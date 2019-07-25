@@ -54,12 +54,14 @@ message Payload {
   repeated Message messages = 5004;
 }
 
- message Message {
+message Message {
   bytes group_id = 6001;
   int64 timestamp = 6002;
   bytes body = 6003;
 }
 ```
+
+*The payload field numbers are kept more "unique" to ensure no overlap with other protocol buffers.*
 
 Each payload contains the following fields:
 
