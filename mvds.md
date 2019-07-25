@@ -48,19 +48,20 @@ Payloads are implemented using [protocol buffers v3](https://developers.google.c
 syntax = "proto3";
 
 message Payload {
-  repeated bytes acks = 1;
-  repeated bytes offers = 2;
-  repeated bytes requests = 3;
-  repeated Message messages = 4;
+  repeated bytes acks = 5001;
+  repeated bytes offers = 5002;
+  repeated bytes requests = 5003;
+  repeated Message messages = 5004;
 }
 
 message Message {
-  bytes group_id = 1;
-  int64 timestamp = 2;
-  bytes body = 3;
+  bytes group_id = 6001;
+  int64 timestamp = 6002;
+  bytes body = 6003;
 }
-
 ```
+
+*The payload field numbers are kept more "unique" to ensure no overlap with other protocol buffers.*
 
 Each payload contains the following fields:
 
