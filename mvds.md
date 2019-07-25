@@ -1,6 +1,6 @@
 # Minimum Viable Data Synchronization
 
-**DRAFT VERSION 0.5.1**
+**DRAFT VERSION 0.5.2**
 
 *Written by Oskar Thorén oskar@status.im & Dean Eigenmann dean@status.im*
 
