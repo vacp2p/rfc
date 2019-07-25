@@ -4,8 +4,6 @@
 
 *Written by Oskar Thorén oskar@status.im & Dean Eigenmann dean@status.im*
 
-**This document follows [RFC-2119](https://tools.ietf.org/html/rfc2119).**
-
 ## Table of Contents
 
 1. [Abstract](#abstract)
