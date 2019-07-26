@@ -2,7 +2,7 @@
 
 > Version: 0.5.2 (Draft)
 > 
-> Authors: Oskar Thorén oskar@status.im & Dean Eigenmann dean@status.im
+> Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
 ## Table of Contents
 
