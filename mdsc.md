@@ -64,7 +64,7 @@ message Message {
 | **signature**        | Signed `HASH(message_type, body, previous_message)`                                                        |
 
 <!--@TODO WORD BETTER?-->
-**Note:** For purposes of signing `message_type` is encoded as a uint32 little-endian.
+**Note:** For purposes of signing `message_type` MUST be encoded as a uint32 little-endian.
 
 **Message Identifiers** refer to the identifiers provided by MVDS for messages.
 
