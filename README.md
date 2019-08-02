@@ -4,6 +4,8 @@
 
 ## Status
 
+The entire VacP2P protocol is under active development, each specification has its own `status` which is reflected through the version number at the top of every document. We use [semver](https://semver.org/) to version these specifications.
+
 ## Protocols
 
 These protocols define various components of the [vacp2p](https://vac.dev) stack.
