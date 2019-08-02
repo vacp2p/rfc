@@ -22,7 +22,7 @@
 
 In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol<sup>1</sup>. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
 
-We present a functional specification for future implementation<sup>2</sup> as well as reference simulation data which demonstrates its performance.
+We present a reference implementation<sup>2</sup> including a simulation to demonstrate its performance.
 
 ## Definitions
 
