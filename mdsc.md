@@ -52,7 +52,7 @@ message Message {
     MessageType message_type = 1;
     bytes body = 2;
     bytes previous_message = 3;
-    repeated bytes signature = 4;
+    bytes signature = 4;
 }
 ```
 
@@ -64,6 +64,8 @@ message Message {
 | **signature**        | Signed `HASH(message_type, body, previous_message)`                                                        |
 
 <!--@TODO WORD BETTER?-->
+**Note:** For purposes of signing `message_type` is encoded as a uint32 little-endian.
+
 **Message Identifiers** refer to the identifiers provided by MVDS for messages.
 
 The current `HASH` function used is `sha256`.
