@@ -1,4 +1,4 @@
-# vacp2p Specifications
+# Specifications
 
 This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging.
 
