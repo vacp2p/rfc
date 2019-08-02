@@ -1,6 +1,6 @@
 # Specifications
 
-This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. You can find a more detailed explanation of the vac [here](https://vac.dev/vac-overview).
+This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. A detailed explanation of the vac and its design goals can be found [here](https://vac.dev/vac-overview).
 
 ## Status
 
