@@ -15,6 +15,8 @@
 
 In this specification we define a minimal data sync client that utilizes [minimal viable data sync](./mvds.md) to distribute messages amongst participants.
 
+Additionally we present a reference implementation<sup>1</sup> to demonstrate full functionality.
+
 ## Definitions
 
 | Term        | Definition                                                                             |
@@ -116,6 +118,7 @@ What happens to message order if user is kicked but they pretend they didn't see
 -->
 
 ## Footnotes
+1. https://github.com/vacp2p/dasy
 
 ## Acknowledgements
 
