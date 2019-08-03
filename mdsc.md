@@ -9,8 +9,10 @@
 1. [Abstract](#abstract)
 2. [Definitions](#definitions)
 3. [Message](#message)
-4. [Footnotes](#footnotes)
-5. [Acknowledgements](#acknowledgements)
+    1. [Types](#types)
+    2. [Validity](#validity) 
+1. [Footnotes](#footnotes)
+2. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
