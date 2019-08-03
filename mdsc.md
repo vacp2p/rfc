@@ -8,8 +8,9 @@
 
 1. [Abstract](#abstract)
 2. [Definitions](#definitions)
-3. [Footnotes](#footnotes)
-4. [Acknowledgements](#acknowledgements)
+3. [Message](#message)
+4. [Footnotes](#footnotes)
+5. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -36,6 +37,8 @@ Is this accurate? I also feel like this is rather confusing, shouldn't this be s
 - **Public Chat:**
 
 ## Message
+
+<!--- Some description?  -->
 
 The new message data structure is based on the [status protocol message](https://github.com/status-im/specs/blob/master/protocol.md#payload).
 
@@ -96,6 +99,17 @@ Where `content` is the `utf-8` encoded content and `content-type` is `uint8` enc
 - **`3` KICK:** ? Not sure if we need this
 - **`4` ACK:** Acknowledgements for `JOIN`, `LEAVE` and `KICK` messages. <!-- We may not need this as we can rely on the acks of data sync -->
 - **`5` POST:** *seems like a good name instead of message, makes less sense for private chats maybe?*
+
+### Validity
+
+For each `MessageType` there are a set of rules dictating whether the sent message was valid.
+
+1. **INVITE** - 
+2. **JOIN** - 
+3. **LEAVE** - 
+4. **KICK** - 
+5. **ACK** -
+6. **POST** -
 
 ## Flow
 
