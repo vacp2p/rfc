@@ -113,6 +113,8 @@ For each `MessageType` there are a set of rules dictating whether the sent messa
 5. **ACK** -
 6. **POST** -
 
+Each message requires a valid `signature`. The recovered public key from the signature is considered the `sender`.
+
 ## Flow
 
 <!-- This section is only here for research right now, might move or be unnecessary -->
