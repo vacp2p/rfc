@@ -34,9 +34,9 @@ Is this accurate? I also feel like this is rather confusing, shouldn't this be s
 
 -->
 
-- **Private Chat:** Chats between 2 parties.
-- **Group:**
-- **Public Chat:**
+- **Private Chat:** A chat between 2 parties.
+- **Group:** A chat between multiple parties where every party must be invited by the owner.
+- **Public Chat:** A chat between multiple parties where any party can join the chat without an invite.
 
 ## Message
 
