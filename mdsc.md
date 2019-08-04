@@ -77,20 +77,6 @@ message Message {
 
 The current `HASH` function used is `sha256`.
 
-<!-- this needs to be one layer up, status client which is a data sync client.
-**Note:** The `POST` for a text message is:
- ```
- <content-type><content>
- ```__
-
-Where `content` is the `utf-8` encoded content and `content-type` is `uint8` encoded big endian of:
-1. `text/plain`
-2. `sticker`
-3. `status`
-4. `command-request`
-5. `emoji`
--->
-
 <!-- Might make sense to have separate sub sections for this -->
 
 ### Types
@@ -136,7 +122,7 @@ What happens to message order if user is kicked but they pretend they didn't see
 -->
 
 ## Footnotes
-1. https://github.com/vacp2p/dasy
+1. <https://github.com/vacp2p/dasy>
 
 ## Acknowledgements
 
