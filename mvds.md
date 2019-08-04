@@ -135,8 +135,8 @@ The record of the type `Type` SHOULD be retransmitted every time `Send Epoch` is
 
 ## Footnotes
 
-1. https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md
-2. https://github.com/vacp2p/mvds
+1. <https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md>
+2. <https://github.com/vacp2p/mvds>
 
 ## Acknowledgements
  - Preston van Loon
