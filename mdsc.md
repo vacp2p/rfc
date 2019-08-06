@@ -1,5 +1,7 @@
 # Minimal Data Sync Client
 
+<!-- @TODO IS THIS A GOOD NAME? MIGHT MAKE SENSE TO JUST CALL IT MESSAGING CLIENT IDK? -->
+
 > Version: 0.1.0 (Draft)
 > 
 > Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
