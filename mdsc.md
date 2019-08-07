@@ -13,8 +13,8 @@
 3. [Message](#message)
     1. [Types](#types)
     2. [Validity](#validity) 
-1. [Footnotes](#footnotes)
-2. [Acknowledgements](#acknowledgements)
+4. [Footnotes](#footnotes)
+5. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -122,6 +122,10 @@ Alice->>Group: KICK
 What happens to message order if user is kicked but they pretend they didn't see it? Need some sort of topological 'smash' to ensure this is respected
 
 -->
+
+### Receiving
+
+When messages are received they MUST be checked for their [validity](#validity). Additionally clients SHOULD check to ensure that they have the `previous_message`, if not it SHOULD be requested.
 
 ## Footnotes
 1. <https://github.com/vacp2p/dasy>
