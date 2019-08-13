@@ -1,6 +1,6 @@
 # Minimum Viable Data Synchronization
 
-> Version: 0.5.2 (Draft)
+> Version: 0.6.0 (Draft)
 > 
 > Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
@@ -68,13 +68,7 @@ Each payload contains the following fields:
 - **Requests:** This field contains a list (can be empty) of `message identifiers` that the sender would like to receive from the recipient.
 - **Messages:** This field contains a list of messages (can be empty).
 
-**Message Identifiers:** Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
-
-```
-HASH("MESSAGE_ID", group_id, timestamp, body);
-```
-
-The current `HASH` function used is `sha256`.
+**Message Identifiers:** A 32 byte array that uniquely identifies a message, the ID is provided with the message.
 
 ## Synchronization
 
