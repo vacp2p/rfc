@@ -14,5 +14,3 @@ These protocols define various components of the [vac](https://vac.dev) stack.
  
 <!-- @Todo put this in a better place !-->
 All specs follow [RFC-2119](https://tools.ietf.org/html/rfc2119).
-
-## Contributing
