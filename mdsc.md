@@ -1,4 +1,4 @@
-# Minimal Data Sync Client
+# Messaging Data Sync Client
 
 <!-- @TODO IS THIS A GOOD NAME? MIGHT MAKE SENSE TO JUST CALL IT MESSAGING CLIENT IDK? -->
 
@@ -18,7 +18,7 @@
 
 ## Abstract
 
-In this specification we define a minimal data sync client that utilizes [minimal viable data sync](./mvds.md) to distribute messages amongst participants.
+In this specification we define a messaging data sync client that utilizes [minimal viable data sync](./mvds.md) to distribute messages amongst participants.
 
 Additionally we present a reference implementation<sup>1</sup> to demonstrate full functionality.
 
