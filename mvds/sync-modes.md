@@ -20,5 +20,4 @@ In this specification, we describe a method to provide consistency through vario
 | Name       |  Description                                                             |
 | ---------- | ------------------------------------------------------------------------ |
 | `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads) |
-| `sequence` |  - @todo                                                                 |
-
+| `sequence` |  sequence number of the message                                          |
