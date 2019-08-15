@@ -72,7 +72,7 @@ Each payload contains the following fields:
 **Message Identifiers:** Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
 
 ```
-HASH("MESSAGE_ID", group_id, timestamp, body);
+HASH("MESSAGE_ID", header, group_id, timestamp, body);
 ```
 
 The current `HASH` function used is `sha256`.
