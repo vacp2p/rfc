@@ -53,6 +53,7 @@ message Payload {
 }
 
 message Message {
+  bytes header = 6000;
   bytes group_id = 6001;
   int64 timestamp = 6002;
   bytes body = 6003;
