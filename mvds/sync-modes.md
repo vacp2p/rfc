@@ -21,3 +21,4 @@ In this specification, we describe a method to provide consistency through vario
 | ---------- | ------------------------------------------------------------------------ |
 | `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads) |
 | `sequence` |  sequence number of the message                                          |
+| `ack`      |  contains a flag whether a message needs to be acked or not.             |
