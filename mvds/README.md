@@ -1,6 +1,6 @@
 # Minimum Viable Data Synchronization
 
-> Version: 0.6.0 (Draft)
+> Version: 0.5.3 (Draft)
 > 
 > Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
