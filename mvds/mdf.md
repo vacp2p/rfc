@@ -17,11 +17,21 @@
 
 ## Format
 
-We extend the MVDS [message](./README.md#payloads) by adding a header field.
+The meta data field is used to convey various information on a message and how it SHOULD be handled.
+
+```protobuf
+package vac.mvds;
+
+message MetaData {
+  
+}
+```
+
+We transmit the `MetaData` message by extending the MVDS [message](./README.md#payloads) with a `meta_data` field.
 
 ```diff
 message Message {
-+ Header header = 6000;
++ MetaData meta_data = 6000;
   bytes group_id = 6001;
   int64 timestamp = 6002;
   bytes body = 6003;
