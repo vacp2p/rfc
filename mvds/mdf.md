@@ -23,7 +23,9 @@ The meta data field is used to convey various information on a message and how i
 package vac.mvds;
 
 message MetaData {
-  
+  repeated bytes parents = 7001;
+  optional int64 sequence = 7002;
+  optional bool ack = 7003 [default = true];
 }
 ```
 
