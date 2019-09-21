@@ -39,10 +39,10 @@ message Message {
   bytes body = 6003;
 }
 ```
-<!-- ### Fields
+### Fields
 
 | Name       |  Description                                                             |
 | ---------- | ------------------------------------------------------------------------ |
 | `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads) |
 | `sequence` |  sequence number of the message                                          |
-| `ack`      |  contains a flag whether a message needs to be acknowledged or not.      | -->
+| `ack`      |  contains a flag whether a message needs to be acknowledged or not.      |
