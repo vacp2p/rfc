@@ -8,6 +8,8 @@
 
 1. [Abstract](#abstract)
 2. [Format](#format)
+    1. [Fields](#fields) 
+4. [Behaviour](#behaviour)
 
 ## Abstract
 
@@ -46,3 +48,5 @@ message Message {
 | `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads) |
 | `sequence` |  sequence number of the message                                          |
 | `ack`      |  contains a flag whether a message needs to be acknowledged or not.      |
+
+## Behaviour
