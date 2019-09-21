@@ -9,7 +9,7 @@
 1. [Abstract](#abstract)
 2. [Format](#format)
     1. [Fields](#fields) 
-4. [Behaviour](#behaviour)
+4. [Behavior](#behavior)
 
 ## Abstract
 
@@ -49,4 +49,4 @@ message Message {
 | `sequence` |  sequence number of the message                                          |
 | `ack`      |  contains a flag whether a message needs to be acknowledged or not.      |
 
-## Behaviour
+## Behavior
