@@ -9,7 +9,9 @@
 1. [Abstract](#abstract)
 2. [Format](#format)
     1. [Fields](#fields) 
-4. [Behavior](#behavior)
+1. [Usage](#usage)
+    1. [Information](#information)
+    2. [Behavior](#behavior)
 
 ## Abstract
 
