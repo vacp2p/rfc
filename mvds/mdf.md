@@ -43,18 +43,24 @@ message Message {
 ```
 ### Fields
 
-| Name       |  Description                                                             |
-| ---------- | ------------------------------------------------------------------------ |
-| `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads) |
-| `sequence` |  sequence number of the message                                          |
-| `ack`      |  contains a flag whether a message needs to be acknowledged or not.      |
+| Name       |  Description                                                              |
+| ---------- | ------------------------------------------------------------------------- |
+| `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads). |
+| `sequence` |  sequence number of the message.                                          |
+| `ack`      |  contains a flag whether a message needs to be acknowledged or not.       |
 
 ## Usage
 
 The flags provided through the `MetaData` message are either informational or configurational. Informational fields MAY be used by a node, configurational fields MUST be recognized and the nodes behavior MUST change accordingly.
 
+### Information
+
+Below are the list of informational flags and what they MAY be used for by a node.
+
+@TODO
+
 ### Behavior
 
-Below are a list of the informational flags and how they modify node behavior.
+Below are a list of the behavioral flags and how they modify node behavior.
 
 - `ack`: When the `ack` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
