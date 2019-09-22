@@ -19,7 +19,7 @@
 
 ## Format
 
-The meta data field is used to convey various information on a message and how it SHOULD be handled.
+The meta data field is used to convey various information on a message and how it MUST be handled.
 
 ```protobuf
 package vac.mvds;
@@ -31,7 +31,7 @@ message MetaData {
 }
 ```
 
-We transmit the `MetaData` message by extending the MVDS [message](./README.md#payloads) with a `meta_data` field.
+We MAY transmit a `MetaData` message by extending the MVDS [message](./README.md#payloads) with a `meta_data` field.
 
 ```diff
 message Message {
@@ -50,3 +50,5 @@ message Message {
 | `ack`      |  contains a flag whether a message needs to be acknowledged or not.      |
 
 ## Behavior
+
+The flags provided through the `MetaData` message are either informational or configurational. Informational fields MAY be used by a node, configurational fields MUST be recognized and the nodes behavior MUST change accordingly.
