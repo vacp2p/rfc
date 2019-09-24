@@ -11,6 +11,9 @@ The entire vac protocol is under active development, each specification has its 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
  - [mvds](./mvds.md) - Ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
- 
+
+## Style guide
 <!-- @Todo put this in a better place !-->
 All specs follow [RFC-2119](https://tools.ietf.org/html/rfc2119).
+
+Sequence diagrams are generated using [Mscgen](http://www.mcternan.me.uk/mscgen/) like this: `mscgen -T png -i input.msc -o output.png`. Both the source and generated image should be in source control. For ease of readability, the generated image is embedded inside the main spec document.
