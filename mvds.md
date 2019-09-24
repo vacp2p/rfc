@@ -68,7 +68,9 @@ Each payload contains the following fields:
 - **Requests:** This field contains a list (can be empty) of `message identifiers` that the sender would like to receive from the recipient.
 - **Messages:** This field contains a list of messages (can be empty).
 
-**Message Identifiers:** Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
+#### Message Identifiers
+
+Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
 
 ```
 HASH("MESSAGE_ID", group_id, timestamp, body);
