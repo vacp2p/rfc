@@ -74,7 +74,9 @@ Each payload contains the following fields:
 HASH("MESSAGE_ID", group_id, timestamp, body);
 ```
 
-The current `HASH` function used is `sha256`.
+It MUST then be transmitted as a [`multihash`](https://github.com/multiformats/multihash).
+
+The current default `HASH` function used is `sha256`. Multihash is used to enable interoperability and different hashing functions later on.
 
 ## Synchronization
 
