@@ -45,6 +45,8 @@ Payloads are implemented using [protocol buffers v3](https://developers.google.c
 ```protobuf
 syntax = "proto3";
 
+package vac.mvds;
+
 message Payload {
   repeated bytes acks = 5001;
   repeated bytes offers = 5002;
