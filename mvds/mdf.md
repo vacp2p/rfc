@@ -27,9 +27,16 @@ The meta data field is used to convey various information on a message and how i
 package vac.mvds;
 
 message MetaData {
+  
+  enum Persistence {
+    PERSISTENT = 0;
+    EPHEMERAL = 1;
+  }
+  
   repeated bytes parents = 7001;
   optional int64 sequence = 7002;
   optional bool ack = 7003 [default = true];
+  optional Persistence persistence = 7004 [default = PERSISTENT]
 }
 ```
 
@@ -45,11 +52,12 @@ message Message {
 ```
 ### Fields
 
-| Name       |  Description                                                              |
-| ---------- | ------------------------------------------------------------------------- |
-| `parents`  |  contains a list of parent [`message identifiers`](./README.md#payloads). |
-| `sequence` |  sequence number of the message.                                          |
-| `ack`      |  contains a flag whether a message needs to be acknowledged or not.       |
+| Name          |  Description                                                              |
+| ------------- | ------------------------------------------------------------------------- |
+| `parents`     |  contains a list of parent [`message identifiers`](./README.md#payloads). |
+| `sequence`    |  sequence number of the message.                                          |
+| `ack`         |  contains a flag whether a message needs to be acknowledged or not.       |
+| `persistence` |  dictates whether a message's storage is ephemeral or persistent.         |
 
 ## Usage
 
@@ -65,4 +73,10 @@ Below are the list of informational flags and what they MAY be used for by a nod
 
 Below are a list of the behavioral flags and how they modify node behavior.
 
-- `ack`: When the `ack` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
+#### `ack`
+
+When the `ack` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
+
+#### `persistance`
+
+@todo
