@@ -67,6 +67,12 @@ The flags provided through the `MetaData` message are either informational or co
 
 Below are the list of informational flags and what they MAY be used for by a node.
 
+#### `parents`
+
+This field contains a list of a messages parents, or messages that have been seen by the node in a given context. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
+
+#### `sequence`
+
 @TODO
 
 ### Behavior
@@ -80,3 +86,6 @@ When the `ack` flag is set to `true`, a node MUST acknowledge when they have rec
 #### `persistance`
 
 @todo
+
+## Footnotes
+1. <https://github.com/matrix-org/matrix-doc/blob/master/specification/server_server_api.rst#pdus>
