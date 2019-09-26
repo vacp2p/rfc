@@ -104,7 +104,7 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
  - All records that require retransmission are added to the payload, given `Send Epoch` has been reached.
 
 <p align="center">
-    <img src="./../assets/mvds/interactive.png" />
+    <img src="/assets/mvds/interactive.png" />
     <br />
     Figure 1: Delivery without retransmissions in interactive mode.
 </p>
@@ -119,7 +119,7 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
 <!-- diagram -->
 
 <p align="center">
-    <img src="./../assets/mvds/batch.png" />
+    <img src="/assets/mvds/batch.png" />
     <br />
     Figure 2: Delivery without retransmissions in batch mode.
 </p>
