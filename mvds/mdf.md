@@ -15,8 +15,6 @@
 
 ## Abstract
 
-@TODO
-
 In this specification, we describe a method to construct a message DAG (Directed Acyclic Graph) that will aid the consistency of [MVDS](./README.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./README.md#payloads) to modify the functionality of MVDS.
 
 ## Format
