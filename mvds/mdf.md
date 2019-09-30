@@ -65,7 +65,7 @@ This field contains a list of a messages parents, or messages that have been see
 
 #### `sequence`
 
-@TODO
+<!-- This will be related to remote log -->
 
 ### Behavior
 
