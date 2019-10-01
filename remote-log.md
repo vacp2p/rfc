@@ -52,6 +52,8 @@ Payloads are implemented using [protocol buffers v3](https://developers.google.c
 **CAS service**:
 
 ```protobuf
+syntax = "proto3";
+
 package vac.cas;
 
 service CAS {
@@ -73,6 +75,10 @@ message Content {
 **NS service**:
 
 ```protobuf
+syntax = "proto3";
+
+package vac.cas;
+
 service NS {
   rpc Update(NameUpdate) returns (Response) {}
   rpc Fetch(Query) returns (Content) {}
@@ -102,6 +108,10 @@ message Response {
 **Remote log:**
 
 ```protobuf
+syntax = "proto3";
+
+package vac.cas;
+
 message RemoteLog {
   repeated Pair pair = 1;
   bytes tail = 2;
@@ -133,7 +143,7 @@ There are four fundamental roles:
 
 The *remote log* protobuf is what is stored at the Name system.
 
-"Bob" can represents anything from 0 to N participants. Unlike Alice, Bob only needs read-only access to NS and CAS.
+"Bob" can represent anything from 0 to N participants. Unlike Alice, Bob only needs read-only access to NS and CAS.
 
 ### Flow
 
