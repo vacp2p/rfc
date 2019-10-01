@@ -19,15 +19,16 @@ In this specification, we describe a method to construct a message DAG (Directed
 
 ## Format
 
-The meta data field is used to convey various information on a message and how it SHOULD be handled.
+The meta data field is used to convey information about a message and how it SHOULD be handled. If an MVDS node implements this, we say that node has MDF capability (This might become part of a future reconicled MVDS spec).
+
 
 ```protobuf
 package vac.mvds;
 
 message MetaData {
   repeated bytes parents = 7001;
-  optional int64 sequence = 7002;
-  optional bool ack = 7003 [default = true];
+  int64 sequence = 7002;
+  bool ack = 7003 [default = true];
 }
 ```
 
