@@ -1,4 +1,4 @@
-#  MVDS Meta Data Field
+#  MVDS Metadata Field
 
 > Version: 0.1.0 (Draft)
 > 
@@ -25,18 +25,18 @@ The meta data field is used to convey information about a message and how it SHO
 ```protobuf
 package vac.mvds;
 
-message MetaData {
+message Metadata {
   repeated bytes parents = 7001;
   int64 sequence = 7002;
   bool ack = 7003 [default = true];
 }
 ```
 
-We MAY transmit a `MetaData` message by extending the MVDS [message](./README.md#payloads) with a `meta_data` field.
+We MAY transmit a `Metadata` message by extending the MVDS [message](./README.md#payloads) with a `metadata` field.
 
 ```diff
 message Message {
-+ MetaData meta_data = 6000;
++ Metadata metadata = 6000;
   bytes group_id = 6001;
   int64 timestamp = 6002;
   bytes body = 6003;
@@ -52,7 +52,7 @@ message Message {
 
 ## Usage
 
-The flags provided through the `MetaData` message are either informational or behavioral. Informational fields MAY be used by a node, configurational fields SHOULD be recognized and the nodes behavior SHOULD change accordingly.
+The flags provided through the `Metadata` message are either informational or behavioral. Informational fields MAY be used by a node, configurational fields SHOULD be recognized and the nodes behavior SHOULD change accordingly.
 
 ### Information
 
