@@ -150,7 +150,7 @@ The *remote log* protobuf is what is stored at the Name system.
 <!-- diagram -->
 
 <p align="center">
-    <img src="./remote-log.png" />
+    <img src="./assets/remotelog/remote-log.png" />
     <br />
     Figure 1: Remote log data synchronization.
 </p>
