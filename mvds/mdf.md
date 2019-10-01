@@ -19,7 +19,7 @@ In this specification, we describe a method to construct a message DAG (Directed
 
 ## Format
 
-The meta data field is used to convey various information on a message and how it MUST be handled.
+The meta data field is used to convey various information on a message and how it SHOULD be handled.
 
 ```protobuf
 package vac.mvds;
@@ -51,7 +51,7 @@ message Message {
 
 ## Usage
 
-The flags provided through the `MetaData` message are either informational or configurational. Informational fields MAY be used by a node, configurational fields MUST be recognized and the nodes behavior MUST change accordingly.
+The flags provided through the `MetaData` message are either informational or behavioral. Informational fields MAY be used by a node, configurational fields SHOULD be recognized and the nodes behavior SHOULD change accordingly.
 
 ### Information
 
