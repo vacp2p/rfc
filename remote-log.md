@@ -1,6 +1,6 @@
 # Remote log specification
 
-> Version: 0.1.0 (Draft)
+> Version: 0.1.1 (Draft)
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
@@ -213,9 +213,7 @@ in time.
 
 ### Interaction with MVDS
 
-TBD.
-
-<!-- TODO: Elaborate on interaction with MVDS, especially with what messages are synced, etc -->
+`vac.mvds.Message` payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
 ## Footnotes
 
