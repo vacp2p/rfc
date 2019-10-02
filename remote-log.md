@@ -38,7 +38,7 @@ This specification is complemented by a proof of concept implementation <sup>1</
 
 ### Secure Transport, storage, and name system
 
-This specification does not define anything related to to: secure transport,
+This specification does not define anything related to: secure transport,
 content addressed storage, or the name system. It is assumed these capabilities
 are abstracted away in such a way that any such protocol can easily be
 implemented.
@@ -141,7 +141,7 @@ There are four fundamental roles:
 2. Name system (NS)
 3. Content-addressed storage (CAS)
 
-The *remote log* protobuf is what is stored at the Name system.
+The *remote log* protobuf is what is stored in the name system.
 
 "Bob" can represent anything from 0 to N participants. Unlike Alice, Bob only needs read-only access to NS and CAS.
 
@@ -213,7 +213,7 @@ in time.
 
 ### Interaction with MVDS
 
-`vac.mvds.Message` payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
+[`vac.mvds.Message`](./mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
 ## Footnotes
 
