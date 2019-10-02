@@ -28,7 +28,8 @@ package vac.mvds;
 message Metadata {
   repeated bytes parents = 7001;
   int64 sequence = 7002;
-  bool ack = 7003 [default = true];
+  bytes previous_message = 7003;
+  bool ack = 7004 [default = true];
 }
 ```
 
@@ -44,11 +45,12 @@ message Message {
 ```
 ### Fields
 
-| Name          |  Description                                                              |
-| ------------- | ------------------------------------------------------------------------- |
-| `parents`     |  contains a list of parent [`message identifiers`](./README.md#payloads). |
-| `sequence`    |  sequence number of the message.                                          |
-| `ack`         |  contains a flag whether a message needs to be acknowledged or not.       |
+| Name                  |   Description                                                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `parents`             |   contains a list of parent [`message identifiers`](./README.md#payloads).                                                      |
+| `sequence`            |   sequence number of the message.                                                                                               |
+| `previous_message`    |   contains the [`message indentifier`](README.md#payloads) of the last sent message for the given node in the specific context. |
+| `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                            |
 
 ## Usage
 
@@ -65,6 +67,10 @@ This field contains a list of a messages parents, or messages that have been see
 #### `sequence`
 
 <!-- This will be related to remote log -->
+
+#### `previous_message`
+
+<!-- Linked list of messages -->
 
 ### Behavior
 
