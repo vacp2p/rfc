@@ -204,6 +204,8 @@ semantics, this gives users flexibility in terms of bandwidth and
 latency/indirection, all the way from a simple linked list to a fully replicated
 log. The latter is useful for things like backups on durable storage.
 
+<!-- TODO: Consider making more useful in conjunction with metadata field. It makes sense to explicitly list what sequence a message is <local hash, remote hash, data, seqid> this way I can easily sync a messages prior or after a specific number. To enable this to be dynamic it might make sense to add page info so that I am aware which page I can find seqid on -->
+
 ### Next page semantics
 
 The pointer to the 'next page' is another remote log entry, at a previous point
