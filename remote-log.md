@@ -126,11 +126,9 @@ message RemoteLog {
 
 <!-- TODO: Better name for Pair, Mapping? -->
 
-<!-- TODO: Extend pair with (optional) data -->
+<!-- TODO: Consider making more useful in conjunction with metadata field. It makes sense to explicitly list what sequence a message is <local hash, remote hash, data, seqid> this way I can easily sync a messages prior or after a specific number. To enable this to be dynamic it might make sense to add page info so that I am aware which page I can find seqid on -->
 
 ## Synchronization
-
-<!-- TODO: Elaborate on interaction with MVDS, especially with what messages are synced, etc -->
 
 ### Roles
 
@@ -144,6 +142,9 @@ There are four fundamental roles:
 The *remote log* protobuf is what is stored in the name system.
 
 "Bob" can represent anything from 0 to N participants. Unlike Alice, Bob only needs read-only access to NS and CAS.
+
+<!-- TODO: Document random node as remote log -->
+<!-- TODO: Document how to find initial remote log (e.g. per sync contexts -->
 
 ### Flow
 
@@ -204,14 +205,14 @@ semantics, this gives users flexibility in terms of bandwidth and
 latency/indirection, all the way from a simple linked list to a fully replicated
 log. The latter is useful for things like backups on durable storage.
 
-<!-- TODO: Consider making more useful in conjunction with metadata field. It makes sense to explicitly list what sequence a message is <local hash, remote hash, data, seqid> this way I can easily sync a messages prior or after a specific number. To enable this to be dynamic it might make sense to add page info so that I am aware which page I can find seqid on -->
-
 ### Next page semantics
 
 The pointer to the 'next page' is another remote log entry, at a previous point
 in time.
 
 <!-- TODO: Determine requirement re overlapping, adjacent, and/or missing entries -->
+
+<!-- TODO: Document message ordering append only requirements -->
 
 ### Interaction with MVDS
 
