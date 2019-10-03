@@ -19,7 +19,7 @@ In this specification, we describe a method to construct both a linear and DAG (
 
 ## Format
 
-We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled. If an MVDS node implements this, we say that node has MDF capability (This might become part of a future reconicled MVDS spec).
+We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled. If an MVDS node implements this, we say that node has MDF capability (This might become part of a future reconciled MVDS spec).
 
 
 ```protobuf
