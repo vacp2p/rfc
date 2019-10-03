@@ -27,7 +27,7 @@ package vac.mvds;
 
 message Metadata {
   repeated bytes parents = 7001;
-  int64 sequence = 7002;
+  uint32 sequence = 7002;
   bytes previous_message = 7003;
   bool ack = 7004 [default = true];
 }
