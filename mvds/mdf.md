@@ -45,12 +45,12 @@ message Message {
 ```
 ### Fields
 
-| Name                  |   Description                                                                                                                   |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`             |   contains a list of parent [`message identifiers`](./README.md#payloads).                                                      |
-| `sequence`            |   sequence number of the message.                                                                                               |
-| `previous_message`    |   contains the [`message indentifier`](README.md#payloads) of the last sent message for the given node in the specific context. |
-| `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                            |
+| Name                  |   Description                                                                                                                    |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `parents`             |   contains a list of parent [`message identifiers`](./README.md#payloads).                                                       |
+| `sequence`            |   sequence number of the message.                                                                                                |
+| `previous_message`    |   contains the [`message indentifier`](README.md#payloads) of the last sent message for the given node in the specific group id. |
+| `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
