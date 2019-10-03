@@ -156,6 +156,8 @@ The *remote log* protobuf is what is stored in the name system.
     Figure 1: Remote log data synchronization.
 </p>
 
+<!-- Document the flow wrt operations -->
+
 ### Remote log
 
 The remote log lets receiving nodes know what data they are missing. Depending
