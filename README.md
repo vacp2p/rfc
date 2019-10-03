@@ -12,6 +12,9 @@ These protocols define various components of the [vac](https://vac.dev) stack.
 
  - [mvds](./mvds.md) - Ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
 
+ - [remote log](./remote-log.md) - Ensures a node can read data from a node that iss offline by replicating a local log remotely.
+
+
 ## Style guide
 <!-- @Todo put this in a better place !-->
 All specs follow [RFC-2119](https://tools.ietf.org/html/rfc2119).

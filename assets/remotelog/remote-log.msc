@@ -1,0 +1,21 @@
+# Alice and Bob: remote log data sync
+msc {
+  hscale="2", wordwraparcs=on;
+
+  alice [label="Alice"],
+  cas [label="CAS"],
+  ns [label="NS"],
+  bob [label="Bob"];
+
+  --- [label="Alice replicates data to a remote log"];
+  alice => cas [label="Add content"];
+  cas => alice [label="Address"];
+  alice => ns [label="Update NameUpdate"];
+  ns => alice [label="Response"];
+
+  --- [label="Bob comes online"];
+  bob => ns [label="Fetch"];
+  ns => bob [label="Content"];
+  bob => cas [label="Fetch Query"];
+  cas => bob [label="Content"];
+}
