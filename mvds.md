@@ -45,6 +45,8 @@ Payloads are implemented using [protocol buffers v3](https://developers.google.c
 ```protobuf
 syntax = "proto3";
 
+package vac.mvds;
+
 message Payload {
   repeated bytes acks = 5001;
   repeated bytes offers = 5002;
@@ -68,17 +70,13 @@ Each payload contains the following fields:
 - **Requests:** This field contains a list (can be empty) of `message identifiers` that the sender would like to receive from the recipient.
 - **Messages:** This field contains a list of messages (can be empty).
 
-#### Message Identifiers
-
-Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
+**Message Identifiers:** Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
 
 ```
 HASH("MESSAGE_ID", group_id, timestamp, body);
 ```
 
-It MUST then be transmitted as a [`multihash`](https://github.com/multiformats/multihash).
-
-The current default `HASH` function used is `sha256`. Multihash is used to enable interoperability and different hashing functions later on.
+The current `HASH` function used is `sha256`.
 
 ## Synchronization
 
