@@ -45,8 +45,6 @@ Payloads are implemented using [protocol buffers v3](https://developers.google.c
 ```protobuf
 syntax = "proto3";
 
-package vac.mvds;
-
 message Payload {
   repeated bytes acks = 5001;
   repeated bytes offers = 5002;
@@ -70,13 +68,17 @@ Each payload contains the following fields:
 - **Requests:** This field contains a list (can be empty) of `message identifiers` that the sender would like to receive from the recipient.
 - **Messages:** This field contains a list of messages (can be empty).
 
-**Message Identifiers:** Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
+#### Message Identifiers
+
+Each `message` has a message identifier calculated by hashing the `group_id`, `timestamp` and `body` fields as follows:
 
 ```
 HASH("MESSAGE_ID", group_id, timestamp, body);
 ```
 
-The current `HASH` function used is `sha256`.
+It MUST then be transmitted as a [`multihash`](https://github.com/multiformats/multihash).
+
+The current default `HASH` function used is `sha256`. Multihash is used to enable interoperability and different hashing functions later on.
 
 ## Synchronization
 
@@ -104,7 +106,7 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
  - All records that require retransmission are added to the payload, given `Send Epoch` has been reached.
 
 <p align="center">
-    <img src="/assets/mvds/interactive.png" />
+    <img src="./assets/mvds/interactive.png" />
     <br />
     Figure 1: Delivery without retransmissions in interactive mode.
 </p>
@@ -119,7 +121,7 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
 <!-- diagram -->
 
 <p align="center">
-    <img src="/assets/mvds/batch.png" />
+    <img src="./assets/mvds/batch.png" />
     <br />
     Figure 2: Delivery without retransmissions in batch mode.
 </p>
@@ -145,4 +147,3 @@ The record of the type `Type` SHOULD be retransmitted every time `Send Epoch` is
  - Greg Markou
  - Rene Nayman
  - Jacek Sieka
- 

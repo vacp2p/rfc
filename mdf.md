@@ -15,7 +15,7 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./README.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./README.md#payloads) to modify the functionality of MVDS.
+In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./mvds.md#payloads) to modify the functionality of MVDS.
 
 ## Format
 
@@ -33,7 +33,7 @@ message Metadata {
 }
 ```
 
-We MAY transmit a `Metadata` message by extending the MVDS [message](./README.md#payloads) with a `metadata` field.
+We MAY transmit a `Metadata` message by extending the MVDS [message](./mvds.md#payloads) with a `metadata` field.
 
 ```diff
 message Message {
@@ -47,9 +47,9 @@ message Message {
 
 | Name                  |   Description                                                                                                                    |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`             |   contains a list of parent [`message identifiers`](./README.md#payloads).                                                       |
+| `parents`             |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
 | `sequence`            |   sequence number of the message.                                                                                                |
-| `previous_message`    |   contains the [`message indentifier`](README.md#payloads) of the last sent message for the given node in the specific group id. |
+| `previous_message`    |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |
 | `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
