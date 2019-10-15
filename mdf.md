@@ -60,10 +60,11 @@ Below are the list of informational flags and what they MAY be used for by a nod
 
 #### `parent`
 
+This field contains the last sent message by `MVDS` for a specific group, it MUST NOT use any messages as parent whose `ack` flag was set to `false`.
 
 #### `previous_messages`
 
-This field contains a list of a messages parent, or messages that have been seen by the node in a given group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
+This field contains a list of a messages previously sent or received by a node in a specific group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
 
 ### Behavior
 
