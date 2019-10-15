@@ -26,8 +26,8 @@ We introduce the metadata message which is used to convey information about a me
 package vac.mvds;
 
 message Metadata {
-  repeated bytes parents = 7000;
-  bytes previous_message = 7001;
+  bytes parent = 7000;
+  repeated bytes previous_messages = 7001;
   bool ack = 7002 [default = true];
 }
 ```
@@ -44,11 +44,11 @@ message Message {
 ```
 ### Fields
 
-| Name                  |   Description                                                                                                                    |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`             |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
-| `previous_message`    |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |
-| `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                             |
+| Name                   |   Description                                                                                                                    |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `parent`               |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |            
+| `previous_messages`    |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
+| `ack`                  |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
@@ -58,13 +58,12 @@ The flags provided through the `Metadata` message are either informational or be
 
 Below are the list of informational flags and what they MAY be used for by a node.
 
-#### `parents`
+#### `parent`
 
-This field contains a list of a messages parents, or messages that have been seen by the node in a given group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
 
-#### `previous_message`
+#### `previous_messages`
 
-<!-- Linked list of messages -->
+This field contains a list of a messages parent, or messages that have been seen by the node in a given group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
 
 ### Behavior
 
