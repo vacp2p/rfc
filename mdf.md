@@ -28,7 +28,7 @@ package vac.mvds;
 message Metadata {
   bytes parent = 7000;
   repeated bytes previous_messages = 7001;
-  bool ack = 7002 [default = true];
+  bool ack_required = 7002 [default = true];
 }
 ```
 
@@ -48,7 +48,7 @@ message Message {
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parent`               |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |            
 | `previous_messages`    |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
-| `ack`                  |   contains a flag whether a message needs to be acknowledged or not.                                                             |
+| `ack_required`         |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
@@ -70,9 +70,9 @@ This field contains a list of a messages previously sent or received by a node i
 
 Below are a list of the behavioral flags and how they modify node behavior.
 
-#### `ack`
+#### `ack_required`
 
-When the `ack` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
+When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
 
 > ***NOTE**: Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST not be shared as part of the message history.*
 
