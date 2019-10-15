@@ -60,7 +60,7 @@ Below are the list of informational flags and what they MAY be used for by a nod
 
 #### `parents`
 
-This field contains a list of a messages parents, or messages that have been seen by the node in a given context. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
+This field contains a list of a messages parents, or messages that have been seen by the node in a given group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
 
 #### `previous_message`
 
