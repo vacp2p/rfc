@@ -10,8 +10,8 @@
 2. [Format](#format)
     1. [Fields](#fields) 
 1. [Usage](#usage)
-    1. [Information](#information)
-    2. [Behavior](#behavior)
+    1. [Informational Fields](#informational-fields)
+    2. [Configurational Fields](#configurational-fields)
 
 ## Abstract
 
@@ -54,7 +54,7 @@ message Message {
 
 The flags provided through the `Metadata` message are either informational or behavioral. Informational fields MAY be used by a node, configurational fields SHOULD be recognized and the nodes behavior SHOULD change accordingly.
 
-### Information
+### Informational Fields
 
 Below are the list of informational flags and what they MAY be used for by a node.
 
@@ -66,9 +66,9 @@ This field contains the last sent message by `MVDS` for a specific group, it MUS
 
 This field contains a list of a messages previously sent or received by a node in a specific group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
 
-### Behavior
+### Configurational Fields
 
-Below are a list of the behavioral flags and how they modify node behavior.
+Below are a list of the configurational flags and how they modify node behavior.
 
 #### `ack_required`
 
