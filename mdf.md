@@ -8,7 +8,7 @@
 
 1. [Abstract](#abstract)
 2. [Format](#format)
-    1. [Fields](#fields) 
+    1. [Fields](#fields)
 1. [Usage](#usage)
     1. [Informational Fields](#informational-fields)
     2. [Configurational Fields](#configurational-fields)
