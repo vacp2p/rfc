@@ -74,7 +74,7 @@ Below are a list of the behavioral flags and how they modify node behavior.
 
 When the `ack` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
 
-**NOTE:** Messages that are not required to be acknowledged can be considered ephemeral, meaning nodes MAY decide to not persist them and they MUST not be shared as part of the message history.
+> ***NOTE**: Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST not be shared as part of the message history.*
 
 ## Footnotes
 1. <https://github.com/matrix-org/matrix-doc/blob/master/specification/server_server_api.rst#pdus>
