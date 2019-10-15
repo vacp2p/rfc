@@ -60,7 +60,7 @@ Below are the list of informational flags and what they MAY be used for by a nod
 
 #### `parent`
 
-This field contains the last sent message by `MVDS` for a specific group, it MUST NOT use any messages as parent whose `ack` flag was set to `false`.
+This field contains the last sent message by `MVDS` for a specific group, it MUST NOT use any messages as parent whose `ack` flag was set to `false`. This creates a linked list of persistent messages.
 
 #### `previous_messages`
 
