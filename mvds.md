@@ -125,6 +125,8 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
 </p>
 
 
+> ***NOTE:** Batch mode is higher bandwidth whereas interactive mode is higer latency.*
+
 <!-- Interactions with state, flow chart with retransmissions? -->
 
 ### Retransmission
