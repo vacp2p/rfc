@@ -94,6 +94,8 @@ A maximum of one payload SHOULD be sent to peers per epoch, this payload contain
 
 Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACTIVE` mode. The following rules dictate how nodes construct payloads every epoch for any given peer for both modes.
 
+> ***NOTE:** A node may send messages both in interactive and in batch mode.*
+
 #### Interactive Mode
 
  - A node initially offers a `MESSAGE` when attempting to send it to a peer. This means an `OFFER` is added to the next payload and state for the given peer.
