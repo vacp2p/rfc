@@ -76,5 +76,7 @@ When the `ack` flag is set to `true`, a node MUST acknowledge when they have rec
 
 > ***NOTE**: Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST not be shared as part of the message history.*
 
+Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
+
 ## Footnotes
 1. <https://github.com/matrix-org/matrix-doc/blob/master/specification/server_server_api.rst#pdus>
