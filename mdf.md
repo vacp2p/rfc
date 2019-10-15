@@ -26,10 +26,9 @@ We introduce the metadata message which is used to convey information about a me
 package vac.mvds;
 
 message Metadata {
-  repeated bytes parents = 7001;
-  uint32 sequence = 7002;
-  bytes previous_message = 7003;
-  bool ack = 7004 [default = true];
+  repeated bytes parents = 7000;
+  bytes previous_message = 7001;
+  bool ack = 7002 [default = true];
 }
 ```
 
@@ -48,7 +47,6 @@ message Message {
 | Name                  |   Description                                                                                                                    |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parents`             |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
-| `sequence`            |   sequence number of the message.                                                                                                |
 | `previous_message`    |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |
 | `ack`                 |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
@@ -63,10 +61,6 @@ Below are the list of informational flags and what they MAY be used for by a nod
 #### `parents`
 
 This field contains a list of a messages parents, or messages that have been seen by the node in a given context. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
-
-#### `sequence`
-
-<!-- This will be related to remote log -->
 
 #### `previous_message`
 
