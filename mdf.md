@@ -64,7 +64,7 @@ This field contains the [`message indentifier`](./mvds.md#payloads) of the last 
 
 #### `previous_messages`
 
-This field contains a list of a messages previously sent or received by a node in a specific group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>.
+This field contains a list of a messages previously sent or received by a node in a specific group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>. The amount of messages included in the field SHOULD be determined by the application, the messages MUST be ordered from latest to oldest sent or received.
 
 ### Configurational Fields
 
