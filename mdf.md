@@ -20,7 +20,7 @@ In this specification, we describe a method to construct both a linear and DAG (
 
 ## Motivation
 
-In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message. Encoding a DAG within a message allows for an entire portion to be synchronized if information is missing with a single `REQUEST` message.
+In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message. Encoding a DAG within a message allows for an entire portion to be synchronized if messages are missing with a single `REQUEST` message.
 
 ## Format
 
