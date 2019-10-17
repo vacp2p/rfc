@@ -16,7 +16,7 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./mvds.md#payloads) to modify the functionality of MVDS adding consistency guarantees, like casual consistency with the DAG and sequential consistency with the linear history, which currently do not exist.
+In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./mvds.md#payloads) and adds consistency guarantees which currently do not exist, casual consistency is added with the DAG and sequential consistency with the linear history.
 
 ## Motivation
 
