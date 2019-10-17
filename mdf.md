@@ -47,7 +47,7 @@ message Message {
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parent`               |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |            
-| `previous_messages`    |   contains a list of parent [`message identifiers`](./mvds.md#payloads).                                                         |
+| `previous_messages`    |   contains a list of previous [`message identifiers`](./mvds.md#payloads).                                                         |
 | `ack_required`         |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
@@ -64,7 +64,7 @@ This field contains the [`message indentifier`](./mvds.md#payloads) of the last 
 
 #### `previous_messages`
 
-This field contains a list of a messages previously sent or received by a node in a specific group. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>. The amount of messages included in the field SHOULD be determined by the application, the messages MUST be ordered from latest to oldest sent or received.
+This field contains a list of a messages previously sent or received by a node in a specific group id. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>. The number of messages and layers (simply parents or ancestors) included in the field SHOULD be determined by the application, the messages MUST be ordered from latest to oldest sent or received.
 
 ### Configurational Fields
 
