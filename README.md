@@ -10,9 +10,9 @@ The entire vac protocol is under active development, each specification has its 
 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
- - [mvds](./mvds.md) - Ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
+ - [mvds](./mvds.md) - Data Synchronization protocol for unreliable transports.
 
- - [remote log](./remote-log.md) - Ensures a node can read data from a node that is offline by replicating a local log remotely.
+ - [remote log](./remote-log.md) - Remote replication of local logs.
 
 
 ## Style guide
