@@ -7,15 +7,20 @@
 ##  Table of Contents
 
 1. [Abstract](#abstract)
-2. [Format](#format)
+2. [Motivation](#motivation)
+3. [Format](#format)
     1. [Fields](#fields)
-1. [Usage](#usage)
+4. [Usage](#usage)
     1. [Informational Fields](#informational-fields)
     2. [Configurational Fields](#configurational-fields)
 
 ## Abstract
 
 In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization. This specification extends the [MVDS message](./mvds.md#payloads) to modify the functionality of MVDS.
+
+## Motivation
+
+In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message. Encoding a DAG within a message allows for an entire portion to be synchronized if information is missing with a single `REQUEST` message.
 
 ## Format
 
@@ -61,6 +66,8 @@ Below are the list of informational flags and what they MAY be used for by a nod
 #### `parent`
 
 This field contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id, it MUST NOT use any messages as parent whose `ack` flag was set to `false`. This creates a linked list of persistent messages.
+
+This field provides sequential consistency for all messages sent by a peer in a specific group id.
 
 #### `previous_messages`
 
