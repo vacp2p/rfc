@@ -16,7 +16,7 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md), which currently do not exist, causal consistency is added with the DAG and sequential consistency with the linear history. Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct message history that will aid the consistency of [MVDS](./mvds.md), which currently do not exist, the additional fields allow for various consistency models such. Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
