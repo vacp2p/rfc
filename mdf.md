@@ -32,8 +32,7 @@ package vac.mvds;
 
 message Metadata {
   bytes parent = 7000;
-  repeated bytes previous_messages = 7001;
-  bool ack_required = 7002 [default = true];
+  bool ack_required = 7001 [default = true];
 }
 ```
 
@@ -51,8 +50,7 @@ message Message {
 
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parent`               |   contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id. |            
-| `previous_messages`    |   contains a list of previous [`message identifiers`](./mvds.md#payloads).                                                         |
+| `parents`               |   contains a list of parent [`message indentifier`](./mvds.md#payloads) for the specific message. |            
 | `ack_required`         |   contains a flag whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
@@ -65,15 +63,9 @@ Below are the list of informational flags and what they MAY be used for by a nod
 
 #### `parent`
 
-This field contains the [`message indentifier`](./mvds.md#payloads) of the last sent message for the given node in the specific group id, it MUST NOT use any messages as parent whose `ack` flag was set to `false`. This creates a linked list of persistent messages.
+This field contains a list of parent [`message indentifier`](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a Directed Acyclic Graph (DAG)<sup>1</sup> of persistent messages.
 
-This field provides sequential consistency for all messages sent by a peer in a specific group id.
-
-#### `previous_messages`
-
-This field contains a list of a messages previously sent or received by a node in a specific group id. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>. The number of messages and layers (simply parents or ancestors) included in the field SHOULD be determined by the application, the messages MUST be ordered from latest to oldest sent or received.
-
-By establishing a DAG this field provides causal consistency for all messages within a specific group id, not limited to a single sender.
+This field helps establish consistency that may either be causal or eventual depending on the client.
 
 ### Configurational Fields
 
