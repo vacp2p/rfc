@@ -16,7 +16,7 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md), which currently do not exist, casual consistency is added with the DAG and sequential consistency with the linear history. Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct both a linear and DAG (Directed Acyclic Graph) based message history that will aid the consistency of [MVDS](./mvds.md), which currently do not exist, causal consistency is added with the DAG and sequential consistency with the linear history. Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
@@ -73,7 +73,7 @@ This field provides sequential consistency for all messages sent by a peer in a 
 
 This field contains a list of a messages previously sent or received by a node in a specific group id. This helps establish ordering by creating a Directed Acyclic Graph (DAG)<sup>1</sup>. The number of messages and layers (simply parents or ancestors) included in the field SHOULD be determined by the application, the messages MUST be ordered from latest to oldest sent or received.
 
-By establishing a DAG this field provides casual consistency for all messages within a specific group id, not limited to a single sender.
+By establishing a DAG this field provides causal consistency for all messages within a specific group id, not limited to a single sender.
 
 ### Configurational Fields
 
