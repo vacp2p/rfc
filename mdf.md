@@ -13,6 +13,8 @@
 4. [Usage](#usage)
     1. [`parents`](#parents)
     2. [`ack_required`](#ack_required)
+5. [Footnotes](#footnotes)
+6. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -73,3 +75,6 @@ Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not nee
 1. <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
 2. <https://jepsen.io/consistency/models/causal>
 3. <https://en.wikipedia.org/wiki/Eventual_consistency>
+
+## Acknowledgements
+ - Andrea Maria Piana
