@@ -16,27 +16,27 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct message history that will aid the consistency of [MVDS](./mvds.md), which currently do not exist, the additional fields allow for various consistency models such. Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
-In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message. Encoding a DAG within a message allows for an entire portion to be synchronized if messages are missing with a single `REQUEST` message.
+In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
 
 ## Format
 
-We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled. If an MVDS node implements this, we say that node has MDF capability (This might become part of a future reconciled MVDS spec).
+We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.
 
 
 ```protobuf
 package vac.mvds;
 
 message Metadata {
-  bytes parent = 7000;
+  bytes parents = 7000;
   bool ack_required = 7001 [default = true];
 }
 ```
 
-We MAY transmit a `Metadata` message by extending the MVDS [message](./mvds.md#payloads) with a `metadata` field.
+Nodes MAY transmit a `Metadata` message by extending the MVDS [message](./mvds.md#payloads) with a `metadata` field.
 
 ```diff
 message Message {
@@ -50,8 +50,8 @@ message Message {
 
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`               |   contains a list of parent [`message indentifier`](./mvds.md#payloads) for the specific message. |            
-| `ack_required`         |   contains a flag whether a message needs to be acknowledged or not.                                                             |
+| `parents`               |   list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. |            
+| `ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
@@ -61,9 +61,9 @@ The flags provided through the `Metadata` message are either informational or be
 
 Below are the list of informational flags and what they MAY be used for by a node.
 
-#### `parent`
+#### `parents`
 
-This field contains a list of parent [`message indentifier`](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a Directed Acyclic Graph (DAG)<sup>1</sup> of persistent messages.
+This field contains a list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a Directed Acyclic Graph (DAG)<sup>1</sup> of persistent messages.
 
 This field helps establish consistency that may either be causal or eventual depending on the client.
 
@@ -73,9 +73,9 @@ Below are a list of the configurational flags and how they modify node behavior.
 
 #### `ack_required`
 
-When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it MUST not send any acknowledgement.
+When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it SHOULD NOT send any acknowledgement.
 
-> ***NOTE**: Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST not be shared as part of the message history.*
+Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST NOT be shared as part of the message history.
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
 
