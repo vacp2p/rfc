@@ -52,14 +52,14 @@ message Message {
 
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`               |   list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. |            
+| `parents`               |   list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. |            
 | `ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
 ### `parents`
 
-This field contains a list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
+This field contains a list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
 
 Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup>2</sup>, they MAY also pass the messages straight away for eventual consistency<sup>3</sup>.
 
