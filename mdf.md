@@ -11,8 +11,8 @@
 3. [Format](#format)
     1. [Fields](#fields)
 4. [Usage](#usage)
-    1. [Informational Fields](#informational-fields)
-    2. [Configurational Fields](#configurational-fields)
+    1. [`parents`](#parents)
+    2. [`ack_required`](#ack_required)
 
 ## Abstract
 
