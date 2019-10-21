@@ -12,7 +12,7 @@ These protocols define various components of the [vac](https://vac.dev) stack.
 
  - [mvds](./mvds.md) - Data Synchronization protocol for unreliable transports.
  - [remote log](./remote-log.md) - Remote replication of local logs.
- - [mdf](./mdf.md) - Adds informational and behavioral information to [MVDS](./mvds.md) messages in order to allow more specific behavior, as well as adding consistency guarantees. 
+ - [mdf](./mdf.md) - Metadata field for [MVDS](./mvds.md) messages. 
 
 
 ## Style guide
