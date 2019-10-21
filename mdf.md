@@ -41,10 +41,10 @@ Nodes MAY transmit a `Metadata` message by extending the MVDS [message](./mvds.m
 
 ```diff
 message Message {
-+ Metadata metadata = 6000;
-  bytes group_id = 6001;
-  int64 timestamp = 6002;
-  bytes body = 6003;
+  bytes group_id = 1;
+  int64 timestamp = 2;
+  bytes body = 3;
++ Metadata metadata = 4;
 }
 ```
 
