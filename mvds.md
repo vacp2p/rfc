@@ -1,6 +1,6 @@
 # Minimum Viable Data Synchronization
 
-> Version: 0.5.2 (Draft)
+> Version: 0.6.0 (Draft)
 > 
 > Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
@@ -48,16 +48,16 @@ syntax = "proto3";
 package vac.mvds;
 
 message Payload {
-  repeated bytes acks = 5001;
-  repeated bytes offers = 5002;
-  repeated bytes requests = 5003;
-  repeated Message messages = 5004;
+  repeated bytes acks = 1;
+  repeated bytes offers = 2;
+  repeated bytes requests = 3;
+  repeated Message messages = 4;
 }
 
 message Message {
-  bytes group_id = 6001;
-  int64 timestamp = 6002;
-  bytes body = 6003;
+  bytes group_id = 1;
+  int64 timestamp = 2;
+  bytes body = 3;
 }
 ```
 
