@@ -26,7 +26,6 @@ In order for more efficient synchronization of conversational messages, informat
 
 We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.
 
-
 ```protobuf
 package vac.mvds;
 
@@ -46,6 +45,7 @@ message Message {
   bytes body = 6003;
 }
 ```
+
 ### Fields
 
 | Name                   |   Description                                                                                                                    |
