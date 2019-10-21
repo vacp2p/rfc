@@ -55,23 +55,13 @@ message Message {
 
 ## Usage
 
-The flags provided through the `Metadata` message are either informational or behavioral. Informational fields MAY be used by a node, configurational fields SHOULD be recognized and the nodes behavior SHOULD change accordingly.
+### `parents`
 
-### Informational Fields
+This field contains a list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
 
-Below are the list of informational flags and what they MAY be used for by a node.
+This field helps establish consistency that may either be causal<sup>2</sup> or eventual<sup>3</sup> depending on the client.
 
-#### `parents`
-
-This field contains a list of parent [`message indentifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a Directed Acyclic Graph (DAG)<sup>1</sup> of persistent messages.
-
-This field helps establish consistency that may either be causal or eventual depending on the client.
-
-### Configurational Fields
-
-Below are a list of the configurational flags and how they modify node behavior.
-
-#### `ack_required`
+### `ack_required`
 
 When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it SHOULD NOT send any acknowledgement.
 
@@ -80,4 +70,6 @@ Messages that are not required to be acknowledged can be considered **ephemeral*
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
 
 ## Footnotes
-1. <https://github.com/matrix-org/matrix-doc/blob/master/specification/server_server_api.rst#pdus>
+1. <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
+2. <https://jepsen.io/consistency/models/causal>
+3. <https://en.wikipedia.org/wiki/Eventual_consistency>
