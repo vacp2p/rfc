@@ -63,6 +63,12 @@ This field contains a list of parent [`message indentifier`s](./mvds.md#payloads
 
 Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup>2</sup>, they MAY also pass the messages straight away for eventual consistency<sup>3</sup>.
 
+A parent is any message before a new message that a node is aware of that has no children.
+
+The number of parents for a given message is bound by [0, N], where N is the number of nodes participating in the conversation, therefore the space requirements for the `parents` field is O(N).
+
+If a message has no parents it is considered a root. There can be multiple roots, which might be disconnected, giving rise to multiple DAGs.
+
 ### `ack_required`
 
 When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it SHOULD NOT send any acknowledgement.
