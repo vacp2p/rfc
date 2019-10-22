@@ -12,7 +12,7 @@
     1. [Fields](#fields)
 4. [Usage](#usage)
     1. [`parents`](#parents)
-    2. [`no_ack_required`](#ack_required)
+    2. [`no_ack_required`](#no_ack_required)
 5. [Footnotes](#footnotes)
 6. [Acknowledgements](#acknowledgements)
 
