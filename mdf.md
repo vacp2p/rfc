@@ -33,7 +33,7 @@ package vac.mvds;
 
 message Metadata {
   bytes parents = 1;
-  bool ack_required = 2 [default = true];
+  bool no_ack_required = 2;
 }
 ```
 
@@ -53,7 +53,7 @@ message Message {
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parents`               |   list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. |            
-| `ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
+| `no_ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
 
 ## Usage
 
@@ -69,9 +69,9 @@ The number of parents for a given message is bound by [0, N], where N is the num
 
 If a message has no parents it is considered a root. There can be multiple roots, which might be disconnected, giving rise to multiple DAGs.
 
-### `ack_required`
+### `no_ack_required`
 
-When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it SHOULD NOT send any acknowledgement.
+When the `no_ack_required` flag is set to `false`, a node MUST acknowledge when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement.
 
 Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST NOT be shared as part of the message history.
 
