@@ -71,7 +71,7 @@ If a message has no parents it is considered a root. There can be multiple roots
 
 ### `ephemeral`
 
-When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement.
+When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement. The flag is `false` by default.
 
 Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
