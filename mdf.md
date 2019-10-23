@@ -53,7 +53,7 @@ message Message {
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parents`               |   list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. |            
-| `no_ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
+| `ephemeral`         |   indicates whether a message is ephemeral or not.                                                             |
 
 ## Usage
 
