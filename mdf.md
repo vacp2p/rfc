@@ -12,7 +12,7 @@
     1. [Fields](#fields)
 4. [Usage](#usage)
     1. [`parents`](#parents)
-    2. [`no_ack_required`](#no_ack_required)
+    2. [`ephemeral`](#ephemeral)
 5. [Footnotes](#footnotes)
 6. [Acknowledgements](#acknowledgements)
 
@@ -33,7 +33,7 @@ package vac.mvds;
 
 message Metadata {
   bytes parents = 1;
-  bool no_ack_required = 2;
+  bool ephemeral = 2;
 }
 ```
 
@@ -69,11 +69,11 @@ The number of parents for a given message is bound by [0, N], where N is the num
 
 If a message has no parents it is considered a root. There can be multiple roots, which might be disconnected, giving rise to multiple DAGs.
 
-### `no_ack_required`
+### `ephemeral`
 
-When the `no_ack_required` flag is set to `false`, a node MUST acknowledge when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement.
+When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement.
 
-Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST NOT be shared as part of the message history.
+Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
 
