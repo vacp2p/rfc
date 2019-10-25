@@ -12,7 +12,7 @@
     1. [Fields](#fields)
 4. [Usage](#usage)
     1. [`parents`](#parents)
-    2. [`ack_required`](#ack_required)
+    2. [`ephemeral`](#ephemeral)
 5. [Footnotes](#footnotes)
 6. [Acknowledgements](#acknowledgements)
 
@@ -33,7 +33,7 @@ package vac.mvds;
 
 message Metadata {
   repeated bytes parents = 1;
-  bool ack_required = 2 [default = true];
+  bool ephemeral = 2;
 }
 ```
 
@@ -53,7 +53,7 @@ message Message {
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `parents`               |   list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. |            
-| `ack_required`         |   indicates whether a message needs to be acknowledged or not.                                                             |
+| `ephemeral`         |   indicates whether a message is ephemeral or not.                                                             |
 
 ## Usage
 
@@ -69,11 +69,11 @@ The number of parents for a given message is bound by [0, N], where N is the num
 
 If a message has no parents it is considered a root. There can be multiple roots, which might be disconnected, giving rise to multiple DAGs.
 
-### `ack_required`
+### `ephemeral`
 
-When the `ack_required` flag is set to `true`, a node MUST acknowledge when they have received and processed  a message. If it is set to `false`, it SHOULD NOT send any acknowledgement.
+When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement. The flag is `false` by default.
 
-Messages that are not required to be acknowledged can be considered **ephemeral**, meaning nodes MAY decide to not persist them and they MUST NOT be shared as part of the message history.
+Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
 
