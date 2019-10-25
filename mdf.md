@@ -32,7 +32,7 @@ We introduce the metadata message which is used to convey information about a me
 package vac.mvds;
 
 message Metadata {
-  bytes parents = 1;
+  repeated bytes parents = 1;
   bool ack_required = 2 [default = true];
 }
 ```
