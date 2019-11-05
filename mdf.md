@@ -13,8 +13,9 @@
 4. [Usage](#usage)
     1. [`parents`](#parents)
     2. [`ephemeral`](#ephemeral)
-5. [Footnotes](#footnotes)
-6. [Acknowledgements](#acknowledgements)
+5. [Changelog](#changelog)
+6. [Footnotes](#footnotes)
+7. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -76,6 +77,12 @@ When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement
 Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| [0.1.0](https://github.com/vacp2p/specs/blob/53bc8585add58695c28cfaf4382818f4daf8de84/mdf.md)   | Initial Release |
 
 ## Footnotes
 1. <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
