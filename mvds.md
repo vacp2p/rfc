@@ -16,7 +16,8 @@
     2. [Flow](#flow)
     3. [Retransmission](#retransmission)
 5. [Footnotes](#footnotes)
-6. [Acknowledgements](#acknowledgements)
+6. [Changelog](#changelog)
+7. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
