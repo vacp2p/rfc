@@ -1,22 +1,16 @@
----
-eip: 627
-title: Whisper Specification
-author: Vlad Gluhovsky <gluk256@gmail.com>
-type: Standards Track
-category: Networking
-status: Final
-created: 2017-05-05
----
+# Waku Whisper Specification
+
+> Version 0.0.1 (Draft)
+>
+> Authors: Oskar Thorén oskar@status.im
 
 ## Abstract
 
-This EIP describes the format of Whisper messages within the ÐΞVp2p Wire Protocol.
-This EIP should substitute the [existing specification](https://github.com/ethereum/wiki/wiki/Whisper-Wire-Protocol).
-More detailed documentation on Whisper could be found [here](https://github.com/ethereum/go-ethereum/wiki/Whisper).
+This spec describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec should substitute the [existing spec](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that - optionally - enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) mailserver (c) waku mode and (d) basic rate limiting.
 
 ## Motivation
 
-It is necessary to specify the standard for Whisper messages in order to ensure forward compatibility of different Whisper clients.
+It is necessary to specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku.
 
 ## Specification
 
