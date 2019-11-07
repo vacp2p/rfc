@@ -76,6 +76,8 @@ Each payload contains the following fields:
 HASH("MESSAGE_ID", group_id, timestamp, body);
 ```
 
+**Group Identifiers:** Each `message` is assigned into a **group** using the `group_id` field, groups are independent synchronization contexts between peers.
+
 The current `HASH` function used is `sha256`.
 
 ## Synchronization
