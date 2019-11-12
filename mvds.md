@@ -15,9 +15,10 @@
     1. [State](#state)
     2. [Flow](#flow)
     3. [Retransmission](#retransmission)
-5. [Footnotes](#footnotes)
-6. [Changelog](#changelog)
-7. [Acknowledgements](#acknowledgements)
+5. [Formal Specification](#formal-Specification)
+6. [Footnotes](#footnotes)
+7. [Changelog](#changelog)
+8. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -76,6 +77,8 @@ Each payload contains the following fields:
 ```
 HASH("MESSAGE_ID", group_id, timestamp, body);
 ```
+
+**Group Identifiers:** Each `message` is assigned into a **group** using the `group_id` field, groups are independent synchronization contexts between peers.
 
 The current `HASH` function used is `sha256`.
 
@@ -139,6 +142,10 @@ The record of the type `Type` SHOULD be retransmitted every time `Send Epoch` is
 `Send Epoch` and `Send Count` MUST be increased every time a record is retransmitted. Although no function is defined on how to increase `Send Epoch`, it SHOULD be exponentially increased until reaching an upper bound where it then goes back to a lower epoch in order to prevent a record's `Send Epoch`'s from becoming too large.
 
 > ***NOTE:** We do not retransmission `ACK`s as we do not know when they have arrived, therefore we simply resend them every time we receive a `MESSAGE`.*
+
+## Formal Specification
+
+MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalities/tree/master/MVDS>.
 
 ## Footnotes
 
