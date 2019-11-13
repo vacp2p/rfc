@@ -17,7 +17,8 @@
     3. [Retransmission](#retransmission)
 5. [Formal Specification](#formal-Specification)
 6. [Footnotes](#footnotes)
-7. [Acknowledgements](#acknowledgements)
+7. [Changelog](#changelog)
+8. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -150,6 +151,15 @@ MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalit
 
 1. <https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md>
 2. <https://github.com/vacp2p/mvds>
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| [0.6.0](https://github.com/vacp2p/specs/commit/b6335947e09502ec399954002d983a709065a342#diff-a6dbd535bfcb545a64b1c95f6dc8f9f1) | Breaking change to update protocol buffer and field changes. |
+| [0.5.2](https://github.com/vacp2p/specs/blob/0adddcdb8d7e71240c2df30d4ba40e49b4275011/mvds.md) | Breaking change to update protocol buffer and field changes. |
+| [0.5.1](https://github.com/status-im/bigbrother-specs/blob/20e2659447dcb5123a105526eb26816307c3780c/data_sync/mvds.md) | Documentation updates: clarifications on spec, RFC-2119 and message identifiers. |
+| [0.5.0](https://github.com/status-im/bigbrother-specs/blob/6d3d0771b46941791eabe9263f80cbaeaf3d1148/data_sync/mvds.md) | Initial Release |
 
 ## Acknowledgements
  - Preston van Loon
