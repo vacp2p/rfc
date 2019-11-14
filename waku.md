@@ -14,16 +14,18 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 ## Specification
 
-All Whisper messages sent as ÐΞVp2p Wire Protocol packets should be RLP-encoded arrays of data containing two objects: integer packet code followed by another object (whose type depends on the packet code). 
+All Waku messages sent as ÐΞVp2p Wire Protocol packets should be RLP-encoded arrays of data containing two objects: integer packet code followed by another object (whose type depends on the packet code). 
 
-If Whisper node does not support a particular packet code, it should just ignore the packet without generating any error.
+If Waku node does not support a particular packet code, it should just ignore the packet without generating any error.
 
 ### Packet Codes
 
-The message codes reserved for Whisper protocol: 0 - 127.
+<!-- Packet code not clear -->
+
+The message codes reserved for Waku protocol: 0 - 127.
 Messages with unknown codes must be ignored, for forward compatibility of future versions.
 
-The Whisper sub-protocol should support the following packet codes:
+The Waku sub-protocol should support the following packet codes:
 
 | EIP   | Name                       | Int Value |
 |-------|----------------------------|-----------|
@@ -176,3 +178,53 @@ The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
+----
+
+## Inbox
+through: mailservers for offline messaging, light mode, and 
+
+with an eye towards better user
+
+This is a fork of the Whisper protocol, with attention towards scalability ...
+
+Compatible with Whisper clients.
+
+limited optional support for x.
+
+spam resistance practice, rate limiting,
+
+settlement
+
+mailserver
+
+and
+...
+
+compatible with Whisper.
+
+
+version
+
+roadmap
+changelog
+
+differences whisper
+
+
+
+## Changelog
+
+Whisper
+
+
+Recommendations for mobile nodes use x
+
+
+Known flaws devp2p, move to libp2p
+
+Incremental approach
+
+Use whisper
