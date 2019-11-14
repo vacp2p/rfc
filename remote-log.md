@@ -6,19 +6,20 @@
 
 ## Table of Contents
 
-- [Abstract](#abstract)
-- [Definitions](#definitions)
-- [Wire Protocol](#wire-protocol)
-    - [Secure Transport, storage, and name system](#secure-transport-storage-and-name-system)
-    - [Payloads](#payloads)
-- [Synchronization](#synchronization)
-    - [Roles](#roles)
-    - [Flow](#flow)
-    - [Remote log](#remote-log)
-    - [Next page semantics](#next-page-semantics)
-    - [Interaction with MVDS](#interaction-with-mvds)
-- [Footnotes](#footnotes)
-- [Acknowledgements](#acknowledgements)
+1. [Abstract](#abstract)
+2. [Definitions](#definitions)
+3. [Wire Protocol](#wire-protocol)
+    1. [Secure Transport, storage, and name system](#secure-transport-storage-and-name-system)
+    2. [Payloads](#payloads)
+4. [Synchronization](#synchronization)
+    1. [Roles](#roles)
+    2. [Flow](#flow)
+    3. [Remote log](#remote-log)
+    4. [Next page semantics](#next-page-semantics)
+    5. [Interaction with MVDS](#interaction-with-mvds)
+5. [Footnotes](#footnotes)
+6. [Changelog](#changelog)
+7. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -223,6 +224,15 @@ in time.
 ## Footnotes
 
 1. <https://github.com/vacp2p/research/tree/master/remote_log>
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| 0.1.1 (current) | Add protobuf package name, protobuf3 and fix typos. |
+| [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.mdhttps://github.com/status-im/bigbrother-specs/blob/6d3d0771b46941791eabe9263f80cbaeaf3d1148/data_sync/mvds.md) | Initial Release |
+
+
 
 ## Acknowledgements
 
