@@ -14,7 +14,7 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 ## Specification
 
-All Waku messages sent as ÐΞVp2p Wire Protocol packets should be RLP-encoded arrays of data containing two objects: integer packet code followed by another object (whose type depends on the packet code). 
+All Waku messages sent as ÐΞVp2p Wire Protocol packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
 If Waku node does not support a particular packet code, it should just ignore the packet without generating any error.
 
@@ -23,9 +23,12 @@ If Waku node does not support a particular packet code, it should just ignore th
 <!-- Packet code not clear -->
 
 The message codes reserved for Waku protocol: 0 - 127.
-Messages with unknown codes must be ignored, for forward compatibility of future versions.
 
-The Waku sub-protocol should support the following packet codes:
+<!-- Is this a MUST or rather a SHOULD -->
+
+Messages with unknown codes MUST be ignored, for forward compatibility of future versions.
+
+The Waku sub-protocol SHOULD support the following packet codes:
 
 | Name                       | Int Value |
 |----------------------------|-----------|
@@ -46,19 +49,21 @@ The following message codes are optional, but they are reserved for specific pur
 
 **Status** [`0`]
 
-This packet contains two objects: integer message code (0x00) followed by a list of values: integer version, float PoW requirement, and bloom filter, in this order. The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
+<!-- @todo maybe make a table or something -->
+
+This packet contains two objects: integer message code (0x00) followed by a list of values: version, PoW requirement, and bloom filter, in this order. The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
 
 Status message should be sent after the initial handshake and prior to any other messages.
 
 **Messages** [`1`, `whisper_envelopes`]
 
-This packet contains two objects: integer message code (0x01) followed by a list (possibly empty) of Whisper Envelopes.
+This packet contains two objects: message code (0x01) followed by a list (possibly empty) of Whisper Envelopes.
 
 This packet is used for sending the standard Whisper envelopes.
 
 **PoW Requirement** [`2`, `PoW`]
 
-This packet contains two objects: integer message code (0x02) followed by a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed.
+This packet contains two objects: message code (0x02) followed by the value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed.
 
 This packet is used by Whisper nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
 
@@ -113,17 +118,17 @@ This packet is used for sending the peer-to-peer messages, which are not suppose
 
 Envelopes are RLP-encoded structures of the following format:
 
-	[ Expiry, TTL, Topic, Data, Nonce ]
-	
-`Expiry`: 4 bytes (UNIX time in seconds).
+```
+[ Expiry, TTL, Topic, Data, Nonce ]
+```
 
-`TTL`: 4 bytes (time-to-live in seconds).
-
-`Topic`: 4 bytes of arbitrary data.
-
-`Data`: byte array of arbitrary size (contains encrypted message).
-
-`Nonce`: 8 bytes of arbitrary data (used for PoW calculation).
+| Field | Type |
+|-|-|
+| Expiry | 4 bytes (UNIX time in seconds) |
+| TTL | 4 bytes (time-to-live in seconds) |
+| Topic | 4 bytes of arbitrary data |
+| Data | byte array of arbitrary size (contains encrypted message) |
+| Nonce |  8 bytes of arbitrary data (used for PoW calculation) |
 
 ### Contents of Data Field of the Message (Optional)
 
