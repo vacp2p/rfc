@@ -27,22 +27,20 @@ Messages with unknown codes must be ignored, for forward compatibility of future
 
 The Waku sub-protocol should support the following packet codes:
 
-| EIP   | Name                       | Int Value |
-|-------|----------------------------|-----------|
-|       | Status                     |     0     |
-|       | Messages                   |     1     |
-|       | PoW Requirement            |     2     |
-|       | Bloom Filter               |     3     |
-|-------|----------------------------|-----------|
+| Name                       | Int Value |
+|----------------------------|-----------|
+| Status                     |     0     |
+| Messages                   |     1     |
+| PoW Requirement            |     2     |
+| Bloom Filter               |     3     |
 
 
 The following message codes are optional, but they are reserved for specific purpose.
 
-| EIP   | Name                       | Int Value |
-|-------|----------------------------|-----------|
-|       | P2P Request                |    126    |
-|       | P2P Message                |    127    |
-|-------|----------------------------|-----------|
+| Name                       | Int Value |
+|----------------------------|-----------|
+| P2P Request                |    126    |
+| P2P Message                |    127    |
 
 ### Packet Format and Usage
 
