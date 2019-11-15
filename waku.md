@@ -182,52 +182,9 @@ The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-
-
-----
-
-## Inbox
-through: mailservers for offline messaging, light mode, and 
-
-with an eye towards better user
-
-This is a fork of the Whisper protocol, with attention towards scalability ...
-
-Compatible with Whisper clients.
-
-limited optional support for x.
-
-spam resistance practice, rate limiting,
-
-settlement
-
-mailserver
-
-and
-...
-
-compatible with Whisper.
-
-
-version
-
-roadmap
-changelog
-
-differences whisper
-
-
-
-## Changelog
-
-Whisper
-
-
-Recommendations for mobile nodes use x
-
-
-Known flaws devp2p, move to libp2p
-
-Incremental approach
-
-Use whisper
+<!-- TODO: Document recommendations for mobile nodes node --->
+<!-- TODO: Document spam resistance in practice, rate limiting -->
+<!-- TODO: Document accounting for resources, with mention of later settlement -->
+<!-- TODO: Document compatibility and differences with Whisper v6 -->
+<!-- TODO: Add changelog -->
+<!-- TODO: Consider adding roadmap, or link to -->
