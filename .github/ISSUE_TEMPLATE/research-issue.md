@@ -9,10 +9,10 @@ assignees: ''
 
 # Problem
 
-# Solution
-
 # Acceptance criteria
 
-# Not in scope
+# Details
+
+# Possible Solutions
 
 # Notes
