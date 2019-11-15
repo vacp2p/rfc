@@ -4,6 +4,8 @@
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
+<!-- TODO: How to reconcile spec version format with RLPx subprotocol format? Include in header and keep in sync somehow? -->
+
 ## Table of Contents
 
 - [Waku Whisper Specification](#waku-whisper-specification)
@@ -34,6 +36,10 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 All Waku messages sent as ÐΞVp2p Wire Protocol packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
 If Waku node does not support a particular packet code, it should just ignore the packet without generating any error.
+
+## RLPx subprotocol
+
+The current RLPx subprotocol and version is `wkk/1`. See changelog for changes.
 
 ### Packet Codes
 
