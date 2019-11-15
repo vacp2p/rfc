@@ -183,6 +183,12 @@ Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Sch
 
 Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
+## Light node
+
+Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. 
+
+Light Nodes SHOULD not connect to other light nodes as this would simply waste connections.
+
 ## Rationale
 
 Packet codes 0x00 and 0x01 are already used in all Whisper versions.
