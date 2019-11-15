@@ -14,7 +14,8 @@
     1. [`parents`](#parents)
     2. [`ephemeral`](#ephemeral)
 5. [Footnotes](#footnotes)
-6. [Acknowledgements](#acknowledgements)
+6. [Changelog](#changelog)
+7. [Acknowledgements](#acknowledgements)
 
 ## Abstract
 
@@ -81,6 +82,12 @@ Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not nee
 1. <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
 2. <https://jepsen.io/consistency/models/causal>
 3. <https://en.wikipedia.org/wiki/Eventual_consistency>
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| [0.1.0](https://github.com/vacp2p/specs/blob/53bc8585add58695c28cfaf4382818f4daf8de84/mdf.md)   | Initial Release |
 
 ## Acknowledgements
  - Andrea Maria Piana
