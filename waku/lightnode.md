@@ -14,5 +14,7 @@
 
 ## Footnotes
 
+## Changelog
+
 ## Acknowledgements
 
