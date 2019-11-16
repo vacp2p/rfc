@@ -8,20 +8,18 @@
 
 ## Table of Contents
 
-- [Waku Whisper Specification](#waku-whisper-specification)
-    - [Table of Contents](#table-of-contents)
-    - [Abstract](#abstract)
-    - [Motivation](#motivation)
-    - [Specification](#specification)
-        - [Packet Codes](#packet-codes)
-        - [Packet Format and Usage](#packet-format-and-usage)
-        - [Whisper Envelope](#whisper-envelope)
-        - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
-        - [Payload Encryption](#payload-encryption)
-    - [Rationale](#rationale)
-    - [Backwards Compatibility](#backwards-compatibility)
-    - [Implementation](#implementation)
-    - [Copyright](#copyright)
+- [Abstract](#abstract)
+- [Motivation](#motivation)
+- [Specification](#specification)
+  - [Packet Codes](#packet-codes)
+  - [Packet Format and Usage](#packet-format-and-usage)
+  - [Whisper Envelope](#whisper-envelope)
+  - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
+  - [Payload Encryption](#payload-encryption)
+- [Rationale](#rationale)
+- [Backwards Compatibility](#backwards-compatibility)
+- [Implementation](#implementation)
+- [Copyright](#copyright)
 
 ## Abstract
 
