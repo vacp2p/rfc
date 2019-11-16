@@ -35,7 +35,7 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 All Waku messages sent as ÐΞVp2p Wire Protocol packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
-If Waku node does not support a particular packet code, it should just ignore the packet without generating any error.
+Waku nodes that do not support a particular packet code SHOULD ignore the packet without generating any error.
 
 ## RLPx subprotocol
 
