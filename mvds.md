@@ -86,7 +86,7 @@ The current `HASH` function used is `sha256`.
 
 ### State
 
-We refer to `state` as set of records for the types `OFFER`, `REQUEST` and `MESSAGE` that every node SHOULD store per peer. We MUST NOT keep states for `ACK` records as we do not retransmit those periodically. The following information is stored for records:
+We refer to `state` as set of records for the types `OFFER`, `REQUEST` and `MESSAGE` that every node SHOULD store per peer. `state` MUST NOT contain `ACK` records as we do not retransmit those periodically. The following information is stored for records:
 
  - **Type** - Either `OFFER`, `REQUEST` or `MESSAGE`
  - **Send Count** - The amount of times a record has been sent to a peer.
