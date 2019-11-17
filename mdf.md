@@ -60,7 +60,7 @@ message Message {
 
 ### `parents`
 
-This field contains a list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This creates a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
+This field contains a list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
 
 Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup>2</sup>, they MAY also pass the messages straight away for eventual consistency<sup>3</sup>.
 
