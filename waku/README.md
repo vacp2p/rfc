@@ -16,6 +16,7 @@
   - [Whisper Envelope](#whisper-envelope)
   - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
   - [Payload Encryption](#payload-encryption)
+  - [Light Node](#light-node)
 - [Rationale](#rationale)
 - [Backwards Compatibility](#backwards-compatibility)
 - [Implementation](#implementation)
