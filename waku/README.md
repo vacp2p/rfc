@@ -8,20 +8,19 @@
 
 ## Table of Contents
 
-- [Waku Whisper Specification](#waku-whisper-specification)
-    - [Table of Contents](#table-of-contents)
-    - [Abstract](#abstract)
-    - [Motivation](#motivation)
-    - [Specification](#specification)
-        - [Packet Codes](#packet-codes)
-        - [Packet Format and Usage](#packet-format-and-usage)
-        - [Whisper Envelope](#whisper-envelope)
-        - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
-        - [Payload Encryption](#payload-encryption)
-    - [Rationale](#rationale)
-    - [Backwards Compatibility](#backwards-compatibility)
-    - [Implementation](#implementation)
-    - [Copyright](#copyright)
+- [Abstract](#abstract)
+- [Motivation](#motivation)
+- [Specification](#specification)
+  - [Packet Codes](#packet-codes)
+  - [Packet Format and Usage](#packet-format-and-usage)
+  - [Whisper Envelope](#whisper-envelope)
+  - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
+  - [Payload Encryption](#payload-encryption)
+  - [Light Node](#light-node)
+- [Rationale](#rationale)
+- [Backwards Compatibility](#backwards-compatibility)
+- [Implementation](#implementation)
+- [Copyright](#copyright)
 
 ## Abstract
 
@@ -182,6 +181,12 @@ The padding field was introduced in order to align the message size, since messa
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.
 
 Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
+
+## Light node
+
+Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. 
+
+Light Nodes SHOULD not connect to other light nodes as this would simply waste connections.
 
 ## Rationale
 
