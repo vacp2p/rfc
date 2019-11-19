@@ -184,9 +184,7 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 ## Light node
 
-Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. 
-
-Light Nodes SHOULD not connect to other light nodes as this would simply waste connections.
+Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
 
 ## Rationale
 
