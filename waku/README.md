@@ -186,6 +186,13 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
 
+Light nodes are identified using the handshake.
+
+<!-- @todo rationale and privacy -->
+
+
+<!-- @todo handshake should be explained somewhere -->
+
 ## Rationale
 
 Packet codes 0x00 and 0x01 are already used in all Whisper versions.
