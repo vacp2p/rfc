@@ -24,9 +24,11 @@
 
 ## Abstract
 
-This spec describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec should substitute the [existing spec](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that - optionally - enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) mailserver (c) waku mode and (d) basic rate limiting.
+This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) mailserver (c) waku mode and (d) basic rate limiting.
 
 ## Motivation
+
+<!-- This should be the motivation of Waku rather than the motivation of this spec: aka to enable scalability etc. -->
 
 It is necessary to specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku.
 
