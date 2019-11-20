@@ -58,7 +58,7 @@ The message codes reserved for Waku protocol: 0 - 127.
 
 Messages with unknown codes MUST be ignored, for forward compatibility of future versions.
 
-The Waku sub-protocol SHOULD support the following packet codes:
+The Waku sub-protocol MUST support the following packet codes:
 
 | Name                       | Int Value |
 |----------------------------|-----------|
