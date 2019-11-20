@@ -216,6 +216,22 @@ Packet codes 0x7E and 0x7F may be used to implement Whisper Mail Server and Clie
 
 This EIP is compatible with Whisper version 6. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
+### WakuWhisper bridging
+
+`waku/1` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
+
+**Roles:**
+- Waku client A, only Waku capability
+- Whisper client B, only Whisper capability
+- WakuWhisper bridge C, both Waku and Whisper capability
+
+**Flow:**
+1. A posts message; B posts message.
+2. C picks up message from A and B and relays them both to Waku and Whisper.
+3. A receives message on Waku; B on Whisper.
+
+**Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
+
 ## Implementation
 
 The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03. Parity's implementation of v.6 will also use codes 0x00 - 0x03. Codes 0x7E and 0x7F are reserved, but still unused and left for custom implementation of Whisper Mail Server.
