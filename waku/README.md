@@ -4,8 +4,6 @@
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
-<!-- TODO: How to reconcile spec version format with RLPx subprotocol format? Include in header and keep in sync somehow? -->
-
 ## Table of Contents
 
 - [Abstract](#abstract)
@@ -236,6 +234,14 @@ This EIP is compatible with Whisper version 6. Any client which does not impleme
 
 The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03. Parity's implementation of v.6 will also use codes 0x00 - 0x03. Codes 0x7E and 0x7F are reserved, but still unused and left for custom implementation of Whisper Mail Server.
 
+<!-- TODO(Dean): Break out into Status spec and remove this section -->
+
+## Changelog
+
+| Version | Comment |
+| :-----: | ------- |
+| 0.0.1 (current) | [WIP] Initial Release |
+
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -243,6 +249,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 <!-- TODO: Document recommendations for mobile nodes node --->
 <!-- TODO: Document spam resistance in practice, rate limiting -->
 <!-- TODO: Document accounting for resources, with mention of later settlement -->
-<!-- TODO: Document compatibility and differences with Whisper v6 -->
-<!-- TODO: Add changelog -->
+<!-- TODO: Document differences with Whisper v6 -->
 <!-- TODO: Consider adding roadmap, or link to -->
