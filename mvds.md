@@ -19,6 +19,7 @@
 6. [Footnotes](#footnotes)
 7. [Changelog](#changelog)
 8. [Acknowledgements](#acknowledgements)
+9. [Copyright](#copyright)
 
 ## Abstract
 
@@ -166,3 +167,7 @@ MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalit
  - Greg Markou
  - Rene Nayman
  - Jacek Sieka
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
