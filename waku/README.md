@@ -188,21 +188,28 @@ Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Sch
 
 Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
-## Light node
+## Additional capabilities
+
+Waku supports multiple capabilities. These include light node, rate limting, mailserver (client and server) and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
+
+### Light node
+
+The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.
 
 Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
 
 Light nodes are identified using the handshake.
 
-### Rationale
+<!-- TODO: Add details on handshake -- >
 
-The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.
+**Security consideration**:
+Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
 
-### Considerations
+<!-- TODO: Consider moving all security considerations to end section of document -->
 
-It is important to note that running a node as a light node mode has effects on privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
+### Mailserver and client
 
-<!-- @todo handshake should be explained somewhere -->
+<!-- TODO: Clean up vocabulary, is it mailserver and mailserver client? mailclient? mailserver node? historynode? etc -->
 
 ## Rationale
 
