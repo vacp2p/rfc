@@ -77,7 +77,7 @@ The following message codes are optional, but they are reserved for specific pur
 
 ### Packet Format and Usage
 
-**Status** [`0`]
+**Status** [`0`, [`version`, `pow_requirement`, `bloom_filter`, `light_node`]]
 
 <!-- @todo maybe make a table or something -->
 
