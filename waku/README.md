@@ -200,7 +200,7 @@ The rationale for light nodes is to allow for interaction with waku on resource 
 
 Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
 
-Light nodes are identified using the handshake.
+Light nodes are identified by the `light_node` value in the status message.
 
 <!-- TODO: Add details on handshake -- >
 
