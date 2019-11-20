@@ -1,6 +1,6 @@
 # Waku Whisper Specification
 
-> Version 0.0.1 (Draft)
+> Version 0.0.5 (Draft)
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
@@ -277,7 +277,9 @@ The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03
 
 | Version | Comment |
 | :-----: | ------- |
-| 0.0.1 (current) | [WIP] Initial Release |
+| 0.0.5 (current) | [WIP] Initial Release |
+
+<!-- TODO: Start counting at 0.1, which is when this PR is merged -->
 
 ### Differences between shh/6 waku/0
 
