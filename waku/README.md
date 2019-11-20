@@ -21,6 +21,7 @@
 - [Rationale](#rationale-1)
 - [Backwards Compatibility](#backwards-compatibility)
     - [WakuWhisper bridging](#wakuwhisper-bridging)
+- [Security Considerations](#security-considerations)
 - [Implementation](#implementation)
 - [Changelog](#changelog)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0-1)
@@ -240,6 +241,12 @@ This EIP is compatible with Whisper version 6. Any client which does not impleme
 3. A receives message on Waku; B on Whisper.
 
 **Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
+
+## Security considerations
+
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also varies depending on what capabilities are used, such as mailserver, light node, and so on.
+
+<!-- TODO: elaborate on security considerations -->
 
 ## Implementation
 
