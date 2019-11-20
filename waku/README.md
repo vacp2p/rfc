@@ -198,7 +198,7 @@ Waku supports multiple capabilities. These include light node, rate limting, mai
 
 The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.
 
-Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
+Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. When light nodes happen to connect to each other, they SHOULD disconnect. As this would result in messages being dropped between the two.
 
 Light nodes are identified by the `light_node` value in the status message.
 
