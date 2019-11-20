@@ -21,6 +21,7 @@
 - [Rationale](#rationale-1)
 - [Backwards Compatibility](#backwards-compatibility)
     - [WakuWhisper bridging](#wakuwhisper-bridging)
+- [Forwards Compatibility](#forwards-compatibility)
 - [Security Considerations](#security-considerations)
 - [Implementation](#implementation)
 - [Changelog](#changelog)
@@ -241,6 +242,24 @@ This EIP is compatible with Whisper version 6. Any client which does not impleme
 3. A receives message on Waku; B on Whisper.
 
 **Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
+
+## Forwards Compatibility
+
+It is desirable to maintain forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
+
+<!-- TODO: Think about how to maintain forwards capability for waku/v0 -> v1 -> v2, etc. -->
+<!-- Example user story: changing version number to 1; moving to libp2p; changing routing to PSS style; remove PoW; replacing PoW with zkSNARKs; adding packet codes for rate limit / accounting for resources feedback; additional disconnect features -->
+
+<!-- TODO: Right now we have
+
+    if m.protocolVersion == wakuVersion:
+      debug "Waku peer", peer, wakuVersion
+    else:
+      raise newException(UselessPeerError, "Incompatible Waku version")
+
+Is this what we want? Decide!
+-->
+
 
 ## Security considerations
 
