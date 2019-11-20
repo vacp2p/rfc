@@ -23,6 +23,7 @@
     - [WakuWhisper bridging](#wakuwhisper-bridging)
 - [Implementation](#implementation)
 - [Changelog](#changelog)
+    - [Differences between shh/6 waku/0](#differences-between-shh6-waku0-1)
 - [Copyright](#copyright)
 
 ## Abstract
@@ -245,6 +246,16 @@ The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03
 | :-----: | ------- |
 | 0.0.1 (current) | [WIP] Initial Release |
 
+### Differences between shh/6 waku/0
+
+Summary of main differences between this spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
+
+- RLPx subprotocol is changed from `shh/6` to `waku/0`
+- Light node capability
+- Whisper Mail Server and Whisper Mail Client implemented
+
+<!-- TODO: Document further differences with Whisper v6 -->
+
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -252,5 +263,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 <!-- TODO: Document recommendations for mobile nodes node --->
 <!-- TODO: Document spam resistance in practice, rate limiting -->
 <!-- TODO: Document accounting for resources, with mention of later settlement -->
-<!-- TODO: Document differences with Whisper v6 -->
 <!-- TODO: Consider adding roadmap, or link to -->
