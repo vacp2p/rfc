@@ -81,7 +81,16 @@ The following message codes are optional, but they are reserved for specific pur
 
 <!-- @todo maybe make a table or something -->
 
-This packet contains two objects: integer message code (0x00) followed by a list of values: integer version, PoW requirement, and bloom filter, in this order. The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
+This packet contains two objects: integer message code (0x00) followed by a list of values:
+
+| Field | Type |
+| ----- | ---- |
+| `version` | integer |
+| `pow requirement` | IEEE 754 binary representation of 64-bit floating point number |
+| `bloom filter` | byte array |
+| `light node` | bool |
+
+**Note**: The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
 
 Status message should be sent after the initial handshake and prior to any other messages.
 
