@@ -17,6 +17,7 @@
   - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
   - [Payload Encryption](#payload-encryption)
   - [Light Node](#light-node)
+    - [Considerations](#considerations)
 - [Rationale](#rationale)
 - [Backwards Compatibility](#backwards-compatibility)
 - [Implementation](#implementation)
@@ -190,8 +191,9 @@ Light nodes MUST NOT forward any incoming messages, they MUST only send their ow
 
 Light nodes are identified using the handshake.
 
-<!-- @todo rationale and privacy -->
+### Considerations
 
+It is important to note that running a node as a light node mode has effects on privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
 
 <!-- @todo handshake should be explained somewhere -->
 
