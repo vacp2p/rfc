@@ -17,8 +17,9 @@
   - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
   - [Payload Encryption](#payload-encryption)
   - [Light Node](#light-node)
+    - [Rationale](#rationale)
     - [Considerations](#considerations)
-- [Rationale](#rationale)
+- [Rationale](#rationale-1)
 - [Backwards Compatibility](#backwards-compatibility)
 - [Implementation](#implementation)
 - [Copyright](#copyright)
@@ -190,6 +191,10 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. Light nodes SHOULD not connect to other light nodes, this would result in messages being dropped between the two.
 
 Light nodes are identified using the handshake.
+
+### Rationale
+
+The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.
 
 ### Considerations
 
