@@ -44,7 +44,7 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 All Waku messages are sent as devp2p [RLPx transport protocol, version 5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) packets. These packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
-Waku nodes that do not support a particular packet code SHOULD ignore the packet without generating any error.
+Waku nodes that do not support a particular packet code MUST ignore the packet without generating any error.
 
 Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
 
