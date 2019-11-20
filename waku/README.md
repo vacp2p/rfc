@@ -23,7 +23,7 @@
 - [Security Considerations](#security-considerations)
 - [Implementation](#implementation)
 - [Changelog](#changelog)
-    - [Differences between shh/6 waku/0](#differences-between-shh6-waku0-1)
+    - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Copyright](#copyright)
 
 ## Abstract
