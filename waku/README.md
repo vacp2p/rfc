@@ -90,7 +90,9 @@ This packet contains two objects: integer message code (0x00) followed by a list
 
 **Note**: The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
 
-Status message should be sent after the initial handshake and prior to any other messages.
+Status message should be sent after the RLPx handshake and prior to any other messages.
+
+When a node does not receive the status message from a peer, before a configurable timeout, it MUST disconnect from that peer.
 
 **Messages** [`1`, `whisper_envelopes`]
 
