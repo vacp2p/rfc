@@ -234,7 +234,7 @@ Packet codes 0x7E and 0x7F may be used to implement Whisper Mail Server and Clie
 
 ## Backwards Compatibility
 
-This EIP is compatible with Whisper version 6. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
+This EIP is backward compatible with Whisper version 6. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
 ### WakuWhisper bridging
 
