@@ -42,7 +42,7 @@ Waku nodes that do not support a particular packet code SHOULD ignore the packet
 
 ## RLPx subprotocol
 
-The current RLPx subprotocol and version is `wkk/1`. See changelog for changes.
+The current RLPx subprotocol and version is `waku/0`. See changelog for changes.
 
 ### Packet Codes
 
