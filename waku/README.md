@@ -229,7 +229,7 @@ This EIP is compatible with Whisper version 6. Any client which does not impleme
 
 ### WakuWhisper bridging
 
-`waku/1` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
+`waku/0` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
 
 **Roles:**
 - Waku client A, only Waku capability
