@@ -9,7 +9,7 @@
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Specification](#specification)
-- [RLPx subprotocol](#rlpx-subprotocol)
+    - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [Packet Codes](#packet-codes)
     - [Packet Format and Usage](#packet-format-and-usage)
     - [Whisper Envelope](#whisper-envelope)
@@ -37,13 +37,13 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 ## Specification
 
-All Waku messages sent as ÐΞVp2p Wire Protocol packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
+### Use of RLPx transport protocol
+
+All Waku messages are sent as devp2p [RLPx transport protocol](https://github.com/ethereum/devp2p/blob/master/rlpx.md) packets. These packets SHOULD be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
 Waku nodes that do not support a particular packet code SHOULD ignore the packet without generating any error.
 
-## RLPx subprotocol
-
-The current RLPx subprotocol and version is `waku/0`. See changelog for changes.
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
 
 ### Packet Codes
 
