@@ -47,6 +47,33 @@ Waku nodes that do not support a particular packet code MUST ignore the packet w
 
 Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
 
+
+### ABNF specification
+
+Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
+
+
+```
+packet ::= "[" required-packet / [ optional-packet ] "]"
+
+required-packet ::= 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
+
+optional-packet ::= 126 p2p-request / 127 p2p-message
+
+status ::= "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
+
+messages ::= *whisper-envelope
+
+pow-requirement ::-= pow
+
+bloom-filter ::= bytes
+
+p2p-request ::= whisper-envelope
+
+p2p-message ::= whisper-envelope
+```
+
+
 ### Packet Codes
 
 <!-- Packet code not clear -->
