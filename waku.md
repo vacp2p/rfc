@@ -363,7 +363,7 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 <!-- TODO: Document further differences with Whisper v6 -->
 
 ## Acknowledgements
- - kdeme
+ - Kim De Mey
  - Andrea Maria Piana
  - Adam Babik
 
