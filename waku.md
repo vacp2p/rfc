@@ -64,56 +64,55 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 <!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
-packet-format ::= "[" packet-code packet-format "]"
-
 ; Packet codes 0 - 127 are reserved for Waku protocol
-packet-code ::= 0 / 1 / 2 / 3 / [ x4-127 ]
+packet-code      = 0 / 1 / 2 / 3 / [ x4-127 ]
+
+packet-format    = "[" packet-code packet-format "]"
 
 ; packet-format needs to be paired with its corresponding packet-format
+packet           = "[" required-packet / [ optional-packet ] "]"
 
-packet ::= "[" required-packet / [ optional-packet ] "]"
+required-packet  = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
 
-required-packet ::= 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
+optional-packet  = 126 p2p-request / 127 p2p-message
 
-optional-packet ::= 126 p2p-request / 127 p2p-message
+packet-format    = "[" packet-code packet-format "]"
 
-packet-format ::= "[" packet-code packet-format "]"
-
-status ::= "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
+status           = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
 
 ; version is "an integer (as specified in RLP)"
-version ::= integer
+version          = integer
 
-messages ::= *whisper-envelope
+messages         = *whisper-envelope
 
 ; pow is "a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed."
-pow-requirement ::= pow
+pow-requirement  = pow
 
 ; bloom filter is "a byte array"
-bloom-filter ::= bytes
+bloom-filter     = bytes
 
-light-node ::= bool
+light-node       = bool
 
-p2p-request ::= whisper-envelope
+p2p-request      = whisper-envelope
 
-p2p-message ::= whisper-envelope
+p2p-message      = whisper-envelope
 
-whisper-envelope ::= "[" expiry ttl topic data nonce "]"
+whisper-envelope = "[" expiry ttl topic data nonce "]"
 
 ; 4 bytes (UNIX time in seconds)
-expiry ::= bytes
+expiry           = bytes
 
 ; 4 bytes (time-to-live in seconds)
-ttl ::= bytes
+ttl              = bytes
 
 ; 4 bytes of arbitrary data
-topic ::= bytes
+topic            = bytes
 
 ; byte array of arbitrary size (contains encrypted message)
-data ::= bytes
+data             = bytes
 
 ; 8 bytes of arbitrary data (used for PoW calculation)
-nonce ::= bytes
+nonce            = bytes
 
 ```
 
