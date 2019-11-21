@@ -243,11 +243,6 @@ Light nodes are identified by the `light_node` value in the status message.
 
 <!-- TODO: Add details on handshake -- >
 
-**Security consideration**:
-Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
-
-<!-- TODO: Consider moving all security considerations to end section of document -->
-
 ### Mailserver and client
 
 Mailservers are waku nodes that can archive messages and delivering them to its peers on-demand.
@@ -309,6 +304,17 @@ Is this what we want? Decide!
 There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also varies depending on what capabilities are used, such as mailserver, light node, and so on.
 
 <!-- TODO: elaborate on security considerations -->
+
+<!-- TODO: Light node security considerations
+
+> Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
+
+Replace with:
+
+> I think the main privacy concern with light nodes is that the directly connected peers will know that a message originates from them (as it are the only ones it sends). And yes, based on that they can make some assumptions on which messages (topics) they are interested in also.
+
+-->
+
 
 ## Implementation
 
