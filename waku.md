@@ -229,6 +229,17 @@ Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Sch
 
 Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
+### Packet code Rationale
+
+Packet codes 0x00 and 0x01 are already used in all Whisper versions.
+
+Packet code 0x02 will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
+
+Packet code 0x03 will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
+
+Packet codes 0x7E and 0x7F may be used to implement Whisper Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
+
+
 ## Additional capabilities
 
 Waku supports multiple capabilities. These include light node, rate limting, mailserver (client and server) and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
@@ -251,21 +262,13 @@ Messages MAY be requested from mailservers by sending a packet with the `p2pRequ
 
 <!-- TODO: Clean up vocabulary, is it mailserver and mailserver client? mailclient? mailserver node? historynode? etc -->
 
-## Rationale
-
-Packet codes 0x00 and 0x01 are already used in all Whisper versions.
-
-Packet code 0x02 will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
-
-Packet code 0x03 will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
-
-Packet codes 0x7E and 0x7F may be used to implement Whisper Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
-
 ## Backwards Compatibility
 
-This EIP is backward compatible with Whisper version 6. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
+Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
-### WakuWhisper bridging
+<!-- TODO: Elaborate on waku/1 would be directly compatible with waku/0 if version don't match -->
+
+### Waku-Whisper bridging
 
 `waku/0` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
 
@@ -283,7 +286,9 @@ This EIP is backward compatible with Whisper version 6. Any client which does no
 
 ## Forwards Compatibility
 
-It is desirable to maintain forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
+It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
+
+<!-- TODO: Outline difference between _bridging_ and data format -->
 
 <!-- TODO: Think about how to maintain forwards capability for waku/v0 -> v1 -> v2, etc. -->
 <!-- Example user story: changing version number to 1; moving to libp2p; changing routing to PSS style; remove PoW; replacing PoW with zkSNARKs; adding packet codes for rate limit / accounting for resources feedback; additional disconnect features -->
@@ -297,6 +302,8 @@ It is desirable to maintain forward compatibility between `waku/0` and future ve
 
 Is this what we want? Decide!
 -->
+
+<!-- TODO: Leave room for RECOMMENDATIONS FOR CLIENTS and DEPRECATION NOTICE when relevant -->
 
 
 ## Security considerations
@@ -316,11 +323,20 @@ Replace with:
 -->
 
 
-## Implementation
+## Implementation Notes
+
+Notes useful for implementing Waku mode.
+
+
+<!-- TODO: Implementation notes, possibly link to matrix and have something similar but lightweight to https://tools.ietf.org/html/rfc8446#appendix-C
+
+Alt, break this out into issue for enhancement -->
+
+<!-- TODO(Dean): Break out into Status spec and remove this section
 
 The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03. Parity's implementation of v.6 will also use codes 0x00 - 0x03. Codes 0x7E and 0x7F are reserved, but still unused and left for custom implementation of Whisper Mail Server.
 
-<!-- TODO(Dean): Break out into Status spec and remove this section -->
+-->
 
 ## Footnotes
 
