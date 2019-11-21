@@ -29,13 +29,16 @@
 
 ## Abstract
 
-This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) mailserver (c) waku mode and (d) basic rate limiting.
+This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this primarily through (a) light node support and (b) historic messages (with a mailserver). Additionally, other experimental features for better scalability and DDoS resistance are under development and will be part of future versions.
+
+<!-- TODO: Add waku mode in v1, it isn't in the spec yet:
+
+> Waku is a fork of the original Whisper protocol that enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) historic messages (through a mailserver) (d) basic rate limiting.
+-->
 
 ## Motivation
 
-<!-- This should be the motivation of Waku rather than the motivation of this spec: aka to enable scalability etc. -->
-
-It is necessary to specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku.
+Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices. We specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku and its capabilities. We also modify the language to be more unambiguous, concise and consistent.
 
 ## Specification
 
