@@ -20,6 +20,7 @@
 5. [Footnotes](#footnotes)
 6. [Changelog](#changelog)
 7. [Acknowledgements](#acknowledgements)
+8. [Copyright](#copyright)
 
 ## Abstract
 
@@ -237,3 +238,7 @@ in time.
 ## Acknowledgements
 
 TBD.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).

@@ -16,6 +16,7 @@
 5. [Footnotes](#footnotes)
 6. [Changelog](#changelog)
 7. [Acknowledgements](#acknowledgements)
+8. [Copyright](#copyright)
 
 ## Abstract
 
@@ -91,3 +92,7 @@ Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not nee
 
 ## Acknowledgements
  - Andrea Maria Piana
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
