@@ -1,6 +1,6 @@
 # Waku Whisper Specification
 
-> Version 0.0.5 (Draft)
+> Version 0.1.0 (Initial release)
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
@@ -10,21 +10,24 @@
 - [Motivation](#motivation)
 - [Specification](#specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
+    - [ABNF specification](#abnf-specification)
     - [Packet Codes](#packet-codes)
-    - [Packet Format and Usage](#packet-format-and-usage)
-    - [Whisper Envelope](#whisper-envelope)
-    - [Contents of Data Field of the Message (Optional)](#contents-of-data-field-of-the-message-optional)
+    - [Packet usage](#packet-usage)
+    - [Whisper Envelope data field (Optional)](#whisper-envelope-data-field-optional)
     - [Payload Encryption](#payload-encryption)
-- [Light node](#light-node)
-- [Rationale](#rationale)
+    - [Packet code Rationale](#packet-code-rationale)
+- [Additional capabilities](#additional-capabilities)
+    - [Light node](#light-node)
+    - [Mailserver and client](#mailserver-and-client)
 - [Backwards Compatibility](#backwards-compatibility)
-    - [WakuWhisper bridging](#wakuwhisper-bridging)
+    - [Waku-Whisper bridging](#waku-whisper-bridging)
 - [Forwards Compatibility](#forwards-compatibility)
-- [Security Considerations](#security-considerations)
-- [Implementation](#implementation)
+- [Security considerations](#security-considerations)
+- [Implementation Notes](#implementation-notes)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
+- [Acknowledgements](#acknowledgements)
 - [Copyright](#copyright)
 
 ## Abstract
@@ -347,9 +350,7 @@ The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03
 
 | Version | Comment |
 | :-----: | ------- |
-| 0.0.5 (current) | [WIP] Initial Release |
-
-<!-- TODO: Start counting at 0.1, which is when this PR is merged -->
+| 0.1.0 (current) | Initial Release |
 
 ### Differences between shh/6 waku/0
 
@@ -360,6 +361,11 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 - Whisper Mail Server and Whisper Mail Client implemented
 
 <!-- TODO: Document further differences with Whisper v6 -->
+
+## Acknowledgements
+ - kdeme
+ - Andrea Maria Piana
+ - Adam Babik
 
 ## Copyright
 
