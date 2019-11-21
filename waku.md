@@ -95,10 +95,26 @@ p2p-request ::= whisper-envelope
 
 p2p-message ::= whisper-envelope
 
-; todo: pow, whisper-envelope, version, bloom-filter, etc
+whisper-envelope ::= "[" expiry ttl topic data nonce "]"
+
+; 4 bytes (UNIX time in seconds)
+expiry ::= bytes
+
+; 4 bytes (time-to-live in seconds)
+ttl ::= bytes
+
+; 4 bytes of arbitrary data
+topic ::= bytes
+
+; byte array of arbitrary size (contains encrypted message)
+data ::= bytes
+
+; 8 bytes of arbitrary data (used for PoW calculation)
+nonce ::= bytes
+
 ```
 
-Note that, per RLP specification, integers are encoded starting from `0x00`.
+All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from `0x00`.
 
 ### Packet Codes
 
@@ -181,27 +197,11 @@ This packet is used for sending Dapp-level peer-to-peer requests, e.g. Whisper M
 
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Whisper Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
-### Whisper Envelope
+### Whisper Envelope data field (Optional)
 
-<!-- TODO: ABNF this bad boy -->
+<!-- TODO: ABNF this and make language more strong -->
 
-Envelopes are RLP-encoded structures of the following format:
-
-```
-[ Expiry, TTL, Topic, Data, Nonce ]
-```
-
-| Field | Type |
-|-|-|
-| Expiry | 4 bytes (UNIX time in seconds) |
-| TTL | 4 bytes (time-to-live in seconds) |
-| Topic | 4 bytes of arbitrary data |
-| Data | byte array of arbitrary size (contains encrypted message) |
-| Nonce |  8 bytes of arbitrary data (used for PoW calculation) |
-
-### Contents of Data Field of the Message (Optional)
-
-This section outlines the optional description of Data Field to set up an example. Later it may be moved to a separate EIP.
+This section outlines the optional description of Data Field to set up an example. Later it may be moved to a separate spec.
 
 It is only relevant if you want to decrypt the incoming message, but if you only want to send a message, any other format would be perfectly valid and must be forwarded to the peers.
 
