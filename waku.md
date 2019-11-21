@@ -47,40 +47,59 @@ Waku nodes that do not support a particular packet code MUST ignore the packet w
 
 Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
 
-
 ### ABNF specification
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
+<!-- TODO: This needs to be run through ABNF validator -->
+
+<!-- TODO: packet-format / packet rules, compact into one somehow? -->
+
+<!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
+packet-format ::= "[" packet-code packet-format "]"
+
+; Packet codes 0 - 127 are reserved for Waku protocol
+packet-code ::= 0 / 1 / 2 / 3 / [ x4-127 ]
+
+; packet-format needs to be paired with its corresponding packet-format
+
 packet ::= "[" required-packet / [ optional-packet ] "]"
 
 required-packet ::= 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
 
 optional-packet ::= 126 p2p-request / 127 p2p-message
 
+packet-format ::= "[" packet-code packet-format "]"
+
 status ::= "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
+
+; version is "an integer (as specified in RLP)"
+version ::= integer
 
 messages ::= *whisper-envelope
 
-pow-requirement ::-= pow
+; pow is "a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed."
+pow-requirement ::= pow
 
+; bloom filter is "a byte array"
 bloom-filter ::= bytes
+
+light-node ::= bool
 
 p2p-request ::= whisper-envelope
 
 p2p-message ::= whisper-envelope
+
+; todo: pow, whisper-envelope, version, bloom-filter, etc
 ```
 
+Note that, per RLP specification, integers are encoded starting from `0x00`.
 
 ### Packet Codes
 
-<!-- Packet code not clear -->
-
 The message codes reserved for Waku protocol: 0 - 127.
-
-<!-- Is this a MUST or rather a SHOULD -->
 
 Messages with unknown codes MUST be ignored, for forward compatibility of future versions.
 
@@ -102,36 +121,21 @@ The following message codes are optional, but they are reserved for specific pur
 
 <!-- TODO: There are more packet codes we use in practice - see Adam's list -->
 
-### Packet Format and Usage
+### Packet usage
 
-**Status** [`0`, [`version`, `pow_requirement`, `bloom_filter`, `light_node`]]
+**Status**
 
-<!-- @todo maybe make a table or something -->
-
-This packet contains two objects: integer message code (0x00) followed by a list of values:
-
-| Field | Type |
-| ----- | ---- |
-| `version` | integer |
-| `pow requirement` | IEEE 754 binary representation of 64-bit floating point number |
-| `bloom filter` | byte array |
-| `light node` | bool |
-
-**Note**: The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages). The format of PoW and bloom filter please see below (message codes 2 and 3).
+The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages).
 
 Status message should be sent after the RLPx handshake and prior to any other messages.
 
 When a node does not receive the status message from a peer, before a configurable timeout, it MUST disconnect from that peer.
 
-**Messages** [`1`, `whisper_envelopes`]
-
-This packet contains two objects: message code (0x01) followed by a list (possibly empty) of Whisper Envelopes.
+**Messages**
 
 This packet is used for sending the standard Whisper envelopes.
 
-**PoW Requirement** [`2`, `PoW`]
-
-This packet contains two objects: message code (0x02) followed by the value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed.
+**PoW Requirement**
 
 This packet is used by Whisper nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
 
@@ -147,9 +151,7 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding env_nonce field (size of `short_rlp(envelope)`).
 
-**Bloom Filter** [`3`, `bytes`]
-
-This packet contains two objects: integer message code (0x03) followed by a byte array of arbitrary size.
+**Bloom Filter**
 
 This packet is used by Whisper nodes for sharing their interest in messages with specific topics.
 
@@ -166,23 +168,19 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-
 OPTIONAL
 
-**P2P Request** [`126`, `whisper_envelope`]
-
-This packet contains two objects: integer message code (0x7E) followed by a single Whisper Envelope.
+**P2P Request**
 
 This packet is used for sending Dapp-level peer-to-peer requests, e.g. Whisper Mail Client requesting old messages from the Whisper Mail Server.
 
-**P2P Message** [`127`, `whisper_envelope`]
-
-This packet contains two objects: integer message code (0x7F) followed by a single Whisper Envelope.
+**P2P Message**
 
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Whisper Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
-
 ### Whisper Envelope
+
+<!-- TODO: ABNF this bad boy -->
 
 Envelopes are RLP-encoded structures of the following format:
 
