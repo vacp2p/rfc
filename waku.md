@@ -279,7 +279,7 @@ This EIP is backward compatible with Whisper version 6. Any client which does no
 2. C picks up message from A and B and relays them both to Waku and Whisper.
 3. A receives message on Waku; B on Whisper.
 
-**Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
+**Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message between C1 and C2. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
 
 ## Forwards Compatibility
 
