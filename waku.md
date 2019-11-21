@@ -41,7 +41,7 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 ### Use of RLPx transport protocol
 
-All Waku messages are sent as devp2p RLPx transport protocol, version 5 <sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
+All Waku messages are sent as devp2p RLPx transport protocol, version 5 <sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
 Waku nodes that do not support a particular packet code MUST ignore the packet without generating any error.
 
@@ -66,13 +66,14 @@ The Waku sub-protocol MUST support the following packet codes:
 | PoW Requirement            |     2     |
 | Bloom Filter               |     3     |
 
-
 The following message codes are optional, but they are reserved for specific purpose.
 
 | Name                       | Int Value |
 |----------------------------|-----------|
 | P2P Request                |    126    |
 | P2P Message                |    127    |
+
+<!-- TODO: There are more packet codes we use in practice - see Adam's list -->
 
 ### Packet Format and Usage
 
