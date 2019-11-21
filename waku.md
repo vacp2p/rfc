@@ -22,6 +22,7 @@
 - [Forwards Compatibility](#forwards-compatibility)
 - [Security Considerations](#security-considerations)
 - [Implementation](#implementation)
+- [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Copyright](#copyright)
@@ -40,7 +41,7 @@ It is necessary to specify the standard for Waku messages in order to ensure for
 
 ### Use of RLPx transport protocol
 
-All Waku messages are sent as devp2p [RLPx transport protocol, version 5](https://github.com/ethereum/devp2p/blob/master/rlpx.md) packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
+All Waku messages are sent as devp2p RLPx transport protocol, version 5 <sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code). 
 
 Waku nodes that do not support a particular packet code MUST ignore the packet without generating any error.
 
@@ -285,6 +286,11 @@ There are several security considerations to take into account when running Waku
 The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03. Parity's implementation of v.6 will also use codes 0x00 - 0x03. Codes 0x7E and 0x7F are reserved, but still unused and left for custom implementation of Whisper Mail Server.
 
 <!-- TODO(Dean): Break out into Status spec and remove this section -->
+
+## Footnotes
+
+1. https://github.com/ethereum/devp2p/blob/master/rlpx.md
+
 
 ## Changelog
 
