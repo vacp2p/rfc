@@ -220,6 +220,10 @@ Running a node as a light node mode impacts privacy due to the fact that it beco
 
 ### Mailserver and client
 
+Mailservers are waku nodes that can archive messages and delivering them to its peers on-demand.
+
+Messages MAY be requested from mailservers by sending a packet with the `p2pRequestCode` code. Once received a mailserver SHOULD respond at some point in the future with packets containing the `p2pMessageCode` code.
+
 <!-- TODO: Clean up vocabulary, is it mailserver and mailserver client? mailclient? mailserver node? historynode? etc -->
 
 ## Rationale
