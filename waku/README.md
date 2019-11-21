@@ -116,7 +116,7 @@ PoW calculation:
 	fn pow_hash(envelope, env_nonce) = sha3(short_rlp(envelope) ++ env_nonce)
 	fn pow(pow_hash, size, ttl) = 2**leading_zeros(pow_hash) / (size * ttl)
 
-where size is the size of the full RLP-encoded envelope.
+where size is the size of the RLP-encoded envelope, excluding env_nonce field (size of `short_rlp(envelope)`).
 
 **Bloom Filter** [`3`, `bytes`]
 
