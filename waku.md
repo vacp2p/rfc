@@ -64,6 +64,8 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 <!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
+bytes            = [repeat] OCTET
+
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code      = 0 / 1 / 2 / 3 / [ x4-127 ]
 
@@ -81,7 +83,7 @@ packet-format    = "[" packet-code packet-format "]"
 status           = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
 
 ; version is "an integer (as specified in RLP)"
-version          = integer
+version          = DIGIT
 
 messages         = *whisper-envelope
 
@@ -91,7 +93,7 @@ pow-requirement  = pow
 ; bloom filter is "a byte array"
 bloom-filter     = bytes
 
-light-node       = bool
+light-node       = BIT
 
 p2p-request      = whisper-envelope
 
@@ -113,7 +115,6 @@ data             = bytes
 
 ; 8 bytes of arbitrary data (used for PoW calculation)
 nonce            = bytes
-
 ```
 
 All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from `0x00`.
