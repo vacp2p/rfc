@@ -254,7 +254,7 @@ Light nodes MUST NOT forward any incoming messages, they MUST only send their ow
 
 Light nodes are identified by the `light_node` value in the status message.
 
-<!-- TODO: Add details on handshake -- >
+<!-- TODO: Add details on handshake -->
 
 ### Mailserver and client
 
