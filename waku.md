@@ -49,8 +49,6 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 All Waku messages are sent as devp2p RLPx transport protocol, version 5<sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku nodes that do not support a particular packet code MUST ignore the packet without generating any error.
-
 Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
 
 ### ABNF specification
@@ -123,7 +121,7 @@ All primitive types are RLP encoded. Note that, per RLP specification, integers 
 
 The message codes reserved for Waku protocol: 0 - 127.
 
-Messages with unknown codes MUST be ignored, for forward compatibility of future versions.
+Messages with unknown codes MUST be ignored without generating any error, for forward compatibility of future versions.
 
 The Waku sub-protocol MUST support the following packet codes:
 
