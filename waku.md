@@ -233,13 +233,13 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 ### Packet code Rationale
 
-Packet codes 0x00 and 0x01 are already used in all Whisper versions.
+Packet codes `0x00` and `0x01` are already used in all Whisper versions.
 
-Packet code 0x02 will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
+Packet code `0x02` will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
 
-Packet code 0x03 will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
+Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
 
-Packet codes 0x7E and 0x7F may be used to implement Whisper Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
+Packet codes `0x7E` and `0x7F` may be used to implement Whisper Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
 
 
 ## Additional capabilities
@@ -336,7 +336,7 @@ Alt, break this out into issue for enhancement -->
 
 <!-- TODO(Dean): Break out into Status spec and remove this section
 
-The golang implementation of Whisper (v.6) already uses packet codes 0x00 - 0x03. Parity's implementation of v.6 will also use codes 0x00 - 0x03. Codes 0x7E and 0x7F are reserved, but still unused and left for custom implementation of Whisper Mail Server.
+The golang implementation of Whisper (v.6) already uses packet codes `0x00` - `0x03`. Parity's implementation of v.6 will also use codes `0x00` - `0x03`. Codes `0x7E` and `0x7F` are reserved, but still unused and left for custom implementation of Whisper Mail Server.
 
 -->
 
