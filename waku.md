@@ -204,7 +204,7 @@ This packet is used for sending the peer-to-peer messages, which are not suppose
 
 <!-- TODO: ABNF this and make language more strong -->
 
-This section outlines the optional description of Data Field to set up an example. Later it may be moved to a separate spec.
+This section outlines the OPTIONAL description of Data Field to set up an example.
 
 It is only relevant if you want to decrypt the incoming message, but if you only want to send a message, any other format would be perfectly valid and must be forwarded to the peers.
 
