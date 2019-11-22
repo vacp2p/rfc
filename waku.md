@@ -310,7 +310,7 @@ Is this what we want? Decide!
 
 ## Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also varies depending on what capabilities are used, such as mailserver, light node, and so on.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
 
 <!-- TODO: elaborate on security considerations -->
 
