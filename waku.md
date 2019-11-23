@@ -83,7 +83,7 @@ status           = "[" version pow-requirement [ bloom-filter ] [ light-node ] "
 ; version is "an integer (as specified in RLP)"
 version          = DIGIT
 
-messages         = *whisper-envelope
+messages         = *waku-envelope
 
 ; pow is "a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed."
 pow-requirement  = pow
@@ -93,9 +93,9 @@ bloom-filter     = bytes
 
 light-node       = BIT
 
-p2p-request      = whisper-envelope
+p2p-request      = waku-envelope
 
-p2p-message      = whisper-envelope
+p2p-message      = waku-envelope
 
 whisper-envelope = "[" expiry ttl topic data nonce "]"
 
@@ -153,11 +153,11 @@ When a node does not receive the status message from a peer, before a configurab
 
 **Messages**
 
-This packet is used for sending the standard Whisper envelopes.
+This packet is used for sending the standard Waku envelopes.
 
 **PoW Requirement**
 
-This packet is used by Whisper nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
+This packet is used by Waku nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
 
 PoW is defined as average number of iterations, required to find the current BestBit (the number of leading zero bits in the hash), divided by message size and TTL:
 
@@ -173,7 +173,7 @@ where size is the size of the RLP-encoded envelope, excluding env_nonce field (s
 
 **Bloom Filter**
 
-This packet is used by Whisper nodes for sharing their interest in messages with specific topics.
+This packet is used by Waku nodes for sharing their interest in messages with specific topics.
 
 The Bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
 
@@ -192,11 +192,11 @@ OPTIONAL
 
 **P2P Request**
 
-This packet is used for sending Dapp-level peer-to-peer requests, e.g. Whisper Mail Client requesting old messages from the Whisper Mail Server.
+This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
 
 **P2P Message**
 
-This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Whisper Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
+This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
 ### Whisper Envelope data field (Optional)
 
@@ -232,13 +232,13 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 ### Packet code Rationale
 
-Packet codes `0x00` and `0x01` are already used in all Whisper versions.
+Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
 
 Packet code `0x02` will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
 
 Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
 
-Packet codes `0x7E` and `0x7F` may be used to implement Whisper Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
+Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
 
 
 ## Additional capabilities
