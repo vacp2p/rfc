@@ -263,9 +263,9 @@ A mailserver SHOULD store envelopes for all topics to be generally useful for an
 
 #### Requesting messages
 
-In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Whisper envelope.
+In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Waku envelope.
 
-In the Whisper envelope's payload section, there MUST be RLP-encoded information about the details of the request:
+In the Waku envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
 ```
 [ Lower, Upper, Bloom, Limit, Cursor ]
@@ -273,7 +273,7 @@ In the Whisper envelope's payload section, there MUST be RLP-encoded information
 
 `Lower`: 4-byte wide unsigned integer (UNIX time in seconds; oldest requested envelope's creation time)
 `Upper`: 4-byte wide unsigned integer (UNIX time in seconds; newest requested envelope's creation time)
-`Bloom`: 64-byte wide array of Whisper topics encoded in a bloom filter to filter envelopes
+`Bloom`: 64-byte wide array of Waku topics encoded in a bloom filter to filter envelopes
 `Limit`: 4-byte wide unsigned integer limiting the number of returned envelopes
 `Cursor`: 32-byte wide array of a cursor returned from the previous request (optional)
 
@@ -283,11 +283,11 @@ The envelope MUST be signed with a symmetric key agreed between the requester an
 
 #### Receiving historic messages
 
-Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Whisper envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
+Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
 
 In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive packets with the P2P Message code. By default, such packets are discarded.
 
-Received envelopes MUST be passed through the Whisper envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
+Received envelopes MUST be passed through the Waku envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
 
 ## Backwards Compatibility
 
