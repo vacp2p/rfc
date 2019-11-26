@@ -152,10 +152,8 @@ The Status message serves as a Waku handshake and peers MUST exchange this
 message upon connection. It MUST be sent after the RLPx handshake and prior to
 any other Waku messages.
 
-A Waku node MUST await the Status message from a peer before engaging in other
-Waku protocol activity with that peer.
-When a node does not receive the Status message from a peer, before a
-configurable timeout, it SHOULD disconnect from that peer.
+A Waku node MUST await the Status message from a peer before engaging in other Waku protocol activity with that peer.g
+When a node does not receive the Status message from a peer, before a configurable timeout, it SHOULD disconnect from that peer.
 
 Upon retrieval of the Status message, the node SHOULD validate the message
 content and decide whether it is compatible with the Waku version and mode
