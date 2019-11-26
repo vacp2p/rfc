@@ -64,17 +64,6 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code     = 0 / 1 / 2 / 3 / [ x4-127 ]
 
-packet-format   = "[" packet-code packet-format "]"
-
-required-packet = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
-
-optional-packet = 126 p2p-request / 127 p2p-message
-
-; packet-format needs to be paired with its corresponding packet-format
-packet          = "[" required-packet / [ optional-packet ] "]"
-
-packet-format   = "[" packet-code packet-format "]"
-
 status          = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
 
 ; version is "an integer (as specified in RLP)"
@@ -110,6 +99,17 @@ messages        = *waku-envelope
 p2p-request     = waku-envelope
 
 p2p-message     = waku-envelope
+
+packet-format   = "[" packet-code packet-format "]"
+
+required-packet = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
+
+optional-packet = 126 p2p-request / 127 p2p-message
+
+; packet-format needs to be paired with its corresponding packet-format
+packet          = "[" required-packet / [ optional-packet ] "]"
+
+packet-format   = "[" packet-code packet-format "]"
 ```
 
 All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from `0x00`.
