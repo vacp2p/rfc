@@ -24,6 +24,7 @@
 - [Forwards Compatibility](#forwards-compatibility)
 - [Security considerations](#security-considerations)
 - [Implementation Notes](#implementation-notes)
+    - [Implementation Matrix](#implementation-matrix)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
@@ -351,6 +352,22 @@ Replace with:
 
 
 ## Implementation Notes
+
+### Implementation Matrix
+
+| Client | Version |
+| ------ | ------- |
+| go-ethereum (geth) | [v1.9.7](https://github.com/ethereum/go-ethereum/tree/v1.9.7) |
+| status whisper | [25321](https://github.com/status-im/whisper/tree/25321b2c035b6e03dbae85a2f54cf89f9f873dd9) |
+| nimbus | [9c19f](https://github.com/status-im/nim-eth/tree/9c19f1e5b17b36ebcf1c7513428818f585a3cb16) |
+| status-go | [ed5a5](https://github.com/status-im/status-go/commit/ed5a5c154daf5362cdf0c35fd1bc204e6a6d49ae) |
+
+| | Light mode | Mailserver client | Mailserver server | shh/6 | waku/0 |
+| -: | :--------: | :----------------: | :--------------: |  :-: | :-: |
+| **geth** | x | x | x | x | - |
+| **status whisper** | x | x | - | x | - |
+| **nimbus** | x | - | - | x | - |
+| **status-go** | x | x | x |x | - |
 
 Notes useful for implementing Waku mode.
 
