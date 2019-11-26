@@ -56,62 +56,60 @@ Waku is a RLPx subprotocol called `waku` with version `0`. The version number co
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
-<!-- TODO: This needs to be run through ABNF validator -->
-
 <!-- TODO: packet-format / packet rules, compact into one somehow? -->
 
 <!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
 ; Packet codes 0 - 127 are reserved for Waku protocol
-packet-code      = 0 / 1 / 2 / 3 / [ x4-127 ]
+packet-code     = 0 / 1 / 2 / 3 / [ x4-127 ]
 
-packet-format    = "[" packet-code packet-format "]"
+packet-format   = "[" packet-code packet-format "]"
 
-required-packet  = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
+required-packet = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
 
-optional-packet  = 126 p2p-request / 127 p2p-message
+optional-packet = 126 p2p-request / 127 p2p-message
 
 ; packet-format needs to be paired with its corresponding packet-format
-packet           = "[" required-packet / [ optional-packet ] "]"
+packet          = "[" required-packet / [ optional-packet ] "]"
 
-packet-format    = "[" packet-code packet-format "]"
+packet-format   = "[" packet-code packet-format "]"
 
-status           = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
+status          = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
 
 ; version is "an integer (as specified in RLP)"
-version          = DIGIT
+version         = DIGIT
 
 ; pow is "a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed."
-pow-requirement  = pow
+pow-requirement = pow
 
 ; bloom filter is "a byte array"
-bloom-filter     = *OCTET
+bloom-filter    = *OCTET
 
-light-node       = BIT
+light-node      = BIT
 
-waku-envelope = "[" expiry ttl topic data nonce "]"
+waku-envelope   = "[" expiry ttl topic data nonce "]"
 
 ; 4 bytes (UNIX time in seconds)
-expiry           = 4*OCTET
+expiry          = 4*OCTET
 
 ; 4 bytes (time-to-live in seconds)
-ttl              = 4*OCTET
+ttl             = 4*OCTET
 
 ; 4 bytes of arbitrary data
-topic            = 4*OCTET
+topic           = 4*OCTET
 
 ; byte array of arbitrary size (contains encrypted message)
-data             = OCTET
+data            = OCTET
 
 ; 8 bytes of arbitrary data (used for PoW calculation)
-nonce            = 8*OCTET
+nonce           = 8*OCTET
 
-messages         = *waku-envelope
+messages        = *waku-envelope
 
-p2p-request      = waku-envelope
+p2p-request     = waku-envelope
 
-p2p-message      = waku-envelope
+p2p-message     = waku-envelope
 ```
 
 All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from `0x00`.
