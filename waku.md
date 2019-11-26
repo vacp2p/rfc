@@ -148,9 +148,26 @@ The following message codes are optional, but they are reserved for specific pur
 
 The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages).
 
-Status message should be sent after the RLPx handshake and prior to any other messages.
+The Status message serves as a Waku handshake and peers MUST exchange this
+message upon connection. It MUST be sent after the RLPx handshake and prior to
+any other Waku messages.
 
-When a node does not receive the status message from a peer, before a configurable timeout, it MUST disconnect from that peer.
+A Waku node MUST await the Status message from a peer before engaging in other
+Waku protocol activity with that peer.
+When a node does not receive the Status message from a peer, before a
+configurable timeout, it SHOULD disconnect from that peer.
+
+Upon retrieval of the Status message, the node SHOULD validate the message
+content and decide whether it is compatible with the Waku version and mode
+its peer is advertising. The handshake is completed when the node has sent,
+received and validated the Status message. Note that its peer might not be in
+the same state.
+
+When a node is receiving other Waku messages from a peer before a Status
+message is received, the node MUST ignore these messages and SHOULD disconnect
+from that peer.
+Status messages received after the handshake is completed MUST also be ignored.
+
 
 **Messages**
 
