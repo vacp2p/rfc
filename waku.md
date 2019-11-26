@@ -212,25 +212,25 @@ Data field contains encrypted message of the Envelope. In case of symmetric encr
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
 ```
-bytes           = [repeat] OCTET
-
 ; 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
-flags           = OCTET
+flags           = 1*OCTET
 
 ; contains the size of payload.
-auxiliary-field = bytes
+auxiliary-field = 4*OCTET
 
 ; byte array of arbitrary size (may be zero)
-payload         = bytes
+payload         = *OCTET
 
 ; byte array of arbitrary size (may be zero).
-padding         = bytes
+padding         = *OCTET
 
 ; 65 bytes, if present.
-signature       = bytes
+signature       = 65*OCTET
 
 ; 2 bytes, if present (in case of symmetric encryption).
-salt            = bytes
+salt            = 2*OCTET
+
+envelope        = flags auxiliary-field payload padding signature salt
 ```
 
 Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are both big-endian encoded, fixed-width 256-bit unsigned. `V` is an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
