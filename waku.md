@@ -224,17 +224,29 @@ It is only relevant if you want to decrypt the incoming message, but if you only
 
 Data field contains encrypted message of the Envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
 
-	flags: 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
-	
-	auxiliary field: up to 4 bytes; contains the size of payload.
+Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
-	payload: byte array of arbitrary size (may be zero).
+```
+; 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
+flags           = 1*OCTET
 
-	padding: byte array of arbitrary size (may be zero).
+; contains the size of payload.
+auxiliary-field = 4*OCTET
 
-	signature: 65 bytes, if present.
+; byte array of arbitrary size (may be zero)
+payload         = *OCTET
 
-	salt: 12 bytes, if present (in case of symmetric encryption).
+; byte array of arbitrary size (may be zero).
+padding         = *OCTET
+
+; 65 bytes, if present.
+signature       = 65*OCTET
+
+; 2 bytes, if present (in case of symmetric encryption).
+salt            = 2*OCTET
+
+envelope        = flags auxiliary-field payload padding [signature] salt
+```
 
 Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are both big-endian encoded, fixed-width 256-bit unsigned. `V` is an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
 
