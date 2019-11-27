@@ -269,8 +269,6 @@ Light nodes MUST NOT forward any incoming messages, they MUST only send their ow
 
 Light nodes are identified by the `light_node` value in the status message.
 
-<!-- TODO: Add details on handshake -->
-
 ### Mailserver and client
 
 Mailservers are waku nodes that can archive messages and deliver them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
