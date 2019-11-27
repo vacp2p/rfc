@@ -269,8 +269,6 @@ Light nodes MUST NOT forward any incoming messages, they MUST only send their ow
 
 Light nodes are identified by the `light_node` value in the status message.
 
-<!-- TODO: Add details on handshake -->
-
 ### Mailserver and client
 
 Mailservers are waku nodes that can archive messages and deliver them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
@@ -355,16 +353,7 @@ There are several security considerations to take into account when running Waku
 
 <!-- TODO: elaborate on security considerations -->
 
-<!-- TODO: Light node security considerations
-
-> Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
-
-Replace with:
-
-> I think the main privacy concern with light nodes is that the directly connected peers will know that a message originates from them (as it are the only ones it sends). And yes, based on that they can make some assumptions on which messages (topics) they are interested in also.
-
--->
-
+The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends), this means nodes can make assumptions about what messages (topics) their peers are interested in.
 
 ## Implementation Notes
 
