@@ -363,16 +363,11 @@ There are several security considerations to take into account when running Waku
 
 <!-- TODO: elaborate on security considerations -->
 
-<!-- TODO: Light node security considerations
+## Security considerations
 
-> Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
+### Light node privacy
 
-Replace with:
-
-> I think the main privacy concern with light nodes is that the directly connected peers will know that a message originates from them (as it are the only ones it sends). And yes, based on that they can make some assumptions on which messages (topics) they are interested in also.
-
--->
-
+The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
 ## Implementation Notes
 
