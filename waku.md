@@ -353,7 +353,11 @@ There are several security considerations to take into account when running Waku
 
 <!-- TODO: elaborate on security considerations -->
 
-The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends), this means nodes can make assumptions about what messages (topics) their peers are interested in.
+## Security considerations
+
+### Light node privacy
+
+The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
 ## Implementation Notes
 
