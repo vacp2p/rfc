@@ -323,7 +323,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 ### Waku-Whisper bridging
 
-`waku/0` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
+`waku/0` and `shh/6` are different DevP2P subprotocols, however they share the same data format making their envelopes compatible. This means we can bridge the protocols naively, this works as follows.
 
 **Roles:**
 - Waku client A, only Waku capability
@@ -340,8 +340,6 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 ## Forwards Compatibility
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
-
-<!-- TODO: Outline difference between _bridging_ and data format -->
 
 <!-- TODO: Think about how to maintain forwards capability for waku/v0 -> v1 -> v2, etc. -->
 <!-- Example user story: changing version number to 1; moving to libp2p; changing routing to PSS style; remove PoW; replacing PoW with zkSNARKs; adding packet codes for rate limit / accounting for resources feedback; additional disconnect features -->
