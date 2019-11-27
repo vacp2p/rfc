@@ -273,7 +273,7 @@ Light nodes are identified by the `light_node` value in the status message.
 
 ### Mailserver and client
 
-Mailservers are waku nodes that can archive messages and delivering them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
+Mailservers are waku nodes that can archive messages and deliver them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
 
 A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
 
