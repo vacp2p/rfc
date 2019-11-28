@@ -216,13 +216,13 @@ This packet is used for sending the peer-to-peer messages, which are not suppose
 
 ### Whisper Envelope data field (Optional)
 
-<!-- TODO: ABNF this and make language more strong -->
+<!-- TODO: make language more strong -->
 
-This section outlines the OPTIONAL description of Data Field to set up an example.
+This section outlines the description of the Data Field.
 
 It is only relevant if you want to decrypt the incoming message, but if you only want to send a message, any other format would be perfectly valid and must be forwarded to the peers.
 
-Data field contains encrypted message of the Envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
+The Data field contains the encrypted message of the envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
