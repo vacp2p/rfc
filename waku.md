@@ -204,7 +204,7 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-OPTIONAL
+OPTIONAL <!-- what does this optional here mean? -->
 
 **P2P Request**
 
@@ -389,7 +389,6 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 Notes useful for implementing Waku mode.
 
-
 <!-- TODO: Implementation notes, possibly link to matrix and have something similar but lightweight to https://tools.ietf.org/html/rfc8446#appendix-C
 
 Alt, break this out into issue for enhancement -->
@@ -402,8 +401,7 @@ The golang implementation of Whisper (v.6) already uses packet codes `0x00` - `0
 
 ## Footnotes
 
-1. https://github.com/ethereum/devp2p/blob/master/rlpx.md
-
+1. <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
 
 ## Changelog
 
