@@ -35,11 +35,6 @@
 
 This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this primarily through (a) light node support and (b) historic messages (with a mailserver). Additionally, other experimental features for better scalability and DDoS resistance are under development and will be part of future versions.
 
-<!-- TODO: Add waku mode in v1, it isn't in the spec yet:
-
-> Waku is a fork of the original Whisper protocol that enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) historic messages (through a mailserver) (d) basic rate limiting.
--->
-
 ## Motivation
 
 Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices. We specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku and its capabilities. We also modify the language to be more unambiguous, concise and consistent.
@@ -55,12 +50,6 @@ Waku is a RLPx subprotocol called `waku` with version `0`. The version number co
 ### ABNF specification
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
-
-<!-- TODO: This needs to be run through ABNF validator -->
-
-<!-- TODO: packet-format / packet rules, compact into one somehow? -->
-
-<!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
 bytes            = [repeat] OCTET
@@ -140,8 +129,6 @@ The following message codes are optional, but they are reserved for specific pur
 | P2P Request                |    126    |
 | P2P Message                |    127    |
 
-<!-- TODO: There are more packet codes we use in practice - see Adam's list -->
-
 ### Packet usage
 
 **Status**
@@ -204,8 +191,6 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-OPTIONAL <!-- what does this optional here mean? -->
-
 **P2P Request**
 
 This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
@@ -215,8 +200,6 @@ This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
 ### Whisper Envelope data field (Optional)
-
-<!-- TODO: make language more strong -->
 
 This section outlines the description of the Data Field.
 
@@ -319,8 +302,6 @@ Received envelopes MUST be passed through the Waku envelopes pipelines so that t
 
 Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
-<!-- TODO: Elaborate on waku/1 would be directly compatible with waku/0 if version don't match -->
-
 ### Waku-Whisper bridging
 
 `waku/0` and `shh/6` are different DevP2P subprotocols, however they share the same data format making their envelopes compatible. This means we can bridge the protocols naively, this works as follows.
@@ -341,29 +322,10 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
-<!-- TODO: Think about how to maintain forwards capability for waku/v0 -> v1 -> v2, etc. -->
-<!-- Example user story: changing version number to 1; moving to libp2p; changing routing to PSS style; remove PoW; replacing PoW with zkSNARKs; adding packet codes for rate limit / accounting for resources feedback; additional disconnect features -->
-
-<!-- TODO: Right now we have
-
-    if m.protocolVersion == wakuVersion:
-      debug "Waku peer", peer, wakuVersion
-    else:
-      raise newException(UselessPeerError, "Incompatible Waku version")
-
-Is this what we want? Decide!
--->
-
-<!-- TODO: Leave room for RECOMMENDATIONS FOR CLIENTS and DEPRECATION NOTICE when relevant -->
-
 
 ## Security considerations
 
 There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
-
-<!-- TODO: elaborate on security considerations -->
-
-## Security considerations
 
 ### Light node privacy
 
@@ -389,16 +351,6 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 Notes useful for implementing Waku mode.
 
-<!-- TODO: Implementation notes, possibly link to matrix and have something similar but lightweight to https://tools.ietf.org/html/rfc8446#appendix-C
-
-Alt, break this out into issue for enhancement -->
-
-<!-- TODO(Dean): Break out into Status spec and remove this section
-
-The golang implementation of Whisper (v.6) already uses packet codes `0x00` - `0x03`. Parity's implementation of v.6 will also use codes `0x00` - `0x03`. Codes `0x7E` and `0x7F` are reserved, but still unused and left for custom implementation of Whisper Mail Server.
-
--->
-
 ## Footnotes
 
 1. <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
@@ -417,8 +369,6 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 - Light node capability
 - Whisper Mail Server and Whisper Mail Client implemented
 
-<!-- TODO: Document further differences with Whisper v6 -->
-
 ## Acknowledgements
  - Kim De Mey
  - Andrea Maria Piana
@@ -427,8 +377,3 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-<!-- TODO: Document recommendations for mobile nodes node --->
-<!-- TODO: Document spam resistance in practice, rate limiting -->
-<!-- TODO: Document accounting for resources, with mention of later settlement -->
-<!-- TODO: Consider adding roadmap, or link to -->
