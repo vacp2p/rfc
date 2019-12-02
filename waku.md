@@ -35,11 +35,6 @@
 
 This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this primarily through (a) light node support and (b) historic messages (with a mailserver). Additionally, other experimental features for better scalability and DDoS resistance are under development and will be part of future versions.
 
-<!-- TODO: Add waku mode in v1, it isn't in the spec yet:
-
-> Waku is a fork of the original Whisper protocol that enables better scalability and offline messaging, at the cost of some metadata protection guarantees. It does this through (a) light node support (b) historic messages (through a mailserver) (d) basic rate limiting.
--->
-
 ## Motivation
 
 Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices. We specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku and its capabilities. We also modify the language to be more unambiguous, concise and consistent.
@@ -55,10 +50,6 @@ Waku is a RLPx subprotocol called `waku` with version `0`. The version number co
 ### ABNF specification
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
-
-<!-- TODO: packet-format / packet rules, compact into one somehow? -->
-
-<!-- TOOD: ABNF floating point rep for pow? https://www.cs.cmu.edu/Groups/AI/html/cltl/clm/node19.html -->
 
 ```
 ; Packet codes 0 - 127 are reserved for Waku protocol
@@ -136,8 +127,6 @@ The following message codes are optional, but they are reserved for specific pur
 | P2P Request                |    126    |
 | P2P Message                |    127    |
 
-<!-- TODO: There are more packet codes we use in practice - see Adam's list -->
-
 ### Packet usage
 
 **Status**
@@ -148,10 +137,8 @@ The Status message serves as a Waku handshake and peers MUST exchange this
 message upon connection. It MUST be sent after the RLPx handshake and prior to
 any other Waku messages.
 
-A Waku node MUST await the Status message from a peer before engaging in other
-Waku protocol activity with that peer.
-When a node does not receive the Status message from a peer, before a
-configurable timeout, it SHOULD disconnect from that peer.
+A Waku node MUST await the Status message from a peer before engaging in other Waku protocol activity with that peer.
+When a node does not receive the Status message from a peer, before a configurable timeout, it SHOULD disconnect from that peer.
 
 Upon retrieval of the Status message, the node SHOULD validate the message
 content and decide whether it is compatible with the Waku version and mode
@@ -202,8 +189,6 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-OPTIONAL
-
 **P2P Request**
 
 This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
@@ -214,25 +199,35 @@ This packet is used for sending the peer-to-peer messages, which are not suppose
 
 ### Whisper Envelope data field (Optional)
 
-<!-- TODO: ABNF this and make language more strong -->
-
-This section outlines the OPTIONAL description of Data Field to set up an example.
+This section outlines the description of the Data Field.
 
 It is only relevant if you want to decrypt the incoming message, but if you only want to send a message, any other format would be perfectly valid and must be forwarded to the peers.
 
-Data field contains encrypted message of the Envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
+The Data field contains the encrypted message of the envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
 
-	flags: 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
-	
-	auxiliary field: up to 4 bytes; contains the size of payload.
+Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
-	payload: byte array of arbitrary size (may be zero).
+```
+; 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
+flags           = 1*OCTET
 
-	padding: byte array of arbitrary size (may be zero).
+; contains the size of payload.
+auxiliary-field = 4*OCTET
 
-	signature: 65 bytes, if present.
+; byte array of arbitrary size (may be zero)
+payload         = *OCTET
 
-	salt: 12 bytes, if present (in case of symmetric encryption).
+; byte array of arbitrary size (may be zero).
+padding         = *OCTET
+
+; 65 bytes, if present.
+signature       = 65*OCTET
+
+; 2 bytes, if present (in case of symmetric encryption).
+salt            = 2*OCTET
+
+envelope        = flags auxiliary-field payload padding [signature] salt
+```
 
 Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are both big-endian encoded, fixed-width 256-bit unsigned. `V` is an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
 
@@ -267,11 +262,9 @@ Light nodes MUST NOT forward any incoming messages, they MUST only send their ow
 
 Light nodes are identified by the `light_node` value in the status message.
 
-<!-- TODO: Add details on handshake -->
-
 ### Mailserver and client
 
-Mailservers are waku nodes that can archive messages and delivering them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
+Mailservers are waku nodes that can archive messages and deliver them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
 
 A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
 
@@ -307,11 +300,9 @@ Received envelopes MUST be passed through the Waku envelopes pipelines so that t
 
 Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
-<!-- TODO: Elaborate on waku/1 would be directly compatible with waku/0 if version don't match -->
-
 ### Waku-Whisper bridging
 
-`waku/0` and `shh/6` are different DevP2P subprotocols. In order to achieve backwards compatibility, bridging is required. It works as follows.
+`waku/0` and `shh/6` are different DevP2P subprotocols, however they share the same data format making their envelopes compatible. This means we can bridge the protocols naively, this works as follows.
 
 **Roles:**
 - Waku client A, only Waku capability
@@ -329,40 +320,14 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
-<!-- TODO: Outline difference between _bridging_ and data format -->
-
-<!-- TODO: Think about how to maintain forwards capability for waku/v0 -> v1 -> v2, etc. -->
-<!-- Example user story: changing version number to 1; moving to libp2p; changing routing to PSS style; remove PoW; replacing PoW with zkSNARKs; adding packet codes for rate limit / accounting for resources feedback; additional disconnect features -->
-
-<!-- TODO: Right now we have
-
-    if m.protocolVersion == wakuVersion:
-      debug "Waku peer", peer, wakuVersion
-    else:
-      raise newException(UselessPeerError, "Incompatible Waku version")
-
-Is this what we want? Decide!
--->
-
-<!-- TODO: Leave room for RECOMMENDATIONS FOR CLIENTS and DEPRECATION NOTICE when relevant -->
-
 
 ## Security considerations
 
 There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
 
-<!-- TODO: elaborate on security considerations -->
+### Light node privacy
 
-<!-- TODO: Light node security considerations
-
-> Running a node as a light node mode impacts privacy due to the fact that it becomes identifiable what nodes care about if they aren't relaying traffic.
-
-Replace with:
-
-> I think the main privacy concern with light nodes is that the directly connected peers will know that a message originates from them (as it are the only ones it sends). And yes, based on that they can make some assumptions on which messages (topics) they are interested in also.
-
--->
-
+The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
 ## Implementation Notes
 
@@ -384,21 +349,9 @@ Replace with:
 
 Notes useful for implementing Waku mode.
 
-
-<!-- TODO: Implementation notes, possibly link to matrix and have something similar but lightweight to https://tools.ietf.org/html/rfc8446#appendix-C
-
-Alt, break this out into issue for enhancement -->
-
-<!-- TODO(Dean): Break out into Status spec and remove this section
-
-The golang implementation of Whisper (v.6) already uses packet codes `0x00` - `0x03`. Parity's implementation of v.6 will also use codes `0x00` - `0x03`. Codes `0x7E` and `0x7F` are reserved, but still unused and left for custom implementation of Whisper Mail Server.
-
--->
-
 ## Footnotes
 
-1. https://github.com/ethereum/devp2p/blob/master/rlpx.md
-
+1. <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
 
 ## Changelog
 
@@ -414,8 +367,6 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 - Light node capability
 - Whisper Mail Server and Whisper Mail Client implemented
 
-<!-- TODO: Document further differences with Whisper v6 -->
-
 ## Acknowledgements
  - Kim De Mey
  - Andrea Maria Piana
@@ -424,8 +375,3 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-<!-- TODO: Document recommendations for mobile nodes node --->
-<!-- TODO: Document spam resistance in practice, rate limiting -->
-<!-- TODO: Document accounting for resources, with mention of later settlement -->
-<!-- TODO: Consider adding roadmap, or link to -->
