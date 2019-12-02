@@ -60,7 +60,11 @@ status          = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]
 ; version is "an integer (as specified in RLP)"
 version         = DIGIT
 
-; pow is "a single floating point value of PoW. This value is the IEEE 754 binary representation of 64-bit floating point number. Values of qNAN, sNAN, INF and -INF are not allowed. Negative values are also not allowed."
+; pow is "a single floating point value of PoW. 
+; This value is the IEEE 754 binary representation 
+; of a 64-bit floating point number. 
+; Values of qNAN, sNAN, INF and -INF are not allowed.
+; Negative values are also not allowed."
 pow-requirement = pow
 
 ; bloom filter is "a byte array"
@@ -79,10 +83,12 @@ ttl             = 4*OCTET
 ; 4 bytes of arbitrary data
 topic           = 4*OCTET
 
-; byte array of arbitrary size (contains encrypted message)
+; byte array of arbitrary size 
+; (contains encrypted message)
 data            = OCTET
 
-; 8 bytes of arbitrary data (used for PoW calculation)
+; 8 bytes of arbitrary data 
+; (used for PoW calculation)
 nonce           = 8*OCTET
 
 messages        = *waku-envelope
