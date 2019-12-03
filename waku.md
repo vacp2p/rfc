@@ -386,7 +386,7 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 **Devp2p TCP port blockable:**
 
-By default Devp2p runs on an odd, high valued port. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port 80 or 443, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
+By default Devp2p runs on port `30303`, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port `80` or `443`, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
 ## Appendix B: Implementation Notes
 
