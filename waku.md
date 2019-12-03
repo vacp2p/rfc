@@ -1,6 +1,6 @@
 # Waku Whisper Specification
 
-> Version 0.1.1 (Initial release)
+> Version 0.1.2 (Initial release)
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
@@ -41,7 +41,7 @@
 
 ## Abstract
 
-This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP- 627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this primarily through (a) light node support and (b) historic messages (with a mailserver). Additionally, other experimental features for better scalability and DDoS resistance are under development and will be part of future versions.
+This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this primarily through (a) light node support, (b) historic messages (with a mailserver) and (c) `topic-interest` for better bandwidth usage. Additionally, other experimental features for better scalability and DDoS resistance are under development and will be part of future versions.
 
 ## Motivation
 
@@ -84,6 +84,10 @@ limit-peerid = 1*DIGIT
 limit-topic  = 1*DIGIT
 
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
+
+; list of topics interested in
+; XXX: Boundedness?
+topic-interest   = "[" *topic "]"
 
 light-node = BIT
 
@@ -142,7 +146,7 @@ required-packet = 0 status /
 		  2 pow-requirement /
 		  3 bloom-filter
 		  
-optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits
+optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits / 21 topic-interest
 
 packet = "[" required-packet [ optional-packet ] "]"
 ```
@@ -166,11 +170,12 @@ The Waku sub-protocol MUST support the following packet codes:
 
 The following message codes are optional, but they are reserved for specific purpose.
 
-| Name                       | Int Value |
-|----------------------------|-----------|
-| Rate limits                |     20    |
-| P2P Request                |    126    |
-| P2P Message                |    127    |
+| Name                       | Int Value | Comment |
+|----------------------------|-----------|---------|
+| Rate limits                |     20    |         |
+| Topic interest             |     21    | Experimental in v0 |
+| P2P Request                |    126    | |
+| P2P Message                |    127    | |
 
 ### Packet usage
 
@@ -256,6 +261,12 @@ If a peer exceeds node's rate limits, the connection between them MAY be dropped
 Each node SHOULD broadcast its rate limits to its peers using the rate limits packet. The rate limits MAY also be sent as an optional parameter in the handshake.
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
+
+**Topic interest** (experimental)
+
+This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection.
+
+This feature will likely stop being experimental in v1.
 
 ### Whisper Envelope data field (Optional)
 
@@ -469,8 +480,16 @@ Notes useful for implementing Waku mode.
 
 | Version | Comment |
 | :-----: | ------- |
+| 0.1.2  | Experimental topic-interest |
 | 0.1.1   | Add security considerations appendix |
 | 0.1.0 (current) | Initial Release |
+
+
+### Differences between waku/0 and waku/1 (WIP)
+
+Features considered for waku/1:
+
+- `topic-interest` packet code
 
 ### Differences between shh/6 waku/0
 
