@@ -350,7 +350,37 @@ Waku currently lacks incentives to run nodes, which means node operators are mor
 
 The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
+**Bloom filter privacy:**
+
+By having a "tight" bloom filter you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
+
+**Mailserver client privacy:**
+
+A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+
+**Privacy guarantees not rigorous:**
+
+Privacy for Whisper / Waku haven't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
+
+**Topic hygiene:**
+
+Similar to bloom filter privacy, if you use a very specific topic you reveal more information. See scalability model linked above.
+
 ### Spam resistance
+
+**PoW bad for heterogenerous devices:**
+
+Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up your phone battery. This means someone can spin up a powerful node and overwhelm the network.
+
+**Mailserver trusted connection:**
+
+A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
+
+### Censorship resistance
+
+**Devp2p TCP port blockable:**
+
+By default Devp2p runs on an odd, high valued port. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port 80 or 443, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
 ## Implementation Notes
 
