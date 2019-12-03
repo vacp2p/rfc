@@ -33,6 +33,7 @@
     - [Censorship resistance](#censorship-resistance)
 - [Appendix B: Implementation Notes](#appendix-b-implementation-notes)
     - [Implementation Matrix](#implementation-matrix)
+    - [Recommendations for clients](#recommendations-for-clients)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
@@ -476,7 +477,17 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 | **nimbus** | x | -           | -           | x | - |
 | **status-go** | x | x           | x           |x | - |
 
+### Recommendations for clients
+
 Notes useful for implementing Waku mode.
+
+1. Avoid duplicate envelopes
+
+To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
+
+2. Topic specific recommendations 
+
+Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
 ## Footnotes
 
