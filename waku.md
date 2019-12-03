@@ -340,7 +340,7 @@ In version 0 of Waku, bandwidth usage is likely to be an issue. For more investi
 
 **Mailserver High Availability requirement:**
 
-A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it. This can be somewhat mitigated by the use of something like [MVDS](https://specs.vac.dev/mvds.html) on top, thereby treating a mailserver as a form of cache.
+A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it.
 
 **Gossip-based routing:**
 
