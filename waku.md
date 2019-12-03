@@ -336,7 +336,7 @@ There are several security considerations to take into account when running Waku
 
 **Bandwidth usage:**
 
-In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://vac.dev/fixing-whisper-with-waku).
+In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
 
 **Mailserver High Availability requirement:**
 
