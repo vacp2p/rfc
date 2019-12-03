@@ -1,6 +1,6 @@
 # Waku Whisper Specification
 
-> Version 0.1.0 (Initial release)
+> Version 0.1.1 (Initial release)
 >
 > Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
 
@@ -19,11 +19,17 @@
 - [Additional capabilities](#additional-capabilities)
     - [Light node](#light-node)
     - [Mailserver and client](#mailserver-and-client)
+        - [Requesting messages](#requesting-messages)
+        - [Receiving historic messages](#receiving-historic-messages)
 - [Backwards Compatibility](#backwards-compatibility)
     - [Waku-Whisper bridging](#waku-whisper-bridging)
 - [Forwards Compatibility](#forwards-compatibility)
-- [Security considerations](#security-considerations)
-- [Implementation Notes](#implementation-notes)
+- [Appendix A: Security considerations](#appendix-a-security-considerations)
+    - [Scalability and UX](#scalability-and-ux)
+    - [Privacy](#privacy)
+    - [Spam resistance](#spam-resistance)
+    - [Censorship resistance](#censorship-resistance)
+- [Appendix B: Implementation Notes](#appendix-b-implementation-notes)
     - [Implementation Matrix](#implementation-matrix)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
@@ -322,7 +328,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
-## Security considerations
+## Appendix A: Security considerations
 
 There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
 
@@ -382,7 +388,7 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 By default Devp2p runs on an odd, high valued port. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port 80 or 443, but there are still outstanding issues. See libp2p and Tor's Pluggable Transport for how this can be improved.
 
-## Implementation Notes
+## Appendix B: Implementation Notes
 
 ### Implementation Matrix
 
@@ -410,6 +416,7 @@ Notes useful for implementing Waku mode.
 
 | Version | Comment |
 | :-----: | ------- |
+| 0.1.1   | Add security considerations appendix |
 | 0.1.0 (current) | Initial Release |
 
 ### Differences between shh/6 waku/0
