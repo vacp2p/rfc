@@ -114,6 +114,10 @@ bloom-filter = *OCTET
 
 waku-envelope = "[" expiry ttl topic data nonce "]"
 
+; List of topics interested in
+; Bounded to maximum of 100 topics
+topic-interest   = "[" *100topic "]"
+
 ; 4 bytes (UNIX time in seconds)
 expiry = 4OCTET
 
@@ -267,6 +271,8 @@ Each node SHOULD respect rate limits advertised by its peers. The number of pack
 This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection.
 
 This feature will likely stop being experimental in v1.
+
+It is currently bounded to a maximum of 1000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
 
 ### Whisper Envelope data field (Optional)
 
