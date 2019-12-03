@@ -322,14 +322,27 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
-
 ## Security considerations
 
 There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
 
-### Light node privacy
+### Scalability and UX
+
+**Bandwidth usage:**
+
+In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://vac.dev/fixing-whisper-with-waku).
+
+**Mailserver High Availability requirement:**
+
+A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it. This can be somewhat mitigated by the use of something like [MVDS](https://specs.vac.dev/mvds.html) on top, thereby treating a mailserver as a form of cache.
+
+### Privacy
+
+**Light node privacy:**
 
 The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
+
+### Spam resistance
 
 ## Implementation Notes
 
