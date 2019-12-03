@@ -53,7 +53,7 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 
 ```
 ; Packet codes 0 - 127 are reserved for Waku protocol
-packet-code     = 0 / 1 / 2 / 3 / [ x4-127 ]
+packet-code     = 1*3DIGIT
 
 status          = "[" version pow-requirement [ bloom-filter ] [ light-node ] "]"
 
@@ -75,13 +75,13 @@ light-node      = BIT
 waku-envelope   = "[" expiry ttl topic data nonce "]"
 
 ; 4 bytes (UNIX time in seconds)
-expiry          = 4*OCTET
+expiry          = 4OCTET
 
 ; 4 bytes (time-to-live in seconds)
-ttl             = 4*OCTET
+ttl             = 4OCTET
 
 ; 4 bytes of arbitrary data
-topic           = 4*OCTET
+topic           = 4OCTET
 
 ; byte array of arbitrary size 
 ; (contains encrypted message)
@@ -89,13 +89,13 @@ data            = OCTET
 
 ; 8 bytes of arbitrary data 
 ; (used for PoW calculation)
-nonce           = 8*OCTET
+nonce           = 8OCTET
 
-messages        = *waku-envelope
+messages        = 1*waku-envelope
 
 p2p-request     = waku-envelope
 
-p2p-message     = waku-envelope
+p2p-message     = 1*waku-envelope
 
 packet-format   = "[" packet-code packet-format "]"
 
@@ -104,7 +104,7 @@ required-packet = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
 optional-packet = 126 p2p-request / 127 p2p-message
 
 ; packet-format needs to be paired with its corresponding packet-format
-packet          = "[" required-packet / [ optional-packet ] "]"
+packet          = "[" required-packet [ optional-packet ] "]"
 
 packet-format   = "[" packet-code packet-format "]"
 ```
@@ -214,8 +214,9 @@ The Data field contains the encrypted message of the envelope. In case of symmet
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
 ```
-; 1 byte; first two bits contain the size of auxiliary field, third bit indicates whether the signature is present.
-flags           = 1*OCTET
+; 1 byte; first two bits contain the size of auxiliary field, 
+; third bit indicates whether the signature is present.
+flags           = 1OCTET
 
 ; contains the size of payload.
 auxiliary-field = 4*OCTET
@@ -227,12 +228,12 @@ payload         = *OCTET
 padding         = *OCTET
 
 ; 65 bytes, if present.
-signature       = 65*OCTET
+signature       = *65OCTET
 
 ; 2 bytes, if present (in case of symmetric encryption).
-salt            = 2*OCTET
+salt            = 2OCTET
 
-envelope        = flags auxiliary-field payload padding [signature] salt
+envelope        = flags auxiliary-field payload padding [signature] [salt]
 ```
 
 Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are both big-endian encoded, fixed-width 256-bit unsigned. `V` is an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
