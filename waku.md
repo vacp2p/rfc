@@ -336,6 +336,14 @@ In version 0 of Waku, bandwidth usage is likely to be an issue. For more investi
 
 A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it. This can be somewhat mitigated by the use of something like [MVDS](https://specs.vac.dev/mvds.html) on top, thereby treating a mailserver as a form of cache.
 
+**Gossip-based routing:**
+
+Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause too low propagation probability. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
+
+**Lack of incentives:**
+
+Waku currently lacks incentives to run nodes, which means node operators are more likely to create centralized choke points.
+
 ### Privacy
 
 **Light node privacy:**
