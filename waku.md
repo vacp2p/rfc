@@ -269,7 +269,7 @@ Each node SHOULD respect rate limits advertised by its peers. The number of pack
 
 **Topic interest** (experimental)
 
-This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection.
+This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection. Peers MUST only send envelopes with specified topics.
 
 This feature will likely stop being experimental in v1.
 
