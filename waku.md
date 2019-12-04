@@ -344,7 +344,7 @@ A mailserver has to be online to receive messages for other nodes, this puts a h
 
 **Gossip-based routing:**
 
-Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause too low propagation probability. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
+Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause propagation probability that is too low. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
 
 **Lack of incentives:**
 
