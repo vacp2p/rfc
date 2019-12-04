@@ -376,7 +376,7 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 **PoW bad for heterogenerous devices:**
 
-Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up your phone battery. This means someone can spin up a powerful node and overwhelm the network.
+Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
 **Mailserver trusted connection:**
 
