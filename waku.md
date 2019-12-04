@@ -23,6 +23,7 @@
     - [Mailserver and client](#mailserver-and-client)
         - [Requesting messages](#requesting-messages)
         - [Receiving historic messages](#receiving-historic-messages)
+    - [Accounting for resources](#accounting-for-resources)
 - [Backwards Compatibility](#backwards-compatibility)
     - [Waku-Whisper bridging](#waku-whisper-bridging)
 - [Forwards Compatibility](#forwards-compatibility)
@@ -369,6 +370,21 @@ Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0
 In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.
 
 Received envelopes MUST be passed through the Waku envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
+
+### Accounting for resources (experimental)
+
+This is an experimental mode that MAY be implemented. It is heavily inspired by Swarm's SWAP protocol, and works by doing pairwise accounting for resources.
+
+Each node keeps track of resource usage with all other node. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.
+
+Every time epoch (say, every minute or every time an event happens) statistics SHOULD be print of the form:
+
+| peer  | sent | received |
+|-------|------|----------|
+| peer1 | 0    | 123 |
+| peer2 | 10   | 40  |
+
+In later versions this will be amended by nodes communication threshholds, settlements and disconnect logic.
 
 ## Backwards Compatibility
 
