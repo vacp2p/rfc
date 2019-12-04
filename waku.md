@@ -46,7 +46,7 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 | Term            | Definition                                            |
 | --------------- | ----------------------------------------------------- |
 | **Light node**   | A Waku node that does not forward any messages.       |
-| **Envelope**    | Packets sent and received by Waku nodes.              |
+| **Envelope**    | Messages sent and received by Waku nodes.              |
 | **Node**        | Some process that is able to communicate for Waku.    |
 
 ## Roles
