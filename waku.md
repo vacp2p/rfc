@@ -87,8 +87,7 @@ limit-topic  = 1*DIGIT
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
 ; list of topics interested in
-; XXX: Boundedness?
-topic-interest   = "[" *topic "]"
+topic-interest   = "[" *1000topic "]"
 
 light-node = BIT
 
