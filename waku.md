@@ -373,7 +373,7 @@ Received envelopes MUST be passed through the Waku envelopes pipelines so that t
 
 ### Accounting for resources (experimental)
 
-Nodes MAY implement accounting, keeping track of resource usage. It is heavily inspired by Swarm's SWAP protocol, and works by doing pairwise accounting for resources.
+Nodes MAY implement accounting, keeping track of resource usage. It is heavily inspired by Swarm's [SWAP protocol](https://www.bokconsulting.com.au/wp-content/uploads/2016/09/tron-fischer-sw3.pdf), and works by doing pairwise accounting for resources.
 
 Each node keeps track of resource usage with all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.
 
