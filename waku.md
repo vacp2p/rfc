@@ -68,7 +68,7 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 ### Use of DevP2P
 
-For nodes to communicate, they MUST implement devp2p and run RLPx. Nodes discover is out of scope for this spec.
+For nodes to communicate, they MUST implement devp2p and run RLPx. Node discovery is out of scope for this spec.
 
 ### Gossip based routing
 
