@@ -377,7 +377,7 @@ This is an experimental mode that MAY be implemented. It is heavily inspired by 
 
 Each node keeps track of resource usage with all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.
 
-Every time epoch (say, every minute or every time an event happens) statistics SHOULD be print of the form:
+Every time epoch (e.g. every minute or every time an event happens) statistics SHOULD be print of the form:
 
 | peer  | sent | received |
 |-------|------|----------|
