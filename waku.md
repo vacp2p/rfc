@@ -8,6 +8,8 @@
 
 - [Abstract](#abstract)
 - [Motivation](#motivation)
+- [Definitions](#definitions)
+- [Roles](#roles)
 - [Specification](#specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [ABNF specification](#abnf-specification)
@@ -38,6 +40,21 @@ This specification describes the format of Waku messages within the ÐΞVp2p Wir
 ## Motivation
 
 Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices. We specify the standard for Waku messages in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku and its capabilities. We also modify the language to be more unambiguous, concise and consistent.
+
+## Definitions
+
+| Term            | Definition                                            |
+| --------------- | ----------------------------------------------------- |
+| **Light node**   | A Waku node that does not forward any messages.       |
+| **Envelope**    | Messages sent and received by Waku nodes.              |
+| **Node**        | Some process that is able to communicate for Waku.    |
+
+## Roles
+
+| Role            | Definition                                       |
+| --------------- | ------------------------------------------------ |
+| **Mail Server** | A node responsible for archiving messages.       |
+| **Mail Client** | A node that requests messages from mail servers. |
 
 ## Specification
 
@@ -233,7 +250,7 @@ envelope        = flags auxiliary-field payload padding [signature] salt
 
 Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are both big-endian encoded, fixed-width 256-bit unsigned. `V` is an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
 
-The padding field was introduced in order to align the message size, since message size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excuding the Salt) before encryption (i.e. plain text) should be factor of 256 bytes.
+The padding field was introduced in order to align the message size, since message size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) should be factor of 256 bytes.
 
 ### Payload Encryption
 
@@ -245,7 +262,7 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
 
-Packet code `0x02` will be necessary for the future development of Whisper. It will provide possiblitity to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
+Packet code `0x02` will be necessary for the future development of Whisper. It will provide possibility to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
 
 Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
 
@@ -254,7 +271,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 ## Additional capabilities
 
-Waku supports multiple capabilities. These include light node, rate limting, mailserver (client and server) and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
+Waku supports multiple capabilities. These include light node, rate limiting, mailserver (client and server) and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
 ### Light node
 
@@ -342,12 +359,12 @@ The main privacy concern with light nodes is that directly connected peers will 
 | nimbus | [9c19f](https://github.com/status-im/nim-eth/tree/9c19f1e5b17b36ebcf1c7513428818f585a3cb16) |
 | status-go | [ed5a5](https://github.com/status-im/status-go/commit/ed5a5c154daf5362cdf0c35fd1bc204e6a6d49ae) |
 
-| | Light mode | Mailserver client | Mailserver server | shh/6 | waku/0 |
-| -: | :--------: | :----------------: | :--------------: |  :-: | :-: |
-| **geth** | x | x | x | x | - |
-| **status whisper** | x | x | - | x | - |
-| **nimbus** | x | - | - | x | - |
-| **status-go** | x | x | x |x | - |
+| | Light mode | Mail Client | Mail Server | shh/6 | waku/0 |
+| -: | :--------: | :---------: | :---------: |  :-: | :-: |
+| **geth** | x | x           | x           | x | - |
+| **status whisper** | x | x           | -           | x | - |
+| **nimbus** | x | -           | -           | x | - |
+| **status-go** | x | x           | x           |x | - |
 
 Notes useful for implementing Waku mode.
 
