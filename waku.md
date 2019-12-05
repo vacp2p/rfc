@@ -459,9 +459,13 @@ Notes useful for implementing Waku mode.
 
 Summary of main differences between this spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
 
-- RLPx subprotocol is changed from `shh/6` to `waku/0`
-- Light node capability
-- Whisper Mail Server and Whisper Mail Client implemented
+- RLPx subprotocol is changed from `shh/6` to `waku/0`.
+- Light node capability is added.
+- Optional rate limiting is added.
+- Status packet has following additional parameters: light-node,
+confirmations-enabled and rate-limits
+- Mail Server and Mail Client functionality is now part of the specification.
+- P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Acknowledgements
  - Kim De Mey
