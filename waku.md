@@ -142,7 +142,7 @@ required-packet = 0 status /
 		  2 pow-requirement /
 		  3 bloom-filter
 		  
-optional-packet = 126 p2p-request / 127 p2p-message / 14 rate-limits
+optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits
 
 packet = "[" required-packet [ optional-packet ] "]"
 ```
@@ -253,7 +253,7 @@ Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer 
 
 If a peer exceeds node's rate limits, the connection between them MAY be dropped.
 
-Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits MAY also be sent as an optional parameter in the handshake.
+Each node SHOULD broadcast its rate limits to its peers using the rate limits packet. The rate limits MAY also be sent as an optional parameter in the handshake.
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
