@@ -72,7 +72,7 @@ For nodes to communicate, they MUST implement devp2p and run RLPx. Node discover
 
 ### Gossip based routing
 
-In Whisper, messages are gossiped between peers. They float around the network until their TTL has expired. A node SHOULD relay messages to all connected nodes if an envelope matches its bloom filter or topic interest. A node MUST NOT sent expired envelopes, unless it is action as a mailserver.
+In Whisper, messages are gossiped between peers. They float around the network until their TTL has expired. A node SHOULD relay messages to all connected nodes if an envelope matches its bloom filter or topic interest. A node MUST NOT send expired envelopes, unless it is action as a mailserver.
 
 ## Wire Specification
 
