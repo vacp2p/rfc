@@ -194,11 +194,8 @@ message is received, the node MUST ignore these messages and SHOULD disconnect
 from that peer.
 Status messages received after the handshake is completed MUST also be ignored.
 
-<<<<<<< HEAD
-=======
 The fields `bloom-filter`, `light-node`, `confirmations-enabled` and `rate-limits` are OPTIONAL. However if an optional field is specified, all subsequent fields MUST be specified in order to be unambiguous.
 
->>>>>>> master
 **Messages**
 
 This packet is used for sending the standard Waku envelopes.
