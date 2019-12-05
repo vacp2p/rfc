@@ -86,9 +86,6 @@ limit-topic  = 1*DIGIT
 
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
-; list of topics interested in
-topic-interest   = "[" *1000topic "]"
-
 light-node = BIT
 
 status = "[" 
@@ -115,8 +112,7 @@ bloom-filter = *OCTET
 waku-envelope = "[" expiry ttl topic data nonce "]"
 
 ; List of topics interested in
-; Bounded to maximum of 100 topics
-topic-interest   = "[" *100topic "]"
+topic-interest   = "[" *0100topic "]"
 
 ; 4 bytes (UNIX time in seconds)
 expiry = 4OCTET
@@ -484,7 +480,7 @@ Notes useful for implementing Waku mode.
 
 To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
-2. Topic specific recommendations 
+2. Topic specific recommendations
 
 Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
