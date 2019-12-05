@@ -112,7 +112,7 @@ bloom-filter = *OCTET
 waku-envelope = "[" expiry ttl topic data nonce "]"
 
 ; List of topics interested in
-topic-interest   = "[" *0100topic "]"
+topic-interest   = "[" *1000topic "]"
 
 ; 4 bytes (UNIX time in seconds)
 expiry = 4OCTET
