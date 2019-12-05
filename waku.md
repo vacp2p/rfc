@@ -124,7 +124,7 @@ packet-format   = "[" packet-code packet-format "]"
 
 required-packet = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
 
-optional-packet = 126 p2p-request / 127 p2p-message
+optional-packet = 126 p2p-request / 127 p2p-message / 14 rate-limits
 
 ; packet-format needs to be paired with its corresponding packet-format
 packet          = "[" required-packet [ optional-packet ] "]"
@@ -142,12 +142,13 @@ Messages with unknown codes MUST be ignored without generating any error, for fo
 
 The Waku sub-protocol MUST support the following packet codes:
 
-| Name                       | Int Value |
-|----------------------------|-----------|
-| Status                     |     0     |
-| Messages                   |     1     |
-| PoW Requirement            |     2     |
-| Bloom Filter               |     3     |
+| Name                       |     Int Value |
+| -------------------------- | ------------- |
+| Status                     |     0         |
+| Messages                   |     1         |
+| PoW Requirement            |     2         |
+| Bloom Filter               |     3         |
+| Rate limits                |     20        |
 
 The following message codes are optional, but they are reserved for specific purpose.
 
@@ -179,7 +180,6 @@ When a node is receiving other Waku messages from a peer before a Status
 message is received, the node MUST ignore these messages and SHOULD disconnect
 from that peer.
 Status messages received after the handshake is completed MUST also be ignored.
-
 
 **Messages**
 
@@ -225,6 +225,20 @@ This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail
 **P2P Message**
 
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
+
+**Rate Limits**
+
+This packet is used for informing other nodes of their self defined rate limits.
+
+In order to provide basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
+
+Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer IDs.
+
+If a peer exceeds node's rate limits, the connection between them MAY be dropped.
+
+Each node SHOULD broadcast its rate limits to its peers using rate limits packet code (`0x14`). The rate limits MAY also be sent as an optional parameter in the handshake.
+
+Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
 ### Whisper Envelope data field (Optional)
 
