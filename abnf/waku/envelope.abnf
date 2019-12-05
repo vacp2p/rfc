@@ -1,0 +1,20 @@
+; 1 byte; first two bits contain the size of auxiliary field, 
+; third bit indicates whether the signature is present.
+flags           = 1OCTET
+
+; contains the size of payload.
+auxiliary-field = 4*OCTET
+
+; byte array of arbitrary size (may be zero)
+payload         = *OCTET
+
+; byte array of arbitrary size (may be zero).
+padding         = *OCTET
+
+; 65 bytes, if present.
+signature       = *65OCTET
+
+; 2 bytes, if present (in case of symmetric encryption).
+salt            = 2OCTET
+
+envelope        = flags auxiliary-field payload padding [signature] [salt]
