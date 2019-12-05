@@ -163,12 +163,12 @@ The Waku sub-protocol MUST support the following packet codes:
 | Messages                   |     1         |
 | PoW Requirement            |     2         |
 | Bloom Filter               |     3         |
-| Rate limits                |     20        |
 
 The following message codes are optional, but they are reserved for specific purpose.
 
 | Name                       | Int Value |
 |----------------------------|-----------|
+| Rate limits                |     20    |
 | P2P Request                |    126    |
 | P2P Message                |    127    |
 
