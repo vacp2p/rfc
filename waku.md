@@ -64,7 +64,17 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 | **Mail Server** | A node responsible for archiving messages.       |
 | **Mail Client** | A node that requests messages from mail servers. |
 
-## Specification
+## Underlying Transports and Prerequisites
+
+### Use of DevP2P
+
+For nodes to communicate, they MUST implement devp2p and run RLPx. Nodes discover is out of scope for this spec.
+
+### Gossip based routing
+
+In Whisper, messages are gossiped between peers. They float around the network until their TTL has expired. A node SHOULD relay messages to all connected nodes if an envelope matches its bloom filter or topic interest. A node MUST NOT sent expired envelopes, unless it is action as a mailserver.
+
+## Wire Specification
 
 ### Use of RLPx transport protocol
 
