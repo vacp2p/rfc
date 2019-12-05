@@ -375,7 +375,7 @@ Received envelopes MUST be passed through the Waku envelopes pipelines so that t
 
 This is an experimental mode that MAY be implemented. It is heavily inspired by Swarm's SWAP protocol, and works by doing pairwise accounting for resources.
 
-Each node keeps track of resource usage with all other node. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.
+Each node keeps track of resource usage with all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.
 
 Every time epoch (say, every minute or every time an event happens) statistics SHOULD be print of the form:
 
