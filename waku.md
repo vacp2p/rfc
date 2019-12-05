@@ -265,7 +265,7 @@ payload         = *OCTET
 padding         = *OCTET
 
 ; 65 bytes, if present.
-signature       = *65OCTET
+signature       = 65OCTET
 
 ; 2 bytes, if present (in case of symmetric encryption).
 salt            = 2OCTET
