@@ -78,21 +78,23 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code          = 1*3DIGIT
 
-; limit ip is the number of accepted packets per s for an IP
-limit-ip             = 1*DIGIT
+; rate limits
+limit-ip     = 1*DIGIT
+limit-peerid = 1*DIGIT
+limit-topic  = 1*DIGIT
 
-; limit peerid is the number of accepted packets per s for a peer id
-limit-peerid         = 1*DIGIT
+rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
-; limit topic is the number of accepted packets per s for a topic
-limit-topic         = 1*DIGIT
+light-node = BIT
 
-rate-limts           = "[" limit-ip limit-peerid limit-topic "]"
-
-status               = "[" version pow-requirement [ bloom-filter ] [ light-node ] [confirmations-enabled] [rate-limits] "]"
+status = "[" 
+	 version pow-requirement 
+         [ bloom-filter ] [ light-node ] 
+	 [confirmations-enabled] [rate-limits]
+	 "]"
 
 ; version is "an integer (as specified in RLP)"
-version               = DIGIT
+version = DIGIT
 
 confirmations-enabled = BIT
 
@@ -101,48 +103,48 @@ confirmations-enabled = BIT
 ; of a 64-bit floating point number. 
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
-pow-requirement       = pow
+pow-requirement = pow
 
 ; bloom filter is "a byte array"
-bloom-filter          = *OCTET
+bloom-filter = *OCTET
 
-light-node            = BIT
-
-waku-envelope         = "[" expiry ttl topic data nonce "]"
+waku-envelope = "[" expiry ttl topic data nonce "]"
 
 ; 4 bytes (UNIX time in seconds)
-expiry                = 4OCTET
+expiry = 4OCTET
 
 ; 4 bytes (time-to-live in seconds)
-ttl                   = 4OCTET
+ttl = 4OCTET
 
 ; 4 bytes of arbitrary data
-topic                 = 4OCTET
+topic = 4OCTET
 
 ; byte array of arbitrary size 
 ; (contains encrypted message)
-data                  = OCTET
+data = OCTET
 
 ; 8 bytes of arbitrary data 
 ; (used for PoW calculation)
-nonce                 = 8OCTET
+nonce = 8OCTET
 
-messages              = 1*waku-envelope
+messages = 1*waku-envelope
 
-p2p-request           = waku-envelope
+; mail server / client specific
+p2p-request = waku-envelope
+p2p-message = 1*waku-envelope
 
-p2p-message           = 1*waku-envelope
+; packet-format needs to be paired with its corresponding 
+; packet-format
+packet-format = "[" packet-code packet-format "]"
 
-packet-format         = "[" packet-code packet-format "]"
+required-packet = 0 status / 
+                  1 messages /
+		  2 pow-requirement /
+		  3 bloom-filter
+		  
+optional-packet = 126 p2p-request / 127 p2p-message
 
-required-packet       = 0 status / 1 messages / 2 pow-requirement / 3 bloom-filter
-
-optional-packet       = 126 p2p-request / 127 p2p-message
-
-; packet-format needs to be paired with its corresponding packet-format
-packet                = "[" required-packet [ optional-packet ] "]"
-
-packet-format         = "[" packet-code packet-format "]"
+packet = "[" required-packet [ optional-packet ] "]"
 ```
 
 All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from `0x00`.
