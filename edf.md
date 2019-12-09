@@ -6,9 +6,15 @@
 
 ## Table of Contents
 
- - [Specification](#specification)
+ 1. [Abstract](#abstract)
+ 2. [Specification](#specification)
+
+## Abstract
+
+In this specification, we describe the [data field used in Waku](./waku.md#abnf-specification), this is relevant for decrypting incoming messages.
 
 ## Specification
+
 This section outlines the description of the Data Field.
 
 It is only relevant if you want to decrypt the incoming message, any other format would be perfectly valid for sending messages and must be forwarded to the peers.
