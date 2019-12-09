@@ -9,6 +9,7 @@
  - [Specification](#specification)
 
 ## Specification
+This section outlines the description of the Data Field.
 
 It is only relevant if you want to decrypt the incoming message, any other format would be perfectly valid for sending messages and must be forwarded to the peers.
 
