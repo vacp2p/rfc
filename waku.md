@@ -365,7 +365,7 @@ The envelope MUST be signed with a symmetric key agreed between the requester an
 
 #### Receiving historic messages
 
-Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes. It is incompatible with the original Whisper spec (EIP-627) because it allows only a single envelope, however, an array of envelopes is much more performant. In order to stay compatible with EIP-627, a peer receiving historic message MUST handle both cases.
+Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
 
 In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.
 
@@ -523,9 +523,13 @@ Features considered for waku/1:
 
 Summary of main differences between this spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
 
-- RLPx subprotocol is changed from `shh/6` to `waku/0`
-- Light node capability
-- Whisper Mail Server and Whisper Mail Client implemented
+- RLPx subprotocol is changed from `shh/6` to `waku/0`.
+- Light node capability is added.
+- Optional rate limiting is added.
+- Status packet has following additional parameters: light-node,
+confirmations-enabled and rate-limits
+- Mail Server and Mail Client functionality is now part of the specification.
+- P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Acknowledgements
  - Kim De Mey
