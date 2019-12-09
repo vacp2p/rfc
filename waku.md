@@ -68,7 +68,7 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 ### Use of DevP2P
 
-For nodes to communicate, they MUST implement devp2p and run RLPx. Node discovery is out of scope for this spec.
+For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST have some way of connecting to other nodes. Node discovery is largely out of scope for this spec, but see the appendix for some suggestions on how to do this.
 
 ### Gossip based routing
 
@@ -509,6 +509,16 @@ To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate en
 2. Topic specific recommendations
 
 Consider partition topics based on some usage, to avoid too much traffic on a single topic.
+
+### Node discovery
+
+[Discovery v4](https://github.com/ethereum/devp2p/wiki/Discovery-Overview) SHOULD NOT be used, because it doesn't distinguish between capabilities. It will thus have a hard time finding Waku/Whisper nodes.
+
+[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) MAY be used. However, it is quite bandwidth heavy for resource restricted devices. Thus, some lighter discovery mechanism is used. For some ad hoc ideas, see the current ad hoc implementation used in the [Status spec](https://github.com/status-im/specs/blob/master/status-client-spec.md#discovery).
+
+This is an ongoing area of research and will likely change in future versions.
+
+Known static nodes MAY also be used.
 
 ## Footnotes
 
