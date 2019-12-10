@@ -1,6 +1,6 @@
 # Waku
 
-> Version 0.1.2 (Initial release)
+> Version 0.2.0
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -508,9 +508,8 @@ Consider partition topics based on some usage, to avoid too much traffic on a si
 
 | Version | Comment |
 | :-----: | ------- |
-| 0.1.2  | Experimental topic-interest |
-| 0.1.1   | Add security considerations appendix |
-| 0.1.0 (current) | Initial Release |
+| 0.2.0 (current) | See [CHANGELOG](https://github.com/vacp2p/specs/releases/tag/waku-0.2.0) for more details. |
+| [0.1.0](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md) | Initial Release |
 
 
 ### Differences between waku/0 and waku/1 (WIP)
