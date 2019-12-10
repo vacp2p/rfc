@@ -72,7 +72,7 @@ For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST hav
 
 ### Gossip based routing
 
-In Whisper, messages are gossiped between peers. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a mailserver response.
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a mailserver response. A node SHOULD NOT send a message to a peer that it has already sent before.
 
 ## Wire Specification
 
