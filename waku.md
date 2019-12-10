@@ -492,13 +492,13 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 Notes useful for implementing Waku mode.
 
-1. Avoid duplicate envelopes
+ 1. Avoid duplicate envelopes
+ 
+	To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
-To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
-
-2. Topic specific recommendations
-
-Consider partition topics based on some usage, to avoid too much traffic on a single topic.
+ 2. Topic specific recommendations
+ 
+	Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
 ## Footnotes
 
