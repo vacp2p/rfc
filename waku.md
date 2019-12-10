@@ -64,7 +64,17 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 | **Mail Server** | A node responsible for archiving messages.       |
 | **Mail Client** | A node that requests messages from mail servers. |
 
-## Specification
+## Underlying Transports and Prerequisites
+
+### Use of DevP2P
+
+For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST have some way of connecting to other nodes. Node discovery is largely out of scope for this spec, but see the appendix for some suggestions on how to do this.
+
+### Gossip based routing
+
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a mailserver response. A node SHOULD NOT send a message to a peer that it has already sent before.
+
+## Wire Specification
 
 ### Use of RLPx transport protocol
 
@@ -499,6 +509,16 @@ Notes useful for implementing Waku mode.
  2. Topic specific recommendations
  
 	Consider partition topics based on some usage, to avoid too much traffic on a single topic.
+
+### Node discovery
+
+[Discovery v4](https://github.com/ethereum/devp2p/wiki/Discovery-Overview) SHOULD NOT be used, because it doesn't distinguish between capabilities. It will thus have a hard time finding Waku/Whisper nodes.
+
+[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) MAY be used. However, it is quite bandwidth heavy for resource restricted devices. Thus, some lighter discovery mechanism is used. For some ad hoc ideas, see the current ad hoc implementation used in the [Status spec](https://github.com/status-im/specs/blob/master/status-client-spec.md#discovery).
+
+This is an ongoing area of research and will likely change in future versions.
+
+Known static nodes MAY also be used.
 
 ## Footnotes
 
