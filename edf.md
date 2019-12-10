@@ -21,14 +21,6 @@ In this specification, we describe the [data field used in Waku](./waku.md#abnf-
 
 The `data` field is used within the `waku envelope`, the field MUST contain the encrypted message of the envelope.
 
-<!--
-
-do we care about this section?
-
-It is only relevant if you want to decrypt the incoming message, any other format would be perfectly valid for sending messages and must be forwarded to the peers.
-
--->
-
 The fields that are concatenated and encrypted as part of the `data` field are:
  - flags
  - auxiliary field
