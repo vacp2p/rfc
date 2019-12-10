@@ -8,6 +8,9 @@
 
  1. [Abstract](#abstract)
  2. [Specification](#specification)
+    1. [ABNF](#abnf)
+    2. [Signature](#signature)
+    3. [Padding](#padding)
 
 ## Abstract
 
@@ -15,11 +18,26 @@ In this specification, we describe the [data field used in Waku](./waku.md#abnf-
 
 ## Specification
 
-This section outlines the description of the Data Field.
+The `data` field is used within the `waku envelope`, the field MUST contain the encrypted message of the envelope.
+
+<!--
+
+do we care about this section?
 
 It is only relevant if you want to decrypt the incoming message, any other format would be perfectly valid for sending messages and must be forwarded to the peers.
 
-The Data field MUST contain the encrypted message of the envelope. In case of symmetric encryption, it also contains appended Salt (a.k.a. AES Nonce, 12 bytes). Plaintext (unencrypted) payload consists of the following concatenated fields: flags, auxiliary field, payload, padding and signature (in this sequence).
+-->
+
+The fields that are concatenated and encrypted as part of the `data` field are:
+ - flags
+ - auxiliary field
+ - payload
+ - padding
+ - signature
+ 
+In case of symmetric encryption, a `salt`  (a.k.a. AES Nonce, 12 bytes) field MUST be appended. 
+
+### ABNF
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
@@ -46,6 +64,10 @@ salt            = 2OCTET
 envelope        = flags auxiliary-field payload padding [signature] [salt]
 ```
 
-Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` are MUST be big-endian encoded, fixed-width 256-bit unsigned. `V` is MUST be an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
+### Signature
+
+Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` MUST be big-endian encoded, fixed-width 256-bit unsigned. `V` MUST be an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
+
+### Padding
 
 The padding field is used to align message size, since message size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
