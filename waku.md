@@ -2,7 +2,7 @@
 
 > Version 0.1.2 (Initial release)
 >
-> Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
+> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Table of Contents
 
@@ -532,9 +532,7 @@ confirmations-enabled and rate-limits
 - P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Acknowledgements
- - Kim De Mey
  - Andrea Maria Piana
- - Adam Babik
 
 ## Copyright
 
