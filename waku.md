@@ -9,7 +9,6 @@
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Definitions](#definitions)
-- [Roles](#roles)
 - [Specification](#specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [ABNF specification](#abnf-specification)
@@ -20,9 +19,6 @@
     - [Packet code Rationale](#packet-code-rationale)
 - [Additional capabilities](#additional-capabilities)
     - [Light node](#light-node)
-    - [Mailserver and client](#mailserver-and-client)
-        - [Requesting messages](#requesting-messages)
-        - [Receiving historic messages](#receiving-historic-messages)
     - [Accounting for resources](#accounting-for-resources)
 - [Backwards Compatibility](#backwards-compatibility)
     - [Waku-Whisper bridging](#waku-whisper-bridging)
@@ -57,13 +53,6 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 | **Envelope**    | Messages sent and received by Waku nodes.              |
 | **Node**        | Some process that is able to communicate for Waku.    |
 
-## Roles
-
-| Role            | Definition                                       |
-| --------------- | ------------------------------------------------ |
-| **Mail Server** | A node responsible for archiving messages.       |
-| **Mail Client** | A node that requests messages from mail servers. |
-
 ## Underlying Transports and Prerequisites
 
 ### Use of DevP2P
@@ -72,7 +61,7 @@ For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST hav
 
 ### Gossip based routing
 
-In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a mailserver response. A node SHOULD NOT send a message to a peer that it has already sent before.
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./wms.md) response. A node SHOULD NOT send a message to a peer that it has already sent before.
 
 ## Wire Specification
 
@@ -145,6 +134,7 @@ nonce = 8OCTET
 messages = 1*waku-envelope
 
 ; mail server / client specific
+; @TODO DO WE MOVE THIS TO MS SPEC?
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
@@ -337,7 +327,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 ## Additional capabilities
 
-Waku supports multiple capabilities. These include light node, rate limiting, mailserver (client and server) and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
+Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
 ### Light node
 
@@ -346,40 +336,6 @@ The rationale for light nodes is to allow for interaction with waku on resource 
 Light nodes MUST NOT forward any incoming messages, they MUST only send their own messages. When light nodes happen to connect to each other, they SHOULD disconnect. As this would result in messages being dropped between the two.
 
 Light nodes are identified by the `light_node` value in the status message.
-
-### Mailserver and client
-
-Mailservers are waku nodes that can archive messages and deliver them to its peers on-demand. A node which wants to provide mailserver functionality MUST store envelopes from incoming message packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
-
-A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.
-
-#### Requesting messages
-
-In order to request historic messages, a node MUST send a packet P2P Request (`0x7e`) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Waku envelope.
-
-In the Waku envelope's payload section, there MUST be RLP-encoded information about the details of the request:
-
-```
-[ Lower, Upper, Bloom, Limit, Cursor ]
-```
-
-`Lower`: 4-byte wide unsigned integer (UNIX time in seconds; oldest requested envelope's creation time)
-`Upper`: 4-byte wide unsigned integer (UNIX time in seconds; newest requested envelope's creation time)
-`Bloom`: 64-byte wide array of Waku topics encoded in a bloom filter to filter envelopes
-`Limit`: 4-byte wide unsigned integer limiting the number of returned envelopes
-`Cursor`: 32-byte wide array of a cursor returned from the previous request (optional)
-
-The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
-
-The envelope MUST be signed with a symmetric key agreed between the requester and Mailserver.
-
-#### Receiving historic messages
-
-Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
-
-In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.
-
-Received envelopes MUST be passed through the Waku envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
 
 ### Accounting for resources (experimental)
 
@@ -422,17 +378,13 @@ It is desirable to have a strategy for maintaining forward compatibility between
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used, such as mailserver, light node, and so on.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used.
 
 ### Scalability and UX
 
 **Bandwidth usage:**
 
 In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
-
-**Mailserver High Availability requirement:**
-
-A mailserver has to be online to receive messages for other nodes, this puts a high availability requirement on it.
 
 **Gossip-based routing:**
 
@@ -452,10 +404,6 @@ The main privacy concern with light nodes is that directly connected peers will 
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
-**Mailserver client privacy:**
-
-A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
-
 **Privacy guarantees not rigorous:**
 
 Privacy for Whisper / Waku haven't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
@@ -469,10 +417,6 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 **PoW bad for heterogenerous devices:**
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
-
-**Mailserver trusted connection:**
-
-A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
 
 ### Censorship resistance
 
