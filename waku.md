@@ -115,6 +115,7 @@ confirmations-enabled = BIT
 ; of a 64-bit floating point number. 
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
+pow             = 1*DIGIT "." 1*DIGIT
 pow-requirement = pow
 
 ; bloom filter is "a byte array"
