@@ -11,6 +11,7 @@
     1. [ABNF](#abnf)
     2. [Signature](#signature)
     3. [Padding](#padding)
+ 3. [Copyright](#copyright)
 
 ## Abstract
 
@@ -71,3 +72,7 @@ Those unable to decrypt the message data are also unable to access the signature
 ### Padding
 
 The padding field is used to align message size, since message size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
+
+## Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
