@@ -15,7 +15,7 @@
 
 ## Abstract
 
-In this specification, we describe the [data field used in Waku](./waku.md#abnf-specification), this is relevant for decrypting incoming messages.
+In this specification, we describe the [data field used in Waku](./waku.md#abnf-specification) for the encryption, decryption and signing of messages.
 
 ## Specification
 
