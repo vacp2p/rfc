@@ -329,6 +329,8 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
+Additionally there is the capability of a mailserver which is documented in its on [specification](./wms). 
+
 ### Light node
 
 The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.
