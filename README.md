@@ -14,7 +14,7 @@ These protocols define various components of the [vac](https://vac.dev) stack.
  - [remote log](./remote-log.md) - Remote replication of local logs.
  - [mdf](./mdf.md) - Metadata field for [MVDS](./mvds.md) messages. 
  - [waku](./waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
- - [edf](./edf.md) - Envelope data field specification for [waku](./waku.md).
+ - [wedf](./wedf.md) - [Waku](./waku.md) envelope data field specification.
 
 
 ## Style guide
