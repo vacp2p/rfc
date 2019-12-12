@@ -43,7 +43,7 @@ In the Waku envelope's payload section, there MUST be RLP-encoded information ab
 
 The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
 
-The envelope MUST be signed with a symmetric key agreed between the requester and Mailserver.
+The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.
 
 ### Receiving historic messages
 
@@ -51,7 +51,21 @@ Historic messages MUST be sent to a peer as a packet with a P2P Message code (`0
 
 In order to receive historic messages from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.
 
-Received envelopes MUST be passed through the Waku envelopes pipelines so that they are picked up by registered filters and passed to subscribers.
+Received envelopes MUST be passed through the Whisper envelope pipelines so that they are picked up by registered filters and passed to subscribers.
+
+For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by a list with:
+
+```
+[ RequestID, LastEnvelopeHash, Cursor ]
+```
+
+| Field              | Description                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------ |
+| `RequestID`        | 32-byte wide array with a Keccak-256 hash of the envelope containing the original request. |
+| `LastEnvelopeHash` | 32-byte wide array with a Keccak-256 hash of the last sent envelope for the request.       |
+| `Cursor`           | an array of a cursor returned from the previous request (optional)                         |
+
+If `Cursor` is not empty, it means that not all messages were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the messages.
 
 ### Security considerations
 
