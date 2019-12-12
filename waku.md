@@ -134,7 +134,6 @@ nonce = 8OCTET
 messages = 1*waku-envelope
 
 ; mail server / client specific
-; @TODO DO WE MOVE THIS TO MS SPEC?
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
