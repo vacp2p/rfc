@@ -1,8 +1,8 @@
-# Waku Whisper Specification
+# Waku
 
-> Version 0.1.2 (Initial release)
+> Version 0.2.0
 >
-> Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
+> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Table of Contents
 
@@ -63,7 +63,17 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 | **Mail Server** | A node responsible for archiving messages.       |
 | **Mail Client** | A node that requests messages from mail servers. |
 
-## Specification
+## Underlying Transports and Prerequisites
+
+### Use of DevP2P
+
+For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST have some way of connecting to other nodes. Node discovery is largely out of scope for this spec, but see the appendix for some suggestions on how to do this.
+
+### Gossip based routing
+
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a mailserver response. A node SHOULD NOT send a message to a peer that it has already sent before.
+
+## Wire Specification
 
 ### Use of RLPx transport protocol
 
@@ -104,6 +114,7 @@ confirmations-enabled = BIT
 ; of a 64-bit floating point number. 
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
+pow             = 1*DIGIT "." 1*DIGIT
 pow-requirement = pow
 
 ; bloom filter is "a byte array"
@@ -138,7 +149,7 @@ p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
 ; packet-format needs to be paired with its 
-corresponding packet-format
+; corresponding packet-format
 packet-format = "[" packet-code packet-format "]"
 
 required-packet = 0 status / 
@@ -454,13 +465,23 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 Notes useful for implementing Waku mode.
 
-1. Avoid duplicate envelopes
+ 1. Avoid duplicate envelopes
+ 
+	To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
-To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
+ 2. Topic specific recommendations
+ 
+	Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
-2. Topic specific recommendations
+### Node discovery
 
-Consider partition topics based on some usage, to avoid too much traffic on a single topic.
+[Discovery v4](https://github.com/ethereum/devp2p/wiki/Discovery-Overview) SHOULD NOT be used, because it doesn't distinguish between capabilities. It will thus have a hard time finding Waku/Whisper nodes.
+
+[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) MAY be used. However, it is quite bandwidth heavy for resource restricted devices. Thus, some lighter discovery mechanism is used. For some ad hoc ideas, see the current ad hoc implementation used in the [Status spec](https://github.com/status-im/specs/blob/master/status-client-spec.md#discovery).
+
+This is an ongoing area of research and will likely change in future versions.
+
+Known static nodes MAY also be used.
 
 ## Footnotes
 
@@ -470,9 +491,8 @@ Consider partition topics based on some usage, to avoid too much traffic on a si
 
 | Version | Comment |
 | :-----: | ------- |
-| 0.1.2  | Experimental topic-interest |
-| 0.1.1   | Add security considerations appendix |
-| 0.1.0 (current) | Initial Release |
+| 0.2.0 (current) | See [CHANGELOG](https://github.com/vacp2p/specs/releases/tag/waku-0.2.0) for more details. |
+| [0.1.0](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md) | Initial Release |
 
 
 ### Differences between waku/0 and waku/1 (WIP)
@@ -494,9 +514,7 @@ confirmations-enabled and rate-limits
 - P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Acknowledgements
- - Kim De Mey
  - Andrea Maria Piana
- - Adam Babik
 
 ## Copyright
 
