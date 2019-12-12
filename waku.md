@@ -378,7 +378,7 @@ It is desirable to have a strategy for maintaining forward compatibility between
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./wms.md#security-considerations) can be found in their respective specifications.
 
 ### Scalability and UX
 
