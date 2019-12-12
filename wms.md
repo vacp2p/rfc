@@ -2,7 +2,7 @@
 
 > Version 0.1.0
 >
-> Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
 ## Table of Contents
 
