@@ -241,11 +241,6 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-<!--
-
-@TODO DO WE MOVE THIS?
-
--->
 **P2P Request**
 
 This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
