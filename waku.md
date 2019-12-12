@@ -115,6 +115,7 @@ confirmations-enabled = BIT
 ; of a 64-bit floating point number. 
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
+pow             = 1*DIGIT "." 1*DIGIT
 pow-requirement = pow
 
 ; bloom filter is "a byte array"
@@ -149,7 +150,7 @@ p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
 ; packet-format needs to be paired with its 
-corresponding packet-format
+; corresponding packet-format
 packet-format = "[" packet-code packet-format "]"
 
 required-packet = 0 status / 
