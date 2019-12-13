@@ -15,7 +15,7 @@ These protocols define various components of the [vac](https://vac.dev) stack.
  - [mdf](./mdf.md) - Metadata field for [MVDS](./mvds.md) messages. 
  - [waku](./waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
  - [wedf](./wedf.md) - [Waku](./waku.md) envelope data field specification.
-
+ - [wms](./wms.md) - Mailserver specification for archiving and delivering historical [waku](./waku.md) envelopes on demand.
 
 ## Style guide
 
