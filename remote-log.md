@@ -231,7 +231,7 @@ in time.
 | Version | Comment |
 | :-----: | ------- |
 | 0.1.1 (current) | Add protobuf package name, protobuf3 and fix typos. |
-| [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.mdhttps://github.com/status-im/bigbrother-specs/blob/6d3d0771b46941791eabe9263f80cbaeaf3d1148/data_sync/mvds.md) | Initial Release |
+| [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.md) | Initial Release |
 
 
 
