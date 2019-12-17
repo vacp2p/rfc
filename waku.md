@@ -74,7 +74,7 @@ Waku is a RLPx subprotocol called `waku` with version `0`. The version number co
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
-```
+```abnf
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code          = 1*3DIGIT
 
@@ -285,7 +285,6 @@ Packet code `0x02` will be necessary for the future development of Whisper. It w
 Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
 
 Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
-
 
 ## Additional capabilities
 
