@@ -34,7 +34,7 @@ In case of symmetric encryption, a `salt`  (a.k.a. AES Nonce, 12 bytes) field MU
 
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
-```
+```abnf
 ; 1 byte; first two bits contain the size of auxiliary field, 
 ; third bit indicates whether the signature is present.
 flags           = 1OCTET
