@@ -29,17 +29,24 @@ In order to request historic messages, a node MUST send a packet P2P Request (`0
 
 In the Waku envelope's payload section, there MUST be RLP-encoded information about the details of the request:
 
-```
-[ Lower, Upper, Bloom, Limit, Cursor ]
-```
+```abnf
+; UNIX time in seconds; oldest requested envelope's creation time
+lower  = 4OCTET
 
-| Field    |   Description                                                                                    |
-| -------- | ------------------------------------------------------------------------------------------------ |
-| `Lower`  |   4-byte wide unsigned integer (UNIX time in seconds; oldest requested envelope's creation time) |
-| `Upper`  |   4-byte wide unsigned integer (UNIX time in seconds; newest requested envelope's creation time) |
-| `Bloom`  |   64-byte wide array of Waku topics encoded in a bloom filter to filter envelopes                |
-| `Limit`  |   4-byte wide unsigned integer limiting the number of returned envelopes                         |
-| `Cursor` |   32-byte wide array of a cursor returned from the previous request (optional)                   |
+; UNIX time in seconds; newest requested envelope's creation time
+upper  = 4OCTET
+
+; array of Waku topics encoded in a bloom filter to filter envelopes
+bloom  = 64OCTET
+
+; unsigned integer limiting the number of returned envelopes
+limit  = 4OCTET
+
+; array of a cursor returned from the previous request (optional)
+cursor = 32OCTET
+
+payload = "[" lower upper bloom limit [ cursor ] "]"
+```
 
 The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
 
@@ -55,15 +62,18 @@ Received envelopes MUST be passed through the Whisper envelope pipelines so that
 
 For a requester, to know that all messages have been sent by mailserver, it SHOULD handle P2P Request Complete code (`0x7d`). This code is followed by a list with:
 
-```
-[ RequestID, LastEnvelopeHash, Cursor ]
-```
+```abnf
+; array with a Keccak-256 hash of the envelope containing the original request.
+request-id = 32OCTET
 
-| Field              | Description                                                                                |
-| ------------------ | ------------------------------------------------------------------------------------------ |
-| `RequestID`        | 32-byte wide array with a Keccak-256 hash of the envelope containing the original request. |
-| `LastEnvelopeHash` | 32-byte wide array with a Keccak-256 hash of the last sent envelope for the request.       |
-| `Cursor`           | an array of a cursor returned from the previous request (optional)                         |
+; array with a Keccak-256 hash of the last sent envelope for the request. 
+last-envelope-hash = 32OCTET
+
+; array of a cursor returned from the previous request (optional)
+cursor = *OCTET
+
+payload = "[" request-id last-envelope-hash [ cursor ] "]"
+```
 
 If `Cursor` is not empty, it means that not all messages were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the messages.
 
