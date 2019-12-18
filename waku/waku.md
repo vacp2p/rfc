@@ -37,7 +37,7 @@
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Differences between waku/0 and waku/1 (WIP)](#differences-between-waku0-and-waku1-wip)
-    - [Differences between shh/6 waku/0](#differences-between-shh-6-waku-0)
+    - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Acknowledgements](#acknowledgements)
 - [Copyright](#copyright)
 
