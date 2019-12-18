@@ -299,7 +299,7 @@ The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes ba
 
 The Message Response packet is more complex and is followed by a Versioned Message Response:
 
-```
+```abnf
 ; a version of the Message Response, equal to `1`
 version = 1*DIGIT
 
