@@ -16,6 +16,7 @@
     - [Packet usage](#packet-usage)
     - [Payload Encryption](#payload-encryption)
     - [Packet code Rationale](#packet-code-rationale)
+    - [Message confirmations](#message-confirmations)
 - [Additional capabilities](#additional-capabilities)
     - [Light node](#light-node)
     - [Accounting for resources](#accounting-for-resources)
@@ -285,6 +286,46 @@ Packet code `0x02` will be necessary for the future development of Whisper. It w
 Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
 
 Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
+
+## Message Confirmations
+
+Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been received by its peers.
+
+A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
+
+A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
+
+The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data (raw bytes).
+
+The Message Response packet is more complex and is followed by a Versioned Message Response:
+
+```
+; a version of the Message Response, equal to `1`
+version = 1*DIGIT
+
+; keccak256 hash of the envelopes batch data (raw bytes) for which the confirmation is sent
+hash = *OCTET
+
+hasherror = *OCTET
+
+; error code
+code = 1*DIGIT
+
+; a descriptive error message
+description = *ALPHA
+
+error  = "[" hasherror code description "]"
+errors = *error
+
+response = "[" hash errors "]"
+
+confirmation = "[" version response "]"
+```
+
+The supported codes:
+`1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
+
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
 
 ## Additional capabilities
 
