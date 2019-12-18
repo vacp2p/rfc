@@ -19,7 +19,7 @@ These protocols define various components of the [vac](https://vac.dev) stack.
 Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
 
  - [waku](./waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
- - [wedf](./waku/wedf.md) - [Waku](./waku/waku.md) envelope data field specification.
+ - [wedf](./waku/wedf.md) - [waku](./waku/waku.md) envelope data field specification.
  - [wms](./waku/wms.md) - Mailserver specification for archiving and delivering historical [waku](./waku/waku.md) envelopes on demand.
 
 ## Style guide
