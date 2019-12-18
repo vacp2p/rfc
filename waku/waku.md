@@ -90,7 +90,7 @@ light-node = BIT
 status = "[" 
 	 version pow-requirement 
          [ bloom-filter ] [ light-node ] 
-	 [confirmations-enabled] [rate-limits]
+	 [ confirmations-enabled ] [ rate-limits ]
 	 "]"
 
 ; version is "an integer (as specified in RLP)"
