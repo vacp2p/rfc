@@ -45,12 +45,24 @@ limit  = 4OCTET
 ; array of a cursor returned from the previous request (optional)
 cursor = 32OCTET
 
-payload = "[" lower upper bloom limit [ cursor ] "]"
+; List of topics interested in
+topic-interest   = "[" *1000topic "]"
+
+; 4 bytes of arbitrary data
+topic = 4OCTET
+
+payload_alt1 = "[" lower upper bloom limit [ cursor ] "]"
+
+payload_alt2 = "[" lower upper bloom limit cursor [ topic-interest ] "]"
+
+payload = payload_alt1 | payload_2
 ```
 
 The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
 
 The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.
+
+If `topic-interest` is used `Cursor` field MUST be specified for the argument order to be unambiguous. However, it MAY be set to null. `topic-interest` is used to specify limit envelopes to. If this is specified, a mailserver MUST NOT send messages that aren't in in that topic. This option takes precedence over the `bloom` parameter.
 
 ### Receiving historic messages
 
@@ -92,6 +104,12 @@ A mailserver client has to trust a mailserver, which means they can send direct 
 **Mailserver trusted connection:**
 
 A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.
+
+## Changelog
+
+### Difference between wms/0 (0.1) and wms0 (0.2) (WIP)
+
+- `topic-interest` option
 
 ## Copyright
 
