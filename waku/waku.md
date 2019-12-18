@@ -76,7 +76,7 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 
 ```abnf
 ; Packet codes 0 - 127 are reserved for Waku protocol
-packet-code          = 1*3DIGIT
+packet-code = 1*3DIGIT
 
 ; rate limits
 limit-ip     = 1*DIGIT
@@ -112,7 +112,7 @@ bloom-filter = *OCTET
 waku-envelope = "[" expiry ttl topic data nonce "]"
 
 ; List of topics interested in
-topic-interest   = "[" *1000topic "]"
+topic-interest = "[" *1000topic "]"
 
 ; 4 bytes (UNIX time in seconds)
 expiry = 4OCTET
