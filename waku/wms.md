@@ -43,7 +43,7 @@ bloom  = 64OCTET
 limit  = 4OCTET
 
 ; array of a cursor returned from the previous request (optional)
-cursor = 32OCTET
+cursor = *OCTET
 
 ; List of topics interested in
 topic-interest   = "[" *1000topic "]"
