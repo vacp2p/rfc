@@ -297,10 +297,12 @@ A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Messag
 
 The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data (raw bytes).
 
-The Message Response packet is more complex and is followed by a Versioned Message Response:
+The Message Response packet is more complex and is followed by a Versioned Message Response. The current version of the message response MUST be equal to `1`.
+
+Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
 ```abnf
-; a version of the Message Response, equal to `1`
+; a version of the Message Response
 version = 1*DIGIT
 
 ; keccak256 hash of the envelopes batch data (raw bytes) for which the confirmation is sent
