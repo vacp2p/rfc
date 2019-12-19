@@ -16,7 +16,6 @@
     - [Packet usage](#packet-usage)
     - [Payload Encryption](#payload-encryption)
     - [Packet code Rationale](#packet-code-rationale)
-    - [Message confirmations](#message-confirmations)
 - [Additional capabilities](#additional-capabilities)
     - [Light node](#light-node)
     - [Accounting for resources](#accounting-for-resources)
@@ -173,6 +172,8 @@ The following message codes are optional, but they are reserved for specific pur
 
 | Name                       | Int Value | Comment |
 |----------------------------|-----------|---------|
+| Batch Ack                  |     11    |         |
+| Message Response           |     12    |         |
 | Rate limits                |     20    |         |
 | Topic interest             |     21    | Experimental in v0 |
 | P2P Request                |    126    | |
@@ -271,23 +272,7 @@ This feature will likely stop being experimental in v1.
 
 It is currently bounded to a maximum of 1000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
 
-### Payload Encryption
-
-Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.
-
-Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
-
-### Packet code Rationale
-
-Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
-
-Packet code `0x02` will be necessary for the future development of Whisper. It will provide possibility to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
-
-Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
-
-Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
-
-## Message Confirmations
+**Message Confirmations**
 
 Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
@@ -328,6 +313,22 @@ The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
 The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
+
+### Payload Encryption
+
+Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.
+
+Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
+
+### Packet code Rationale
+
+Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
+
+Packet code `0x02` will be necessary for the future development of Whisper. It will provide possibility to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
+
+Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
+
+Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
 
 ## Additional capabilities
 
