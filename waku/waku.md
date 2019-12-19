@@ -289,7 +289,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 ## Message Confirmations
 
-Sending a message is a complex process where many things can go wrong. Message confirmations tell a node that a message originating from it has been received by its peers.
+Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
 A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
 
