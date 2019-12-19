@@ -107,6 +107,10 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 ## Changelog
 
+| Version | Comment |
+| :-----: | ------- |
+| 0.1.0 (current)  | Initial Release |
+
 ### Difference between wms/0 (0.1) and wms0 (0.2) (WIP)
 
 - `topic-interest` option
