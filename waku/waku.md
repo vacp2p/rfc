@@ -278,9 +278,7 @@ Message confirmations tell a node that a message originating from it has been re
 
 A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
 
-A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`).
-
-The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data (raw bytes).
+A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`). The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data.
 
 The current `version` of the message response is `1`.
 
