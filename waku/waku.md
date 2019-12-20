@@ -93,10 +93,10 @@ rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 light-node = BIT
 
 status = "[" 
-	 version pow-requirement 
-         [ bloom-filter ] [ light-node ] 
-	 [ confirmations-enabled ] [ rate-limits ]
-	 "]"
+        version pow-requirement 
+        [ bloom-filter ] [ light-node ] 
+        [ confirmations-enabled ] [ rate-limits ]
+    "]"
 
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
