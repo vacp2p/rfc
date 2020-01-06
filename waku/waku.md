@@ -177,6 +177,8 @@ The following message codes are optional, but they are reserved for specific pur
 
 | Name                       | Int Value | Comment |
 |----------------------------|-----------|---------|
+| Batch Ack                  |     11    |         |
+| Message Response           |     12    |         |
 | Rate limits                |     20    |         |
 | Topic interest             |     21    | Experimental in v0 |
 | P2P Request                |    126    | |
@@ -274,6 +276,46 @@ This packet is used by Waku nodes for sharing their interest in messages with sp
 This feature will likely stop being experimental in v1.
 
 It is currently bounded to a maximum of 1000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
+
+**Message Confirmations**
+
+Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
+
+A node MAY send a message confirmation for any batch of messages received with a packet Messages Code (`0x01`).
+
+A message confirmation is sent using Batch Acknowledge packet (`0x0b`) or Message Response packet (`0x0c`). The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data.
+
+The current `version` of the message response is `1`.
+
+Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
+
+```abnf
+; a version of the Message Response
+version = 1*DIGIT
+
+; keccak256 hash of the envelopes batch data (raw bytes) for which the confirmation is sent
+hash = *OCTET
+
+hasherror = *OCTET
+
+; error code
+code = 1*DIGIT
+
+; a descriptive error message
+description = *ALPHA
+
+error  = "[" hasherror code description "]"
+errors = *error
+
+response = "[" hash errors "]"
+
+confirmation = "[" version response "]"
+```
+
+The supported codes:
+`1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
+
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
 
 ### Payload Encryption
 
