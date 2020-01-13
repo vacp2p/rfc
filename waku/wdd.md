@@ -10,8 +10,9 @@
 2. [Specification](#specification)
     1. [Records](#records)
     2. [Traversing](#traversing)
-3. [Footnotes](#footnotes)
-4. [Copyright](#copyright)
+3. [Rationale](#rationale)
+4. [Footnotes](#footnotes)
+5. [Copyright](#copyright)
 
 ## Abstract
 
@@ -67,6 +68,12 @@ If the record contains an `r` record, we MUST decode the record, verify the node
 
 It SHOULD be avoided to download the entire tree at once during normal operation. The tree entries SHOULD be requested when they are needed instead.
 
+## Rationale
+
+**Merkle Trees** are used as they provide integrity of our records. A list of nodes can be authenticated using the signature of the root hash of our the tree.
+
+**Diverging from the EIP** has been done to enable modifications to the specification, such as using `multiaddr` over [`ENR`s](https://eips.ethereum.org/EIPS/eip-778), this provides us with a more holisitic protocol. <!-- @todo do we want to write about libp2p -->
+ 
 ## Footnotes
 1. <https://eips.ethereum.org/EIPS/eip-1459>
 
