@@ -15,7 +15,7 @@
 
 ## Abstract
 
-In this specification, we describe the DNS discovery protocol used by [Waku](./waku.md). 
+In this specification, we describe the DNS discovery protocol used by [Waku](./waku.md). This protocol allows a node to easily find peers by traversing a merkle tree located in the DNS records of a domain.
 
 ## Specification
 
