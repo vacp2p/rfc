@@ -23,7 +23,7 @@ This specification is based on the DNS discovery proposal for Ethereum<sup>1</su
 
 ### Records
 
-The node lists are encoded as merkle trees and stored within DNS TXT records. The root of the tree is a `TXT` record:
+The node lists are encoded as merkle trees and stored within DNS TXT records. The root of the tree is a `TXT` record and MUST contain the following content:
 
 ```
 tree-root:v1 r=<root> l=<link-root> seq=<sequence-number> sig=<signature>
@@ -34,7 +34,7 @@ tree-root:v1 r=<root> l=<link-root> seq=<sequence-number> sig=<signature>
 - `sequence-number`: the update sequence number, as an integer.
 - `signature`: a 65-byte secp256k1 EV signature of the `sha256` hash of `root`, `link-root`, and `sequence-number` concatenated.
 
-The next `TXT` records on subdomains map hashes to one of three entry types. The subdomain name is the `sha256` hash of its text content delimited to 26 characters.
+The next `TXT` records on subdomains MUST map hashes to one of three entry types. The subdomain name MUST be the `sha256` hash of its text content delimited to 26 characters.
 
 - `tree-branch:<h₁>,<h₂>,...` - A tree entry containing hashes of subtree entries.
 - `tree://<key>@<fqdn>` - A leaf pointing to a different list located at another DNS name. Note that this format matches URL encoding. This type of entry MUST only appear in the subtree pointed to by `link-root`.
