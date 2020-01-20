@@ -1,6 +1,6 @@
 # Waku Mailserver
 
-> Version 0.1.0
+> Version 0.2.0
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -109,9 +109,10 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 | Version | Comment |
 | :-----: | ------- |
-| 0.1.0 (current)  | Initial Release |
+| 0.2.0 (current)  | Add topic interest to reduce bandwidth usage |
+| 0.1.0  | Initial Release |
 
-### Difference between wms/0 (0.1) and wms0 (0.2) (WIP)
+### Difference between wms 0.1 and wms 0.2
 
 - `topic-interest` option
 
