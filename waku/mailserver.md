@@ -46,14 +46,14 @@ limit  = 4OCTET
 cursor = *OCTET
 
 ; List of topics interested in
-topic-interest   = "[" *1000topic "]"
+topics = "[" *1000topic "]"
 
 ; 4 bytes of arbitrary data
 topic = 4OCTET
 
 payload_without_topic = "[" lower upper bloom limit [ cursor ] "]"
 
-payload_with_topic = "[" lower upper bloom limit cursor [ topic-interest ] "]"
+payload_with_topic = "[" lower upper bloom limit cursor [ topics ] "]"
 
 payload = payload_without_topic | payload_with_topic
 ```
@@ -62,7 +62,7 @@ The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` 
 
 The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.
 
-If `topic-interest` is used the `Cursor` field MUST be specified for the argument order to be unambiguous. However, it MAY be set to null. `topic-interest` is used to specify which topics a node is interested in. If this is specified, a mailserver MUST NOT send messages that aren't in in that topic. When `topic-interest` is set (even if it an empty array), the `bloom` filter parameter should be ignored.
+If `topics` is used the `Cursor` field MUST be specified for the argument order to be unambiguous. However, it MAY be set to null. `topics` is used to specify which topics a node is interested in. If this is specified, a mailserver MUST NOT send messages that aren't in in that topic. When `topic` is set (even if it an empty array), the `bloom` filter parameter should be ignored.
 
 ### Receiving historic messages
 
@@ -113,7 +113,7 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 ### Difference between wms/0 (0.1) and wms0 (0.2) (WIP)
 
-- `topic-interest` option
+- `topics` option
 
 ## Copyright
 
