@@ -110,7 +110,7 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 | Version | Comment |
 | :-----: | ------- |
 | 0.2.0 (current)  | Add topic interest to reduce bandwidth usage |
-| 0.1.0  | Initial Release |
+| [0.1.0](https://github.com/vacp2p/specs/blob/06d4c736c920526472a507e5d842212843a112ed/wms.md)  | Initial Release |
 
 ### Difference between wms 0.1 and wms 0.2
 
