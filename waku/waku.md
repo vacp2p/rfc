@@ -376,6 +376,12 @@ These are policies that guide how we make decisions when it comes to upgradabili
 - a) Accretion over changing data
 - b) When we want to change things, we give it a new name (for example, a version number).
 
+Examples:
+
+- We enable bridging between `shh/6` and `waku/0` until such a time as when we are ready to gracefully drop support for `shh/6` (1, 2, 3).
+- When we add parameter fields, we (currently) do so by accreting them in a list, so old clients can ignore new fields (dynamic list) and new clients can use new capabilities (1, 3).
+- To better support (2) and (3) in the future, we will likely release a new version that gives better support for open, growable maps (association lists or native map type) (3)
+
 ### Backwards Compatibility
 
 Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
