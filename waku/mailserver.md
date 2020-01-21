@@ -62,7 +62,7 @@ The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` 
 
 The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.
 
-If `Topics` is used the `Cursor` field MUST be specified for the argument order to be unambiguous. However, it MAY be set to null. `Topics` is used to specify which topics a node is interested in. If `Topics` is not empty, a mailserver MUST only send messages that belong to a topic from `Topics` list and `Bloom` value MUST be ignored.
+If `Topics` is used the `Cursor` field MUST be specified for the argument order to be unambiguous. However, it MAY be set to `null`. `Topics` is used to specify which topics a node is interested in. If `Topics` is not empty, a mailserver MUST only send messages that belong to a topic from `Topics` list and `Bloom` value MUST be ignored.
 
 ### Receiving historic messages
 
