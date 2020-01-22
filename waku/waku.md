@@ -362,7 +362,27 @@ Every epoch (say, every minute or every time an event happens) statistics SHOULD
 
 In later versions this will be amended by nodes communication threshholds, settlements and disconnect logic.
 
-## Backwards Compatibility
+## Upgradability and Compatibility
+
+### General principles and policy
+
+These are policies that guide how we make decisions when it comes to upgradability, compatibility, and extensibility:
+
+1. Waku aims to be compatible with previous and future versions.
+
+2. In cases where we want to break this compatibility, we do so gracefully and as a single decision point.
+
+3. To achieve this, we employ the following two general strategies: 
+- a) Accretion over changing data
+- b) When we want to change things, we give it a new name (for example, a version number).
+
+Examples:
+
+- We enable bridging between `shh/6` and `waku/0` until such a time as when we are ready to gracefully drop support for `shh/6` (1, 2, 3).
+- When we add parameter fields, we (currently) do so by accreting them in a list, so old clients can ignore new fields (dynamic list) and new clients can use new capabilities (1, 3).
+- To better support (2) and (3) in the future, we will likely release a new version that gives better support for open, growable maps (association lists or native map type) (3)
+
+### Backwards Compatibility
 
 Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
 
@@ -382,7 +402,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 **Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message between C1 and C2. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
 
-## Forwards Compatibility
+### Forwards Compatibility
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
@@ -490,9 +510,10 @@ Known static nodes MAY also be used.
 
 Features considered for waku/1:
 
+- Upgradability policy
 - `topic-interest` packet code
 
-### Differences between shh/6 waku/0
+### Differences between shh/6 and waku/0
 
 Summary of main differences between this spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
 
