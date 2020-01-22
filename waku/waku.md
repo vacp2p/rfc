@@ -89,8 +89,6 @@ limit-topic  = 1*DIGIT
 
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
-light-node = BIT
-
 pow-requirement-key = 0
 bloom-filter-key = 1
 light-node-key = 2
@@ -98,15 +96,16 @@ confirmations-enabled-key = 3
 rate-limits-key = 4
 topic-interest-key = 5
 
-status = "[" 
-        version
-        [ pow-requirement-key pow-requirement ]
-        [ bloom-filter-key bloom-filter ]
-	[ light-node-key light-node ] 
-        [ confirmations-enabled-key confirmations-enabled ]
-	[ rate-limits-key rate-limits ]
-	[ topic-interest-key topic-interest ]
-    "]"
+status-options = "["
+  [ pow-requirement-key pow-requirement ]
+  [ bloom-filter-key bloom-filter ]
+  [ light-node-key light-node ] 
+  [ confirmations-enabled-key confirmations-enabled ]
+  [ rate-limits-key rate-limits ]
+  [ topic-interest-key topic-interest ]
+  "]"
+
+status = "[" version status-options "]"
 
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
@@ -226,7 +225,7 @@ The tuple `[ topic-node-enabled topic-interest ]` is also OPTIONAL. If `topics-n
 
 New Status logic:
 
-Aside from version, all other parameters are specified in an association list and are OPTIONAL. Ordering of key-value pairs is not guaranteed.
+Only version and options list is required. All parameters inside option list are specified in an association list and are OPTIONAL. Ordering of key-value pairs is not guaranteed.
 
 **Messages**
 
