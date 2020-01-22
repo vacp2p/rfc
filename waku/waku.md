@@ -96,10 +96,13 @@ status = "["
         version pow-requirement 
         [ bloom-filter ] [ light-node ] 
         [ confirmations-enabled ] [ rate-limits ]
+	[ topic-node-enabled topic-interest ]
     "]"
 
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
+
+topic-node-enabled = BIT
 
 confirmations-enabled = BIT
 
@@ -198,8 +201,6 @@ A Waku node MUST await the Status message from a peer before engaging in other W
 When a node does not receive the Status message from a peer, before a configurable timeout, it SHOULD disconnect from that peer.
 
 Upon retrieval of the Status message, the node SHOULD validate the message
-content and decide whether it is compatible with the Waku version and mode
-its peer is advertising. The handshake is completed when the node has sent,
 received and validated the Status message. Note that its peer might not be in
 the same state.
 
@@ -209,6 +210,8 @@ from that peer.
 Status messages received after the handshake is completed MUST also be ignored.
 
 The fields `bloom-filter`, `light-node`, `confirmations-enabled` and `rate-limits` are OPTIONAL. However if an optional field is specified, all subsequent fields MUST be specified in order to be unambiguous.
+
+The tuple `[ topic-node-enabled topic-interest ]` is also OPTIONAL. If `topics-node-enabled` is set to 1, `topic-interest` setting takes precedence over `bloom-filter`. By default, `topic-node-enabled` MUST be 0.
 
 **Messages**
 
@@ -510,6 +513,7 @@ Known static nodes MAY also be used.
 
 Features considered for waku/1:
 
+- Include topic-interest in Status handshake
 - Upgradability policy
 - `topic-interest` packet code
 
