@@ -13,8 +13,7 @@
     - [Use of DevP2P](#use-of-devp2p)
     - [Gossip based routing](#gossip-based-routing)
 - [Wire Specification](#wire-specification)
-    - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
-    - [ABNF specification](#abnf-specification)
+    - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol) [ABNF specification](#abnf-specification)
     - [Packet Codes](#packet-codes)
     - [Packet usage](#packet-usage)
     - [Payload Encryption](#payload-encryption)
@@ -90,16 +89,28 @@ limit-topic  = 1*DIGIT
 
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
-light-node = BIT
+pow-requirement-key = 0
+bloom-filter-key = 1
+light-node-key = 2
+confirmations-enabled-key = 3
+rate-limits-key = 4
+topic-interest-key = 5
 
-status = "[" 
-        version pow-requirement 
-        [ bloom-filter ] [ light-node ] 
-        [ confirmations-enabled ] [ rate-limits ]
-    "]"
+status-options = "["
+  [ pow-requirement-key pow-requirement ]
+  [ bloom-filter-key bloom-filter ]
+  [ light-node-key light-node ] 
+  [ confirmations-enabled-key confirmations-enabled ]
+  [ rate-limits-key rate-limits ]
+  [ topic-interest-key topic-interest ]
+  "]"
+
+status = "[" version status-options "]"
 
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
+
+topic-node-enabled = BIT
 
 confirmations-enabled = BIT
 
@@ -188,6 +199,8 @@ The following message codes are optional, but they are reserved for specific pur
 
 **Status**
 
+**XXX: This section needs to be rewritten**
+
 The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages).
 
 The Status message serves as a Waku handshake and peers MUST exchange this
@@ -198,8 +211,6 @@ A Waku node MUST await the Status message from a peer before engaging in other W
 When a node does not receive the Status message from a peer, before a configurable timeout, it SHOULD disconnect from that peer.
 
 Upon retrieval of the Status message, the node SHOULD validate the message
-content and decide whether it is compatible with the Waku version and mode
-its peer is advertising. The handshake is completed when the node has sent,
 received and validated the Status message. Note that its peer might not be in
 the same state.
 
@@ -209,6 +220,12 @@ from that peer.
 Status messages received after the handshake is completed MUST also be ignored.
 
 The fields `bloom-filter`, `light-node`, `confirmations-enabled` and `rate-limits` are OPTIONAL. However if an optional field is specified, all subsequent fields MUST be specified in order to be unambiguous.
+
+The tuple `[ topic-node-enabled topic-interest ]` is also OPTIONAL. If `topics-node-enabled` is set to 1, `topic-interest` setting takes precedence over `bloom-filter`. By default, `topic-node-enabled` MUST be 0.
+
+New Status logic:
+
+Only version and options list is required. All parameters inside option list are specified in an association list and are OPTIONAL. Ordering of key-value pairs is not guaranteed.
 
 **Messages**
 
@@ -511,6 +528,8 @@ Known static nodes MAY also be used.
 
 Features considered for waku/1:
 
+- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
+- Include topic-interest in Status handshake
 - Upgradability policy
 - `topic-interest` packet code
 
