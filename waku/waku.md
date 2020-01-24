@@ -373,7 +373,7 @@ These are policies that guide how we make decisions when it comes to upgradabili
 2. In cases where we want to break this compatibility, we do so gracefully and as a single decision point.
 
 3. To achieve this, we employ the following two general strategies: 
-- a) Accretion over changing data
+- a) Accretion (including protocol negotiation) over changing data
 - b) When we want to change things, we give it a new name (for example, a version number).
 
 Examples:
@@ -381,6 +381,7 @@ Examples:
 - We enable bridging between `shh/6` and `waku/0` until such a time as when we are ready to gracefully drop support for `shh/6` (1, 2, 3).
 - When we add parameter fields, we (currently) do so by accreting them in a list, so old clients can ignore new fields (dynamic list) and new clients can use new capabilities (1, 3).
 - To better support (2) and (3) in the future, we will likely release a new version that gives better support for open, growable maps (association lists or native map type) (3)
+- When we we want to provide a new set of messages that have different requirements, we do so under a new protocol version and employ protocol versioning. This is a form of accretion at a level above - it ensures a client can support both protocols at once and drop support for legacy versions gracefully. (1,2,3)
 
 ### Backwards Compatibility
 
