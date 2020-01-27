@@ -103,7 +103,7 @@ status-options = "["
   [ confirmations-enabled-key confirmations-enabled ]
   [ rate-limits-key rate-limits ]
   [ topic-interest-key topic-interest ]
-  "]"
+"]"
 
 status = "[" version status-options "]"
 
