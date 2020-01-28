@@ -114,6 +114,8 @@ topic-node-enabled = BIT
 
 confirmations-enabled = BIT
 
+light-node = BIT
+
 ; pow is "a single floating point value of PoW. 
 ; This value is the IEEE 754 binary representation 
 ; of a 64-bit floating point number. 
