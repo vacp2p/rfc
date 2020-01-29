@@ -103,16 +103,16 @@ status-options = "["
   [ confirmations-enabled-key confirmations-enabled ]
   [ rate-limits-key rate-limits ]
   [ topic-interest-key topic-interest ]
-  "]"
+"]"
 
 status = "[" version status-options "]"
 
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
 
-topic-node-enabled = BIT
-
 confirmations-enabled = BIT
+
+light-node = BIT
 
 ; pow is "a single floating point value of PoW. 
 ; This value is the IEEE 754 binary representation 
@@ -199,10 +199,6 @@ The following message codes are optional, but they are reserved for specific pur
 
 **Status**
 
-**XXX: This section needs to be rewritten**
-
-The bloom filter paramenter is optional; if it is missing or nil, the node is considered to be full node (i.e. accepts all messages).
-
 The Status message serves as a Waku handshake and peers MUST exchange this
 message upon connection. It MUST be sent after the RLPx handshake and prior to
 any other Waku messages.
@@ -215,17 +211,9 @@ received and validated the Status message. Note that its peer might not be in
 the same state.
 
 When a node is receiving other Waku messages from a peer before a Status
-message is received, the node MUST ignore these messages and SHOULD disconnect
-from that peer.
-Status messages received after the handshake is completed MUST also be ignored.
+message is received, the node MUST ignore these messages and SHOULD disconnect from that peer. Status messages received after the handshake is completed MUST also be ignored.
 
-The fields `bloom-filter`, `light-node`, `confirmations-enabled` and `rate-limits` are OPTIONAL. However if an optional field is specified, all subsequent fields MUST be specified in order to be unambiguous.
-
-The tuple `[ topic-node-enabled topic-interest ]` is also OPTIONAL. If `topics-node-enabled` is set to 1, `topic-interest` setting takes precedence over `bloom-filter`. By default, `topic-node-enabled` MUST be 0.
-
-New Status logic:
-
-Only version and options list is required. All parameters inside option list are specified in an association list and are OPTIONAL. Ordering of key-value pairs is not guaranteed.
+The status message MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on.
 
 **Messages**
 
