@@ -110,8 +110,6 @@ status = "[" version status-options "]"
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
 
-topic-node-enabled = BIT
-
 confirmations-enabled = BIT
 
 light-node = BIT
