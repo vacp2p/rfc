@@ -213,7 +213,7 @@ the same state.
 When a node is receiving other Waku messages from a peer before a Status
 message is received, the node MUST ignore these messages and SHOULD disconnect from that peer. Status messages received after the handshake is completed MUST also be ignored.
 
-The status message MUST contain an associated list containing various options. All options within this associated list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on.
+The status message MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on.
 
 **Messages**
 
