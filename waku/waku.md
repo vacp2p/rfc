@@ -72,7 +72,7 @@ In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mong
 
 All Waku messages are sent as devp2p RLPx transport protocol, version 5<sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec.
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major.
 
 ### ABNF specification
 
@@ -411,6 +411,9 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 ### Forwards Compatibility
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
+
+- **Connecting to nodes with multiple versions:** The way this SHOULD be accomplished in the future is by negotiating the versions of subprotocols, within the `hello` message nodes transmit their capabilities along with a version. As suggested in [EIP-8](https://eips.ethereum.org/EIPS/eip-8), if a node connects that has a higher version number for a specific capability, the node with a lower number SHOULD assume backwards compatiblity. The node with the higher version will decide if compatibility can be assured between versions, if this is not the case it MUST disconnect.
+- **Adding new packet codes:** New packet codes can be added easily due to the available packet codes, upgrades that add new packet codes should implement some fallback mechanism if no response was received for nodes that do not yet understand this packet.
 
 ## Appendix A: Security considerations
 
