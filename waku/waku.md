@@ -495,8 +495,6 @@ Notes useful for implementing Waku mode.
 
 ### Node discovery
 
-[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) MAY be used. However, it is quite bandwidth heavy for resource restricted devices.
-
 Resource restricted devices SHOULD use [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459) to discover nodes.
 
 Known static nodes MAY also be used.
