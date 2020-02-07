@@ -495,11 +495,7 @@ Notes useful for implementing Waku mode.
 
 ### Node discovery
 
-[Discovery v4](https://github.com/ethereum/devp2p/wiki/Discovery-Overview) SHOULD NOT be used, because it doesn't distinguish between capabilities. It will thus have a hard time finding Waku/Whisper nodes.
-
-[Discovery v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) MAY be used. However, it is quite bandwidth heavy for resource restricted devices. Thus, some lighter discovery mechanism is used. For some ad hoc ideas, see the current ad hoc implementation used in the [Status spec](https://github.com/status-im/specs/blob/master/status-client-spec.md#discovery).
-
-This is an ongoing area of research and will likely change in future versions.
+Resource restricted devices SHOULD use [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459) to discover nodes.
 
 Known static nodes MAY also be used.
 
