@@ -76,7 +76,7 @@ In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mong
 
 All Waku messages are sent as devp2p RLPx transport protocol, version 5<sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major.
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
 
 ### ABNF specification
 
@@ -514,12 +514,13 @@ Known static nodes MAY also be used.
 
 Released February 12, 2020.
 
-- Mark spec as Draft mode in terms of its lifecycle
-- Simplify Changelog and misc formatting
-- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
-- Include topic-interest in Status handshake
-- Upgradability policy
-- `topic-interest` packet code
+- Recommend DNS based node discovery over other Discovery methods.
+- Mark spec as Draft mode in terms of its lifecycle.
+- Simplify Changelog and misc formatting.
+- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list.
+- Include topic-interest in Status handshake.
+- Upgradability policy.
+- `topic-interest` packet code.
 
 ### Version 0.2
 
