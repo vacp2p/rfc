@@ -1,7 +1,7 @@
 # Waku
 
 > Version 0.3.0
-> 
+>
 > Status: Draft
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
@@ -103,7 +103,7 @@ topic-interest-key = 5
 status-options = "["
   [ pow-requirement-key pow-requirement ]
   [ bloom-filter-key bloom-filter ]
-  [ light-node-key light-node ] 
+  [ light-node-key light-node ]
   [ confirmations-enabled-key confirmations-enabled ]
   [ rate-limits-key rate-limits ]
   [ topic-interest-key topic-interest ]
@@ -118,9 +118,9 @@ confirmations-enabled = BIT
 
 light-node = BIT
 
-; pow is "a single floating point value of PoW. 
-; This value is the IEEE 754 binary representation 
-; of a 64-bit floating point number. 
+; pow is "a single floating point value of PoW.
+; This value is the IEEE 754 binary representation
+; of a 64-bit floating point number.
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
 pow             = 1*DIGIT "." 1*DIGIT
@@ -143,11 +143,11 @@ ttl = 4OCTET
 ; 4 bytes of arbitrary data
 topic = 4OCTET
 
-; byte array of arbitrary size 
+; byte array of arbitrary size
 ; (contains encrypted message)
 data = OCTET
 
-; 8 bytes of arbitrary data 
+; 8 bytes of arbitrary data
 ; (used for PoW calculation)
 nonce = 8OCTET
 
@@ -157,15 +157,15 @@ messages = 1*waku-envelope
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
-; packet-format needs to be paired with its 
+; packet-format needs to be paired with its
 ; corresponding packet-format
 packet-format = "[" packet-code packet-format "]"
 
-required-packet = 0 status / 
+required-packet = 0 status /
                   1 messages /
 		  2 pow-requirement /
 		  3 bloom-filter
-		  
+
 optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits / 21 topic-interest
 
 packet = "[" required-packet [ optional-packet ] "]"
@@ -346,7 +346,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
-Additionally there is the capability of a mailserver which is documented in its on [specification](./mailserver.md). 
+Additionally there is the capability of a mailserver which is documented in its on [specification](./mailserver.md).
 
 ### Light node
 
@@ -381,7 +381,7 @@ These are policies that guide how we make decisions when it comes to upgradabili
 
 2. In cases where we want to break this compatibility, we do so gracefully and as a single decision point.
 
-3. To achieve this, we employ the following two general strategies: 
+3. To achieve this, we employ the following two general strategies:
 - a) Accretion (including protocol negotiation) over changing data
 - b) When we want to change things, we give it a new name (for example, a version number).
 
@@ -394,7 +394,7 @@ Examples:
 
 ### Backwards Compatibility
 
-Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
+Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility.
 
 ### Waku-Whisper bridging
 
@@ -491,11 +491,11 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 Notes useful for implementing Waku mode.
 
  1. Avoid duplicate envelopes
- 
+
 	To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
  2. Topic specific recommendations
- 
+
 	Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
 ### Node discovery
