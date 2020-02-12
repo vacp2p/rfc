@@ -1,6 +1,8 @@
 # Waku
 
-> Version 0.2.0
+> Version 0.3.0
+> 
+> Status: Draft
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -35,14 +37,16 @@
     - [Node discovery](#node-discovery)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
-    - [Differences between waku/0 and waku/1 (WIP)](#differences-between-waku0-and-waku1-wip)
+    - [Version 0.3](#version-03)
+    - [Version 0.2](#version-02)
+    - [Version 0.1](#version-01)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Acknowledgements](#acknowledgements)
 - [Copyright](#copyright)
 
 ## Abstract
 
-This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic messages (with a mailserver) (c) `topic-interest` for better bandwidth usage and (d) basic rate limiting.
+This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic messages (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
 
 ## Motivation
 
@@ -52,8 +56,8 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 | Term            | Definition                                            |
 | --------------- | ----------------------------------------------------- |
-| **Light node**   | A Waku node that does not forward any messages.       |
-| **Envelope**    | Messages sent and received by Waku nodes.              |
+| **Light node**  | A Waku node that does not forward any messages.       |
+| **Envelope**    | Messages sent and received by Waku nodes.             |
 | **Node**        | Some process that is able to communicate for Waku.    |
 
 ## Underlying Transports and Prerequisites
@@ -233,7 +237,7 @@ PoW calculation:
 	fn pow_hash(envelope, env_nonce) = sha3(short_rlp(envelope) ++ env_nonce)
 	fn pow(pow_hash, size, ttl) = 2**leading_zeros(pow_hash) / (size * ttl)
 
-where size is the size of the RLP-encoded envelope, excluding env_nonce field (size of `short_rlp(envelope)`).
+where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
 **Bloom Filter**
 
@@ -408,7 +412,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 **Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message between C1 and C2. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
 
-### Forwards Compatibility
+### Forward Compatibility
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
@@ -474,12 +478,13 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 | nimbus | [9c19f](https://github.com/status-im/nim-eth/tree/9c19f1e5b17b36ebcf1c7513428818f585a3cb16) |
 | status-go | [ed5a5](https://github.com/status-im/status-go/commit/ed5a5c154daf5362cdf0c35fd1bc204e6a6d49ae) |
 
-| | Light mode | Mail Client | Mail Server | shh/6 | waku/0 |
-| -: | :--------: | :---------: | :---------: |  :-: | :-: |
-| **geth** | x | x           | x           | x | - |
-| **status whisper** | x | x           | -           | x | - |
-| **nimbus** | x | -           | -           | x | - |
-| **status-go** | x | x           | x           |x | - |
+|    | Light mode    | Mail Client | Mail Server | shh/6 | waku/0 |
+| -: | :-----------: | :---------: | :---------: |  :-:  | :-:   |
+| **geth**           | x           | x           | x     | x | - |
+| **status whisper** | x           | x           | -     | x | - |
+| **nimbus**         | x           | -           | -     | x | - |
+| **status-go**      | x           | x           | x     |x | - |
+
 
 ### Recommendations for clients
 
@@ -505,20 +510,38 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
-| Version | Comment |
-| :-----: | ------- |
-| 0.2.0 (current) | See [CHANGELOG](https://github.com/vacp2p/specs/releases/tag/waku-0.2.0) for more details. |
-| [0.1.0](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md) | Initial Release |
+### Version 0.3
 
+Released February 12, 2020.
 
-### Differences between waku/0 and waku/1 (WIP)
-
-Features considered for waku/1:
-
+- Mark spec as Draft mode in terms of its lifecycle
+- Simplify Changelog and misc formatting
 - Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
 - Include topic-interest in Status handshake
 - Upgradability policy
 - `topic-interest` packet code
+
+### Version 0.2
+
+Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/waku.md).
+
+- General style improvements.
+- Fix ABNF grammar.
+- Mailserver requesting/receiving.
+- New packet codes: topic-interest (experimental), rate limits (experimental).
+- More details on handshake modifications.
+- Accounting for resources mode (experimental)
+- Appendix with security considerations: scalablity and UX, privacy, and spam resistance.
+- Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.
+- More details on handshake and parameters.
+- Describe rate limits in more detail.
+- More details on mailserver and mail client API.
+- Accounting for resources mode (very experimental).
+- Clarify differences with Whisper.
+
+### Version 0.1
+
+Initial version. Released [November 21, 2019](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md).
 
 ### Differences between shh/6 and waku/0
 
