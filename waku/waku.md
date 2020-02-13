@@ -512,7 +512,7 @@ Known static nodes MAY also be used.
 
 ### Version 0.3
 
-Released February 12, 2020.
+Released [February 13, 2020](https://github.com/vacp2p/specs/commit/73138d6ba954ab4c315e1b8d210ac7631b6d1428).
 
 - Recommend DNS based node discovery over other Discovery methods.
 - Mark spec as Draft mode in terms of its lifecycle.
