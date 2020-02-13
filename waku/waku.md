@@ -1,6 +1,8 @@
 # Waku
 
-> Version 0.2.0
+> Version 0.3.0
+>
+> Status: Draft
 >
 > Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
 
@@ -35,14 +37,16 @@
     - [Node discovery](#node-discovery)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
-    - [Differences between waku/0 and waku/1 (WIP)](#differences-between-waku0-and-waku1-wip)
+    - [Version 0.3](#version-03)
+    - [Version 0.2](#version-02)
+    - [Version 0.1](#version-01)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Acknowledgements](#acknowledgements)
 - [Copyright](#copyright)
 
 ## Abstract
 
-This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic messages (with a mailserver) (c) `topic-interest` for better bandwidth usage and (d) basic rate limiting.
+This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic messages (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
 
 ## Motivation
 
@@ -52,8 +56,8 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 | Term            | Definition                                            |
 | --------------- | ----------------------------------------------------- |
-| **Light node**   | A Waku node that does not forward any messages.       |
-| **Envelope**    | Messages sent and received by Waku nodes.              |
+| **Light node**  | A Waku node that does not forward any messages.       |
+| **Envelope**    | Messages sent and received by Waku nodes.             |
 | **Node**        | Some process that is able to communicate for Waku.    |
 
 ## Underlying Transports and Prerequisites
@@ -72,7 +76,7 @@ In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mong
 
 All Waku messages are sent as devp2p RLPx transport protocol, version 5<sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major.
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
 
 ### ABNF specification
 
@@ -99,7 +103,7 @@ topic-interest-key = 5
 status-options = "["
   [ pow-requirement-key pow-requirement ]
   [ bloom-filter-key bloom-filter ]
-  [ light-node-key light-node ] 
+  [ light-node-key light-node ]
   [ confirmations-enabled-key confirmations-enabled ]
   [ rate-limits-key rate-limits ]
   [ topic-interest-key topic-interest ]
@@ -114,9 +118,9 @@ confirmations-enabled = BIT
 
 light-node = BIT
 
-; pow is "a single floating point value of PoW. 
-; This value is the IEEE 754 binary representation 
-; of a 64-bit floating point number. 
+; pow is "a single floating point value of PoW.
+; This value is the IEEE 754 binary representation
+; of a 64-bit floating point number.
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
 pow             = 1*DIGIT "." 1*DIGIT
@@ -139,11 +143,11 @@ ttl = 4OCTET
 ; 4 bytes of arbitrary data
 topic = 4OCTET
 
-; byte array of arbitrary size 
+; byte array of arbitrary size
 ; (contains encrypted message)
 data = OCTET
 
-; 8 bytes of arbitrary data 
+; 8 bytes of arbitrary data
 ; (used for PoW calculation)
 nonce = 8OCTET
 
@@ -153,15 +157,15 @@ messages = 1*waku-envelope
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
-; packet-format needs to be paired with its 
+; packet-format needs to be paired with its
 ; corresponding packet-format
 packet-format = "[" packet-code packet-format "]"
 
-required-packet = 0 status / 
+required-packet = 0 status /
                   1 messages /
 		  2 pow-requirement /
 		  3 bloom-filter
-		  
+
 optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits / 21 topic-interest
 
 packet = "[" required-packet [ optional-packet ] "]"
@@ -233,7 +237,7 @@ PoW calculation:
 	fn pow_hash(envelope, env_nonce) = sha3(short_rlp(envelope) ++ env_nonce)
 	fn pow(pow_hash, size, ttl) = 2**leading_zeros(pow_hash) / (size * ttl)
 
-where size is the size of the RLP-encoded envelope, excluding env_nonce field (size of `short_rlp(envelope)`).
+where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
 **Bloom Filter**
 
@@ -342,7 +346,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
-Additionally there is the capability of a mailserver which is documented in its on [specification](./mailserver.md). 
+Additionally there is the capability of a mailserver which is documented in its on [specification](./mailserver.md).
 
 ### Light node
 
@@ -377,7 +381,7 @@ These are policies that guide how we make decisions when it comes to upgradabili
 
 2. In cases where we want to break this compatibility, we do so gracefully and as a single decision point.
 
-3. To achieve this, we employ the following two general strategies: 
+3. To achieve this, we employ the following two general strategies:
 - a) Accretion (including protocol negotiation) over changing data
 - b) When we want to change things, we give it a new name (for example, a version number).
 
@@ -390,7 +394,7 @@ Examples:
 
 ### Backwards Compatibility
 
-Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility. 
+Waku is a different subprotocol from Whisper so it isn't directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility.
 
 ### Waku-Whisper bridging
 
@@ -408,7 +412,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 **Note**: This flow means if another bridge C1 is active, we might get duplicate relaying for a message between C1 and C2. I.e. Whisper(<>Waku<>Whisper)<>Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.
 
-### Forwards Compatibility
+### Forward Compatibility
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
@@ -474,23 +478,24 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 | nimbus | [9c19f](https://github.com/status-im/nim-eth/tree/9c19f1e5b17b36ebcf1c7513428818f585a3cb16) |
 | status-go | [ed5a5](https://github.com/status-im/status-go/commit/ed5a5c154daf5362cdf0c35fd1bc204e6a6d49ae) |
 
-| | Light mode | Mail Client | Mail Server | shh/6 | waku/0 |
-| -: | :--------: | :---------: | :---------: |  :-: | :-: |
-| **geth** | x | x           | x           | x | - |
-| **status whisper** | x | x           | -           | x | - |
-| **nimbus** | x | -           | -           | x | - |
-| **status-go** | x | x           | x           |x | - |
+|    | Light mode    | Mail Client | Mail Server | shh/6 | waku/0 |
+| -: | :-----------: | :---------: | :---------: |  :-:  | :-:   |
+| **geth**           | x           | x           | x     | x | - |
+| **status whisper** | x           | x           | -     | x | - |
+| **nimbus**         | x           | -           | -     | x | - |
+| **status-go**      | x           | x           | x     |x | - |
+
 
 ### Recommendations for clients
 
 Notes useful for implementing Waku mode.
 
  1. Avoid duplicate envelopes
- 
+
 	To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.
 
  2. Topic specific recommendations
- 
+
 	Consider partition topics based on some usage, to avoid too much traffic on a single topic.
 
 ### Node discovery
@@ -505,20 +510,39 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
-| Version | Comment |
-| :-----: | ------- |
-| 0.2.0 (current) | See [CHANGELOG](https://github.com/vacp2p/specs/releases/tag/waku-0.2.0) for more details. |
-| [0.1.0](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md) | Initial Release |
+### Version 0.3
 
+Released February 12, 2020.
 
-### Differences between waku/0 and waku/1 (WIP)
+- Recommend DNS based node discovery over other Discovery methods.
+- Mark spec as Draft mode in terms of its lifecycle.
+- Simplify Changelog and misc formatting.
+- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list.
+- Include topic-interest in Status handshake.
+- Upgradability policy.
+- `topic-interest` packet code.
 
-Features considered for waku/1:
+### Version 0.2
 
-- Handshake/Status message not compatible with shh/6 nodes; specifying options as association list
-- Include topic-interest in Status handshake
-- Upgradability policy
-- `topic-interest` packet code
+Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/waku.md).
+
+- General style improvements.
+- Fix ABNF grammar.
+- Mailserver requesting/receiving.
+- New packet codes: topic-interest (experimental), rate limits (experimental).
+- More details on handshake modifications.
+- Accounting for resources mode (experimental)
+- Appendix with security considerations: scalablity and UX, privacy, and spam resistance.
+- Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.
+- More details on handshake and parameters.
+- Describe rate limits in more detail.
+- More details on mailserver and mail client API.
+- Accounting for resources mode (very experimental).
+- Clarify differences with Whisper.
+
+### Version 0.1
+
+Initial version. Released [November 21, 2019](https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md).
 
 ### Differences between shh/6 and waku/0
 
