@@ -201,7 +201,7 @@ The following message codes are optional, but they are reserved for specific pur
 
 ### Packet usage
 
-**Status**
+#### Status
 
 The Status message serves as a Waku handshake and peers MUST exchange this
 message upon connection. It MUST be sent after the RLPx handshake and prior to
@@ -219,11 +219,11 @@ message is received, the node MUST ignore these messages and SHOULD disconnect f
 
 The status message MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on.
 
-**Messages**
+#### Messages
 
 This packet is used for sending the standard Waku envelopes.
 
-**PoW Requirement**
+#### PoW Requirement
 
 This packet is used by Waku nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
 
@@ -239,7 +239,7 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
-**Bloom Filter**
+#### Bloom Filter
 
 This packet is used by Waku nodes for sharing their interest in messages with specific topics.
 
@@ -256,15 +256,15 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-**P2P Request**
+#### P2P Request
 
 This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
 
-**P2P Message**
+#### P2P Message
 
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
-**Rate Limits**
+#### Rate Limits
 
 This packet is used for informing other nodes of their self defined rate limits.
 
@@ -278,7 +278,7 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-**Topic interest** (experimental)
+#### Topic interest (experimental)
 
 This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection. Peers MUST only send envelopes with specified topics.
 
@@ -286,7 +286,7 @@ This feature will likely stop being experimental in v1.
 
 It is currently bounded to a maximum of 1000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
 
-**Message Confirmations**
+#### Message Confirmations
 
 Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
