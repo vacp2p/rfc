@@ -9,7 +9,6 @@ layout: default
     </h1>
     <table>
         <tr><th>Authors</th><td>{% include authorlist.html authors=page.author %}</td></tr>
-        {% if page["discussions-to"] != undefined %}
         <tr><th>Status</th><td>{{ page.status | xml_escape }}
             {% if page.review-period-end != undefined %}
             <strong>(review ends {{ page.review-period-end | xml_escape }})</strong>
