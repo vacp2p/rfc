@@ -1,2 +1,4 @@
-theme: jekyll-theme-minimal
 title: "Vac Protocol"
+
+markdown: kramdown
+theme: minima
