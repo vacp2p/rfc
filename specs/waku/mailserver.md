@@ -1,5 +1,5 @@
 ---
-name: Waku Mailserver
+title: Waku Mailserver
 version: 0.2.0
 status: Draft
 authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im>

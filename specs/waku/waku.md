@@ -1,5 +1,5 @@
 ---
-name: Waku
+title: Waku
 version: 0.3.0
 status: Draft
 authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
