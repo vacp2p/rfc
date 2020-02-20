@@ -1,8 +1,9 @@
-# Remote log specification
-
-> Version: 0.1.1 (Draft)
->
-> Authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
+---
+name: Remote log specification
+version: 0.1.1
+status: Draft
+authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
+---
 
 ## Table of Contents
 

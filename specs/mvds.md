@@ -1,8 +1,9 @@
-# Minimum Viable Data Synchronization
-
-> Version: 0.6.0 (Draft)
-> 
-> Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
+name: Minimum Viable Data Synchronization
+version: 0.6.0
+status: Draft
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
 
 ## Table of Contents
 

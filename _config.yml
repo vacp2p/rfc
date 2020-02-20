@@ -13,7 +13,7 @@ defaults:
     scope:
       path: ""
     values:
-      layout: "default"
+      layout: "spec"
 
 header_pages:
   - waku.md

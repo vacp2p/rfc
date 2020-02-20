@@ -1,8 +1,9 @@
-# Waku Mailserver
-
-> Version 0.2.0
->
-> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+---
+name: Waku Mailserver
+version: 0.2.0
+status: Draft
+authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im>
+---
 
 ## Table of Contents
 

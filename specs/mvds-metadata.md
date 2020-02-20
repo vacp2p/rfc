@@ -1,8 +1,9 @@
-#  MVDS Metadata Field
-
-> Version: 0.1.0 (Draft)
-> 
-> Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
+name: MVDS Metadata Field
+version: 0.1.0
+status: Draft
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
 
 ##  Table of Contents
 

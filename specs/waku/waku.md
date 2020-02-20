@@ -1,10 +1,9 @@
-# Waku
-
-> Version 0.3.0
->
-> Status: Draft
->
-> Authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im> (alphabetical order)
+---
+name: Waku
+version: 0.3.0
+status: Draft
+authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
+---
 
 ## Table of Contents
 
