@@ -6,12 +6,11 @@ theme: minima
 collections:
   specs:
     output: true
-    permalink: /:path
 
 defaults:
   -
     scope:
-      path: ""
+      path: "specs"
     values:
       layout: "spec"
 
