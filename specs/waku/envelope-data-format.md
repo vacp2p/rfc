@@ -1,8 +1,8 @@
-# Envelope data field
-
-> Version: 0.1.0 (Draft)
-> 
-> Authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
+name: Envelope data field
+version: 0.1.0 (Draft)
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+---
 
 ## Table of Contents
 
