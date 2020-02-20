@@ -68,7 +68,7 @@ For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST hav
 
 ### Gossip based routing
 
-In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send a message to a peer that it has already sent before.
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](mailserver.md) response. A node SHOULD NOT send a message to a peer that it has already sent before.
 
 ## Wire Specification
 
@@ -346,7 +346,7 @@ Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Cli
 
 Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
-Additionally there is the capability of a mailserver which is documented in its on [specification](./mailserver.md).
+Additionally there is the capability of a mailserver which is documented in its on [specification](mailserver.md).
 
 ### Light node
 

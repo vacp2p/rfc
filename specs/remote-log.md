@@ -153,7 +153,7 @@ The *remote log* protobuf is what is stored in the name system.
 <!-- diagram -->
 
 <p align="center">
-    <img src="./assets/remotelog/remote-log.png" />
+    <img src="../assets/remotelog/remote-log.png" />
     <br />
     Figure 1: Remote log data synchronization.
 </p>
@@ -220,7 +220,7 @@ in time.
 
 ### Interaction with MVDS
 
-[vac.mvds.Message](./mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
+[vac.mvds.Message](mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
 ## Footnotes
 

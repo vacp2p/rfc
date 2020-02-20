@@ -20,7 +20,7 @@
 
 ## Abstract
 
-In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](./mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
@@ -39,7 +39,7 @@ message Metadata {
 }
 ```
 
-Nodes MAY transmit a `Metadata` message by extending the MVDS [message](./mvds.md#payloads) with a `metadata` field.
+Nodes MAY transmit a `Metadata` message by extending the MVDS [message](mvds.md#payloads) with a `metadata` field.
 
 ```diff
 message Message {
@@ -54,14 +54,14 @@ message Message {
 
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`               |   list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. |            
+| `parents`               |   list of parent [`message identifier`s](mvds.md#payloads) for the specific message. |            
 | `ephemeral`         |   indicates whether a message is ephemeral or not.                                                             |
 
 ## Usage
 
 ### `parents`
 
-This field contains a list of parent [`message identifier`s](./mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
+This field contains a list of parent [`message identifier`s](mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
 
 Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup>2</sup>, they MAY also pass the messages straight away for eventual consistency<sup>3</sup>.
 

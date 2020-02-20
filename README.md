@@ -12,17 +12,17 @@ The entire vac protocol is under active development, each specification has its 
 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
- - [mvds](./mvds.md) - Data Synchronization protocol for unreliable transports.
- - [remote log](./remote-log.md) - Remote replication of local logs.
- - [mvds metadata](./mvds-metadata.md) - Metadata field for [MVDS](./mvds.md) messages. 
+ - [mvds](specs/mvds.md) - Data Synchronization protocol for unreliable transports.
+ - [remote log](specs/remote-log.md) - Remote replication of local logs.
+ - [mvds metadata](specs/mvds-metadata.md) - Metadata field for [MVDS](specs/mvds.md) messages. 
 
 ### Waku
 
 Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
 
- - [waku](./waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
- - [envelope data format](./waku/envelope-data-format.md) - [waku](./waku/waku.md) envelope data field specification.
- - [mailserver](./waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku/waku.md) envelopes on demand.
+ - [waku](specs/waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
+ - [envelope data format](specs/waku/envelope-data-format.md) - [waku](specs/waku/waku.md) envelope data field specification.
+ - [mailserver](specs/waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](specs/waku/waku.md) envelopes on demand.
 
 ## Style guide
 
