@@ -3,12 +3,16 @@ title: "Vac Protocol"
 markdown: kramdown
 theme: minima
 
+collections:
+  specs:
+    output: true
+
 defaults:
   -
     scope:
-      path: "specs"
+      path: ""
     values:
-      layout: ""
+      layout: "default"
 
 header_pages:
   - waku.md

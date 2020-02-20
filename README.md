@@ -1,5 +1,3 @@
-# Specifications
-
 [![Build Status](https://travis-ci.com/vacp2p/specs.svg?branch=master)](https://travis-ci.com/vacp2p/specs)
 
 This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. A detailed explanation of the vac and its design goals can be found [here](https://vac.dev/vac-overview).
@@ -12,7 +10,7 @@ The entire vac protocol is under active development, each specification has its 
 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
- - [mvds](specs/mvds.md) - Data Synchronization protocol for unreliable transports.
+ - [mvds](./specs/mvds.md) - Data Synchronization protocol for unreliable transports.
  - [remote log](specs/remote-log.md) - Remote replication of local logs.
  - [mvds metadata](specs/mvds-metadata.md) - Metadata field for [MVDS](specs/mvds.md) messages. 
 
