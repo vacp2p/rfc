@@ -6,6 +6,7 @@ theme: minima
 collections:
   specs:
     output: true
+    permalink: /:path
 
 defaults:
   -
