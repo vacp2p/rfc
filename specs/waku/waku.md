@@ -1,8 +1,8 @@
 ---
 title: Waku
-version: 0.3.0
+version: 0.4.0
 status: Draft
-authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
+authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
 ---
 
 ## Table of Contents
@@ -37,6 +37,7 @@ authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Kim De Me
     - [Node discovery](#node-discovery)
 - [Footnotes](#footnotes)
 - [Changelog](#changelog)
+    - [Version 0.4](#version-04)
     - [Version 0.3](#version-03)
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
@@ -68,7 +69,7 @@ For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST hav
 
 ### Gossip based routing
 
-In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are elgible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](mailserver.md) response. A node SHOULD NOT send a message to a peer that it has already sent before.
+In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Messages are eligible for retransmission until their TTL expires. A node SHOULD relay messages to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send a message to a peer that it has already sent before.
 
 ## Wire Specification
 
@@ -111,6 +112,8 @@ status-options = "["
 
 status = "[" version status-options "]"
 
+status-update = status-options
+
 ; version is "an integer (as specified in RLP)"
 version = DIGIT
 
@@ -132,7 +135,7 @@ bloom-filter = *OCTET
 waku-envelope = "[" expiry ttl topic data nonce "]"
 
 ; List of topics interested in
-topic-interest = "[" *1000topic "]"
+topic-interest = "[" *10000topic "]"
 
 ; 4 bytes (UNIX time in seconds)
 expiry = 4OCTET
@@ -163,10 +166,9 @@ packet-format = "[" packet-code packet-format "]"
 
 required-packet = 0 status /
                   1 messages /
-		  2 pow-requirement /
-		  3 bloom-filter
+		  22 status-update /
 
-optional-packet = 126 p2p-request / 127 p2p-message / 20 rate-limits / 21 topic-interest
+optional-packet = 126 p2p-request / 127 p2p-message
 
 packet = "[" required-packet [ optional-packet ] "]"
 ```
@@ -185,8 +187,7 @@ The Waku sub-protocol MUST support the following packet codes:
 | -------------------------- | ------------- |
 | Status                     |     0         |
 | Messages                   |     1         |
-| PoW Requirement            |     2         |
-| Bloom Filter               |     3         |
+| Status Update              |     22        |
 
 The following message codes are optional, but they are reserved for specific purpose.
 
@@ -194,8 +195,6 @@ The following message codes are optional, but they are reserved for specific pur
 |----------------------------|-----------|---------|
 | Batch Ack                  |     11    |         |
 | Message Response           |     12    |         |
-| Rate limits                |     20    |         |
-| Topic interest             |     21    | Experimental in v0 |
 | P2P Request                |    126    | |
 | P2P Message                |    127    | |
 
@@ -223,9 +222,17 @@ The status message MUST contain an association list containing various options. 
 
 This packet is used for sending the standard Waku envelopes.
 
-#### PoW Requirement
+#### Status Update
 
-This packet is used by Waku nodes for dynamic adjustment of their individual PoW requirements. Recipient of this message should no longer deliver the sender messages with PoW lower than specified in this message.
+The Status Update message is used to communicate an update of the settings of the node.
+The format is the same as the Status message, all fields are optional.
+If none of the options are specified the message MUST be ignored and considered a noop.
+Fields that are omitted are considered unchanged, fields that haven't changed SHOULD not 
+be transmitted.
+
+**PoW Requirement update**
+
+When PoW is updated, peers MUST NOT deliver the sender envelopes with PoW lower than specified in this message.
 
 PoW is defined as average number of iterations, required to find the current BestBit (the number of leading zero bits in the hash), divided by message size and TTL:
 
@@ -239,11 +246,9 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
-#### Bloom Filter
+**bloom filter update**
 
-This packet is used by Waku nodes for sharing their interest in messages with specific topics.
-
-The Bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
+The bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
 
 Blooms are formed by the bitwise OR operation on a number of bloomed topics. The bloom function takes the topic and projects them onto a 512-bit slice. At most, three bits are marked for each bloomed topic.
 
@@ -256,15 +261,26 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 	D[n] = 1
 	END FOR
 
-#### P2P Request
+A full bloom filter (all the bits set to 1) means that the node is to be considered a `Full Node` and it will accept any topic.
 
-This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the Waku Mail Server.
+If both Topic Interest and bloom filter are specified, Topic Interest always takes precedence and bloom filter MUST be ignored.
 
-#### P2P Message
+If only bloom filter is specified, the current Topic Interest MUST be discarded and only the updated bloom filter MUST be used when forwarding or posting envelopes.
 
-This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
+A bloom filter with all bits set to 0 signals that the node is not currently interested in receiving any envelope.
 
-#### Rate Limits
+**Topic Interest update**
+
+This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics.
+
+
+It is currently bounded to a maximum of 10000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
+
+If only Topic Interest is specified, the current bloom filter MUST be discarded and only the updated Topic Interest MUST be used when forwarding or posting envelopes.
+
+An empty array signals that the node is not currently interested in receiving any envelope.
+
+**Rate Limits update**
 
 This packet is used for informing other nodes of their self defined rate limits.
 
@@ -278,15 +294,7 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-#### Topic interest (experimental)
-
-This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of metadata protection. Peers MUST only send envelopes with specified topics.
-
-This feature will likely stop being experimental in v1.
-
-It is currently bounded to a maximum of 1000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
-
-#### Message Confirmations
+**Message Confirmations update**
 
 Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
@@ -326,6 +334,16 @@ The supported codes:
 
 The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
 
+
+#### P2P Request
+
+This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting old messages from the [Waku Mail Server](./mailserver.md).
+
+#### P2P Message
+
+This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
+
+
 ### Payload Encryption
 
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.
@@ -336,9 +354,7 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
 
-Packet code `0x02` will be necessary for the future development of Whisper. It will provide possibility to adjust the PoW requirement in real time. It is better to allow the network to govern itself, rather than hardcode any specific value for minimal PoW requirement.
-
-Packet code `0x03` will be necessary for scalability of the network. In case of too much traffic, the nodes will be able to request and receive only the messages they are interested in.
+Packet code `0x22` is used to dynamically change the settings of a node.
 
 Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without P2P messages it would be impossible to deliver the old messages, since they will be recognized as expired, and the peer will be disconnected for violating the Whisper protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
 
@@ -443,7 +459,7 @@ Waku currently lacks incentives to run nodes, which means node operators are mor
 
 The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
-**Bloom filter privacy:**
+**bloom filter privacy:**
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
@@ -510,6 +526,14 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
+### Version 0.4
+
+Released [February 20, 2020](https://github.com/vacp2p/specs/commit/fdad4396ec9c5b559db3ee3564f561095ab9cf41).
+
+- Introduces a new packet code Status Code (`0x22`) for communicating option changes
+- Breaking: Removes support for the following packet codes: PoW Requirement (`0x02`), Bloom Filter (`0x03`), Rate limits (`0x20`), Topic interest (`0x21`) - all superseded by the new Status Code (`0x22`)
+- Increased `topic-interest` capacity from 1000 to 10000
+
 ### Version 0.3
 
 Released [February 13, 2020](https://github.com/vacp2p/specs/commit/73138d6ba954ab4c315e1b8d210ac7631b6d1428).
@@ -555,9 +579,6 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 confirmations-enabled and rate-limits
 - Mail Server and Mail Client functionality is now part of the specification.
 - P2P Message packet contains a list of envelopes instead of a single envelope.
-
-## Acknowledgements
- - Andrea Maria Piana
 
 ## Copyright
 
