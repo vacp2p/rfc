@@ -528,7 +528,7 @@ Known static nodes MAY also be used.
 
 ### Version 0.4
 
-Released [February 20, 2020](https://github.com/vacp2p/specs/commit/fdad4396ec9c5b559db3ee3564f561095ab9cf41).
+Released [February 20, 2020](https://github.com/vacp2p/specs/commit/ce12c499e0ac484dee2b05a307c86a164ae3f178).
 
 - Introduces a new packet code Status Code (`0x22`) for communicating option changes
 - Breaking: Removes support for the following packet codes: PoW Requirement (`0x02`), Bloom Filter (`0x03`), Rate limits (`0x20`), Topic interest (`0x21`) - all superseded by the new Status Code (`0x22`)
