@@ -246,7 +246,7 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
-**bloom filter update**
+**Bloom filter update**
 
 The bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
 
@@ -352,7 +352,7 @@ Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
 
 ### Packet code Rationale
 
-Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions.
+Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions. Packet code `0x02` and `0x03` were previously used in Whisper but are deprecated as of Waku v0.4
 
 Packet code `0x22` is used to dynamically change the settings of a node.
 
@@ -459,7 +459,7 @@ Waku currently lacks incentives to run nodes, which means node operators are mor
 
 The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
-**bloom filter privacy:**
+**Bloom filter privacy:**
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
@@ -530,8 +530,8 @@ Known static nodes MAY also be used.
 
 Released [February 20, 2020](https://github.com/vacp2p/specs/commit/ce12c499e0ac484dee2b05a307c86a164ae3f178).
 
-- Introduces a new packet code Status Code (`0x22`) for communicating option changes
-- Breaking: Removes support for the following packet codes: PoW Requirement (`0x02`), Bloom Filter (`0x03`), Rate limits (`0x20`), Topic interest (`0x21`) - all superseded by the new Status Code (`0x22`)
+- Introduces a new required packet code Status Code (`0x22`) for communicating option changes
+- Deprecates the following packet codes: PoW Requirement (`0x02`), Bloom Filter (`0x03`), Rate limits (`0x20`), Topic interest (`0x21`) - all superseded by the new Status Code (`0x22`)
 - Increased `topic-interest` capacity from 1000 to 10000
 
 ### Version 0.3
