@@ -574,4 +574,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## Footnotes
 
-[^1]: <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
+[^1]: Felix Lange et al. [The RLPx Transport Protocol](https://github.com/ethereum/devp2p/blob/master/rlpx.md). Ethereum.
