@@ -487,20 +487,10 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 ### Implementation Matrix
 
-| Client | Version |
-| ------ | ------- |
-| go-ethereum (geth) | [v1.9.7](https://github.com/ethereum/go-ethereum/tree/v1.9.7) |
-| status whisper | [25321](https://github.com/status-im/whisper/tree/25321b2c035b6e03dbae85a2f54cf89f9f873dd9) |
-| nimbus | [9c19f](https://github.com/status-im/nim-eth/tree/9c19f1e5b17b36ebcf1c7513428818f585a3cb16) |
-| status-go | [ed5a5](https://github.com/status-im/status-go/commit/ed5a5c154daf5362cdf0c35fd1bc204e6a6d49ae) |
-
-|    | Light mode    | Mail Client | Mail Server | shh/6 | waku/0 |
-| -: | :-----------: | :---------: | :---------: |  :-:  | :-:   |
-| **geth**           | x           | x           | x     | x | - |
-| **status whisper** | x           | x           | -     | x | - |
-| **nimbus**         | x           | -           | -     | x | - |
-| **status-go**      | x           | x           | x     |x | - |
-
+| Client | Spec supported | Details |
+|--------|----------------|---------|
+| **Status-go** | 0.4 | [details](https://github.com/status-im/status-go/blob/develop/WAKU.md) |
+| **Nimbus** | 0.3 | [details](https://github.com/status-im/nimbus/blob/master/waku/README.md#spec-support) |
 
 ### Recommendations for clients
 
@@ -530,6 +520,7 @@ Known static nodes MAY also be used.
 
 Released [February 20, 2020](https://github.com/vacp2p/specs/commit/ce12c499e0ac484dee2b05a307c86a164ae3f178).
 
+- Simplify implementation matrix with latest state
 - Introduces a new required packet code Status Code (`0x22`) for communicating option changes
 - Deprecates the following packet codes: PoW Requirement (`0x02`), Bloom Filter (`0x03`), Rate limits (`0x20`), Topic interest (`0x21`) - all superseded by the new Status Code (`0x22`)
 - Increased `topic-interest` capacity from 1000 to 10000
