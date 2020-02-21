@@ -518,7 +518,7 @@ Known static nodes MAY also be used.
 
 ### Version 0.4
 
-Released [February 20, 2020](https://github.com/vacp2p/specs/commit/ce12c499e0ac484dee2b05a307c86a164ae3f178).
+Released [February 21, 2020](https://github.com/vacp2p/specs/commit/17bd066e317bbe33af07146b721d73f24de47e88).
 
 - Simplify implementation matrix with latest state
 - Introduces a new required packet code Status Code (`0x22`) for communicating option changes
