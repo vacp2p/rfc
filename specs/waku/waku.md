@@ -35,7 +35,6 @@ authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, De
     - [Implementation Matrix](#implementation-matrix)
     - [Recommendations for clients](#recommendations-for-clients)
     - [Node discovery](#node-discovery)
-- [Footnotes](#footnotes)
 - [Changelog](#changelog)
     - [Version 0.4](#version-04)
     - [Version 0.3](#version-03)
@@ -44,6 +43,7 @@ authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, De
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
 - [Acknowledgements](#acknowledgements)
 - [Copyright](#copyright)
+- [Footnotes](#footnotes)
 
 ## Abstract
 
@@ -75,7 +75,7 @@ In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mong
 
 ### Use of RLPx transport protocol
 
-All Waku messages are sent as devp2p RLPx transport protocol, version 5<sup>[1](https://github.com/ethereum/devp2p/blob/master/rlpx.md)</sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
+All Waku messages are sent as devp2p RLPx transport protocol, version 5[^1] packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
 Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
 
@@ -510,10 +510,6 @@ Resource restricted devices SHOULD use [EIP-1459](https://eips.ethereum.org/EIPS
 
 Known static nodes MAY also be used.
 
-## Footnotes
-
-1. <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
-
 ## Changelog
 
 ### Version 0.4
@@ -574,3 +570,8 @@ confirmations-enabled and rate-limits
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+## Footnotes
+
+[^1]: <https://github.com/ethereum/devp2p/blob/master/rlpx.md>
