@@ -18,16 +18,16 @@ authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
     3. [Remote log](#remote-log)
     4. [Next page semantics](#next-page-semantics)
     5. [Interaction with MVDS](#interaction-with-mvds)
-5. [Footnotes](#footnotes)
-6. [Changelog](#changelog)
-7. [Acknowledgements](#acknowledgements)
-8. [Copyright](#copyright)
+5. [Changelog](#changelog)
+6. [Acknowledgements](#acknowledgements)
+7. [Copyright](#copyright)
+8. [Footnotes](#footnotes)
 
 ## Abstract
 
 A remote log is a replication of a local log. This means a node can read data from a node that is offline.
 
-This specification is complemented by a proof of concept implementation <sup>1</sup>.
+This specification is complemented by a proof of concept implementation[^1].
 
 ## Definitions
 
@@ -223,18 +223,12 @@ in time.
 
 [vac.mvds.Message](mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
-## Footnotes
-
-1. <https://github.com/vacp2p/research/tree/master/remote_log>
-
 ## Changelog
 
 | Version | Comment |
 | :-----: | ------- |
 | 0.1.1 (current) | Add protobuf package name, protobuf3 and fix typos. |
 | [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.md) | Initial Release |
-
-
 
 ## Acknowledgements
 
@@ -243,3 +237,7 @@ TBD.
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+## Footnotes
+
+[^1]:  <https://github.com/vacp2p/research/tree/master/remote_log>

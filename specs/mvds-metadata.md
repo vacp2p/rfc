@@ -14,10 +14,10 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 4. [Usage](#usage)
     1. [`parents`](#parents)
     2. [`ephemeral`](#ephemeral)
-5. [Footnotes](#footnotes)
-6. [Changelog](#changelog)
-7. [Acknowledgements](#acknowledgements)
-8. [Copyright](#copyright)
+5. [Changelog](#changelog)
+6. [Acknowledgements](#acknowledgements)
+7. [Copyright](#copyright)
+8. [Footnotes](#footnotes)
 
 ## Abstract
 
@@ -62,9 +62,9 @@ message Message {
 
 ### `parents`
 
-This field contains a list of parent [`message identifier`s](mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)<sup>1</sup> of persistent messages.
+This field contains a list of parent [`message identifier`s](mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)[^1] of persistent messages.
 
-Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup>2</sup>, they MAY also pass the messages straight away for eventual consistency<sup>3</sup>.
+Nodes MAY buffer messages until dependencies are satisfied for causal consistency[^2], they MAY also pass the messages straight away for eventual consistency[^3].
 
 A parent is any message before a new message that a node is aware of that has no children.
 
@@ -80,11 +80,6 @@ Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be sha
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
 
-## Footnotes
-1. <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
-2. <https://jepsen.io/consistency/models/causal>
-3. <https://en.wikipedia.org/wiki/Eventual_consistency>
-
 ## Changelog
 
 | Version | Comment |
@@ -97,3 +92,9 @@ Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not nee
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+## Footnotes
+
+[^1]: <https://en.wikipedia.org/wiki/Directed_acyclic_graph>
+[^2]: Jepsen. [Causal Consistency](https://jepsen.io/consistency/models/causal). Jepsen, LLC.
+[^3]: <https://en.wikipedia.org/wiki/Eventual_consistency>

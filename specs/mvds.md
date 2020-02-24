@@ -16,17 +16,17 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
     1. [State](#state)
     2. [Flow](#flow)
     3. [Retransmission](#retransmission)
-5. [Formal Specification](#formal-Specification)
-6. [Footnotes](#footnotes)
-7. [Changelog](#changelog)
-8. [Acknowledgements](#acknowledgements)
-9. [Copyright](#copyright)
+5. [Formal Specification](#formal-specification)
+6. [Changelog](#changelog)
+7. [Acknowledgements](#acknowledgements)
+8. [Copyright](#copyright)
+9. [Footnotes](#footnotes)
 
 ## Abstract
 
-In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol<sup>1</sup>. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
+In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol[^1]. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
 
-We present a reference implementation<sup>2</sup> including a simulation to demonstrate its performance.
+We present a reference implementation[^2] including a simulation to demonstrate its performance.
 
 ## Definitions
 
@@ -149,11 +149,6 @@ The record of the type `Type` SHOULD be retransmitted every time `Send Epoch` is
 
 MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalities/tree/master/MVDS>.
 
-## Footnotes
-
-1. <https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md>
-2. <https://github.com/vacp2p/mvds>
-
 ## Changelog
 
 | Version | Comment |
@@ -172,3 +167,8 @@ MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalit
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+## Footnotes
+
+[^1]: akwizgran et al. [BSP](https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md). Briar.
+[^2]: <https://github.com/vacp2p/mvds>
