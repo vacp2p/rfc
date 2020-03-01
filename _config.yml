@@ -16,3 +16,6 @@ defaults:
 
 header_pages:
   - waku.md
+
+plugins:
+  - jekyll-sitemap
