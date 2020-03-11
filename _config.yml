@@ -19,3 +19,4 @@ header_pages:
   
 plugins:
   - jekyll-redirect-from
+  - jekyll-sitemap

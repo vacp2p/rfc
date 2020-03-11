@@ -18,7 +18,7 @@ redirect_from:
     1. [State](#state)
     2. [Flow](#flow)
     3. [Retransmission](#retransmission)
-5. [Formal Specification](#formal-Specification)
+5. [Formal Specification](#formal-specification)
 6. [Changelog](#changelog)
 7. [Acknowledgements](#acknowledgements)
 8. [Copyright](#copyright)
