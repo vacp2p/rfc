@@ -3,6 +3,8 @@ title: Remote log specification
 version: 0.1.1
 status: Draft
 authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
+redirect_from:
+  - /remote-log.html
 ---
 
 ## Table of Contents

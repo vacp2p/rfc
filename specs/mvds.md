@@ -3,6 +3,8 @@ title: Minimum Viable Data Synchronization
 version: 0.6.0
 status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+redirect_from:
+  - /mvds.html
 ---
 
 ## Table of Contents

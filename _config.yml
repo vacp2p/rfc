@@ -16,6 +16,7 @@ defaults:
 
 header_pages:
   - waku.md
-
+  
 plugins:
+  - jekyll-redirect-from
   - jekyll-sitemap
