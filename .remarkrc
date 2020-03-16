@@ -20,8 +20,7 @@
             "no-tabs": true,
             "blockquote-indentation": false,
             "strong-marker": "*",
-            "heading-style": "atx",
-            "no-dead-urls": { skipOffline: true }
+            "heading-style": "atx"
         }
     },
     "settings": {
