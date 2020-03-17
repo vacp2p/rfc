@@ -19,7 +19,8 @@
             "emphasis-marker": "*",
             "no-tabs": true,
             "blockquote-indentation": false,
-            "strong-marker": "*"
+            "strong-marker": "*",
+            "heading-style": "atx"
         }
     },
     "settings": {
