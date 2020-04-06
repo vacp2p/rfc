@@ -218,7 +218,7 @@ the same state.
 When a node is receiving other Waku messages from a peer before a Status
 message is received, the node MUST ignore these messages and SHOULD disconnect from that peer. Status messages received after the handshake is completed MUST also be ignored.
 
-The status message MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on.
+The status message MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on. Unknown keys in the association list MUST be ignored.
 
 #### Messages
 
@@ -435,7 +435,8 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
 - **Connecting to nodes with multiple versions:** The way this SHOULD be accomplished in the future is by negotiating the versions of subprotocols, within the `hello` message nodes transmit their capabilities along with a version. As suggested in [EIP-8](https://eips.ethereum.org/EIPS/eip-8), if a node connects that has a higher version number for a specific capability, the node with a lower number SHOULD assume backwards compatiblity. The node with the higher version will decide if compatibility can be assured between versions, if this is not the case it MUST disconnect.
-- **Adding new packet codes:** New packet codes can be added easily due to the available packet codes, upgrades that add new packet codes should implement some fallback mechanism if no response was received for nodes that do not yet understand this packet.
+- **Adding new packet codes:** New packet codes can be added easily due to the available packet codes. Unknown packet codes MUST be ignored. Upgrades that add new packet codes SHOULD implement some fallback mechanism if no response was received for nodes that do not yet understand this packet.
+- **Adding new options in `status-options`:** New options can be added to the `status-options` association list in the `status` and `status-update` packet as options are OPTIONAL and unknown option keys MUST to be ignored.
 
 ## Appendix A: Security considerations
 
