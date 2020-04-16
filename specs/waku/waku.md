@@ -124,8 +124,8 @@ confirmations-enabled = BIT
 light-node = BIT
 
 ; pow is "a single floating point value of PoW.
-; This value is the IEEE 754 binary representation
-; of a 64-bit floating point number.
+; This value is the IEEE 754 binary representation,
+; of a 64-bit floating point number, in little-endian order.
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
 pow             = 1*DIGIT "." 1*DIGIT
@@ -518,6 +518,7 @@ Known static nodes MAY also be used.
 ### Upcoming Version
 
 - Clarify the preferred way of handling unknown keys in the `status-options` association list.
+- Clarify endianness for IEEE 754 represented floating number.
 
 ### Version 0.4
 
