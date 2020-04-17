@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 0.4.0
+version: 0.5.0
 status: Draft
 authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
 redirect_from:
@@ -38,6 +38,7 @@ redirect_from:
     - [Recommendations for clients](#recommendations-for-clients)
     - [Node discovery](#node-discovery)
 - [Changelog](#changelog)
+    - [Version 0.5](#version-05)
     - [Version 0.4](#version-04)
     - [Version 0.3](#version-03)
     - [Version 0.2](#version-02)
@@ -96,12 +97,12 @@ limit-topic  = 1*DIGIT
 
 rate-limits = "[" limit-ip limit-peerid limit-topic "]"
 
-pow-requirement-key = 0
-bloom-filter-key = 1
-light-node-key = 2
-confirmations-enabled-key = 3
-rate-limits-key = 4
-topic-interest-key = 5
+pow-requirement-key = 48
+bloom-filter-key = 49
+light-node-key = 50
+confirmations-enabled-key = 51
+rate-limits-key = 52
+topic-interest-key = 53
 
 status-options = "["
   [ pow-requirement-key pow-requirement ]
@@ -492,7 +493,7 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 
 | Client | Spec supported | Details |
 |--------|----------------|---------|
-| **Status-go** | 0.4 | [details](https://github.com/status-im/status-go/blob/develop/WAKU.md) |
+| **Status-go** | 0.5 | [details](https://github.com/status-im/status-go/blob/develop/WAKU.md) |
 | **Nimbus** | 0.4 | [details](https://github.com/status-im/nimbus/blob/master/waku/README.md#spec-support) |
 
 ### Recommendations for clients
@@ -515,9 +516,12 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
-### Upcoming Version
+### Version 0.5
+
+Released []()
 
 - Clarify the preferred way of handling unknown keys in the `status-options` association list.
+- Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behaviour
 
 ### Version 0.4
 
