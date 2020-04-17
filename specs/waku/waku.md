@@ -518,7 +518,7 @@ Known static nodes MAY also be used.
 
 ### Version 0.5
 
-Released []()
+Released [March 17,2020](https://github.com/vacp2p/specs/commit/7b9dc562bc50c6bb844ac575cb221ec9cda2530a)
 
 - Clarify the preferred way of handling unknown keys in the `status-options` association list.
 - Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behaviour
