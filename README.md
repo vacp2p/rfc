@@ -25,6 +25,7 @@ Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip
 ## Style guide
 
 Sequence diagrams are generated using [Mscgen](http://www.mcternan.me.uk/mscgen/) like this: `mscgen -T png -i input.msc -o output.png`. Both the source and generated image should be in source control. For ease of readability, the generated image is embedded inside the main spec document.
+The lifecycle of the specs follows the [COSS Lifecycle](https://rfc.unprotocols.org/spec:2/COSS/)
 
 ## Meta
 
