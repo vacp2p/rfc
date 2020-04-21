@@ -519,7 +519,7 @@ Known static nodes MAY also be used.
 
 ### Version 0.6
 
-Released []()
+Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125)
 
 - Mark spec as Deprecated mode in terms of its lifecycle.
 

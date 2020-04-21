@@ -523,7 +523,7 @@ Known static nodes MAY also be used.
 
 ### Version 1.0
 
-Released []()
+Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125)
 
 - Removed `version` from handshake
 - Changed `RLP` keys from 48,49.. to 0,1..
@@ -531,7 +531,7 @@ Released []()
 
 ### Version 0.6
 
-Released []()
+Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125)
 
 - Mark spec as Deprecated mode in terms of its lifecycle.
 
