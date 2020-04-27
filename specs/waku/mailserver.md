@@ -118,16 +118,16 @@ This endpoint returns a list of `envelopes` for a given query.
 
 ```json
 {
-	envelopes: [{
-		"expiry": 1587993256,
-		"ttl": 15,
-		"topic": "0x123",
-		"nonce": "0x0123",
-		"data": "0x129232138ae123",
-	}],
-	page: 0,
-	count: 1,
-	pages: 10
+  "envelopes": [{
+    "expiry": 1587993256,
+    "ttl": 15,
+    "topic": "0x123",
+    "nonce": "0x0123",
+    "data": "0x129232138ae123",
+  }],
+  page: 0,
+  count: 1,
+  pages: 10
 }
 ```
 
