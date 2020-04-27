@@ -125,9 +125,9 @@ This endpoint returns a list of `envelopes` for a given query.
     "nonce": "0x0123",
     "data": "0x129232138ae123",
   }],
-  page: 0,
-  count: 1,
-  pages: 10
+  "page": 0,
+  "count": 1,
+  "pages": 10
 }
 ```
 
