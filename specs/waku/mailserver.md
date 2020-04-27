@@ -101,7 +101,7 @@ To do this we define a single endpoint that mailserver nodes MUST implement.
 
 #### GET `/v1/envelopes`
 
-This endpoint returns a list of `messages` for a given query.
+This endpoint returns a list of `envelopes` for a given query.
 
 ##### Parameters
 
