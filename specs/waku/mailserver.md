@@ -108,7 +108,7 @@ This endpoint returns a list of `envelopes` for a given query.
 - **from [int]** - `required` - UNIX time in seconds; oldest requested envelope's creation time.
 - **to [int]** - `required` - UNIX time in seconds; newest requested envelope's creation time.
 - **bloom [string]** - `optional` - array of Waku topics encoded in a bloom filter to filter envelopes.
-- **limit [int]** - `required default: 100` - The maximum amount of envelopes to return.
+- **limit [int]** - `optional default: 100` - The maximum amount of envelopes to return.
 - **page [int]** - `optional` `default: 0` - The page to return.
 - **topics [[]string]** - `optional` - A hex encoded list of message topics.
 
