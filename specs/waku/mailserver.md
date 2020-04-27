@@ -13,6 +13,7 @@ redirect_from:
 2. [Specification](#specification)
     1. [Requesting messages](#requesting-messages)
     2. [Receiving historic messages](#receiving-historic-messages)
+    3. [REST API](#rest-api)
     3. [Security considerations](#security-considerations)
 3. [Copyright](#copyright)
 
@@ -91,6 +92,63 @@ payload = "[" request-id last-envelope-hash [ cursor ] "]"
 ```
 
 If `Cursor` is not empty, it means that not all messages were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the messages.
+
+### REST API
+
+In order to provide a stateless method of recovering messages from a mailserver, we define a simple REST api that SHOULD be used by clients.
+
+To do this we define a single endpoint that mailserver nodes MUST implement.
+
+#### GET `/v1/envelopes`
+
+This endpoint returns a list of `messages` for a given query.
+
+##### Parameters
+
+- **from [int]** - `required` - UNIX time in seconds; oldest requested envelope's creation time.
+- **to [int]** - `required` - UNIX time in seconds; newest requested envelope's creation time.
+- **bloom [string]** - `optional` - array of Waku topics encoded in a bloom filter to filter envelopes.
+- **limit [int]** - `required default: 100` - The maximum amount of envelopes to return.
+- **page [int]** - `optional` `default: 0` - The page to return.
+- **topics [[]string]** - `optional` - A hex encoded list of message topics.
+
+**Either `bloom` or `topics` MUST be present. If not a `Bad Request - 400` error should be returned.**
+
+##### Response Body
+
+```json
+{
+	envelopes: [{
+		"expiry": 1587993256,
+		"ttl": 15,
+		"topic": "0x123",
+		"nonce": "0x0123",
+		"data": "0x129232138ae123",
+	}],
+	page: 0,
+	count: 1,
+	pages: 10
+}
+```
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| envelopes | [`[]Envelope`](#envelope) | Contains a list of envelopes. |
+| page | `int` | The current page number. |
+| count | `int` | The total amount returned. |
+| pages | `int` | The total amount of pages there are. |
+
+###### `Envelope`
+
+The Envelope object contains the following fields:
+
+| Field | Type | Description |
+| ----- | ---- | ----------- |
+| expiry | `int` | The expiry time in seconds. |
+| ttl | `int` | Time to live in seconds. |
+| topic | `int` | The hex encoded topic of the message. |
+| nonce | `string` | Arbitrary data, hex encoded, used for PoW calculation. |
+| data | `string` | The hex encoded encrypted message.  |
 
 ### Security considerations
 
