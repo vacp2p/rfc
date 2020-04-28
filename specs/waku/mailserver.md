@@ -127,6 +127,7 @@ service Mailserver {
   rpc Fetch (Query) returns (Response);
 }
 ```
+
 **Either `bloom` or `topics` MUST be present.**
 
 ### Security considerations
