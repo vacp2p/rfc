@@ -119,7 +119,7 @@ message Envelope {
 }
 
 message Response {
-  Envelope envelopes = 1;
+  repeated Envelope envelopes = 1;
   Cursor cursor = 2;
 }
 
