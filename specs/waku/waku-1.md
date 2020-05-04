@@ -590,7 +590,6 @@ Initial version. Released [November 21, 2019](https://github.com/vacp2p/specs/bl
 Summary of main differences between this spec and Whisper v6, as described in [EIP-627](https://eips.ethereum.org/EIPS/eip-627):
 
 - RLPx subprotocol is changed from `shh/6` to `waku/1`.
-- Light node capability is added.
 - Optional rate limiting is added.
 - Status packet has following additional parameters: light-node,
 confirmations-enabled and rate-limits
