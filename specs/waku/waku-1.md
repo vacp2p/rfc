@@ -234,7 +234,7 @@ If none of the options are specified the message MUST be ignored and considered 
 Fields that are omitted are considered unchanged, fields that haven't changed SHOULD not 
 be transmitted.
 
-**PoW Requirement update**
+#### PoW Requirement update
 
 When PoW is updated, peers MUST NOT deliver the sender envelopes with PoW lower than specified in this message.
 
@@ -250,7 +250,7 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
-**Bloom filter update**
+#### Bloom filter update
 
 The bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
 
@@ -273,7 +273,7 @@ If only bloom filter is specified, the current Topic Interest MUST be discarded 
 
 A bloom filter with all bits set to 0 signals that the node is not currently interested in receiving any envelope.
 
-**Topic Interest update**
+#### Topic Interest update
 
 This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics.
 
@@ -284,7 +284,7 @@ If only Topic Interest is specified, the current bloom filter MUST be discarded 
 
 An empty array signals that the node is not currently interested in receiving any envelope.
 
-**Rate Limits update**
+#### Rate Limits update
 
 This packet is used for informing other nodes of their self defined rate limits.
 
@@ -298,7 +298,7 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-**Message Confirmations update**
+#### Message Confirmations update
 
 Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
@@ -450,33 +450,33 @@ There are several security considerations to take into account when running Waku
 
 ### Scalability and UX
 
-**Bandwidth usage:**
+#### Bandwidth usage:
 
 In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described [here](https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability).
 
-**Gossip-based routing:**
+#### Gossip-based routing:
 
 Use of gossip-based routing doesn't necessarily scale. It means each node can see a message multiple times, and having too many light nodes can cause propagation probability that is too low. See [Whisper vs PSS](https://our.status.im/whisper-pss-comparison/) for more and a possible Kademlia based alternative.
 
-**Lack of incentives:**
+#### Lack of incentives:
 
 Waku currently lacks incentives to run nodes, which means node operators are more likely to create centralized choke points.
 
 ### Privacy
 
-**Light node privacy:**
+#### Light node privacy:
 
 The main privacy concern with light nodes is that directly connected peers will know that a message originates from them (as it are the only ones it sends). This means nodes can make assumptions about what messages (topics) their peers are interested in.
 
-**Bloom filter privacy:**
+#### Bloom filter privacy:
 
 By having a bloom filter where only the topics you are interested in are set, you reveal which messages you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the [Anonymity](https://eprint.iacr.org/2017/954.pdf) [trilemma](https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf).
 
-**Privacy guarantees not rigorous:**
+#### Privacy guarantees not rigorous:
 
 Privacy for Whisper / Waku haven't been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.
 
-**Topic hygiene:**
+#### Topic hygiene:
 
 Similar to bloom filter privacy, if you use a very specific topic you reveal more information. See scalability model linked above.
 
