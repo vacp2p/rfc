@@ -127,7 +127,7 @@ light-node = BIT
 
 ; pow is "a single floating point value of PoW.
 ; This value is the IEEE 754 binary representation
-; of a 64-bit floating point number.
+; of a 64-bit floating point number packed as an uint64.
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
 pow             = 1*DIGIT "." 1*DIGIT
