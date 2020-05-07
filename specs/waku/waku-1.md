@@ -170,9 +170,13 @@ packet-format = "[" packet-code packet-format "]"
 
 required-packet = 0 status /
                   1 messages /
-		  22 status-update /
+                  22 status-update /
 
-optional-packet = 126 p2p-request / 127 p2p-message
+optional-packet = 11 batch-ack /
+                  12 message-response /
+                  126 p2p-request-complete /
+                  126 p2p-request /
+                  127 p2p-message
 
 packet = "[" required-packet [ optional-packet ] "]"
 ```
@@ -199,8 +203,9 @@ The following message codes are optional, but they are reserved for specific pur
 |----------------------------|-----------|---------|
 | Batch Ack                  |     11    |         |
 | Message Response           |     12    |         |
-| P2P Request                |    126    | |
-| P2P Message                |    127    | |
+| P2P Request Complete       |    125    |         |
+| P2P Request                |    126    |         |
+| P2P Message                |    127    |         |
 
 ### Packet usage
 
@@ -234,7 +239,7 @@ If none of the options are specified the message MUST be ignored and considered 
 Fields that are omitted are considered unchanged, fields that haven't changed SHOULD not 
 be transmitted.
 
-#### PoW Requirement update
+##### PoW Requirement Field
 
 When PoW is updated, peers MUST NOT deliver the sender envelopes with PoW lower than specified in this message.
 
@@ -250,7 +255,7 @@ PoW calculation:
 
 where size is the size of the RLP-encoded envelope, excluding `env_nonce` field (size of `short_rlp(envelope)`).
 
-#### Bloom filter update
+##### Bloom Filter Field
 
 The bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.
 
@@ -267,26 +272,26 @@ The projection function is defined as a mapping from a 4-byte slice S to a 512-b
 
 A full bloom filter (all the bits set to 1) means that the node is to be considered a `Full Node` and it will accept any topic.
 
-If both Topic Interest and bloom filter are specified, Topic Interest always takes precedence and bloom filter MUST be ignored.
+If both topic interest and bloom filter are specified, topic interest always takes precedence and bloom filter MUST be ignored.
 
-If only bloom filter is specified, the current Topic Interest MUST be discarded and only the updated bloom filter MUST be used when forwarding or posting envelopes.
+If only bloom filter is specified, the current topic interest MUST be discarded and only the updated bloom filter MUST be used when forwarding or posting envelopes.
 
 A bloom filter with all bits set to 0 signals that the node is not currently interested in receiving any envelope.
 
-#### Topic Interest update
+##### Topic Interest Field
 
-This packet is used by Waku nodes for sharing their interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics.
+Topic interest is used to share a node's interest in messages with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics.
 
 
 It is currently bounded to a maximum of 10000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.
 
-If only Topic Interest is specified, the current bloom filter MUST be discarded and only the updated Topic Interest MUST be used when forwarding or posting envelopes.
+If only topic interest is specified, the current bloom filter MUST be discarded and only the updated topic interest MUST be used when forwarding or posting envelopes.
 
 An empty array signals that the node is not currently interested in receiving any envelope.
 
-#### Rate Limits update
+##### Rate Limits Field
 
-This packet is used for informing other nodes of their self defined rate limits.
+Rate limits is used to inform other nodes of their self defined rate limits.
 
 In order to provide basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.
 
@@ -298,13 +303,13 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-#### Message Confirmations update
+##### Message Confirmations Field
 
 Message confirmations tell a node that a message originating from it has been received by its peers, allowing a node to know whether a message has or has not been received.
 
-A node MAY send a message confirmation for any batch of messages received with a packet Messages Code.
+A node MAY send a message confirmation for any batch of messages received with a Messages packet (`0x01`).
 
-A message confirmation is sent using Batch Acknowledge packet or Message Response packet. The Batch Acknowledge packet is followed by a keccak256 hash of the envelopes batch data.
+A message confirmation is sent using Batch Ack packet (`0x0B`) or Message Response packet (`0x0C`). The message confirmation is specified in the ABNF specification below.
 
 The current `version` of the message response is `1`.
 
@@ -347,6 +352,11 @@ This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail
 
 This packet is used for sending the peer-to-peer messages, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of old (expired) messages, which is otherwise not allowed.
 
+#### P2P Request Complete
+
+This packet is used to indicate that all messages, requested earlier with an P2P Request packet (`0x7E`), have been send via one or more P2P Message packets (`0x7F`).
+
+The content of the packet is explained in the [Waku Mail Server](./mailserver.md) specification.
 
 ### Payload Encryption
 
