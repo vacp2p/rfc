@@ -499,7 +499,7 @@ By default Devp2p runs on port `30303`, which is not commonly used for any other
 | Client | Spec supported | Details |
 |--------|----------------|---------|
 | **Status-go** | 0.5 | [details](https://github.com/status-im/status-go/blob/develop/WAKU.md) |
-| **Nimbus** | 0.4 | [details](https://github.com/status-im/nimbus/blob/master/waku/README.md#spec-support) |
+| **Nim-waku** | 1.0 | [details](https://github.com/status-im/nim-waku/blob/master/README.md) |
 
 ### Recommendations for clients
 
