@@ -54,11 +54,11 @@ topics = "[" *1000topic "]"
 ; 4 bytes of arbitrary data
 topic = 4OCTET
 
-payload_without_topic = "[" lower upper bloom limit [ cursor ] "]"
+payload-without-topic = "[" lower upper bloom limit [ cursor ] "]"
 
-payload_with_topic = "[" lower upper bloom limit cursor [ topics ] "]"
+payload-with-topic = "[" lower upper bloom limit cursor [ topics ] "]"
 
-payload = payload_without_topic | payload_with_topic
+payload = payload-with-topic | payload-without-topic
 ```
 
 The `Cursor` field SHOULD be filled in if a number of envelopes between `Lower` and `Upper` is greater than `Limit` so that the requester can send another request using the obtained `Cursor` value. What exactly is in the `Cursor` is up to the implementation. The requester SHOULD NOT use a `Cursor` obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.
