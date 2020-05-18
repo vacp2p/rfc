@@ -18,11 +18,11 @@ redirect_from:
 
 ## Abstract
 
-In this specification, we describe the [data field used in Waku](waku.md#abnf-specification) for the encryption, decryption and signing of messages.
+This specification describes the encryption, decryption and signing of the content in the [data field used in Waku](waku.md#abnf-specification).
 
 ## Specification
 
-The `data` field is used within the `waku envelope`, the field MUST contain the encrypted message of the envelope.
+The `data` field is used within the `waku envelope`, the field MUST contain the encrypted payload of the envelope.
 
 The fields that are concatenated and encrypted as part of the `data` field are:
  - flags
@@ -62,11 +62,11 @@ envelope        = flags auxiliary-field payload padding [signature] [salt]
 
 ### Signature
 
-Those unable to decrypt the message data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` MUST be big-endian encoded, fixed-width 256-bit unsigned. `V` MUST be an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
+Those unable to decrypt the envelope data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialised as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` MUST be big-endian encoded, fixed-width 256-bit unsigned. `V` MUST be an 8-bit big-endian encoded, non-normalised and should be either 27 or 28.
 
 ### Padding
 
-The padding field is used to align message size, since message size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
+The padding field is used to align data size, since data size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
 
 ## Copyright
 
