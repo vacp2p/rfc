@@ -127,7 +127,7 @@ light-node = BIT
 
 ; pow is "a single floating point value of PoW.
 ; This value is the IEEE 754 binary representation
-; of a 64-bit floating point number packed as an uint64.
+; of a 64-bit floating point number packed as a uint64.
 ; Values of qNAN, sNAN, INF and -INF are not allowed.
 ; Negative values are also not allowed."
 pow             = 1*DIGIT "." 1*DIGIT
@@ -354,7 +354,7 @@ This packet is used for sending the peer-to-peer messages, which are not suppose
 
 #### P2P Request Complete
 
-This packet is used to indicate that all messages, requested earlier with an P2P Request packet (`0x7E`), have been send via one or more P2P Message packets (`0x7F`).
+This packet is used to indicate that all messages, requested earlier with a P2P Request packet (`0x7E`), have been sent via one or more P2P Message packets (`0x7F`).
 
 The content of the packet is explained in the [Waku Mail Server](./mailserver.md) specification.
 
