@@ -531,6 +531,11 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
+### Upcoming Version
+
+- Add section on P2P Request Complete packet and update packet code table.
+- Correct the header hierarchy for the status-options fields.
+
 ### Version 1.0
 
 Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125)
