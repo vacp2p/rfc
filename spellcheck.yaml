@@ -8,8 +8,6 @@ matrix:
       output: wordlist.dic
       encoding: utf-8
     pipeline:
-      - pyspelling.filters.url:
-      - pyspelling.filters.email:
       - pyspelling.filters.markdown:
       - pyspelling.filters.html:
           comments: true
