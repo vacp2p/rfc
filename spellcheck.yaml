@@ -4,11 +4,14 @@ matrix:
     mode: none
   dictionary:
     wordlists:
-    - wordlist.txt
+      - wordlist.txt
     output: wordlist.dic
     encoding: utf-8
   pipeline:
-  - pyspelling.filters.markdown:
-  - pyspelling.filters.html:
+    - pyspelling.filters.markdown:
+    - pyspelling.filters.html:
+        ignores:
+            - code
+            - pre
   sources:
-  - '**/*.md'
+    - '**/*.md'
