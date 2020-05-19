@@ -69,7 +69,7 @@ If `Topics` is used the `Cursor` field MUST be specified for the argument order 
 
 ### Receiving Historic Envelopes
 
-Historic envelopes MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes.
+Historic envelopes MUST be sent to a peer as a packet with a P2P Message code (`0x7f`) followed by an array of Waku envelopes. A Mailserver MUST limit the amount of messages sent, either by the `Limit` specified in the request or limited to the maximum [RLPx packet size](./waku#maximum-packet-size) whichever limit comes first.
 
 In order to receive historic envelopes from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.
 
@@ -91,8 +91,6 @@ payload = "[" request-id last-envelope-hash [ cursor ] "]"
 ```
 
 If `Cursor` is not empty, it means that not all envelopes were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the envelopes.
-
-<!-- @TODO DISCUSS MAX PACKET SIZE -->
 
 ### Security considerations
 
