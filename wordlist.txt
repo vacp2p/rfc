@@ -19,3 +19,8 @@ AES
 Naur
 ECDSA
 Keccak
+bool
+PoW
+protobuf
+DAG
+DAGs
