@@ -12,7 +12,7 @@ matrix:
       - pyspelling.filters.email:
       - pyspelling.filters.markdown:
       - pyspelling.filters.html:
-          comments: false
+          comments: true
           ignores:
             - code
             - pre
