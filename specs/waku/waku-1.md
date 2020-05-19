@@ -81,7 +81,7 @@ In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mon
 
 ### Maximum Packet Size
 
-Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet exceeds its limit it MUST be dropped.
+Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet or envelope exceeds its limit, it MUST be dropped.
 
 - **RLPx Packet Size** - This size MUST be checked before a message is decoded.
 - **Waku Envelope Size** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
