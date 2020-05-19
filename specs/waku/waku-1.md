@@ -84,7 +84,7 @@ In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mon
 Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet exceeds its limit it MUST be dropped.
 
 - **RLPx Packet Size** - This size MUST be checked before a message is decoded.
-- **Waku Envelope** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
+- **Waku Envelope Size** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
 
 Clients are free to use their own packet sizes. The default values are `10mb` for the RLPx Packet and `1mb` for a Waku envelope.
 
