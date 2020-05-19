@@ -84,7 +84,7 @@ In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mon
 
 All Waku packets are sent as devp2p RLPx transport protocol, version 5[^1] packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatibility of `waku`, this would result in a new major. (Some exceptions to this apply in the Draft stage of where client implementation is rapidly change).
 
 ### ABNF specification
 
