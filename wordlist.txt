@@ -27,6 +27,7 @@ dereference
 deserialized
 devp
 devp2p
+DevP
 DNS
 ECDSA
 Eigenmann
@@ -73,14 +74,11 @@ NameInit
 NameUpdate
 Naur
 Nayman
-Nim
 nim
 noop
 Ok
-oskar
 Oskar
 peerid
-peerID
 Piana
 Pluggable
 PoW
@@ -97,7 +95,6 @@ retransmit
 retransmitted
 rlp
 rlpx
-RLPx
 rpc
 scalability
 SECP
@@ -117,12 +114,10 @@ TODO
 tradeoff
 trilemma
 ttl
-TTL
 uint
 underspecified
 unencrypted
 upgradability
-Upgradability
 UX
 vac
 vacp
