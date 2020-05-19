@@ -79,6 +79,7 @@ noop
 Ok
 Oskar
 peerid
+peerID
 Piana
 Pluggable
 PoW
@@ -95,6 +96,7 @@ retransmit
 retransmitted
 rlp
 rlpx
+RLPx
 rpc
 scalability
 SECP
