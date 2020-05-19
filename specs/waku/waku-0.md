@@ -45,7 +45,7 @@ redirect_from:
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
-- [Acknowledgements](#acknowledgements)
+- [Acknowledgments](#acknowledgments)
 - [Copyright](#copyright)
 - [Footnotes](#footnotes)
 
