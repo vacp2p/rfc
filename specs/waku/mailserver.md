@@ -92,6 +92,8 @@ payload = "[" request-id last-envelope-hash [ cursor ] "]"
 
 If `Cursor` is not empty, it means that not all envelopes were sent due to the set `Limit` in the request. One or more consecutive requests MAY be sent with `Cursor` field filled in in order to receive the rest of the envelopes.
 
+<!-- @TODO DISCUSS MAX PACKET SIZE -->
+
 ### Security considerations
 
 There are several security considerations to take into account when running or interacting with Mailservers. Chief among them are: scalability, DDoS-resistance and privacy.

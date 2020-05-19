@@ -15,6 +15,7 @@ redirect_from:
 - [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
     - [Use of DevP2P](#use-of-devp2p)
     - [Gossip based routing](#gossip-based-routing)
+    - [Maximum Packet Size](#maximum-packet-size)
 - [Wire Specification](#wire-specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [ABNF specification](#abnf-specification)
@@ -78,13 +79,24 @@ This protocol needs to advertise the `waku/1` [capability](https://ethereum.gitb
 
 In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
 
+### Maximum Packet Size
+
+Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet exceeds its limit it MUST be dropped.
+
+- **RLPx Packet** - This size MUST be checked before a message is decoded.
+- **Waku Envelope** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
+
+Clients are free to use their own packet sizes. The default values are `10mb` for the RLPx Packet and `1mb` for a Waku envelope.
+
+<!-- @TODO IT MAY MAKE SENSE FOR CLIENTS TO ADVERTISE THEIR PACKET SIZES TO PEERS? -->
+
 ## Wire Specification
 
 ### Use of RLPx transport protocol
 
 All Waku packets are sent as devp2p RLPx transport protocol, version 5[^1] packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatibility of `waku`, this would result in a new major. (Some exceptions to this apply in the Draft stage of where client implementation is rapidly change).
 
 ### ABNF specification
 
@@ -405,7 +417,6 @@ In later versions this will be amended by nodes communication threshholds, settl
 
 ### General principles and policy
 
-
 The currently advertised capability is `waku/1`. This needs to be advertised in the `hello` `ÐΞVp2p` [packet](https://ethereum.gitbooks.io/frontier-guide/devp2p.html).
 If a node supports multiple versions of `waku`, those needs to be explicitly advertised. For example if both `waku/0` and `waku/1` are supported, both `waku/0` and `waku/1` MUST be advertised.
 
@@ -536,6 +547,7 @@ Known static nodes MAY also be used.
 - Add section on P2P Request Complete packet and update packet code table.
 - Correct the header hierarchy for the status-options fields.
 - Consistent use of the words packet, message and envelope.
+- Added section on max packet size
 
 ### Version 1.0
 
