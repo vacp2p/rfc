@@ -1,9 +1,6 @@
-ABNF
 abnf
 accreting
-Ack
 ack
-Acks
 acks
 acyclic
 adam
@@ -18,7 +15,6 @@ bool
 Briar
 BSP
 cas
-CAS
 Changelog
 COSS
 DAG
@@ -29,16 +25,12 @@ De
 decrypt
 dereference
 deserialized
-devp
-DevP
-Devp
-DevP2P
+devp2p
 DNS
 ECDSA
 Eigenmann
 EIP
 endian
-Enum
 enum
 et
 Ethereum
@@ -61,8 +53,6 @@ keccak
 Keccak
 kimdemey
 Lange
-libp
-libp
 libp2p
 lifecycle
 LLC
@@ -97,7 +87,6 @@ protobuf
 PSS
 qNAN
 remoteHash
-RemoteLog
 remotelog
 retransmission
 retransmissions
