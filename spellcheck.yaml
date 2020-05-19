@@ -1,7 +1,7 @@
 matrix:
 - name: Markdown
   apsell:
-    mode: none
+    mode: en
   dictionary:
     wordlists:
       - wordlist.txt
