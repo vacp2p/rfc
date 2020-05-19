@@ -12,9 +12,9 @@ matrix:
     - pyspelling.filters.email:
     - pyspelling.filters.markdown:
     - pyspelling.filters.html:
-        comments: false
-        ignores:
-            - code
-            - pre
+      comments: false
+      ignores:
+        - code
+        - pre
     sources:
       - '**/*.md'
