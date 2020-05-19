@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.com/vacp2p/specs.svg?branch=master)](https://travis-ci.com/vacp2p/specs)
+[![lint](https://github.com/vacp2p/specs/workflows/lint/badge.svg)](https://github.com/vacp2p/specs/actions?query=workflow%3Alint)
+[![spellcheck](https://github.com/vacp2p/specs/workflows/spellcheck/badge.svg)](https://github.com/vacp2p/specs/actions?query=workflow%3Aspellcheck)
 
 This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. A detailed explanation of the vac and its design goals can be found [here](https://vac.dev/vac-overview).
 
