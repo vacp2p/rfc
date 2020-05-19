@@ -98,7 +98,6 @@ Babik
 De
 Mey
 adam
-andreap
 kimdemey
 Ethereum
 subprotocol
