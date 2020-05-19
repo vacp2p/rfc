@@ -88,8 +88,6 @@ Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet o
 
 Clients are free to use their own packet sizes. The default values are `10mb` for the RLPx Packet and `1mb` for a Waku envelope.
 
-<!-- @TODO IT MAY MAKE SENSE FOR CLIENTS TO ADVERTISE THEIR PACKET SIZES TO PEERS? -->
-
 ## Wire Specification
 
 ### Use of RLPx transport protocol
