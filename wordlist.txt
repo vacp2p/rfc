@@ -2,3 +2,7 @@ waku
 rlp
 rlpx
 mailserver
+Changelog
+Piana
+Jepsen
+LLC
