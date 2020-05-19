@@ -25,6 +25,7 @@ De
 decrypt
 dereference
 deserialized
+devp
 devp2p
 DNS
 ECDSA
@@ -53,6 +54,7 @@ keccak
 Keccak
 kimdemey
 Lange
+libp
 libp2p
 lifecycle
 LLC
@@ -88,6 +90,7 @@ PSS
 qNAN
 remoteHash
 remotelog
+RemoteLog
 retransmission
 retransmissions
 retransmit
