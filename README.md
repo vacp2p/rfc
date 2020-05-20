@@ -31,7 +31,9 @@ The lifecycle of the specs follows the [COSS Lifecycle](https://rfc.unprotocols.
 
 The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-## Spellcheck
+## Linting
+
+### Spellcheck
 
 To run the spellchecker locally, you must install [pyspelling](https://facelessuser.github.io/pyspelling/).
 
@@ -42,3 +44,13 @@ pyspelling -c spellcheck.yml
 ```
 
 Words that should be ignored or are unrecognized must be added to the [wordlist](./wordlist.txt).
+
+### Markdown Verification
+
+We use [remark](https://remark.js.org/) to verify our markdown. You can easily run this tool simply by using our `npm` package:
+
+```console
+npm install
+npm run lint
+```
+
