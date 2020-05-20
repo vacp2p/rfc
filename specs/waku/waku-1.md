@@ -86,7 +86,7 @@ Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet o
 - **RLPx Packet Size** - This size MUST be checked before a message is decoded.
 - **Waku Envelope Size** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
 
-Clients are free to use their own packet sizes. The default values are `10mb` for the RLPx Packet and `1mb` for a Waku envelope.
+Clients MAY use their own maximum packet and envelope sizes. The default values are `10mb` for the RLPx Packet and `1mb` for a Waku envelope.
 
 ## Wire Specification
 
