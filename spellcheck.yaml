@@ -1,0 +1,20 @@
+matrix:
+  - name: Markdown
+    apsell:
+      mode: en
+      ignore-case: true
+    dictionary:
+      wordlists:
+        - wordlist.txt
+      output: wordlist.dic
+      encoding: utf-8
+    pipeline:
+      - pyspelling.filters.url:
+      - pyspelling.filters.markdown:
+      - pyspelling.filters.html:
+          comments: false
+          ignores:
+            - code
+            - pre
+    sources:
+      - '**/*.md'

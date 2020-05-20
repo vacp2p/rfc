@@ -21,7 +21,7 @@ redirect_from:
     4. [Next page semantics](#next-page-semantics)
     5. [Interaction with MVDS](#interaction-with-mvds)
 5. [Changelog](#changelog)
-6. [Acknowledgements](#acknowledgements)
+6. [Acknowledgments](#acknowledgments)
 7. [Copyright](#copyright)
 8. [Footnotes](#footnotes)
 
@@ -232,7 +232,7 @@ in time.
 | 0.1.1 (current) | Add protobuf package name, protobuf3 and fix typos. |
 | [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.md) | Initial Release |
 
-## Acknowledgements
+## Acknowledgments
 
 TBD.
 

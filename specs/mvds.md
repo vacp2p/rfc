@@ -20,7 +20,7 @@ redirect_from:
     3. [Retransmission](#retransmission)
 5. [Formal Specification](#formal-specification)
 6. [Changelog](#changelog)
-7. [Acknowledgements](#acknowledgements)
+7. [Acknowledgments](#acknowledgments)
 8. [Copyright](#copyright)
 9. [Footnotes](#footnotes)
 
@@ -135,7 +135,7 @@ Nodes MAY have two modes with which they can send records: `BATCH` and `INTERACT
 </p>
 
 
-> ***NOTE:** Batch mode is higher bandwidth whereas interactive mode is higer latency.*
+> ***NOTE:** Batch mode is higher bandwidth whereas interactive mode is higher latency.*
 
 <!-- Interactions with state, flow chart with retransmissions? -->
 
@@ -160,7 +160,7 @@ MVDS has been formally specified using TLA+: <https://github.com/vacp2p/formalit
 | [0.5.1](https://github.com/status-im/bigbrother-specs/blob/20e2659447dcb5123a105526eb26816307c3780c/data_sync/mvds.md) | Documentation updates: clarifications on spec, RFC-2119 and message identifiers. |
 | [0.5.0](https://github.com/status-im/bigbrother-specs/blob/6d3d0771b46941791eabe9263f80cbaeaf3d1148/data_sync/mvds.md) | Initial Release |
 
-## Acknowledgements
+## Acknowledgments
  - Preston van Loon
  - Greg Markou
  - Rene Nayman
