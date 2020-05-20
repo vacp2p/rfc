@@ -26,8 +26,8 @@ decrypt
 dereference
 deserialized
 devp
-devp2p
 DevP
+devp2p
 DNS
 ECDSA
 Eigenmann
@@ -51,8 +51,8 @@ IPs
 Jacek
 Jepsen
 Kademlia
-keccak
 Keccak
+keccak
 kimdemey
 Lange
 libp
@@ -86,6 +86,7 @@ PoW
 proto
 protobuf
 PSS
+pyspelling
 qNAN
 remoteHash
 remotelog
@@ -129,4 +130,5 @@ waku
 WakuWhisper
 wms
 wns
+wordlist
 ÐΞVp2p
