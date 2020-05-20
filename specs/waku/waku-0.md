@@ -45,7 +45,7 @@ redirect_from:
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
     - [Differences between shh/6 waku/0](#differences-between-shh6-waku0)
-- [Acknowledgements](#acknowledgements)
+- [Acknowledgments](#acknowledgments)
 - [Copyright](#copyright)
 - [Footnotes](#footnotes)
 
@@ -81,7 +81,7 @@ In Whisper, messages are gossiped between peers. Whisper is a form of rumor-mong
 
 All Waku messages are sent as devp2p RLPx transport protocol, version 5[^1] packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See [informal RLP spec](https://github.com/ethereum/wiki/wiki/RLP) and the [Ethereum Yellow Paper, appendix B](https://ethereum.github.io/yellowpaper/paper.pdf) for more details on RLP.
 
-Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatiblity of `waku`, this would result in a new major. (Some expections to this apply in the Draft stage of where client implementation is rapidly change).
+Waku is a RLPx subprotocol called `waku` with version `0`. The version number corresponds to the major version in the header spec. Minor versions should not break compatibility of `waku`, this would result in a new major. (Some exceptions to this apply in the Draft stage of where client implementation is rapidly change).
 
 ### ABNF specification
 
@@ -336,7 +336,7 @@ confirmation = "[" version response "]"
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcasted by one or more peers.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent message, a corresponding confirmation is broadcast by one or more peers.
 
 
 #### P2P Request
@@ -389,7 +389,7 @@ Every epoch (say, every minute or every time an event happens) statistics SHOULD
 | peer1 | 0    | 123 |
 | peer2 | 10   | 40  |
 
-In later versions this will be amended by nodes communication threshholds, settlements and disconnect logic.
+In later versions this will be amended by nodes communication thresholds, settlements and disconnect logic.
 
 ## Upgradability and Compatibility
 
@@ -436,7 +436,7 @@ Waku is a different subprotocol from Whisper so it isn't directly compatible. Ho
 
 It is desirable to have a strategy for maintaining forward compatibility between `waku/0` and future version of waku. Here we outline some concerns and strategy for this.
 
-- **Connecting to nodes with multiple versions:** The way this SHOULD be accomplished in the future is by negotiating the versions of subprotocols, within the `hello` message nodes transmit their capabilities along with a version. As suggested in [EIP-8](https://eips.ethereum.org/EIPS/eip-8), if a node connects that has a higher version number for a specific capability, the node with a lower number SHOULD assume backwards compatiblity. The node with the higher version will decide if compatibility can be assured between versions, if this is not the case it MUST disconnect.
+- **Connecting to nodes with multiple versions:** The way this SHOULD be accomplished in the future is by negotiating the versions of subprotocols, within the `hello` message nodes transmit their capabilities along with a version. As suggested in [EIP-8](https://eips.ethereum.org/EIPS/eip-8), if a node connects that has a higher version number for a specific capability, the node with a lower number SHOULD assume backwards compatibility. The node with the higher version will decide if compatibility can be assured between versions, if this is not the case it MUST disconnect.
 - **Adding new packet codes:** New packet codes can be added easily due to the available packet codes. Unknown packet codes SHOULD be ignored. Upgrades that add new packet codes SHOULD implement some fallback mechanism if no response was received for nodes that do not yet understand this packet.
 - **Adding new options in `status-options`:** New options can be added to the `status-options` association list in the `status` and `status-update` packet as options are OPTIONAL and unknown option keys SHOULD be ignored. A node SHOULD NOT disconnect from a peer when receiving `status-options` with unknown option keys.
 
@@ -478,7 +478,7 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 ### Spam resistance
 
-**PoW bad for heterogenerous devices:**
+**PoW bad for heterogeneous devices:**
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
@@ -528,7 +528,7 @@ Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f2417984
 Released [March 17,2020](https://github.com/vacp2p/specs/commit/7b9dc562bc50c6bb844ac575cb221ec9cda2530a)
 
 - Clarify the preferred way of handling unknown keys in the `status-options` association list.
-- Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behaviour
+- Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behavior
 
 ### Version 0.4
 
@@ -561,7 +561,7 @@ Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/wak
 - New packet codes: topic-interest (experimental), rate limits (experimental).
 - More details on handshake modifications.
 - Accounting for resources mode (experimental)
-- Appendix with security considerations: scalablity and UX, privacy, and spam resistance.
+- Appendix with security considerations: scalability and UX, privacy, and spam resistance.
 - Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.
 - More details on handshake and parameters.
 - Describe rate limits in more detail.
