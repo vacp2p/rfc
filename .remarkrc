@@ -20,7 +20,10 @@
             "no-tabs": true,
             "blockquote-indentation": false,
             "strong-marker": "*",
-            "heading-style": "atx"
+            "heading-style": "atx",
+            "final-newline": true,
+            "heading-increment": true,
+            "no-tabs": true
         }
     },
     "settings": {
