@@ -17,7 +17,7 @@ redirect_from:
     1. [`parents`](#parents)
     2. [`ephemeral`](#ephemeral)
 5. [Changelog](#changelog)
-6. [Acknowledgements](#acknowledgements)
+6. [Acknowledgments](#acknowledgments)
 7. [Copyright](#copyright)
 8. [Footnotes](#footnotes)
 
@@ -76,7 +76,7 @@ If a message has no parents it is considered a root. There can be multiple roots
 
 ### `ephemeral`
 
-When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgement when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgement. The flag is `false` by default.
+When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgment when they have received and processed a message. If it is set to `true`, it SHOULD NOT send any acknowledgment. The flag is `false` by default.
 
 Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
@@ -88,7 +88,7 @@ Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not nee
 | :-----: | ------- |
 | [0.1.0](https://github.com/vacp2p/specs/blob/53bc8585add58695c28cfaf4382818f4daf8de84/mdf.md)   | Initial Release |
 
-## Acknowledgements
+## Acknowledgments
  - Andrea Maria Piana
 
 ## Copyright

@@ -47,7 +47,7 @@ redirect_from:
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
     - [Differences between shh/6 waku/1](#differences-between-shh6-waku1)
-- [Acknowledgements](#acknowledgements)
+- [Acknowledgments](#acknowledgments)
 - [Copyright](#copyright)
 - [Footnotes](#footnotes)
 
@@ -351,7 +351,7 @@ confirmation = "[" version response "]"
 The supported codes:
 `1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
 
-The drawback of sending message confirmations is that it increases the noise in the network because for each sent envelope, a corresponding confirmation is broadcasted by one or more peers.
+The drawback of sending message confirmations is that it increases the noise in the network because for each sent envelope, a corresponding confirmation is broadcast by one or more peers.
 
 
 #### P2P Request
@@ -409,7 +409,7 @@ Every epoch (say, every minute or every time an event happens) statistics SHOULD
 | peer1 | 0    | 123 |
 | peer2 | 10   | 40  |
 
-In later versions this will be amended by nodes communication threshholds, settlements and disconnect logic.
+In later versions this will be amended by nodes communication thresholds, settlements and disconnect logic.
 
 ## Upgradability and Compatibility
 
@@ -501,7 +501,7 @@ Similar to bloom filter privacy, if you use a very specific topic you reveal mor
 
 ### Spam resistance
 
-**PoW bad for heterogenerous devices:**
+**PoW bad for heterogeneous devices:**
 
 Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.
 
@@ -566,7 +566,7 @@ Released [April 21,2020](https://github.com/vacp2p/specs/commit/9e650995f2417984
 Released [March 17,2020](https://github.com/vacp2p/specs/commit/7b9dc562bc50c6bb844ac575cb221ec9cda2530a)
 
 - Clarify the preferred way of handling unknown keys in the `status-options` association list.
-- Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behaviour
+- Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behavior
 
 ### Version 0.4
 
@@ -599,7 +599,7 @@ Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/wak
 - New packet codes: topic-interest (experimental), rate limits (experimental).
 - More details on handshake modifications.
 - Accounting for resources mode (experimental)
-- Appendix with security considerations: scalablity and UX, privacy, and spam resistance.
+- Appendix with security considerations: scalability and UX, privacy, and spam resistance.
 - Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.
 - More details on handshake and parameters.
 - Describe rate limits in more detail.
