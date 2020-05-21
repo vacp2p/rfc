@@ -6,6 +6,7 @@
     "remark-preset-lint-recommended": "^3.0.2",
     "remark-validate-links": "^10.0.0",
     "textlint": "^11.6.3",
+    "textlint-rule-footnote-order": "^1.0.3",
     "textlint-rule-no-empty-section": "^1.1.0",
     "textlint-rule-write-good": "^1.6.2"
   },
