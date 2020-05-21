@@ -28,7 +28,7 @@ redirect_from:
     - [Accounting for resources (experimental)](#accounting-for-resources-experimental)
 - [Backwards Compatibility](#backwards-compatibility)
     - [Waku-Whisper bridging](#waku-whisper-bridging)
-- [Forwards Compatibility](#forwards-compatibility)
+- [Forward Compatibility](#forward-compatibility)
 - [Appendix A: Security considerations](#appendix-a-security-considerations)
     - [Scalability and UX](#scalability-and-ux)
     - [Privacy](#privacy)
@@ -46,8 +46,7 @@ redirect_from:
     - [Version 0.3](#version-03)
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
-    - [Differences between shh/6 waku/1](#differences-between-shh6-waku1)
-- [Acknowledgments](#acknowledgments)
+    - [Differences between shh/6 waku/1](#differences-between-shh6-and-waku1)
 - [Copyright](#copyright)
 - [Footnotes](#footnotes)
 
@@ -465,7 +464,7 @@ It is desirable to have a strategy for maintaining forward compatibility between
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./wms.md#security-considerations) can be found in their respective specifications.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./mailserver.md#security-considerations) can be found in their respective specifications.
 
 ### Scalability and UX
 
