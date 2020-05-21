@@ -8,7 +8,9 @@ authors: Dean Eigenmann <dean@status.im>
 ## Table of Contents
 
 1. [Abstract](#abstract)
-2. [Methods](#methods)
+2. [Wire Protocol](#wire-protocol)
+    1. [Transport](#transport)
+    1. [Methods](#methods)
 3. [Copyright](#copyright)
 
 ## Abstract
@@ -16,13 +18,19 @@ authors: Dean Eigenmann <dean@status.im>
 In this specification we describe the RPC API that Waku nodes SHOULD adhere to. The unified API allows clients to easily
 be able to connect to any node implementation. 
 
-## Methods
+## Wire Protocol
 
-### `waku_addSymKey`
+### Transport
+
+@TODO TALK ABOUT JSON RPC
+
+### Methods
+
+#### `waku_addSymKey`
 
 The `waku_addSymKey` method stores a symmetric key on the node and returns its ID.
 
-### `waku_post`
+#### `waku_post`
 
 The `waku_post` method creates a [waku message](./waku-1.md#messages) and disseminates it to the network.
 
