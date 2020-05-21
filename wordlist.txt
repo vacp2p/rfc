@@ -110,6 +110,7 @@ subprotocol
 subprotocols
 TBD
 TCP
+textlint
 Thorén
 tla
 tls
