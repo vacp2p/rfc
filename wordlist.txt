@@ -7,6 +7,7 @@ adam
 AES
 akwizgran
 al
+API
 Babik
 BestBit
 bitwise
@@ -51,8 +52,8 @@ IPs
 Jacek
 Jepsen
 Kademlia
-Keccak
 keccak
+Keccak
 kimdemey
 Lange
 libp
