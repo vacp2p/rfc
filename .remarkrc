@@ -1,6 +1,7 @@
 {
     "presets": ["lint-recommended", "lint-consistent"],
     "plugins": {
+	"validate-links": {"repository": false},
         "remark-lint": {
             "unordered-list-marker-style": "consistent",
             "list-item-bullet-indent": true,
