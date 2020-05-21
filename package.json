@@ -11,7 +11,8 @@
     "textlint-rule-write-good": "^1.6.2"
   },
   "scripts": {
-    "lint": "remark ."
+     "textlint": "textlint specs/",
+     "lint": "remark ."
   },
   "remarkConfig": {
     "plugins": [
