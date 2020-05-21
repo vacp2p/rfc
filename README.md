@@ -54,3 +54,12 @@ npm install
 npm run lint
 ```
 
+### Textlint
+
+We use [textlint](https://textlint.github.io/) for extra markdown verification. You can easily run this tool simply by using our `npm` package:
+
+```console
+npm install
+npm run textlint
+```
+
