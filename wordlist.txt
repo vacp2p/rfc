@@ -7,6 +7,7 @@ adam
 AES
 akwizgran
 al
+api
 API
 Babik
 BestBit
@@ -51,6 +52,7 @@ ip
 IPs
 Jacek
 Jepsen
+JSON
 Kademlia
 keccak
 Keccak
