@@ -15,6 +15,7 @@ redirect_from:
 - [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
     - [Use of DevP2P](#use-of-devp2p)
     - [Gossip based routing](#gossip-based-routing)
+    - [Maximum Packet Size](#maximum-packet-size)
 - [Wire Specification](#wire-specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [ABNF specification](#abnf-specification)
@@ -59,11 +60,12 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 ## Definitions
 
-| Term            | Definition                                                                  |
-| --------------- | ----------------------------------------------------------------------------|
-| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.|
-| **Envelope**    | Messages sent and received by Waku nodes.                                   |
-| **Node**        | Some process that is able to communicate for Waku.                          |
+| Term            | Definition                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------|
+| **Batch Ack**   | An abbreviated term for Batch Acknowledgment                                           |
+| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.            |
+| **Envelope**    | Messages sent and received by Waku nodes. Described in [ABNF spec `waku-envelope`](#abnf-specification) |
+| **Node**        | Some process that is able to communicate for Waku.                                      |
 
 ## Underlying Transports and Prerequisites
 
@@ -76,6 +78,15 @@ This protocol needs to advertise the `waku/1` [capability](https://ethereum.gitb
 ### Gossip based routing
 
 In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
+
+### Maximum Packet Size
+
+Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet or envelope exceeds its limit, it MUST be dropped.
+
+- **RLPx Packet Size** - This size MUST be checked before a message is decoded.
+- **Waku Envelope Size** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
+
+Clients MAY use their own maximum packet and envelope sizes. The default values are `1.5mb` for the RLPx Packet and `1mb` for a Waku envelope.
 
 ## Wire Specification
 
@@ -302,7 +313,17 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-##### Message Confirmations Field
+##### Light Node Field
+
+When the node's `light-node` field is set to true, the node SHOULD NOT forward Envelopes from its peers.
+
+A node connected to a peer with the `light-node` field set to true MUST NOT depend on the peer for forwarding Envelopes.
+
+##### Confirmations Enabled Field
+
+When the node's `confirmations-enabled` field is set to true, the node SHOULD send [message confirmations](#batch-ack-and-message-response) to its peers.
+
+#### Batch Ack and Message Response
 
 Message confirmations tell a node that a envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.
 
@@ -403,7 +424,6 @@ In later versions this will be amended by nodes communication thresholds, settle
 ## Upgradability and Compatibility
 
 ### General principles and policy
-
 
 The currently advertised capability is `waku/1`. This needs to be advertised in the `hello` `ÐΞVp2p` [packet](https://ethereum.gitbooks.io/frontier-guide/devp2p.html).
 If a node supports multiple versions of `waku`, those needs to be explicitly advertised. For example if both `waku/0` and `waku/1` are supported, both `waku/0` and `waku/1` MUST be advertised.
@@ -535,6 +555,7 @@ Known static nodes MAY also be used.
 - Add section on P2P Request Complete packet and update packet code table.
 - Correct the header hierarchy for the status-options fields.
 - Consistent use of the words packet, message and envelope.
+- Added section on max packet size
 
 ### Version 1.0
 

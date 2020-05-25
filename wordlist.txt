@@ -12,6 +12,7 @@ BestBit
 bitwise
 blockable
 bool
+boolean
 Briar
 BSP
 cas
