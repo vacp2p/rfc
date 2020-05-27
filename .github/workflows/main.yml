@@ -29,3 +29,18 @@ jobs:
         run: npm install
       - name: Test
         run: npm run lint
+
+  textlint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@master
+        with:
+          node-version: 13
+      - name: Install
+        run: npm install
+      - name: Test
+        run: npm run textlint

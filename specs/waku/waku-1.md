@@ -60,11 +60,12 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 ## Definitions
 
-| Term            | Definition                                                                  |
-| --------------- | ----------------------------------------------------------------------------|
-| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.|
-| **Envelope**    | Messages sent and received by Waku nodes.                                   |
-| **Node**        | Some process that is able to communicate for Waku.                          |
+| Term            | Definition                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------|
+| **Batch Ack**   | An abbreviated term for Batch Acknowledgment                                           |
+| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.            |
+| **Envelope**    | Messages sent and received by Waku nodes. Described in [ABNF spec `waku-envelope`](#abnf-specification) |
+| **Node**        | Some process that is able to communicate for Waku.                                      |
 
 ## Underlying Transports and Prerequisites
 
@@ -312,7 +313,17 @@ Each node SHOULD broadcast its rate limits to its peers using the rate limits pa
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-##### Message Confirmations Field
+##### Light Node Field
+
+When the node's `light-node` field is set to true, the node SHOULD NOT forward Envelopes from its peers.
+
+A node connected to a peer with the `light-node` field set to true MUST NOT depend on the peer for forwarding Envelopes.
+
+##### Confirmations Enabled Field
+
+When the node's `confirmations-enabled` field is set to true, the node SHOULD send [message confirmations](#batch-ack-and-message-response) to its peers.
+
+#### Batch Ack and Message Response
 
 Message confirmations tell a node that a envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.
 

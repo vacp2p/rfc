@@ -14,6 +14,7 @@ BestBit
 bitwise
 blockable
 bool
+boolean
 Briar
 BSP
 cas
@@ -113,6 +114,7 @@ subprotocol
 subprotocols
 TBD
 TCP
+textlint
 Thorén
 tla
 tls

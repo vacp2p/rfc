@@ -1,0 +1,7 @@
+{
+  "filters": {},
+  "rules": {
+    "no-empty-section": true,
+    "footnote-order": true
+  }
+}
