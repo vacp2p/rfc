@@ -95,7 +95,7 @@ The parameters is an `Object` containing the following fields:
  - **`powTarget` [number]** - Minimal PoW target required for this message.
  - **`targetPeer` [string]** `optional` - The optional peer ID for peer-to-peer messages.
  
-*Either the **symKeyID** or the **pubKey** need to be present. It can not be both.*
+*Either the **`symKeyID`** or the **`pubKey`** need to be present. It can not be both.*
 
 #### Response
 
