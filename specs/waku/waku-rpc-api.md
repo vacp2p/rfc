@@ -115,21 +115,39 @@ Marks a specific peer as trusted allowing it to send expired messages.
 
 #### `waku_newKeyPair`
 
+Generates a public and private key pair used for message encryption and decryption.
+
 ##### Parameters
 
+none
+
 ##### Response
+
+ - **string** - Key ID on success or an error on failure.
 
 #### `waku_addPrivateKey`
 
+Stores a key and returns its ID.
+
 ##### Parameters
 
+- **string** - Private key as hex bytes.
+
 ##### Response
+
+ - **string** - Key ID on success or an error on failure.
 
 #### `waku_deleteKeyPair`
 
+Deletes a specific key if it exists.
+
 ##### Parameters
 
+- **string** - ID of the Key pair.
+
 ##### Response
+
+- **bool** - `true` on success or an error on failure.
 
 #### `waku_hasKeyPair`
 
