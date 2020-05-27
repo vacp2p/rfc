@@ -133,3 +133,5 @@ WakuWhisper
 wms
 wns
 wordlist
+whitelist
+
