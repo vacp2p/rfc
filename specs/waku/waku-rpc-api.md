@@ -72,10 +72,10 @@ none
 
 The response is an `Object` containing the following fields:
 
-- **minPow [number]** - The current PoW requirement.
-- **maxMessageSize [float]** - The current maximum message size in bytes.
-- **memory [number]** - The memory size of the floating messages in bytes.
-- **messages [number]** - The number of floating messages.
+- **`minPow` [number]** - The current PoW requirement.
+- **`maxMessageSize` [float]** - The current maximum message size in bytes.
+- **`memory` [number]** - The memory size of the floating messages in bytes.
+- **`messages` [number]** - The number of floating messages.
 
 #### `waku_post`
 
@@ -84,16 +84,16 @@ The `waku_post` method creates a [waku message](./waku-1.md#messages) and dissem
 ##### Parameters
 
 The parameters is an `Object` containing the following fields:
- - **symKeyID [string]** `optional` - The ID of the symmetric key used for encryption
- - **pubKey [string]** `optional` - The public key for message encryption.
- - **sig [string]** `optional` - The ID of the signing key.
- - **ttl [number]** - The time-to-live in seconds.
- - **topic [string]** - 4 bytes message topic.
- - **payload [string]** - The payload to be encrypted.
- - **padding [string]** `optional` - The padding, a byte array of arbitrary length.
- - **powTime [number]** - Maximum time in seconds to be spent on the proof of work.
- - **powTarget [number]** - Minimal PoW target required for this message.
- - **targetPeer [string]** `optional` - The optional peer ID for peer-to-peer messages.
+ - **`symKeyID` [string]** `optional` - The ID of the symmetric key used for encryption
+ - **`pubKey` [string]** `optional` - The public key for message encryption.
+ - **`sig` [string]** `optional` - The ID of the signing key.
+ - **`ttl` [number]** - The time-to-live in seconds.
+ - **`topic` [string]** - 4 bytes message topic.
+ - **`payload` [string]** - The payload to be encrypted.
+ - **`padding` [string]** `optional` - The padding, a byte array of arbitrary length.
+ - **`powTime` [number]** - Maximum time in seconds to be spent on the proof of work.
+ - **`powTarget` [number]** - Minimal PoW target required for this message.
+ - **`targetPeer` [string]** `optional` - The optional peer ID for peer-to-peer messages.
  
 *Either the **symKeyID** or the **pubKey** need to be present. It can not be both.*
 
