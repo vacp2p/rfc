@@ -39,12 +39,12 @@ Nodes SHOULD expose a [JSON RPC](https://www.jsonrpc.org/specification) API that
 
 #### Fields
 
-| Field     | Description                                        |
-| --------- | -------------------------------------------------- |
-| `jsonrpc` | Contains the used JSONRPC version (`Default: 2.0`) |
-| `method`  | Contains the JSONRPC method that is being called   |
-| `params`  | An array of parameters for the request             |
-| `id`      | The request ID                                     |
+| Field     | Description                                         |
+| --------- | --------------------------------------------------- |
+| `jsonrpc` | Contains the used JSON RPC version (`Default: 2.0`) |
+| `method`  | Contains the JSON RPC method that is being called   |
+| `params`  | An array of parameters for the request              |
+| `id`      | The request ID                                      |
 
 ### Methods
 
