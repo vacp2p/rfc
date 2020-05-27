@@ -40,7 +40,7 @@ To run the spellchecker locally, you must install [pyspelling](https://facelessu
 It can then be run with the following command:
 
 ```console
-pyspelling -c .spellcheck.yml
+pyspelling -c .pyspelling.yml
 ```
 
 Words that should be ignored or are unrecognized must be added to the [wordlist](./wordlist.txt).
