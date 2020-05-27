@@ -24,7 +24,7 @@ jobs:
       run: |
         sudo apt-get install aspell aspell-en
     - name: Spell check
-      run: python -m pyspelling -c spellcheck.yml
+      run: python -m pyspelling
   
   lint:
     runs-on: ubuntu-latest
