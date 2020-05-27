@@ -93,6 +93,7 @@ remoteHash
 remotelog
 RemoteLog
 retransmission
+retransmissions
 retransmit
 retransmitted
 rlp
