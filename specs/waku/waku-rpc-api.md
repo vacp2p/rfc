@@ -20,7 +20,7 @@ be able to connect to any node implementation.
 
 ## Introduction
 
-This API is based off the [Whisper V5 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v5-RPC-API). It focuses on the end-user API semantics for communicating with a Node. However, it does not document APIs used to maintain a node.
+This API is based off the [Whisper V5 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v5-RPC-API).
 
 ## Wire Protocol
 
@@ -76,6 +76,132 @@ The response is an `Object` containing the following fields:
 - **`maxMessageSize` [float]** - The current maximum message size in bytes.
 - **`memory` [number]** - The memory size of the floating messages in bytes.
 - **`messages` [number]** - The number of floating messages.
+
+#### `waku_setMaxMessageSize`
+
+Sets the maximum message size allowed by this node. Any messages larger than this size both incoming and outgoing will be rejected. The message size can never exceed the underlying message size of `10mb` <!-- is this still accurate -->
+
+##### Parameters
+
+ - **number** - The message size in bytes.
+
+##### Response
+
+- **bool** - `true` on success or an error on failure.
+
+#### `waku_setMinPoW`
+
+Sets the minimal PoW required by this node.
+
+##### Parameters
+
+ - **number** - The new PoW requirment.
+
+##### Response
+
+- **bool** - `true` on success or an error on failure.
+
+#### `waku_markTrustedPeer`
+
+Marks a specific peer as trusted allowing it to send expired messages.
+
+##### Parameters
+
+- **string** - `enode` of the peer.
+
+##### Response
+
+- **bool** - `true` on success or an error on failure.
+
+#### `waku_newKeyPair`
+
+##### Parameters
+
+##### Response
+
+#### `waku_addPrivateKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_deleteKeyPair`
+
+##### Parameters
+
+##### Response
+
+#### `waku_hasKeyPair`
+
+##### Parameters
+
+##### Response
+
+#### `waku_getPublicKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_getPrivateKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_newSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_addSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_generateSymKeyFromPassword`
+
+##### Parameters
+
+##### Response
+
+#### `waku_hasSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_getSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_deleteSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_newMessageFilter`
+
+##### Parameters
+
+##### Response
+
+#### `waku_deleteMessageFilter`
+
+##### Parameters
+
+##### Response
+
+#### `waku_getFilterMessages`
+
+##### Parameters
+
+##### Response
 
 #### `waku_post`
 
