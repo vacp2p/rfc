@@ -151,21 +151,39 @@ Deletes a specific key if it exists.
 
 #### `waku_hasKeyPair`
 
+Checks if the node has a private key of a key pair matching the given ID.
+
 ##### Parameters
 
+- **string** - ID of the Key pair.
+
 ##### Response
+
+- **bool** - `true` or `false` or an error on failure.
 
 #### `waku_getPublicKey`
 
+Returns the public key for an ID.
+
 ##### Parameters
 
+- **string** - ID of the Key.
+
 ##### Response
+
+ - **string** - The public key or an error on failure.
 
 #### `waku_getPrivateKey`
 
+Returns the private key for an ID.
+
 ##### Parameters
 
+- **string** - ID of the Key.
+
 ##### Response
+
+ - **string** - The private key or an error on failure.
 
 #### `waku_newSymKey`
 
