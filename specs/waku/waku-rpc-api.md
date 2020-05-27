@@ -20,7 +20,7 @@ be able to connect to any node implementation.
 
 ## Introduction
 
-This API is based off the [Whisper V5 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v5-RPC-API).
+This API is based off the [Whisper V6 RPC API](https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API).
 
 ## Wire Protocol
 
@@ -198,6 +198,18 @@ Deletes a specific key if it exists.
 ##### Response
 
 #### `waku_deleteSymKey`
+
+##### Parameters
+
+##### Response
+
+#### `waku_subscribe`
+
+##### Parameters
+
+##### Response
+
+#### `waku_unsubscribe`
 
 ##### Parameters
 
