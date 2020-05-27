@@ -9,6 +9,7 @@ akwizgran
 al
 api
 API
+APIs
 Babik
 BestBit
 bitwise
