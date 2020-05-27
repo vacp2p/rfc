@@ -99,7 +99,7 @@ The parameters is an `Object` containing the following fields:
 
 #### Response
 
-- **bool** - `true` on sucess or an error on failure.
+- **bool** - `true` on success or an error on failure.
 
 ## Copyright
 
