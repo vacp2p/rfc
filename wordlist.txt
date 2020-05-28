@@ -27,6 +27,7 @@ Dapp
 DDoS
 De
 decrypt
+Decrypted
 dereference
 deserialized
 devp
