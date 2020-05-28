@@ -58,7 +58,7 @@ The message object represents a Waku message. Below you will find the descriptio
 | Field | Type | Description |
 | ----: | :--: | ----------- |
 | `sig` | string | Public Key that signed this message |
-| `recipientPublicKey` | string | The recepients public key |
+| `recipientPublicKey` | string | The recipients public key |
 | `ttl` | number | Time-to-live in seconds |
 | `timestamp` | number | Unix timestamp of the message generation |
 | `topic` | string | 4 bytes, the message topic |
@@ -131,7 +131,7 @@ Sets the minimal PoW required by this node.
 
 ##### Parameters
 
- - **number** - The new PoW requirment.
+ - **number** - The new PoW requirement.
 
 ##### Response
 
@@ -371,7 +371,7 @@ Removes a message filter from the node.
 
 #### `waku_getFilterMessages`
 
-Retreives messages that match a filter criteria and were received after the last time this function was called.
+Retrieves messages that match a filter criteria and were received after the last time this function was called.
 
 ##### Parameters
 
