@@ -223,7 +223,7 @@ Returns the private key for an ID.
 
 #### `waku_newSymKey`
 
-Generates a random symmetric key and stores it under an ID. This key can be used for encrypting and decrypting messages where the key is known to both parties.
+Generates a random symmetric key and stores it under an ID. This key can be used for encrypting and to decrypt messages where the key is known to both parties.
 
 ##### Parameters
 
