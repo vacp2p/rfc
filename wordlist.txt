@@ -133,4 +133,5 @@ WakuWhisper
 wms
 wns
 wordlist
-ÐΞVp2p
+whitelist
+
