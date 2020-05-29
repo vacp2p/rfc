@@ -302,7 +302,7 @@ Creates and registers a new subscription to receive notifications for inbound Wa
 The parameters for this request is an array containing the following fields:
 
  1. **string** - The ID of the function call, in case of Waku this must contain the value "messages".
- 2. **object** - The [message filter](#message-filter).
+ 2. **object** - The [message filter](#filter).
 
 ##### Response
 
