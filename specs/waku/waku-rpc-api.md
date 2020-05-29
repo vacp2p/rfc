@@ -16,8 +16,8 @@ authors: Dean Eigenmann <dean@status.im>
 
 ## Abstract
 
-In this specification we describe the RPC API that Waku nodes SHOULD adhere to. The unified API allows clients to easily
-be able to connect to any node implementation.
+In this specification we describe the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily
+be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients. 
 
 ## Introduction
 
@@ -27,7 +27,7 @@ This API is based off the [Whisper V6 RPC API](https://github.com/ethereum/go-et
 
 ### Transport
 
-Nodes SHOULD expose a [JSON RPC](https://www.jsonrpc.org/specification) API that can be publicly accessed. The JSON RPC version SHOULD be `2.0`. Below is an example request:
+Nodes SHOULD expose a [JSON RPC](https://www.jsonrpc.org/specification) API that can be accessed. The JSON RPC version SHOULD be `2.0`. Below is an example request:
 
 ```json
 {
@@ -53,7 +53,7 @@ In this section you will find objects used throughout the JSON RPC API.
 
 #### Message
 
-The message object represents a Waku message. Below you will find the description of the attributes contained in the message object.
+The message object represents a Waku message. Below you will find the description of the attributes contained in the message object. A message is the decrypted payload and padding of an [envelope](./envelope-data-format.md) along with all of its metadata and other extra information such as the hash.
 
 | Field | Type | Description |
 | ----: | :--: | ----------- |
@@ -109,13 +109,13 @@ none
 The response is an `Object` containing the following fields:
 
 - **`minPow` [number]** - The current PoW requirement.
-- **`maxMessageSize` [float]** - The current maximum message size in bytes.
+- **`maxEnvelopeSize` [float]** - The current maximum envelope size in bytes.
 - **`memory` [number]** - The memory size of the floating messages in bytes.
-- **`messages` [number]** - The number of floating messages.
+- **`envelopes` [number]** - The number of floating envelopes.
 
-#### `waku_setMaxMessageSize`
+#### `waku_setMaxEnvelopeSize`
 
-Sets the maximum message size allowed by this node. Any messages larger than this size both incoming and outgoing will be rejected. The message size can never exceed the underlying message size of `10mb` <!-- is this still accurate -->
+Sets the maximum envelope size allowed by this node. Any envelopes larger than this size both incoming and outgoing will be rejected. The envelope size can never exceed the underlying envelope size of `10mb` <!-- is this still accurate -->
 
 ##### Parameters
 
@@ -383,7 +383,7 @@ The response contains an array of [messages](#messages) or an error on failure.
 
 #### `waku_post`
 
-The `waku_post` method creates a [waku message](./waku-1.md#messages) and disseminates it to the network.
+The `waku_post` method creates a waku envelope and disseminates it to the network.
 
 ##### Parameters
 
