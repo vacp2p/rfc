@@ -295,7 +295,7 @@ Deletes the key associated with an ID.
 
 #### `waku_subscribe`
 
-Creates and registers a new subscription to receive notifications for inbound waku messages.
+Creates and registers a new subscription to receive notifications for inbound Waku messages.
 
 ##### Parameters
 
