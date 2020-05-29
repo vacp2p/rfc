@@ -351,7 +351,7 @@ Creates a new message filter within the node. This filter can be used to poll fo
 
 ##### Parameters
 
-The request must contain a [message filter](#message-filter) as its parameter. 
+The request must contain a [message filter](#filter) as its parameter. 
 
 ##### Response
 
