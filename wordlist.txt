@@ -59,6 +59,7 @@ JSON
 Kademlia
 keccak
 Keccak
+keypair
 kimdemey
 Lange
 libp
