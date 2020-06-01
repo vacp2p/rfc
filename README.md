@@ -21,7 +21,7 @@ Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip
  - [waku](./specs/waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
  - [envelope data format](./specs/waku/envelope-data-format.md) - [waku](./specs/waku/waku.md) envelope data field specification.
  - [mailserver](./specs/waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./specs/waku/waku.md) envelopes on demand.
- - [rpc api](./specs/waku/waku-rpc-api.md) - The RPC API for interacting with Waku nodes.
+ - [rpc api](./specs/waku/waku-rpc-api.md) - The RPC API for interacting with a Waku node.
 
 ## Style guide
 
@@ -63,4 +63,3 @@ We use [textlint](https://textlint.github.io/) for extra markdown verification. 
 npm install
 npm run textlint
 ```
-
