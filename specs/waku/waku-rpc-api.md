@@ -151,7 +151,7 @@ Marks a specific peer as trusted allowing it to send expired messages.
 
 #### `waku_newKeyPair`
 
-Generates a public and private key pair used for message encryption and decryption.
+Generates a keypair used for message encryption and decryption.
 
 ##### Parameters
 
