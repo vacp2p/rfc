@@ -335,7 +335,7 @@ Notifications received by the client contain a [message](#message) matching the 
 
 #### `waku_unsubscribe`
 
-Cancels and removes an existing subscription.
+Cancels and removes an existing subscription. The node MUST stop sending the client notifications.
 
 ##### Parameters
 
