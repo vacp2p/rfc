@@ -123,7 +123,7 @@ Sets the maximum envelope size allowed by this node. Any envelopes larger than t
 
 ##### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_setMinPoW`
 
@@ -135,7 +135,7 @@ Sets the minimal PoW required by this node.
 
 ##### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_markTrustedPeer`
 
@@ -147,7 +147,7 @@ Marks a specific peer as trusted allowing it to send expired messages.
 
 ##### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_newKeyPair`
 
@@ -159,7 +159,7 @@ none
 
 ##### Response
 
- - **string** - Key ID on success or an error on failure.
+ - **string** - Key ID on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_addPrivateKey`
 
@@ -171,7 +171,7 @@ Stores a key and returns its ID.
 
 ##### Response
 
- - **string** - Key ID on success or an error on failure.
+ - **string** - Key ID on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_deleteKeyPair`
 
@@ -183,7 +183,7 @@ Deletes a specific key if it exists.
 
 ##### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_hasKeyPair`
 
@@ -195,7 +195,7 @@ Checks if the node has a private key of a key pair matching the given ID.
 
 ##### Response
 
-- **bool** - `true` or `false` or an error on failure.
+- **bool** - `true` or `false` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_getPublicKey`
 
@@ -207,7 +207,7 @@ Returns the public key for an ID.
 
 ##### Response
 
- - **string** - The public key or an error on failure.
+ - **string** - The public key or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_getPrivateKey`
 
@@ -219,7 +219,7 @@ Returns the private key for an ID.
 
 ##### Response
 
- - **string** - The private key or an error on failure.
+ - **string** - The private key or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_newSymKey`
 
@@ -231,7 +231,7 @@ none
 
 ##### Response
 
- - **string** - The key ID or an error on failure.
+ - **string** - The key ID or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_addSymKey`
 
@@ -243,7 +243,7 @@ Stores the key and returns its ID.
 
 ##### Response
 
- - **string** - The key ID or an error on failure.
+ - **string** - The key ID or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_generateSymKeyFromPassword`
 
@@ -255,7 +255,7 @@ Generates the key from a password and stores it.
 
 ##### Response
 
- - **string** - The key ID or an error on failure.
+ - **string** - The key ID or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_hasSymKey`
 
@@ -267,7 +267,7 @@ Returns whether there is a key associated with the ID.
 
 ##### Response
 
-- **bool** - `true` or `false` or an error on failure.
+- **bool** - `true` or `false` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_getSymKey`
 
@@ -279,7 +279,7 @@ Returns the symmetric key associated with an ID.
 
 ##### Response
 
-- **string** - Raw key on success or a failure on error.
+- **string** - Raw key on success or an [error](https://www.jsonrpc.org/specification#error_object) of failure.
 
 #### `waku_deleteSymKey`
 
@@ -291,7 +291,7 @@ Deletes the key associated with an ID.
 
 ##### Response
 
-- **bool** - `true` or `false` or an error on failure.
+- **bool** - `true` or `false` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_subscribe`
 
@@ -306,7 +306,7 @@ The parameters for this request is an array containing the following fields:
 
 ##### Response
 
-- **string** - ID of the subscription or an error on failure.
+- **string** - ID of the subscription or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 ###### Notifications
 
@@ -367,7 +367,7 @@ Removes a message filter from the node.
 
 ##### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_getFilterMessages`
 
@@ -379,7 +379,7 @@ Retrieves messages that match a filter criteria and were received after the last
 
 ##### Response
 
-The response contains an array of [messages](#messages) or an error on failure.
+The response contains an array of [messages](#messages) or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 #### `waku_post`
 
@@ -403,7 +403,7 @@ The parameters is an `Object` containing the following fields:
 
 #### Response
 
-- **bool** - `true` on success or an error on failure.
+- **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 ## Copyright
 
