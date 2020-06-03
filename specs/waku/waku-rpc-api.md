@@ -32,7 +32,7 @@ Nodes SHOULD expose a [JSON RPC](https://www.jsonrpc.org/specification) API that
 ```json
 {
   "jsonrpc":"2.0",
-  "method":"shh_version",
+  "method":"waku_version",
   "params":[],
   "id":1
 }
@@ -315,7 +315,7 @@ Notifications received by the client contain a [message](#message) matching the 
 ```json
 {
   "jsonrpc": "2.0",
-  "method": "shh_subscription",
+  "method": "waku_subscription",
   "params": {
     "subscription": "02c1f5c953804acee3b68eda6c0afe3f1b4e0bec73c7445e10d45da333616412",
     "result": {
