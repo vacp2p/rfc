@@ -16,7 +16,7 @@ authors: Dean Eigenmann <dean@status.im>
 
 ## Abstract
 
-In this specification we describe the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily
+This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily
 be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients. 
 
 ## Introduction
