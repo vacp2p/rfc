@@ -104,27 +104,35 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code = 1*3DIGIT
 
-; rate limits
-limit-ip     = 1*DIGIT
-limit-peerid = 1*DIGIT
-limit-topic  = 1*DIGIT
+; rate limits per packet
+packet-limit-ip     = 1*DIGIT
+packet-limit-peerid = 1*DIGIT
+packet-limit-topic  = 1*DIGIT
 
-rate-limits = "[" limit-ip limit-peerid limit-topic "]"
+; rate limits by size in bytes
+bytes-limit-ip     = 1*DIGIT
+bytes-limit-peerid = 1*DIGIT
+bytes-limit-topic  = 1*DIGIT
+
+packet-rate-limits = "[" packet-limit-ip packet-limit-peerid packet-limit-topic "]"
+bytes-rate-limits = "[" bytes-limit-ip bytes-limit-peerid bytes-limit-topic "]"
 
 pow-requirement-key = 0
 bloom-filter-key = 1
 light-node-key = 2
 confirmations-enabled-key = 3
-rate-limits-key = 4
+packet-rate-limits-key = 4
 topic-interest-key = 5
+bytes-rate-limits-key = 6
 
 status-options = "["
   [ pow-requirement-key pow-requirement ]
   [ bloom-filter-key bloom-filter ]
   [ light-node-key light-node ]
   [ confirmations-enabled-key confirmations-enabled ]
-  [ rate-limits-key rate-limits ]
+  [ packet-rate-limits-key packet-rate-limits ]
   [ topic-interest-key topic-interest ]
+  [ bytes-limits-key bytes-rate-limits ]
 "]"
 
 status = status-options
@@ -309,9 +317,18 @@ Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer 
 
 If a peer exceeds node's rate limits, the connection between them MAY be dropped.
 
-Each node SHOULD broadcast its rate limits to its peers using the rate limits packet. The rate limits MAY also be sent as an optional parameter in the handshake.
+Each node SHOULD broadcast its rate limits to its peers using the `status-update` packet. The rate limits MAY also be sent as an optional parameter in the handshake.
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
+
+Two rate limits strategies are applied:
+
+1) Number of packets per second
+2) Size of packets (in bytes) per second
+
+Both strategies SHOULD be applied per IP address, peer id and topic.
+
+The size limit SHOULD be greater or equal than the maximum packet size.
 
 ##### Light Node Field
 
@@ -556,6 +573,12 @@ Known static nodes MAY also be used.
 - Correct the header hierarchy for the status-options fields.
 - Consistent use of the words packet, message and envelope.
 - Added section on max packet size
+
+### Version 1.1
+
+Released []()
+
+- Add rate limit per bytes
 
 ### Version 1.0
 
