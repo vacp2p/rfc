@@ -576,7 +576,7 @@ Known static nodes MAY also be used.
 
 ### Version 1.1
 
-Released []()
+Released [June 09, 2020](https://github.com/vacp2p/specs/commit/33b8d7304c9ebece90ea94e601f11080a8ac2c4d)
 
 - Add rate limit per bytes
 
