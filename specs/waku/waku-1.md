@@ -52,7 +52,7 @@ redirect_from:
 
 ## Abstract
 
-This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
+This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a history node) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
 
 ## Motivation
 
@@ -77,7 +77,7 @@ This protocol needs to advertise the `waku/1` [capability](https://ethereum.gitb
 
 ### Gossip based routing
 
-In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
+In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [history node](./historynode.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
 
 ### Maximum Packet Size
 
@@ -178,7 +178,7 @@ nonce = 8OCTET
 
 messages = 1*waku-envelope
 
-; mail server / client specific
+; history node / client specific
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
 
@@ -383,17 +383,17 @@ The drawback of sending message confirmations is that it increases the noise in 
 
 #### P2P Request
 
-This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting historic (expired) envelopes from the [Waku Mail Server](./mailserver.md).
+This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku History Client requesting historic (expired) envelopes from the [Waku History Node](./historynode.md).
 
 #### P2P Message
 
-This packet is used for sending the peer-to-peer envelopes, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of historic (expired) envelopes, which is otherwise not allowed.
+This packet is used for sending the peer-to-peer envelopes, which are not supposed to be forwarded any further. E.g. it might be used by the Waku History Server for delivery of historic (expired) envelopes, which is otherwise not allowed.
 
 #### P2P Request Complete
 
 This packet is used to indicate that all envelopes, requested earlier with a P2P Request packet (`0x7E`), have been sent via one or more P2P Message packets (`0x7F`).
 
-The content of the packet is explained in the [Waku Mail Server](./mailserver.md) specification.
+The content of the packet is explained in the [Waku History node](./historynode.md) specification.
 
 ### Payload Encryption
 
@@ -407,13 +407,13 @@ Packet codes `0x00` and `0x01` are already used in all Waku / Whisper versions. 
 
 Packet code `0x22` is used to dynamically change the settings of a node.
 
-Packet codes `0x7E` and `0x7F` may be used to implement Waku Mail Server and Client. Without the P2P Message packet it would be impossible to deliver the historic envelopes, since they will be recognized as expired, and the peer will be disconnected for violating the Waku protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
+Packet codes `0x7E` and `0x7F` may be used to implement Waku History Server and Client. Without the P2P Message packet it would be impossible to deliver the historic envelopes, since they will be recognized as expired, and the peer will be disconnected for violating the Waku protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.
 
 ## Additional capabilities
 
 Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.
 
-Additionally there is the capability of a mailserver which is documented in its on [specification](mailserver.md).
+Additionally there is the capability of a history node which is documented in its on [specification](historynode.md).
 
 ### Light node
 
@@ -492,7 +492,7 @@ It is desirable to have a strategy for maintaining forward compatibility between
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./mailserver.md#security-considerations) can be found in their respective specifications.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [history nodes](./historynode.md#security-considerations) can be found in their respective specifications.
 
 ### Scalability and UX
 
@@ -628,7 +628,7 @@ Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/wak
 
 - General style improvements.
 - Fix ABNF grammar.
-- Mailserver requesting/receiving.
+- History node requesting/receiving.
 - New packet codes: topic-interest (experimental), rate limits (experimental).
 - More details on handshake modifications.
 - Accounting for resources mode (experimental)
@@ -636,7 +636,7 @@ Released [December 10, 2019](https://github.com/vacp2p/specs/blob/waku-0.2.0/wak
 - Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.
 - More details on handshake and parameters.
 - Describe rate limits in more detail.
-- More details on mailserver and mail client API.
+- More details on history node and history client API.
 - Accounting for resources mode (very experimental).
 - Clarify differences with Whisper.
 
@@ -653,7 +653,7 @@ Summary of main differences between this spec and Whisper v6, as described in [E
 - Optional rate limiting is added.
 - Status packet has following additional parameters: light-node,
 confirmations-enabled and rate-limits
-- Mail Server and Mail Client functionality is now part of the specification.
+- History Server and History Client functionality is now part of the specification.
 - P2P Message packet contains a list of envelopes instead of a single envelope.
 
 ## Copyright
