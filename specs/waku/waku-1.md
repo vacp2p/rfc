@@ -427,7 +427,7 @@ Light nodes are identified by the `light_node` value in the Status packet.
 
 Nodes MAY implement accounting, keeping track of resource usage. It is heavily inspired by Swarm's [SWAP protocol](https://www.bokconsulting.com.au/wp-content/uploads/2016/09/tron-fischer-sw3.pdf), and works by doing pairwise accounting for resources.
 
-Each node SHOULD keep track of the resource usage of all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) or sent, it SHOULD be tracked.
+Each node SHOULD keep track of the resource usage of all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is valid, etc.) or sent, it SHOULD be tracked.
 
 In later versions this will be amended by nodes communication thresholds, settlements and disconnect logic.
 
