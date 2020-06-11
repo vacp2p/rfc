@@ -7,6 +7,9 @@ adam
 AES
 akwizgran
 al
+api
+API
+APIs
 Babik
 BestBit
 bitwise
@@ -24,6 +27,7 @@ Dapp
 DDoS
 De
 decrypt
+decrypted
 dereference
 deserialized
 devp
@@ -51,9 +55,11 @@ ip
 IPs
 Jacek
 Jepsen
+JSON
 Kademlia
-Keccak
 keccak
+Keccak
+keypair
 kimdemey
 Lange
 libp
