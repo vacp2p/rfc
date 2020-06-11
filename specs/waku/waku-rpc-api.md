@@ -115,7 +115,7 @@ The response is an `Object` containing the following fields:
 
 #### `waku_setMaxEnvelopeSize`
 
-Sets the maximum envelope size allowed by this node. Any envelopes larger than this size both incoming and outgoing will be rejected. The envelope size can never exceed the underlying envelope size of `10mb` <!-- is this still accurate -->
+Sets the maximum envelope size allowed by this node. Any envelopes larger than this size both incoming and outgoing will be rejected. The envelope size can never exceed the underlying envelope size of `10mb`.
 
 ##### Parameters
 
@@ -383,7 +383,7 @@ The response contains an array of [messages](#messages) or an [error](https://ww
 
 #### `waku_post`
 
-The `waku_post` method creates a waku envelope and disseminates it to the network.
+The `waku_post` method creates a waku envelope and propagates it to the network.
 
 ##### Parameters
 
