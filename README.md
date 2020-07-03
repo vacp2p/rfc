@@ -21,6 +21,7 @@ Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip
  - [waku](./specs/waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
  - [envelope data format](./specs/waku/envelope-data-format.md) - [waku](./specs/waku/waku.md) envelope data field specification.
  - [mailserver](./specs/waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./specs/waku/waku.md) envelopes on demand.
+ - [rpc api](./specs/waku/waku-rpc-api.md) - The RPC API for interacting with a Waku node.
 
 ## Style guide
 
@@ -31,14 +32,34 @@ The lifecycle of the specs follows the [COSS Lifecycle](https://rfc.unprotocols.
 
 The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-## Spellcheck
+## Linting
+
+### Spellcheck
 
 To run the spellchecker locally, you must install [pyspelling](https://facelessuser.github.io/pyspelling/).
 
 It can then be run with the following command:
 
 ```console
-pyspelling -c spellcheck.yml
+pyspelling -c .pyspelling.yml
 ```
 
 Words that should be ignored or are unrecognized must be added to the [wordlist](./wordlist.txt).
+
+### Markdown Verification
+
+We use [remark](https://remark.js.org/) to verify our markdown. You can easily run this tool simply by using our `npm` package:
+
+```console
+npm install
+npm run lint
+```
+
+### Textlint
+
+We use [textlint](https://textlint.github.io/) for extra markdown verification. You can easily run this tool simply by using our `npm` package:
+
+```console
+npm install
+npm run textlint
+```

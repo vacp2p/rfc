@@ -15,6 +15,7 @@ redirect_from:
 - [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
     - [Use of DevP2P](#use-of-devp2p)
     - [Gossip based routing](#gossip-based-routing)
+    - [Maximum Packet Size](#maximum-packet-size)
 - [Wire Specification](#wire-specification)
     - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
     - [ABNF specification](#abnf-specification)
@@ -27,7 +28,7 @@ redirect_from:
     - [Accounting for resources (experimental)](#accounting-for-resources-experimental)
 - [Backwards Compatibility](#backwards-compatibility)
     - [Waku-Whisper bridging](#waku-whisper-bridging)
-- [Forwards Compatibility](#forwards-compatibility)
+- [Forward Compatibility](#forward-compatibility)
 - [Appendix A: Security considerations](#appendix-a-security-considerations)
     - [Scalability and UX](#scalability-and-ux)
     - [Privacy](#privacy)
@@ -45,8 +46,7 @@ redirect_from:
     - [Version 0.3](#version-03)
     - [Version 0.2](#version-02)
     - [Version 0.1](#version-01)
-    - [Differences between shh/6 waku/1](#differences-between-shh6-waku1)
-- [Acknowledgments](#acknowledgments)
+    - [Differences between shh/6 waku/1](#differences-between-shh6-and-waku1)
 - [Copyright](#copyright)
 - [Footnotes](#footnotes)
 
@@ -60,11 +60,12 @@ Waku was created to incrementally improve in areas that Whisper is lacking in, w
 
 ## Definitions
 
-| Term            | Definition                                                                  |
-| --------------- | ----------------------------------------------------------------------------|
-| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.|
-| **Envelope**    | Messages sent and received by Waku nodes.                                   |
-| **Node**        | Some process that is able to communicate for Waku.                          |
+| Term            | Definition                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------|
+| **Batch Ack**   | An abbreviated term for Batch Acknowledgment                                           |
+| **Light node**  | A Waku node that does not forward any envelopes through the Messages packet.            |
+| **Envelope**    | Messages sent and received by Waku nodes. Described in [ABNF spec `waku-envelope`](#abnf-specification) |
+| **Node**        | Some process that is able to communicate for Waku.                                      |
 
 ## Underlying Transports and Prerequisites
 
@@ -77,6 +78,15 @@ This protocol needs to advertise the `waku/1` [capability](https://ethereum.gitb
 ### Gossip based routing
 
 In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
+
+### Maximum Packet Size
+
+Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet or envelope exceeds its limit, it MUST be dropped.
+
+- **RLPx Packet Size** - This size MUST be checked before a message is decoded.
+- **Waku Envelope Size** - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.
+
+Clients MAY use their own maximum packet and envelope sizes. The default values are `1.5mb` for the RLPx Packet and `1mb` for a Waku envelope.
 
 ## Wire Specification
 
@@ -94,27 +104,35 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 ; Packet codes 0 - 127 are reserved for Waku protocol
 packet-code = 1*3DIGIT
 
-; rate limits
-limit-ip     = 1*DIGIT
-limit-peerid = 1*DIGIT
-limit-topic  = 1*DIGIT
+; rate limits per packet
+packet-limit-ip     = 1*DIGIT
+packet-limit-peerid = 1*DIGIT
+packet-limit-topic  = 1*DIGIT
 
-rate-limits = "[" limit-ip limit-peerid limit-topic "]"
+; rate limits by size in bytes
+bytes-limit-ip     = 1*DIGIT
+bytes-limit-peerid = 1*DIGIT
+bytes-limit-topic  = 1*DIGIT
+
+packet-rate-limits = "[" packet-limit-ip packet-limit-peerid packet-limit-topic "]"
+bytes-rate-limits = "[" bytes-limit-ip bytes-limit-peerid bytes-limit-topic "]"
 
 pow-requirement-key = 0
 bloom-filter-key = 1
 light-node-key = 2
 confirmations-enabled-key = 3
-rate-limits-key = 4
+packet-rate-limits-key = 4
 topic-interest-key = 5
+bytes-rate-limits-key = 6
 
 status-options = "["
   [ pow-requirement-key pow-requirement ]
   [ bloom-filter-key bloom-filter ]
   [ light-node-key light-node ]
   [ confirmations-enabled-key confirmations-enabled ]
-  [ rate-limits-key rate-limits ]
+  [ packet-rate-limits-key packet-rate-limits ]
   [ topic-interest-key topic-interest ]
+  [ bytes-limits-key bytes-rate-limits ]
 "]"
 
 status = status-options
@@ -299,11 +317,30 @@ Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer 
 
 If a peer exceeds node's rate limits, the connection between them MAY be dropped.
 
-Each node SHOULD broadcast its rate limits to its peers using the rate limits packet. The rate limits MAY also be sent as an optional parameter in the handshake.
+Each node SHOULD broadcast its rate limits to its peers using the `status-update` packet. The rate limits MAY also be sent as an optional parameter in the handshake.
 
 Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer's rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.
 
-##### Message Confirmations Field
+Two rate limits strategies are applied:
+
+1) Number of packets per second
+2) Size of packets (in bytes) per second
+
+Both strategies SHOULD be applied per IP address, peer id and topic.
+
+The size limit SHOULD be greater or equal than the maximum packet size.
+
+##### Light Node Field
+
+When the node's `light-node` field is set to true, the node SHOULD NOT forward Envelopes from its peers.
+
+A node connected to a peer with the `light-node` field set to true MUST NOT depend on the peer for forwarding Envelopes.
+
+##### Confirmations Enabled Field
+
+When the node's `confirmations-enabled` field is set to true, the node SHOULD send [message confirmations](#batch-ack-and-message-response) to its peers.
+
+#### Batch Ack and Message Response
 
 Message confirmations tell a node that a envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.
 
@@ -405,7 +442,6 @@ In later versions this will be amended by nodes communication thresholds, settle
 
 ### General principles and policy
 
-
 The currently advertised capability is `waku/1`. This needs to be advertised in the `hello` `ÐΞVp2p` [packet](https://ethereum.gitbooks.io/frontier-guide/devp2p.html).
 If a node supports multiple versions of `waku`, those needs to be explicitly advertised. For example if both `waku/0` and `waku/1` are supported, both `waku/0` and `waku/1` MUST be advertised.
 
@@ -456,7 +492,7 @@ It is desirable to have a strategy for maintaining forward compatibility between
 
 ## Appendix A: Security considerations
 
-There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./wms.md#security-considerations) can be found in their respective specifications.
+There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as [mailservers](./mailserver.md#security-considerations) can be found in their respective specifications.
 
 ### Scalability and UX
 
@@ -536,6 +572,13 @@ Known static nodes MAY also be used.
 - Add section on P2P Request Complete packet and update packet code table.
 - Correct the header hierarchy for the status-options fields.
 - Consistent use of the words packet, message and envelope.
+- Added section on max packet size
+
+### Version 1.1
+
+Released [June 09, 2020](https://github.com/vacp2p/specs/commit/33b8d7304c9ebece90ea94e601f11080a8ac2c4d)
+
+- Add rate limit per bytes
 
 ### Version 1.0
 

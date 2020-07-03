@@ -23,7 +23,7 @@ redirect_from:
 
 ## Abstract
 
-In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](mvds.md). Additionally we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](mvds.md). Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
