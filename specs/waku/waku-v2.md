@@ -81,11 +81,7 @@ TODO
 
 ## Underlying Transports and Prerequisites
 
-TODO
-
-*NOTE: Should highlight use of libp2p, PubSub (with WakuSub<FloodSub initiailly), and optionally bridging with Waku v1.*
-
-We are using protobuf RPC messages between peers.
+TODO Right now this is more like a set of components
 
 ### Peer Discovery
 
@@ -105,11 +101,37 @@ The current protocol identifier is: `/wakusub/0.0.1` [xx1].
 
 WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will support GossipSub 1 [xx3] and GossipSub 1.1 [xx4].
 
+### Bridge mode
+
+To maintain compatibility with Waku v1, a bridge mode can be achieved. See separate spec.
+
+TODO Detail this in a separate spec
+
 ## Wire Specification
 
-TODO
+We are using protobuf RPC messages between peers. Here's what a message looks like, as defined in the PubSub interface.
+
 
 *NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as the data field for encryption, etc.*
+
+### Messages
+
+```
+message Message {
+	optional string from = 1;
+	optional bytes data = 2;
+	optional bytes seqno = 3;
+	repeated string topicIDs = 4;
+	optional bytes signature = 5;
+	optional bytes key = 6;
+}
+```
+
+TODO Detail options and what's in data, additional methods, etc
+
+### SubOpts
+
+TODO
 
 ## Changelog
 
@@ -119,9 +141,7 @@ TODO
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-## Footnotes
-
-TODO
+## References
 
 xx1: https://docs.libp2p.io/concepts/protocols/
 
