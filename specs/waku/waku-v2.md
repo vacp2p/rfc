@@ -87,6 +87,10 @@ TODO
 
 We are using protobuf RPC messages between peers.
 
+### Peer Discovery
+
+WakuSub and PubSub don't provide an peer discovery mechanism. This has to be provided for by the environment.
+
 ### PubSub interface
 
 Waku v2 is implementing the PubSub interface in Libp2p. See PubSub spec [xx2] for more details.
@@ -96,6 +100,10 @@ Waku v2 is implementing the PubSub interface in Libp2p. See PubSub spec [xx2] fo
 The current protocol identifier is: `/wakusub/0.0.1` [xx1].
 
 **TODO Update to 2.0.0-alpha0**
+
+### FloodSub
+
+WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will support GossipSub 1 [xx3] and GossipSub 1.1 [xx4].
 
 ## Wire Specification
 
@@ -118,3 +126,7 @@ TODO
 xx1: https://docs.libp2p.io/concepts/protocols/
 
 xx2: [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
+
+xx3: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md
+
+xx4: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md
