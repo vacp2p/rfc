@@ -65,9 +65,9 @@ TODO
 
 ## Abstract
 
-TODO
+Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices. It implements PubSub in libp2p and adds capabilities on top of it. These capabilities are: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogenerous nodes to contribute, and (iii) bandwidth preservation for light nodes. This makes it ideal for running a p2p protocol on mobile.
 
-*NOTE: Should highlight things such as mostly-offline bandwidth-constrainted smartphones, historic messages, adaptive nodes, topic interest.*
+Historically, it has its roots in Waku v1 [xx5], which stems from Whisper [xx6], originally part of the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and has a different API. It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p. See here for a rough road map [xx7].
 
 ## Motivation
 
@@ -130,3 +130,9 @@ xx2: [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/sp
 xx3: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md
 
 xx4: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md
+
+xx5: specs.vac.dev/waku/waku.html
+
+xx6: https://eips.ethereum.org/EIPS/eip-627
+
+xx7: https://vac.dev/waku-v2-plan
