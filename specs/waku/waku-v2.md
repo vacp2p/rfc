@@ -85,9 +85,11 @@ TODO
 
 *NOTE: Should highlight use of libp2p, PubSub (with WakuSub<FloodSub initiailly), and optionally bridging with Waku v1.*
 
-Waku v2 is using PubSub in Libp2p. See [PubSub interface for libp2p (r2, 2019-02-01, 958beeed6a90a3cf39db2bb089724d0d44d32296)](https://github.com/libp2p/specs/blob/master/pubsub/README.md** for more details on that.
-
 We are using protobuf RPC messages between peers.
+
+### PubSub interface
+
+Waku v2 is implementing the PubSub interface in Libp2p. See PubSub spec [xx2] for more details.
 
 ### Protocol Identifier
 
@@ -114,3 +116,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 TODO
 
 xx1: https://docs.libp2p.io/concepts/protocols/
+
+xx2: [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
