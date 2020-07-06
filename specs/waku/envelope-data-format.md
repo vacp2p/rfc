@@ -57,7 +57,7 @@ signature       = 65OCTET
 ; 2 bytes, if present (in case of symmetric encryption).
 salt            = 2OCTET
 
-envelope        = flags auxiliary-field payload padding [signature] [salt]
+data        = flags auxiliary-field payload padding [signature] [salt]
 ```
 
 ### Signature
