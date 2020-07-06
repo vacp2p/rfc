@@ -170,7 +170,7 @@ topic = 4OCTET
 
 ; byte array of arbitrary size
 ; (contains encrypted payload)
-data = OCTET
+data = *OCTET
 
 ; 8 bytes of arbitrary data
 ; (used for PoW calculation)
@@ -178,9 +178,36 @@ nonce = 8OCTET
 
 messages = 1*waku-envelope
 
+; version of the confirmation packet
+version = 1*DIGIT
+
+; keccak256 hash of the envelopes batch data (raw bytes)
+; for which the confirmation is sent
+hash = *OCTET
+
+hasherror = *OCTET
+
+; error code
+code = 1*DIGIT
+
+; a descriptive error message
+description = *ALPHA
+
+error  = "[" hasherror code description "]"
+errors = *error
+
+response = "[" hash errors "]"
+
+confirmation = "[" version response "]"
+
+; message confirmation packet types
+batch-ack = confirmation
+message-response = confirmation
+
 ; mail server / client specific
 p2p-request = waku-envelope
 p2p-message = 1*waku-envelope
+p2p-request-complete = *OCTET
 
 ; packet-format needs to be paired with its
 ; corresponding packet-format
@@ -342,44 +369,18 @@ When the node's `confirmations-enabled` field is set to true, the node SHOULD se
 
 #### Batch Ack and Message Response
 
-Message confirmations tell a node that a envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.
+Message confirmations tell a node that an envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.
 
 A node MAY send a message confirmation for any batch of envelopes received with a Messages packet (`0x01`).
 
-A message confirmation is sent using Batch Ack packet (`0x0B`) or Message Response packet (`0x0C`). The message confirmation is specified in the ABNF specification below.
+A message confirmation is sent using Batch Ack packet (`0x0B`) or Message Response packet (`0x0C`). The message confirmation is specified in the [ABNF specification](#abnf-specification).
 
-The current `version` of the Message Response is `1`.
+The current `version` in the `confirmation` is `1`.
 
-Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
-
-```abnf
-; a version of the Message Response
-version = 1*DIGIT
-
-; keccak256 hash of the envelopes batch data (raw bytes) for which the confirmation is sent
-hash = *OCTET
-
-hasherror = *OCTET
-
-; error code
-code = 1*DIGIT
-
-; a descriptive error message
-description = *ALPHA
-
-error  = "[" hasherror code description "]"
-errors = *error
-
-response = "[" hash errors "]"
-
-confirmation = "[" version response "]"
-```
-
-The supported codes:
-`1`: means time sync error which happens when an envelope is too old or created in the future (the root cause is no time sync between nodes).
+The supported error codes:
+- `1`: time sync error which happens when an envelope is too old or was created in the future (typically because of an unsynchronized clock of a node).
 
 The drawback of sending message confirmations is that it increases the noise in the network because for each sent envelope, a corresponding confirmation is broadcast by one or more peers.
-
 
 #### P2P Request
 
@@ -573,6 +574,7 @@ Known static nodes MAY also be used.
 - Correct the header hierarchy for the status-options fields.
 - Consistent use of the words packet, message and envelope.
 - Added section on max packet size
+- Complete the ABNF specification and minor ABNF fixes.
 
 ### Version 1.1
 
