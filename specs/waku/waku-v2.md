@@ -31,11 +31,27 @@ Waku is a privacy-preserving peer-to-peer messaging protocol for resource restri
 
 Historically, it has its roots in [Waku v1](specs.vac.dev/waku/waku.html), which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and has a different API. It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p. See [rough road map](https://vac.dev/waku-v2-plan).
 
-## Motivation
+## Motivation and goals
 
-TODO
+1. **Generalized messaging.** Many applications requires some form of messaging
+   protocol to communicate between different subsystems or different nodes. This
+   messaging can be human-to-human or machine-to-machine or a mix.
 
-*NOTE: Should elaborate on privacy-preserving messaging for resource restricted devices, etc. Also Waku v1 history briefly.*
+2. **Peer-to-peer.**These applications sometimes have requirements that make
+   them suitable for peer-to-peer solutions.
+
+3. **Resource restricted**.These applications often run in constrained
+   environments, where resources or the environment is restricted in some
+   fashion. E.g.:
+
+- limited bandwidth, cpu, memory, disk, battery, etc
+- not being publicly connectable
+- only being intermittently connected; mostly-offline
+
+4. **Privacy.** These applications have a desire for some privacy guarantees,
+   such as pseudonymity, metadata protection in transit, etc.
+
+Waku provides a solution that satisfies these goals in a reasonable matter.
 
 ## Definitions
 
