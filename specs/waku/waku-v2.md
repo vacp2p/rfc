@@ -39,9 +39,7 @@ Waku v2 is implementing the PubSub interface in Libp2p. See PubSub spec [xx2] fo
 
 ### Protocol Identifier
 
-The current protocol identifier is: `/wakusub/0.0.1` [xx1].
-
-**TODO Update to 2.0.0-alpha0**
+The current protocol identifier is: `/wakusub/2.0.0-alpha1` [xx1].
 
 ### FloodSub
 
