@@ -7,7 +7,23 @@ authors: Oskar Thorén <oskar@status.im>
 
 ## Table of Contents
 
-TODO
+- [Abstract](#abstract)
+- [Motivation](#motivation)
+- [Definitions](#definitions)
+- [Goals](#goals)
+- [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
+  * [Peer Discovery](#peer-discovery)
+  * [PubSub interface](#pubsub-interface)
+  * [Protocol Identifier](#protocol-identifier)
+  * [FloodSub](#floodsub)
+  * [Bridge mode](#bridge-mode)
+- [Wire Specification](#wire-specification)
+  * [Messages](#messages)
+  * [SubOpts](#subopts)
+- [Changelog](#changelog)
+- [Copyright](#copyright)
+- [References](#references)
+
 
 ## Abstract
 
