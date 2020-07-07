@@ -29,7 +29,7 @@ authors: Oskar Thorén <oskar@status.im>
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices. It implements PubSub over libp2p and adds capabilities on top of it. These capabilities are: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to contribute, and (iii) bandwidth preservation for light nodes. This makes it ideal for running a p2p protocol on mobile.
 
-Historically, it has its roots in Waku v1 [xx5], which stems from Whisper [xx6], originally part of the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and has a different API. It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p. See here for a rough road map [xx7].
+Historically, it has its roots in [Waku v1](specs.vac.dev/waku/waku.html), which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and has a different API. It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p. See [rough road map](https://vac.dev/waku-v2-plan).
 
 ## Motivation
 
@@ -51,15 +51,15 @@ WakuSub and PubSub don't provide an peer discovery mechanism. This has to be pro
 
 ### PubSub interface
 
-Waku v2 is implementing the PubSub interface in Libp2p. See PubSub spec [xx2] for more details.
+Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
 ### Protocol Identifier
 
-The current protocol identifier is: `/wakusub/2.0.0-alpha1` [xx1].
+The current [protocol identifier](https://docs.libp2p.io/concepts/protocols/) is: `/wakusub/2.0.0-alpha1`.
 
 ### FloodSub
 
-WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will support GossipSub 1 [xx3] and GossipSub 1.1 [xx4].
+WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md) and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
 
 ### Bridge mode
 
@@ -103,16 +103,16 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## References
 
-xx1: https://docs.libp2p.io/concepts/protocols/
+1. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
-xx2: [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
+2. [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
 
-xx3: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md
+3. [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
 
-xx4: https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md
+4. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-xx5: specs.vac.dev/waku/waku.html
+5. [Waku v1 spec](specs.vac.dev/waku/waku.html)
 
-xx6: https://eips.ethereum.org/EIPS/eip-627
+6. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
-xx7: https://vac.dev/waku-v2-plan
+7. [Waku v2 plan](https://vac.dev/waku-v2-plan)
