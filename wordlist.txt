@@ -115,6 +115,7 @@ scalability
 SECP
 semver
 seqid
+seqno
 Sieka
 sNAN
 suboptimal
@@ -124,6 +125,7 @@ subprotocols
 TBD
 TCP
 textlint
+topicIDs
 Thorén
 tla
 tls
