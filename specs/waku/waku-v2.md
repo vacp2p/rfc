@@ -8,9 +8,8 @@ authors: Oskar Thorén <oskar@status.im>
 ## Table of Contents
 
 - [Abstract](#abstract)
-- [Motivation](#motivation)
+- [Motivation and goals](#motivation-and-goals)
 - [Definitions](#definitions)
-- [Goals](#goals)
 - [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
   * [Peer Discovery](#peer-discovery)
   * [PubSub interface](#pubsub-interface)
@@ -18,12 +17,13 @@ authors: Oskar Thorén <oskar@status.im>
   * [FloodSub](#floodsub)
   * [Bridge mode](#bridge-mode)
 - [Wire Specification](#wire-specification)
-  * [Messages](#messages)
+  * [Protobuf](#protobuf)
+  * [Message](#message)
   * [SubOpts](#subopts)
+  * [Historical message support](#historical-message-support)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
 - [References](#references)
-
 
 ## Abstract
 
