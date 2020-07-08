@@ -21,6 +21,7 @@ BSP
 cas
 Changelog
 COSS
+CPU
 DAG
 DAGs
 Dapp
@@ -42,6 +43,7 @@ enum
 et
 Ethereum
 extensibility
+FloodSub
 GCM
 github
 GossipSub
@@ -94,6 +96,7 @@ PoW
 proto
 protobuf
 PSS
+pseudonymity
 PubSub
 pyspelling
 qNAN

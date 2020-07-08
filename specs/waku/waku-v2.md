@@ -54,7 +54,7 @@ map](https://vac.dev/waku-v2-plan).
    environments, where resources or the environment is restricted in some
    fashion. E.g.:
 
-- limited bandwidth, cpu, memory, disk, battery, etc
+- limited bandwidth, CPU, memory, disk, battery, etc
 - not being publicly connectable
 - only being intermittently connected; mostly-offline
 
