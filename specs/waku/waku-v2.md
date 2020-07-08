@@ -134,17 +134,37 @@ message Message {
 }
 ```
 
-WakuSub does not currently use the `ControlMessage` defined in GossipSub. However, later versions will add likely add this capability.
+WakuSub does not currently use the `ControlMessage` defined in GossipSub.
+However, later versions will add likely add this capability.
 
 `TopicDescriptor` as defined in the PubSub interface spec is not currently used.
+
+### Message
+
+The `from` field MAY indicate which peer is publishing the message.
+
+The `data` field SHOULD be filled out with whatever payload is being sent. Encryption of this field is done at a separate layer.
+
+The `seqno` field MAY be used to provide a linearly increasing number. See PubSub spec for more details.
+
+The `topicIDs` field MUST contain the topics that a message is being published on.
+
+The `signature` field MAY contain the signature of the message, thus providing authentication of the message. See PubSub spec for more details.
+
+The `key` field MAY be present and relates to signing. See PubSub spec for more details.
+
+TODO: Don't quite understand this scenario, to clarify. Wouldn't it always be in `from`?
+> The key field contains the signing key when it cannot be inlined in the source peer ID. When present, it must match the peer ID.
+
+### SubOpts
+
+TODO
 
 ### Historical message support
 
 TODO(Dean): Fill out this section with historical message API.
 
-### Options used
-
-*NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as the data field for encryption, etc.*
+- Add issue for this in specs repo
 
 ## Changelog
 
