@@ -148,7 +148,10 @@ TODO(Dean): Fill out this section with historical message API.
 
 ## Changelog
 
-TODO
+TODO(Oskar): Update changelog once we are in draft, which is when
+implementation matches spec
+
+Intial draft version. Released []()
 
 ## Copyright
 
