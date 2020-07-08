@@ -44,6 +44,7 @@ Ethereum
 extensibility
 GCM
 github
+GossipSub
 growable
 hasherror
 html
@@ -93,6 +94,7 @@ PoW
 proto
 protobuf
 PSS
+PubSub
 pyspelling
 qNAN
 remoteHash
@@ -113,6 +115,7 @@ seqid
 Sieka
 sNAN
 suboptimal
+SubOpts
 subprotocol
 subprotocols
 TBD
@@ -135,6 +138,7 @@ vacp
 vacp2p
 Vp
 waku
+WakuSub
 WakuWhisper
 wms
 wns
