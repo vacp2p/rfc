@@ -170,14 +170,14 @@ NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
 TODO(Dean): Fill out this section with historical message API.
 
-- Add issue for this in specs repo
+- Add issue for this in specs repository
 
 ## Changelog
 
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
 
-Intial draft version. Released []()
+Initial draft version. Released []()
 
 ## Copyright
 

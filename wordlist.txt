@@ -19,6 +19,7 @@ boolean
 Briar
 BSP
 cas
+changelog
 Changelog
 COSS
 CPU
@@ -53,6 +54,7 @@ html
 http
 https
 im
+inlined
 invariants
 ip
 IPs
