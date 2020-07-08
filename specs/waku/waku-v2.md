@@ -105,17 +105,25 @@ TODO Detail this in a separate spec
 
 ## Wire Specification
 
-We are using protobuf RPC messages between peers. Here's what a message looks
-like, as defined in the PubSub interface.
+We are using protobuf RPC messages between peers. Here's what the protobuf messages looks like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
+In this section we specify two things:
+1) How WakuSub is using these messages.
+2) Additional message types.
 
-*NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In
-cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as
-the data field for encryption, etc.*
-
-### Messages
+### Protobuf
 
 ```
+message RPC {
+	repeated SubOpts subscriptions = 1;
+	repeated Message publish = 2;
+
+	message SubOpts {
+		optional bool subscribe = 1;
+		optional string topicid = 2;
+	}
+}
+
 message Message {
 	optional string from = 1;
 	optional bytes data = 2;
@@ -126,11 +134,17 @@ message Message {
 }
 ```
 
-TODO Detail options and what's in data, additional methods, etc
+WakuSub does not currently use the `ControlMessage` defined in GossipSub. However, later versions will add likely add this capability.
 
-### SubOpts
+`TopicDescriptor` as defined in the PubSub interface spec is not currently used.
 
-TODO
+### Historical message support
+
+TODO(Dean): Fill out this section with historical message API.
+
+### Options used
+
+*NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as the data field for encryption, etc.*
 
 ## Changelog
 
