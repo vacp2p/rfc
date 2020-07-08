@@ -158,7 +158,13 @@ TODO: Don't quite understand this scenario, to clarify. Wouldn't it always be in
 
 ### SubOpts
 
-TODO
+To do topic subscription management, we MAY send updates to our peers. If we do so, then:
+
+The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
+
+The `topicid` field MUST contain the topic.
+
+NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
 ### Historical message support
 
