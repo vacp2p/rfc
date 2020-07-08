@@ -27,9 +27,19 @@ authors: Oskar Thorén <oskar@status.im>
 
 ## Abstract
 
-Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices. It implements PubSub over libp2p and adds capabilities on top of it. These capabilities are: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to contribute, and (iii) bandwidth preservation for light nodes. This makes it ideal for running a p2p protocol on mobile.
+Waku is a privacy-preserving peer-to-peer messaging protocol for resource
+restricted devices. It implements PubSub over libp2p and adds capabilities on
+top of it. These capabilities are: (i) retrieving historical messages for
+mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to
+contribute, and (iii) bandwidth preservation for light nodes. This makes it
+ideal for running a p2p protocol on mobile.
 
-Historically, it has its roots in [Waku v1](specs.vac.dev/waku/waku.html), which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and has a different API. It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p. See [rough road map](https://vac.dev/waku-v2-plan).
+Historically, it has its roots in [Waku v1](specs.vac.dev/waku/waku.html), which
+stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of
+the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and
+has a different API. It is implemented in an iterative manner where initial
+focus is on porting essential functionality to libp2p. See [rough road
+map](https://vac.dev/waku-v2-plan).
 
 ## Motivation and goals
 
@@ -63,32 +73,45 @@ TODO Right now this is more like a set of components
 
 ### Peer Discovery
 
-WakuSub and PubSub don't provide an peer discovery mechanism. This has to be provided for by the environment.
+WakuSub and PubSub don't provide an peer discovery mechanism. This has to be
+provided for by the environment.
 
 ### PubSub interface
 
-Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
+Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
+for libp2p (r2,
+2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for
+more details.
 
 ### Protocol Identifier
 
-The current [protocol identifier](https://docs.libp2p.io/concepts/protocols/) is: `/wakusub/2.0.0-alpha1`.
+The current [protocol identifier](https://docs.libp2p.io/concepts/protocols/)
+is: `/wakusub/2.0.0-alpha1`.
 
 ### FloodSub
 
-WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md) and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
+WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
+support [GossipSub
+v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+and [GossipSub
+1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
 
 ### Bridge mode
 
-To maintain compatibility with Waku v1, a bridge mode can be achieved. See separate spec.
+To maintain compatibility with Waku v1, a bridge mode can be achieved. See
+separate spec.
 
 TODO Detail this in a separate spec
 
 ## Wire Specification
 
-We are using protobuf RPC messages between peers. Here's what a message looks like, as defined in the PubSub interface.
+We are using protobuf RPC messages between peers. Here's what a message looks
+like, as defined in the PubSub interface.
 
 
-*NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as the data field for encryption, etc.*
+*NOTE: Should contain protobuf definitions that cover essentials of Waku v1. In
+cases where it doesn't cover, we can defer to siblings/child specs, e.g. such as
+the data field for encryption, etc.*
 
 ### Messages
 
@@ -115,17 +138,21 @@ TODO
 
 ## Copyright
 
-Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+Copyright and related rights waived via
+[CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 ## References
 
 1. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
-2. [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
+2. [PubSub interface for libp2p (r2,
+   2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
 
-3. [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+3. [GossipSub
+   v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
 
-4. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
+4. [GossipSub
+   v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
 5. [Waku v1 spec](specs.vac.dev/waku/waku.html)
 
