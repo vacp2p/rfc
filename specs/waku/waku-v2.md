@@ -168,6 +168,35 @@ NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
 ### Historical message support
 
+```protobuf
+message Cursor {
+  bytes before = 1;
+  bytes after = 2;
+}
+
+message Query {
+  int32 from = 1;
+  int32 to = 2;
+  bytes bloom = 3;
+  int32 limit = 4;
+  repeated bytes topics = 5;
+  Cursor cursor = 6;
+}
+
+message Envelope {
+  int32 expiry = 1;
+  int32 ttl = 2;
+  bytes nonce = 3;
+  bytes topic = 4;
+  bytes data = 5;
+}
+
+message Response {
+  repeated Envelope envelopes = 1;
+  Cursor cursor = 2;
+}
+```
+
 TODO(Dean): Fill out this section with historical message API.
 
 - Add issue for this in specs repository
