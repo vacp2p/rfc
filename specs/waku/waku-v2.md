@@ -47,7 +47,7 @@ map](https://vac.dev/waku-v2-plan).
    protocol to communicate between different subsystems or different nodes. This
    messaging can be human-to-human or machine-to-machine or a mix.
 
-2. **Peer-to-peer.**These applications sometimes have requirements that make
+2. **Peer-to-peer.** These applications sometimes have requirements that make
    them suitable for peer-to-peer solutions.
 
 3. **Resource restricted**.These applications often run in constrained
