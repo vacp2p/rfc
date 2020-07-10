@@ -138,6 +138,7 @@ ttl
 uint
 underspecified
 unencrypted
+unsynchronized
 upgradability
 UX
 vac
