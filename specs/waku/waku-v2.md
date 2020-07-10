@@ -91,10 +91,8 @@ is: `/wakusub/2.0.0-alpha1`.
 ### FloodSub
 
 WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
-support [GossipSub
-v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
-and [GossipSub
-1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
+support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
 
 ### Bridge mode
 
