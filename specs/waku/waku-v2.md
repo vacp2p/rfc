@@ -175,7 +175,7 @@ TODO(Dean): Fill out this section with historical message API.
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
 
-Initial draft version. Released []()
+Initial raw version. Released []()
 
 ## Copyright
 
