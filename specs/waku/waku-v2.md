@@ -79,8 +79,8 @@ provided for by the environment.
 ### PubSub interface
 
 Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
-for libp2p (r2,
-2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for
+for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
+for
 more details.
 
 ### Protocol Identifier
