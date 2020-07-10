@@ -47,7 +47,7 @@ map](https://vac.dev/waku-v2-plan).
    protocol to communicate between different subsystems or different nodes. This
    messaging can be human-to-human or machine-to-machine or a mix.
 
-2. **Peer-to-peer.**These applications sometimes have requirements that make
+2. **Peer-to-peer.** These applications sometimes have requirements that make
    them suitable for peer-to-peer solutions.
 
 3. **Resource restricted**.These applications often run in constrained
@@ -79,8 +79,8 @@ provided for by the environment.
 ### PubSub interface
 
 Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
-for libp2p (r2,
-2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for
+for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
+for
 more details.
 
 ### Protocol Identifier
@@ -91,10 +91,8 @@ is: `/wakusub/2.0.0-alpha1`.
 ### FloodSub
 
 WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
-support [GossipSub
-v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
-and [GossipSub
-1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
+support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
 
 ### Bridge mode
 
@@ -206,7 +204,7 @@ TODO(Dean): Fill out this section with historical message API.
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
 
-Initial draft version. Released []()
+Initial raw version. Released []()
 
 ## Copyright
 
