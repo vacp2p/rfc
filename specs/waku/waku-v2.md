@@ -111,7 +111,7 @@ In this section we specify two things:
 
 ### Protobuf
 
-```
+```protobuf
 message RPC {
 	repeated SubOpts subscriptions = 1;
 	repeated Message publish = 2;
