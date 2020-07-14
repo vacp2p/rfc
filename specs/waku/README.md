@@ -5,3 +5,4 @@
  - [envelope data format](./envelope-data-format.md) - [waku](./waku.md) envelope data field specification.
  - [mailserver](./mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku.md) envelopes on demand.
 
+  -[waku/2](./waku-v2.md) specs for `waku/2` version, current raw alpha version (WIP)
