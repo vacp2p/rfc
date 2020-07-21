@@ -180,16 +180,12 @@ message Query {
   Cursor cursor = 5;
 }
 
-message Envelope {
-  int32 expiry = 1;
-  int32 ttl = 2;
-  bytes nonce = 3;
-  bytes topic = 4;
-  bytes data = 5;
-}
+// So we need to think about either using `Message` or 
+// having just byte encoded messages and delegating duties
+// to that upwards.
 
 message Response {
-  repeated Envelope envelopes = 1;
+  repeated Message messages = 1;
   Cursor cursor = 2;
 }
 ```
