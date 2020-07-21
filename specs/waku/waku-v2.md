@@ -175,10 +175,9 @@ message Cursor {
 message Query {
   int32 from = 1;
   int32 to = 2;
-  bytes bloom = 3;
-  int32 limit = 4;
-  repeated bytes topics = 5;
-  Cursor cursor = 6;
+  int32 limit = 3;
+  repeated bytes topics = 4;
+  Cursor cursor = 5;
 }
 
 message Envelope {
