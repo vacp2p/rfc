@@ -115,11 +115,16 @@ In this section we specify two things:
 message RPC {
 	repeated SubOpts subscriptions = 1;
 	repeated Message publish = 2;
+    repeated ContentFilter contentFilter = 3;
 
 	message SubOpts {
 		optional bool subscribe = 1;
 		optional string topicid = 2;
 	}
+
+    message ContentFilter {
+    optional string subtopic = 1;
+    }
 }
 
 message Message {
@@ -129,6 +134,7 @@ message Message {
 	repeated string topicIDs = 4;
 	optional bytes signature = 5;
 	optional bytes key = 6;
+    optional string contentTopic = 7;
 }
 ```
 
@@ -136,6 +142,11 @@ WakuSub does not currently use the `ControlMessage` defined in GossipSub.
 However, later versions will add likely add this capability.
 
 `TopicDescriptor` as defined in the PubSub interface spec is not currently used.
+
+### RPC
+
+These are messages sent to directly connected peers. These SHOULD NOT be
+gossiped. See section below on how the fields work.
 
 ### Message
 
@@ -163,6 +174,22 @@ The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 mean
 The `topicid` field MUST contain the topic.
 
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
+
+### ContentFilter
+
+Content filter is a way to do [message-based
+filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
+Currently the only content filter being applied is on `subtopic`. This
+corresponds to topics in Waku v1.
+
+A node that only sets this field but doesn't subscribe to any topic SHOULD only
+get notified when the content subtopic matches. A content subtopic matches when
+a message `contentTopic` is the same. This means such a node acts as a light node.
+
+A node that receives this RPC SHOULD apply this content filter before relaying.
+Since such a node is doing extra work for a light node, it MAY also account for
+usage and be selective in how much service it provides. This mechanism is
+currently planned but underspecified.
 
 ### Historical message support
 
@@ -200,3 +227,5 @@ Copyright and related rights waived via
 6. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
 7. [Waku v2 plan](https://vac.dev/waku-v2-plan)
+
+8. [Message Filtering (Wikipedia)](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering)
