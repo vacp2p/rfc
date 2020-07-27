@@ -123,7 +123,7 @@ message RPC {
 	}
 
     message ContentFilter {
-    optional string subtopic = 1;
+      optional string contentTopic = 1;
     }
 }
 
@@ -179,7 +179,7 @@ NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
 Content filter is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `subtopic`. This
+Currently the only content filter being applied is on `contentTopic`. This
 corresponds to topics in Waku v1.
 
 A node that only sets this field but doesn't subscribe to any topic SHOULD only
