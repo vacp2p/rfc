@@ -113,28 +113,28 @@ In this section we specify two things:
 
 ```protobuf
 message RPC {
-	repeated SubOpts subscriptions = 1;
-	repeated Message publish = 2;
-    repeated ContentFilter contentFilter = 3;
+  repeated SubOpts subscriptions = 1;
+  repeated Message publish = 2;
+  repeated ContentFilter contentFilter = 3;
 
-	message SubOpts {
-		optional bool subscribe = 1;
-		optional string topicid = 2;
-	}
+  message SubOpts {
+    optional bool subscribe = 1;
+    optional string topicid = 2;
+  }
 
-    message ContentFilter {
-      optional string contentTopic = 1;
-    }
+  message ContentFilter {
+    optional string contentTopic = 1;
+  }
 }
 
 message Message {
-	optional string from = 1;
-	optional bytes data = 2;
-	optional bytes seqno = 3;
-	repeated string topicIDs = 4;
-	optional bytes signature = 5;
-	optional bytes key = 6;
-    optional string contentTopic = 7;
+  optional string from = 1;
+  optional bytes data = 2;
+  optional bytes seqno = 3;
+  repeated string topicIDs = 4;
+  optional bytes signature = 5;
+  optional bytes key = 6;
+  optional string contentTopic = 7;
 }
 ```
 
