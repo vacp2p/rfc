@@ -156,7 +156,7 @@ However, later versions will add likely add this capability.
 
 ### RPC
 
-These are messages sent to directly connected peers. These SHOULD NOT be
+These are messages sent to directly connected peers. They SHOULD NOT be
 gossiped. See section below on how the fields work.
 
 TODO Give brief summary of each type here
