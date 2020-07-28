@@ -23,6 +23,11 @@ Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip
  - [mailserver](./specs/waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./specs/waku/waku.md) envelopes on demand.
  - [rpc api](./specs/waku/waku-rpc-api.md) - The RPC API for interacting with a Waku node.
 
+Waku v2 is in early development. Here you can read more about the [plan for
+it](https://vac.dev/waku-v2-plan). Here's the current raw spec:
+
+- [waku v2](https://specs.vac.dev/specs/waku/waku-v2.html)
+
 ## Style guide
 
 Sequence diagrams are generated using [Mscgen](http://www.mcternan.me.uk/mscgen/) like this: `mscgen -T png -i input.msc -o output.png`. Both the source and generated image should be in source control. For ease of readability, the generated image is embedded inside the main spec document.

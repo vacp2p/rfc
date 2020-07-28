@@ -204,6 +204,22 @@ Since such a node is doing extra work for a light node, it MAY also account for
 usage and be selective in how much service it provides. This mechanism is
 currently planned but underspecified.
 
+### Historical message support
+
+Content filter is a way to do [message-based
+filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
+Currently the only content filter being applied is on `contentTopic`. This
+corresponds to topics in Waku v1.
+
+A node that only sets this field but doesn't subscribe to any topic SHOULD only
+get notified when the content subtopic matches. A content subtopic matches when
+a message `contentTopic` is the same. This means such a node acts as a light node.
+
+A node that receives this RPC SHOULD apply this content filter before relaying.
+Since such a node is doing extra work for a light node, it MAY also account for
+usage and be selective in how much service it provides. This mechanism is
+currently planned but underspecified.
+
 ### HistoryQuery
 
 RPC call to query historical messages.
