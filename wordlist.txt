@@ -53,6 +53,10 @@ github
 GossipSub
 growable
 hasherror
+historyQuery
+HistoryQuery
+historyResponse
+HistoryResponse
 html
 http
 https

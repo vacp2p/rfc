@@ -116,6 +116,8 @@ message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
   repeated ContentFilter contentFilter = 3;
+  repeated HistoryQuery historyQuery = 4;
+  repeated HistoryResponse historyResponse = 5;
 
   message SubOpts {
     optional bool subscribe = 1;
@@ -136,6 +138,15 @@ message Message {
   optional bytes key = 6;
   optional string contentTopic = 7;
 }
+
+message HistoryQuery {
+  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
+}
+
+message HistoryResponse {
+  // TODO Include Messages, cursor, etc
+}
+
 ```
 
 WakuSub does not currently use the `ControlMessage` defined in GossipSub.
@@ -147,6 +158,8 @@ However, later versions will add likely add this capability.
 
 These are messages sent to directly connected peers. They SHOULD NOT be
 gossiped. See section below on how the fields work.
+
+TODO Give brief summary of each type here
 
 ### Message
 
@@ -193,9 +206,31 @@ currently planned but underspecified.
 
 ### Historical message support
 
-TODO(Dean): Fill out this section with historical message API.
+Content filter is a way to do [message-based
+filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
+Currently the only content filter being applied is on `contentTopic`. This
+corresponds to topics in Waku v1.
 
-- Add issue for this in specs repository
+A node that only sets this field but doesn't subscribe to any topic SHOULD only
+get notified when the content subtopic matches. A content subtopic matches when
+a message `contentTopic` is the same. This means such a node acts as a light node.
+
+A node that receives this RPC SHOULD apply this content filter before relaying.
+Since such a node is doing extra work for a light node, it MAY also account for
+usage and be selective in how much service it provides. This mechanism is
+currently planned but underspecified.
+
+### HistoryQuery
+
+RPC call to query historical messages.
+
+TODO To be specified in more detail
+
+### HistoryResponse
+
+RPC call to respond to a HistoryQuery call.
+
+TODO To be specified in more detail
 
 ## Changelog
 
