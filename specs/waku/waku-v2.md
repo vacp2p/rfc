@@ -77,7 +77,7 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 
 1. `/vac/waku/relay/2.0.0-alpha2`
 2. `/vac/waku/store/2.0.0-alpha2`
-3. `/vac/waku/filter/2.0.0-alpha`
+3. `/vac/waku/filter/2.0.0-alpha2`
 
 TODO: Protocol identifiers are subject to change, e.g. for request-reply
 
