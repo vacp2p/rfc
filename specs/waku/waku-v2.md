@@ -127,8 +127,6 @@ In this section we specify two things how WakuSub is using these messages.
 message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
-  repeated HistoryQuery historyQuery = 4;
-  repeated HistoryResponse historyResponse = 5;
 
   message SubOpts {
     optional bool subscribe = 1;
@@ -144,15 +142,6 @@ message Message {
   optional bytes key = 6;
   optional string contentTopic = 7;
 }
-
-message HistoryQuery {
-  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
-}
-
-message HistoryResponse {
-  // TODO Include Messages, cursor, etc
-}
-
 ```
 
 WakuSub does not currently use the `ControlMessage` defined in GossipSub.
@@ -194,34 +183,6 @@ The `topicid` field MUST contain the topic.
 
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
-### Historical message support
-
-Content filter is a way to do [message-based
-filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `contentTopic`. This
-corresponds to topics in Waku v1.
-
-A node that only sets this field but doesn't subscribe to any topic SHOULD only
-get notified when the content subtopic matches. A content subtopic matches when
-a message `contentTopic` is the same. This means such a node acts as a light node.
-
-A node that receives this RPC SHOULD apply this content filter before relaying.
-Since such a node is doing extra work for a light node, it MAY also account for
-usage and be selective in how much service it provides. This mechanism is
-currently planned but underspecified.
-
-### HistoryQuery
-
-RPC call to query historical messages.
-
-TODO To be specified in more detail
-
-### HistoryResponse
-
-RPC call to respond to a HistoryQuery call.
-
-TODO To be specified in more detail
-
 ## Discovery domain
 
 TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167
@@ -232,11 +193,40 @@ This consists of two main protocols. They are used in order to get Waku to run
 in resource restricted environments, such as low bandwidth or being mostly
 offline.
 
-### Historical storage and query
+### Historical message support
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha2`
 
-TODO
+TODO To be elaborated on
+
+#### Protobuf
+
+```protobuf
+message RPC {
+  repeated HistoryQuery historyQuery = 4;
+  repeated HistoryResponse historyResponse = 5;
+}
+
+message HistoryQuery {
+  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
+}
+
+message HistoryResponse {
+  // TODO Include Messages, cursor, etc
+}
+```
+
+##### HistoryQuery
+
+RPC call to query historical messages.
+
+TODO To be specified in more detail
+
+##### HistoryResponse
+
+RPC call to respond to a HistoryQuery call.
+
+TODO To be specified in more detail
 
 ### Content filtering
 
@@ -258,10 +248,10 @@ currently planned but underspecified.
 
 #### Protobuf
 
-NOTE: previously in RPC messages
-
 ```protobuf
+message RPC {
   repeated ContentFilter contentFilter = 3;
+}
 
   message ContentFilter {
     optional string contentTopic = 1;
@@ -270,7 +260,6 @@ NOTE: previously in RPC messages
 ```
 
 
-## Changelog
 
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
