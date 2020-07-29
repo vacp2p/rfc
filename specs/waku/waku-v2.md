@@ -107,7 +107,7 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 
 1. `/vac/waku/relay/2.0.0-alpha2`
 2. `/vac/waku/store/2.0.0-alpha2`
-3. `/vac/waku/filter/2.0.0-alpha2**
+3. `/vac/waku/filter/2.0.0-alpha`
 
 TODO: Protocol identifiers are subject to change, e.g. for request-reply
 
@@ -127,7 +127,6 @@ In this section we specify two things how WakuSub is using these messages.
 message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
-  repeated ContentFilter contentFilter = 3;
   repeated HistoryQuery historyQuery = 4;
   repeated HistoryResponse historyResponse = 5;
 
@@ -135,11 +134,6 @@ message RPC {
     optional bool subscribe = 1;
     optional string topicid = 2;
   }
-
-  message ContentFilter {
-    optional string contentTopic = 1;
-  }
-}
 
 message Message {
   optional string from = 1;
@@ -200,22 +194,6 @@ The `topicid` field MUST contain the topic.
 
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
-### ContentFilter
-
-Content filter is a way to do [message-based
-filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `contentTopic`. This
-corresponds to topics in Waku v1.
-
-A node that only sets this field but doesn't subscribe to any topic SHOULD only
-get notified when the content subtopic matches. A content subtopic matches when
-a message `contentTopic` is the same. This means such a node acts as a light node.
-
-A node that receives this RPC SHOULD apply this content filter before relaying.
-Since such a node is doing extra work for a light node, it MAY also account for
-usage and be selective in how much service it provides. This mechanism is
-currently planned but underspecified.
-
 ### Historical message support
 
 Content filter is a way to do [message-based
@@ -258,9 +236,39 @@ offline.
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha2`
 
-### Filtering of content messages
+TODO
+
+### Content filtering
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-alpha2`
+
+Content filter is a way to do [message-based
+filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
+Currently the only content filter being applied is on `contentTopic`. This
+corresponds to topics in Waku v1.
+
+A node that only sets this field but doesn't subscribe to any topic SHOULD only
+get notified when the content subtopic matches. A content subtopic matches when
+a message `contentTopic` is the same. This means such a node acts as a light node.
+
+A node that receives this RPC SHOULD apply this content filter before relaying.
+Since such a node is doing extra work for a light node, it MAY also account for
+usage and be selective in how much service it provides. This mechanism is
+currently planned but underspecified.
+
+#### Protobuf
+
+NOTE: previously in RPC messages
+
+```protobuf
+  repeated ContentFilter contentFilter = 3;
+
+  message ContentFilter {
+    optional string contentTopic = 1;
+  }
+}
+```
+
 
 ## Changelog
 
