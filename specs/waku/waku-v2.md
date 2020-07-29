@@ -1,31 +1,34 @@
 ---
 title: Waku
-version: 2.0.0-alpha1
+version: 2.0.0-alpha2
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
 
-## Table of Contents
+# Table of Contents
 
 - [Abstract](#abstract)
 - [Motivation and goals](#motivation-and-goals)
-- [Definitions](#definitions)
-- [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
-  * [Peer Discovery](#peer-discovery)
-  * [PubSub interface](#pubsub-interface)
-  * [Protocol Identifier](#protocol-identifier)
-  * [FloodSub](#floodsub)
-  * [Bridge mode](#bridge-mode)
-- [Wire Specification](#wire-specification)
-  * [Protobuf](#protobuf)
-  * [Message](#message)
-  * [SubOpts](#subopts)
-  * [Historical message support](#historical-message-support)
-- [Changelog](#changelog)
+- [Network interaction domains](#network-interaction-domains)
+    + [Protocol Identifiers](#protocol-identifiers)
+  * [Gossip domain](#gossip-domain)
+    + [Wire Specification](#wire-specification)
+    + [Protobuf](#protobuf)
+    + [RPC](#rpc)
+    + [Message](#message)
+    + [SubOpts](#subopts)
+  * [Discovery domain](#discovery-domain)
+  * [Request/reply domain](#request-reply-domain)
+    + [Historical message support](#historical-message-support)
+      - [Protobuf](#protobuf-1)
+        * [HistoryQuery](#historyquery)
+        * [HistoryResponse](#historyresponse)
+    + [Content filtering](#content-filtering)
+      - [Protobuf](#protobuf-2)
 - [Copyright](#copyright)
 - [References](#references)
 
-## Abstract
+# Abstract
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource
 restricted devices. It implements PubSub over libp2p and adds capabilities on
@@ -41,7 +44,7 @@ has a different API. It is implemented in an iterative manner where initial
 focus is on porting essential functionality to libp2p. See [rough road
 map](https://vac.dev/waku-v2-plan).
 
-## Motivation and goals
+# Motivation and goals
 
 1. **Generalized messaging.** Many applications requires some form of messaging
    protocol to communicate between different subsystems or different nodes. This
@@ -63,51 +66,30 @@ map](https://vac.dev/waku-v2-plan).
 
 Waku provides a solution that satisfies these goals in a reasonable matter.
 
-## Definitions
+# Network interaction domains
 
-TODO
+While Waku is best though of as a single cohesive thing, there are three network
+interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 
-## Underlying Transports and Prerequisites
+### Protocol Identifiers
 
-TODO Right now this is more like a set of components
+The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
-### Peer Discovery
+1. `/vac/waku/relay/2.0.0-alpha2`
+2. `/vac/waku/store/2.0.0-alpha2`
+3. `/vac/waku/filter/2.0.0-alpha2`
 
-WakuSub and PubSub don't provide an peer discovery mechanism. This has to be
-provided for by the environment.
+TODO: Protocol identifiers are subject to change, e.g. for request-reply
 
-### PubSub interface
+## Gossip domain
 
-Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
-for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
-for
-more details.
+**Protocol identifier***: `/vac/waku/relay/2.0.0-alpha2`
 
-### Protocol Identifier
-
-The current [protocol identifier](https://docs.libp2p.io/concepts/protocols/)
-is: `/wakusub/2.0.0-alpha1`.
-
-### FloodSub
-
-WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
-support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
-and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
-
-### Bridge mode
-
-To maintain compatibility with Waku v1, a bridge mode can be achieved. See
-separate spec.
-
-TODO Detail this in a separate spec
-
-## Wire Specification
+### Wire Specification
 
 We are using protobuf RPC messages between peers. Here's what the protobuf messages looks like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
-In this section we specify two things:
-1) How WakuSub is using these messages.
-2) Additional message types.
+In this section we specify two things how WakuSub is using these messages.
 
 ### Protobuf
 
@@ -115,19 +97,11 @@ In this section we specify two things:
 message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
-  repeated ContentFilter contentFilter = 3;
-  repeated HistoryQuery historyQuery = 4;
-  repeated HistoryResponse historyResponse = 5;
 
   message SubOpts {
     optional bool subscribe = 1;
     optional string topicid = 2;
   }
-
-  message ContentFilter {
-    optional string contentTopic = 1;
-  }
-}
 
 message Message {
   optional string from = 1;
@@ -138,15 +112,6 @@ message Message {
   optional bytes key = 6;
   optional string contentTopic = 7;
 }
-
-message HistoryQuery {
-  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
-}
-
-message HistoryResponse {
-  // TODO Include Messages, cursor, etc
-}
-
 ```
 
 WakuSub does not currently use the `ControlMessage` defined in GossipSub.
@@ -188,63 +153,93 @@ The `topicid` field MUST contain the topic.
 
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
-### ContentFilter
+## Discovery domain
 
-Content filter is a way to do [message-based
-filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `contentTopic`. This
-corresponds to topics in Waku v1.
+TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167
 
-A node that only sets this field but doesn't subscribe to any topic SHOULD only
-get notified when the content subtopic matches. A content subtopic matches when
-a message `contentTopic` is the same. This means such a node acts as a light node.
+## Request/reply domain
 
-A node that receives this RPC SHOULD apply this content filter before relaying.
-Since such a node is doing extra work for a light node, it MAY also account for
-usage and be selective in how much service it provides. This mechanism is
-currently planned but underspecified.
+This consists of two main protocols. They are used in order to get Waku to run
+in resource restricted environments, such as low bandwidth or being mostly
+offline.
 
 ### Historical message support
 
-Content filter is a way to do [message-based
-filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `contentTopic`. This
-corresponds to topics in Waku v1.
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha2`
 
-A node that only sets this field but doesn't subscribe to any topic SHOULD only
-get notified when the content subtopic matches. A content subtopic matches when
-a message `contentTopic` is the same. This means such a node acts as a light node.
+TODO To be elaborated on
 
-A node that receives this RPC SHOULD apply this content filter before relaying.
-Since such a node is doing extra work for a light node, it MAY also account for
-usage and be selective in how much service it provides. This mechanism is
-currently planned but underspecified.
+#### Protobuf
 
-### HistoryQuery
+```protobuf
+message RPC {
+  repeated HistoryQuery historyQuery = 4;
+  repeated HistoryResponse historyResponse = 5;
+}
+
+message HistoryQuery {
+  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
+}
+
+message HistoryResponse {
+  // TODO Include Messages, cursor, etc
+}
+```
+
+##### HistoryQuery
 
 RPC call to query historical messages.
 
 TODO To be specified in more detail
 
-### HistoryResponse
+##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
 
 TODO To be specified in more detail
 
-## Changelog
+### Content filtering
+
+**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha2`
+
+Content filter is a way to do [message-based
+filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
+Currently the only content filter being applied is on `contentTopic`. This
+corresponds to topics in Waku v1.
+
+A node that only sets this field but doesn't subscribe to any topic SHOULD only
+get notified when the content subtopic matches. A content subtopic matches when
+a message `contentTopic` is the same. This means such a node acts as a light node.
+
+A node that receives this RPC SHOULD apply this content filter before relaying.
+Since such a node is doing extra work for a light node, it MAY also account for
+usage and be selective in how much service it provides. This mechanism is
+currently planned but underspecified.
+
+#### Protobuf
+
+```protobuf
+message RPC {
+  repeated ContentFilter contentFilter = 3;
+}
+
+  message ContentFilter {
+    optional string contentTopic = 1;
+  }
+}
+```
 
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
 
 Initial raw version. Released []()
 
-## Copyright
+# Copyright
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-## References
+# References
 
 1. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
@@ -264,3 +259,33 @@ Copyright and related rights waived via
 7. [Waku v2 plan](https://vac.dev/waku-v2-plan)
 
 8. [Message Filtering (Wikipedia)](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering)
+
+<!--
+
+# Underlying transports, etc
+
+## Peer Discovery
+
+WakuSub and PubSub don't provide an peer discovery mechanism. This has to be
+provided for by the environment.
+
+### PubSub interface
+
+Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
+for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
+for
+more details.
+
+### FloodSub
+
+WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
+support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
+
+### Bridge mode
+
+To maintain compatibility with Waku v1, a bridge mode can be achieved. See
+separate spec.
+
+TODO Detail this in a separate spec
+-->

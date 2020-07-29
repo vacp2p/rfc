@@ -112,6 +112,8 @@ qNAN
 remoteHash
 remotelog
 RemoteLog
+req
+Req
 retransmission
 retransmissions
 retransmit
