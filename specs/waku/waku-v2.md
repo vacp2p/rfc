@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha1
+version: 2.0.0-alpha2
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -83,11 +83,6 @@ for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/
 for
 more details.
 
-### Protocol Identifier
-
-The current [protocol identifier](https://docs.libp2p.io/concepts/protocols/)
-is: `/wakusub/2.0.0-alpha1`.
-
 ### FloodSub
 
 WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
@@ -101,13 +96,30 @@ separate spec.
 
 TODO Detail this in a separate spec
 
-## Wire Specification
+## Network interaction domains
+
+While Waku is best though of as a single cohesive thing, there are three network
+interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
+
+### Protocol Identifiers
+
+The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
+
+1. `/vac/waku/relay/2.0.0-alpha2`
+2. `/vac/waku/store/2.0.0-alpha2`
+3. `/vac/waku/filter/2.0.0-alpha2**
+
+TODO: Protocol identifiers are subject to change, e.g. for request-reply
+
+## Gossip domain
+
+**Protocol identifier***: `/vac/waku/relay/2.0.0-alpha2`
+
+### Wire Specification
 
 We are using protobuf RPC messages between peers. Here's what the protobuf messages looks like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
-In this section we specify two things:
-1) How WakuSub is using these messages.
-2) Additional message types.
+In this section we specify two things how WakuSub is using these messages.
 
 ### Protobuf
 
@@ -231,6 +243,24 @@ TODO To be specified in more detail
 RPC call to respond to a HistoryQuery call.
 
 TODO To be specified in more detail
+
+## Discovery domain
+
+TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167
+
+## Request/reply domain
+
+This consists of two main protocols. They are used in order to get Waku to run
+in resource restricted environments, such as low bandwidth or being mostly
+offline.
+
+### Historical storage and query
+
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha2`
+
+### Filtering of content messages
+
+**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha2`
 
 ## Changelog
 
