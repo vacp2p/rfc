@@ -5,37 +5,30 @@ status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
 
-## Table of Contents
+# Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation and goals](#motivation-and-goals)
-- [Definitions](#definitions)
-- [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
-  * [Peer Discovery](#peer-discovery)
-  * [PubSub interface](#pubsub-interface)
-  * [FloodSub](#floodsub)
-  * [Bridge mode](#bridge-mode)
 - [Network interaction domains](#network-interaction-domains)
-  * [Protocol Identifiers](#protocol-identifiers)
-- [Gossip domain](#gossip-domain)
-  * [Wire Specification](#wire-specification)
-  * [Protobuf](#protobuf)
-  * [RPC](#rpc)
-  * [Message](#message)
-  * [SubOpts](#subopts)
-- [Discovery domain](#discovery-domain)
-- [Request/reply domain](#request-reply-domain)
-  * [Historical message support](#historical-message-support)
-    + [Protobuf](#protobuf-1)
-      - [HistoryQuery](#historyquery)
-      - [HistoryResponse](#historyresponse)
-  * [Content filtering](#content-filtering)
-    + [Protobuf](#protobuf-2)
+    + [Protocol Identifiers](#protocol-identifiers)
+  * [Gossip domain](#gossip-domain)
+    + [Wire Specification](#wire-specification)
+    + [Protobuf](#protobuf)
+    + [RPC](#rpc)
+    + [Message](#message)
+    + [SubOpts](#subopts)
+  * [Discovery domain](#discovery-domain)
+  * [Request/reply domain](#request-reply-domain)
+    + [Historical message support](#historical-message-support)
+      - [Protobuf](#protobuf-1)
+        * [HistoryQuery](#historyquery)
+        * [HistoryResponse](#historyresponse)
+    + [Content filtering](#content-filtering)
+      - [Protobuf](#protobuf-2)
 - [Copyright](#copyright)
 - [References](#references)
 
-## Abstract
+# Abstract
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource
 restricted devices. It implements PubSub over libp2p and adds capabilities on
@@ -51,7 +44,7 @@ has a different API. It is implemented in an iterative manner where initial
 focus is on porting essential functionality to libp2p. See [rough road
 map](https://vac.dev/waku-v2-plan).
 
-## Motivation and goals
+# Motivation and goals
 
 1. **Generalized messaging.** Many applications requires some form of messaging
    protocol to communicate between different subsystems or different nodes. This
@@ -73,40 +66,7 @@ map](https://vac.dev/waku-v2-plan).
 
 Waku provides a solution that satisfies these goals in a reasonable matter.
 
-## Definitions
-
-TODO
-
-## Underlying Transports and Prerequisites
-
-TODO Right now this is more like a set of components
-
-### Peer Discovery
-
-WakuSub and PubSub don't provide an peer discovery mechanism. This has to be
-provided for by the environment.
-
-### PubSub interface
-
-Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
-for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
-for
-more details.
-
-### FloodSub
-
-WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
-support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
-and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
-
-### Bridge mode
-
-To maintain compatibility with Waku v1, a bridge mode can be achieved. See
-separate spec.
-
-TODO Detail this in a separate spec
-
-## Network interaction domains
+# Network interaction domains
 
 While Waku is best though of as a single cohesive thing, there are three network
 interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
@@ -269,19 +229,17 @@ message RPC {
 }
 ```
 
-
-
 TODO(Oskar): Update changelog once we are in draft, which is when
 implementation matches spec
 
 Initial raw version. Released []()
 
-## Copyright
+# Copyright
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-## References
+# References
 
 1. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
@@ -301,3 +259,33 @@ Copyright and related rights waived via
 7. [Waku v2 plan](https://vac.dev/waku-v2-plan)
 
 8. [Message Filtering (Wikipedia)](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering)
+
+<!--
+
+# Underlying transports, etc
+
+## Peer Discovery
+
+WakuSub and PubSub don't provide an peer discovery mechanism. This has to be
+provided for by the environment.
+
+### PubSub interface
+
+Waku v2 is implementing the PubSub interface in Libp2p. See [PubSub interface
+for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md) 
+for
+more details.
+
+### FloodSub
+
+WakuSub is currently a subprotocol of FloodSub. Future versions of WakuSub will
+support [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
+and [GossipSub 1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md).
+
+### Bridge mode
+
+To maintain compatibility with Waku v1, a bridge mode can be achieved. See
+separate spec.
+
+TODO Detail this in a separate spec
+-->
