@@ -190,10 +190,13 @@ message RPC {
 }
 
 message HistoryQuery {
-  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
+  uint64 requestID = 1;
+  repeated string topic = 2;
 }
 
 message HistoryResponse {
+  uint64 requestID = 1;
+  repeated Message messages = 2;
   // TODO Include Messages, cursor, etc
 }
 ```
