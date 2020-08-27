@@ -221,7 +221,7 @@ corresponds to topics in Waku v1.
 
 A node that only sets this field but doesn't subscribe to any topic SHOULD only
 get notified when the content subtopic matches. A content subtopic matches when
-a `Wakumessage` `contentTopic` field is the same. This means such a node acts as a light node.
+a `Wakumessage` `contentTopic` field is the same.
 
 A node that receives this RPC SHOULD apply this content filter before relaying.
 Since such a node is doing extra work for a light node, it MAY also account for
