@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha2
+version: 2.0.0-alpha3
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -110,7 +110,11 @@ message Message {
   repeated string topicIDs = 4;
   optional bytes signature = 5;
   optional bytes key = 6;
-  optional string contentTopic = 7;
+}
+
+message WakuMessage {
+  optional bytes payload = 1;
+  optional string contentTopic = 2;
 }
 ```
 
@@ -130,7 +134,7 @@ TODO Give brief summary of each type here
 
 The `from` field MAY indicate which peer is publishing the message.
 
-The `data` field SHOULD be filled out with whatever payload is being sent. Encryption of this field is done at a separate layer.
+The `data` field SHOULD be filled out with a `WakuMessage`.
 
 The `seqno` field MAY be used to provide a linearly increasing number. See PubSub spec for more details.
 
@@ -153,6 +157,14 @@ The `topicid` field MUST contain the topic.
 
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
+### WakuMessage
+
+A `WakuMessage` SHOULD be in the `data` field of `Message`.
+
+The `payload` field SHOULD contain whatever payload is being sent. Encryption of this field is done at a separate layer.
+
+The `contentTopic` field SHOULD be filled out to allow for content-based filtering (see section below).
+
 ## Discovery domain
 
 TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167
@@ -173,8 +185,8 @@ TODO To be elaborated on
 
 ```protobuf
 message RPC {
-  repeated HistoryQuery historyQuery = 4;
-  repeated HistoryResponse historyResponse = 5;
+  repeated HistoryQuery historyQuery = 1;
+  repeated HistoryResponse historyResponse = 2;
 }
 
 message HistoryQuery {
@@ -209,7 +221,7 @@ corresponds to topics in Waku v1.
 
 A node that only sets this field but doesn't subscribe to any topic SHOULD only
 get notified when the content subtopic matches. A content subtopic matches when
-a message `contentTopic` is the same. This means such a node acts as a light node.
+a `Wakumessage` `contentTopic` field is the same. This means such a node acts as a light node.
 
 A node that receives this RPC SHOULD apply this content filter before relaying.
 Since such a node is doing extra work for a light node, it MAY also account for
@@ -220,7 +232,7 @@ currently planned but underspecified.
 
 ```protobuf
 message RPC {
-  repeated ContentFilter contentFilter = 3;
+  repeated ContentFilter contentFilter = 1;
 }
 
   message ContentFilter {

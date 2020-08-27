@@ -156,6 +156,7 @@ vacp
 vacp2p
 Vp
 waku
+WakuMessage
 WakuSub
 WakuWhisper
 WIP
