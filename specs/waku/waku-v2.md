@@ -209,8 +209,6 @@ RPC call to query historical messages.
 | `uuid` | The current request UUID, used to identify the corresponding response. |
 | `topic` | A list of topics to query. |
 
-TODO To be specified in more detail
-
 ##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
