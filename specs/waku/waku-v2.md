@@ -190,18 +190,12 @@ message RPC {
 }
 
 message HistoryQuery {
-  // Represents the current request UUID, used to identify the corresponding response.
-  string uuid = 1;
-  
-  // A list of topics to query.
+  string uuid = 1;  
   repeated string topic = 2;
 }
 
 message HistoryResponse {
-  // The originating request UUID.
-  string uuid = 1;
-  
-  // The messages found in the queried topics.
+  string uuid = 1;  
   repeated Message messages = 2;
 }
 ```
@@ -210,13 +204,21 @@ message HistoryResponse {
 
 RPC call to query historical messages.
 
+| Field | Description |
+| ----- | ----------- |
+| `uuid` | The current request UUID, used to identify the corresponding response. |
+| `topic` | A list of topics to query. |
+
 TODO To be specified in more detail
 
 ##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
 
-TODO To be specified in more detail
+| Field | Description |
+| ----- | ----------- |
+| `uuid` | The originating request UUID. |
+| `messages` | he messages found in the queried topics. |
 
 ### Content filtering
 
