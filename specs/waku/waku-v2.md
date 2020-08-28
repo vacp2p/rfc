@@ -190,14 +190,19 @@ message RPC {
 }
 
 message HistoryQuery {
+  // Represents the current request ID, used to identify the corresponding response.
   uint64 requestID = 1;
+  
+  // A list of topics to query.
   repeated string topic = 2;
 }
 
 message HistoryResponse {
+  // The originating request ID.
   uint64 requestID = 1;
+  
+  // The messages found in the queried topics.
   repeated Message messages = 2;
-  // TODO Include Messages, cursor, etc
 }
 ```
 
