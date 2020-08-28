@@ -204,19 +204,15 @@ message HistoryResponse {
 
 RPC call to query historical messages.
 
-| Field | Description |
-| ----- | ----------- |
-| `uuid` | The current request UUID, used to identify the corresponding response. |
-| `topic` | A list of topics to query. |
+The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
+The `topic` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
 
-| Field | Description |
-| ----- | ----------- |
-| `uuid` | The originating request UUID. |
-| `messages` | he messages found in the queried topics. |
+The `uuid` field MUST indicate which query is being responded to.
+The `messages` field MUST contain the messages found.
 
 ### Content filtering
 
