@@ -205,6 +205,7 @@ message HistoryResponse {
 RPC call to query historical messages.
 
 The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
+
 The `topic` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
@@ -212,6 +213,7 @@ The `topic` field MUST indicate the list of topics to query.
 RPC call to respond to a HistoryQuery call.
 
 The `uuid` field MUST indicate which query is being responded to.
+
 The `messages` field MUST contain the messages found.
 
 ### Content filtering
