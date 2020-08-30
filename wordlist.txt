@@ -114,6 +114,7 @@ remotelog
 RemoteLog
 req
 Req
+requestID
 retransmission
 retransmissions
 retransmit
@@ -150,6 +151,8 @@ underspecified
 unencrypted
 unsynchronized
 upgradability
+uuid
+UUID
 UX
 vac
 vacp
@@ -164,4 +167,3 @@ wms
 wns
 wordlist
 whitelist
-

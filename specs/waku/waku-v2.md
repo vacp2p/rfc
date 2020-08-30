@@ -190,11 +190,13 @@ message RPC {
 }
 
 message HistoryQuery {
-  // TODO Include time range, topic/contentTopic, limit, cursor, (request-id), etc
+  string uuid = 1;  
+  repeated string topic = 2;
 }
 
 message HistoryResponse {
-  // TODO Include Messages, cursor, etc
+  string uuid = 1;  
+  repeated Message messages = 2;
 }
 ```
 
@@ -202,13 +204,17 @@ message HistoryResponse {
 
 RPC call to query historical messages.
 
-TODO To be specified in more detail
+The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
+
+The `topic` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
 
-TODO To be specified in more detail
+The `uuid` field MUST indicate which query is being responded to.
+
+The `messages` field MUST contain the messages found.
 
 ### Content filtering
 
