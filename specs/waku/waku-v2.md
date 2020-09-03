@@ -282,7 +282,7 @@ message MessagePush {
 
 ##### FilterRequest
 
-A node that sends this RPC with a filter requests requests that the filter node
+A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
 
 The filter matches when content filter and, optionally, a topic is matched.
