@@ -254,7 +254,7 @@ TODO Consider adding a FilterResponse acting as a form of ACK
 
 TODO Consider adding request id
 
-TODO Clarify if Messages or WakuMessages are pushed
+TODO Clarify if Messages or a list of WakuMessage are pushed
 
 TODO Specify unsubscribe mechanism and semantics
 
@@ -306,7 +306,7 @@ protocols where this comes from. This is up to the consumer of the protocol.
 A filter node MUST NOT send a push message for messages that have not been
 requested via a FilterRequest.
 
-If a specific light node isn't connnected to a filter node for some specific
+If a specific light node isn't connected to a filter node for some specific
 period of time (e.g. a TTL), then the filter node MAY choose to not push these
 messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.

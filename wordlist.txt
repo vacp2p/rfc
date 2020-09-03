@@ -47,6 +47,10 @@ enum
 et
 Ethereum
 extensibility
+FilterRequest
+filterRequest
+FilterResponse
+filterResponse
 FloodSub
 GCM
 github
@@ -82,6 +86,8 @@ localHash
 mailserver
 mailservers
 Markou
+messagePush
+MessagePush
 metainformation
 Mey
 mixnet
