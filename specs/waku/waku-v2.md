@@ -252,6 +252,10 @@ TODO Clarify if Messages or a list of WakuMessage are pushed
 
 TODO Specify unsubscribe mechanism and semantics
 
+TODO Investigate if we need a way to communicate (handshake?) that we are a a client - server (full node - light node) or not.
+NOTE I would imagine this is implied from the contentFilter, especially as two nodes can play multiple roles.
+
+
 ```protobuf
 message RPC {
   repeated FilterRequest filterRequest = 1;
@@ -276,6 +280,8 @@ message MessagePush {
 
 ##### FilterRequest
 
+TODO Specify mechanism for telling it won't honor (normal-noservice-spam case)
+
 A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
 
@@ -283,8 +289,9 @@ The filter matches when content filter and, optionally, a topic is matched.
 Content filter is matched when a `WakuMessage` `contentTopic` field is the same.
 
 A filter node SHOULD honor this request, though it MAY choose not to do so. If
-it chooses not to do so it SHOULD tell the light why. For notifying the light
-node a filter node sends a MessagePush message.
+it chooses not to do so it MAY tell the light why. The mechanism for doing this
+is currently not specified. For notifying the light node a filter node sends a
+MessagePush message.
 
 Since such a filter node is doing extra work for a light node, it MAY also
 account for usage and be selective in how much service it provides. This
