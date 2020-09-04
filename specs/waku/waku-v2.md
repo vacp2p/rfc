@@ -238,12 +238,6 @@ pub/sub, it is only used between two nodes in a direct fashion. Unlike the
 Gossip domain, this is meant for light nodes which put a premium on bandwidth.
 No gossiping takes place.
 
-As a technical detail, the [Topic Validation used in libp2p
-PubSub](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation)
-currently doesn't apply to individual nodes. This makes it unsuitable as a form
-of subscribe mechanism, in addition to peer management etc being expensive for
-light nodes.
-
 It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
