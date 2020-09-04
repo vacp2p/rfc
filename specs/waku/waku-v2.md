@@ -226,7 +226,7 @@ filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Messa
 Currently the only content filter being applied is on `contentTopic`. This
 corresponds to topics in Waku v1.
 
-### Rationale
+#### Rationale
 
 Unlike the `store` protocol for historical messages, this protocol allows for
 native lower latency scenarios such as instant messaging. It is thus
