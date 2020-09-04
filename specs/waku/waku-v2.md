@@ -280,7 +280,9 @@ message MessagePush {
 
 ##### FilterRequest
 
-TODO Specify mechanism for telling it won't honor (normal-noservice-spam case)
+TODO Specify mechanism for telling it won't honor (normal-no service-spam case)
+
+TODO Clarify exactly what we mean by connection and TTL
 
 A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
