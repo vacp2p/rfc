@@ -184,11 +184,6 @@ TODO To be elaborated on
 #### Protobuf
 
 ```protobuf
-message RPC {
-  repeated HistoryQuery historyQuery = 1;
-  repeated HistoryResponse historyResponse = 2;
-}
-
 message HistoryQuery {
   string uuid = 1;
   repeated string topic = 2;
@@ -257,24 +252,18 @@ NOTE I would imagine this is implied from the contentFilter, especially as two n
 
 
 ```protobuf
-message RPC {
-  repeated FilterRequest filterRequest = 1;
-  // space for optional FilterResponse
-  repeated MessagePush messagePush = 3;
-}
-
 message FilterRequest {
   // space for optional request id
-  repeated ContentFilter contentFilter = 2;
+  repeated ContentFilter contentFilters = 2;
   optional string topic = 3;
 
   message ContentFilter {
-    optional string contentTopic = 1;
+    optional string contentTopics = 1;
   }
 }
 
 message MessagePush {
-  repeated Message message = 1;
+  repeated Message messages = 1;
 }
 ```
 
