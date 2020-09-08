@@ -186,7 +186,7 @@ TODO To be elaborated on
 ```protobuf
 message HistoryQuery {
   string uuid = 1;
-  repeated string topic = 2;
+  repeated string topics = 2;
 }
 
 message HistoryResponse {
@@ -201,7 +201,7 @@ RPC call to query historical messages.
 
 The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
 
-The `topic` field MUST indicate the list of topics to query.
+The `topics` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
 
