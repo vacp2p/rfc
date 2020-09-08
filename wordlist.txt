@@ -24,7 +24,9 @@ Changelog
 COSS
 ContentFilter
 contentFilter
+contentFilters
 contentTopic
+contentTopics
 CPU
 DAG
 DAGs
