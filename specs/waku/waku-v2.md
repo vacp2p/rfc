@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha3
+version: 2.0.0-alpha4
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -76,8 +76,8 @@ interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
 1. `/vac/waku/relay/2.0.0-alpha2`
-2. `/vac/waku/store/2.0.0-alpha2`
-3. `/vac/waku/filter/2.0.0-alpha2`
+2. `/vac/waku/store/2.0.0-alpha4`
+3. `/vac/waku/filter/2.0.0-alpha4`
 
 TODO: Protocol identifiers are subject to change, e.g. for request-reply
 
@@ -177,21 +177,16 @@ offline.
 
 ### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha2`
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha4`
 
 TODO To be elaborated on
 
 #### Protobuf
 
 ```protobuf
-message RPC {
-  repeated HistoryQuery historyQuery = 1;
-  repeated HistoryResponse historyResponse = 2;
-}
-
 message HistoryQuery {
   string uuid = 1;
-  repeated string topic = 2;
+  repeated string topics = 2;
 }
 
 message HistoryResponse {
@@ -206,7 +201,7 @@ RPC call to query historical messages.
 
 The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
 
-The `topic` field MUST indicate the list of topics to query.
+The `topics` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
 
@@ -219,7 +214,7 @@ The `messages` field MUST contain the messages found.
 
 ### Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha3`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha4`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
@@ -257,24 +252,18 @@ NOTE I would imagine this is implied from the contentFilter, especially as two n
 
 
 ```protobuf
-message RPC {
-  repeated FilterRequest filterRequest = 1;
-  // space for optional FilterResponse
-  repeated MessagePush messagePush = 3;
-}
-
 message FilterRequest {
   // space for optional request id
-  repeated ContentFilter contentFilter = 2;
+  repeated ContentFilter contentFilters = 2;
   optional string topic = 3;
 
   message ContentFilter {
-    optional string contentTopic = 1;
+    optional string contentTopics = 1;
   }
 }
 
 message MessagePush {
-  repeated Message message = 1;
+  repeated Message messages = 1;
 }
 ```
 
