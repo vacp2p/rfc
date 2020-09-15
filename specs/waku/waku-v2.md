@@ -362,6 +362,7 @@ and ttl and do the PoW nonce calculation.
 ### Security Considerations
 As mentioned above, a bridge will be posting new Waku v1 envelopes, which
 requires doing the PoW nonce calculation.
+
 This could be a DoS attack vector, as the PoW calculation will make it more
 expensive to post the message compared to the original publishing on the Waku v2
 network. Low PoW setting will lower this problem, but it is likely that it is
