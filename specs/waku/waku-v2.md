@@ -195,7 +195,7 @@ message HistoryQuery {
 
 message HistoryResponse {
   string uuid = 1;
-  repeated Message messages = 2;
+  repeated WakuMessage messages = 2;
 }
 ```
 
@@ -267,7 +267,7 @@ message FilterRequest {
 }
 
 message MessagePush {
-  repeated Message messages = 1;
+  repeated WakuMessage messages = 1;
 }
 ```
 
