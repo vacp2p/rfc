@@ -80,8 +80,8 @@ interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
 1. `/vac/waku/relay/2.0.0-alpha2`
-2. `/vac/waku/store/2.0.0-alpha4`
-3. `/vac/waku/filter/2.0.0-alpha4`
+2. `/vac/waku/store/2.0.0-alpha5`
+3. `/vac/waku/filter/2.0.0-alpha5`
 
 TODO: Protocol identifiers are subject to change, e.g. for request-reply
 
@@ -181,7 +181,7 @@ offline.
 
 ### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha4`
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
 
 TODO To be elaborated on
 
@@ -195,7 +195,7 @@ message HistoryQuery {
 
 message HistoryResponse {
   string uuid = 1;
-  repeated Message messages = 2;
+  repeated WakuMessage messages = 2;
 }
 ```
 
@@ -218,7 +218,7 @@ The `messages` field MUST contain the messages found.
 
 ### Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha4`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha5`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
@@ -267,7 +267,7 @@ message FilterRequest {
 }
 
 message MessagePush {
-  repeated Message messages = 1;
+  repeated WakuMessage messages = 1;
 }
 ```
 
