@@ -41,6 +41,7 @@ devp
 DevP
 devp2p
 DNS
+DoS
 ECDSA
 Eigenmann
 EIP
