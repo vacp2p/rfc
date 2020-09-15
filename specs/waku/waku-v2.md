@@ -347,7 +347,7 @@ Before this is done, the usual envelope verification still applies:
 * PoW verification
 * Size verification
 
-Bridging SHOULD occur on the `WakuRelay`, but it MAY also be done on other Waku
+Bridging SHOULD occur through the `WakuRelay`, but it MAY also be done on other Waku
 v2 protocols (e.g. `WakuFilter`). The latter is however not advised as it will
 increase the complexity of the bridge and because of the
 [Security Considerations](#security-considerations) explained further below.
