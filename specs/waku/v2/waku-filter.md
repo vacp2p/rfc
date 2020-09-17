@@ -7,7 +7,7 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Table of Contents
 
-TODO Add ToC
+TODO
 
 # Abstract
 
