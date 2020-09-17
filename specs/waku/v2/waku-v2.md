@@ -105,38 +105,7 @@ offline.
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
 
-TODO To be elaborated on
-
-#### Protobuf
-
-```protobuf
-message HistoryQuery {
-  string uuid = 1;
-  repeated string topics = 2;
-}
-
-message HistoryResponse {
-  string uuid = 1;
-  repeated WakuMessage messages = 2;
-}
-```
-
-##### HistoryQuery
-
-RPC call to query historical messages.
-
-The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
-
-The `topics` field MUST indicate the list of topics to query.
-
-##### HistoryResponse
-
-RPC call to respond to a HistoryQuery call.
-
-The `uuid` field MUST indicate which query is being responded to.
-
-The `messages` field MUST contain the messages found.
-
+See `WakuStore` spec.
 
 ### Content filtering
 
