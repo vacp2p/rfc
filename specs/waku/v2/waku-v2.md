@@ -1,7 +1,7 @@
 ---
 title: Waku
-version: 2.0.0-alpha4
-status: Raw
+version: 2.0.0-beta1
+status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
 
@@ -18,8 +18,6 @@ authors: Oskar Thorén <oskar@status.im>
     + [Content filtering](#content-filtering)
 - [Upgradability and Compatibility](#upgradability-and-compatibility)
     * [Compatibility with Waku v1](#compatibility-with-waku-v1)
-      - [Bridge](#bridge)
-      - [Security Considerations](#security-considerations)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -66,27 +64,27 @@ Waku provides a solution that satisfies these goals in a reasonable matter.
 While Waku is best though of as a single cohesive thing, there are three network
 interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 
-## Protocol Identifiers
+## Protocols and identifiers
 
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
-1. `/vac/waku/relay/2.0.0-alpha2`
+1. `/vac/waku/relay/2.0.0-beta1`
 2. `/vac/waku/store/2.0.0-alpha5`
 3. `/vac/waku/filter/2.0.0-alpha5`
 
-TODO: Protocol identifiers are subject to change, e.g. for request-reply
-
-TODO Some are alpha some are beta etc
+These protocols and their semantics are elaborated on in their own specs.
 
 ## Gossip domain
 
-**Protocol identifier***: `/vac/waku/relay/2.0.0-alpha2`
+**Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
 
-See `WakuRelay` spec.
+See [WakuRelay](waku-relay.md) spec for more details.
 
 ## Discovery domain
 
-TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167
+Discovery domain is not yet implemented. Currently static nodes should be used.
+
+<!-- TODO: To document how we use Discovery v5, etc. See https://github.com/vacp2p/specs/issues/167 -->
 
 ## Request/reply domain
 
@@ -94,26 +92,21 @@ This consists of two main protocols. They are used in order to get Waku to run
 in resource restricted environments, such as low bandwidth or being mostly
 offline.
 
-### Historical message support
+### Historical message support (experimental, alpha)
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
 
-See `WakuStore` spec.
+See [WakuStore](waku-store.md) spec for more details.
 
-### Content filtering
+### Content filtering (experimental, alpha)
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-alpha5`
 
-See `WakuFilter` spec.
+See [WakuFilter](waku-filter.md) spec for more details.
 
----
-
-TODO(Oskar): Update changelog once we are in draft, which is when
-implementation matches spec
-
-Initial raw version. Released []()
 
 # Upgradability and Compatibility
+
 ## Compatibility with Waku v1
 
 Waku v2 and Waku v1 are different protocols all together. They use a different
@@ -123,59 +116,14 @@ Compatibility can be achieved only by using a bridge that not only talks both
 devp2p RLPx and libp2p, but that also transfers (partially) the content of a
 packet from one version to the other.
 
-See bridge spec for details on a bridge mode.
+See [bridge spec](waku-bridge.md) for details on a bridge mode.
 
-### Bridge
+## Changelog
 
-A bridge requires supporting both Waku versions:
+### 2.0.0-beta1
 
-* Waku v1 - using devp2p RLPx protocol
-* Waku v2 - using libp2p protocols
+Initial draft version. Released [2020-09-17](TODO)
 
-Packets received on the Waku v1 network SHOULD be published just once on the
-Waku v2 network. More specifically, the bridge SHOULD publish
-this through the Waku Relay (PubSub domain).
-
-Publishing such packet will require the creation of a new `Message` with a
-new `WakuMessage` as data field. The `data` and `topic` field from the Waku v1
-`Envelope` MUST be copied to the `payload` and `contentTopic` fields of the
-`WakuMessage`. Other fields such as nonce, expiry and ttl will be dropped as
-they become obsolete in Waku v2.
-
-Before this is done, the usual envelope verification still applies:
-
-* Expiry & future time verification
-* PoW verification
-* Size verification
-
-Bridging SHOULD occur through the `WakuRelay`, but it MAY also be done on other Waku
-v2 protocols (e.g. `WakuFilter`). The latter is however not advised as it will
-increase the complexity of the bridge and because of the
-[Security Considerations](#security-considerations) explained further below.
-
-Packets received on the Waku v2 network SHOULD be posted just once on the Waku
-v1 network. The Waku v2 `WakuMessage` contains only the `payload` and
-`contentTopic` fields. The bridge MUST create a new Waku v1 `Envelope` and
-copy over the `payload` and `contentFilter` fields to the `data` and `topic`
-fields. Next, before posting on the network, the bridge MUST set a new expiry
-and ttl and do the PoW nonce calculation.
-
-### Security Considerations
-As mentioned above, a bridge will be posting new Waku v1 envelopes, which
-requires doing the PoW nonce calculation.
-
-This could be a DoS attack vector, as the PoW calculation will make it more
-expensive to post the message compared to the original publishing on the Waku v2
-network. Low PoW setting will lower this problem, but it is likely that it is
-still more expensive.
-
-For this reason, bridges SHOULD probably be run independently of other nodes, so
-that a bridge that gets overwhelmed does not disrupt regular Waku v2 to v2
-traffic.
-
-Bridging functionality SHOULD also be carefully implemented so that messages do
-not bounce back and forth between the two networks. The bridge SHOULD properly
-track messages with a seen filter so that no amplification can be achieved here.
 
 # Copyright
 
