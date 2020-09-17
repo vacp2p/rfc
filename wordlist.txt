@@ -168,7 +168,10 @@ vacp
 vacp2p
 Vp
 waku
+WakuFilter
 WakuMessage
+WakuRelay
+WakuStore
 WakuSub
 WakuWhisper
 WIP
