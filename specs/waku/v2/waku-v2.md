@@ -66,7 +66,7 @@ Waku provides a solution that satisfies these goals in a reasonable matter.
 While Waku is best though of as a single cohesive thing, there are three network
 interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 
-### Protocol Identifiers
+## Protocol Identifiers
 
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
@@ -75,6 +75,8 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 3. `/vac/waku/filter/2.0.0-alpha5`
 
 TODO: Protocol identifiers are subject to change, e.g. for request-reply
+
+TODO Some are alpha some are beta etc
 
 ## Gossip domain
 
@@ -104,7 +106,6 @@ See `WakuStore` spec.
 
 See `WakuFilter` spec.
 
-
 ---
 
 TODO(Oskar): Update changelog once we are in draft, which is when
@@ -121,6 +122,8 @@ libp2p. The protocols themselves also differ as does their data format.
 Compatibility can be achieved only by using a bridge that not only talks both
 devp2p RLPx and libp2p, but that also transfers (partially) the content of a
 packet from one version to the other.
+
+See bridge spec for details on a bridge mode.
 
 ### Bridge
 
