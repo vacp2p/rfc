@@ -96,6 +96,12 @@ The `payload` field SHOULD contain whatever payload is being sent. Encryption of
 
 The `contentTopic` field SHOULD be filled out to allow for content-based filtering (see section below).
 
+## Changelog
+
+### 2.0.0-beta1
+
+Initial draft version. Released [2020-09-17](https://github.com/vacp2p/specs/commit/a57dad2cc3d62f9128e21f68719704a0b358768b)
+
 # Copyright
 
 Copyright and related rights waived via
