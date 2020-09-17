@@ -1,7 +1,7 @@
 ---
 title: Waku
-version: 2.0.0-alpha2
-status: Raw
+version: 2.0.0-beta1
+status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
 
@@ -18,9 +18,9 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Abstract
 
-`WakuRelay` is part of the gossip domain for Waku. It is a thin layer on top of FloodSub and/or GossipSub.
+`WakuRelay` is part of the gossip domain for Waku. It is a thin layer on top of GossipSub.
 
-**Protocol identifier***: `/vac/waku/relay/2.0.0-alpha2`
+**Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
 
 ## Wire Specification
 
@@ -65,8 +65,6 @@ However, later versions will add likely add this capability.
 These are messages sent to directly connected peers. They SHOULD NOT be
 gossiped. See section below on how the fields work.
 
-TODO Give brief summary of each type here
-
 ## Message
 
 The `from` field MAY indicate which peer is publishing the message.
@@ -81,8 +79,6 @@ The `signature` field MAY contain the signature of the message, thus providing a
 
 The `key` field MAY be present and relates to signing. See PubSub spec for more details.
 
-TODO: Don't quite understand this scenario, to clarify. Wouldn't it always be in `from`?
-> The key field contains the signing key when it cannot be inlined in the source peer ID. When present, it must match the peer ID.
 
 ## SubOpts
 
@@ -91,8 +87,6 @@ To do topic subscription management, we MAY send updates to our peers. If we do 
 The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
 
 The `topicid` field MUST contain the topic.
-
-NOTE: This doesn't appear to be documented in PubSub spec, upstream?
 
 ## WakuMessage
 
@@ -121,3 +115,14 @@ Copyright and related rights waived via
 4. [Waku v1 spec](specs.vac.dev/waku/waku.html)
 
 5. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
+
+
+<!--
+TODO: Don't quite understand this scenario [key field], to clarify. Wouldn't it always be in `from`?
+> The key field contains the signing key when it cannot be inlined in the source peer ID. When present, it must match the peer ID. -->
+
+Re topicid:
+NOTE: This doesn't appear to be documented in PubSub spec, upstream?
+
+TODO: Find place for WakuMessage
+-->
