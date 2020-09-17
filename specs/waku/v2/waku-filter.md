@@ -7,13 +7,15 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Table of Contents
 
+TODO Add ToC
+
 # Abstract
+
+Filter spec.
 
 ### Content filtering
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-alpha5`
-
-See `WakuFilter` spec.
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
