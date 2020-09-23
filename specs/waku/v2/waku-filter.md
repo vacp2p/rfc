@@ -68,8 +68,9 @@ message MessagePush {
 }
 
 message FilterRPC {
-  FilterRequest request = 1;
-  MessagePush push = 2;
+  string uuid = 1;
+  FilterRequest request = 2;
+  MessagePush push = 3;
 }
 ```
 
