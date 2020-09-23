@@ -54,6 +54,7 @@ FilterRequest
 filterRequest
 FilterResponse
 filterResponse
+FilterRPC
 FloodSub
 GCM
 github
