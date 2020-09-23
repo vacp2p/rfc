@@ -68,7 +68,7 @@ message MessagePush {
 }
 
 message FilterRPC {
-  string uuid = 1;
+  string request_id = 1;
   FilterRequest request = 2;
   MessagePush push = 3;
 }
@@ -79,6 +79,8 @@ message FilterRPC {
 A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped inside a
 `FilterRPC` this allows the node handler to determine how to handle a message as the Waku
 Filter protocol is not a request response based protocol but instead a push based system.
+
+The `request_id` MUST be a uniquely generated string.
 
 ##### FilterRequest
 
