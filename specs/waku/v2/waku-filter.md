@@ -15,7 +15,7 @@ Filter spec.
 
 ### Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha5`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha6`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
@@ -66,7 +66,18 @@ message FilterRequest {
 message MessagePush {
   repeated WakuMessage messages = 1;
 }
+
+message FilterRPC {
+  FilterRequest request = 1;
+  MessagePush push = 2;
+}
 ```
+
+##### FilterRPC
+
+A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped inside a
+`FilterRPC` this allows the node handler to determine how to handle a message as the Waku
+Filter protocol is not a request response based protocol but instead a push based system.
 
 ##### FilterRequest
 
