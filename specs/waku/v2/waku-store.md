@@ -42,7 +42,7 @@ message HistoryRPC {
 ##### HistoryRPC
 
 A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
-`HistoryRPC` this allows the node handler to determine how to handle a message as the Waku
+`HistoryRPC`. This allows the node handler to determine how to handle a message as the Waku
 Filter protocol is not a request response based protocol but instead a push based system.
 
 The `request_id` MUST be a uniquely generated string.
