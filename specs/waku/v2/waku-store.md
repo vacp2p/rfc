@@ -14,7 +14,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
 # Abstract
 
-`WakuStore` is a protocol to enable querying of messages received and stored by other nodes.
+`WakuStore` is a protocol to enable querying of messages received through relay protocol and stored by other nodes.
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
 
