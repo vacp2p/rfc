@@ -1,27 +1,28 @@
 ---
 title: Waku
-version: 2.0.0-alpha4
+version: 2.0.0-alpha5
 status: Raw
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
 
 # Table of Contents
 
-TODO
+- [Abstract](#abstract)
+- [Wire Specification](#wire-specification)
+  * [Protobuf](#protobuf)
+- [Copyright](#copyright)
 
 # Abstract
 
-TODO
-
-### Historical message support
+`WakuStore` is a protocol to enable querying of messages received and stored by other nodes.
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
 
-See `WakuStore` spec.
+# Wire Specification
 
-TODO To be elaborated on
+Peers communicate with eachother using a request / response API. The messages sent are Protobuf RPC messages.
 
-#### Protobuf
+## Protobuf
 
 ```protobuf
 message HistoryQuery {
