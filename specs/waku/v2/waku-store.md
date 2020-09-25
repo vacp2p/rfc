@@ -20,7 +20,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
 # Wire Specification
 
-Peers communicate with eachother using a request / response API. The messages sent are Protobuf RPC messages.
+Peers communicate with each other using a request / response API. The messages sent are Protobuf RPC messages.
 
 ## Protobuf
 
