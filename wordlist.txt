@@ -65,6 +65,7 @@ historyQuery
 HistoryQuery
 historyResponse
 HistoryResponse
+HistoryRPC
 html
 http
 https
