@@ -15,7 +15,7 @@ TODO
 
 ### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha6`
 
 See `WakuStore` spec.
 
@@ -25,15 +25,27 @@ TODO To be elaborated on
 
 ```protobuf
 message HistoryQuery {
-  string uuid = 1;
   repeated string topics = 2;
 }
 
 message HistoryResponse {
-  string uuid = 1;
   repeated WakuMessage messages = 2;
 }
+
+message HistoryRPC {
+  string request_id = 1;
+  HistoryQuery query = 2;
+  HistoryResponse response = 3;
+}
 ```
+
+##### HistoryRPC
+
+A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
+`HistoryRPC` this allows the node handler to determine how to handle a message as the Waku
+Filter protocol is not a request response based protocol but instead a push based system.
+
+The `request_id` MUST be a uniquely generated string.
 
 ##### HistoryQuery
 
