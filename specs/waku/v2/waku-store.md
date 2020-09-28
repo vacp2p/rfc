@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha5
+version: 2.0.0-alpha6
 status: Raw
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
@@ -16,7 +16,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
 `WakuStore` is a protocol to enable querying of messages received through relay protocol and stored by other nodes.
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
+**Protocol identifier***: `/vac/waku/store/2.0.0-alpha6`
 
 # Wire Specification
 
@@ -26,15 +26,27 @@ Peers communicate with each other using a request / response API. The messages s
 
 ```protobuf
 message HistoryQuery {
-  string uuid = 1;
   repeated string topics = 2;
 }
 
 message HistoryResponse {
-  string uuid = 1;
   repeated WakuMessage messages = 2;
 }
+
+message HistoryRPC {
+  string request_id = 1;
+  HistoryQuery query = 2;
+  HistoryResponse response = 3;
+}
 ```
+
+##### HistoryRPC
+
+A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
+`HistoryRPC`. This allows the node handler to determine how to handle a message as the Waku
+Filter protocol is not a request response based protocol but instead a push based system.
+
+The `request_id` MUST be a uniquely generated string.
 
 ##### HistoryQuery
 
