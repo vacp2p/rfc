@@ -41,7 +41,7 @@ The `payload` field SHOULD contain whatever payload is being sent. See section b
 
 The `contentTopic` field SHOULD be filled out to allow for content-based filtering. See [Waku Filter spec](waku-filter.md) for details.
 
-The `version` field SHOULD be filled out to allow for various types of payload encryption.
+The `version` field MAY be filled out to allow for various types of payload encryption. Omitting it means the version is 0.
 
 ## Protobuf
 
