@@ -55,7 +55,7 @@ message WakuMessage {
 
 ## Payload encryption
 
-Payload encryption depends on which `version` field is set.
+Payload encryption depends on the `version` field.
 
 ### Version 0
 
