@@ -159,6 +159,7 @@ trilemma
 ttl
 uint
 underspecified
+unlinkability
 unencrypted
 unsynchronized
 upgradability
