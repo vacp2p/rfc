@@ -37,9 +37,9 @@ This specification attempts to provide for these various requirements.
 
 A `WakuMessage` is what is being passed around by the other protocols, such as WakuRelay, WakuStore, and WakuFilter.
 
-The `payload` field SHOULD contain whatever payload is being sent. Encryption of this field MAY be done at a separate layer.
+The `payload` field SHOULD contain whatever payload is being sent. See section below on payload encryption.
 
-The `contentTopic` field SHOULD be filled out to allow for content-based filtering (see section below).
+The `contentTopic` field SHOULD be filled out to allow for content-based filtering. See [Waku Filter spec](waku-filter.md) for details.
 
 The `version` field SHOULD be filled out to allow for various types of payload encryption.
 
