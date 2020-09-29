@@ -7,7 +7,16 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Table of Contents
 
-TODO
+- [Abstract](#abstract)
+- [Motivation](#motivation)
+    - [WakuMessage](#wakumessage)
+    - [Protobuf](#protobuf)
+    - [Payload encryption](#payload-encryption)
+        - [Version 0](#version-0)
+        - [Version 1](#version-1)
+- [Differences from Whisper / Waku v1 envelopes](#differences-from-whisper--waku-v1-envelopes)
+- [Changelog](#changelog)
+- [Copyright](#copyright)
 
 # Abstract
 
@@ -69,7 +78,7 @@ field corresponds to `contentTopic`. The previous `data` field corresponds to th
 
 # Changelog
 
-TODO
+Initial release on [](TODO).
 
 # Copyright
 
