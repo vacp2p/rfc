@@ -11,20 +11,28 @@ TODO
 
 # Abstract
 
-TODO
+This specification provides a way to encapsulate messages sent over Waku with specific information security goals.
 
 # Motivation
 
-TODO
+When using Waku to send messages over Waku there are multiple concerns:
+- We may have a separate encryption layer as part of our application
+- We may want to provide efficient routing for resource restricted devices
+- We may want to provide compatibility with Waku v1 envelopes
+- We may want payloads to be encrypted by default
+- We may want to provide unlinkability for metadata protection
+
+This specification attempts to provide for these various requirements.
 
 ## WakuMessage
 
 A `WakuMessage` is what is being passed around by the other protocols, such as WakuRelay, WakuStore, and WakuFilter.
 
-The `payload` field SHOULD contain whatever payload is being sent. Encryption of this field is done at a separate layer.
+The `payload` field SHOULD contain whatever payload is being sent. Encryption of this field MAY be done at a separate layer.
 
 The `contentTopic` field SHOULD be filled out to allow for content-based filtering (see section below).
 
+The `version` field SHOULD be filled out to allow for various types of payload encryption.
 
 ## Protobuf
 
@@ -32,8 +40,24 @@ The `contentTopic` field SHOULD be filled out to allow for content-based filteri
 message WakuMessage {
   optional bytes payload = 1;
   optional string contentTopic = 2;
+  optional string version = 3;
 }
 ```
+
+## Payload encryption
+
+Payload encryption depends on which `version` field is set.
+
+### Version 0
+
+This indicates that the payload SHOULD be either unencrypted or that encryption is done at a separate layer outside of Waku.
+
+### Version 1
+
+This indicates that payloads MUST be encrypted using [Waku v1 envelope data
+format spec](../v1/envelope-data-format.md).
+
+This provides for asymmetric and symmetric encryption. Key agreement is out of band. It also provides an encrypted signature and padding for some form of unlinkability.
 
 # Differences from Whisper / Waku v1 envelopes
 
