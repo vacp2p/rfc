@@ -1,6 +1,6 @@
 ---
-title: Waku
-version: 2.0.0-beta1
+title: Waku Relay
+version: 2.0.0-beta2
 status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -20,7 +20,7 @@ authors: Oskar Thorén <oskar@status.im>
 
 `WakuRelay` is part of the gossip domain for Waku. It is a thin layer on top of GossipSub.
 
-**Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
+**Protocol identifier***: `/vac/waku/relay/2.0.0-beta2`
 
 ## Wire Specification
 
@@ -48,11 +48,6 @@ message Message {
   optional bytes signature = 5;
   optional bytes key = 6;
 }
-
-message WakuMessage {
-  optional bytes payload = 1;
-  optional string contentTopic = 2;
-}
 ```
 
 WakuSub does not currently use the `ControlMessage` defined in GossipSub.
@@ -69,7 +64,7 @@ gossiped. See section below on how the fields work.
 
 The `from` field MAY indicate which peer is publishing the message.
 
-The `data` field SHOULD be filled out with a `WakuMessage`.
+The `data` field MUST be filled out with a `WakuMessage`. See the [Waku Message](waku-message.md) spec for more details.
 
 The `seqno` field MAY be used to provide a linearly increasing number. See PubSub spec for more details.
 
@@ -88,15 +83,14 @@ The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 mean
 
 The `topicid` field MUST contain the topic.
 
-## WakuMessage
-
-A `WakuMessage` SHOULD be in the `data` field of `Message`.
-
-The `payload` field SHOULD contain whatever payload is being sent. Encryption of this field is done at a separate layer.
-
-The `contentTopic` field SHOULD be filled out to allow for content-based filtering (see section below).
-
 ## Changelog
+
+### 2.0.0-beta2
+
+Next version. Changes:
+
+- Moved WakuMessage to separate spec and made it mandatory
+
 
 ### 2.0.0-beta1
 
@@ -129,6 +123,4 @@ TODO: Don't quite understand this scenario [key field], to clarify. Wouldn't it 
 
 Re topicid:
 NOTE: This doesn't appear to be documented in PubSub spec, upstream?
-
-TODO: Find place for WakuMessage
 -->

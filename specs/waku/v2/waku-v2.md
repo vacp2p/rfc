@@ -74,6 +74,9 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 
 These protocols and their semantics are elaborated on in their own specs.
 
+For the actual content being passed around, see the [Waku
+Message](waku-message.md) spec.
+
 ## Gossip domain
 
 **Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
