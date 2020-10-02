@@ -1,7 +1,7 @@
 ---
 title: Waku
 version: 2.0.0-alpha5
-status: Raw
+status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
 
@@ -42,10 +42,6 @@ frequent polling.
 
 TODO Consider adding a FilterResponse acting as a form of ACK
 
-TODO Consider adding request id
-
-TODO Clarify if Messages or a list of WakuMessage are pushed
-
 TODO Specify unsubscribe mechanism and semantics
 
 TODO Investigate if we need a way to communicate (handshake?) that we are a a client - server (full node - light node) or not.
@@ -54,9 +50,8 @@ NOTE I would imagine this is implied from the contentFilter, especially as two n
 
 ```protobuf
 message FilterRequest {
-  // space for optional request id
+  optional string topic = 1;
   repeated ContentFilter contentFilters = 2;
-  optional string topic = 3;
 
   message ContentFilter {
     optional string contentTopics = 1;
@@ -80,7 +75,9 @@ A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped in
 `FilterRPC` this allows the node handler to determine how to handle a message as the Waku
 Filter protocol is not a request response based protocol but instead a push based system.
 
-The `request_id` MUST be a uniquely generated string.
+The `request_id` MUST be a uniquely generated string. When a `MessagePush` is sent
+it the `request_id` MUST match the `request_id` of the `FilterRequest` whose filters
+matched the message causing it to be pushed.
 
 ##### FilterRequest
 
@@ -106,7 +103,7 @@ mechanism is currently planned but underspecified.
 ##### MessagePush
 
 A filter node that has received a filter request SHOULD push all messages that
-match this filter to a light node. These messages are likely to come from the
+match this filter to a light node. These [`WakuMessage`'s](./waku-message.md) are likely to come from the
 `relay` protocol and be kept at the Node, but there MAY be other sources or
 protocols where this comes from. This is up to the consumer of the protocol.
 
