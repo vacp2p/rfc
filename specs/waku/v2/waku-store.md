@@ -1,7 +1,7 @@
 ---
 title: Waku
 version: 2.0.0-alpha6
-status: Raw
+status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
 
