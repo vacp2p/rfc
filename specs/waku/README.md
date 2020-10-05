@@ -5,6 +5,7 @@
  - [waku/1](./v1/waku-1.md) specs for `waku/1` version, current stable version
  - [envelope data format](./v1/envelope-data-format.md) [waku](./waku.md) envelope data field specification.
  - [mailserver](./v1/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku.md) envelopes on demand.
+ - [rpc api](./v1/waku-rpc-api.md) - Waku RPC API for Waku v1 nodes.
 
 ## Version 2
   - [waku/2](./v2/waku-v2.md) specs for `waku/2` version, current draft version
