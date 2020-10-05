@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha5
+version: 2.0.0-beta1
 status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -11,6 +11,7 @@ authors: Oskar Thorén <oskar@status.im>
 - [Content filtering](#content-filtering)
   * [Rationale](#rationale)
   * [Protobuf](#protobuf)
+- [Changelog](#changelog)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -20,7 +21,7 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha6`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
@@ -88,9 +89,13 @@ matched the message causing it to be pushed.
 
 #### FilterRequest
 
+<!--
+
 TODO Specify mechanism for telling it won't honor (normal-no service-spam case)
 
 TODO Clarify exactly what we mean by connection and TTL
+
+-->
 
 A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
@@ -123,6 +128,11 @@ messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.
 
 ---
+
+# Changelog
+
+2.0.0-beta1
+Initial draft version. Released 2020-10-05 <!-- @TODO LINK -->
 
 # Copyright
 
