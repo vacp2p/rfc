@@ -1,6 +1,6 @@
 ---
 title: Waku
-version: 2.0.0-alpha6
+version: 2.0.0-beta1
 status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
@@ -10,13 +10,14 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 - [Abstract](#abstract)
 - [Wire Specification](#wire-specification)
   * [Protobuf](#protobuf)
+- [Changelog](#changelog)
 - [Copyright](#copyright)
 
 # Abstract
 
 `WakuStore` is a protocol to enable querying of messages received through relay protocol and stored by other nodes.
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha6`
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta1`
 
 # Wire Specification
 
@@ -62,7 +63,12 @@ RPC call to respond to a HistoryQuery call.
 
 The `uuid` field MUST indicate which query is being responded to.
 
-The `messages` field MUST contain the messages found.
+The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
+
+# Changelog
+
+2.0.0-beta1
+Initial draft version. Released 2020-10-05 <!-- @TODO LINK -->
 
 # Copyright
 
