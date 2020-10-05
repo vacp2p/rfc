@@ -45,12 +45,14 @@ frequent polling.
 
 ## Protobuf
 
+<!--
 TODO Consider adding a FilterResponse acting as a form of ACK
 
 TODO Specify unsubscribe mechanism and semantics
 
 TODO Investigate if we need a way to communicate (handshake?) that we are a a client - server (full node - light node) or not.
 NOTE I would imagine this is implied from the contentFilter, especially as two nodes can play multiple roles.
+-->
 
 
 ```protobuf
