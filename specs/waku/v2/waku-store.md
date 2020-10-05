@@ -44,10 +44,10 @@ message HistoryRPC {
 ##### HistoryRPC
 
 A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
-`HistoryRPC`. This allows the node handler to determine how to handle a message as the Waku
-Filter protocol is not a request response based protocol but instead a push based system.
+`HistoryRPC`.
 
-The `request_id` MUST be a uniquely generated string.
+The `request_id` MUST be a uniquely generated string. The `HistoryResponse` message SHOULD contain any messages found
+whose `topic` can be found in the `HistoryQuery` `topics` array. Any message whose `topic` does not match MUST NOT be included.
 
 ##### HistoryQuery
 
