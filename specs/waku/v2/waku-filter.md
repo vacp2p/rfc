@@ -7,13 +7,18 @@ authors: Oskar Thorén <oskar@status.im>
 
 # Table of Contents
 
-TODO
+- [Abstract](#abstract)
+- [Content filtering](#content-filtering)
+  * [Rationale](#rationale)
+  * [Protobuf](#protobuf)
+- [Copyright](#copyright)
+- [References](#references)
 
 # Abstract
 
-Filter spec.
+`WakuFilter` is a protocol that enables receiving of messages from a peer whenever it receives one that matches the specified filter.
 
-### Content filtering
+# Content filtering
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-alpha6`
 
@@ -22,7 +27,7 @@ filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Messa
 Currently the only content filter being applied is on `contentTopic`. This
 corresponds to topics in Waku v1.
 
-#### Rationale
+## Rationale
 
 Unlike the `store` protocol for historical messages, this protocol allows for
 native lower latency scenarios such as instant messaging. It is thus
@@ -38,7 +43,7 @@ It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
 
-#### Protobuf
+## Protobuf
 
 TODO Consider adding a FilterResponse acting as a form of ACK
 
@@ -69,7 +74,7 @@ message FilterRPC {
 }
 ```
 
-##### FilterRPC
+#### FilterRPC
 
 A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped inside a
 `FilterRPC` this allows the node handler to determine how to handle a message as the Waku
@@ -79,7 +84,7 @@ The `request_id` MUST be a uniquely generated string. When a `MessagePush` is se
 it the `request_id` MUST match the `request_id` of the `FilterRequest` whose filters
 matched the message causing it to be pushed.
 
-##### FilterRequest
+#### FilterRequest
 
 TODO Specify mechanism for telling it won't honor (normal-no service-spam case)
 
@@ -100,7 +105,7 @@ Since such a filter node is doing extra work for a light node, it MAY also
 account for usage and be selective in how much service it provides. This
 mechanism is currently planned but underspecified.
 
-##### MessagePush
+#### MessagePush
 
 A filter node that has received a filter request SHOULD push all messages that
 match this filter to a light node. These [`WakuMessage`'s](./waku-message.md) are likely to come from the
