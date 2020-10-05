@@ -10,22 +10,17 @@ The entire vac protocol is under active development, each specification has its 
 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
+## Waku
+
+Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku v2 is in development. Here you can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
+
+Waku is made up of several protocols and specifications. To see them go to the [Waku spec home](https://specs.vac.dev/specs/waku/).
+
+### Data sync
+
  - [mvds](./specs/mvds.md) - Data Synchronization protocol for unreliable transports.
  - [remote log](./specs/remote-log.md) - Remote replication of local logs.
  - [mvds metadata](./specs/mvds-metadata.md) - Metadata field for [MVDS](./specs/mvds.md) messages. 
-
-### Waku
-
-Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
-
- - [waku](./specs/waku/waku.md) - ÐΞVp2p wire protocol, substituting [EIP-627](https://eips.ethereum.org/EIPS/eip-627).
- - [envelope data format](./specs/waku/envelope-data-format.md) - [waku](./specs/waku/waku.md) envelope data field specification.
- - [mailserver](./specs/waku/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./specs/waku/waku.md) envelopes on demand.
- - [rpc api](./specs/waku/waku-rpc-api.md) - The RPC API for interacting with a Waku node.
-
-Waku v2 is in development. Here you can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update). Here's the current main spec:
-
-- [waku v2](https://specs.vac.dev/specs/waku/v2/waku-v2.html)
 
 ## Style guide
 
