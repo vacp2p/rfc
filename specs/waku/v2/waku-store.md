@@ -53,15 +53,11 @@ whose `topic` can be found in the `HistoryQuery` `topics` array. Any message who
 
 RPC call to query historical messages.
 
-The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
-
 The `topics` field MUST indicate the list of topics to query.
 
 ##### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
-
-The `uuid` field MUST indicate which query is being responded to.
 
 The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 
