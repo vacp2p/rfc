@@ -74,7 +74,7 @@ A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped in
 Filter protocol is not a request response based protocol but instead a push based system.
 
 The `request_id` MUST be a uniquely generated string. When a `MessagePush` is sent
-it the `request_id` MUST match the `request_id` of the `FilterRequest` whose filters
+the `request_id` MUST match the `request_id` of the `FilterRequest` whose filters
 matched the message causing it to be pushed.
 
 #### FilterRequest
