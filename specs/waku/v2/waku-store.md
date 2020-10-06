@@ -1,7 +1,7 @@
 ---
 title: Waku
-version: 2.0.0-alpha6
-status: Raw
+version: 2.0.0-beta1
+status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
 
@@ -10,13 +10,14 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 - [Abstract](#abstract)
 - [Wire Specification](#wire-specification)
   * [Protobuf](#protobuf)
+- [Changelog](#changelog)
 - [Copyright](#copyright)
 
 # Abstract
 
 `WakuStore` is a protocol to enable querying of messages received through relay protocol and stored by other nodes.
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha6`
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta1`
 
 # Wire Specification
 
@@ -43,16 +44,14 @@ message HistoryRPC {
 ##### HistoryRPC
 
 A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
-`HistoryRPC`. This allows the node handler to determine how to handle a message as the Waku
-Filter protocol is not a request response based protocol but instead a push based system.
+`HistoryRPC`.
 
-The `request_id` MUST be a uniquely generated string.
+The `request_id` MUST be a uniquely generated string, the `HistoryResponse` and `HistoryQuery` `request_id` MUST match. The `HistoryResponse` message SHOULD contain any messages found
+whose `topic` can be found in the `HistoryQuery` `topics` array. Any message whose `topic` does not match MUST NOT be included.
 
 ##### HistoryQuery
 
 RPC call to query historical messages.
-
-The `uuid` field MUST indicate current request UUID, it is used to identify the corresponding response.
 
 The `topics` field MUST indicate the list of topics to query.
 
@@ -60,9 +59,12 @@ The `topics` field MUST indicate the list of topics to query.
 
 RPC call to respond to a HistoryQuery call.
 
-The `uuid` field MUST indicate which query is being responded to.
+The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 
-The `messages` field MUST contain the messages found.
+# Changelog
+
+2.0.0-beta1
+Initial draft version. Released 2020-10-05 <!-- @TODO LINK -->
 
 # Copyright
 
