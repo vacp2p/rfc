@@ -2,7 +2,7 @@
 title: Waku
 version: 2.0.0-beta1
 status: Draft
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
 
 # Table of Contents
