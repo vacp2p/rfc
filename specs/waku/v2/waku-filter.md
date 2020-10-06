@@ -58,11 +58,11 @@ NOTE I would imagine this is implied from the contentFilter, especially as two n
 
 ```protobuf
 message FilterRequest {
-  optional string topic = 1;
-  repeated ContentFilter contentFilters = 2;
+  string topic = 1;
+  ContentFilter contentFilters = 2;
 
   message ContentFilter {
-    optional string contentTopics = 1;
+    string contentTopics = 1;
   }
 }
 
