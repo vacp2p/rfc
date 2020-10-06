@@ -46,16 +46,6 @@ frequent polling.
 
 ## Protobuf
 
-<!--
-TODO Consider adding a FilterResponse acting as a form of ACK
-
-TODO Specify unsubscribe mechanism and semantics
-
-TODO Investigate if we need a way to communicate (handshake?) that we are a a client - server (full node - light node) or not.
-NOTE I would imagine this is implied from the contentFilter, especially as two nodes can play multiple roles.
--->
-
-
 ```protobuf
 message FilterRequest {
   string topic = 1;
@@ -88,14 +78,6 @@ it the `request_id` MUST match the `request_id` of the `FilterRequest` whose fil
 matched the message causing it to be pushed.
 
 #### FilterRequest
-
-<!--
-
-TODO Specify mechanism for telling it won't honor (normal-no service-spam case)
-
-TODO Clarify exactly what we mean by connection and TTL
-
--->
 
 A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
