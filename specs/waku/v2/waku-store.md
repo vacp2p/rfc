@@ -46,7 +46,7 @@ message HistoryRPC {
 A node MUST send all History messages (`HistoryQuery`, `HistoryResponse`) wrapped inside a
 `HistoryRPC`.
 
-The `request_id` MUST be a uniquely generated string. The `HistoryResponse` message SHOULD contain any messages found
+The `request_id` MUST be a uniquely generated string, the `HistoryResponse` and `HistoryQuery` `request_id` MUST match. The `HistoryResponse` message SHOULD contain any messages found
 whose `topic` can be found in the `HistoryQuery` `topics` array. Any message whose `topic` does not match MUST NOT be included.
 
 ##### HistoryQuery
