@@ -95,9 +95,9 @@ This consists of two main protocols. They are used in order to get Waku to run
 in resource restricted environments, such as low bandwidth or being mostly
 offline.
 
-### Historical message support (experimental, alpha)
+### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-alpha5`
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta1`
 
 See [WakuStore](waku-store.md) spec for more details.
 
