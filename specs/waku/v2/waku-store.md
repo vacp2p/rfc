@@ -64,7 +64,7 @@ The `messages` field MUST contain the messages found, these are [`WakuMessage`] 
 # Changelog
 
 2.0.0-beta1
-Initial draft version. Released 2020-10-05 <!-- @TODO LINK -->
+Initial draft version. Released [2020-10-06](https://github.com/vacp2p/specs/commit/75b4c39e7945eb71ad3f9a0a62b99cff5dac42cf)
 
 # Copyright
 
