@@ -17,7 +17,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 
 # Abstract
 
-`WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices.
+`WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices. This is due to the fact that lightnodes subscribe to fullnodes and only receive the messages they desire.
 
 # Content filtering
 
