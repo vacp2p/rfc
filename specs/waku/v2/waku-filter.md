@@ -1,28 +1,34 @@
 ---
 title: Waku
-version: 2.0.0-alpha5
-status: Raw
-authors: Oskar Thorén <oskar@status.im>
+version: 2.0.0-beta1
+status: Draft
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
 ---
 
 # Table of Contents
 
-TODO
+- [Abstract](#abstract)
+- [Content filtering](#content-filtering)
+  * [Rationale](#rationale)
+  * [Protobuf](#protobuf)
+- [Changelog](#changelog)
+- [Copyright](#copyright)
+- [References](#references)
 
 # Abstract
 
-Filter spec.
+`WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
 
-### Content filtering
+# Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha6`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
 Currently the only content filter being applied is on `contentTopic`. This
 corresponds to topics in Waku v1.
 
-#### Rationale
+## Rationale
 
 Unlike the `store` protocol for historical messages, this protocol allows for
 native lower latency scenarios such as instant messaging. It is thus
@@ -38,28 +44,15 @@ It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
 
-#### Protobuf
-
-TODO Consider adding a FilterResponse acting as a form of ACK
-
-TODO Consider adding request id
-
-TODO Clarify if Messages or a list of WakuMessage are pushed
-
-TODO Specify unsubscribe mechanism and semantics
-
-TODO Investigate if we need a way to communicate (handshake?) that we are a a client - server (full node - light node) or not.
-NOTE I would imagine this is implied from the contentFilter, especially as two nodes can play multiple roles.
-
+## Protobuf
 
 ```protobuf
 message FilterRequest {
-  // space for optional request id
-  repeated ContentFilter contentFilters = 2;
-  optional string topic = 3;
+  string topic = 1;
+  ContentFilter contentFilters = 2;
 
   message ContentFilter {
-    optional string contentTopics = 1;
+    string contentTopics = 1;
   }
 }
 
@@ -68,25 +61,23 @@ message MessagePush {
 }
 
 message FilterRPC {
-  string request_id = 1;
+  string requestId = 1;
   FilterRequest request = 2;
   MessagePush push = 3;
 }
 ```
 
-##### FilterRPC
+#### FilterRPC
 
 A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped inside a
 `FilterRPC` this allows the node handler to determine how to handle a message as the Waku
 Filter protocol is not a request response based protocol but instead a push based system.
 
-The `request_id` MUST be a uniquely generated string.
+The `requestId` MUST be a uniquely generated string. When a `MessagePush` is sent
+the `requestId` MUST match the `requestId` of the `FilterRequest` whose filters
+matched the message causing it to be pushed.
 
-##### FilterRequest
-
-TODO Specify mechanism for telling it won't honor (normal-no service-spam case)
-
-TODO Clarify exactly what we mean by connection and TTL
+#### FilterRequest
 
 A node that sends the RPC with a filter request requests that the filter node
 SHOULD notify the light requesting node of messages matching this filter.
@@ -103,10 +94,10 @@ Since such a filter node is doing extra work for a light node, it MAY also
 account for usage and be selective in how much service it provides. This
 mechanism is currently planned but underspecified.
 
-##### MessagePush
+#### MessagePush
 
 A filter node that has received a filter request SHOULD push all messages that
-match this filter to a light node. These messages are likely to come from the
+match this filter to a light node. These [`WakuMessage`'s](./waku-message.md) are likely to come from the
 `relay` protocol and be kept at the Node, but there MAY be other sources or
 protocols where this comes from. This is up to the consumer of the protocol.
 
@@ -119,6 +110,11 @@ messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.
 
 ---
+
+# Changelog
+
+2.0.0-beta1
+Initial draft version. Released 2020-10-05 <!-- @TODO LINK -->
 
 # Copyright
 

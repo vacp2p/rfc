@@ -101,9 +101,9 @@ offline.
 
 See [WakuStore](waku-store.md) spec for more details.
 
-### Content filtering (experimental, alpha)
+### Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-alpha5`
+**Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
 See [WakuFilter](waku-filter.md) spec for more details.
 
