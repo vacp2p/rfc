@@ -48,7 +48,7 @@ The `version` field MAY be filled out to allow for various types of payload encr
 ```protobuf
 message WakuMessage {
   optional bytes payload = 1;
-  optional string contentTopic = 2;
+  optional bytes contentTopic = 2;
   optional string version = 3;
 }
 ```
