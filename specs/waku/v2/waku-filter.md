@@ -113,6 +113,10 @@ implementation, though a reasonable default is one minute.
 
 # Changelog
 
+### Next version
+
+- Bugfix: Ensure contentFilter and contentTopic are repeated fields, per implementation
+
 ### 2.0.0-beta1
 
 Initial draft version. Released [2020-10-05](https://github.com/vacp2p/specs/commit/31857c7434fa17efc00e3cd648d90448797d107b)
