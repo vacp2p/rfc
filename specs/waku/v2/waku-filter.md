@@ -115,7 +115,7 @@ implementation, though a reasonable default is one minute.
 
 ### Next version
 
-- Bugfix: Ensure contentFilter and contentTopic are repeated fields, per implementation
+- Fix: Ensure contentFilter and contentTopic are repeated fields, per implementation
 
 ### 2.0.0-beta1
 
