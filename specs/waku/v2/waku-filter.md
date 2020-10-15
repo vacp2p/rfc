@@ -49,10 +49,10 @@ frequent polling.
 ```protobuf
 message FilterRequest {
   string topic = 1;
-  ContentFilter contentFilters = 2;
+  repeated ContentFilter contentFilters = 2;
 
   message ContentFilter {
-    string contentTopics = 1;
+    repeated string contentTopics = 1;
   }
 }
 
@@ -112,6 +112,10 @@ implementation, though a reasonable default is one minute.
 ---
 
 # Changelog
+
+### Next version
+
+- Fix: Ensure contentFilter and contentTopic are repeated fields, per implementation
 
 ### 2.0.0-beta1
 

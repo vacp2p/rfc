@@ -69,8 +69,8 @@ interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
 1. `/vac/waku/relay/2.0.0-beta1`
-2. `/vac/waku/store/2.0.0-alpha5`
-3. `/vac/waku/filter/2.0.0-alpha5`
+2. `/vac/waku/store/2.0.0-beta1`
+3. `/vac/waku/filter/2.0.0-beta1`
 
 These protocols and their semantics are elaborated on in their own specs.
 
