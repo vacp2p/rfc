@@ -39,7 +39,7 @@ A `WakuMessage` is what is being passed around by the other protocols, such as W
 
 The `payload` field SHOULD contain whatever payload is being sent. See section below on payload encryption.
 
-The `contentTopic` field SHOULD be filled out to allow for content-based filtering, the field MUST be 4 bytes long. See [Waku Filter spec](waku-filter.md) for details.
+The `contentTopic` field SHOULD be filled out to allow for content-based filtering. See [Waku Filter spec](waku-filter.md) for details.
 
 The `version` field MAY be filled out to allow for various types of payload encryption. Omitting it means the version is 0.
 
@@ -48,7 +48,7 @@ The `version` field MAY be filled out to allow for various types of payload encr
 ```protobuf
 message WakuMessage {
   optional bytes payload = 1;
-  optional bytes contentTopic = 2;
+  optional fixed32 contentTopic = 2;
   optional string version = 3;
 }
 ```
