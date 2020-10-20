@@ -1,6 +1,6 @@
 ---
 title: Waku Message
-version: 2.0.0-alpha1
+version: 2.0.0-alpha2
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -48,7 +48,7 @@ The `version` field MAY be filled out to allow for various types of payload encr
 ```protobuf
 message WakuMessage {
   optional bytes payload = 1;
-  optional string contentTopic = 2;
+  optional fixed32 contentTopic = 2;
   optional string version = 3;
 }
 ```
