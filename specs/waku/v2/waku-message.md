@@ -78,7 +78,7 @@ field corresponds to `contentTopic`. The previous `data` field corresponds to th
 
 # Changelog
 
-Initial release on [2020-10-22](TODO).
+Initial release on [2020-10-22](https://github.com/vacp2p/specs/pull/222/commits/dbab6c7084b414b62818150588266abedd09315f).
 
 # Copyright
 
