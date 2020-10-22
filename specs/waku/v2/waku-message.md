@@ -1,7 +1,7 @@
 ---
 title: Waku Message
-version: 2.0.0-alpha2
-status: Raw
+version: 2.0.0-beta1
+status: Draft
 authors: Oskar Thorén <oskar@status.im>
 ---
 
@@ -9,11 +9,11 @@ authors: Oskar Thorén <oskar@status.im>
 
 - [Abstract](#abstract)
 - [Motivation](#motivation)
-    - [WakuMessage](#wakumessage)
-    - [Protobuf](#protobuf)
-    - [Payload encryption](#payload-encryption)
-        - [Version 0](#version-0)
-        - [Version 1](#version-1)
+- [WakuMessage](#wakumessage)
+  - [Protobuf](#protobuf)
+  - [Payload encryption](#payload-encryption)
+      - [Version 0](#version-0)
+      - [Version 1](#version-1)
 - [Differences from Whisper / Waku v1 envelopes](#differences-from-whisper--waku-v1-envelopes)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
@@ -33,7 +33,7 @@ When using Waku to send messages over Waku there are multiple concerns:
 
 This specification attempts to provide for these various requirements.
 
-## WakuMessage
+# WakuMessage
 
 A `WakuMessage` is what is being passed around by the other protocols, such as WakuRelay, WakuStore, and WakuFilter.
 
@@ -61,7 +61,7 @@ Payload encryption depends on the `version` field.
 
 This indicates that the payload SHOULD be either unencrypted or that encryption is done at a separate layer outside of Waku.
 
-### Version 1
+### Version 1 (not yet implemented in Waku v2)
 
 This indicates that payloads MUST be encrypted using [Waku v1 envelope data
 format spec](../v1/envelope-data-format.md).
@@ -78,7 +78,7 @@ field corresponds to `contentTopic`. The previous `data` field corresponds to th
 
 # Changelog
 
-Initial release on [](TODO).
+Initial release on [2020-10-22](TODO).
 
 # Copyright
 

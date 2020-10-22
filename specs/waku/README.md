@@ -12,5 +12,5 @@
   - [waku/2 relay](./v2/waku-relay.md) spec for WakuRelay, current draft version
   - [waku/2 filter](./v2/waku-filter.md) spec for WakuFilter, current draft version
   - [waku/2 store](./v2/waku-store.md) spec for WakuStore, current draft version
+  - [waku/2 message](./v2/waku-message.md) spec for Waku Message, current draft version
   - [waku/2 bridge](./v2/waku-bridge.md) spec for Waku bridge with v1, alpha
-  - [waku/2 message](./v2/waku-message.md) spec for Waku Message, alpha
