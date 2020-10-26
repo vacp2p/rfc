@@ -1,8 +1,8 @@
 ---
 title: Waku
-version: 2.0.0-beta1
+version: 2.0.0-beta2
 status: Draft
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno Cornelius <hanno@status.im>
 ---
 
 # Table of Contents
@@ -48,8 +48,9 @@ frequent polling.
 
 ```protobuf
 message FilterRequest {
-  string topic = 1;
-  repeated ContentFilter contentFilters = 2;
+  bool subscribe = 1;
+  string topic = 2;
+  repeated ContentFilter contentFilters = 3;
 
   message ContentFilter {
     repeated string contentTopics = 1;
@@ -74,13 +75,22 @@ A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped in
 Filter protocol is not a request response based protocol but instead a push based system.
 
 The `requestId` MUST be a uniquely generated string. When a `MessagePush` is sent
-the `requestId` MUST match the `requestId` of the `FilterRequest` whose filters
+the `requestId` MUST match the `requestId` of the subscribing `FilterRequest` whose filters
 matched the message causing it to be pushed.
 
 #### FilterRequest
 
-A node that sends the RPC with a filter request requests that the filter node
-SHOULD notify the light requesting node of messages matching this filter.
+A `FilterRequest` contains an optional topic, zero or more content filters and
+a boolean signifying whether to subscribe or unsubscribe to the given filters.
+True signifies 'subscribe' and false signifies 'unsubscribe'.
+
+A node that sends the RPC with a filter request and `subscribe` set to 'true' 
+requests that the filter node SHOULD notify the light requesting node of messages
+matching this filter.
+
+A node that sends the RPC with a filter request and `subscribe` set to 'false'
+requests that the filter node SHOULD stop notifying the light requesting node
+of messages matching this filter if it is currently doing so.
 
 The filter matches when content filter and, optionally, a topic is matched.
 Content filter is matched when a `WakuMessage` `contentTopic` field is the same.
@@ -113,9 +123,11 @@ implementation, though a reasonable default is one minute.
 
 # Changelog
 
-### Next version
+### 2.0.0-beta2
 
+Initial draft version. Released [2020-10-28]
 - Fix: Ensure contentFilter and contentTopic are repeated fields, per implementation
+- Change: Add ability to unsubscribe from filters. Make `subscribe` an explicit boolean indication. Edit protobuf field order to be consistent with libp2p.
 
 ### 2.0.0-beta1
 
