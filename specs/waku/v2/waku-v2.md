@@ -10,16 +10,25 @@ authors: Oskar Thorén <oskar@status.im>
 - [Abstract](#abstract)
 - [Motivation and goals](#motivation-and-goals)
 - [Network interaction domains](#network-interaction-domains)
-    + [Protocol Identifiers](#protocol-identifiers)
-  * [Gossip domain](#gossip-domain)
-  * [Discovery domain](#discovery-domain)
-  * [Request/reply domain](#request-reply-domain)
-    + [Historical message support](#historical-message-support)
-    + [Content filtering](#content-filtering)
+    - [Protocols and identifiers](#protocols-and-identifiers)
+    - [Gossip domain](#gossip-domain)
+        - [Default pubsub topic](#default-pubsub-topic)
+    - [Discovery domain](#discovery-domain)
+    - [Request/reply domain](#requestreply-domain)
+        - [Historical message support](#historical-message-support)
+        - [Content filtering](#content-filtering)
 - [Upgradability and Compatibility](#upgradability-and-compatibility)
-    * [Compatibility with Waku v1](#compatibility-with-waku-v1)
+    - [Compatibility with Waku v1](#compatibility-with-waku-v1)
+    - [Changelog](#changelog)
+        - [Next version](#next-version)
+        - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
+- [Underlying transports, etc](#underlying-transports-etc)
+    - [Peer Discovery](#peer-discovery)
+        - [PubSub interface](#pubsub-interface)
+        - [FloodSub](#floodsub)
+        - [Bridge mode](#bridge-mode)
 
 # Abstract
 
@@ -68,7 +77,7 @@ interaction domains: (a) gossip domain (b) discovery domain (c) req/resp domain.
 
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
-1. `/vac/waku/relay/2.0.0-beta1`
+1. `/vac/waku/relay/2.0.0-beta2`
 2. `/vac/waku/store/2.0.0-beta1`
 3. `/vac/waku/filter/2.0.0-beta1`
 
@@ -76,11 +85,29 @@ These protocols and their semantics are elaborated on in their own specs.
 
 For the actual content being passed around, see the [Waku Message](waku-message.md) spec.
 
+The WakuMessage spec being used is: `2.0.0-beta1`.
+
 ## Gossip domain
 
 **Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
 
 See [WakuRelay](waku-relay.md) spec for more details.
+
+### Default pubsub topic
+
+The default PubSub topic being used for Waku is currently: `/waku/2/default-waku/proto`
+
+This indicates that it relates to Waku, is version 2, is the default topic, and
+that the encoding of data field is protobuf.
+
+The default PubSub topic SHOULD be used for all protocols. This ensures a
+connected network, as well some degree of metadata protection. It MAY be
+different if or when:
+
+- Different applications have different message volume
+- Topic sharding is introduced
+- Encoding is changed
+- Version is changed
 
 ## Discovery domain
 
@@ -121,6 +148,11 @@ packet from one version to the other.
 See [bridge spec](waku-bridge.md) for details on a bridge mode.
 
 ## Changelog
+
+### Next version
+
+- Add recommended default PubSub topic
+- Update relay and message spec version
 
 ### 2.0.0-beta1
 
