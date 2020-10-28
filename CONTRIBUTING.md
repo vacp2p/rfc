@@ -12,7 +12,7 @@ To make sure people don't miss your PR, ask for review from people of the Vac te
 
 ## Spec lifecycle
 
-Every spec has its own lifecycle that shows its maturity. We indicate this in a similar fashion to [COSS Lifecycle](https://rfc.unprotocols.org/spec:2/COSS/):
+Every spec has its own lifecycle that shows its maturity. We indicate this in a similar fashion to [COSS Lifecycle](https://github.com/unprotocols/rfc/blob/master/2/README.md):
 
 ![](assets/lifecycle.png)
 
