@@ -125,7 +125,7 @@ implementation, though a reasonable default is one minute.
 
 ### 2.0.0-beta2
 
-Initial draft version. Released [2020-10-28]
+Initial draft version. Released [2020-10-28](https://github.com/vacp2p/specs/commit/5ceeb88cee7b918bb58f38e7c4de5d581ff31e68)
 - Fix: Ensure contentFilter and contentTopic are repeated fields, per implementation
 - Change: Add ability to unsubscribe from filters. Make `subscribe` an explicit boolean indication. Edit protobuf field order to be consistent with libp2p.
 
