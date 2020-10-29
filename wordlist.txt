@@ -119,6 +119,7 @@ protobuf
 PSS
 pseudonymity
 PubSub
+pubsub
 pyspelling
 qNAN
 remoteHash
@@ -141,6 +142,7 @@ SECP
 semver
 seqid
 seqno
+sharding
 Sieka
 sNAN
 suboptimal
