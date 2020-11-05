@@ -109,6 +109,8 @@ nim
 noop
 Ok
 Oskar
+pageSize
+pagingInfo
 peerid
 peerID
 Piana
@@ -116,12 +118,15 @@ Pluggable
 PoW
 proto
 protobuf
+PRs
 PSS
 pseudonymity
 PubSub
 pubsub
 pyspelling
 qNAN
+rebase
+receivedTime
 remoteHash
 remotelog
 RemoteLog
@@ -137,6 +142,7 @@ rlp
 rlpx
 RLPx
 rpc
+Sanaz
 scalability
 SECP
 semver
@@ -149,6 +155,7 @@ suboptimal
 SubOpts
 subprotocol
 subprotocols
+Taheri
 TBD
 TCP
 textlint
