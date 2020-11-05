@@ -95,7 +95,7 @@ RPC call to respond to a HistoryQuery call.
 
 
 ### 2.0.0-beta2 
-Released [2020-10-27]()
+Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
 - Added pagination support.
   
 ### 2.0.0-beta1
