@@ -1,7 +1,7 @@
 ---
 title: Waku RPC API
-version: 0.1.0
-status: Draft
+version: 1.0.0
+status: Stable
 authors: Dean Eigenmann <dean@status.im>
 ---
 

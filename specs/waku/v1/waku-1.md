@@ -1,7 +1,7 @@
 ---
 title: Waku
 version: 1.0.0
-status: Draft
+status: Stable
 authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
 redirect_from:
   - /waku/waku.html
