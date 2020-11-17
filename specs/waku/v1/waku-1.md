@@ -568,7 +568,7 @@ Known static nodes MAY also be used.
 
 ## Changelog
 
-### Upcoming Version
+### [Initial Release](https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8)
 
 - Add section on P2P Request Complete packet and update packet code table.
 - Correct the header hierarchy for the status-options fields.

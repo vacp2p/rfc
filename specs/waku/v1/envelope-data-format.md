@@ -14,7 +14,8 @@ redirect_from:
     1. [ABNF](#abnf)
     2. [Signature](#signature)
     3. [Padding](#padding)
- 3. [Copyright](#copyright)
+ 3. [Changelog](#changelog) 
+ 4. [Copyright](#copyright)
 
 ## Abstract
 
@@ -67,6 +68,12 @@ Those unable to decrypt the envelope data are also unable to access the signatur
 ### Padding
 
 The padding field is used to align data size, since data size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
+
+## Changelog
+
+| Version                                                                                 | Comment          |
+| :--------------------------------------------------------------------------------------:| ---------------- |
+| [1.0.0](https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8)| Initial release. |
 
 ## Copyright
 
