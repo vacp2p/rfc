@@ -80,7 +80,7 @@ The following structured types are defined for use throughout the document:
 | Field | Type | Inclusion | Description |
 | ----: | :--: | :--: |----------- |
 | `messages` | `Array`[[`WakuMessage`](#WakuMessage)] | mandatory | Array of retrieved historical messages |
-| `pagingInfo` | [`PagingInfo`](#PagingInfo) | conditional | Paging information from which to resume further historical queries |
+| `pagingInfo` | [`PagingInfo`](#PagingInfo) | [conditional](#store-api) | Paging information from which to resume further historical queries |
 
 #### PagingInfo
 
@@ -125,7 +125,7 @@ The `get_waku_v2_debug_info` method retrieves information about a Waku v2 node
 none
 
 ##### Response
-- [**WakuInfo**](#WakuInfo) - information about a Waku v2 node
+- [**`WakuInfo`**](#WakuInfo) - information about a Waku v2 node
 
 ### Relay API
 
@@ -138,7 +138,7 @@ The `post_waku_v2_relay_publish` method publishes a message on a [PubSub `topic`
 ##### Parameters
 
 - **`String`** - the [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on
-- [**WakuMessage**](#WakuMessage) - the `message` to publish
+- [**`WakuMessage`**](#WakuMessage) - the `message` to publish
 
 ##### Response
 
@@ -150,15 +150,15 @@ Refer to the [Waku Store specification](https://github.com/vacp2p/specs/blob/mas
 
 #### `get_waku_v2_store_query`
 
-The `get_waku_v2_store_query` method retrieves historical messages on specific content topics. 
+The `get_waku_v2_store_query` method retrieves historical messages on specific content topics.
 
 ##### Parameters
 
-- [**HistoryQuery**](#HistoryQuery) - the history `query` to perform. This query MAY be called with [`PagingInfo`](#PagingInfo), to retrieve historical messages on a per-page basis.
+- [**`HistoryQuery`**](#HistoryQuery) - the history `query` to perform. This query MAY be called with [`PagingInfo`](#PagingInfo), to retrieve historical messages on a per-page basis.
 
 ##### Response
 
-- [**HistoryResponse**](#HistoryResponse) - the response to a history `query`. If the `query` included [`PagingInfo`](#PagingInfo), the node MUST return messages on a per-page basis and include [`PagingInfo`](#PagingInfo) in the response. This [`PagingInfo`](#PagingInfo) MUST contain a `cursor` pointing to the [`Index`](#Index) from which a new page can be requested.
+- [**`HistoryResponse`**](#HistoryResponse) - the response to a history `query`. If the `query` included [`PagingInfo`](#PagingInfo), the node MUST return messages on a per-page basis and include [`PagingInfo`](#PagingInfo) in the response. This [`PagingInfo`](#PagingInfo) MUST contain a `cursor` pointing to the [`Index`](#Index) from which a new page can be requested.
 
 ### Filter API
 
@@ -170,7 +170,7 @@ The `post_waku_v2_filter_subscribe` method subscribes to receive notifications f
 
 ##### Parameters
 
-- [**FilterRequest**](#FilterRequest) - filter criteria being subscribed to.
+- [**`FilterRequest`**](#FilterRequest) - filter criteria being subscribed to.
 
 ##### Response
 
@@ -182,7 +182,7 @@ The `post_waku_v2_filter_unsubscribe` method unsubscribes from notifications for
 
 ##### Parameters
 
-- [**FilterRequest**](#FilterRequest) - filter criteria being unsubscribed from.
+- [**`FilterRequest`**](#FilterRequest) - filter criteria being unsubscribed from.
 
 ##### Response
 
