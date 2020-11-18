@@ -1,7 +1,7 @@
 ---
 title: Waku Mailserver
-version: 0.2.0
-status: Draft
+version: 1.0.0
+status: Stable
 authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im>
 redirect_from:
   - /waku/mailserver.html
@@ -110,9 +110,10 @@ A mailserver has a direct TCP connection, which means they are trusted to send t
 
 ## Changelog
 
-| Version | Comment |
-| :-----: | ------- |
-| 0.2.0 (current)  | Add topic interest to reduce bandwidth usage |
+| Version                                                                                        | Comment |
+| :--------------------------------------------------------------------------------------------: | ------- |
+| [1.0.0](https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8)       | marked stable as it is in use.                                                   |
+| 0.2.0                                                                                          | Add topic interest to reduce bandwidth usage |
 | [0.1.0](https://github.com/vacp2p/specs/blob/06d4c736c920526472a507e5d842212843a112ed/wms.md)  | Initial Release |
 
 ### Difference between wms 0.1 and wms 0.2

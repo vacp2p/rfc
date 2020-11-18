@@ -1,7 +1,7 @@
 ---
 title: Waku RPC API
-version: 0.1.0
-status: Draft
+version: 1.0.0
+status: Stable
 authors: Dean Eigenmann <dean@status.im>
 ---
 
@@ -10,9 +10,10 @@ authors: Dean Eigenmann <dean@status.im>
 1. [Abstract](#abstract)
 2. [Wire Protocol](#wire-protocol)
     1. [Transport](#transport)
-    1. [Objects](#objects)
-    1. [Methods](#methods)
-3. [Copyright](#copyright)
+    2. [Objects](#objects)
+    3. [Methods](#methods)
+3. [Changelog](#changelog)
+4. [Copyright](#copyright)
 
 ## Abstract
 
@@ -404,6 +405,12 @@ The parameters is an `Object` containing the following fields:
 #### Response
 
 - **bool** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+## Changelog
+
+| Version                                                                                 | Comment          |
+| :--------------------------------------------------------------------------------------:| ---------------- |
+| [1.0.0](https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8)| Initial release. | 
 
 ## Copyright
 
