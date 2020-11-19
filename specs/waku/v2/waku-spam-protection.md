@@ -13,6 +13,10 @@ authors: Sanaz Taheri <sanaz@status.im>
 - [RLN-integrated Relay protocol](#rln-integrated-relay-protocol)
   - [RLN](#rln)
   - [Flow](#flow)
+    - [SetUp](#setup)
+    - [Registration](#registration)
+    - [Publishing](#publishing)
+    - [Routing](#routing)
   - [Protobuf](#protobuf)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
@@ -48,21 +52,21 @@ For the registration, the peer shall create a transaction that sends x (TODO to 
 
 A peer willing to publish a message requires to prove that she is a current member and has not exceeded her messaging quota in the given epoch. The membership proof relies on the state of the contract (the root of the membership tree) and is done anonymously using zkSNARK. The messaging quotas are controlled through the concept of nullifiers. In specific, each message published in the system is associated with a nullifier derived from the peer's private key and an external nullifier which is the epoch. Nullifiers are stored as part of the contract's state and enable monitoring of the number of messages issued by each member per epoch. However, in our current implementation, the set of nullifiers can be locally stored by the routing peers. More details are provided below.
 ## Flow
-**SetUp**
+### SetUp
 
 There should be a smart contract with a known address.
 The state of the smart contract will contain a Merkle Tree `MT` containing the set of registered peers and a `nullifier_map` that stores `share_x`, `share_y`, and `internal_nullifier`. 
 
 TODO: add more details
 
-**Registration**
+### Registration
 
 Peers willing to publish in the network shall follow the registration phase of RLN. 
 The `a_0` and `auth_path` resultant from the RLN **registration** phase (step 2 of  https://github.com/vacp2p/research/issues/49) must be permanently and locally stored by the peer.
 
 TODO: replicate step 2 of RLN here 
 
-**Publishing**
+### Publishing
 
 Peer:  
 The publisher decides on the `WakuMessage` and calculates the `epoch`.
@@ -81,7 +85,7 @@ builds its PubSub message by setting the `proofBundle` part of the `WakuMessage`
 4. `internal_nullifier`
 5. `zkproof`
 
-**Routing**:
+### Routing
 
 If the `epoch` attached to the message has a non-reasonable gap (TODO to be defined) with the routing node's current `epoch` then the message must be dropped (this is to prevent a newly registered node spamming the system by messaging for all the past epochs)
 For each incoming message, the routing peer checks whether her local `nullifier_map` contains the `internal_nullifier`:
