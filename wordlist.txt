@@ -14,6 +14,7 @@ Babik
 BestBit
 bitwise
 blockable
+blockchain
 bool
 boolean
 Briar
@@ -45,6 +46,7 @@ DoS
 ECDSA
 Eigenmann
 EIP
+ETH
 endian
 enum
 et
@@ -92,6 +94,7 @@ localHash
 mailserver
 mailservers
 Markou
+Merkle
 messagePush
 MessagePush
 metainformation
@@ -107,6 +110,8 @@ Naur
 Nayman
 nim
 noop
+nullifier
+nullifiers
 Ok
 Oskar
 pageSize
@@ -116,6 +121,8 @@ peerID
 Piana
 Pluggable
 PoW
+proofBundle
+ProofBundle
 proto
 protobuf
 PRs
@@ -138,6 +145,8 @@ retransmission
 retransmissions
 retransmit
 retransmitted
+RLN
+RLNs
 rlp
 rlpx
 RLPx
@@ -148,6 +157,8 @@ SECP
 semver
 seqid
 seqno
+SetUp
+Shamir
 sharding
 Sieka
 sNAN
@@ -193,3 +204,5 @@ wms
 wns
 wordlist
 whitelist
+zkproof
+ZKproof
