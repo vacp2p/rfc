@@ -6,6 +6,7 @@ authors: Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Flow](#flow)
@@ -90,7 +91,7 @@ TODO: may shorten or delete the Spam detection and slashing process
 ## Protobuf
 
 ```protobuf
-//TODO may need to include the pubsub message 
+//TODO may include the pubsub message 
 message WakuMessage {
   optional bytes payload = 1;
   optional fixed32 contentTopic = 2;
