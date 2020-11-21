@@ -90,6 +90,7 @@ TODO: may shorten or delete the Spam detection and slashing process
 ## Protobuf
 
 ```protobuf
+//TODO may need to include the pubsub message 
 message WakuMessage {
   optional bytes payload = 1;
   optional fixed32 contentTopic = 2;
