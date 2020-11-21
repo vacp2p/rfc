@@ -6,8 +6,6 @@ authors: Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
-
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Flow](#flow)
