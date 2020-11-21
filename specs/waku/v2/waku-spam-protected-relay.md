@@ -42,7 +42,7 @@ A peer willing to publish a message is required to register. Registration is mod
 
 For the registration, a peer creates a transaction that sends x (TODO to be specified) ETH to the contract. The peer who has the "private key" `sk` associated with that deposit would be able to withdraw x ETH by providing valid proof. Note that  `sk` is initially only known by the owning peer however it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per epoch.
 
-TODO: the interaction with the contract is subject to change dependign on the final implementation
+TODO: the interaction with the contract is subject to change depending on the final implementation
 
 Once registered, the peer obtains the root of the tree (after the registration of the current peer) i.e., `root`  as well as the authenticity path `authPath`. A peer can prove her membership using the `authPath`.
 
