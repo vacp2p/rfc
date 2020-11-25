@@ -6,7 +6,6 @@ authors: Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Flow](#flow)
@@ -15,7 +14,6 @@ authors: Sanaz Taheri <sanaz@status.im>
   - [Routing](#routing)
     - [Spam Detection and Slashing](#spam-detection-and-slashing)
 - [Security Considerations](#security-considerations)
-  - [TODO: discuss about the economic spam guarantees](#todo-discuss-about-the-economic-spam-guarantees)
 - [Protobuf](#protobuf)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
@@ -90,8 +88,11 @@ TODO: may shorten or delete the Spam detection and slashing process
 TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection
 
 # Security Considerations
+
 TODO: add discussion about the anonymity (e.g., the `StrictNoSign` policy)
+
 TODO: discuss about the economic spam guarantees
+
 -------
 
 # Protobuf
