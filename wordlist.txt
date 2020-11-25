@@ -18,6 +18,7 @@ bool
 boolean
 Briar
 BSP
+capitalisation
 cas
 changelog
 Changelog
@@ -91,6 +92,7 @@ LLC
 localHash
 mailserver
 mailservers
+mappable
 Markou
 messagePush
 MessagePush
@@ -111,6 +113,7 @@ Ok
 Oskar
 pageSize
 pagingInfo
+PagingOptions
 peerid
 peerID
 Piana
@@ -151,6 +154,7 @@ seqno
 sharding
 Sieka
 sNAN
+StoreResponse
 suboptimal
 SubOpts
 subprotocol
@@ -183,8 +187,10 @@ vacp2p
 Vp
 waku
 WakuFilter
+WakuInfo
 WakuMessage
 WakuRelay
+WakuRelayMessage
 WakuStore
 WakuSub
 WakuWhisper
