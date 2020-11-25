@@ -17,7 +17,7 @@ authors: Hanno Cornelius <hanno@status.im>
     1. [Store API](#store-api)
     1. [Filter API](#filter-api)
 1. [Example usage](#example-usage)
-1. [Changelod](#changelog)
+1. [Changelog](#changelog)
 1. [Copyright](#copyright)
 
 # Introduction
