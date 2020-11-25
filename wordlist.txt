@@ -74,6 +74,7 @@ http
 https
 im
 inlined
+internalNullifier
 invariants
 ip
 IPs
@@ -160,6 +161,8 @@ seqno
 SetUp
 Shamir
 sharding
+shareX
+shareY
 Sieka
 sNAN
 suboptimal
@@ -204,5 +207,6 @@ wms
 wns
 wordlist
 whitelist
-zkproof
+zkProof
 ZKproof
+ZKProof

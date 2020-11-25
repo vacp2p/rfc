@@ -1,11 +1,12 @@
 ---
-title: Waku Spam Protected Relay
+title: Waku RLN Relay
 version: 2.0.0-alpha1
 status: Raw
 authors: Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Flow](#flow)
@@ -13,7 +14,9 @@ authors: Sanaz Taheri <sanaz@status.im>
   - [Publishing](#publishing)
   - [Routing](#routing)
     - [Spam Detection and Slashing](#spam-detection-and-slashing)
-  - [Protobuf](#protobuf)
+- [Security Considerations](#security-considerations)
+  - [TODO: discuss about the economic spam guarantees](#todo-discuss-about-the-economic-spam-guarantees)
+- [Protobuf](#protobuf)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
 
@@ -24,7 +27,7 @@ The current specification embodies the details of the spam-protected version of 
 The security objective is to control the number of PubSub messages that each peer can publish per epoch (where epoch is a system design parameter), regardless of the published topic.
 
 
-**Protocol identifier***: `/vac/waku/spam-protected-relay/2.0.0-alpha1`
+**Protocol identifier***: `/vac/waku/waku-rln-relay/2.0.0-alpha1`
 
 # Motivation
 
@@ -54,9 +57,9 @@ TODO: To specify the details of protobuf messages for the interaction with the c
 
 In order to publish at a given `epoch`, the publishing peer proceeds based on the regular relay protocol.  However, in order to protect against spamming, each PubSub message must carry a `proofBundle`. At a high level, the `proofBundle` is a zero-knowledge proof (TODO: to clarify what a zero-knowledge proof means) signifying that the publishing peer is a  registered member, and she has not exceeded the messaging rate at the given `epoch`. 
 
-The `proofBundle` is embedded inside the `data` field of the PubSub message, which, in the `relay` protocol, corresponds to the `WakuMessage`. More details on the `proofBundle`'s message fields are provided under the ProtoBuf section. 
+The `proofBundle` is embedded inside the `data` field of the PubSub message, which, in the `relay` protocol, corresponds to the `WakuMessage`. More details on the `proofBundle`'s message fields are provided under the Protobuf section. 
 
-The proof generation relies on the knowledge of `sk` and `authPath` (that is why they should be permanently and privately stored by the owning peer). Further inputs to the proof generation are `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage` (TODO: the inputs of the proof generation may change). The proof generation results in the following data items which are included as part of the `ProofBundle`:  
+The proof generation relies on the knowledge of `sk` and `authPath` (that is why they should be permanently and privately stored by the owning peer). Further inputs to the proof generation are `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage` (TODO: the inputs of the proof generation may change). The proof generation results in the following data items which are included as part of the `ProofBundle`:  
 1. `shareX`
 2. `shareY`
 3. `internalNullifier`
@@ -84,13 +87,18 @@ In order to enable local spam detection and slashing, routing peers MUST record 
 
 TODO: may shorten or delete the Spam detection and slashing process
 
+TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection
 
+# Security Considerations
+TODO: add discussion about the anonymity (e.g., the `StrictNoSign` policy)
+TODO: discuss about the economic spam guarantees
 -------
 
-## Protobuf
+# Protobuf
 
 ```protobuf
 //TODO may include the pubsub message 
+// TODO to reflect this change on WakuMessage spec once the PR gets mature
 message WakuMessage {
   optional bytes payload = 1;
   optional fixed32 contentTopic = 2;
@@ -98,10 +106,12 @@ message WakuMessage {
   optional ProofBundle proofBundle = 4;
 }
 
+
 message ProofBundle {
    int64 epoch = 1; //  indicating the intended epoch of the message
    // TODO shareX and shareY
-   bytes internalNullifier;
+   bytes internalNullifier = 2;
+   bytes root = 3; // TODO may be removed and added as part of zkProof
    // TODO zkProof
 }
 // TODO ZKProof may be a separate message type
