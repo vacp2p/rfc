@@ -1,5 +1,5 @@
 ---
-domain: rfc.unprotocols.org
+domain: rfc.vac.dev
 shortname: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
@@ -81,7 +81,7 @@ Every specification has an independent lifecycle that documents clearly its curr
 
 A specification has six possible states that reflect its maturity and contractual weight:
 
-![Lifecycle diagram](lifecycle.png)
+![Lifecycle diagram](../../../../assets/lifecycle.png)
 
 ### Raw Specifications
 All new specifications are **raw** specifications. Changes to raw specifications can be unilateral and arbitrary. Those seeking to implement a raw specification should ask for it to be made a draft specification. Raw specifications have no contractual weight.
