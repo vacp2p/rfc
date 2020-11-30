@@ -1,0 +1,15 @@
+# MSC for some fictional process
+msc {
+  hscale = "2";
+
+  a [label = "Relay Node"],b [label = "Membership Contract"];
+  a=>b [ label = "register(pk)" ] ;
+  b->a [ label = "index, root, authPath"];
+  #...;
+  ---  [ label = " " ];
+  a=>b [ label = "getRoot()" ] ;
+  b->a [ label = "root"];
+  ---  [ label = " " ];
+  a=>b [ label = "getAuthPath(index)" ] ;
+  b->a [ label = "authPath"];
+}
