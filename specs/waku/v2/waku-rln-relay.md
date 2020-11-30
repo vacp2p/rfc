@@ -6,6 +6,7 @@ authors: Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Motivation](#motivation)
 - [Flow](#flow)
@@ -50,6 +51,15 @@ Once registered, the peer obtains the root of the tree (after the registration o
 `sk`  and `authPath`  are secret data and MUST be permanently and locally stored by the peer. 
 
 TODO: To specify the details of protobuf messages for the interaction with the contract
+
+<!-- diagram -->
+
+<p align="center">
+    <img src="../../../assets/rln-relay/rln-relay.png" />
+    <br />
+    Figure 1: Registration.
+</p>
+
 
 ## Publishing
 
