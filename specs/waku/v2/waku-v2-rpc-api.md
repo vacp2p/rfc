@@ -117,6 +117,8 @@ The following structured types are defined for use on the Relay API:
 | `payload` | `String` | mandatory | The payload being relayed |
 | `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
 
+ > **_NOTE:_** `WakuRelayMessage` maps directly to a [`WakuMessage`](#WakuMessage), except that the latter contains an explicit message `version`. For `WakuRelay` purposes, the versioning is handled by the API.
+
 ### `post_waku_v2_relay_v1_message`
 
 The `post_waku_v2_relay_v1_message` method publishes a message to be relayed on a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor)
@@ -160,19 +162,19 @@ The `delete_waku_v2_relay_v1_subscriptions` method unsubscribes a node from an a
 
 - **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
-### `get_waku_v2_relay_v1_messages_head`
+### `get_waku_v2_relay_v1_messages`
 
-The `get_waku_v2_relay_v1_messages_head` method returns the latest message on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor). The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server MUST block until a message is received or a timeout is reached. This method can be used to long poll a `topic` for new messages.
+The `get_waku_v2_relay_v1_messages` method returns a list of messages that were received on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server SHOULD return an empty list. This method can be used to poll a `topic` for new messages.
 
 #### Parameters
 
 | Field | Type | Inclusion | Description |
 | ----: | :--: | :--: |----------- |
-| `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest message |
+| `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
 
 #### Response
 
-- [**`WakuMessage`**](#WakuMessage) - the latest `message` on the polled `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+- **`Array`[[`WakuMessage`](#WakuMessage)]** - the latest `messages` on the polled `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 ## Store API
 
@@ -267,6 +269,20 @@ The `delete_waku_v2_filter_v1_subscription` method removes subscriptions in a [l
 #### Response
 
 - **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+### `get_waku_v2_filter_v1_messages`
+
+The `get_waku_v2_filter_v1_messages` method returns a list of messages that were received on a subscribed content `topic` after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled content `topic`. If no message has yet been received on the polled content `topic`, the server SHOULD respond with an empty list. This method can be used to poll a content `topic` for new messages.
+
+#### Parameters
+
+| Field | Type | Inclusion | Description |
+| ----: | :--: | :--: |----------- |
+| `contentTopic` | `Number` | mandatory | The content topic to poll for the latest messages |
+
+#### Response
+
+- **`Array`[[`WakuMessage`](#WakuMessage)]** - the latest `messages` on the polled content `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 # Example usage
 
@@ -449,6 +465,12 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "error": null
 }
 ```
+
+# References
+
+1. [JSON-RPC specification](https://www.jsonrpc.org/specification)
+1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
+1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
 
 # Changelog
 
