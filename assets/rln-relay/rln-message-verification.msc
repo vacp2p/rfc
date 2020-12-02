@@ -3,9 +3,9 @@ msc {
   hscale = "2";
   a [label = "Relay Node: Publisher"], b [label = "Relay Node: Router"], c[label="Relay Node"], d [label="Relay Node"],e [label="Contract"];
   |||;
-  b box b [linecolor="white",label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of submmited internalNullifiers"],
-  c box c [linecolor="white",label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of submmited internalNullifiers"],
-  d box d [linecolor="white",label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of submmited internalNullifiers"];
+  b box b [label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of the received internalNullifiers"],
+  c box c [label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of the received internalNullifiers"],
+  d box d [label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of the received internalNullifiers"];
   |||;
   ..., b->b [ label = "Keep track of epoch"], c->c [ label = "Keep track of epoch"], d->d [ label = "Keep track of epoch"];
   
