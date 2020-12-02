@@ -101,6 +101,7 @@ TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/ma
     <br />
     Figure 2: Publishing and Routing.
 </p>
+
 # Security Considerations
 
 TODO: add discussion about the anonymity (e.g., the `StrictNoSign` policy)
