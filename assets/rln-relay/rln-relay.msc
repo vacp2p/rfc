@@ -6,7 +6,7 @@ msc {
   a box a [ label="generate sk,pk"] ;
   a=>b [ label = "register(pk)" ] ;
   |||;
-  b box b [label="insert pk as a leaf to the tree \n index: the index of the inserted leaf \nroot: the updated root \n authPath: the authentication path"];
+  b box b [label=" \n insert pk as a leaf to the tree \n index: the index of the inserted leaf \nroot: the updated root \n authPath: the authentication path \n  "];
   |||;
   b->a [ label = "index, root, authPath"];
   |||;
