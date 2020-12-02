@@ -4,7 +4,7 @@ msc {
   a [label = "Relay Node: Publisher"], b [label = "Relay Node: Router"], c[label="Relay Node"], d [label="Relay Node"],e [label="Contract"];
   b box b [label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of submmited internalNullifiers"];
 
-  a box a [label = "Message: the intended message \n epoch: the current epoch \n A(x) = sk + H(sk, epoch)x \n shareX=H(message), shareY=A(shareX) \n internalNullifier = H(H(sk,epoch))"];
+  a box a [label = "Message: the intended message \n \n epoch: the current epoch \n A(x) = sk + H(sk, epoch)x \n shareX=H(message), shareY=A(shareX) \n internalNullifier = H(H(sk,epoch))"];
   a box a [label="  \n  zkProof: generate the proof using zkSNARK \n "];
 
   |||;
