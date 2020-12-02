@@ -14,14 +14,14 @@ msc {
   ...   [ label = " Other relay nodes register and the membership tree gets updatetd " ];
   ...,  ---;
   a=>b [ label = "getRoot()" ] ;
-  b box b [label="root: get the current root"];
+  b box b [label="  \n  root: get the current root\n  "];
   b->a [ label = "root"];
 
   ...,  ---  [ label = "    " ];
 
 
   a=>b [ label = "getAuthPath(index)" ] ;
-  b box b [label="authPath: calculate the authentication path of the leaf with the given index and based on the current tree"];
+  b box b [label="  \n  authPath: calculate the authentication path of the leaf with the given index and based on the current tree\n  "];
 
   b->a [ label = "authPath"];
 }
