@@ -89,7 +89,9 @@ keypair
 kimdemey
 Lange
 libp
+LibP
 libp2p
+LibP2P
 lifecycle
 LLC
 localHash
