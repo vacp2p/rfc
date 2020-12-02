@@ -1,0 +1,15 @@
+# MSC for some fictional process
+msc {
+  hscale = "2";
+
+  a [label = "Relay Node 1: Publisher"], b , c[label = "Relay Node 2"];
+  a=>b [ label = "epoch, proofBundle:(shareX,shareY,internalNullifier,zkProof)" ] ;
+  b->a [ label = "index, root, authPath"];
+  #...;
+  ---  [ label = " " ];
+  a=>b [ label = "getRoot()" ] ;
+  b->a [ label = "root"];
+  ---  [ label = " " ];
+  a=>b [ label = "getAuthPath(index)" ] ;
+  b->a [ label = "authPath"];
+}
