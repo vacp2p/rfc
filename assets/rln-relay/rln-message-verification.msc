@@ -1,15 +1,26 @@
 # MSC for some fictional process
 msc {
   hscale = "2";
+  a [label = "Relay Node: Publisher"], b [label = "Relay Node: Router"], c[label="Relay Node"], d [label="Relay Node"],e [label="Contract"];
+  b box b [label="internalNullifierMap = [(internalNullifier, shareX, shareY)...] \n initialize an empty map of submmited internalNullifiers"];
 
-  a [label = "Relay Node 1: Publisher"], b , c[label = "Relay Node 2"];
-  a=>b [ label = "epoch, proofBundle:(shareX,shareY,internalNullifier,zkProof)" ] ;
-  b->a [ label = "index, root, authPath"];
-  #...;
-  ---  [ label = " " ];
-  a=>b [ label = "getRoot()" ] ;
-  b->a [ label = "root"];
-  ---  [ label = " " ];
-  a=>b [ label = "getAuthPath(index)" ] ;
-  b->a [ label = "authPath"];
+  a box a [label = "Message: the intended message \n epoch: the current epoch \n A(x) = sk + H(sk, epoch)x \n shareX=H(message), shareY=A(shareX) \n internalNullifier = H(H(sk,epoch))"];
+  a box a [label="  \n  zkProof: generate the proof using zkSNARK \n "];
+
+  |||;
+
+  a=>b [ label = " \n Message, \n epoch, \n proofBundle:(shareX, shareY, internalNullifier, zkProof)  \n "]  ;
+  b box b [label=" \n 1. If the received epoch is far from the current epoch \n "];
+  b -x c [label="Drop the message"];
+
+  b box b [label=" \n 2. If verification of zkProof failed \n "];
+  b -x c [label="Drop the message"];
+
+  b box b [label=" \n 3. if identical internalNullifier exists in the internalNullifierMap, extract the publisher sk \n "];
+  b -x c [label="Drop the message"];
+  b <=e, b => e[label="Slash the publisher: withdraw the deposit associated with sk"];
+  b box b [label=" \n If none of  1-3 happens, then relay the message \n  "];
+  b => c [label="Relay"];
+  b => d [label="Relay"];
+
 }

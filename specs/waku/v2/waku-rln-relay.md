@@ -60,7 +60,6 @@ TODO: To specify the details of protobuf messages for the interaction with the c
     Figure 1: Registration.
 </p>
 
-
 ## Publishing
 
 In order to publish at a given `epoch`, the publishing peer proceeds based on the regular relay protocol.  However, in order to protect against spamming, each PubSub message must carry a `proofBundle`. At a high level, the `proofBundle` is a zero-knowledge proof (TODO: to clarify what a zero-knowledge proof means) signifying that the publishing peer is a  registered member, and she has not exceeded the messaging rate at the given `epoch`. 
@@ -97,6 +96,11 @@ TODO: may shorten or delete the Spam detection and slashing process
 
 TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection
 
+<p align="center">
+    <img src="../../../assets/rln-relay/rln-message-verfification.png" />
+    <br />
+    Figure 2: Publishing and Routing.
+</p>
 # Security Considerations
 
 TODO: add discussion about the anonymity (e.g., the `StrictNoSign` policy)
