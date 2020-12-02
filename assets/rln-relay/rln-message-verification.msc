@@ -9,7 +9,7 @@ msc {
   |||;
   ..., b->b [ label = "Keep track of epoch"], c->c [ label = "Keep track of epoch"], d->d [ label = "Keep track of epoch"];
   
-  a box a [label = "Message: the intended message \n \n epoch: the current epoch \n A(x) = sk + H(sk, epoch)x \n shareX=H(message), shareY=A(shareX) \n internalNullifier = H(H(sk,epoch))"];
+  a box a [label = "Message: the intended message \n \n epoch: the current epoch \n \n  A(x) = sk + H(sk, epoch)x \n \n shareX=H(message), shareY=A(shareX) \n \n internalNullifier = H(H(sk,epoch))"];
   a box a [label="  \n  zkProof: generate the proof using zkSNARK \n "];
 
   |||;
