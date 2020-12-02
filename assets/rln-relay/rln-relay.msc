@@ -3,13 +3,25 @@ msc {
   hscale = "2";
 
   a [label = "Relay Node"],b [label = "Membership Contract"];
+  a box a [ label="generate sk,pk"] ;
   a=>b [ label = "register(pk)" ] ;
+  |||;
+  b box b [label="insert pk as a leaf to the tree \n index: the index of the inserted leaf \nroot: the updated root \n authPath: the authentication path"];
+  |||;
   b->a [ label = "index, root, authPath"];
-  #...;
-  ---  [ label = " " ];
+  |||;
+  ...,  ---;
+  ...   [ label = " Other relay nodes register and the membership tree gets updatetd " ];
+  ...,  ---;
   a=>b [ label = "getRoot()" ] ;
+  b box b [label="root: get the current root"];
   b->a [ label = "root"];
-  ---  [ label = " " ];
+
+  ...,  ---  [ label = "    " ];
+
+
   a=>b [ label = "getAuthPath(index)" ] ;
+  b box b [label="authPath: calculate the authentication path of the leaf with the given index and based on the current tree"];
+
   b->a [ label = "authPath"];
 }
