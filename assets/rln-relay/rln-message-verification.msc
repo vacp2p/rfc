@@ -7,7 +7,7 @@ msc {
   b rbox b [label = "Relay Node: Router"], 
   c rbox c[label="Relay Node"], 
   d rbox d [label="Relay Node"], 
-  e note e [label="Contract"];
+  e note e [label="Membership Contract"];
   |||;
    
   b box b [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n  initialize an empty map of the received nullifiers \n "],
