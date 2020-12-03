@@ -297,7 +297,7 @@ The following structured types are defined for use on the Admin API:
 `WakuPeer` is an `Object` containing the following fields:
 | Field | Type | Inclusion | Description |
 | ----: | :--: | :--: |----------- |
-| `listenStr` | `String` | mandatory | Address that this peer is listening for |
+| `multiaddr` | `String` | mandatory | Multiaddress containing this peer's location and identity |
 | `protocol` | `String` | mandatory | Protocol that this peer is registered for |
 | `connected` | `bool` | mandatory | `true` if peer has active connection for this `protocol`, `false` if not |
 
