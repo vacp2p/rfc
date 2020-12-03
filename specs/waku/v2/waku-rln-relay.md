@@ -90,6 +90,7 @@ In order to enable local spam detection and slashing, routing peers MUST record 
 2. Otherwise, it checks whether a message with an identical `nullifier` has already been relayed. 
    1. If such message exists and its `shareX` and `shareY` components are different from the incoming message, then slashing takes place (if the `shareX` and `shareY` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be dropped).
    2. If none found, then the message gets relayed.
+
 An overview of slashing procedure is provided in Figure 2.
 
 TODO: may shorten or delete the Spam detection and slashing process
