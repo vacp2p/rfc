@@ -69,11 +69,11 @@ The `proofBundle` is embedded inside the `data` field of the PubSub message, whi
 The proof generation relies on the knowledge of `sk` and `authPath` (that is why they should be permanently and privately stored by the owning peer). Further inputs to the proof generation are `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage` (TODO: the inputs of the proof generation may change). The proof generation results in the following data items which are included as part of the `ProofBundle`:  
 1. `shareX`
 2. `shareY`
-3. `internalNullifier`
+3. `nullifier`
 4. `zkProof`
 
 
-The tuple of (`internalNullifier`, `shareX`, `ShareY`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.  Given two such tuples with identical `internalNullifier` but distinct `shareX`, `ShareY` results in full disclosure of peer's `sk` and hence burning the associated deposit. Note that the `internalNullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `internalNullifier`s.
+The tuple of (`nullifier`, `shareX`, `ShareY`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.  Given two such tuples with identical `nullifier` but distinct `shareX`, `ShareY` results in full disclosure of peer's `sk` and hence burning the associated deposit. Note that the `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
 
 Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register). As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the tree and attempts the proof using her updated `authPath`.
 
@@ -84,9 +84,9 @@ Upon the receipt of a PubSub message, the routing peer needs to extract and pars
 Furthermore, the routing peers MUST check whether the `proofBundle` is valid and the message is not spam. If both checks are passed successfully, then the message is relayed. If `proofBundle` is invalid then the message is dropped. If spamming is detected, the publishing peer gets slashed. 
 
 ### Spam Detection and Slashing
-In order to enable local spam detection and slashing, routing peers MUST record the `internalNullifier`, `shareX`, and `shareY` of any incoming message conditioned that it is not spam and has valid proof. To do so, the peer should follow the following steps. 
+In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `shareX`, and `shareY` of any incoming message conditioned that it is not spam and has valid proof. To do so, the peer should follow the following steps. 
 1. The routing peer first verifies the `zkProof` and drops the message if not verified. 
-2. Otherwise, it checks whether a message with an identical `internalNullifier` has already been relayed. 
+2. Otherwise, it checks whether a message with an identical `nullifier` has already been relayed. 
    1. If such message exists and its `shareX` and `shareY` components are different from the incoming message, then slashing takes place (if the `shareX` and `shareY` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be dropped).
    2. If none found, then the message gets relayed.
 
@@ -126,7 +126,7 @@ message WakuMessage {
 message ProofBundle {
    int64 epoch = 1; //  indicating the intended epoch of the message
    // TODO shareX and shareY
-   bytes internalNullifier = 2;
+   bytes nullifier = 2;
    bytes root = 3; // TODO may be removed and added as part of zkProof
    // TODO zkProof
 }
