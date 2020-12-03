@@ -303,7 +303,7 @@ The following structured types are defined for use on the Admin API:
 
 ### `get_waku_v2_admin_v1_peers`
 
-The `get_waku_v2_admin_v1_peers` method returns an array of peers registered on this node. Since a Waku v2 node may open either continuous or ad-hoc connections, depending on the negotiated protocol, these peers may have different connected states. The same peer MAY appear twice in the returned array, if it is registered for more than one protocol.
+The `get_waku_v2_admin_v1_peers` method returns an array of peers registered on this node. Since a Waku v2 node may open either continuous or ad hoc connections, depending on the negotiated protocol, these peers may have different connected states. The same peer MAY appear twice in the returned array, if it is registered for more than one protocol.
 
 #### Parameters
 
