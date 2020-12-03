@@ -3,10 +3,10 @@ msc {
   hscale = "2";
 
   a [label = "Relay Node"],b [label = "Membership Contract"];
-  a box a [ label="generate sk,pk"] ;
-  a=>b [ label = "register(pk)" ] ;
+  a box a [ label=" \n Generate sk,pk \n "] ;
+  a=>b [ label = " \n Register(pk) \n " ] ;
   |||;
-  b box b [label=" \n insert pk as a leaf to the tree \n index: the index of the inserted leaf \nroot: the updated root \n authPath: the authentication path \n  "];
+  b box b [label=" \n Insert pk as a leaf to the tree \n \n index: The index of the inserted leaf \n \n root: The updated tree root \n \n authPath: The authentication path \n  "];
   |||;
   b->a [ label = "index, root, authPath"];
   |||;
@@ -14,14 +14,14 @@ msc {
   ...   [ label = " Other relay nodes register and the membership tree gets updatetd " ];
   ...,  ---;
   a=>b [ label = "getRoot()" ] ;
-  b box b [label="  \n  root: get the current root\n  "];
+  b box b [label="  \n  root: Get the current root\n  "];
   b->a [ label = "root"];
 
   ...,  ---  [ label = "    " ];
 
 
   a=>b [ label = "getAuthPath(index)" ] ;
-  b box b [label="  \n  authPath: calculate the authentication path of the leaf with the given index and based on the current tree\n  "];
+  b box b [label="  \n  authPath: Calculate the authentication path of the leaf with the given index and based on the current tree\n  "];
 
   b->a [ label = "authPath"];
 }

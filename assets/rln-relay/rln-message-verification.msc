@@ -28,16 +28,16 @@ msc {
 
   a=>b [ label = "Message, epoch, proofBundle:(shareX, shareY, nullifier, zkProof) \n "]  ;
   b box b [label= "1. If the received epoch is far from the current epoch"];
-  b -x c [label= "Drop the message"];
+  b -x c [label= "Do not relay"];
 
   b box b [label=" \n 2. If verification of zkProof failed \n "];
-  b -x c [label="Drop the message"];
+  b -x c [label="Do not relay"];
 
-  b box b [label=" \n 3. if identical nullifier exists in the nullifierMap, \n \n extract the publisher sk \n "];
-  b -x c [label="Drop the message"];
+  b box b [label=" \n 3. If identical nullifier exists in the nullifierMap, \n \n extract the publisher sk \n "];
+  b -x c [label="Do not relay"];
   b => e[label="Slash the publisher: Unlbock the deposit associated with sk"];
   e => b [label="x ETH"];
-  b box b [label=" \n If none of  1-3 happens, update the nullifierMap and\n \n relay the message \n "];
+  b box b [label=" \n 4. If none of  1-3 happens, update the nullifierMap \n "];
   b => c [label="Relay"];
   b => d [label="Relay"];
   
