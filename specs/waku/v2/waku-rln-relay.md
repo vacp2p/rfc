@@ -39,7 +39,7 @@ TODO: Fill in more
 
 # Flow
 ## SetUp and Registration
-A peer willing to publish a message is required to register. Registration is moderated through a smart contract deployed on the Ethereum blockchain. The state of the contract contains the list of registered members (realized by a Merkle Tree). 
+A peer willing to publish a message is required to register. Registration is moderated through a smart contract deployed on the Ethereum blockchain. The state of the contract contains the list of registered members (realized by a Merkle Tree). An overview of registration is illustrated in Figure 1.
 
 For the registration, a peer creates a transaction that sends x (TODO to be specified) ETH to the contract. The peer who has the "private key" `sk` associated with that deposit would be able to withdraw x ETH by providing valid proof. Note that  `sk` is initially only known by the owning peer however it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per epoch.
 
@@ -59,6 +59,8 @@ TODO: To specify the details of protobuf messages for the interaction with the c
     <br />
     Figure 1: Registration.
 </p>
+
+TODO: the function calls in this figure as well as messages are subject to change
 
 ## Publishing
 
@@ -81,7 +83,7 @@ Note that the `authPath` of each peer depends on the current status of the regis
 ## Routing
 
 Upon the receipt of a PubSub message, the routing peer needs to extract and parse the `proofBundle` from the `data` field.  If the `epoch` attached to the message has a non-reasonable gap (TODO: the gap should be defined) with the routing peer's current `epoch` then the message must be dropped (this is to prevent a newly registered peer spamming the system by messaging for all the past epochs). 
-Furthermore, the routing peers MUST check whether the `proofBundle` is valid and the message is not spam. If both checks are passed successfully, then the message is relayed. If `proofBundle` is invalid then the message is dropped. If spamming is detected, the publishing peer gets slashed. 
+Furthermore, the routing peers MUST check whether the `proofBundle` is valid and the message is not spam. If both checks are passed successfully, then the message is relayed. If `proofBundle` is invalid then the message is dropped. If spamming is detected, the publishing peer gets slashed. An overview of routing procedure is depicted in Figure 2.
 
 ### Spam Detection and Slashing
 In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `shareX`, and `shareY` of any incoming message conditioned that it is not spam and has valid proof. To do so, the peer should follow the following steps. 
@@ -89,8 +91,7 @@ In order to enable local spam detection and slashing, routing peers MUST record 
 2. Otherwise, it checks whether a message with an identical `nullifier` has already been relayed. 
    1. If such message exists and its `shareX` and `shareY` components are different from the incoming message, then slashing takes place (if the `shareX` and `shareY` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be dropped).
    2. If none found, then the message gets relayed.
-
-
+An overview of slashing procedure is provided in Figure 2.
 
 TODO: may shorten or delete the Spam detection and slashing process
 
@@ -99,8 +100,10 @@ TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/ma
 <p align="center">
     <img src="../../../assets/rln-relay/rln-message-verfification.png" />
     <br />
-    Figure 2: Publishing and Routing.
+    Figure 2: Publishing, Routing and Slashing workflow.
 </p>
+
+TODO: the function calls in this figure as well as messages are subject to change
 
 # Security Considerations
 
