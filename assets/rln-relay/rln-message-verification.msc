@@ -35,7 +35,8 @@ msc {
 
   b box b [label=" \n 3. if identical nullifier exists in the nullifierMap, \n \n extract the publisher sk \n "];
   b -x c [label="Drop the message"];
-  b <=e , b => e[label="Slash the publisher: withdraw the deposit associated with sk"];
+  b => e[label="Slash the publisher: Unlbock the deposit associated with sk"];
+  e => b [label="x ETH"];
   b box b [label=" \n If none of  1-3 happens, update the nullifierMap and\n \n relay the message \n "];
   b => c [label="Relay"];
   b => d [label="Relay"];
