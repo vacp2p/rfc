@@ -1,11 +1,11 @@
-# Sequence diagram for RLN Relay protocol
+# Sequence diagram for RLN Relay protocol (registration)
 msc {
   hscale = "2";
 
   d [label = " "], a [label = " "],b [label = " "];
-  a rbox a [label="Relay Node"], 
+  a rbox a [label="Relay Node A"], 
   b note b [label="Membership Contract"],
-  d rbox d [label = "Relay Node"];
+  d rbox d [label = "Relay Node B"];
   |||;
 
   a box a [ label=" \n Generate sk,pk \n "] ;
@@ -17,14 +17,13 @@ msc {
   b=>a [ label = "index, root, authPath"];
   |||;
   ...,  ---;
-  ...   [ label = " Other relay nodes register and the membership tree gets updatetd " ];
+  ...   [ label = "Other relay nodes register and the membership tree gets updatetd" ];
   ...,  ---;
   a=>b [ label = "getRoot()" ] ;
   b box b [label="  \n  root: Get the current root\n  "];
   b=>a [ label = "root"];
 
   ...,  ---  [ label = "    " ];
-
 
   a=>b [ label = "getAuthPath(index)" ] ;
   b box b [label="  \n  authPath: Calculate the authentication path of the leaf with the given index and based on the current tree\n  "];
