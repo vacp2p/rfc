@@ -2,9 +2,10 @@
 msc {
   hscale = "2";
 
-  a [label = " "],b [label = " "];
+  d [label = " "], a [label = " "],b [label = " "];
   a rbox a [label="Relay Node"], 
-  b note b [label="Membership Contract"];
+  b note b [label="Membership Contract"],
+  d rbox d [label = "Relay Node"];
   |||;
 
   a box a [ label=" \n Generate sk,pk \n "] ;
