@@ -284,6 +284,34 @@ The `get_waku_v2_filter_v1_messages` method returns a list of messages that were
 
 - **`Array`[[`WakuMessage`](#WakuMessage)]** - the latest `messages` on the polled content `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
+## Admin API
+
+The Admin API provides privileged accesses to the internal operations of a Waku v2 node.
+
+### Types
+
+The following structured types are defined for use on the Admin API:
+
+#### WakuPeer
+
+`WakuPeer` is an `Object` containing the following fields:
+| Field | Type | Inclusion | Description |
+| ----: | :--: | :--: |----------- |
+| `multiaddr` | `String` | mandatory | Multiaddress containing this peer's location and identity |
+| `protocol` | `String` | mandatory | Protocol that this peer is registered for |
+| `connected` | `bool` | mandatory | `true` if peer has active connection for this `protocol`, `false` if not |
+
+### `get_waku_v2_admin_v1_peers`
+
+The `get_waku_v2_admin_v1_peers` method returns an array of peers registered on this node. Since a Waku v2 node may open either continuous or ad hoc connections, depending on the negotiated protocol, these peers may have different connected states. The same peer MAY appear twice in the returned array, if it is registered for more than one protocol.
+
+#### Parameters
+
+none
+
+#### Response
+- **`Array`[[`WakuPeer`](#WakuPeer)]** - Array of peers registered on this node
+
 # Example usage
 
 ## Store API

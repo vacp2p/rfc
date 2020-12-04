@@ -70,6 +70,7 @@ HistoryQuery
 historyResponse
 HistoryResponse
 HistoryRPC
+hoc
 html
 http
 https
@@ -205,6 +206,7 @@ waku
 WakuFilter
 WakuInfo
 WakuMessage
+WakuPeer
 WakuRelay
 WakuRelayMessage
 WakuStore
