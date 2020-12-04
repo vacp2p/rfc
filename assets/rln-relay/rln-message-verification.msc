@@ -1,4 +1,4 @@
-# MSC for some fictional process
+# Sequence diagram for RLN Relay protocol (publishing,routing, and slashing)
 msc {
   hscale="1",
   wordwraparcs=true;
