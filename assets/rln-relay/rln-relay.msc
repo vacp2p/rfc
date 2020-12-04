@@ -1,4 +1,4 @@
-# MSC for some fictional process
+# Sequence diagram for RLN Relay protocol
 msc {
   hscale = "2";
 
