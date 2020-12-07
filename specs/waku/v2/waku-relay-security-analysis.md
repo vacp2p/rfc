@@ -12,7 +12,7 @@ authors: Sanaz Taheri <sanaz@status.im>
   - [Terminologies](#terminologies)
   - [Anonymity](#anonymity)
     - [Definition](#definition)
-      - [Message Author Anonymity](#message-author-anonymity)
+      - [Message Publisher Anonymity](#message-publisher-anonymity)
       - [Topic Subscriber Anonymity](#topic-subscriber-anonymity)
     - [Analysis](#analysis)
   - [Authenticity](#authenticity)
@@ -43,8 +43,8 @@ Personally identifiable information (PII): PII indicates any piece of data that 
 ### Definition
 We classify anonymity into the following categories:
 
-#### Message Author Anonymity
-This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. 
+#### Message Publisher Anonymity
+This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the topic id as well.
 
 #### Topic Subscriber Anonymity
 This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
