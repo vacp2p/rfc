@@ -39,7 +39,7 @@ We classify anonymity into the following categories:
 This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. 
 
 #### Topic Subscriber Anonymity
-This feature stands for the inability of any adversarial entity from linking between a peer to its subscribed topic IDs. 
+This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
 
 
 ## Authenticity
