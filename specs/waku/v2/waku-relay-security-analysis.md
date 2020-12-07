@@ -25,7 +25,6 @@ authors: Sanaz Taheri <sanaz@status.im>
     - [Definition](#definition-3)
     - [Analysis](#analysis-3)
   - [Changelog](#changelog)
-    - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
@@ -74,13 +73,6 @@ In order to accomdoate message anonymity, `relay` protocol follows `NoSign` poli
 
 
 ## Changelog
-
-### 2.0.0-beta2
-
-Next version. Changes:
-
-- 
-
 
 ### 2.0.0-beta1
 
