@@ -11,8 +11,10 @@ authors: Sanaz Taheri <sanaz@status.im>
 - [Abstract](#abstract)
   - [Terminologies](#terminologies)
   - [Anonymity](#anonymity)
+    - [Definition](#definition)
       - [Message Author Anonymity](#message-author-anonymity)
       - [Topic Subscriber Anonymity](#topic-subscriber-anonymity)
+    - [Anlysis](#anlysis)
   - [Authenticity](#authenticity)
   - [Integrity](#integrity)
   - [Confidentiality](#confidentiality)
@@ -33,6 +35,7 @@ Honest but Curious / static adversary: Throught this spec we consider an Honest 
 Personally identifiable information (PII): PII indicates any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
 
 ## Anonymity
+### Definition
 We classify anonymity into the following categories:
 
 #### Message Author Anonymity
@@ -41,6 +44,9 @@ This propery indicates that no adversarial entity is able to link a published `M
 #### Topic Subscriber Anonymity
 This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
 
+### Anlysis
+
+In order to accomdoate message anonymity, `relay` protocol follows `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone count as PII for the message author. 
 
 ## Authenticity
 
@@ -52,7 +58,7 @@ This feature stands for the inability of any adversarial entity from linking a p
 
 ## Confidentiality
 
-In order to accomdoate message anonymity, `relay` protocol follows `NoStrictSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone count as PII for the message author. 
+
 
 
 
