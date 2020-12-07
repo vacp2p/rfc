@@ -44,7 +44,7 @@ Personally identifiable information (PII): PII indicates any piece of data that 
 We classify anonymity into the following categories:
 
 #### Message Publisher Anonymity
-This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the topic id as well.
+This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
 
 #### Topic Subscriber Anonymity
 This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
