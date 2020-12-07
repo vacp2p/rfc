@@ -16,8 +16,14 @@ authors: Sanaz Taheri <sanaz@status.im>
       - [Topic Subscriber Anonymity](#topic-subscriber-anonymity)
     - [Anlysis](#anlysis)
   - [Authenticity](#authenticity)
+    - [Definition](#definition-1)
+    - [Anlysis](#anlysis-1)
   - [Integrity](#integrity)
+    - [Definition](#definition-2)
+    - [Anlysis](#anlysis-2)
   - [Confidentiality](#confidentiality)
+    - [Definition](#definition-3)
+    - [Anlysis](#anlysis-3)
   - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -50,14 +56,18 @@ In order to accomdoate message anonymity, `relay` protocol follows `NoSign` poli
 
 ## Authenticity
 
+### Definition
+### Anlysis
 
 
 
 ## Integrity
-
+### Definition
+### Anlysis
 
 ## Confidentiality
-
+### Definition
+### Anlysis
 
 
 
