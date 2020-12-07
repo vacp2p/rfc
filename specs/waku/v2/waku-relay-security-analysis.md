@@ -14,16 +14,16 @@ authors: Sanaz Taheri <sanaz@status.im>
     - [Definition](#definition)
       - [Message Author Anonymity](#message-author-anonymity)
       - [Topic Subscriber Anonymity](#topic-subscriber-anonymity)
-    - [Anlysis](#anlysis)
+    - [Analysis](#analysis)
   - [Authenticity](#authenticity)
     - [Definition](#definition-1)
-    - [Anlysis](#anlysis-1)
+    - [Analysis](#analysis-1)
   - [Integrity](#integrity)
     - [Definition](#definition-2)
-    - [Anlysis](#anlysis-2)
+    - [Analysis](#analysis-2)
   - [Confidentiality](#confidentiality)
     - [Definition](#definition-3)
-    - [Anlysis](#anlysis-3)
+    - [Analysis](#analysis-3)
   - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -50,24 +50,24 @@ This propery indicates that no adversarial entity is able to link a published `M
 #### Topic Subscriber Anonymity
 This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
 
-### Anlysis
+### Analysis
 
 In order to accomdoate message anonymity, `relay` protocol follows `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone count as PII for the message author. 
 
 ## Authenticity
 
 ### Definition
-### Anlysis
+### Analysis
 
 
 
 ## Integrity
 ### Definition
-### Anlysis
+### Analysis
 
 ## Confidentiality
 ### Definition
-### Anlysis
+### Analysis
 
 
 
