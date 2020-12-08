@@ -2,7 +2,7 @@
 title: Waku Relay
 version: 2.0.0-beta2
 status: Draft
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
