@@ -31,30 +31,30 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 ## Security Requirements
 
-<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make informed decision about all the secuirty properties that can or can not achieve by deploying `relay` protocol. -->
-We will use term Personally identifiable information (PII) to refer to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make an informed decision about all the security properties that can or can not achieve by deploying a `relay` protocol. -->
+We will use the term Personally identifiable information (PII) to refer to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
 
-- **Message Publisher Anonymity**: This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
+- **Message Publisher Anonymity**: This property indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
 
 - **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
 
-- **Confidentiality**: The adversary should nto be able to learn the data carried by the `relay` protocol
--  **Integrity**: This feature indicates that the data tranffered by the `relay` protocol is not tampered with by any adversarial entity unless it can be detected
--  **Authenticity**: No adversary can forge a data on behalf of a victim peer and make it accepted by other peers as if the origin is the victim
+- **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol
+-  **Integrity**: This feature indicates that the data transferred by the `relay` protocol is not tampered with by an adversarial entity without being detected
+-  **Authenticity**: No adversary can forge data on behalf of a victim peer and make it accepted by other peers as if the origin is the victim
 - **Spam resistant**: No adversarial node in the `relay` protocol is able to flood the system with the spam messages
 - 
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
 ## Adversarial Model
-- Honest but Curious / static adversary: Throught this spec we consider an Honest but Curious adversarial model (static adversary interchangebly. That is, an adversarial entity may attempt to collect infromation from other peers (i.e., being curious) in order to succedd in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications. 
-- No eavesropping
+- Any peer or collection of peers talking the `relay` protocol can act adversely to compromise any of the security features. As such, the adversary is a participant in the `relay` protocol. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) in order to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
+- The following are not considered as part of the adversarial model: 1- a powerful adversary with a global view of all the peers and their connections 2- an adversary that can eavesdrop on communication links between arbitrary `relay` enabled nodes. 
 
 
 ## Wire Specification
 
-We are using protobuf RPC messages between peers. Here's what the protobuf messages looks like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
+We are using protobuf RPC messages between peers. Here's what the protobuf messages look like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
-In this section we specify two things how WakuSub is using these messages.
+In this section, we specify two things how WakuSub is using these messages.
 
 ## Protobuf
 
@@ -113,7 +113,7 @@ The `topicid` field MUST contain the topic.
 
 
 ## Security Analysis
-- In order to accomdoate message anonymity, `relay` protocol follows `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone count as PII for the message author. 
+- In order to accommodate message anonymity, `relay` protocol follows the `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone counts as PII for the message author. 
   
 
 ## Changelog
@@ -122,7 +122,7 @@ The `topicid` field MUST contain the topic.
 
 Next version. Changes:
 
-- Moved WakuMessage to separate spec and made it mandatory
+- Moved WakuMessage to a separate spec and made it mandatory
 
 
 ### 2.0.0-beta1
