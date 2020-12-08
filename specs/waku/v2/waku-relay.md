@@ -8,11 +8,17 @@ authors: Oskar Thorén <oskar@status.im>
 # Table of Contents
 
 - [Abstract](#abstract)
-  * [Wire Specification](#wire-specification)
-  * [Protobuf](#protobuf)
-  * [RPC](#rpc)
-  * [Message](#message)
-  * [SubOpts](#subopts)
+  - [Security Requirements](#security-requirements)
+  - [Adversarial Model](#adversarial-model)
+  - [Wire Specification](#wire-specification)
+  - [Protobuf](#protobuf)
+  - [RPC](#rpc)
+  - [Message](#message)
+  - [SubOpts](#subopts)
+  - [Security Analysis](#security-analysis)
+  - [Changelog](#changelog)
+    - [2.0.0-beta2](#200-beta2)
+    - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -21,6 +27,21 @@ authors: Oskar Thorén <oskar@status.im>
 `WakuRelay` is part of the gossip domain for Waku. It is a thin layer on top of GossipSub.
 
 **Protocol identifier***: `/vac/waku/relay/2.0.0-beta2`
+
+## Security Requirements
+
+<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make informed decision about all the secuirty properties that can or can not achieve by deploying `relay` protocol. -->
+
+- Personally identifiable information (PII): PII indicates any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+
+- Message Publisher Anonymity: This propery indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
+
+- Topic Subscriber Anonymity: This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
+
+
+## Adversarial Model
+- Honest but Curious / static adversary: Throught this spec we consider an Honest but Curious adversarial model (static adversary interchangebly. That is, an adversarial entity may attempt to collect infromation from other peers (i.e., being curious) in order to succedd in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications. 
+
 
 ## Wire Specification
 
@@ -82,6 +103,11 @@ To do topic subscription management, we MAY send updates to our peers. If we do 
 The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
 
 The `topicid` field MUST contain the topic.
+
+
+## Security Analysis
+- In order to accomdoate message anonymity, `relay` protocol follows `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone count as PII for the message author. 
+  
 
 ## Changelog
 
