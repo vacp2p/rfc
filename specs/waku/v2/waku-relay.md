@@ -40,7 +40,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 - **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol
 -  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected
--  **Authenticity**: No adversary can forge data on behalf of a victim peer and make it accepted by other peers as if the origin is the victim
+-  **Authenticity**: No adversary can forge data on behalf of a targeted peer and make it accepted by other peers as if the origin is the target
 - **Spam resistant**: No avdersary is able to flood the system with the spam messages (i.e., publishing a large number of messages in a short amount of time)
   
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
@@ -116,7 +116,8 @@ The `topicid` field MUST contain the topic.
 
 
 ## Security Analysis 
-The prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features in case either case was doable.
+<!-- TODO: realized that the prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features e.g., anonymity is prefered over authenticitty and integrity. It might be good to motivate anonymity and its impact on the relay protocol or other protocols invoking relay protocol.-->
+
 - **Message Publisher Anonymity**: To preserve message anonymity, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing) due to which messages should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message. One can link the creation of the PubSub message with libp2p peerId and thus indirectly with the IP address of the publisher.
 
 
