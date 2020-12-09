@@ -50,7 +50,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
 
 ## Adversarial Model
--  The adversary is a participant in the `relay` protocol i.e., any peer or collection of peers talking the `relay` protocol can act adversely to compromise security. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
+-  Any peer or collection of peers talking the `relay` protocol can act adversarially and try to compromise security. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
 - The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary `relay`-enabled nodes. 
 
 
