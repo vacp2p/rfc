@@ -39,10 +39,10 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 - **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed `topicIDs`.
 
-- **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol
--  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected
--  **Authenticity**: No adversary can forge data on behalf of a targeted peer and make it accepted by other peers as if the origin is the target
-- **Spam resistant**: No adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time)
+- **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol.
+-  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
+-  **Authenticity**: No adversary can forge data on behalf of a targeted peer and make it accepted by other peers as if the origin is the target.
+- **Spam resistant**: No adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time).
   
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
@@ -50,8 +50,8 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
 
 ## Adversarial Model
--  Any peer or collection of peers talking the `relay` protocol can act adversarially and try to compromise security. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
-- The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary `relay`-enabled nodes. 
+-  Any peer talking the `relay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `relay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
+- The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication).
 
 
 ## Wire Specification
@@ -119,14 +119,14 @@ The `topicid` field MUST contain the topic.
 ## Security Analysis 
 <!-- TODO: realized that the prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features e.g., anonymity is preferred over authenticity and integrity. It might be good to motivate anonymity and its impact on the relay protocol or other protocols invoking relay protocol.-->
 
-- **Message Publisher Anonymity**: To preserve message anonymity, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing) due to which messages should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the PubSub message with libp2p peerId and thus indirectly with the IP address of the publisher). 
-Note that removing identifiable information from messages cannot lead to perfect anonymity. The direct connections of each peer might be able to link the messages to that peer by analyzing the patterns in the traffic coming out of that peer. The possibility of such inference gets higher when the data is also not encrypted. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
+- **Message Publisher Anonymity**: To preserve message publisher anonymity, one should remove any PII from the published message. As such, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing). As the result of the `StrictNoSign` policy, `Message`s should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the message with libp2p peerId and thus indirectly with the IP address of the publisher). 
+Note that removing identifiable information from messages cannot lead to perfect anonymity. The direct connections of a publisher might be able to figure out which messages belong to that publisher by analyzing its traffic. The possibility of such inference may get higher when the `data` field is also not encrypted. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
 
 ## Future work
 
-- **Confidentiality**: The current version of the `relay` protocol does not address confidentiality however it is achievable by performing encryption on top of the `data` field of `Message`s. More details on enabling encryption mode are provided in [Libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor) as part of the `TopicDescriptor` messages.
+- **Confidentiality**: The current version of the `relay` protocol does not address confidentiality, however, it is achievable by performing encryption on top of the `data` field of `Message`s. More details on enabling encryption mode are provided in [Libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor) as part of the `TopicDescriptor` messages.
   
-- **Integrity** and  **Authenticity**: Integrity is typically addressed through digital signatures or MAC schemes, however, the usage of digital signatures (where signatures are bound to particular peers) contradicts with the anonymity requirements (messages signed under a certain signature key are verifiable by the corresponding verification key that is bound to a particular peer).  As such, integrity and authenticity are missing features in the `relay` protocol in the interest of anonymity. To fill this gap, we propose the integration of advanced signature schemes like group signatures to enable authenticity, integrity, and anonymity simultaneously. A group signature scheme is a method for allowing a member of a group to anonymously sign a message on behalf of the group. <!-- TODO: Can add reference for group signatures?-->
+- **Integrity** and  **Authenticity**: These properties are typically addressed through digital signatures or Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the anonymity requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular peer).  As such, integrity and authenticity are missing features in the `relay` protocol in the interest of anonymity. To fill this gap, we propose the integration of advanced signature schemes like group signatures to enable authenticity, integrity, and anonymity simultaneously. In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
 
 - **Spam resistant**: This feature is not yet supported by the `relay` protocol, however, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
   <!-- TODO: Maybe mentioning Peer scoring and PoW-->
