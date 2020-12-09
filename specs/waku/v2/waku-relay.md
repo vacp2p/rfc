@@ -35,9 +35,9 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 <!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make an informed decision about all the security properties that can or can not achieve by deploying a `relay` protocol.-->
 
-- **Message Publisher Anonymity**: This property indicates that no adversarial entity can link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
+- **Message Publisher Anonymity**: This property indicates that no adversarial entity can link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the topic IDs as well.
 
-- **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed `topicIDs`.
+- **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs.
 
 - **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol.
 -  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
@@ -120,7 +120,7 @@ The `topicid` field MUST contain the topic.
 <!-- TODO: realized that the prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features e.g., anonymity is preferred over authenticity and integrity. It might be good to motivate anonymity and its impact on the relay protocol or other protocols invoking relay protocol.-->
 
 - **Message Publisher Anonymity**: To preserve message publisher anonymity, one should remove any PII from the published message. As such, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing). As the result of the `StrictNoSign` policy, `Message`s should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the message with libp2p peerId and thus indirectly with the IP address of the publisher). 
-Note that removing identifiable information from messages cannot lead to perfect anonymity. The direct connections of a publisher might be able to figure out which messages belong to that publisher by analyzing its traffic. The possibility of such inference may get higher when the `data` field is also not encrypted. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
+Note that removing identifiable information from messages cannot lead to perfect anonymity. The direct connections of a publisher might be able to figure out which `Message`s belong to that publisher by analyzing its traffic. The possibility of such inference may get higher when the `data` field is also not encrypted. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
 
 ## Future work
 
