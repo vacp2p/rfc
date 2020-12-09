@@ -9,6 +9,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
+    - [Terminologies](#terminologies)
   - [Adversarial Model](#adversarial-model)
   - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
@@ -31,8 +32,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 ## Security Requirements
 
-<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make an informed decision about all the security properties that can or can not achieve by deploying a `relay` protocol. -->
-We will use the term Personally identifiable information (PII) to refer to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make an informed decision about all the security properties that can or can not achieve by deploying a `relay` protocol.-->
 
 - **Message Publisher Anonymity**: This property indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
 
@@ -42,12 +42,15 @@ We will use the term Personally identifiable information (PII) to refer to any p
 -  **Integrity**: This feature indicates that the data transferred by the `relay` protocol is not tampered with by an adversarial entity without being detected
 -  **Authenticity**: No adversary can forge data on behalf of a victim peer and make it accepted by other peers as if the origin is the victim
 - **Spam resistant**: No adversarial node in the `relay` protocol is able to flood the system with the spam messages
-- 
+  
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
+### Terminologies
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+
 ## Adversarial Model
-- Any peer or collection of peers talking the `relay` protocol can act adversely to compromise any of the security features. As such, the adversary is a participant in the `relay` protocol. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) in order to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
-- The following are not considered as part of the adversarial model: 1- a powerful adversary with a global view of all the peers and their connections 2- an adversary that can eavesdrop on communication links between arbitrary `relay` enabled nodes. 
+-  The adversary is a participant in the `relay` protocol i.e., any peer or collection of peers talking the `relay` protocol can act adversely to compromise security. <!-- TODO: May later add the Honest but Curious adversary/static adversary assumption. That is, an adversarial entity may attempt to collect information from other peers (i.e., being curious) in order to succeed in its attack but it does so without violating protocol definitions and instructions (is honest), namely, it does follow the protocol specifications.--> 
+- The followings are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary `relay`-enabled nodes. 
 
 
 ## Wire Specification
