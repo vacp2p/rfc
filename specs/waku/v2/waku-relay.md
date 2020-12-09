@@ -7,7 +7,6 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 # Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
   - [Adversarial Model](#adversarial-model)
