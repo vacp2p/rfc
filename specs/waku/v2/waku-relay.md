@@ -39,9 +39,9 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 - **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed `topicIDs`.
 
 - **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol
--  **Integrity**: This feature indicates that the data transferred by the `relay` protocol is not tampered with by an adversarial entity without being detected
+-  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected
 -  **Authenticity**: No adversary can forge data on behalf of a victim peer and make it accepted by other peers as if the origin is the victim
-- **Spam resistant**: No adversarial node in the `relay` protocol is able to flood the system with the spam messages
+- **Spam resistant**: No avdersary is able to flood the system with the spam messages (i.e., publishing a large number of messages in a short amount of time)
   
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
@@ -126,8 +126,8 @@ The prime security objective of the `relay` protocol is to provide peers anonymi
   
 - **Integrity** and  **Authenticity**: Integrity is typically addressed through digital signatures or MAC schemes, however, the usage of digital signatures (where signatures are bound to particular peers) contradicts with the anonymity requirements (messages signed under a certain signature key are verifiable by the corresponding verification key that is bound to a particular peer).  As such, integrity and authenticity are missing features in the `relay` protocol in the favor of anonymity. To fill this gap, we propose the integration of advanced signature schemes like group signatures to enable authenticity, integrity, and anonymity simultaneously. A group signature scheme is a method for allowing a member of a group to anonymously sign a message on behalf of the group. 
 
-- **Spam resistant**: This feature is not yet integrated into the `relay` protocol, however, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
-  <!-- TODO: Peer scoring and PoW-->
+- **Spam resistant**: This feature is not yet supported by the `relay` protocol, however, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
+  <!-- TODO: May be mentioning Peer scoring and PoW-->
   
 - **Topic Subscriber Anonymity:** Concealing the link between a subscriber and its subscribed topic ids can not be addressed at the `relay` protocol since the exposure of this information is key to maintain a topic mesh. In specific,  subscribers can only participate in a topic mesh by getting connected to other subscribers of the same topic id hence disclosing their interest in that topic id at least to a subset of other subscribers (more details on this can be found in [libp2p pubsub documentation](https://docs.libp2p.io/concepts/publish-subscribe/)). As such, this information inevitably gets exposed to the topic mesh. However, upper level protocols can implement [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic) to provide K-anonymity for peers's subscribed topic ids.
 ## Changelog
