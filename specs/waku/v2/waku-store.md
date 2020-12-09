@@ -8,12 +8,16 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 # Table of Contents
 
 - [Abstract](#abstract)
+  - [Security Requirements](#security-requirements)
+  - [Adversarial Model](#adversarial-model)
 - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
     - [Index](#index)
     - [PagingInfo](#paginginfo)
     - [HistoryQuery](#historyquery)
     - [HistoryResponse](#historyresponse)
+  - [Security Analysis](#security-analysis)
+  - [Future Work](#future-work)
 - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -24,6 +28,10 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 This specification explains the Waku Store protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages. 
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
+
+## Security Requirements
+
+## Adversarial Model 
 
 # Wire Specification
 Peers communicate with each other using a request / response API. The messages sent are Protobuf RPC messages. The followings are the specifications of the Protobuf messages. 
@@ -90,6 +98,9 @@ RPC call to respond to a HistoryQuery call.
 - The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. The `pageSize` indicates the number of returned waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). The `direction` is the same direction as in the corresponding `HistoryQuery`. In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
 
+## Security Analysis
+
+## Future Work
 
 # Changelog
 
