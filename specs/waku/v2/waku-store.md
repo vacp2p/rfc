@@ -9,6 +9,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
+    - [Terminologies](#terminologies)
   - [Adversarial Model](#adversarial-model)
 - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
@@ -16,8 +17,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
     - [PagingInfo](#paginginfo)
     - [HistoryQuery](#historyquery)
     - [HistoryResponse](#historyresponse)
-  - [Security Analysis](#security-analysis)
-  - [Future Work](#future-work)
+  - [Security Analysis and Future Work](#security-analysis-and-future-work)
 - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -31,7 +31,16 @@ This specification explains the Waku Store protocol which enables querying of me
 
 ## Security Requirements
 
-## Adversarial Model 
+- **Anonymous query**: This feature guarntees that nodes can anonyousely query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested).  As such, no adversary in the `store` protocol would be able to learn which peer is interested in which topics of waku message.
+
+
+### Terminologies
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+
+## Adversarial Model
+-  Any peer talking the `store` protocol i.e., both the querying node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious quieried node hides the messages it receives from the querying nofr as it is against the description of the `store` protocol. However, a malicious queried node may learn which topics of inteest of other peers. 
+- The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+
 
 # Wire Specification
 Peers communicate with each other using a request / response API. The messages sent are Protobuf RPC messages. The followings are the specifications of the Protobuf messages. 
@@ -98,9 +107,9 @@ RPC call to respond to a HistoryQuery call.
 - The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. The `pageSize` indicates the number of returned waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). The `direction` is the same direction as in the corresponding `HistoryQuery`. In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
 
-## Security Analysis
+## Security Analysis and Future Work
+- **Anonymous query**: The current version of `store` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to a store node and explicitly discolse its intereseted topics to retrive the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 1- By hiding the source of the request, namely, the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utlization of a proxy server or by using Tor <!-- more technqisues to be included--> 2- By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the quieried node learns nothing about the query. Examples of such 2PC ptocols are secure one-way Private Set Intersections (PSI).
 
-## Future Work
 
 # Changelog
 
