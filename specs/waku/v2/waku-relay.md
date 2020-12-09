@@ -17,6 +17,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
   - [Message](#message)
   - [SubOpts](#subopts)
   - [Security Analysis](#security-analysis)
+  - [Future work](#future-work)
   - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -36,7 +37,7 @@ We will use the term Personally identifiable information (PII) to refer to any p
 
 - **Message Publisher Anonymity**: This property indicates that no adversarial entity is able to link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the `topicIDs` as well.
 
-- **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs. 
+- **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed `topicIDs`.
 
 - **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol
 -  **Integrity**: This feature indicates that the data transferred by the `relay` protocol is not tampered with by an adversarial entity without being detected
@@ -112,10 +113,21 @@ The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 mean
 The `topicid` field MUST contain the topic.
 
 
-## Security Analysis
-- In order to accommodate message anonymity, `relay` protocol follows the `NoSign` policy due to which the `from`, `signature` and `key` fields of the `Message` MUST be left empty by the message publisher. The reason is that each of these three fields alone counts as PII for the message author. 
-  
+## Security Analysis 
+The prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features in case either case was doable.
+- **Message Publisher Anonymity**: To preserve message anonymity, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing) due to which messages should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message. One can link the creation of the PubSub message with libp2p peerId and thus indirectly with the IP address of the publisher.
 
+
+## Future work
+
+- **Confidentiality**: The current version of the `relay` protocol does not address confidentiality however it is achievable by performing encryption on top of the `data` field of `Message`s. More details on enabling encryption mode are provided in [Libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor) as part of the `TopicDescriptor` messages.
+  
+- **Integrity** and  **Authenticity**: Integrity is typically addressed through digital signatures or MAC schemes, however, the usage of digital signatures (where signatures are bound to particular peers) contradicts with the anonymity requirements (messages signed under a certain signature key are verifiable by the corresponding verification key that is bound to a particular peer).  As such, integrity and authenticity are missing features in the `relay` protocol in the favor of anonymity. To fill this gap, we propose the integration of advanced signature schemes like group signatures to enable authenticity, integrity, and anonymity simultaneously. A group signature scheme is a method for allowing a member of a group to anonymously sign a message on behalf of the group. 
+
+- **Spam resistant**: This feature is not yet integrated into the `relay` protocol, however, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
+- <!-- Peer scoring and PoW-->
+  
+- **Topic Subscriber Anonymity:** Concealing the link between a subscriber and its subscribed topic ids can not be addressed at the `relay` protocol since the exposure of this information is key to maintain a topic mesh. In specific,  subscribers can only participate in a topic mesh by getting connected to other subscribers of the same topic id hence disclosing their interest in that topic id at least to a subset of other subscribers (more details on this can be found in [libp2p pubsub documentation](https://docs.libp2p.io/concepts/publish-subscribe/)). As such, this information inevitably gets exposed to the topic mesh. However, upper level protocols can implement [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic) to provide K-anonymity for peers's subscribed topic ids.
 ## Changelog
 
 ### 2.0.0-beta2
