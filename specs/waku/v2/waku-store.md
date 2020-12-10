@@ -35,6 +35,7 @@ This specification explains the Waku `store` protocol which enables querying of 
 - **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested in).  As such, no adversary in the `store` protocol would be able to learn which peer is interested in which topics of waku message.
 - **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts a node in the `store` protocol  by making a large number of queries (even redundant queries) thus making the node unavailable to the rest of the system.
 
+<!-- TODO: Censorship resistant: this is about a node which hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to  deviate from the store protocol).  -->
 
 ### Terminologies
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
