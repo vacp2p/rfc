@@ -33,7 +33,7 @@ This specification explains the Waku `store` protocol which enables querying of 
 ## Security Requirements
 
 - **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested in).  As such, no adversary in the `store` protocol would be able to learn which peer is interested in which topics of waku message.
-- **Prevention of Denial of Service**: Denial of service signifies the case where an adversarial node exhausts a node in the `store` protocol  by making a large number of queries (even redundant queries) thus making the node unavailable to the rest of the system.
+- **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts a node in the `store` protocol  by making a large number of queries (even redundant queries) thus making the node unavailable to the rest of the system.
 
 
 ### Terminologies
