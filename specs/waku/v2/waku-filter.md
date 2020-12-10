@@ -17,6 +17,8 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno
       - [FilterRPC](#filterrpc)
       - [FilterRequest](#filterrequest)
       - [MessagePush](#messagepush)
+  - [Security Analysis](#security-analysis)
+  - [Future Work](#future-work)
 - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -54,7 +56,7 @@ frequent polling.
 
 ## Security Requirements
 
-- **Anonymous filter**: This feature guarantees that nodes can anonymously subscribe for messages matching a content filter (i.e., without revealing their exact content filter).  As such, no adversary in the `filter` protocol would be able to link peers to their subscribed content filers.
+- **Anonymous filter subscription**: This feature guarantees that nodes can anonymously subscribe for messages matching a content filter (i.e., without revealing their exact content filter).  As such, no adversary in the `filter` protocol would be able to link peers to their subscribed content filers.
 - **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial requesting node exhausts a full node's bandwidth  and make it unavailable to the rest of the system. This may happen by either submitting a content filter covering all the exisiting contents (effectively applying no filter) or by launching Sybil attack (i.e., creating a large number of peers) and loading the full node with a mass of subscribtion requests.
 
 ### Terminologies
@@ -141,6 +143,16 @@ messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.
 
 ---
+## Security Analysis 
+
+- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `filter` protocol, the subscribing node will be charged for the messages that it obtains from other full nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
+
+## Future Work
+- **Anonymous filter subscription**: The current version of the `filter` protocol does not provide anonymity as the subscribing node needs to explicitly submits its content filter to be notified about the matching messages. However, one can consider preserving anonymity through one of the following ways: 
+  - By hiding the source of the subscribtion i.e., anonymous communication. That is the subscribing node shall hide all its PII in its filter request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- TODO: more techniques to be included -->. 
+  Note that the current structure of filter requests i.e., `FilterRPC` does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve anonymity. 
+  - By deploying secure 2-party computations in which the subscibing node obtains the  messages matching a content filter whereas the full node learns nothing about the content filter as well as the messages pushed to the subscribing node. Examples of such 2PC protocols are [Oblivious Transfers](https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-5906-5_9#:~:text=Oblivious%20transfer%20(OT)%20is%20a,information%20the%20receiver%20actually%20obtains.) and one-way Private Set Intersections (PSI).
+
 
 # Changelog
 
