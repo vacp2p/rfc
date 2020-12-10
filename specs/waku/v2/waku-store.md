@@ -118,7 +118,7 @@ RPC call to respond to a HistoryQuery call.
 - **Anonymous query**: The current version of the `store` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `store` protocol and explicitly disclose the topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
   - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- TODO: more techniques to be included -->. 
   Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity. 
-  - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). Such a solution must be embedded in the `store` protocol and can not be adopted by the nodes independently.
+  - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). Such a solution must be embedded in the `store` protocol and can not be adopted by the nodes independently. <!-- TODO: add reference for PSIs? -->
 
 # Changelog
 
