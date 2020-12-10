@@ -112,7 +112,7 @@ RPC call to respond to a HistoryQuery call.
 
 ## Security Analysis 
 
-- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `store` protocol, the querying node will be charged for the history messages that it queries from other nodes in `store` protocol. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
+- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `store` protocol, the querying node will be charged for the history messages that it queries from other nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
 
 ## Future Work
 - **Anonymous query**: The current version of the `store` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `store` protocol and explicitly disclose the topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
