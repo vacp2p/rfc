@@ -9,9 +9,17 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno
 
 - [Abstract](#abstract)
 - [Content filtering](#content-filtering)
-  * [Rationale](#rationale)
-  * [Protobuf](#protobuf)
+  - [Rationale](#rationale)
+  - [Security Requirements](#security-requirements)
+    - [Terminologies](#terminologies)
+  - [Adversarial Model](#adversarial-model)
+  - [Protobuf](#protobuf)
+      - [FilterRPC](#filterrpc)
+      - [FilterRequest](#filterrequest)
+      - [MessagePush](#messagepush)
 - [Changelog](#changelog)
+    - [2.0.0-beta2](#200-beta2)
+    - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -43,6 +51,19 @@ No gossiping takes place.
 It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
+
+## Security Requirements
+
+- **Anonymous filter**: This feature guarantees that nodes can anonymously subscribe for messages matching a content filter (i.e., without revealing their exact content filter).  As such, no adversary in the `filter` protocol would be able to link peers to their subscribed content filers.
+- **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial requesting node exhausts a full node's bandwidth  and make it unavailable to the rest of the system. This may happen by either submitting a content filter covering all the exisiting contents (effectively applying no filter) or by launching Sybil attack (i.e., creating a large number of peers) and loading the full node with a mass of subscribtion requests.
+
+### Terminologies
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+
+## Adversarial Model
+-  Any peer talking the `filter` protocol i.e., both the subscriber node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node intentionally hides the messages matching to one's subscribed content filter as it is against the description of the `filter` protocol. 
+- The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+
 
 ## Protobuf
 
