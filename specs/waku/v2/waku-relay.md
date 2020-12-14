@@ -20,6 +20,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
   - [Security Analysis](#security-analysis)
   - [Future work](#future-work)
   - [Changelog](#changelog)
+    - [Next](#next)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
@@ -136,6 +137,8 @@ Note that removing identifiable information from messages cannot lead to perfect
 - **Topic Subscriber Anonymity:** Concealing the link between a subscriber and its subscribed topic ids can not be addressed at the `relay` protocol since the exposure of this information is key to maintain a topic mesh. In specific,  subscribers can only participate in a topic mesh by getting connected to other subscribers of the same topic id hence disclosing their interest in that topic id at least to a subset of other subscribers (more details on this can be found in [libp2p pubsub documentation](https://docs.libp2p.io/concepts/publish-subscribe/)). As such, this information inevitably gets exposed to the topic mesh. However, upper-level protocols can implement [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic) to provide K-anonymity for peers' subscribed topic ids.
 ## Changelog
 
+### Next
+- Added initial threat model and security analysis 
 ### 2.0.0-beta2
 
 Next version. Changes:
