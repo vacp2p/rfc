@@ -7,6 +7,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
     - [Terminologies](#terminologies)
@@ -46,7 +47,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
 ### Terminologies
-The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's IP address are unique for each user and hence count as PII.
 
 ## Adversarial Model
 -  Any peer talking the `relay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `relay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
