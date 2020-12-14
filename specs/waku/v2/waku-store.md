@@ -20,6 +20,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
   - [Security Analysis](#security-analysis)
   - [Future Work](#future-work)
 - [Changelog](#changelog)
+    - [Next](#next)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
@@ -122,6 +123,8 @@ RPC call to respond to a HistoryQuery call.
 
 # Changelog
 
+### Next 
+- Added the initial threat model and security analysis.
 
 ### 2.0.0-beta2 
 Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
