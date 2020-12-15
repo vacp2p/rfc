@@ -55,7 +55,7 @@ The term Personally identifiable information (PII) refers to any piece of data t
 
 ## Adversarial Model 
 -  Any entity talking the `WakuRelay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `WakuRelay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
-- The following are not considered as part of the adversarial model: 
+- The following are **not** considered as part of the adversarial model: 
   -  An adversary with a global view of all the peers and their connections. 
   -  An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
