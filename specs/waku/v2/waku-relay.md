@@ -7,6 +7,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
     - [Terminologies](#terminologies)
@@ -33,11 +34,12 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 ## Security Requirements
 
-The `relay` protocol supports the following security properties under a static [Adversarial Model](#adversarial-model). Note that data confidentiality[^1], integrity[^2], and authenticity[^3] are currently considered out of the scope of `relay` protocol and must be handled by the upper-level protocols. 
+The `relay` protocol supports the following security properties under a static [Adversarial Model](#adversarial-model). Note that data confidentiality, integrity, and authenticity are currently considered out of the scope of `relay` protocol and must be handled by the upper-level protocols. 
 
-[^1]: Confidentiality indicates that an adversary should not be able to learn the data carried by the `relay` protocol.
-[^2]: Integrity indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
-[^3]: Authenticity no adversary can forge data on behalf of a targeted publisher and make it accepted by other subscribers as if the origin is the target.
+<!-- May add the defintion of the unsupported feature: 
+Confidentiality indicates that an adversary should not be able to learn the data carried by the `relay` protocol.
+Integrity indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
+Authenticity no adversary can forge data on behalf of a targeted publisher and make it accepted by other subscribers as if the origin is the target. -->
 
 
 - **Publisher-Message Unlinkability**: This property indicates that no adversarial entity can link a published `Message` to its publisher. This feature also implies the unlinkability of the publisher to its published topic ID as the `Message` embodies the topic IDs.
