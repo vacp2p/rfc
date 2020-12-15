@@ -7,6 +7,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
   - [Security Requirements](#security-requirements)
     - [Terminologies](#terminologies)
@@ -33,26 +34,28 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 ## Security Requirements
 
-<!-- In this part, we analyze the security of the  `relay` protocol concerning data confidentiality, integrity, authenticity, and anonymity. This is to enable users of this protocol to make an informed decision about all the security properties that can or can not achieve by deploying a `relay` protocol.-->
+The `relay` protocol supports the following security properties under a static [Adversarial Model](#adversarial-model). Note that data confidentiality[^1], integrity[^2] and authenticity[^3] are currently considered out of the scope of `relay` protocol and must be handled by the upperlevel protocols. 
 
-- **Message Publisher Anonymity**: This property indicates that no adversarial entity can link a published `Message` to its origin i.e., the peer. Note that this feature also implies the unlinkability of the publisher to its published topic ID, this is because  `Message` contains the topic IDs as well.
+[^1]: Confidentiality indicates that an adversary should not be able to learn the data carried by the `relay` protocol.
+[^2]: Integrity indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
+[^3]: Authenticity no adversary can forge data on behalf of a targeted publsiher and make it accepted by other subscribers as if the origin is the target.
 
-- **Topic Subscriber Anonymity:** This feature stands for the inability of any adversarial entity from linking a peer to its subscribed topic IDs.
 
-- **Confidentiality**: The adversary should not be able to learn the data carried by the `relay` protocol.
--  **Integrity**: This feature indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
--  **Authenticity**: No adversary can forge data on behalf of a targeted peer and make it accepted by other peers as if the origin is the target.
-- **Spam resistant**: No adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time).
+- **Publisher-Message Unlinkability**: This property indicates that no adversarial entity can link a published `Message` to its publsiher. This feature also implies the unlinkability of the publisher to its published topic ID as the `Message` embodies the topic IDs.
+
+- **Subscriber-Topic Unlinkability**: This feature stands for the inability of any adversarial entity from linking a subscriber to its subscribed topic IDs.
+
   
 <!-- TODO: more requirements can be added, but that needs further and deeper investigation-->
 
-### Terminologies
-The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's IP address are unique for each user and hence count as PII.
 
-## Adversarial Model
--  Any peer talking the `relay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `relay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
+### Terminologies
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
+
+## Adversarial Model 
+-  Any entity talking the `relay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `relay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
 - The following are not considered as part of the adversarial model: 
-  -  An adversary with a global view of all the peers and their connections 
+  -  An adversary with a global view of all the peers and their connections. 
   -  An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 
@@ -119,21 +122,21 @@ The `topicid` field MUST contain the topic.
 
 
 ## Security Analysis 
-<!-- TODO: realized that the prime security objective of the `relay` protocol is to provide peers anonymity as such this feature is prioritized over other features e.g., anonymity is preferred over authenticity and integrity. It might be good to motivate anonymity and its impact on the relay protocol or other protocols invoking relay protocol.-->
+<!-- TODO: realized that the prime security objective of the `relay` protocol is to provide peers unlinkability as such this feature is prioritized over other features e.g., unlinkability is preferred over authenticity and integrity. It might be good to motivate unlinkability and its impact on the relay protocol or other protocols invoking relay protocol.-->
 
-- **Message Publisher Anonymity**: To preserve message publisher anonymity, one should remove any PII from the published message. As such, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing). As the result of the `StrictNoSign` policy, `Message`s should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the message with libp2p peerId and thus indirectly with the IP address of the publisher). 
-Note that removing identifiable information from messages cannot lead to perfect anonymity. The direct connections of a publisher might be able to figure out which `Message`s belong to that publisher by analyzing its traffic. The possibility of such inference may get higher when the `data` field is also not encrypted. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
+- **Publisher-Message Unlinkability**:  To address publisher-message unlinkability, one should remove any PII from the published message. As such, `relay` protocol follows the `StrictNoSign` policy as described in [libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#message-signing). As the result of the `StrictNoSign` policy, `Message`s should be built without the  `from`, `signature` and `key` fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the message with libp2p peerId and thus indirectly with the IP address of the publisher). 
+Note that removing identifiable information from messages cannot lead to perfect unlinkability. The direct connections of a publisher might be able to figure out which `Message`s belong to that publisher by analyzing its traffic. The possibility of such inference may get higher when the `data` field is also not encrypted by the upper-lelvel protocols. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
 
+- **Subscriber-Topic Unlinkability:** The `relay` protocol operates over only one topic id, as such, the subscriber-topic unlinkability is an immidiate property of this protocol. More specifically, subscribers are not reidentifiable from their subscribed  topic ids as the entire network is subscribed to the same topic id. This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of subscribers).
+  
 ## Future work
 
-- **Confidentiality**: The current version of the `relay` protocol does not address confidentiality, however, it is achievable by performing encryption on top of the `data` field of `Message`s. More details on enabling encryption mode are provided in [Libp2p PubSub specs](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor) as part of the `TopicDescriptor` messages.
-  
-- **Integrity** and  **Authenticity**: These properties are typically addressed through digital signatures or Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the anonymity requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular peer).  As such, integrity and authenticity are missing features in the `relay` protocol in the interest of anonymity. To fill this gap, we propose the integration of advanced signature schemes like group signatures to enable authenticity, integrity, and anonymity simultaneously. In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
-
-- **Spam resistant**: This feature is not yet supported by the `relay` protocol, however, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
+- **Spam resistant**: In the spam-protected `relay` prtocol, no adversary is able to flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time). While this feature is not currently supported, a PoC is in progress regarding the utilization of Rate Limiting Nullifiers to protect against spamming and spammers. More details can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
   <!-- TODO: Maybe mentioning Peer scoring and PoW-->
+
+- Providing **Unlinkability**, **Integrity** and  **Authenticity** simulteounesly: Integrity and authenticity are typically addressed through digital signatures and Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the unlinkability requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular publisher).  As such, integrity and authenticity are missing features in the `relay` protocol in the interest of unlinkability. As a future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously. In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
   
-- **Topic Subscriber Anonymity:** Concealing the link between a subscriber and its subscribed topic ids can not be addressed at the `relay` protocol since the exposure of this information is key to maintain a topic mesh. In specific,  subscribers can only participate in a topic mesh by getting connected to other subscribers of the same topic id hence disclosing their interest in that topic id at least to a subset of other subscribers (more details on this can be found in [libp2p pubsub documentation](https://docs.libp2p.io/concepts/publish-subscribe/)). As such, this information inevitably gets exposed to the topic mesh. However, upper-level protocols can implement [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic) to provide K-anonymity for peers' subscribed topic ids.
+
 ## Changelog
 
 ### Next
