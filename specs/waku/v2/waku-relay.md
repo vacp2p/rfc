@@ -33,14 +33,14 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 
 ## Security Requirements
 
-The `relay` protocol supports the following security properties under a static [Adversarial Model](#adversarial-model). Note that data confidentiality[^1], integrity[^2] and authenticity[^3] are currently considered out of the scope of `relay` protocol and must be handled by the upperlevel protocols. 
+The `relay` protocol supports the following security properties under a static [Adversarial Model](#adversarial-model). Note that data confidentiality[^1], integrity[^2], and authenticity[^3] are currently considered out of the scope of `relay` protocol and must be handled by the upper-level protocols. 
 
 [^1]: Confidentiality indicates that an adversary should not be able to learn the data carried by the `relay` protocol.
 [^2]: Integrity indicates that the data transferred by the `relay` protocol can not be tampered with by an adversarial entity without being detected.
-[^3]: Authenticity no adversary can forge data on behalf of a targeted publsiher and make it accepted by other subscribers as if the origin is the target.
+[^3]: Authenticity no adversary can forge data on behalf of a targeted publisher and make it accepted by other subscribers as if the origin is the target.
 
 
-- **Publisher-Message Unlinkability**: This property indicates that no adversarial entity can link a published `Message` to its publsiher. This feature also implies the unlinkability of the publisher to its published topic ID as the `Message` embodies the topic IDs.
+- **Publisher-Message Unlinkability**: This property indicates that no adversarial entity can link a published `Message` to its publisher. This feature also implies the unlinkability of the publisher to its published topic ID as the `Message` embodies the topic IDs.
 
 - **Subscriber-Topic Unlinkability**: This feature stands for the inability of any adversarial entity from linking a subscriber to its subscribed topic IDs.
 
@@ -55,7 +55,7 @@ The term Personally identifiable information (PII) refers to any piece of data t
 -  Any entity talking the `relay` protocol is considered as an adversary. This includes publishers, subscribers, and all the peers' direct connections. Furthermore, we consider the adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of the `relay` protocol. However, a malicious subscriber may learn which topics are subscribed to by which peers. 
 - The following are not considered as part of the adversarial model: 
   -  An adversary with a global view of all the peers and their connections. 
-  -  An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+  -  An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 
 ## Wire Specification
