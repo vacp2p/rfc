@@ -344,7 +344,7 @@ none
 
 ### `get_waku_v2_private_v1_keypair`
 
-Generates and returns a public/private key pair that can be used for assymetric message encryption and decryption.
+Generates and returns a public/private key pair that can be used for asymmetric message encryption and decryption.
 
 #### Parameters
 
