@@ -13,6 +13,7 @@ authors: Oskar Thorén <oskar@status.im>
   * [RPC](#rpc)
   * [Message](#message)
   * [SubOpts](#subopts)
+  * [Signature Policy](#signature-policy)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -83,6 +84,10 @@ The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 mean
 
 The `topicid` field MUST contain the topic.
 
+## Signature Policy
+
+The `StrictNoSign` option MUST be used. 
+
 ## Changelog
 
 ### 2.0.0-beta2
@@ -90,6 +95,7 @@ The `topicid` field MUST contain the topic.
 Next version. Changes:
 
 - Moved WakuMessage to separate spec and made it mandatory
+- StrictNoSign
 
 
 ### 2.0.0-beta1
