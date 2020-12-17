@@ -16,6 +16,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
   - [RPC](#rpc)
   - [Message](#message)
   - [SubOpts](#subopts)
+  * [Signature Policy](#signature-policy)
 - [Security Analysis](#security-analysis)
 - [Future work](#future-work)
 - [Changelog](#changelog)
@@ -120,6 +121,9 @@ The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 mean
 
 The `topicid` field MUST contain the topic.
 
+## Signature Policy
+
+The `StrictNoSign` option MUST be used. 
 
 # Security Analysis 
 <!-- TODO: realized that the prime security objective of the `WakuRelay` protocol is to provide peers unlinkability as such this feature is prioritized over other features e.g., unlinkability is preferred over authenticity and integrity. It might be good to motivate unlinkability and its impact on the relay protocol or other protocols invoking relay protocol.-->
@@ -147,7 +151,8 @@ However, note that the `WakuRelay` supports the use of more than one topic. In t
 
 Next version. Changes:
 
-- Moved WakuMessage to a separate spec and made it mandatory
+- Moved WakuMessage to separate spec and made it mandatory
+- StrictNoSign
 
 
 ### 2.0.0-beta1
