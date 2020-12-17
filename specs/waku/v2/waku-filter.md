@@ -10,15 +10,15 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno
 - [Abstract](#abstract)
 - [Content filtering](#content-filtering)
   - [Rationale](#rationale)
-  - [Security Requirements](#security-requirements)
-    - [Terminologies](#terminologies)
-  - [Adversarial Model](#adversarial-model)
+- [Security Requirements](#security-requirements)
+  - [Terminology](#terminology)
+- [Adversarial Model](#adversarial-model)
   - [Protobuf](#protobuf)
       - [FilterRPC](#filterrpc)
       - [FilterRequest](#filterrequest)
       - [MessagePush](#messagepush)
-  - [Security Analysis](#security-analysis)
-  - [Future Work](#future-work)
+- [Security Analysis](#security-analysis)
+- [Future Work](#future-work)
 - [Changelog](#changelog)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
@@ -54,16 +54,16 @@ It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
 
-## Security Requirements
+# Security Requirements
+The `WakuFilter` protocol supports the following security features.
 
-- **Anonymous filter subscription**: <!-- Alternative title: Filter-subscriber unlinkability --> This feature guarantees that nodes can anonymously subscribe for messages matching a content filter (i.e., without revealing their exact content filter).  As such, no adversary in the `filter` protocol would be able to link nodes to their subscribed content filers.
 - **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial requesting node exhausts a full node's bandwidth and make it unavailable to the rest of the system. This may happen by either submitting a content filter covering all the existing contents (effectively applying no filter) or by launching a Sybil attack (i.e., creating a large number of nodes) and loading the full node with a mass of subscription requests.
 
-### Terminologies
+## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a node. For example, the signature verification key, and the hash of one's IP address are unique for each node and hence count as PII.
 
-## Adversarial Model
--  Any node talking the `filter` protocol i.e., both the subscriber node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other nodes to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node intentionally hides the messages matching to one's subscribed content filter as it is against the description of the `filter` protocol. 
+# Adversarial Model
+-  Any node talking the `WakuFilter` protocol i.e., both the subscriber node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other nodes to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node intentionally hides the messages matching to one's subscribed content filter as it is against the description of the `WakuFilter` protocol. 
 - The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the nodes and their connections 2- An adversary that can eavesdrop on communication links between arbitrary pair of nodes (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 
@@ -143,12 +143,12 @@ messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.
 
 ---
-## Security Analysis 
+# Security Analysis 
 
-- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, nodes have to pay for the service they obtain from each other, which means, in terms of `filter` protocol, the subscribing node will be charged for the messages that it obtains from other full nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious nodes.
+- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, nodes have to pay for the service they obtain from each other, which means, in terms of `WakuFilter` protocol, the subscribing node will be charged for the messages that it obtains from other full nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious nodes.
 
-## Future Work
-- **Anonymous filter subscription**: The current version of the `filter` protocol does not provide anonymity as the subscribing node has a direct connection to the full node and explicitly submits its content filter to be notified about the matching messages. However, one can consider preserving anonymity through one of the following ways: 
+# Future Work
+- **Anonymous filter subscription**: The current version of the `WakuFilter` protocol does not provide anonymity as the subscribing node has a direct connection to the full node and explicitly submits its content filter to be notified about the matching messages. However, one can consider preserving anonymity through one of the following ways: 
   - By hiding the source of the subscription i.e., anonymous communication. That is the subscribing node shall hide all its PII in its filter request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- TODO: more techniques to be included -->. 
   Note that the current structure of filter requests i.e., `FilterRPC` does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve anonymity. 
   <!-- TODO: the PeerId usage in switches must be investigated futher. Depending on how PeerId is used, oen may be able to link between a subscriber and its content filter despite hiding the IP address-->
