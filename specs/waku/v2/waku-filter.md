@@ -56,6 +56,7 @@ protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
 
 # Security Requirements
+
 The `WakuFilter` protocol supports the following security features.
 
 - **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial requesting node exhausts a full node's bandwidth and make it unavailable to the rest of the system. This may happen by either submitting a content filter covering all the existing contents (effectively applying no filter) or by launching a Sybil attack (i.e., creating a large number of nodes) and loading the full node with a mass of subscription requests.
