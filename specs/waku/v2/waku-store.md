@@ -39,8 +39,9 @@ The `store` protocol provides the following security features.
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
--  Any peer running the `store` protocol i.e., both the querying node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `store` protocol. The following are not considered as part of the adversarial model:
+Any peer running the `store` protocol i.e., both the querying node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `store` protocol. 
 
+The following are not considered as part of the adversarial model:
 - An adversary with a global view of all the peers and their connections.
 - An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
