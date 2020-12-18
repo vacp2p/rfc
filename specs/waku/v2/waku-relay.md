@@ -16,7 +16,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
   - [RPC](#rpc)
   - [Message](#message)
   - [SubOpts](#subopts)
-  * [Signature Policy](#signature-policy)
+  - [Signature Policy](#signature-policy)
 - [Security Analysis](#security-analysis)
 - [Future work](#future-work)
 - [Changelog](#changelog)
