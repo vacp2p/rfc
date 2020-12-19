@@ -1,5 +1,5 @@
 ---
-title: Waku <!-- TODO: Waku or WakuStore? -->
+title: WakuStore
 version: 2.0.0-beta2
 status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz Taheri <sanaz@status.im>
@@ -7,6 +7,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Security Requirements](#security-requirements)
   - [Terminology](#terminology)
@@ -17,7 +18,6 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
     - [PagingInfo](#paginginfo)
     - [HistoryQuery](#historyquery)
     - [HistoryResponse](#historyresponse)
-- [Security Analysis](#security-analysis)
 - [Future Work](#future-work)
 - [Changelog](#changelog)
     - [Next](#next)
@@ -110,10 +110,6 @@ The queried node MAY sort the `WakuMessage`s based on their `Index`, where the `
 RPC call to respond to a HistoryQuery call.
 - The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. The `pageSize` indicates the number of returned waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). The `direction` is the same direction as in the corresponding `HistoryQuery`. In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
-
-# Security Analysis 
-
-- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `store` protocol, the querying node will be charged for the history messages that it queries from other nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
 
 # Future Work
 
