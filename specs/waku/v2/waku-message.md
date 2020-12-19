@@ -79,7 +79,7 @@ field corresponds to `contentTopic`. The previous `data` field corresponds to th
 
 # Security Consideration
 
-In Waku v2, the confidentiality, integrity, and authenticity of the data must be addressed at the `WakuMessage` level.  That is, the `payload` shall be encrypted or signed properly to meet the application-specific privacy needs.  Notice that due to the anonymity considerations these security features are not supported by the `WakuRelay` protocol and are delegated to the upper levels.
+In Waku, the confidentiality, integrity, and authenticity of the data must be addressed at the `WakuMessage` level.  That is, the `payload` shall be encrypted or signed properly to meet the application-specific privacy needs.  
 
 # Changelog
 
