@@ -10,7 +10,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 - [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Security Requirements](#security-requirements)
-  - [Terminology](#terminology)
+- [Terminology](#terminology)
 - [Adversarial Model](#adversarial-model)
 - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
@@ -33,7 +33,7 @@ This specification explains the Waku `WakuStore` protocol which enables querying
 
 <!-- TODO: may add this section in later PRs # Security Requirements -->
 
-## Terminology
+# Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
