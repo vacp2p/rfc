@@ -9,8 +9,8 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 - [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
-- [Security Requirements](#security-requirements)
-- [Terminology](#terminology)
+- [Security Consideration](#security-consideration)
+  - [Terminology](#terminology)
 - [Adversarial Model](#adversarial-model)
 - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
@@ -31,9 +31,11 @@ This specification explains the Waku `WakuStore` protocol which enables querying
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
 
-<!-- TODO: may add this section in later PRs # Security Requirements -->
+# Security Consideration
 
-# Terminology
+The main security consideration to be taken into account while using `WakuStore` is to notice that the querying nodes have to reveal their topics of interest to the queried nodes hence compromising their privacy. 
+
+## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
