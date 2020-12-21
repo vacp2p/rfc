@@ -2,16 +2,26 @@
 title: Waku
 version: 2.0.0-beta2
 status: Draft
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno Cornelius <hanno@status.im>
+authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno Cornelius <hanno@status.im>, Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
 
 - [Abstract](#abstract)
 - [Content filtering](#content-filtering)
-  * [Rationale](#rationale)
-  * [Protobuf](#protobuf)
+  - [Rationale](#rationale)
+- [Security Consideration](#security-consideration)
+  - [Terminology](#terminology)
+- [Adversarial Model](#adversarial-model)
+  - [Protobuf](#protobuf)
+      - [FilterRPC](#filterrpc)
+      - [FilterRequest](#filterrequest)
+      - [MessagePush](#messagepush)
+- [Future Work](#future-work)
 - [Changelog](#changelog)
+    - [Next](#next)
+    - [2.0.0-beta2](#200-beta2)
+    - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
 
@@ -43,6 +53,20 @@ No gossiping takes place.
 It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
+
+# Security Consideration
+
+Note that while using `WakuFilter` allows light nodes to save bandwidth, it comes with a privacy cost in the sense that they need to disclose their liking topics to the full nodes to retrieve the relevant messages. Currently, anonymous subscription is not supported by the `WakuFilter`, however, potential solutions in this regard are sketched below in [Future Work](#future-work) section. 
+
+## Terminology
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
+
+# Adversarial Model
+Any node running the `WakuFilter` protocol i.e., both the subscriber node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other nodes to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node intentionally hides the messages matching to one's subscribed content filter as it is against the description of the `WakuFilter` protocol. 
+
+The following are not considered as part of the adversarial model: 
+  - An adversary with a global view of all the nodes and their connections. 
+  - An adversary that can eavesdrop on communication links between arbitrary pairs of nodes (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 ## Protobuf
 
@@ -119,10 +143,20 @@ period of time (e.g. a TTL), then the filter node MAY choose to not push these
 messages to the node. This period is up to the consumer of the protocol and node
 implementation, though a reasonable default is one minute.
 
----
+--- 
+# Future Work
+<!-- Alternative title: Filter-subscriber unlinkability -->
+**Anonymous filter subscription**: This feature guarantees that nodes can anonymously subscribe for a message filter (i.e., without revealing their exact content filter). As such, no adversary in the `WakuFilter` protocol would be able to link nodes to their subscribed content filers. The current version of the `WakuFilter` protocol does not provide anonymity as the subscribing node has a direct connection to the full node and explicitly submits its content filter to be notified about the matching messages. However, one can consider preserving anonymity through one of the following ways: 
+- By hiding the source of the subscription i.e., anonymous communication. That is the subscribing node shall hide all its PII in its filter request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- TODO: if nodes have to disclose their PeerIDs (e.g., for authentication purposes) when connecting to other nodes in the WakuFilter protocol, then Tor does not preserve anonymity since it only helps in hiding the IP. So, the PeerId usage in switches must be investigated further. Depending on how PeerId is used, one may be able to link between a subscriber and its content filter despite hiding the IP address-->. 
+  Note that the current structure of filter requests i.e., `FilterRPC` does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve anonymity. 
+- By deploying secure 2-party computations in which the subscribing node obtains the messages matching a content filter whereas the full node learns nothing about the content filter as well as the messages pushed to the subscribing node. Examples of such 2PC protocols are [Oblivious Transfers](https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-5906-5_9#:~:text=Oblivious%20transfer%20(OT)%20is%20a,information%20the%20receiver%20actually%20obtains.) and one-way Private Set Intersections (PSI).
 
 # Changelog
 
+### Next
+
+- Added initial threat model and security analysis.
+   
 ### 2.0.0-beta2
 
 Initial draft version. Released [2020-10-28](https://github.com/vacp2p/specs/commit/5ceeb88cee7b918bb58f38e7c4de5d581ff31e68)

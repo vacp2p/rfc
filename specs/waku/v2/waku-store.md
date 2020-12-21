@@ -1,5 +1,5 @@
 ---
-title: Waku
+title: WakuStore
 version: 2.0.0-beta2
 status: Draft
 authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz Taheri <sanaz@status.im>
@@ -7,42 +7,43 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 # Table of Contents
 
+- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
-  - [Security Requirements](#security-requirements)
-    - [Terminologies](#terminologies)
-  - [Adversarial Model](#adversarial-model)
+- [Security Consideration](#security-consideration)
+  - [Terminology](#terminology)
+- [Adversarial Model](#adversarial-model)
 - [Wire Specification](#wire-specification)
   - [Protobuf](#protobuf)
     - [Index](#index)
     - [PagingInfo](#paginginfo)
     - [HistoryQuery](#historyquery)
     - [HistoryResponse](#historyresponse)
-  - [Security Analysis](#security-analysis)
-  - [Future Work](#future-work)
+- [Future Work](#future-work)
 - [Changelog](#changelog)
+    - [Next](#next)
     - [2.0.0-beta2](#200-beta2)
     - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 
 # Abstract
 
-This specification explains the Waku `store` protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages. 
+This specification explains the Waku `WakuStore` protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages. 
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
 
-## Security Requirements
+# Security Consideration
 
-- **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested in).  As such, no adversary in the `store` protocol would be able to learn which peer is interested in which topics of waku message.
-- **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts a node in the `store` protocol  by making a large number of queries (even redundant queries) thus making the node unavailable to the rest of the system.
+The main security consideration to be taken into account while using `WakuStore` is to notice that the querying nodes have to reveal their topics of interest to the queried nodes hence compromising their privacy. 
 
-<!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).  -->
+## Terminology
+The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
-### Terminologies
-The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a Peer. For example, the signature verification key, and the hash of one's IP address are unique for each peer and hence count as PII.
+# Adversarial Model
+Any peer running the `WakuStore` protocol i.e., both the querying node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `WakuStore` protocol. 
 
-## Adversarial Model
--  Any peer talking the `store` protocol i.e., both the querying node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `store` protocol. 
-- The following are not considered as part of the adversarial model: 1- An adversary with a global view of all the peers and their connections 2- An adversary that can eavesdrop on communication links between arbitrary pair of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+The following are not considered as part of the adversarial model:
+- An adversary with a global view of all the peers and their connections.
+- An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 
 # Wire Specification
@@ -85,9 +86,9 @@ message HistoryRPC {
 
 ### Index
 
-To perform pagination, each `WakuMessage` stored at a node running the `store` protocol is associated with a unique `Index` that encapsulates the following parts. 
+To perform pagination, each `WakuMessage` stored at a node running the `WakuStore` protocol is associated with a unique `Index` that encapsulates the following parts. 
 - `digest`:  a sequence of bytes representing the hash of a `WakuMessage`.
-- `receivedTime`: the UNIX time at which the waku message is received by the node running the `store` protocol.
+- `receivedTime`: the UNIX time at which the waku message is received by the node running the `WakuStore` protocol.
 
 ### PagingInfo
 
@@ -110,18 +111,16 @@ RPC call to respond to a HistoryQuery call.
 - The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. The `pageSize` indicates the number of returned waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). The `direction` is the same direction as in the corresponding `HistoryQuery`. In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
 
-## Security Analysis 
+# Future Work
 
-- **Prevention of Denial of Service**: DoS attack can be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `store` protocol, the querying node will be charged for the history messages that it queries from other nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
-
-## Future Work
-- **Anonymous query**: The current version of the `store` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `store` protocol and explicitly disclose the topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
-  - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- TODO: more techniques to be included -->. 
-  Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity. 
-  - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). Such a solution must be embedded in the `store` protocol and can not be adopted by the nodes independently. <!-- TODO: add reference for PSIs? -->
-
+- **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested in).  As such, no adversary in the `WakuStore` protocol would be able to learn which peer is interested in which topics of waku message. The current version of the `WakuStore` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `WakuStore` protocol and explicitly disclose the topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
+  - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor. Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity. <!-- TODO: if nodes have to disclose their PeerIDs (e.g., for authentication purposes) when connecting to other nodes in the store protocol, then Tor does not preserve anonymity since it only helps in hiding the IP. So, the PeerId usage in switches must be investigated further. Depending on how PeerId is used, one may be able to link between a querying node and its queried topics despite hiding the IP address-->. 
+  - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included -->. 
+<!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 # Changelog
 
+### Next 
+- Added the initial threat model and security analysis.
 
 ### 2.0.0-beta2 
 Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
