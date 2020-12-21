@@ -2,7 +2,7 @@
 title: Waku Message
 version: 2.0.0-beta1
 status: Draft
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
@@ -12,9 +12,10 @@ authors: Oskar Thorén <oskar@status.im>
 - [WakuMessage](#wakumessage)
   - [Protobuf](#protobuf)
   - [Payload encryption](#payload-encryption)
-      - [Version 0](#version-0)
-      - [Version 1](#version-1)
+    - [Version 0](#version-0)
+    - [Version 1 (not yet implemented in Waku v2)](#version-1-not-yet-implemented-in-waku-v2)
 - [Differences from Whisper / Waku v1 envelopes](#differences-from-whisper--waku-v1-envelopes)
+- [Security Consideration](#security-consideration)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
 
@@ -75,6 +76,10 @@ topic, data, nonce`.
 
 Since Waku v2 is using libp2p PubSub, some of these fields can be dropped. The previous `topic`
 field corresponds to `contentTopic`. The previous `data` field corresponds to the `payload` field.
+
+# Security Consideration
+
+In Waku, the confidentiality, integrity, and authenticity of the data must be addressed at the `WakuMessage` level.  That is, the `payload` shall be encrypted or signed properly to meet the application-specific privacy needs.  
 
 # Changelog
 
