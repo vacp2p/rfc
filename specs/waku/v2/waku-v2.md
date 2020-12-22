@@ -24,7 +24,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
   - [Security Features](#security-features)
   - [Security considerations](#security-considerations)
   - [Future work](#future-work)
-  - [Changelog](#changelog)
+- [Changelog](#changelog)
     - [Next version](#next-version)
     - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
@@ -186,7 +186,7 @@ We are actively working on the following features to be added to Waku v2.
 
 
 
-## Changelog
+# Changelog
 
 ### Next version
 
