@@ -2,7 +2,7 @@
 title: Waku
 version: 2.0.0-beta1
 status: Draft
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
@@ -23,7 +23,7 @@ authors: Oskar Thorén <oskar@status.im>
   - [Adversarial Model](#adversarial-model)
   - [Security Features](#security-features)
   - [Security considerations](#security-considerations)
-    - [Lack of anonymity in the direct connections including `WakuStore` and `WakuFilter` protocols](#lack-of-anonymity-in-the-direct-connections-including-wakustore-and-wakufilter-protocols)
+  - [Future work](#future-work)
   - [Changelog](#changelog)
     - [Next version](#next-version)
     - [2.0.0-beta1](#200-beta1)
@@ -147,26 +147,45 @@ packet from one version to the other.
 
 See [bridge spec](waku-bridge.md) for details on a bridge mode.
 
+
 # Security 
 
-The security features and considerations in Waku v2 depend on how its different protocol layers are combined to utilize its various capabilities. The security is analyzed against a static adversarial model which is described next.
+The security features and considerations in Waku v2 depend on how its different protocol layers are combined. The security is analyzed against a static adversarial model which is described below.
 
 ## Adversarial Model
-The adversary is considered as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions. This has a different implication for each protocol which is discussed in the protocol specs. 
+The adversary is considered as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions.
+
 The following are **not** considered as part of the adversarial model: 
   -  An adversary with a global view of all the peers and their connections. 
   -  An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
 
 ## Security Features
-Waku v2 follows a modular architecture and is comprised of multiple protocol layers each featuring a distinct capability. The security features of the Waku also depends on how these layers are utilized and combined. 
-Considering the three basic security aspects, i.e., privacy, integrity, and anonymity, Waku v2 capture the following properties:
+<!-- Each protocol layer of waku v2 provides a distinct service and is associated with a separate set of security features and concerns. Therefore, the overall security features provided by Waku v2 depends on how different layers are utilized. -->
+In the followings, we overview the security features supported by Waku v2: <!--concerning data confidentiality, integrity, and anonymity.-->
 
-- **Anonymity**: The anonymity requirement appears in multiple protocol layers and each layer is associated with its measures. At a high level, Anonymity in a system indicates the inability of an adversary in linking an actor to its performed action (the actor and action are context-dependent). 
-  - `WakuRelay`:  Anonymity at this layer is classified into two categories:  **Publisher-Message Unlinkability** and **Subscriber-Topic Unlinkability** which captures anonymity requirement for the two main actions that can take place in the `WakuRelay` i.e., topic subscription and message publishing. The former signifies the unlinkability of a publisher to its published message whereas the latter stands for the unlinkability of the subscriber to its subscribed topics. The Publisher-Message Unlinkability is enforced through the `StrictNoSign` policy whereas the Subscriber-Topic Unlinkability is enabled through the utilization of a single pubsub topic (note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended as it empowers anonymity). See [WakuRelay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md#security-analysis) for detailed security analysis. <!-- TODO the PerrID utilization in peers direct connections may violate anonymity -->
-## Security considerations
-### Lack of anonymity in the direct connections including `WakuStore` and `WakuFilter` protocols
-- Anonymity may be violated in the direct connections where the two ends become aware of each other's IP address or libp2p `PeerID`. While the IP address can be masked through a proxy server, preventing the disclosure of `PeerID` is not straightforward.
+**Pseudonimity**: Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity and instead they utilize libp2p `PeerID` as their identifiers. While pseudonymity is an appealing security feature, it does not guarantee full anonymity since the actions taken under the same pseudonym i.e., `PeerID` can be linked together and result in the re-identification of the true actor. 
   
+**Anonymity / Unlinkability**:  At a high level, we can see Anonymity as the inability of an adversary in linking an actor to its performed action/data (the actor and action are context-dependent). <!-- The anonymity for each protocol layer is defined based on the type of actors in that protocol and each layer provides its own protection measures. --> To be precise about anonymity we use the term Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party/person. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII. Note that while signature keys provide pseudonymity (i.e., they contain no information about the true identity of the actor), but as discussed before, one's actions can be linked through its signatures and cause the re-identification risk, hence, we seek anonymity by avoiding linkability between actions and the actors PIIs as well.
+
+**Publisher-Message Unlinkability** and **Subscriber-Topic Unlinkability**: These levels of unlinkability capture the anonymity requirements of the `WakuRelay` corresponding to the two main actions that can take place in this protocol i.e., topic subscription and message publishing. The former signifies the unlinkability of a publisher to its published message whereas the latter stands for the unlinkability of the subscriber to its subscribed topics. The Publisher-Message Unlinkability is enforced through the `StrictNoSign` policy whereas the Subscriber-Topic Unlinkability is achieved through the utilization of a single pubsub topic. Note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended for the sake of anonymity. See [WakuRelay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md#security-analysis) for detailed security analysis. <!-- TODO the PerrID utilization in peers direct connections may violate anonymity -->
+
+**Spam protection**: This property indicates that no adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time). Spam protection is partly provided in `WakuRelay` through [scoring mechansim](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures) of GossipSub v1.1. At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.   
+  
+**Data confidentiality, Integrity, Authenticity**:  These features are enabled through payload encryption and encrypted signatures at the `WakuMessage` version 1 (see [WakuMessage specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md#version-1-not-yet-implemented-in-waku-v2) for further details). 
+
+## Security considerations
+**Lack of anonymity in the direct connections including `WakuStore` and `WakuFilter` protocols**: The anonymity is not guaranteed in the protocols like `WakuStore` and `WakuFilter` where peers need to have direct connections to benefit from the designated service. This is because during the direct connections peers utilize `PeerID` to identify each other, which means the service (actions) taken in the protocol are linked to parties `PeerID` (which counts as PII).  In terms of `WakuStore`, this means that the querying nodes have to reveal their topics of interest to the queried nodes hence compromising their privacy.  Likewise, in the `WakuFilter`, light nodes have to disclose their liking topics to the full nodes to retrieve the relevant messages. 
+  
+## Future work
+
+We are actively working on the following features to be added to Waku v2.
+
+**Economic Spam resistant**: We aim to enable an incentivized spam protection technique at the `WakuRelay` by using rate limiting nullifiers. Mode details on this can be found in  [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). In this new version, peers are limited to a certain rate of messaging per epoch and an immediate financial penalty is enforced for spammers who break this rate.
+
+**Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts a node in the `store` protocol by making a large number of queries (even redundant queries) thus making the node unavailable to the rest of the system. DoS attack is to be mitigated through accounting model as provided by [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other, which means, in terms of `store` protocol, the querying node will be charged for the history messages that it queries from other nodes. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers. By the accounting model, we aim at protecting service availability in `WakuStore` and `WakuFilter`.
+
+
+
 
 ## Changelog
 
