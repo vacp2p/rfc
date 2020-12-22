@@ -10,25 +10,25 @@ authors: Oskar Thorén <oskar@status.im>
 - [Abstract](#abstract)
 - [Motivation and goals](#motivation-and-goals)
 - [Network interaction domains](#network-interaction-domains)
-    - [Protocols and identifiers](#protocols-and-identifiers)
-    - [Gossip domain](#gossip-domain)
-        - [Default pubsub topic](#default-pubsub-topic)
-    - [Discovery domain](#discovery-domain)
-    - [Request/reply domain](#requestreply-domain)
-        - [Historical message support](#historical-message-support)
-        - [Content filtering](#content-filtering)
+  - [Protocols and identifiers](#protocols-and-identifiers)
+  - [Gossip domain](#gossip-domain)
+    - [Default pubsub topic](#default-pubsub-topic)
+  - [Discovery domain](#discovery-domain)
+  - [Request/reply domain](#requestreply-domain)
+    - [Historical message support](#historical-message-support)
+    - [Content filtering](#content-filtering)
 - [Upgradability and Compatibility](#upgradability-and-compatibility)
-    - [Compatibility with Waku v1](#compatibility-with-waku-v1)
-    - [Changelog](#changelog)
-        - [Next version](#next-version)
-        - [2.0.0-beta1](#200-beta1)
+  - [Compatibility with Waku v1](#compatibility-with-waku-v1)
+- [Security](#security)
+  - [Adversarial Model](#adversarial-model)
+  - [Security Features](#security-features)
+  - [Security considerations](#security-considerations)
+    - [Lack of anonymity in the direct connections including `WakuStore` and `WakuFilter` protocols](#lack-of-anonymity-in-the-direct-connections-including-wakustore-and-wakufilter-protocols)
+  - [Changelog](#changelog)
+    - [Next version](#next-version)
+    - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
-- [Underlying transports, etc](#underlying-transports-etc)
-    - [Peer Discovery](#peer-discovery)
-        - [PubSub interface](#pubsub-interface)
-        - [FloodSub](#floodsub)
-        - [Bridge mode](#bridge-mode)
 
 # Abstract
 
@@ -103,7 +103,7 @@ that the encoding of data field is protobuf.
 The default PubSub topic SHOULD be used for all protocols. This ensures a
 connected network, as well some degree of metadata protection. It MAY be
 different if or when:
-
+<!-- TODO discuss anonymity related to one pubsub topic -->
 - Different applications have different message volume
 - Topic sharding is introduced
 - Encoding is changed
@@ -146,6 +146,27 @@ devp2p RLPx and libp2p, but that also transfers (partially) the content of a
 packet from one version to the other.
 
 See [bridge spec](waku-bridge.md) for details on a bridge mode.
+
+# Security 
+
+The security features and considerations in Waku v2 depend on how its different protocol layers are combined to utilize its various capabilities. The security is analyzed against a static adversarial model which is described next.
+
+## Adversarial Model
+The adversary is considered as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions. This has a different implication for each protocol which is discussed in the protocol specs. 
+The following are **not** considered as part of the adversarial model: 
+  -  An adversary with a global view of all the peers and their connections. 
+  -  An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+
+## Security Features
+Waku v2 follows a modular architecture and is comprised of multiple protocol layers each featuring a distinct capability. The security features of the Waku also depends on how these layers are utilized and combined. 
+Considering the three basic security aspects, i.e., privacy, integrity, and anonymity, Waku v2 capture the following properties:
+
+- **Anonymity**: The anonymity requirement appears in multiple protocol layers and each layer is associated with its measures. At a high level, Anonymity in a system indicates the inability of an adversary in linking an actor to its performed action (the actor and action are context-dependent). 
+  - `WakuRelay`:  Anonymity at this layer is classified into two categories:  **Publisher-Message Unlinkability** and **Subscriber-Topic Unlinkability** which captures anonymity requirement for the two main actions that can take place in the `WakuRelay` i.e., topic subscription and message publishing. The former signifies the unlinkability of a publisher to its published message whereas the latter stands for the unlinkability of the subscriber to its subscribed topics. The Publisher-Message Unlinkability is enforced through the `StrictNoSign` policy whereas the Subscriber-Topic Unlinkability is enabled through the utilization of a single pubsub topic (note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended as it empowers anonymity). See [WakuRelay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md#security-analysis) for detailed security analysis. <!-- TODO the PerrID utilization in peers direct connections may violate anonymity -->
+## Security considerations
+### Lack of anonymity in the direct connections including `WakuStore` and `WakuFilter` protocols
+- Anonymity may be violated in the direct connections where the two ends become aware of each other's IP address or libp2p `PeerID`. While the IP address can be masked through a proxy server, preventing the disclosure of `PeerID` is not straightforward.
+  
 
 ## Changelog
 
