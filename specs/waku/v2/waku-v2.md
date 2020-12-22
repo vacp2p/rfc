@@ -22,7 +22,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 - [Security](#security)
   - [Adversarial Model](#adversarial-model)
   - [Security Features](#security-features)
-  - [Security considerations](#security-considerations)
+  - [Security Considerations](#security-considerations)
   - [Future work](#future-work)
 - [Changelog](#changelog)
     - [Next version](#next-version)
@@ -160,8 +160,6 @@ The following are **not** considered as part of the adversarial model:
 
 ## Security Features
 
-In the followings, we overview the security features supported by Waku v2: 
-
 **Pseudonimity**: Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity and instead they utilize libp2p `PeerID` as their identifiers. While pseudonymity is an appealing security feature, it does not guarantee full anonymity since the actions taken under the same pseudonym i.e., `PeerID` can be linked together and potentially result in the re-identification of the true actor. 
   
 **Anonymity / Unlinkability**:  At a high level, we can see Anonymity as the inability of an adversary in linking an actor to its performed action/data (the actor and action are context-dependent). To be precise about anonymity we use the term Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party/person. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII. Note that while signature keys provide pseudonymity (i.e., they contain no information about the true identity of the actor), but as discussed before, one's actions can be linked through its signatures and cause the re-identification risk, hence, we seek anonymity by avoiding linkability between actions and the actors PIIs as well.
@@ -172,7 +170,7 @@ In the followings, we overview the security features supported by Waku v2:
   
 **Data confidentiality, Integrity, Authenticity**:  These features are enabled through payload encryption and encrypted signatures at the `WakuMessage` version 1 (see [WakuMessage specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md#version-1-not-yet-implemented-in-waku-v2) for further details). 
 
-## Security considerations
+## Security Considerations
 
 **Lack of anonymity/unlinkability in the protocols involving direct connections including `WakuStore` and `WakuFilter` protocols**: The anonymity/unlinkability is not guaranteed in the protocols like `WakuStore` and `WakuFilter` where peers need to have direct connections to benefit from the designated service. This is because during the direct connections peers utilize `PeerID` to identify each other, therefore the service obtained in the protocol is linkable to the beneficiary's `PeerID` (which counts as PII).  In terms of `WakuStore`, the queried node would be able to link the querying node's `PeerID` to its queried topics. Likewise, in the `WakuFilter`, a full node can link the light node's `PeerID`s to its content filter. 
   
@@ -183,9 +181,6 @@ We are actively working on the following features to be added to Waku v2.
 **Economic Spam resistant**: We aim to enable an incentivized spam protection technique at the `WakuRelay` by using rate limiting nullifiers. Mode details on this can be found in  [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). In this new version, peers are limited to a certain rate of messaging per epoch and an immediate financial penalty is enforced for spammers who break this rate.
 
 **Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts a node's service capacity (e.g., by making a large number of requests) and makes the node unavailable to the rest of the system. DoS attack is to be mitigated through accounting model as described in [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers. Accounting model can be used in `WakuStore` and `WakuFilter` to protect against DoS attacks.
-
-
-
 
 # Changelog
 
