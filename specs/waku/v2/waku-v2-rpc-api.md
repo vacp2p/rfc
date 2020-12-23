@@ -410,7 +410,7 @@ Before returning the messages, the server decrypts the message payloads using th
 
 The `get_waku_v2_private_v1_asymmetric_messages` method decrypts and returns a list of messages that were received on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server SHOULD return an empty list. This method can be used to poll a `topic` for new messages.
 
-Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide either a private key.
+Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide a private key.
 
 #### Parameters
 
