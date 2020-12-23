@@ -168,7 +168,7 @@ The following are **not** considered as part of the adversarial model:
 
 **Spam protection**: This property indicates that no adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time). Spam protection is partly provided in `WakuRelay` through [scoring mechanism](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures) of GossipSub v1.1. At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.   
   
-**Data confidentiality, Integrity, Authenticity**:  These features are enabled through payload encryption and encrypted signatures in the `WakuMessage` version 1 (see [WakuMessage specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md#version-1-not-yet-implemented-in-waku-v2) for further details). 
+**Data confidentiality, Integrity, Authenticity**:  Confidentiality can be addressed through data encryption whereas integrity and authenticity are achievable through digital signatures. These features are enabled in `WakuMessage` v1 through payload encryption as well as encrypted signatures (see [WakuMessage specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md#version-1-not-yet-implemented-in-waku-v2) for further details). 
 
 ## Security Considerations
 
