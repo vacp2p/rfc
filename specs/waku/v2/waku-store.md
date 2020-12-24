@@ -7,7 +7,6 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 # Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Design Requirements](#design-requirements)
 - [Security Consideration](#security-consideration)
