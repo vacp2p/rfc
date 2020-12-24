@@ -323,15 +323,15 @@ It is the API client's responsibility to keep track of the keys used for encrypt
 
 The following structured types are defined for use on the Private API:
 
+#### KeyPair
+
 `KeyPair` is an `Object` containing the following fields:
 | Field | Type | Inclusion | Description |
 | ----: | :--: | :--: |----------- |
 | `privateKey` | `String` | mandatory | Private key as hex encoded data string |
 | `publicKey` | `String` | mandatory | Public key as hex encoded data string |
 
-#### KeyPair
-
-### `get_waku_v2_private_v1_symkey`
+### `get_waku_v2_private_v1_symmetric_key`
 
 Generates and returns a symmetric key that can be used for message encryption and decryption.
 
@@ -342,7 +342,7 @@ none
 #### Response
 - **`String`** - A new symmetric key as hex encoded data string
 
-### `get_waku_v2_private_v1_keypair`
+### `get_waku_v2_private_v1_asymmetric_keypair`
 
 Generates and returns a public/private key pair that can be used for asymmetric message encryption and decryption.
 
@@ -353,11 +353,11 @@ none
 #### Response
 - **[`KeyPair`](#KeyPair)** - A new public/private key pair as hex encoded data strings
 
-### `post_waku_v2_private_v1_message`
+### `post_waku_v2_private_v1_symmetric_message`
 
-The `post_waku_v2_private_v1_message` method publishes a message to be relayed on a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor). 
+The `post_waku_v2_private_v1_symmetric_message` method publishes a message to be relayed on a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor). 
 
-Before being relayed, the message payload is encrypted using either the supplied symmetric key or public key. The client MUST provide either a symmetric key or a public key. Only one of these keys SHOULD be provided. If both keys are provided, the server will default to symmetric key encryption.
+Before being relayed, the message payload is encrypted using the supplied symmetric key. The client MUST provide a symmetric key.
 
 #### Parameters
 
@@ -365,26 +365,59 @@ Before being relayed, the message payload is encrypted using either the supplied
 | ----: | :--: | :--: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on |
 | `message` | [`WakuRelayMessage`](#WakuRelayMessage) | mandatory | The (unencrypted) `message` being relayed |
-| `symkey` | `String` | conditional | The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected |
-| `publicKey` | `String` | conditional | The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected |
+| `symkey` | `String` | mandatory | The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected |
 
 #### Response
 
 - **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
-### `get_waku_v2_private_v1_messages`
+### `post_waku_v2_private_v1_asymmetric_message`
 
-The `get_waku_v2_private_v1_messages` method decrypts and returns a list of messages that were received on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server SHOULD return an empty list. This method can be used to poll a `topic` for new messages.
+The `post_waku_v2_private_v1_asymmetric_message` method publishes a message to be relayed on a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor). 
 
-Before returning the messages, the server decrypts the message payloads using either the supplied symmetric key or private key. The client MUST provide either a symmetric key or a private key. Only one of these keys SHOULD be provided. If both keys are provided, the server will attempt decryption using the symmetric key.
+Before being relayed, the message payload is encrypted using the supplied public key. The client MUST provide a public key.
+
+#### Parameters
+
+| Field | Type | Inclusion | Description |
+| ----: | :--: | :--: |----------- |
+| `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on |
+| `message` | [`WakuRelayMessage`](#WakuRelayMessage) | mandatory | The (unencrypted) `message` being relayed |
+| `publicKey` | `String` | mandatory | The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected |
+
+#### Response
+
+- **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+### `get_waku_v2_private_v1_symmetric_messages`
+
+The `get_waku_v2_private_v1_symmetric_messages` method decrypts and returns a list of messages that were received on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server SHOULD return an empty list. This method can be used to poll a `topic` for new messages.
+
+Before returning the messages, the server decrypts the message payloads using the supplied symmetric key. The client MUST provide a symmetric key.
 
 #### Parameters
 
 | Field | Type | Inclusion | Description |
 | ----: | :--: | :--: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
-| `symkey` | `String` | conditional | The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected |
-| `privateKey` | `String` | conditional | The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected |
+| `symkey` | `String` | mandatory | The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected |
+
+#### Response
+
+- **`Array`[[`WakuRelayMessage`](#WakuRelayMessage)]** - the latest `messages` on the polled `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+### `get_waku_v2_private_v1_asymmetric_messages`
+
+The `get_waku_v2_private_v1_asymmetric_messages` method decrypts and returns a list of messages that were received on a subscribed [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) after the last time this method was called. The server MUST respond with an [error](https://www.jsonrpc.org/specification#error_object) if no subscription exists for the polled `topic`. If no message has yet been received on the polled `topic`, the server SHOULD return an empty list. This method can be used to poll a `topic` for new messages.
+
+Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide a private key.
+
+#### Parameters
+
+| Field | Type | Inclusion | Description |
+| ----: | :--: | :--: |----------- |
+| `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
+| `privateKey` | `String` | mandatory | The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected |
 
 #### Response
 
