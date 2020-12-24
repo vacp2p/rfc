@@ -7,7 +7,6 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno
 
 # Table of Contents
 
-- [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
 - [Content filtering](#content-filtering)
   - [Rationale](#rationale)
