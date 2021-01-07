@@ -20,7 +20,7 @@ authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 - [Upgradability and Compatibility](#upgradability-and-compatibility)
   - [Compatibility with Waku v1](#compatibility-with-waku-v1)
 - [Security](#security)
-  - [Adversarial Model](#adversarial-model)
+  - [Primary Adversarial Model](#primary-adversarial-model)
   - [Security Features](#security-features)
     - [Pseudonymity](#pseudonymity)
     - [Anonymity / Unlinkability](#anonymity--unlinkability)
@@ -155,8 +155,8 @@ See [bridge spec](waku-bridge.md) for details on a bridge mode.
 # Security 
 Each protocol layer of Waku v2 provides a distinct service and is associated with a separate set of security features and concerns. Therefore, the overall security of Waku v2 depends on how the different layers are utilized. In this section, we overview the security properties of Waku v2 protocols against a static adversarial model which is described below. Note that a more detailed security analysis of each Waku protocol is supplied in its respective specification as well.
 
-## Adversarial Model
-The adversary is considered as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions.
+## Primary Adversarial Model
+In the primary adversarial model, we consider adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions.
 
 The following are **not** considered as part of the adversarial model: 
   -  An adversary with a global view of all the peers and their connections. 
@@ -200,6 +200,7 @@ We are actively working on the following features to be added to Waku v2.
 
 - Add recommended default PubSub topic
 - Update relay and message spec version
+- Security analysis under the primary adversarial model is done
 
 ### 2.0.0-beta1
 
