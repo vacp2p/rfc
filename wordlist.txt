@@ -76,6 +76,8 @@ html
 http
 https
 im
+incentivized
+incentivizing
 inlined
 internalNullifier
 invariants
@@ -96,6 +98,8 @@ LibP
 libp2p
 LibP2P
 lifecycle
+linkable
+linkability
 LLC
 localHash
 mailserver
@@ -129,6 +133,8 @@ PagingOptions
 peerid
 peerID
 Piana
+PII
+PIIs
 Pluggable
 PoW
 proofBundle

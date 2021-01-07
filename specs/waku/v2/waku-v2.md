@@ -2,7 +2,7 @@
 title: Waku
 version: 2.0.0-beta1
 status: Draft
-authors: Oskar Thorén <oskar@status.im>
+authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
 ---
 
 # Table of Contents
@@ -10,25 +10,29 @@ authors: Oskar Thorén <oskar@status.im>
 - [Abstract](#abstract)
 - [Motivation and goals](#motivation-and-goals)
 - [Network interaction domains](#network-interaction-domains)
-    - [Protocols and identifiers](#protocols-and-identifiers)
-    - [Gossip domain](#gossip-domain)
-        - [Default pubsub topic](#default-pubsub-topic)
-    - [Discovery domain](#discovery-domain)
-    - [Request/reply domain](#requestreply-domain)
-        - [Historical message support](#historical-message-support)
-        - [Content filtering](#content-filtering)
+  - [Protocols and identifiers](#protocols-and-identifiers)
+  - [Gossip domain](#gossip-domain)
+    - [Default pubsub topic](#default-pubsub-topic)
+  - [Discovery domain](#discovery-domain)
+  - [Request/reply domain](#requestreply-domain)
+    - [Historical message support](#historical-message-support)
+    - [Content filtering](#content-filtering)
 - [Upgradability and Compatibility](#upgradability-and-compatibility)
-    - [Compatibility with Waku v1](#compatibility-with-waku-v1)
-    - [Changelog](#changelog)
-        - [Next version](#next-version)
-        - [2.0.0-beta1](#200-beta1)
+  - [Compatibility with Waku v1](#compatibility-with-waku-v1)
+- [Security](#security)
+  - [Primary Adversarial Model](#primary-adversarial-model)
+  - [Security Features](#security-features)
+    - [Pseudonymity](#pseudonymity)
+    - [Anonymity / Unlinkability](#anonymity--unlinkability)
+    - [Spam protection](#spam-protection)
+    - [Data confidentiality, Integrity, Authenticity](#data-confidentiality-integrity-authenticity)
+  - [Security Considerations](#security-considerations)
+  - [Future work](#future-work)
+- [Changelog](#changelog)
+    - [Next version](#next-version)
+    - [2.0.0-beta1](#200-beta1)
 - [Copyright](#copyright)
 - [References](#references)
-- [Underlying transports, etc](#underlying-transports-etc)
-    - [Peer Discovery](#peer-discovery)
-        - [PubSub interface](#pubsub-interface)
-        - [FloodSub](#floodsub)
-        - [Bridge mode](#bridge-mode)
 
 # Abstract
 
@@ -103,7 +107,7 @@ that the encoding of data field is protobuf.
 The default PubSub topic SHOULD be used for all protocols. This ensures a
 connected network, as well some degree of metadata protection. It MAY be
 different if or when:
-
+<!-- TODO discuss anonymity related to one pubsub topic -->
 - Different applications have different message volume
 - Topic sharding is introduced
 - Encoding is changed
@@ -147,12 +151,56 @@ packet from one version to the other.
 
 See [bridge spec](waku-bridge.md) for details on a bridge mode.
 
-## Changelog
+
+# Security 
+Each protocol layer of Waku v2 provides a distinct service and is associated with a separate set of security features and concerns. Therefore, the overall security of Waku v2 depends on how the different layers are utilized. In this section, we overview the security properties of Waku v2 protocols against a static adversarial model which is described below. Note that a more detailed security analysis of each Waku protocol is supplied in its respective specification as well.
+
+## Primary Adversarial Model
+In the primary adversarial model, we consider adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions.
+
+The following are **not** considered as part of the adversarial model: 
+  -  An adversary with a global view of all the peers and their connections. 
+  -  An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.
+
+## Security Features
+
+### Pseudonymity 
+Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity and instead they utilize libp2p `PeerID` as their identifiers. While pseudonymity is an appealing security feature, it does not guarantee full anonymity since the actions taken under the same pseudonym i.e., `PeerID` can be linked together and potentially result in the re-identification of the true actor. 
+  
+### Anonymity / Unlinkability
+At a high level, anonymity is the inability of an adversary in linking an actor to its data/performed action (the actor and action are context-dependent). To be precise about linkability, we use the term Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII. Notice that users' actions can be traced through their PIIs (e.g., signatures) and hence result in their re-identification risk. As such, we seek anonymity by avoiding linkability between actions and the actors / actors' PII. Concerning anonymity, Waku v2 provides the following features:
+
+**Publisher-Message Unlinkability**: This feature signifies the unlinkability of a publisher to its published messages in the `WakuRelay` protocol. The [Publisher-Message Unlinkability](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md#security-analysis) is enforced through the `StrictNoSign` policy due to which the data fields of pubsub messages that count as PII for the publisher must be left unspecified.
+
+**Subscriber-Topic Unlinkability**: This feature stands for the unlinkability of the subscriber to its subscribed topics in the `WakuRelay` protocol. The [Subscriber-Topic Unlinkability](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md#security-analysis) is achieved through the utilization of a single pubsub topic. As such, subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID. This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of subscribers). Note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended for the sake of anonymity. 
+
+### Spam protection
+This property indicates that no adversary can flood the system (i.e., publishing a large number of messages in a short amount of time), either accidentally or deliberately, with any kind of message i.e. even if the message content is valid or useful. Spam protection is partly provided in `WakuRelay` through [scoring mechanism](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures) of GossipSub v1.1. At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.    
+  
+### Data confidentiality, Integrity, Authenticity
+Confidentiality can be addressed through data encryption whereas integrity and authenticity are achievable through digital signatures. These features are enabled in `WakuMessage` v1 through payload encryption as well as encrypted signatures (see [WakuMessage specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md#version-1-not-yet-implemented-in-waku-v2) for further details). 
+
+## Security Considerations
+
+**Lack of anonymity/unlinkability in the protocols involving direct connections including `WakuStore` and `WakuFilter` protocols**: The anonymity/unlinkability is not guaranteed in the protocols like `WakuStore` and `WakuFilter` where peers need to have direct connections to benefit from the designated service. This is because during the direct connections peers utilize `PeerID` to identify each other, therefore the service obtained in the protocol is linkable to the beneficiary's `PeerID` (which counts as PII).  In terms of `WakuStore`, the queried node would be able to link the querying node's `PeerID` to its queried topics. Likewise, in the `WakuFilter`, a full node can link the light node's `PeerID`s to its content filter. <!-- TODO: to inspect the nimlibp2p codebase and figure out the exact use of PeerIDs in direct communication, it might be the case that the requester does not have to disclose its PeerID-->
+
+<!--TODO: might be good to add a figure visualizing the Waku protocol stack and the security features of each layer-->
+
+## Future work
+
+We are actively working on the following features to be added to Waku v2.
+
+**Economic Spam resistance**: We aim to enable an incentivized spam protection technique at the `WakuRelay` by using rate limiting nullifiers. More details on this can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). In this advanced method, peers are limited to a certain rate of messaging per epoch and an immediate financial penalty is enforced for spammers who break this rate.
+
+**Prevention of Denial of Service (DoS)**: Denial of service signifies the case where an adversarial node exhausts another node's service capacity (e.g., by making a large number of requests) and makes it unavailable to the rest of the system. DoS attack is to be mitigated through the accounting model as described in [Waku Swap Accounting specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-swap-accounting.md). In a nutshell, peers have to pay for the service they obtain from each other. In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers. The accounting model can be used in `WakuStore` and `WakuFilter` to protect against DoS attacks.
+
+# Changelog
 
 ### Next version
 
 - Add recommended default PubSub topic
 - Update relay and message spec version
+- Security analysis under the primary adversarial model is done
 
 ### 2.0.0-beta1
 
