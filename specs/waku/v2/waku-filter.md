@@ -10,6 +10,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno
 - [Abstract](#abstract)
 - [Content filtering](#content-filtering)
   - [Rationale](#rationale)
+- [Design Requirements](#design-requirements)
 - [Security Consideration](#security-consideration)
   - [Terminology](#terminology)
 - [Adversarial Model](#adversarial-model)
@@ -53,6 +54,11 @@ No gossiping takes place.
 It is worth noting that a light node could get by with only using the `store`
 protocol to query for a recent time window, provided it is acceptable to do
 frequent polling.
+
+
+# Design Requirements
+
+The effectiveness and reliability of the content filtering service enabled by  `WakuFilter` protocol rely on the *high availability* of the full nodes as the service providers. To this end, full nodes must feature *high uptime* (to persistently listen and capture the network messages) as well as *high Bandwidth* (to provide timely message delivery to the light nodes). 
 
 # Security Consideration
 

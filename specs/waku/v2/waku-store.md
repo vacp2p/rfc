@@ -9,6 +9,7 @@ authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz
 
 - [Table of Contents](#table-of-contents)
 - [Abstract](#abstract)
+- [Design Requirements](#design-requirements)
 - [Security Consideration](#security-consideration)
   - [Terminology](#terminology)
 - [Adversarial Model](#adversarial-model)
@@ -31,8 +32,11 @@ This specification explains the Waku `WakuStore` protocol which enables querying
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
 
-# Security Consideration
 
+# Design Requirements
+Nodes willing to provide storage service in `WakuStore` protocol are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes. Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
+
+# Security Consideration
 The main security consideration to be taken into account while using `WakuStore` is to notice that the querying nodes have to reveal their topics of interest to the queried nodes hence compromising their privacy. 
 
 ## Terminology
