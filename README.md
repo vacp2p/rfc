@@ -23,11 +23,11 @@ Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EI
   - [waku/2 bridge](./v2/waku/waku-bridge.md) spec for Waku bridge with v1, alpha
 
 #### Version 0 and 1
- - [waku/0](./v1/waku-0.md) specs for `waku/0` version, now deprecated
- - [waku/1](./v1/waku-1.md) specs for `waku/1` version, current stable version
- - [envelope data format](./v1/envelope-data-format.md) [waku](./waku.md) envelope data field specification.
- - [mailserver](./v1/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku.md) envelopes on demand.
- - [rpc api](./v1/waku-rpc-api.md) - Waku RPC API for Waku v1 nodes.
+ - [waku/0](./waku/v1/waku-0.md) specs for `waku/0` version, now deprecated
+ - [waku/1](./waku/v1/waku-1.md) specs for `waku/1` version, current stable version
+ - [envelope data format](./waku/v1/envelope-data-format.md) [waku](./waku/waku.md) envelope data field specification.
+ - [mailserver](./waku/v1/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku/waku.md) envelopes on demand.
+ - [rpc api](./waku/v1/waku-rpc-api.md) - Waku RPC API for Waku v1 nodes.
 
 ### Data sync
 
