@@ -1,4 +1,4 @@
-![CI](https://github.com/vacp2p/specs/workflows/CI/badge.svg)
+<!-- [CI](https://github.com/vacp2p/specs/workflows/CI/badge.svg) -->
 
 This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. A detailed explanation of the vac and its design goals can be found [here](https://vac.dev/vac-overview).
 
@@ -10,11 +10,24 @@ The entire vac protocol is under active development, each specification has its 
 
 These protocols define various components of the [vac](https://vac.dev) stack.
 
-## Waku
+### Waku
 
-Waku is a protocol that substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku v2 is in development. Here you can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
+Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EIPS/eip-627)). Waku v2 is an upgrade of Waku v1 that is in active development and offfer significant improvements. You can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
 
-Waku is made up of several protocols and specifications. To see them go to the [Waku spec home](https://specs.vac.dev/specs/waku/).
+#### Version 2
+  - [waku/2](./waku/v2/waku-v2.md) specs for `waku/2` version, current draft version
+  - [waku/2 relay](./waku/v2/waku-relay.md) spec for WakuRelay, current draft version
+  - [waku/2 filter](./waku/v2/waku-filter.md) spec for WakuFilter, current draft version
+  - [waku/2 store](./waku/v2/waku-store.md) spec for WakuStore, current draft version
+  - [waku/2 message](./waku/v2/waku-message.md) spec for Waku Message, current draft version
+  - [waku/2 bridge](./v2/waku/waku-bridge.md) spec for Waku bridge with v1, alpha
+
+#### Version 0 and 1
+ - [waku/0](./v1/waku-0.md) specs for `waku/0` version, now deprecated
+ - [waku/1](./v1/waku-1.md) specs for `waku/1` version, current stable version
+ - [envelope data format](./v1/envelope-data-format.md) [waku](./waku.md) envelope data field specification.
+ - [mailserver](./v1/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku.md) envelopes on demand.
+ - [rpc api](./v1/waku-rpc-api.md) - Waku RPC API for Waku v1 nodes.
 
 ### Data sync
 
