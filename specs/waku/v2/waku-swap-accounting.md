@@ -16,6 +16,7 @@ authors: Oskar Thorén <oskar@status.im>
     - [Policy](#policy)
     - [Protobuf](#protobuf)
     - [Enhancements](#enhancements)
+- [References](#references)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
 
@@ -23,7 +24,7 @@ authors: Oskar Thorén <oskar@status.im>
 
 This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
 
-**Protocol identifier***: `/vac/waku/swap/2.0.0-alpha1`
+**Protocol identifier***: `/vac/waku/swap/2.0.0-alpha2`
 
 # Motivation
 
