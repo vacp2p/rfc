@@ -151,6 +151,8 @@ are better thought of as a form of Karma.
 
 3. [Axelrod - Evolution of Cooperation (book)](https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation)
 
+4. [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf)
+
 # Changelog
 
 TBD.
