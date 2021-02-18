@@ -12,7 +12,7 @@ These protocols define various components of the [vac](https://vac.dev) stack.
 
 ### Waku
 
-Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EIPS/eip-627)). Waku v2 is an upgrade of Waku v1 that is in active development and offfer significant improvements. You can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
+Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EIPS/eip-627)). Waku v2 is an upgrade of Waku v1 that is in active development and offer significant improvements. You can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
 
 #### Version 2
   - [waku/2](./waku/v2/waku-v2.md) specs for `waku/2` version, current draft version
