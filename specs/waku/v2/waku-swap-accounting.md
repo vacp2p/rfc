@@ -1,6 +1,6 @@
 ---
 title: Waku SWAP Accounting
-version: 2.0.0-alpha1
+version: 2.0.0-alpha2
 status: Raw
 authors: Oskar Thorén <oskar@status.im>
 ---
@@ -9,28 +9,68 @@ authors: Oskar Thorén <oskar@status.im>
 
 - [Abstract](#abstract)
 - [Motivation](#motivation)
+- [Game theory](#game-theory)
 - [SWAP Accounting](#swap-accounting)
     - [Accounting](#accounting)
     - [Flow](#flow)
     - [Policy](#policy)
     - [Protobuf](#protobuf)
     - [Enhancements](#enhancements)
+- [References](#references)
 - [Changelog](#changelog)
 - [Copyright](#copyright)
 
 # Abstract
 
-This specification provides a way to do accounting based on the SWAP model proposed in Swarm, as well as being inspired by Bittorrent's economic model for bandwidth incentives. This is used for pairwise accounting to get nodes to cooperate and provide useful service and/or exchange of funds.
+This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
 
-**Protocol identifier***: `/vac/waku/swap/2.0.0-alpha1`
+**Protocol identifier***: `/vac/waku/swap/2.0.0-alpha2`
 
 # Motivation
 
-The Waku network makes up a service network, and some nodes provide a useful service to other nodes. We want to account for that, laying the foundation for settlement.
+The Waku network makes up a service network, and some nodes provide a useful service to other nodes. We want to account for that, and when imbalances arise, settle this. The core of this approach has some theoretical backing in game theory, and variants of it have practically been proven to work in systems such as Bittorrent. The specific model use was developed by the Swarm project (previously part of Ethereum), and we re-use contracts that were written for this purpose.
 
-TODO: Fill in more
+By using a delayed payment mechanism in the form of cheques, a barter-like mechanism can arise, and nodes can decide on their own policy as opposed to be strictly tied to a specific payment scheme. Additionally, this delayed settlement eases requirements on the underlying network in terms of transaction speed or costs.
 
-TODO: Game theoretical foundation, Bittorrent, relaxed tit-for-tat
+Theoretically, nodes providing and using resources over a long, indefinite, period of time can be seen as an iterated form of [Prisoner's Dilemma (PD)](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma). Specifically, and more intuitively, since we have a cost and benefit profile for each provision/usage (of Waku Message's, e.g.), and the pricing can be set such that mutual cooperation is incentivzed, this can be analyzed as a form of donations game.
+
+# Game Theory - Iterated prisoner's dilemma / donation game
+
+What follows is a sketch of what the game looks like between two nodes. We can look at it as a special case of iterated prisoner's dilemma called a [Donation game](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma#Special_case:_donation_game) where each node can cooperate with some benefit `b` at a personal cost `c`, where `b>c`.
+
+From A's point of view:
+
+A/B | Cooperate | Defect
+-----|----------|-------
+Cooperate | b-c | -c
+Defect | b | 0
+
+What this means is that if A and B cooperates, A gets some benefit `b` minus a cost `c`. If A cooperates and B defects she only gets the cost, and if she defects and B cooperates A only gets the benefit. If both defect they get neither benefit nor cost.
+
+The generalized form of PD is:
+
+A/B | Cooperate | Defect
+-----|----------|-------
+Cooperate | R | S
+Defect | T | P
+
+With R=reward, S=Sucker's payoff, T=temptation, P=punishment
+
+And the following holds:
+
+- `T>R>P>S`
+- `2R>T+S`
+
+In our case, this means `b>b-c>0>-c` and `2(b-c)> b-c` which is trivially true.
+
+As this is an iterated game with no clear finishing point in most circumstances, a tit-for-tat strategy is simple, elegant and functional. To be more theoretically precise, this also requires reasonable assumptions on error rate and discount parameter. This captures notions such as "does the perceived action reflect the intended action" and "how much do you value future (uncertain) actions compared to previous actions". See [Axelrod - Evolution of Cooperation (book)](https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation) for more details. In specific circumstances, nodes can choose slightly different policies if there's a strong need for it. A policy is simply how a node chooses to act given a set of circumstances.
+
+A tit-for-tat strategy basically means:
+- cooperate first (perform service/beneficial action to other node)
+- defect when node stops cooperating (disconnect and similar actions), i.e. when it stops performing according to set parameters re settlement
+- resume cooperation if other node does so
+
+This can be complemented with node selection mechanisms.
 
 # SWAP Accounting
 
@@ -102,6 +142,16 @@ are better thought of as a form of Karma.
 
 2. More information to make a decision. E.g. incorporate QoS metrics such as
    online time to inform peer selection (slightly orthogonal to this).
+   
+## References
+
+1. [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
+
+2. [Donation game](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma#Special_case:_donation_game)
+
+3. [Axelrod - Evolution of Cooperation (book)](https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation)
+
+4. [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf)
 
 # Changelog
 
