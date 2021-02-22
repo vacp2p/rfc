@@ -15,28 +15,28 @@ These protocols define various components of the [vac](https://vac.dev) stack.
 Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EIPS/eip-627)). Waku v2 is an upgrade of Waku v1 that is in active development and offer significant improvements. You can read more about the [plan for it](https://vac.dev/waku-v2-plan) and an [update](https://vac.dev/waku-v2-update).
 
 #### Version 2
-  - [waku/2](./waku/v2/waku-v2.md) specs for `waku/2` version, current draft version
-  - [waku/2 relay](./waku/v2/waku-relay.md) spec for WakuRelay, current draft version
-  - [waku/2 filter](./waku/v2/waku-filter.md) spec for WakuFilter, current draft version
-  - [waku/2 store](./waku/v2/waku-store.md) spec for WakuStore, current draft version
-  - [waku/2 message](./waku/v2/waku-message.md) spec for Waku Message, current draft version
-  - [waku/2 bridge](./waku/v2/waku-bridge.md) spec for Waku bridge with v1, alpha
-  - [waku/2 rln relay](./waku/v2/waku-rln-relay.md) spec for Waku Relay with RLN, alpha
-  - [waku/2 swap](./waku/v2/waku-swap-accounting.md) spec for Waku Swap Accounting, alpha
-  - [waku/2 rpc api](./waku/v2/waku-rpc-api.md) - Waku RPC API for Waku v2 nodes, alpha
+  - [waku/2](./specs/waku/v2/waku-v2) specs for `waku/2` version, current draft version
+  - [waku/2 relay](./specs/waku/v2/waku-relay) spec for WakuRelay, current draft version
+  - [waku/2 filter](./specs/waku/v2/waku-filter) spec for WakuFilter, current draft version
+  - [waku/2 store](./specs/waku/v2/waku-store) spec for WakuStore, current draft version
+  - [waku/2 message](./specs/waku/v2/waku-message) spec for Waku Message, current draft version
+  - [waku/2 bridge](./specs/waku/v2/waku-bridge) spec for Waku bridge with v1, alpha
+  - [waku/2 rln relay](./specs/waku/v2/waku-rln-relay) spec for Waku Relay with RLN, alpha
+  - [waku/2 swap](./specs/waku/v2/waku-swap-accounting) spec for Waku Swap Accounting, alpha
+  - [waku/2 rpc api](./specs/waku/v2/waku-rpc-api) - Waku RPC API for Waku v2 nodes, alpha
 
 #### Version 0 and 1
- - [waku/0](./waku/v1/waku-0.md) specs for `waku/0` version, now deprecated
- - [waku/1](./waku/v1/waku-1.md) specs for `waku/1` version, current stable version
- - [envelope data format](./waku/v1/envelope-data-format.md) [waku](./waku/waku.md) envelope data field specification.
- - [mailserver](./waku/v1/mailserver.md) - Mailserver specification for archiving and delivering historical [waku](./waku/waku.md) envelopes on demand.
- - [rpc api](./waku/v1/waku-rpc-api.md) - Waku RPC API for Waku v1 nodes.
+ - [waku/0](./specs/waku/v1/waku-0) specs for `waku/0` version, now deprecated
+ - [waku/1](./specs/waku/v1/waku-1) specs for `waku/1` version, current stable version
+ - [envelope data format](./specs/waku/v1/envelope-data-format) [waku](./waku/waku) envelope data field specification.
+ - [mailserver](./specs/waku/v1/mailserver) - Mailserver specification for archiving and delivering historical [waku](./specs/waku/waku) envelopes on demand.
+ - [rpc api](./specs/waku/v1/waku-rpc-api) - Waku RPC API for Waku v1 nodes.
 
 ### Data sync
 
- - [mvds](./specs/mvds.md) - Data Synchronization protocol for unreliable transports.
- - [remote log](./specs/remote-log.md) - Remote replication of local logs.
- - [mvds metadata](./specs/mvds-metadata.md) - Metadata field for [MVDS](./specs/mvds.md) messages. 
+ - [mvds](./specs/mvds) - Data Synchronization protocol for unreliable transports.
+ - [remote log](./specs/remote-log) - Remote replication of local logs.
+ - [mvds metadata](./specs/mvds-metadata) - Metadata field for [MVDS](./specs/mvds) messages.
 
 ## Style guide
 
