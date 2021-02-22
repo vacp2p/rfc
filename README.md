@@ -23,7 +23,7 @@ Waku is a protocol that replaces Whisper ([EIP-627](https://eips.ethereum.org/EI
   - [waku/2 bridge](./specs/waku/v2/waku-bridge) spec for Waku bridge with v1, alpha
   - [waku/2 rln relay](./specs/waku/v2/waku-rln-relay) spec for Waku Relay with RLN, alpha
   - [waku/2 swap](./specs/waku/v2/waku-swap-accounting) spec for Waku Swap Accounting, alpha
-  - [waku/2 rpc api](./specs/waku/v2/waku-rpc-api) - Waku RPC API for Waku v2 nodes, alpha
+  - [waku/2 rpc api](./specs/waku/v2/waku-v2-rpc-api) - Waku RPC API for Waku v2 nodes, alpha
 
 #### Version 0 and 1
  - [waku/0](./specs/waku/v1/waku-0) specs for `waku/0` version, now deprecated
