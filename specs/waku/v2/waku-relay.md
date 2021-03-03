@@ -78,13 +78,14 @@ message RPC {
     optional string topicid = 2;
   }
 
-message Message {
-  optional string from = 1;
-  optional bytes data = 2;
-  optional bytes seqno = 3;
-  repeated string topicIDs = 4;
-  optional bytes signature = 5;
-  optional bytes key = 6;
+  message Message {
+    optional string from = 1;
+    optional bytes data = 2;
+    optional bytes seqno = 3;
+    repeated string topicIDs = 4;
+    optional bytes signature = 5;
+    optional bytes key = 6;
+  }
 }
 ```
 
