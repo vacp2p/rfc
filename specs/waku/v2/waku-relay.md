@@ -116,7 +116,7 @@ The `key` field MAY be present and relates to signing. See PubSub spec for more 
 
 ## SubOpts
 
-To do topic subscription management, we MAY send updates to our peers. If we do so, then:
+To do topic subscription management, we MAY send updates using `SubOpts` to our peers. If we do so, then:
 
 The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
 
