@@ -64,7 +64,7 @@ The term Personally identifiable information (PII) refers to any piece of data t
 
 We are using protobuf RPC messages between peers. Here's what the protobuf messages look like, as defined in the PubSub interface. Please see [PubSub interface spec](https://github.com/libp2p/specs/blob/master/pubsub/README.md) for more details.
 
-In this section, we specify two things how WakuRelay is using these messages.
+In this section, we specify two things how WakuSub is using these messages.
 
 ## Protobuf
 
