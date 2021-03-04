@@ -78,17 +78,18 @@ message RPC {
     optional string topicid = 2;
   }
 
-message Message {
-  optional string from = 1;
-  optional bytes data = 2;
-  optional bytes seqno = 3;
-  repeated string topicIDs = 4;
-  optional bytes signature = 5;
-  optional bytes key = 6;
+  message Message {
+    optional string from = 1;
+    optional bytes data = 2;
+    optional bytes seqno = 3;
+    repeated string topicIDs = 4;
+    optional bytes signature = 5;
+    optional bytes key = 6;
+  }
 }
 ```
 
-WakuSub does not currently use the `ControlMessage` defined in GossipSub.
+WakuRelay does not currently use the `ControlMessage` defined in GossipSub.
 However, later versions will add likely add this capability.
 
 `TopicDescriptor` as defined in the PubSub interface spec is not currently used.
@@ -115,7 +116,7 @@ The `key` field MAY be present and relates to signing. See PubSub spec for more 
 
 ## SubOpts
 
-To do topic subscription management, we MAY send updates to our peers. If we do so, then:
+To do topic subscription management, we MAY send updates using `SubOpts` to our peers. If we do so, then:
 
 The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
 
@@ -175,7 +176,7 @@ Copyright and related rights waived via
 3. [GossipSub
    v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-4. [Waku v1 spec](specs.vac.dev/waku/waku.html)
+4. [Waku v1 spec](https://specs.vac.dev/waku/waku.html)
 
 5. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
