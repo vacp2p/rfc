@@ -176,7 +176,7 @@ Copyright and related rights waived via
 3. [GossipSub
    v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-4. [Waku v1 spec](specs.vac.dev/waku/waku.html)
+4. [Waku v1 spec](https://specs.vac.dev/waku/waku.html)
 
 5. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
