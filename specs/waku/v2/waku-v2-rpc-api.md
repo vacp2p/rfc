@@ -196,7 +196,7 @@ The following structured types are defined for use on the Store API:
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
 | `messages` | `Array`[[`WakuMessage`](#WakuMessage)] | mandatory | Array of retrieved historical messages |
-| `pagingOptions` | [`PagingOptions`](#PagingOptions) | [conditional](#`get_waku_v2_store_v1_messages`) | Paging information from which to resume further historical queries |
+| `pagingOptions` | [`PagingOptions`](#PagingOptions) | [conditional](#get_waku_v2_filter_v1_messages) | Paging information from which to resume further historical queries |
 
 
 #### PagingOptions
