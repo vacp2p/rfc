@@ -322,6 +322,21 @@ none
 #### Response
 - **`Array`[[`WakuPeer`](#WakuPeer)]** - Array of peers registered on this node
 
+### `post_waku_v2_admin_v1_peers`
+
+The `post_waku_v2_admin_v1_peers` method connects a node to a list of peers.
+
+#### Parameters
+
+| Field | Type | Inclusion | Description |
+| ----: | :---: | :---: |----------- |
+| `peers` | `Array`[`String`] | mandatory | Array of peer `multiaddrs` to connect to. Each `multiaddr` must contain the [location and identity addresses](https://docs.libp2p.io/concepts/addressing/) of a peer. |
+
+#### Response
+
+- **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+
 ## Private API
 
 The Private API provides functionality to encrypt/decrypt `WakuMessage` payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with [Waku v1 nodes](https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md).
@@ -617,6 +632,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
 # References
 
 1. [JSON-RPC specification](https://www.jsonrpc.org/specification)
+1. [LibP2P Addressing](https://docs.libp2p.io/concepts/addressing/)
 1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
 1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
 
