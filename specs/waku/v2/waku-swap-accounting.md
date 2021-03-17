@@ -32,7 +32,7 @@ The Waku network makes up a service network, and some nodes provide a useful ser
 
 By using a delayed payment mechanism in the form of cheques, a barter-like mechanism can arise, and nodes can decide on their own policy as opposed to be strictly tied to a specific payment scheme. Additionally, this delayed settlement eases requirements on the underlying network in terms of transaction speed or costs.
 
-Theoretically, nodes providing and using resources over a long, indefinite, period of time can be seen as an iterated form of [Prisoner's Dilemma (PD)](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma). Specifically, and more intuitively, since we have a cost and benefit profile for each provision/usage (of Waku Message's, e.g.), and the pricing can be set such that mutual cooperation is incentivzed, this can be analyzed as a form of donations game.
+Theoretically, nodes providing and using resources over a long, indefinite, period of time can be seen as an iterated form of [Prisoner's Dilemma (PD)](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma). Specifically, and more intuitively, since we have a cost and benefit profile for each provision/usage (of Waku Message's, e.g.), and the pricing can be set such that mutual cooperation is incentivized, this can be analyzed as a form of donations game.
 
 # Game Theory - Iterated prisoner's dilemma / donation game
 
@@ -76,11 +76,11 @@ This can be complemented with node selection mechanisms.
 
 See [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf) section 3.2. on Peer-to-peer accounting etc., for more context and details.
 
-This approach is based on communicating payment treshholds and sending cheques
+This approach is based on communicating payment thresholds and sending cheques
 as indications of later payments. The first part is done with a handshake, the
-second done once payment threshhold is hit.
+second done once payment threshold is hit.
 
-TODO: Illustrate payment and disconnection treshholds
+TODO: Illustrate payment and disconnection thresholds
 
 TODO: Elaborate on how accounting works with amount in the context of e.g. store
 
@@ -102,15 +102,15 @@ NOTE: This may later be complemented with other metrics, either as part of SWAP 
 
 Assuming we have two store nodes, one operating mostly as a client (A) and another as server (B).
 
-1. Node A performs a handshake with B node. B node responds and both nodes communicate their payment threshhold.
+1. Node A performs a handshake with B node. B node responds and both nodes communicate their payment threshold.
 2. Node A and B creates an accounting entry for the other peer, keep track of peer and current balance.
 3. Node A issues a `HistoryRequest`, and B responds with a `HistoryResponse`. Based on the number of WakuMessages in the response, both nodes update their accounting records.
-4. When payment threshhold is reached, Node A sends over a cheque to reach a neutral balance. Settlement of this is currently out of scope, but would occur through a SWAP contract (to be specified).
-5. If disconnect threshhold is reached, Node B disconnects Node A.
+4. When payment threshold is reached, Node A sends over a cheque to reach a neutral balance. Settlement of this is currently out of scope, but would occur through a SWAP contract (to be specified).
+5. If disconnect threshold is reached, Node B disconnects Node A.
 
 ## Policy
 
-- If a node reaches a disconnect threshhold, which MUST be outside the payment threshhold, it SHOULD disconnect the other peer. For the PoC, this behavior can be mocked.
+- If a node reaches a disconnect threshold, which MUST be outside the payment threshold, it SHOULD disconnect the other peer. For the PoC, this behavior can be mocked.
 - If a node is within payment balance, the other node SHOULD stay connected to it.
 - If a node receives a valid Cheque it SHOULD update its internal accounting records.
 - If any node behaves badly, the other node is free to disconnect and pick another node. Peer rating is out of scope of this specification.
@@ -118,9 +118,9 @@ Assuming we have two store nodes, one operating mostly as a client (A) and anoth
 ## Protobuf
 
 ```
-// TODO What information to include here? For now "payment" threshhold
+// TODO What information to include here? For now "payment" threshold
 message Handshake {
-    bytes payment_threshhold = 1;
+    bytes payment_threshold = 1;
 }
 
 // TODO Signature?
