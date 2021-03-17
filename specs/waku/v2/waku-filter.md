@@ -83,7 +83,7 @@ message FilterRequest {
   repeated ContentFilter contentFilters = 3;
 
   message ContentFilter {
-    repeated string contentTopics = 1;
+    repeated uint32 contentTopics = 1;
   }
 }
 
