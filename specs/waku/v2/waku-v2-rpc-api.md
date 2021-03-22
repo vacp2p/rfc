@@ -64,7 +64,7 @@ Refer to [`Waku Message` specification](https://github.com/vacp2p/specs/blob/mas
 
 | Field | Type | Inclusion | Description |
 | ---: | :---: | :---: | --- |
-| `payload` | `String` | mandatory | The message payload |
+| `payload` | `String` | mandatory | The message payload as a hex encoded data string |
 | `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
 | `version` | `Number` | optional | Message version. Used to indicate type of payload encryption. Default version is 0 (no payload encryption). |
 
@@ -119,7 +119,7 @@ The following structured types are defined for use on the Relay API:
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: | ----------- |
-| `payload` | `String` | mandatory | The payload being relayed |
+| `payload` | `String` | mandatory | The payload being relayed as a hex encoded data string |
 | `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
 
  > **_NOTE:_** `WakuRelayMessage` maps directly to a [`WakuMessage`](#WakuMessage), except that the latter contains an explicit message `version`. For `WakuRelay` purposes, the versioning is handled by the API.
