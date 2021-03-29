@@ -1,26 +1,10 @@
 ---
-title: Waku SWAP Accounting
-version: 2.0.0-alpha2
-status: Raw
-authors: Oskar Thorén <oskar@status.im>
+slug: 17
+title: 17/WAKU2-SWAP
+name: Waku SWAP Accounting
+status: raw
+editor: Oskar Thorén <oskar@status.im>
 ---
-
-# Table of Contents
-
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Game theory](#game-theory)
-- [SWAP Accounting](#swap-accounting)
-    - [Accounting](#accounting)
-    - [Flow](#flow)
-    - [Policy](#policy)
-    - [Protobuf](#protobuf)
-    - [Enhancements](#enhancements)
-- [References](#references)
-- [Changelog](#changelog)
-- [Copyright](#copyright)
-
-# Abstract
 
 This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
 
