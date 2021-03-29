@@ -36,7 +36,7 @@ This protocol needs to advertise the `waku/1` [capability](https://ethereum.gitb
 
 ### Gossip based routing
 
-In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](./mailserver.md) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
+In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a [mailserver](spec/8) response. A node SHOULD NOT send an envelope to a peer that it has already sent before.
 
 ### Maximum Packet Size
 
