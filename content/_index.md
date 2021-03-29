@@ -3,24 +3,26 @@ title: Introduction
 type: docs
 ---
 
-# Acerbo datus maxime
+# Vac RFCs
 
 {{< columns >}}
-## Astris ipse furtiva
+## Specifications
 
-Est in vagis et Pittheus tu arge accipiter regia iram vocatur nurus. Omnes ut
-olivae sensit **arma sorori** deducit, inesset **crudus**, ego vetuere aliis,
-modo arsit? Utinam rapta fiducia valuere litora _adicit cursu_, ad facies
+Here you can find specifications for [Vac.dev](http://vac.dev/), a modular,
+peer-to-peer messaging stack for private, secure, censorship resistant
+communication.
 
 <--->
 
-## Suis quot vota
+## Contribute
 
-Ea _furtique_ risere fratres edidit terrae magis. Colla tam mihi tenebat:
-miseram excita suadent es pecudes iam. Concilio _quam_ velatus posset ait quod
-nunc! Fragosis suae dextra geruntur functus vulgata.
+Contributations are most welcome! First read [1/COSS](spec/1) then contribute at
+[Github](https://github.com/vacp2p/rfc.vac.dev).
+
 {{< /columns >}}
 
+
+<!--
 
 ## Tempora nisi nunc
 
@@ -39,3 +41,5 @@ sequens!
 ## Locis suis novi cum suoque decidit eadem
 
 Idmoniae ripis, at aves, ali missa adest, ut _et autem_, et ab?
+
+-->
