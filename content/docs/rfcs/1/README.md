@@ -81,7 +81,7 @@ Every specification has an independent lifecycle that documents clearly its curr
 
 A specification has six possible states that reflect its maturity and contractual weight:
 
-![Lifecycle diagram](../../../../assets/lifecycle.png)
+![Lifecycle diagram](../../../../rfcs/1/lifecycle.png)
 
 ### Raw Specifications
 All new specifications are **raw** specifications. Changes to raw specifications can be unilateral and arbitrary. Those seeking to implement a raw specification should ask for it to be made a draft specification. Raw specifications have no contractual weight.
