@@ -1,6 +1,6 @@
 ---
-domain: rfc.vac.dev
-shortname: 1/COSS
+slug: 1
+title: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
 editor: Oskar Thoren <ot@oskarthoren.com>

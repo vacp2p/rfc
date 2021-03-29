@@ -1,0 +1,43 @@
+{{ define "main" }}
+<article class="markdown">
+  {{ printf "# %s" .Params.title | markdownify }}
+  {{ if .Params.name }}
+      {{ printf "# %s" .Params.name | markdownify }}
+  {{ end }}
+
+  {{ if eq .Params.status "raw" }}
+  <img src="https://img.shields.io/badge/status-{{.Params.status}}-lightgrey?style=flat-square" />
+  {{ end }}
+  {{ if eq .Params.status "draft" }}
+  <img src="https://img.shields.io/badge/status-{{.Params.status}}-blue?style=flat-square" />
+  {{ end }}
+  {{ if eq .Params.status "stable" }}
+  <img src="https://img.shields.io/badge/status-{{.Params.status}}-brightgreen?style=flat-square" />
+  {{ end }}
+  {{ if eq .Params.status "deprecated" }}
+  <img src="https://img.shields.io/badge/status-{{.Params.status}}-yellowgreen?style=flat-square" />
+  {{ end }}
+  {{ if eq .Params.status "retired" }}
+  <img src="https://img.shields.io/badge/status-{{.Params.status}}-red?style=flat-square" />
+  {{ end }}
+
+  <ul>
+      <li>Status: {{ .Params.status | markdownify }}</li>
+      <li>Editor: {{ .Params.editor | markdownify }}</li>
+      {{ if .Params.contributors }}
+      <li>Contributors:
+          {{ range  $index, $element := .Params.contributors }}
+              {{if $index}},{{end}}
+              {{ . | markdownify }}
+          {{ end }}
+      </li>
+      {{ end }}
+  </ul>
+
+  {{- .Content -}}
+</article>
+{{ end }}
+
+{{ define "toc" }}
+  {{ partial "docs/toc" . }}
+{{ end }}
