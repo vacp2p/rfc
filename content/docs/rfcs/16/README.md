@@ -1,26 +1,10 @@
 ---
-title: Waku v2 JSON-RPC REST API
-version: 0.0.1
-status: Raw
-authors: Hanno Cornelius <hanno@status.im>
+slug: 16
+title: 16/WAKU2-RPC
+name: Waku v2 RPC API
+status: raw
+editor: Hanno Cornelius <hanno@status.im>
 ---
-
-# Table of Contents
-
-1. [Introduction](#introduction)
-1. [Wire Protocol](#wire-protocol)
-    1. [Transport](#transport)
-    1. [Types](#types)
-    1. [Method naming](#method-naming)
-    1. [Debug API](#debug-api)
-    1. [Relay API](#relay-api)
-    1. [Store API](#store-api)
-    1. [Filter API](#filter-api)
-    1. [Admin API](#admin-api)
-    1. [Private API](#private-api)
-1. [Example usage](#example-usage)
-1. [Changelog](#changelog)
-1. [Copyright](#copyright)
 
 # Introduction
 
@@ -610,10 +594,6 @@ This method is part of the `store` API and the specific resources to retrieve ar
 1. [JSON-RPC specification](https://www.jsonrpc.org/specification)
 1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
 1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
-
-# Changelog
-
-TBD
 
 # Copyright
 
