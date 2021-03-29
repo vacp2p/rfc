@@ -1,40 +1,12 @@
 ---
-title: Waku
-version: 2.0.0-beta1
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
+slug: 10
+title: 10/WAKU2
+title: Waku v2
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-
-- [Abstract](#abstract)
-- [Motivation and goals](#motivation-and-goals)
-- [Network interaction domains](#network-interaction-domains)
-  - [Protocols and identifiers](#protocols-and-identifiers)
-  - [Gossip domain](#gossip-domain)
-    - [Default pubsub topic](#default-pubsub-topic)
-  - [Discovery domain](#discovery-domain)
-  - [Request/reply domain](#requestreply-domain)
-    - [Historical message support](#historical-message-support)
-    - [Content filtering](#content-filtering)
-- [Upgradability and Compatibility](#upgradability-and-compatibility)
-  - [Compatibility with Waku v1](#compatibility-with-waku-v1)
-- [Security](#security)
-  - [Primary Adversarial Model](#primary-adversarial-model)
-  - [Security Features](#security-features)
-    - [Pseudonymity](#pseudonymity)
-    - [Anonymity / Unlinkability](#anonymity--unlinkability)
-    - [Spam protection](#spam-protection)
-    - [Data confidentiality, Integrity, Authenticity](#data-confidentiality-integrity-authenticity)
-  - [Security Considerations](#security-considerations)
-  - [Future work](#future-work)
-- [Changelog](#changelog)
-    - [Next version](#next-version)
-    - [2.0.0-beta1](#200-beta1)
-- [Copyright](#copyright)
-- [References](#references)
-
-# Abstract
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource
 restricted devices. It implements PubSub over libp2p and adds capabilities on
@@ -43,7 +15,7 @@ mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to
 contribute, and (iii) bandwidth preservation for light nodes. This makes it
 ideal for running a p2p protocol on mobile.
 
-Historically, it has its roots in [Waku v1](specs.vac.dev/waku/waku.html), which
+Historically, it has its roots in [Waku v1](/spec/6), which
 stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of
 the Ethereum stack. However, Waku v2 acts more as a thin wrapper for PubSub and
 has a different API. It is implemented in an iterative manner where initial
@@ -87,7 +59,7 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 
 These protocols and their semantics are elaborated on in their own specs.
 
-For the actual content being passed around, see the [Waku Message](waku-message.md) spec.
+For the actual content being passed around, see the [7/WAKU-DATA](/spec/7) spec.
 
 The WakuMessage spec being used is: `2.0.0-beta1`.
 
@@ -95,7 +67,7 @@ The WakuMessage spec being used is: `2.0.0-beta1`.
 
 **Protocol identifier***: `/vac/waku/relay/2.0.0-beta1`
 
-See [WakuRelay](waku-relay.md) spec for more details.
+See [11/WAKU-RELAY](/spec/11) spec for more details.
 
 ### Default pubsub topic
 
@@ -129,13 +101,13 @@ offline.
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta1`
 
-See [WakuStore](waku-store.md) spec for more details.
+See [13/WAKU-STORE](/spec/13) spec for more details.
 
 ### Content filtering
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
-See [WakuFilter](waku-filter.md) spec for more details.
+See [14/WAKU-FILTER](/spec/14) spec for more details.
 
 
 # Upgradability and Compatibility
@@ -224,7 +196,7 @@ Copyright and related rights waived via
 4. [GossipSub
    v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-5. [Waku v1 spec](specs.vac.dev/waku/waku.html)
+5. [Waku v1 spec](/spec/6)
 
 6. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
