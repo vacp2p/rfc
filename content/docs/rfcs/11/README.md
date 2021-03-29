@@ -1,32 +1,12 @@
 ---
-title: Waku Relay
-version: 2.0.0-beta2
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
+slug: 11
+title: 11/WAKU2-RELAY
+name: Waku v2 Relay
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-
-- [Abstract](#abstract)
-- [Security Requirements](#security-requirements)
-  - [Terminology](#terminology)
-- [Adversarial Model](#adversarial-model)
-- [Wire Specification](#wire-specification)
-  - [Protobuf](#protobuf)
-  - [RPC](#rpc)
-  - [Message](#message)
-  - [SubOpts](#subopts)
-  - [Signature Policy](#signature-policy)
-- [Security Analysis](#security-analysis)
-- [Future work](#future-work)
-- [Changelog](#changelog)
-    - [Next](#next)
-    - [2.0.0-beta2](#200-beta2)
-    - [2.0.0-beta1](#200-beta1)
-- [Copyright](#copyright)
-- [References](#references)
-
-# Abstract
 
 `WakuRelay` is part of the gossip domain for Waku. It is a thin layer on top of GossipSub.
 
@@ -141,19 +121,18 @@ However, note that the `WakuRelay` supports the use of more than one topic. In t
 
 
 - Providing **Unlinkability**, **Integrity** and  **Authenticity** simultaneously: Integrity and authenticity are typically addressed through digital signatures and Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the unlinkability requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular publisher).  As such, integrity and authenticity are missing features in the `WakuRelay` protocol in the interest of unlinkability. In future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously. In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
-  
 
 # Changelog
 
 ### Next
 - Added initial threat model and security analysis 
+
 ### 2.0.0-beta2
 
 Next version. Changes:
 
 - Moved WakuMessage to separate spec and made it mandatory
 - StrictNoSign
-
 
 ### 2.0.0-beta1
 
@@ -178,7 +157,6 @@ Copyright and related rights waived via
 4. [Waku v1 spec](specs.vac.dev/waku/waku.html)
 
 5. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
-
 
 <!--
 TODO: Don't quite understand this scenario [key field], to clarify. Wouldn't it always be in `from`?
