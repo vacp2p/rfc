@@ -1,32 +1,14 @@
 ---
-title: Waku
-version: 2.0.0-beta2
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Hanno Cornelius <hanno@status.im>, Sanaz Taheri <sanaz@status.im>
+slug: 12
+title: 12/WAKU2-FILTER
+name: Waku v2 Filter
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Dean Eigenmann <dean@status.im>
+  - Hanno Cornelius <hanno@status.im>
+  - Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-
-- [Abstract](#abstract)
-- [Content filtering](#content-filtering)
-  - [Rationale](#rationale)
-- [Design Requirements](#design-requirements)
-- [Security Consideration](#security-consideration)
-  - [Terminology](#terminology)
-- [Adversarial Model](#adversarial-model)
-  - [Protobuf](#protobuf)
-      - [FilterRPC](#filterrpc)
-      - [FilterRequest](#filterrequest)
-      - [MessagePush](#messagepush)
-- [Future Work](#future-work)
-- [Changelog](#changelog)
-    - [Next](#next)
-    - [2.0.0-beta2](#200-beta2)
-    - [2.0.0-beta1](#200-beta1)
-- [Copyright](#copyright)
-- [References](#references)
-
-# Abstract
 
 `WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
 
