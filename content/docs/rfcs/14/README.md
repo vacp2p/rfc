@@ -1,25 +1,12 @@
 ---
-title: Waku Message
-version: 2.0.0-beta1
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Sanaz Taheri <sanaz@status.im>
+slug: 14
+title: 14/WAKU2-MESSAGE
+name: Waku v2 Message
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [WakuMessage](#wakumessage)
-  - [Protobuf](#protobuf)
-  - [Payload encryption](#payload-encryption)
-    - [Version 0](#version-0)
-    - [Version 1 (not yet implemented in Waku v2)](#version-1-not-yet-implemented-in-waku-v2)
-- [Differences from Whisper / Waku v1 envelopes](#differences-from-whisper--waku-v1-envelopes)
-- [Security Consideration](#security-consideration)
-- [Changelog](#changelog)
-- [Copyright](#copyright)
-
-# Abstract
 
 This specification provides a way to encapsulate messages sent over Waku with specific information security goals.
 
