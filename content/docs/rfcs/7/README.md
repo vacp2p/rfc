@@ -1,7 +1,7 @@
 ---
 slug: 7
 title: 7/WAKU-DATA
-title: Waku Envelope data field
+name: Waku Envelope data field
 status: stable
 editor: Oskar Thorén <oskar@status.im>
 contributors:

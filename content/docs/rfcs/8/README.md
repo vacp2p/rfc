@@ -1,7 +1,7 @@
 ---
 slug: 8
 title: 8/WAKU-MAIL
-title: Waku Mailserver
+name: Waku Mailserver
 status: stable
 editor: Oskar Thorén <oskar@status.im>
 contributors:

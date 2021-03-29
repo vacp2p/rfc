@@ -1,7 +1,7 @@
 ---
 slug: 10
 title: 10/WAKU2
-title: Waku v2
+name: Waku v2
 status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:

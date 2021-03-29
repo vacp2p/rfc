@@ -1,7 +1,7 @@
 ---
 slug: 9
 title: 9/WAKU-RPC
-title: Waku RPC API
+name: Waku RPC API
 status: stable
 editor: Oskar Thorén <oskar@status.im>
 contributors:
