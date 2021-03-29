@@ -1,29 +1,15 @@
 ---
-title: MVDS Metadata Field
-version: 0.1.0
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
-redirect_from:
-  - /mvds-metadata.html
+slug: 4
+title: 4/MVDS-META
+name: MVDS Metadata Field
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Dean Eigenmann <dean@status.im>
+  - Andrea Maria Piana <andreap@status.im>
 ---
 
-##  Table of Contents
-
-1. [Abstract](#abstract)
-2. [Motivation](#motivation)
-3. [Format](#format)
-    1. [Fields](#fields)
-4. [Usage](#usage)
-    1. [`parents`](#parents)
-    2. [`ephemeral`](#ephemeral)
-5. [Changelog](#changelog)
-6. [Acknowledgments](#acknowledgments)
-7. [Copyright](#copyright)
-8. [Footnotes](#footnotes)
-
-## Abstract
-
-In this specification, we describe a method to construct message history that will aid the consistency guarantees of [MVDS](mvds.md). Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+In this specification, we describe a method to construct message history that will aid the consistency guarantees of [2/MVDS](specs/2). Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
 
 ## Motivation
 
@@ -42,7 +28,7 @@ message Metadata {
 }
 ```
 
-Nodes MAY transmit a `Metadata` message by extending the MVDS [message](mvds.md#payloads) with a `metadata` field.
+Nodes MAY transmit a `Metadata` message by extending the MVDS [message](specs/2#payloads) with a `metadata` field.
 
 ```diff
 message Message {
@@ -57,14 +43,14 @@ message Message {
 
 | Name                   |   Description                                                                                                                    |
 | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `parents`               |   list of parent [`message identifier`s](mvds.md#payloads) for the specific message. |            
+| `parents`               |   list of parent [`message identifier`s](specs/2#payloads) for the specific message. |            
 | `ephemeral`         |   indicates whether a message is ephemeral or not.                                                             |
 
 ## Usage
 
 ### `parents`
 
-This field contains a list of parent [`message identifier`s](mvds.md#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)[^1] of persistent messages.
+This field contains a list of parent [`message identifier`s](specs/2#payloads) for the specific message. It MUST NOT contain any messages as parent whose `ack` flag was set to `false`. This establishes a directed acyclic graph (DAG)[^1] of persistent messages.
 
 Nodes MAY buffer messages until dependencies are satisfied for causal consistency[^2], they MAY also pass the messages straight away for eventual consistency[^3].
 
@@ -81,15 +67,6 @@ When the `ephemeral` flag is set to `false`, a node MUST send an acknowledgment 
 Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.
 
 Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.
-
-## Changelog
-
-| Version | Comment |
-| :-----: | ------- |
-| [0.1.0](https://github.com/vacp2p/specs/blob/53bc8585add58695c28cfaf4382818f4daf8de84/mdf.md)   | Initial Release |
-
-## Acknowledgments
- - Andrea Maria Piana
 
 ## Copyright
 
