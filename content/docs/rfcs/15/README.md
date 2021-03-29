@@ -1,14 +1,10 @@
 ---
-title: Waku Bridge
-version: 2.0.0-alpha1
-status: Raw
-authors: Kim De Mey <kim@status.im>
+slug: 15
+title: 15/WAKU-BRIDGE
+name: Waku Bridge
+status: raw
+editor: Kim De Mey <kim@status.im>
 ---
-# Table of Contents
-
-TODO
-
-# Abstract
 
 A bridge between Waku v1 and Waku v2.
 
