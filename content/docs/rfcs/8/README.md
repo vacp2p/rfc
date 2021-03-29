@@ -1,20 +1,13 @@
 ---
+slug: 8
+title: 8/WAKU-MAIL
 title: Waku Mailserver
-version: 1.0.0
-status: Stable
-authors: Adam Babik <adam@status.im>, Dean Eigenmann <dean@status.im>, Oskar Thorén <oskar@status.im>
-redirect_from:
-  - /waku/mailserver.html
+status: stable
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Adam Babik <adam@status.im>
+  - Dean Eigenmann <dean@status.im>
 ---
-
-## Table of Contents
-
-1. [Abstract](#abstract)
-2. [Specification](#specification)
-    1. [Requesting Historic Envelopes](#requesting-historic-envelopes)
-    2. [Receiving Historic Envelopes](#receiving-historic-envelopes)
-    3. [Security considerations](#security-considerations)
-3. [Copyright](#copyright)
 
 ## Abstract
 
