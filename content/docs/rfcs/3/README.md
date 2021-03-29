@@ -1,33 +1,14 @@
 ---
-title: Remote log specification
-version: 0.1.1
-status: Draft
-authors: Oskar Thorén oskar@status.im, Dean Eigenmann dean@status.im
-redirect_from:
-  - /remote-log.html
+slug: 3
+title: 3/REMOTE-LOG
+name: Remote log specification
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Dean Eigenmann <dean@status.im>
 ---
 
-## Table of Contents
-
-1. [Abstract](#abstract)
-2. [Definitions](#definitions)
-3. [Wire Protocol](#wire-protocol)
-    1. [Secure Transport, storage, and name system](#secure-transport-storage-and-name-system)
-    2. [Payloads](#payloads)
-4. [Synchronization](#synchronization)
-    1. [Roles](#roles)
-    2. [Flow](#flow)
-    3. [Remote log](#remote-log)
-    4. [Next page semantics](#next-page-semantics)
-    5. [Interaction with MVDS](#interaction-with-mvds)
-5. [Changelog](#changelog)
-6. [Acknowledgments](#acknowledgments)
-7. [Copyright](#copyright)
-8. [Footnotes](#footnotes)
-
-## Abstract
-
-A remote log is a replication of a local log. This means a node can read data from a node that is offline.
+A remote log is a replication of a local log. This means a node can read data that originally came from a node that is offline.
 
 This specification is complemented by a proof of concept implementation[^1].
 
@@ -224,13 +205,6 @@ in time.
 ### Interaction with MVDS
 
 [vac.mvds.Message](mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
-
-## Changelog
-
-| Version | Comment |
-| :-----: | ------- |
-| 0.1.1 (current) | Add protobuf package name, protobuf3 and fix typos. |
-| [0.1.0](https://github.com/vacp2p/specs/blob/ccb9ae7f44e32ff9778bdbe0ed02a56e0ff29996/remote-log.md) | Initial Release |
 
 ## Acknowledgments
 
