@@ -1,24 +1,10 @@
 ---
-title: Waku RLN Relay
-version: 2.0.0-alpha1
-status: Raw
-authors: Sanaz Taheri <sanaz@status.im>
+slug: 17
+title: 17/WAKU-RLN
+name: Waku v2 RLN Relay
+status: raw
+editor: Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Flow](#flow)
-  - [SetUp and Registration](#setup-and-registration)
-  - [Publishing](#publishing)
-  - [Routing](#routing)
-    - [Spam Detection and Slashing](#spam-detection-and-slashing)
-- [Security Considerations](#security-considerations)
-- [Protobuf](#protobuf)
-- [Changelog](#changelog)
-- [Copyright](#copyright)
-
-# Abstract
 
 The current specification embodies the details of the spam-protected version of `relay` protocol empowered by Rate Limiting Nullifiers (RLN). More details on RLN can be found in [this spec]() (TODO: to link the spec).
 
@@ -138,15 +124,6 @@ message ProofBundle {
 
 ```
 TODO: to describe ProofBundle message fields
-
-
-
-
-
-
-# Changelog
-
-TBD.
 
 # Copyright
 
