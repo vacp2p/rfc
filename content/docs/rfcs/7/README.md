@@ -1,25 +1,15 @@
 ---
-title: Envelope data field
-version: 1.0.0
-status: Stable
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>
-redirect_from:
-  - /waku/envelope-data-format.html
+slug: 7
+title: 7/WAKU-DATA
+title: Waku Envelope data field
+status: stable
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Dean Eigenmann <dean@status.im>
+  - Kim De Mey <kimdemey@status.im>
 ---
 
-## Table of Contents
-
- 1. [Abstract](#abstract)
- 2. [Specification](#specification)
-    1. [ABNF](#abnf)
-    2. [Signature](#signature)
-    3. [Padding](#padding)
- 3. [Changelog](#changelog) 
- 4. [Copyright](#copyright)
-
-## Abstract
-
-This specification describes the encryption, decryption and signing of the content in the [data field used in Waku](waku.md#abnf-specification).
+This specification describes the encryption, decryption and signing of the content in the [data field used in Waku](/spec/6/#abnf-specification).
 
 ## Specification
 
@@ -68,12 +58,6 @@ Those unable to decrypt the envelope data are also unable to access the signatur
 ### Padding
 
 The padding field is used to align data size, since data size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
-
-## Changelog
-
-| Version                                                                                 | Comment          |
-| :--------------------------------------------------------------------------------------:| ---------------- |
-| [1.0.0](https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8)| Initial release. |
 
 ## Copyright
 
