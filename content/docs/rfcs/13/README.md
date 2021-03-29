@@ -1,37 +1,17 @@
 ---
-title: WakuStore
-version: 2.0.0-beta2
-status: Draft
-authors: Oskar Thorén <oskar@status.im>, Dean Eigenmann <dean@status.im>, Sanaz Taheri <sanaz@status.im>
+slug: 13
+title: 13/WAKU2-STORE
+name: Waku v2 Store
+status: draft
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Dean Eigenmann <dean@status.im>
+  - Sanaz Taheri <sanaz@status.im>
 ---
-
-# Table of Contents
-
-- [Table of Contents](#table-of-contents)
-- [Abstract](#abstract)
-- [Design Requirements](#design-requirements)
-- [Security Consideration](#security-consideration)
-  - [Terminology](#terminology)
-- [Adversarial Model](#adversarial-model)
-- [Wire Specification](#wire-specification)
-  - [Protobuf](#protobuf)
-    - [Index](#index)
-    - [PagingInfo](#paginginfo)
-    - [HistoryQuery](#historyquery)
-    - [HistoryResponse](#historyresponse)
-- [Future Work](#future-work)
-- [Changelog](#changelog)
-    - [Next](#next)
-    - [2.0.0-beta2](#200-beta2)
-    - [2.0.0-beta1](#200-beta1)
-- [Copyright](#copyright)
-
-# Abstract
 
 This specification explains the Waku `WakuStore` protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages. 
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
-
 
 # Design Requirements
 Nodes willing to provide storage service in `WakuStore` protocol are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes. Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
@@ -121,6 +101,7 @@ RPC call to respond to a HistoryQuery call.
   - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor. Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity. <!-- TODO: if nodes have to disclose their PeerIDs (e.g., for authentication purposes) when connecting to other nodes in the store protocol, then Tor does not preserve anonymity since it only helps in hiding the IP. So, the PeerId usage in switches must be investigated further. Depending on how PeerId is used, one may be able to link between a querying node and its queried topics despite hiding the IP address-->. 
   - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included -->. 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
+
 # Changelog
 
 ### Next 
