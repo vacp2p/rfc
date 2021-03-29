@@ -204,7 +204,7 @@ in time.
 
 ### Interaction with MVDS
 
-[vac.mvds.Message](mvds.md#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
+[vac.mvds.Message](/spec/2#payloads) payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.
 
 ## Acknowledgments
 

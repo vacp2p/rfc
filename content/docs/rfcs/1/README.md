@@ -31,7 +31,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 ## Change Process
 
-This document is governed by the [1/COSS](../1/README.md) (COSS).
+This document is governed by the [1/COSS](spec/1) (COSS).
 
 ## Language
 
