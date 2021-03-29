@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://example.org/docs/example/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/table-of-contents/with-toc/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/table-of-contents/without-toc/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/creating-a-new-theme/</loc>
+    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/migrate-from-jekyll/</loc>
+    <lastmod>2014-03-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/table-of-contents/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/collapsed/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/</loc>
+    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/</loc>
+    <lastmod>2014-09-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/goisforlovers/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/development/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/development/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/posts/hugoisforlovers/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/go/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/golang/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/categories/golang/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/hugo/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/templates/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/tags/themes/</loc>
+    <lastmod>2014-04-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/collapsed/3rd-level/4th-level/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/collapsed/3rd-level/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/example/hidden/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/buttons/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/columns/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/details/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/expand/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/hints/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/katex/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/mermaid/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/section/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/section/page1/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/section/page2/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/shortcodes/tabs/</loc>
+  </url>
+  
+  <url>
+    <loc>http://example.org/docs/</loc>
+  </url>
+  
+</urlset>
