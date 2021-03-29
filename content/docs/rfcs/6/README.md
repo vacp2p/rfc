@@ -1,56 +1,15 @@
 ---
-title: Waku
-version: 1.0.0
-status: Stable
-authors: Adam Babik <adam@status.im>, Andrea Maria Piana <andreap@status.im>, Dean Eigenmann <dean@status.im>, Kim De Mey <kimdemey@status.im>, Oskar Thorén <oskar@status.im>
-redirect_from:
-  - /waku/waku.html
+slug: 6
+title: 6/WAKU1
+name: Waku v1
+status: stable
+editor: Oskar Thorén <oskar@status.im>
+contributors:
+  - Adam Babik <adam@status.im>
+  - Andrea Maria Piana <andreap@status.im>
+  - Dean Eigenmann <dean@status.im>
+  - Kim De Mey <kimdemey@status.im>
 ---
-
-## Table of Contents
-
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Definitions](#definitions)
-- [Underlying Transports and Prerequisites](#underlying-transports-and-prerequisites)
-    - [Use of DevP2P](#use-of-devp2p)
-    - [Gossip based routing](#gossip-based-routing)
-    - [Maximum Packet Size](#maximum-packet-size)
-- [Wire Specification](#wire-specification)
-    - [Use of RLPx transport protocol](#use-of-rlpx-transport-protocol)
-    - [ABNF specification](#abnf-specification)
-    - [Packet Codes](#packet-codes)
-    - [Packet usage](#packet-usage)
-    - [Payload Encryption](#payload-encryption)
-    - [Packet code Rationale](#packet-code-rationale)
-- [Additional capabilities](#additional-capabilities)
-    - [Light node](#light-node)
-    - [Accounting for resources (experimental)](#accounting-for-resources-experimental)
-- [Backwards Compatibility](#backwards-compatibility)
-    - [Waku-Whisper bridging](#waku-whisper-bridging)
-- [Forward Compatibility](#forward-compatibility)
-- [Appendix A: Security considerations](#appendix-a-security-considerations)
-    - [Scalability and UX](#scalability-and-ux)
-    - [Privacy](#privacy)
-    - [Spam resistance](#spam-resistance)
-    - [Censorship resistance](#censorship-resistance)
-- [Appendix B: Implementation Notes](#appendix-b-implementation-notes)
-    - [Implementation Matrix](#implementation-matrix)
-    - [Recommendations for clients](#recommendations-for-clients)
-    - [Node discovery](#node-discovery)
-- [Changelog](#changelog)
-    - [Version 1.0](#version-10)
-    - [Version 0.6](#version-06)
-    - [Version 0.5](#version-05)
-    - [Version 0.4](#version-04)
-    - [Version 0.3](#version-03)
-    - [Version 0.2](#version-02)
-    - [Version 0.1](#version-01)
-    - [Differences between shh/6 waku/1](#differences-between-shh6-and-waku1)
-- [Copyright](#copyright)
-- [Footnotes](#footnotes)
-
-## Abstract
 
 This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes [EIP-627](https://eips.ethereum.org/EIPS/eip-627). Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
 
