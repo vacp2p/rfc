@@ -2,3 +2,6 @@ baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "Vac RFC"
 theme = "book"
+
+[params]
+BookMenuBundle = "/menu"
