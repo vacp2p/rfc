@@ -3,7 +3,7 @@ slug: 15
 title: 15/WAKU-BRIDGE
 name: Waku Bridge
 status: raw
-editor: Hanno Cornelius <hanno@status.im>
+editor: Kim De Mey <kim@status.im>
 ---
 
 A bridge between Waku v1 and Waku v2.

@@ -3,10 +3,10 @@ slug: 12
 title: 12/WAKU2-FILTER
 name: Waku v2 Filter
 status: draft
-editor: Hanno Cornelius <hanno@status.im>
+editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
-  - Oskar Thorén <oskar@status.im>
+  - Hanno Cornelius <hanno@status.im>
   - Sanaz Taheri <sanaz@status.im>
 ---
 
