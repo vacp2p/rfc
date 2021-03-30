@@ -45,9 +45,10 @@ The following structured types are defined for use throughout the document:
 Refer to [`Waku Message` specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-message.md) for more information.
 
 `WakuMessage` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
-| `payload` | `String` | mandatory | The message payload |
+| ---: | :---: | :---: | --- |
+| `payload` | `String` | mandatory | The message payload as a hex encoded data string |
 | `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
 | `version` | `Number` | optional | Message version. Used to indicate type of payload encryption. Default version is 0 (no payload encryption). |
 
@@ -72,8 +73,9 @@ The following structured types are defined for use on the Debug API:
 #### WakuInfo
 
 `WakuInfo` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `listenStr` | `String` | mandatory | Address that the node is listening for |
 
 ### `get_waku_v2_debug_v1_info`
@@ -98,9 +100,10 @@ The following structured types are defined for use on the Relay API:
 #### WakuRelayMessage
 
 `WakuRelayMessage` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
-| `payload` | `String` | mandatory | The payload being relayed |
+| ----: | :---: | :---: | ----------- |
+| `payload` | `String` | mandatory | The payload being relayed as a hex encoded data string |
 | `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
 
  > **_NOTE:_** `WakuRelayMessage` maps directly to a [`WakuMessage`](#WakuMessage), except that the latter contains an explicit message `version`. For `WakuRelay` purposes, the versioning is handled by the API.
@@ -112,7 +115,7 @@ The `post_waku_v2_relay_v1_message` method publishes a message to be relayed on 
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on |
 | `message` | [`WakuRelayMessage`](#WakuRelayMessage) | mandatory | The `message` being relayed |
 
@@ -127,7 +130,7 @@ The `post_waku_v2_relay_v1_subscriptions` method subscribes a node to an array o
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topics` | `Array`[`String`] | mandatory | The [PubSub `topics`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being subscribed to |
 
 #### Response
@@ -141,7 +144,7 @@ The `delete_waku_v2_relay_v1_subscriptions` method unsubscribes a node from an a
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topics` | `Array`[`String`] | mandatory | The [PubSub `topics`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being unsubscribed from |
 
 #### Response
@@ -155,7 +158,7 @@ The `get_waku_v2_relay_v1_messages` method returns a list of messages that were 
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
 
 #### Response
@@ -173,17 +176,19 @@ The following structured types are defined for use on the Store API:
 #### StoreResponse
 
 `StoreResponse` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `messages` | `Array`[[`WakuMessage`](#WakuMessage)] | mandatory | Array of retrieved historical messages |
-| `pagingOptions` | [`PagingOptions`](#PagingOptions) | [conditional](#`get_waku_v2_store_v1_messages`) | Paging information from which to resume further historical queries |
+| `pagingOptions` | [`PagingOptions`](#PagingOptions) | [conditional](#get_waku_v2_store_v1_messages) | Paging information from which to resume further historical queries |
 
 
 #### PagingOptions
 
 `PagingOptions` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `pageSize` | `Number` | mandatory | Number of messages to retrieve per page |
 | `cursor` | [`Index`](#Index) | optional | Message [`Index`](#Index) from which to perform pagination. If not included and `forward` is set to `true`, paging will be performed from the beginning of the list. If not included and `forward` is set to `false`, paging will be performed from the end of the list.|
 | `forward` | `Bool` | mandatory | `true` if paging forward, `false` if paging backward |
@@ -191,8 +196,9 @@ The following structured types are defined for use on the Store API:
 #### Index
 
 `Index` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `digest` | `String` | mandatory | A hash for the message at this [`Index`](#Index) |
 | `receivedTime` | `Number` | mandatory | UNIX timestamp at which the message at this [`Index`](#Index) was received |
 
@@ -203,7 +209,7 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topics` | `Array`[`Number`] | mandatory | Array of content topics to query for historical messages |
 | `pagingOptions` | [`PagingOptions`](#PagingOptions) | optional | Pagination information |
 
@@ -222,8 +228,9 @@ The following structured types are defined for use on the Filter API:
 #### ContentFilter
 
 `ContentFilter` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topics` | `Array`[`Number`] | mandatory | Array of message content topics |
 
 ### `post_waku_v2_filter_v1_subscription`
@@ -233,7 +240,7 @@ The `post_waku_v2_filter_v1_subscription` method creates a subscription in a [li
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `contentFilters` | `Array`[[`ContentFilter`](#ContentFilter)] | mandatory | Array of content filters being subscribed to |
 | `topic` | `String` | optional | Message topic |
 
@@ -248,7 +255,7 @@ The `delete_waku_v2_filter_v1_subscription` method removes subscriptions in a [l
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `contentFilters` | `Array`[[`ContentFilter`](#ContentFilter)] | mandatory | Array of content filters being unsubscribed from |
 | `topic` | `String` | optional | Message topic |
 
@@ -263,7 +270,7 @@ The `get_waku_v2_filter_v1_messages` method returns a list of messages that were
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `contentTopic` | `Number` | mandatory | The content topic to poll for the latest messages |
 
 #### Response
@@ -281,8 +288,9 @@ The following structured types are defined for use on the Admin API:
 #### WakuPeer
 
 `WakuPeer` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `multiaddr` | `String` | mandatory | Multiaddress containing this peer's location and identity |
 | `protocol` | `String` | mandatory | Protocol that this peer is registered for |
 | `connected` | `bool` | mandatory | `true` if peer has active connection for this `protocol`, `false` if not |
@@ -298,6 +306,21 @@ none
 #### Response
 - **`Array`[[`WakuPeer`](#WakuPeer)]** - Array of peers registered on this node
 
+### `post_waku_v2_admin_v1_peers`
+
+The `post_waku_v2_admin_v1_peers` method connects a node to a list of peers.
+
+#### Parameters
+
+| Field | Type | Inclusion | Description |
+| ----: | :---: | :---: |----------- |
+| `peers` | `Array`[`String`] | mandatory | Array of peer `multiaddrs` to connect to. Each `multiaddr` must contain the [location and identity addresses](https://docs.libp2p.io/concepts/addressing/) of a peer. |
+
+#### Response
+
+- **`Bool`** - `true` on success or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+
+
 ## Private API
 
 The Private API provides functionality to encrypt/decrypt `WakuMessage` payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with [Waku v1 nodes](https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md).
@@ -310,8 +333,9 @@ The following structured types are defined for use on the Private API:
 #### KeyPair
 
 `KeyPair` is an `Object` containing the following fields:
+
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `privateKey` | `String` | mandatory | Private key as hex encoded data string |
 | `publicKey` | `String` | mandatory | Public key as hex encoded data string |
 
@@ -346,7 +370,7 @@ Before being relayed, the message payload is encrypted using the supplied symmet
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on |
 | `message` | [`WakuRelayMessage`](#WakuRelayMessage) | mandatory | The (unencrypted) `message` being relayed |
 | `symkey` | `String` | mandatory | The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected |
@@ -364,7 +388,7 @@ Before being relayed, the message payload is encrypted using the supplied public
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) being published on |
 | `message` | [`WakuRelayMessage`](#WakuRelayMessage) | mandatory | The (unencrypted) `message` being relayed |
 | `publicKey` | `String` | mandatory | The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected |
@@ -382,7 +406,7 @@ Before returning the messages, the server decrypts the message payloads using th
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
 | `symkey` | `String` | mandatory | The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected |
 
@@ -399,7 +423,7 @@ Before returning the messages, the server decrypts the message payloads using th
 #### Parameters
 
 | Field | Type | Inclusion | Description |
-| ----: | :--: | :--: |----------- |
+| ----: | :---: | :---: |----------- |
 | `topic` | `String` | mandatory | The [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor) to poll for the latest messages |
 | `privateKey` | `String` | mandatory | The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected |
 
@@ -592,8 +616,13 @@ This method is part of the `store` API and the specific resources to retrieve ar
 # References
 
 1. [JSON-RPC specification](https://www.jsonrpc.org/specification)
+1. [LibP2P Addressing](https://docs.libp2p.io/concepts/addressing/)
 1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
 1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
+
+# Changelog
+
+TBD
 
 # Copyright
 
