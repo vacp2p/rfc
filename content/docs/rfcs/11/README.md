@@ -58,17 +58,18 @@ message RPC {
     optional string topicid = 2;
   }
 
-message Message {
-  optional string from = 1;
-  optional bytes data = 2;
-  optional bytes seqno = 3;
-  repeated string topicIDs = 4;
-  optional bytes signature = 5;
-  optional bytes key = 6;
+  message Message {
+    optional string from = 1;
+    optional bytes data = 2;
+    optional bytes seqno = 3;
+    repeated string topicIDs = 4;
+    optional bytes signature = 5;
+    optional bytes key = 6;
+  }
 }
 ```
 
-WakuSub does not currently use the `ControlMessage` defined in GossipSub.
+WakuRelay does not currently use the `ControlMessage` defined in GossipSub.
 However, later versions will add likely add this capability.
 
 `TopicDescriptor` as defined in the PubSub interface spec is not currently used.
@@ -95,7 +96,7 @@ The `key` field MAY be present and relates to signing. See PubSub spec for more 
 
 ## SubOpts
 
-To do topic subscription management, we MAY send updates to our peers. If we do so, then:
+To do topic subscription management, we MAY send updates using `SubOpts` to our peers. If we do so, then:
 
 The `subscribe` field MUST contain a boolean, where 1 means subscribe and 0 means unsubscribe to a topic.
 
@@ -116,23 +117,24 @@ However, note that the `WakuRelay` supports the use of more than one topic. In t
 
 # Future work
 
-- **Economic Spam resistant**: In the spam-protected `WakuRelay` protocol, no adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time). Spam protection is partly provided by GossipSub v1.1 through [scoring mechansim](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures). At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.  The `WakuRelay` protocol aims at enabling an advanced spam protection mechanism with economic disincentives by utilizing Rate Limiting Nullifiers. In a nutshell, peers must conform to a certain message publishing rate per a system-defined epoch, otherwise, they get financially penalized for exceeding the rate. More details on this new technique can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
+- **Economic Spam resistant**: In the spam-protected `WakuRelay` protocol, no adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time). Spam protection is partly provided by GossipSub v1.1 through [scoring mechanism](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures). At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.  The `WakuRelay` protocol aims at enabling an advanced spam protection mechanism with economic disincentives by utilizing Rate Limiting Nullifiers. In a nutshell, peers must conform to a certain message publishing rate per a system-defined epoch, otherwise, they get financially penalized for exceeding the rate. More details on this new technique can be found in [Waku RLN Relay](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-rln-relay.md). 
   <!-- TODO havn't checked if all the measures in libp2p GossipSub v1.1 are taken in the nim-libp2p as well, may need to audit the code --> 
 
 
 - Providing **Unlinkability**, **Integrity** and  **Authenticity** simultaneously: Integrity and authenticity are typically addressed through digital signatures and Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the unlinkability requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular publisher).  As such, integrity and authenticity are missing features in the `WakuRelay` protocol in the interest of unlinkability. In future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously. In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
+  
 
 # Changelog
 
 ### Next
 - Added initial threat model and security analysis 
-
 ### 2.0.0-beta2
 
 Next version. Changes:
 
 - Moved WakuMessage to separate spec and made it mandatory
 - StrictNoSign
+
 
 ### 2.0.0-beta1
 
@@ -154,9 +156,10 @@ Copyright and related rights waived via
 3. [GossipSub
    v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-4. [Waku v1 spec](specs.vac.dev/waku/waku.html)
+4. [Waku v1 spec](https://specs.vac.dev/waku/waku.html)
 
 5. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
+
 
 <!--
 TODO: Don't quite understand this scenario [key field], to clarify. Wouldn't it always be in `from`?
