@@ -106,7 +106,7 @@ TODO: discuss about the economic spam guarantees
 // TODO to reflect this change on WakuMessage spec once the PR gets mature
 message WakuMessage {
   optional bytes payload = 1;
-  optional fixed32 contentTopic = 2;
+  optional uint32 contentTopic = 2;
   optional uint32 version = 3;
   optional ProofBundle proofBundle = 4;
 }
