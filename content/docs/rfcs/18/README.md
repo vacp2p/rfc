@@ -1,6 +1,6 @@
 ---
-slug: 17
-title: 17/WAKU2-SWAP
+slug: 18
+title: 18/WAKU2-SWAP
 name: Waku SWAP Accounting
 status: raw
 editor: Oskar Thorén <oskar@status.im>
