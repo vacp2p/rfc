@@ -36,7 +36,7 @@ The `version` field MAY be filled out to allow for various types of payload encr
 ```protobuf
 message WakuMessage {
   optional bytes payload = 1;
-  optional fixed32 contentTopic = 2;
+  optional uint32 contentTopic = 2;
   optional uint32 version = 3;
 }
 ```
@@ -52,7 +52,7 @@ This indicates that the payload SHOULD be either unencrypted or that encryption 
 ### Version 1 (not yet implemented in Waku v2)
 
 This indicates that payloads MUST be encrypted using [Waku v1 envelope data
-format spec](../v1/envelope-data-format.md).
+format spec](https://specs.vac.dev/specs/waku/v1/envelope-data-format.html).
 
 This provides for asymmetric and symmetric encryption. Key agreement is out of band. It also provides an encrypted signature and padding for some form of unlinkability.
 
