@@ -1,0 +1,10 @@
+baseURL = "http://rfc.vac.dev"
+languageCode = "en-us"
+title = "Vac RFC"
+theme = "book"
+
+[params]
+BookMenuBundle = "/menu"
+
+[permalinks]
+  docs = "/spec/:slug"
