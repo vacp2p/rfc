@@ -27,4 +27,4 @@ The keywords “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL N
 
 ## Acknowledgement
 
-Site layout and process inspired by https://rfc.zeromq.org/.
+Site layout and process inspired by https://rfc.zeromq.org/
