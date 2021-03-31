@@ -3,9 +3,10 @@ slug: 2
 title: 2/MVDS
 name: Minimum Viable Data Synchronization
 status: stable
-editor: Oskar Thorén <oskar@status.im>
+editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
+  - Oskar Thorén <oskar@status.im>
 ---
 
 In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol[^1]. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.

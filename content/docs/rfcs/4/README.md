@@ -3,10 +3,11 @@ slug: 4
 title: 4/MVDS-META
 name: MVDS Metadata Field
 status: draft
-editor: Oskar Thorén <oskar@status.im>
+editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
   - Andrea Maria Piana <andreap@status.im>
+  - Oskar Thorén <oskar@status.im>
 ---
 
 In this specification, we describe a method to construct message history that will aid the consistency guarantees of [2/MVDS](/spec/2). Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
