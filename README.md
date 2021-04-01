@@ -2,7 +2,7 @@
 
 This repository contains the specs for [vac](https://vac.dev), a modular peer-to-peer messaging stack, with a focus on secure messaging. A detailed explanation of the vac and its design goals can be found [here](https://vac.dev/vac-overview).
 
-See [rfc.vac.dev](rfc.vac.dev).
+See [rfc.vac.dev](https://rfc.vac.dev).
 
 ## Contributing
 
