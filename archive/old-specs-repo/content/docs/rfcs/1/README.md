@@ -1,6 +1,6 @@
 ---
-slug: 1
-title: 1/COSS
+domain: rfc.vac.dev
+shortname: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
 editor: Oskar Thoren <ot@oskarthoren.com>
@@ -31,7 +31,7 @@ You should have received a copy of the GNU General Public License along with thi
 
 ## Change Process
 
-This document is governed by the [1/COSS](spec/1) (COSS).
+This document is governed by the [1/COSS](../1/README.md) (COSS).
 
 ## Language
 
@@ -81,7 +81,7 @@ Every specification has an independent lifecycle that documents clearly its curr
 
 A specification has six possible states that reflect its maturity and contractual weight:
 
-![Lifecycle diagram](../../../../rfcs/1/lifecycle.png)
+![Lifecycle diagram](../../../../assets/lifecycle.png)
 
 ### Raw Specifications
 All new specifications are **raw** specifications. Changes to raw specifications can be unilateral and arbitrary. Those seeking to implement a raw specification should ask for it to be made a draft specification. Raw specifications have no contractual weight.
