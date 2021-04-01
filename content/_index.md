@@ -17,7 +17,7 @@ communication.
 ## Contribute
 
 Contributations are most welcome! First read [1/COSS](spec/1) then contribute at
-[Github](https://github.com/vacp2p/rfc.vac.dev).
+[Github](https://github.com/vacp2p/rfc).
 
 {{< /columns >}}
 
