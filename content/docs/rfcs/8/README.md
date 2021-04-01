@@ -3,10 +3,11 @@ slug: 8
 title: 8/WAKU-MAIL
 name: Waku Mailserver
 status: stable
-editor: Oskar Thorén <oskar@status.im>
+editor: Andrea Maria Piana <andreap@status.im>
 contributors:
   - Adam Babik <adam@status.im>
   - Dean Eigenmann <dean@status.im>
+  - Oskar Thorén <oskar@status.im>
 ---
 
 ## Abstract
