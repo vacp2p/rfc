@@ -38,7 +38,7 @@ Peers communicate with each other using a request / response API. The messages s
 ```protobuf
 message Index {
   bytes digest = 1;
-  float receivedTime = 2;
+  double receivedTime = 2;
 }
 
 message PagingInfo {
