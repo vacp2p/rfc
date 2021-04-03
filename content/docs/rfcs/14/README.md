@@ -31,6 +31,7 @@ The `contentTopic` field SHOULD be filled out to allow for content-based filteri
 
 The `version` field MAY be filled out to allow for various types of payload encryption. Omitting it means the version is 0.
 
+The `proof` field MAY be filled out to allow for filtering spam messages. See [Walu RLN-Relay](../17/README.md) for details.
 ## Protobuf
 
 ```protobuf
@@ -38,6 +39,7 @@ message WakuMessage {
   optional bytes payload = 1;
   optional uint32 contentTopic = 2;
   optional uint32 version = 3;
+  optional double proof = 5;
 }
 ```
 
