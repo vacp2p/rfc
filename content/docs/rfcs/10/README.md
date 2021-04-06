@@ -23,7 +23,7 @@ See [rough road map](https://vac.dev/waku-v2-plan).
 # Motivation and goals
 
 1. **Generalized messaging.**
-Many applications requires some form of messaging protocol to communicate between different subsystems or different nodes.
+Many applications require some form of messaging protocol to communicate between different subsystems or different nodes.
 This messaging can be human-to-human or machine-to-machine or a mix.
 
 2. **Peer-to-peer.**
