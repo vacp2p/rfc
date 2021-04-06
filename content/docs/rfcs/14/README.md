@@ -41,7 +41,7 @@ message WakuMessage {
   optional bytes payload = 1;
   optional uint32 contentTopic = 2;
   optional uint32 version = 3;
-  optional double proof = 4;
+  optional double proof = 21;
 }
 ```
 
