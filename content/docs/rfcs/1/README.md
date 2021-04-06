@@ -3,7 +3,7 @@ slug: 1
 title: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
-editor: Oskar Thoren <ot@oskarthoren.com>
+editor: Oskar Thoren <oskar@status.im>
 contributors:
   - Pieter Hintjens <ph@imatix.com>
   - André Rebentisch <andre@openstandards.de>
@@ -165,5 +165,5 @@ to specification metadata.
 | **shortname**    | short name           | string | 1/COSS              |
 | **name**         | full name            | string | Consensus-Oriented Specification System |
 | **status**       | status               | string | draft               |
-| **editor**       | editor name/email    | string | Oskar Thoren <ot@oskarthoren.com> |
+| **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im> |
 | **contributors** | contributors         | list   | Pieter Hintjens <ph@imatix.com>, André Rebentisch <andre@openstandards.de>, Alberto Barrionuevo <abarrio@opentia.es>, Chris Puttick <chris.puttick@thehumanjourney.net>, Yurii Rashkovskii <yrashk@gmail.com> |
