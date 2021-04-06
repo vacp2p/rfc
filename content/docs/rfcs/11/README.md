@@ -140,7 +140,7 @@ The possibility of such inference may get higher when the `data` field is also n
 
 - **Subscriber-Topic Unlinkability:**
 To preserve subscriber-topic unlinkability, it is recommended by [Waku v2 specs](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md#default-pubsub-topic) to use a single PubSub topic in the `WakuRelay` protocol.
-This allows an immediate subscriber-topic unlinkability where subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID. This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of subscribers).
+This allows an immediate subscriber-topic unlinkability where subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID. This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of participants of Waku relay protocol).
 However, note that `WakuRelay` supports the use of more than one topic.
 In that case, the unlinkability should be addressed by the upper-level protocols through e.g., [partitioned topics technique](https://specs.status.im/spec/10#partitioned-topic) which enables K-anonymity for the peers' subscribed topic ids.
 
