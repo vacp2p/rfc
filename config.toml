@@ -1,4 +1,4 @@
-baseURL = "http://rfc.vac.dev"
+baseURL = "https://rfc.vac.dev"
 languageCode = "en-us"
 title = "Vac RFC"
 theme = "book"
