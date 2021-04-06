@@ -42,7 +42,7 @@ message WakuMessage {
   optional bytes payload = 1;
   optional uint32 contentTopic = 2;
   optional uint32 version = 3;
-  optional double timestamp = 5;
+  optional double timestamp = 4;
 }
 ```
 
