@@ -8,7 +8,7 @@ type: docs
 {{< columns >}}
 ## Specifications
 
-Here you can find specifications for [Vac.dev](http://vac.dev/), a modular,
+Here you can find specifications for [Vac.dev](https://vac.dev/), a modular,
 peer-to-peer messaging stack for private, secure, censorship resistant
 communication.
 
