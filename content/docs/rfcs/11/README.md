@@ -18,7 +18,7 @@ As such the scope is limited to defining a separate [`protocol id`](https://gith
 # Security Requirements
 
 The `11/WAKU2-RELAY` protocol is designed to provide the following security properties under a static [Adversarial Model](#adversarial-model).
-Note that data confidentiality, integrity, and authenticity are currently considered out of scope for `11/WAKU2-RELAY` and must be handled by higher layer protocols such as [`14/WAKU2-MESSAGE`](../14/README.md).
+Note that data confidentiality, integrity, and authenticity are currently considered out of scope for `11/WAKU2-RELAY` and must be handled by higher layer protocols such as [`14/WAKU2-MESSAGE`](/spec/14).
 
 <!-- May add the definition of the unsupported feature: 
 Confidentiality indicates that an adversary should not be able to learn the data carried by the `WakuRelay` protocol.
@@ -58,7 +58,11 @@ We republish these messages here for ease of reference and define how `11/WAKU2-
 
 ## Protobuf definitions
 
+The PubSub RPC messages are specified using [protocol buffers v2](https://developers.google.com/protocol-buffers/)
+
 ```protobuf
+syntax = "proto2";
+
 message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
@@ -93,7 +97,7 @@ The `Message` protobuf defines the format in which content is relayed between pe
 - The `from` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
 
 - The `data` field MUST be filled out with a `WakuMessage`.
-See [`14/WAKU2-MESSAGE`](../14/README.md) for more details.
+See [`14/WAKU2-MESSAGE`](/spec/14) for more details.
 
 - The `seqno` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
 
@@ -131,7 +135,7 @@ The direct connections of a publisher might be able to figure out which `Message
 The possibility of such inference may get higher when the `data` field is also not encrypted by the upper-level protocols. <!-- TODO: more investigation on traffic analysis attacks and their success probability-->
 
 - **Subscriber-Topic Unlinkability:**
-To preserve subscriber-topic unlinkability, it is recommended by [`10/WAKU2`](../10/README.md) to use a single PubSub topic in the `11/WAKU2-RELAY` protocol.
+To preserve subscriber-topic unlinkability, it is recommended by [`10/WAKU2`](/spec/10) to use a single PubSub topic in the `11/WAKU2-RELAY` protocol.
 This allows an immediate subscriber-topic unlinkability where subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID.
 This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of participants of Waku relay protocol).
 However, note that `11/WAKU2-RELAY` supports the use of more than one topic.
@@ -145,7 +149,7 @@ Spam protection is partly provided by GossipSub v1.1 through [scoring mechanism]
 At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.
 `11/WAKU2-RELAY` aims at enabling an advanced spam protection mechanism with economic disincentives by utilizing Rate Limiting Nullifiers.
 In a nutshell, peers must conform to a certain message publishing rate per a system-defined epoch, otherwise, they get financially penalized for exceeding the rate.
-More details on this new technique can be found in [`17/WAKU-RLN`](../17/README.md). 
+More details on this new technique can be found in [`17/WAKU-RLN`](/spec/17). 
   <!-- TODO havn't checked if all the measures in libp2p GossipSub v1.1 are taken in the nim-libp2p as well, may need to audit the code --> 
 
 - Providing **Unlinkability**, **Integrity** and  **Authenticity** simultaneously:
@@ -154,24 +158,6 @@ As such, integrity and authenticity are missing features in `11/WAKU2-RELAY` in 
 In future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously.
 In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
 
-# Changelog
-
-### Next
-
-- Added initial threat model and security analysis 
-- General rework and clarifications
-
-### 2.0.0-beta2
-
-Next version. Changes:
-
-- Moved WakuMessage to separate spec and made it mandatory
-- StrictNoSign
-
-### 2.0.0-beta1
-
-Initial draft version. Released [2020-09-17](https://github.com/vacp2p/specs/commit/a57dad2cc3d62f9128e21f68719704a0b358768b)
-
 # Copyright
 
 Copyright and related rights waived via
@@ -179,11 +165,11 @@ Copyright and related rights waived via
 
 # References
 
-1. [`10/WAKU2`](../10/README.md)
+1. [`10/WAKU2`](/spec/10)
 
-1. [`14/WAKU2-MESSAGE`](../14/README.md)
+1. [`14/WAKU2-MESSAGE`](/spec/14)
 
-1. [`17/WAKU-RLN`](../17/README.md)
+1. [`17/WAKU-RLN`](/spec/17)
 
 1. [GossipSub v1.0](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md)
 
@@ -196,6 +182,8 @@ Copyright and related rights waived via
 1. [`libp2p` protocol negotiation](https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation)
 
 1. [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic)
+
+1. [Protocol Buffers](https://developers.google.com/protocol-buffers/)
 
 1. [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
 
