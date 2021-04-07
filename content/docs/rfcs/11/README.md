@@ -61,7 +61,7 @@ We republish these messages here for ease of reference and define how `11/WAKU2-
 The PubSub RPC messages are specified using [protocol buffers v2](https://developers.google.com/protocol-buffers/)
 
 ```protobuf
-syntax = "proto2"
+syntax = "proto2";
 
 message RPC {
   repeated SubOpts subscriptions = 1;
