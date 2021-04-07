@@ -44,7 +44,7 @@ syntax = "proto3";
 
 message WakuMessage {
   bytes payload = 1;
-  uint32 contentTopic = 2;
+  string contentTopic = 2;
   uint32 version = 3;
   double timestamp = 4;
 }

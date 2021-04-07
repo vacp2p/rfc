@@ -49,7 +49,7 @@ Refer to [`Waku Message` specification](https://github.com/vacp2p/specs/blob/mas
 | Field | Type | Inclusion | Description |
 | ---: | :---: | :---: | --- |
 | `payload` | `String` | mandatory | The message payload as a hex encoded data string |
-| `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
+| `contentTopic` | `String` | optional | Message content topic for optional content-based filtering |
 | `version` | `Number` | optional | Message version. Used to indicate type of payload encryption. Default version is 0 (no payload encryption). |
 
 ## Method naming
@@ -104,7 +104,7 @@ The following structured types are defined for use on the Relay API:
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: | ----------- |
 | `payload` | `String` | mandatory | The payload being relayed as a hex encoded data string |
-| `contentTopic` | `Number` | optional | Message content topic for optional content-based filtering |
+| `contentTopic` | `String` | optional | Message content topic for optional content-based filtering |
 
  > **_NOTE:_** `WakuRelayMessage` maps directly to a [`WakuMessage`](#WakuMessage), except that the latter contains an explicit message `version`. For `WakuRelay` purposes, the versioning is handled by the API.
 
@@ -210,7 +210,7 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
-| `topics` | `Array`[`Number`] | mandatory | Array of content topics to query for historical messages |
+| `topics` | `Array`[`String`] | mandatory | Array of content topics to query for historical messages |
 | `pagingOptions` | [`PagingOptions`](#PagingOptions) | optional | Pagination information |
 
 #### Response
@@ -231,7 +231,7 @@ The following structured types are defined for use on the Filter API:
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
-| `topics` | `Array`[`Number`] | mandatory | Array of message content topics |
+| `topics` | `Array`[`String`] | mandatory | Array of message content topics |
 
 ### `post_waku_v2_filter_v1_subscription`
 
@@ -271,7 +271,7 @@ The `get_waku_v2_filter_v1_messages` method returns a list of messages that were
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
-| `contentTopic` | `Number` | mandatory | The content topic to poll for the latest messages |
+| `contentTopic` | `String` | mandatory | The content topic to poll for the latest messages |
 
 #### Response
 
@@ -439,11 +439,11 @@ Before returning the messages, the server decrypts the message payloads using th
 
 This method is part of the `store` API and the specific resources to retrieve are (historical) `messages`. The protocol (`waku`) is on `v2`, whereas the Store API definition is on `v1`.
 
-1. `get` *all* the historical messages for content topic **1**; no paging required
+1. `get` *all* the historical messages for content topic **"/waku/2/default-content/proto"**; no paging required
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[[1]]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"]]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -452,7 +452,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      1
+      "/waku/2/default-content/proto"
     ]
   ]
 }
@@ -470,21 +470,21 @@ This method is part of the `store` API and the specific resources to retrieve ar
         "payload": [
           1
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       },
       {
         "payload": [
           2
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       },
       {
         "payload": [
           3
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       }
     ],
@@ -496,11 +496,11 @@ This method is part of the `store` API and the specific resources to retrieve ar
 
 ---
 
-2. `get` a single page of historical messages for content topic **1**; 2 messages per page, backward direction. Since this is the initial query, no `cursor` is provided, so paging will be performed from the end of the list.
+2. `get` a single page of historical messages for content topic **"/waku/2/default-content/proto"**; 2 messages per page, backward direction. Since this is the initial query, no `cursor` is provided, so paging will be performed from the end of the list.
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[[1],{"pageSize":2,"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"],{"pageSize":2,"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -509,7 +509,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      1
+      "/waku/2/default-content/proto"
     ],
     {
       "pageSize": 2,
@@ -531,14 +531,14 @@ This method is part of the `store` API and the specific resources to retrieve ar
         "payload": [
           2
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       },
       {
         "payload": [
           3
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       }
     ],
@@ -557,11 +557,11 @@ This method is part of the `store` API and the specific resources to retrieve ar
 
 ---
 
-3. `get` the next page of historical messages for content topic **1**, using the cursor received above; 2 messages per page, backward direction.
+3. `get` the next page of historical messages for content topic **"/waku/2/default-content/proto"**, using the cursor received above; 2 messages per page, backward direction.
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[[1],{"pageSize":2,"cursor":{"digest":"abcdef","receivedTime":1605887187.00},"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"],{"pageSize":2,"cursor":{"digest":"abcdef","receivedTime":1605887187.00},"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -570,7 +570,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      1
+      "/waku/2/default-content/proto"
     ],
     {
       "pageSize": 2,
@@ -596,7 +596,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
         "payload": [
           1
         ],
-        "contentTopic": 1,
+        "contentTopic": "/waku/2/default-content/proto",
         "version": 0
       }
     ],
