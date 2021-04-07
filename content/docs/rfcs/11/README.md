@@ -158,24 +158,6 @@ As such, integrity and authenticity are missing features in `11/WAKU2-RELAY` in 
 In future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously.
 In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- TODO: shall I add a reference for group signatures?-->
 
-# Changelog
-
-### Next
-
-- Added initial threat model and security analysis 
-- General rework and clarifications
-
-### 2.0.0-beta2
-
-Next version. Changes:
-
-- Moved WakuMessage to separate spec and made it mandatory
-- StrictNoSign
-
-### 2.0.0-beta1
-
-Initial draft version. Released [2020-09-17](https://github.com/vacp2p/specs/commit/a57dad2cc3d62f9128e21f68719704a0b358768b)
-
 # Copyright
 
 Copyright and related rights waived via
