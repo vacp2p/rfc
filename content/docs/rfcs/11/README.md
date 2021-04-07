@@ -58,7 +58,11 @@ We republish these messages here for ease of reference and define how `11/WAKU2-
 
 ## Protobuf definitions
 
+The PubSub RPC messages are specified using [protocol buffers v2](https://developers.google.com/protocol-buffers/)
+
 ```protobuf
+syntax = "proto2"
+
 message RPC {
   repeated SubOpts subscriptions = 1;
   repeated Message publish = 2;
@@ -196,6 +200,8 @@ Copyright and related rights waived via
 1. [`libp2p` protocol negotiation](https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation)
 
 1. [Partitioned topics](https://specs.status.im/spec/10#partitioned-topic)
+
+1. [Protocol Buffers](https://developers.google.com/protocol-buffers/)
 
 1. [PubSub interface for libp2p (r2, 2019-02-01)](https://github.com/libp2p/specs/blob/master/pubsub/README.md)
 
