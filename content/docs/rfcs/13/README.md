@@ -17,7 +17,7 @@ This specification explains the Waku `WakuStore` protocol which enables querying
 Nodes willing to provide storage service in `WakuStore` protocol are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes. Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
 # Security Consideration
-The main security consideration to be taken into account while using `WakuStore` is to notice that the querying nodes have to reveal their topics of interest to the queried nodes hence compromising their privacy. 
+The main security consideration to be taken into account while using `WakuStore` is to notice that the querying nodes have to reveal their content topics of interest to the queried nodes hence compromising their privacy. 
 
 ## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
@@ -52,7 +52,7 @@ message PagingInfo {
 }
 
 message HistoryQuery {
-  repeated string topics = 2;
+  repeated string contentTopics = 2;
   optional PagingInfo pagingInfo = 3; // used for pagination
 }
 
@@ -85,7 +85,7 @@ To perform pagination, each `WakuMessage` stored at a node running the `WakuStor
 
 RPC call to query historical messages.
 
-- The `topics` field MUST indicate the list of topics to query. 
+- The `contentTopics` field MUST indicate the list of content topics to query. 
   The items in this list correspond to the `contentTopic` of the queried Waku messages (see [14/WAKU-MESSAGE](../14)).
 - `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `receivedTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
@@ -98,7 +98,7 @@ RPC call to respond to a HistoryQuery call.
 
 # Future Work
 
-- **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact topics of waku messages they are interested in).  As such, no adversary in the `WakuStore` protocol would be able to learn which peer is interested in which topics of waku message. The current version of the `WakuStore` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `WakuStore` protocol and explicitly disclose the topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
+- **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes (i.e., without disclosing the exact content topics of waku messages they are interested in).  As such, no adversary in the `WakuStore` protocol would be able to learn which peer is interested in which content topics of waku message. The current version of the `WakuStore` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `WakuStore` protocol and explicitly disclose the content topics of its interest to retrieve the corresponding messages. However, one can consider preserving anonymity through one of the following ways: 
   - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor. Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity. <!-- TODO: if nodes have to disclose their PeerIDs (e.g., for authentication purposes) when connecting to other nodes in the store protocol, then Tor does not preserve anonymity since it only helps in hiding the IP. So, the PeerId usage in switches must be investigated further. Depending on how PeerId is used, one may be able to link between a querying node and its queried topics despite hiding the IP address-->. 
   - By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query. Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included -->. 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
