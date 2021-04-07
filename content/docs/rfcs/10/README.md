@@ -209,6 +209,48 @@ The accounting model can be used in `13/WAKU2-STORE` and `12/WAKU2-FILTER` to pr
 Additionally, this gives node operators who provide a useful service to the network an incentive to perform that service.
 See [18/WAKU2-SWAP](/spec/18) for more details on this piece of work.
 
+## Appendix A: Implementation Notes
+
+### Implementation Matrix
+
+There are multiple implementations of Waku v2 protocols:
+
+- [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
+- [nim-go (Go)](https://github.com/status-im/go-waku/)
+- [nim-js (NodeJS and Browser)](https://github.com/status-im/js-waku/)
+
+Below you can find an overview of the specs that they implement as they relate to Waku:
+
+| Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
+| ---- | -------------- | ------------ | ----------------- | -------------------- |
+|[6/WAKU1](/spec/6)|:heavy_check_mark:|||
+|[7/WAKU-DATA](/spec/7)|:heavy_check_mark:|:heavy_check_mark:||
+|[8/WAKU-MAIL](/spec/8)|:heavy_check_mark:|||
+|[9/WAKU-RPC](/spec/9)|:heavy_check_mark:|||
+|[10/WAKU2](/spec/10)|:heavy_check_mark:|:construction:|:construction:|:construction:|
+|[11/WAKU2-RELAY](/spec/11)|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:construction:|
+|[12/WAKU2-FILTER](/spec/12)|:heavy_check_mark:|||
+|[13/WAKU2-STORE](/spec/13)|:heavy_check_mark:|:construction:|:construction:|
+|[14/WAKU2-MESSAGE](/spec/14)|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
+|[15/WAKU2-BRIDGE](/spec/15)|:heavy_check_mark:|||
+|[16/WAKU2-RPC](/spec/16)|:heavy_check_mark:|||
+|[17/WAKU2-RLNRELAY](/spec/17)|:construction:|||
+|[18/WAKU2-SWAP](/spec/18)|:construction:|||
+
+### Recommendations for clients
+
+To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:
+
+- [10/WAKU2](/spec/10) - this spec
+- [11/WAKU2-RELAY](/spec/11) - for basic operation
+- [14/WAKU2-MESSAGE](/spec/14) - version 0 (unencrypted)
+- [13/WAKU2-STORE](/spec/13) - for historical messaging (query mode only)
+
+To get compatibility with Waku v1:
+
+- [7/WAKU-DATA](/spec/7)
+- [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -217,7 +259,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 1. [6/WAKU1 spec](/spec/6)
 
-2. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
+2. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)gg
 
 3. [Waku v2 plan](https://vac.dev/waku-v2-plan)
 
