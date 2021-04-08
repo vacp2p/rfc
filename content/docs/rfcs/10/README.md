@@ -216,8 +216,8 @@ See [18/WAKU2-SWAP](/spec/18) for more details on this piece of work.
 There are multiple implementations of Waku v2 and its protocols:
 
 - [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
-- [nim-go (Go)](https://github.com/status-im/go-waku/)
-- [nim-js (NodeJS and Browser)](https://github.com/status-im/js-waku/)
+- [go-waku (Go)](https://github.com/status-im/go-waku/)
+- [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
 
 Below you can find an overview of the specs that they implement as they relate to Waku. This includes Waku v1 specs, as they are used for bridging between the two networks.
 
