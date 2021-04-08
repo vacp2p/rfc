@@ -259,7 +259,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 1. [6/WAKU1 spec](/spec/6)
 
-2. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)gg
+2. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
 3. [Waku v2 plan](https://vac.dev/waku-v2-plan)
 
