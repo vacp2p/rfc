@@ -1,0 +1,41 @@
+# Sequence diagram for Waku v2 (WakuMessage, WakuData, Relay, Store, Filter)
+msc {
+  hscale="1",
+  wordwraparcs=true;
+
+  a [label="A [relay]"],
+  b [label="B [relay(topic1)]"],
+  c [label="C [relay(topic2)]"],
+  d [label="D [relay(topic1), store(topic1)]"],
+  e [label="E[relay, store]"],
+  f [label="F [relay, filter]"];
+
+#  b <-> c [label="connection"];
+#  a <-> b [label="connection"];
+#  b <-> d [label="connection"];
+#  d <-> e [label="connection"];
+#  c <-> d [label="connection"];
+
+  a rbox a [label="msg=WakuMessage(contentTopic1, data) [14/WAKU2-MESSAGE]"];
+  a note a [label="If version=1, encrypt data per [7/WAKU-DATA]"];
+
+#  b note b [label="relay: subscribe topic1"];
+#  c note c [label="relay: subscribe topic2"];
+#  d note d [label="relay: subscribe topic1"];
+
+  f => d [label="FilterRequest(topic1, contentTopic1) [12/WAKU2-FILTER]"];
+  d rbox d [label="filter: install for d [12/WAKU2-FILTER]"];
+
+  a => b [label="relay: publish msg on topic1 [11/WAKU2-RELAY]"];
+  b => d [label="relay msg on topic1 [11/WAKU2-RELAY]"];
+  d rbox d [label="store: saves msg1 [13/WAKU2-STORE]"];
+
+  d => f [label="MessagePush(msg1)[12/WAKU2-FILTER]"];
+
+  ---;
+
+  e note e [label="E comes online"];
+  e => d [label="store: HistoryQuery(topic1, contentTopic1) [13/WAKU2-STORE]"];
+  d => e [label="store: HistoryResponse(msg1, ...) [13/WAKU2-STORE]"];
+
+}

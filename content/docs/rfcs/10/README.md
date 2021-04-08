@@ -109,6 +109,17 @@ See [13/WAKU2-STORE](/spec/13) spec for more details.
 
 See [14/WAKU2-FILTER](/spec/14) spec for more details.
 
+## Overview
+
+See the sequence diagram below for an overview of how the different protocols interact.
+
+<p align="center">
+    <img src="../../../../rfcs/10/overview.png" />
+    <br />
+    Figure 1: Overview of how protocols interact in Waku v2.
+</p>
+
+
 # Upgradability and Compatibility
 
 ## Compatibility with Waku v1
