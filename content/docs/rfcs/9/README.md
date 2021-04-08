@@ -3,9 +3,10 @@ slug: 9
 title: 9/WAKU-RPC
 name: Waku RPC API
 status: stable
-editor: Oskar Thorén <oskar@status.im>
+editor: Andrea Maria Piana <andreap@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
+  - Oskar Thorén <oskar@status.im>
 ---
 
 This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily
