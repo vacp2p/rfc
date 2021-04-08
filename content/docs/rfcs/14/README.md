@@ -28,7 +28,8 @@ A `WakuMessage` is what is being passed around by the other protocols, such as W
 The `payload` field SHOULD contain whatever payload is being sent. See section below on payload encryption.
 
 The `contentTopic` field SHOULD be filled out to allow for content-based filtering.
-See [12/WAKU2-FILTER](/spec/12) and [13/WAKU2-STORE](/spec/13) for details.
+See [12/WAKU2-FILTER](/spec/12) and [13/WAKU2-STORE](/spec/13) for more details.
+To enable a bidirectional bridge with Waku v1 see [15/WAKU2-BRIDGE](/spec/15) for further requirements on this field.
 
 The `version` field MAY be filled out to allow for various types of payload encryption.
 Omitting it means the version is 0.
@@ -44,7 +45,7 @@ syntax = "proto3";
 
 message WakuMessage {
   bytes payload = 1;
-  uint32 contentTopic = 2;
+  string contentTopic = 2;
   uint32 version = 3;
   double timestamp = 4;
 }
