@@ -2,7 +2,7 @@
 slug: 16
 title: 16/WAKU2-RPC
 name: Waku v2 RPC API
-status: raw
+status: draft
 editor: Hanno Cornelius <hanno@status.im>
 ---
 
@@ -619,10 +619,6 @@ This method is part of the `store` API and the specific resources to retrieve ar
 1. [LibP2P Addressing](https://docs.libp2p.io/concepts/addressing/)
 1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
 1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
-
-# Changelog
-
-TBD
 
 # Copyright
 
