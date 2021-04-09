@@ -45,8 +45,8 @@ message PagingInfo {
   uint64 pageSize = 1;
   Index cursor = 2;
   enum Direction {
-    FORWARD = 1;
     BACKWARD = 0;
+    FORWARD = 1;
   }
   Direction direction = 3;
 }
