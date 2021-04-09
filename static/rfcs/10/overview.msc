@@ -1,41 +1,33 @@
 # Sequence diagram for Waku v2 (WakuMessage, WakuData, Relay, Store, Filter)
+# PNG generated with https://mscgen.js.org
 msc {
   hscale="1",
   wordwraparcs=true;
 
-  a [label="A [relay]"],
-  b [label="B [relay(topic1)]"],
-  c [label="C [relay(topic2)]"],
-  d [label="D [relay(topic1), store(topic1)]"],
-  e [label="E[relay, store]"],
-  f [label="F [relay, filter]"];
+  a [label="A\nrelay\n(0)"],
+  b [label="B relay(pubtopic1)\n(0)"],
+  c [label="C relay(pubtopic2)\n(0)"],
+  d [label="D relay(pubtopic1), store(pubtopic1), filter\n(0)"],
+  e [label="E\nrelay, store\n(0)"],
+  f [label="F\nrelay, filter\n(0)"];
 
-#  b <-> c [label="connection"];
-#  a <-> b [label="connection"];
-#  b <-> d [label="connection"];
-#  d <-> e [label="connection"];
-#  c <-> d [label="connection"];
+  a rbox a [label="msg1=WakuMessage(contentTopic1, data) [14/WAKU2-MESSAGE] (1)"];
+  a note a [label="If version=1, encrypt data per [7/WAKU-DATA] (1)"];
 
-  a rbox a [label="msg=WakuMessage(contentTopic1, data) [14/WAKU2-MESSAGE]"];
-  a note a [label="If version=1, encrypt data per [7/WAKU-DATA]"];
+  f => d [label="FilterRequest(pubtopic1, contentTopic1) [12/WAKU2-FILTER] (2)"];
+  d rbox d [label="Subscribe F to filter [12/WAKU2-FILTER] (2)"];
 
-#  b note b [label="relay: subscribe topic1"];
-#  c note c [label="relay: subscribe topic2"];
-#  d note d [label="relay: subscribe topic1"];
+  a => b [label="Publish msg1 on pubtopic1 [11/WAKU2-RELAY] (3)"];
+  b => d [label="relay msg1 on pubtopic1 [11/WAKU2-RELAY] (3)"];
 
-  f => d [label="FilterRequest(topic1, contentTopic1) [12/WAKU2-FILTER]"];
-  d rbox d [label="filter: install for d [12/WAKU2-FILTER]"];
+  d rbox d [label="store: saves msg1 [13/WAKU2-STORE] (4)"];
 
-  a => b [label="relay: publish msg on topic1 [11/WAKU2-RELAY]"];
-  b => d [label="relay msg on topic1 [11/WAKU2-RELAY]"];
-  d rbox d [label="store: saves msg1 [13/WAKU2-STORE]"];
-
-  d => f [label="MessagePush(msg1)[12/WAKU2-FILTER]"];
+  d => f [label="MessagePush(msg1)[12/WAKU2-FILTER] (5)"];
 
   ---;
 
-  e note e [label="E comes online"];
-  e => d [label="store: HistoryQuery(topic1, contentTopic1) [13/WAKU2-STORE]"];
-  d => e [label="store: HistoryResponse(msg1, ...) [13/WAKU2-STORE]"];
+  e note e [label="E comes online (6)"];
+  e => d [label="HistoryQuery(pubtopic1, contentTopic1) [13/WAKU2-STORE] (6)"];
+  d => e [label="HistoryResponse(msg1, ...) [13/WAKU2-STORE] (6)"];
 
 }
