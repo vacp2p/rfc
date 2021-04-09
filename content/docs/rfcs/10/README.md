@@ -121,7 +121,7 @@ The PubSub topics `pubtopic1` and `pubtopic2` is used for routing and indicates 
 Ditto for [13/WAKU2-STORE](/spec/13) where it indicates that these messages are persisted on that node.
 
 1. Node A creates a WakuMessage `msg1` with a ContentTopic `contentTopic1`. See [14/WAKU2-MESSAGE](/spec/14) for more details.
-If WakuMessage version is set to 1, we use the [6/WAKU1](/spec6) compatible `data` field with encryption. See [7/WAKU-DATA](/spec/7) for more details.
+If WakuMessage version is set to 1, we use the [6/WAKU1](/spec/6) compatible `data` field with encryption. See [7/WAKU-DATA](/spec/7) for more details.
 
 2. Node F requests to get messages filtered by PubSub topic `pubtopic1` and ContentTopic `contentTopic1`.
 Node D subscribes F to this filter and will in the future forward messages that match that filter. See [12/WAKU2-FILTER](/spec/12) for more details.
