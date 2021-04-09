@@ -113,11 +113,7 @@ See [14/WAKU2-FILTER](/spec/14) spec for more details.
 
 See the sequence diagram below for an overview of how the different protocols interact.
 
-<p align="center">
-    <img src="../../../../rfcs/10/overview.png" />
-    <br />
-    Figure 1: Overview of how protocols interact in Waku v2.
-</p>
+![Overview of how protocols interact in Waku v2.](../../../../rfcs/10/overview.png)
 
 0. We have six nodes, A-F. The protocols initially mounted are indicated as such. The PubSub topics `pubtopic1` and `pubtopic2` is used for routing and indicates that it is subscribed to messages on that topic for relay, see [11/WAKU2-RELAY](/spec/11) for details. Ditto for [13/WAKU2-STORE](/spec/13) where it indicates that these messages are persisted on that node.
 
@@ -247,19 +243,19 @@ Below you can find an overview of the specs that they implement as they relate t
 
 | Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
 | ---- | -------------- | ------------ | ----------------- | -------------------- |
-|[6/WAKU1](/spec/6)|:heavy_check_mark:|||
-|[7/WAKU-DATA](/spec/7)|:heavy_check_mark:|:heavy_check_mark:||
-|[8/WAKU-MAIL](/spec/8)|:heavy_check_mark:|||
-|[9/WAKU-RPC](/spec/9)|:heavy_check_mark:|||
-|[10/WAKU2](/spec/10)|:heavy_check_mark:|:construction:|:construction:|:construction:|
-|[11/WAKU2-RELAY](/spec/11)|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:construction:|
-|[12/WAKU2-FILTER](/spec/12)|:heavy_check_mark:|||
-|[13/WAKU2-STORE](/spec/13)|:heavy_check_mark:|:construction:|:construction:|
-|[14/WAKU2-MESSAGE](/spec/14)|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|
-|[15/WAKU2-BRIDGE](/spec/15)|:heavy_check_mark:|||
-|[16/WAKU2-RPC](/spec/16)|:heavy_check_mark:|||
-|[17/WAKU2-RLNRELAY](/spec/17)|:construction:|||
-|[18/WAKU2-SWAP](/spec/18)|:construction:|||
+|[6/WAKU1](/spec/6)|✔|||
+|[7/WAKU-DATA](/spec/7)|✔|✔||
+|[8/WAKU-MAIL](/spec/8)|✔|||
+|[9/WAKU-RPC](/spec/9)|✔|||
+|[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
+|[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|🚧|
+|[12/WAKU2-FILTER](/spec/12)|✔|||
+|[13/WAKU2-STORE](/spec/13)|✔|🚧|🚧|
+|[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
+|[15/WAKU2-BRIDGE](/spec/15)|✔|||
+|[16/WAKU2-RPC](/spec/16)|✔|||
+|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
+|[18/WAKU2-SWAP](/spec/18)|🚧|||
 
 ### Recommendations for clients
 
