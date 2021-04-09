@@ -121,9 +121,9 @@ See the sequence diagram below for an overview of how the different protocols in
 
 0. We have six nodes, A-F. The protocols initially mounted are indicated as such. The PubSub topics `pubtopic1` and `pubtopic2` is used for routing and indicates that it is subscribed to messages on that topic for relay, see [11/WAKU2-RELAY](/spec/11) for details. Ditto for [13/WAKU2-STORE](/spec/13) where it indicates that these messages are persisted on that node.
 
-1. Node A creates a `WakuMessage` `msg1` with a `ContentTopic` `contentTopic1`. See [14/WAKU2-MESSAGE](/spec/14) for more details. If `WakuMessage` version is set to 1, we use the [6/WAKU1](/spec6) compatible `data` field with encryption. See [7/WAKU-DATA](/spec/7) for more details.
+1. Node A creates a WakuMessage `msg1` with a ContentTopic `contentTopic1`. See [14/WAKU2-MESSAGE](/spec/14) for more details. If WakuMessage version is set to 1, we use the [6/WAKU1](/spec6) compatible `data` field with encryption. See [7/WAKU-DATA](/spec/7) for more details.
 
-2. Node F requests to get messages filtered by PubSub topic `pubtopic1` and Content Topic `contentTopic1`. Node D subscribes F to this filter and will in the future forward messages that match that filter. See [12/WAKU2-FILTER](/spec/12) for more details.
+2. Node F requests to get messages filtered by PubSub topic `pubtopic1` and ContentTopic `contentTopic1`. Node D subscribes F to this filter and will in the future forward messages that match that filter. See [12/WAKU2-FILTER](/spec/12) for more details.
 
 3. Node A publishes `msg1` on `pubtopic1` and subscribes to that relay topic pick it up. It then gets relayed further from B to D, but not C since it doesn't subscribe to that topic. See [11/WAKU2-RELAY](/spec/11).
 
