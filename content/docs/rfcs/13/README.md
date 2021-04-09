@@ -42,11 +42,11 @@ message Index {
 }
 
 message PagingInfo {
-  int64 pageSize = 1;
+  uint64 pageSize = 1;
   Index cursor = 2;
   enum Direction {
-    FORWARD = 0;
-    BACKWARD = 1;
+    BACKWARD = 0;
+    FORWARD = 1;
   }
   Direction direction = 3;
 }
