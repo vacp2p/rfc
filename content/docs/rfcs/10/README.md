@@ -107,7 +107,7 @@ See [13/WAKU2-STORE](/spec/13) spec for more details.
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
-See [14/WAKU2-FILTER](/spec/14) spec for more details.
+See [12/WAKU2-FILTER](/spec/12) spec for more details.
 
 ## Overview
 
