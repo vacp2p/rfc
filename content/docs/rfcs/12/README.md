@@ -65,7 +65,7 @@ message FilterRequest {
   repeated ContentFilter contentFilters = 3;
 
   message ContentFilter {
-    repeated uint32 contentTopics = 1;
+    repeated string contentTopics = 1;
   }
 }
 
