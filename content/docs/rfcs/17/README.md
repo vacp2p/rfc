@@ -64,17 +64,23 @@ At a high level, the `proof` is a zero-knowledge proof signifying that the publi
 
 The `proof` is embedded inside the `data` field of the PubSub message, which, in the [11/WAKU2-RELAY](/spec/11) protocol, corresponds to the [14/WAKU2-MESSAGE](/spec/14). 
 
-The proof generation relies on the knowledge of `sk` and `authPath` (that is why they should be permanently and privately stored by the owning peer). 
-Further inputs to the proof generation are `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
-The proof generation results in the following data items which are included as part of the `Proof`:  
-1. `shareX`
-2. `shareY`
+The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.  
+`authPath` is  the information by which one can prove its membership in the group.
+<!-- TODO explain what is atuh path -->
+To construct `authPath`, peers need to locally store a Merkle tree out of the group members public keys. 
+Peers need to keep the tree updated with the recent state of the group.  
+Further inputs to the proof generation which are public are tree's `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
+The tree `root` can be obtained from the locally maintained Merkle tree.
+The proof generation results in the following data items which are encoded inside the `Proof`:  
+1. `share_x`
+2. `share_y`
 3. `nullifier`
-4. `zkProof`
+4. `zkSNARKs`
 
-
-The tuple of (`nullifier`, `shareX`, `ShareY`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.  
-Given two such tuples with identical `nullifier` but distinct `shareX`, `ShareY` results in full disclosure of peer's `sk` and hence burning the associated deposit.
+The preceding values as well as the tree `root` (based on which the proof is generated) are encoded inside the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`.
+The numbers enclosed in angle brackets indicate the bit length of the corresponding data item.
+The tuple of (`nullifier`, `share_x`, `share_y`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.  
+Given two such tuples with identical `nullifier` but distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
 Note that the `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
 
 Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register). As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the tree and attempts the proof using her updated `authPath`.
@@ -91,11 +97,11 @@ If spamming is detected, the publishing peer gets slashed.
 An overview of routing procedure is depicted in Figure 2.
 
 ### Spam Detection and Slashing
-In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `shareX`, and `shareY` of any incoming message conditioned that it is not spam and has valid proof. 
+In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `share_x`, and `share_y` of any incoming message conditioned that it is not spam and has valid proof. 
 To do so, the peer should follow the following steps. 
-1. The routing peer first verifies the `zkProof` and drops the message if not verified. 
+1. The routing peer first verifies the `zkSNARKs` and drops the message if not verified. 
 2. Otherwise, it checks whether a message with an identical `nullifier` has already been relayed. 
-   1. If such message exists and its `shareX` and `shareY` components are different from the incoming message, then slashing takes place (if the `shareX` and `shareY` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be dropped).
+   1. If such message exists and its `share_x` and `share_y` components are different from the incoming message, then slashing takes place (if the `share_x` and `share_y` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be dropped).
    2. If none found, then the message gets relayed.
 
 An overview of slashing procedure is provided in Figure 2.
@@ -141,10 +147,10 @@ message WakuMessage {
 
 <!-- message ProofBundle 
    int64 epoch = 1; //  indicating the intended epoch of the message
-   // TODO shareX and shareY
+   // TODO share_x and share_y
    bytes nullifier = 2;
-   bytes root = 3; // TODO may be removed and added as part of zkProof
-   // TODO zkProof
+   bytes root = 3; // TODO may be removed and added as part of zkSNARKs
+   // TODO zkSNARKs
  -->
 
 # Copyright
