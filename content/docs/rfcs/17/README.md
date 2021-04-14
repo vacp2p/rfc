@@ -129,29 +129,22 @@ An overview of slashing procedure is provided in Figure 2.
 # Payloads
 
 Payloads are protobuf messages implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
+Nodes MAY extend the  [14/WAKU2-MESSAGE](/spec/14) with a `proof` field to indicate that their message is not a spam.
 
-```protobuf
+```diff 
 
 syntax = "proto3";
 
-// TODO to reflect this change on WakuMessage spec once the PR gets mature
 message WakuMessage {
   bytes payload = 1;
   string contentTopic = 2;
   uint32 version = 3;
   double timestamp = 4;
-  + bytes proof = 21
++ bytes proof = 21;
 }
 
 ```
-
-<!-- message ProofBundle 
-   int64 epoch = 1; //  indicating the intended epoch of the message
-   // TODO share_x and share_y
-   bytes nullifier = 2;
-   bytes root = 3; // TODO may be removed and added as part of zkSNARKs
-   // TODO zkSNARKs
- -->
+<!-- TODO to reflect this change on WakuMessage spec once the PR gets mature -->
 
 # Copyright
 
