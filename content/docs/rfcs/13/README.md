@@ -68,12 +68,12 @@ message HistoryContentFilter {
 
 message HistoryQuery {
   repeated HistoryContentFilter contentFilters = 2;
-  optional PagingInfo pagingInfo = 3; // used for pagination
+  PagingInfo pagingInfo = 3; // used for pagination
 }
 
 message HistoryResponse {
   repeated WakuMessage messages = 2;
-  optional PagingInfo pagingInfo = 3; // used for pagination
+  PagingInfo pagingInfo = 3; // used for pagination
 }
 
 message HistoryRPC {
