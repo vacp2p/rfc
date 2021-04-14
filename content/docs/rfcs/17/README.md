@@ -78,11 +78,12 @@ The proof generation results in the following data items which are encoded insid
 
 The preceding values as well as the tree `root` (based on which the proof is generated) are encoded inside the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`.
 The numbers enclosed in angle brackets indicate the bit length of the corresponding data item.
-The tuple of (`nullifier`, `share_x`, `share_y`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.  
+The tuple of (`nullifier`, `share_x`, `share_y`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.
 Given two such tuples with identical `nullifier` but distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
 Note that the `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
 
-Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register). As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the tree and attempts the proof using her updated `authPath`.
+Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register).
+As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the group and attempts the proof using her updated `authPath`.
 
 
 ## Routing
