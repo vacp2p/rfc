@@ -48,7 +48,7 @@ Note that  `sk` is initially only known by the owning peer however it may get ex
 <!-- diagram -->
 
 <p align="center">
-    <img src="../../../assets/rln-relay/rln-relay.png" />
+    <img src="../../../../rfcs/17/rln-relay.png" />
     <br />
     Figure 1: Registration.
 </p>
@@ -111,7 +111,7 @@ An overview of slashing procedure is provided in Figure 2.
 <!-- TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection -->
 
 <p align="center">
-    <img src="../../../assets/rln-relay/rln-message-verification.png" />
+    <img src="../../../../rfcs/17/rln-message-verification.png" />
     <br />
     Figure 2: Publishing, Routing and Slashing workflow.
 </p>
