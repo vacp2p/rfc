@@ -71,7 +71,7 @@ To construct `authPath`, peers need to locally store a Merkle tree out of the gr
 Peers need to keep the tree updated with the recent state of the group.  
 Further inputs to the proof generation which are public are tree's `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
 The tree `root` can be obtained from the locally maintained Merkle tree.
-The proof generation results in the following data items which are encoded inside the `Proof`:  
+The proof generation results in the following data items which are encoded inside the `proof`:  
 1. `share_x`
 2. `share_y`
 3. `nullifier`
