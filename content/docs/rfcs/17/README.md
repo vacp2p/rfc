@@ -64,9 +64,8 @@ At a high level, the `proof` is a zero-knowledge proof signifying that the publi
 
 The `proof` is embedded inside the `data` field of the PubSub message, which, in the [11/WAKU2-RELAY](/spec/11) protocol, corresponds to the [14/WAKU2-MESSAGE](/spec/14). 
 
-The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.  
-`authPath` is  the information by which one can prove its membership in the group.
-<!-- TODO explain what is atuh path -->
+The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
+`authPath` is  the information by which one can prove its membership in the group. <!-- TODO explain what is atuh path -->
 To construct `authPath`, peers need to locally store a Merkle tree out of the group members public keys. 
 Peers need to keep the tree updated with the recent state of the group.  
 Further inputs to the proof generation which are public are tree's `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
