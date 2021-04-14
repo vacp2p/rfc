@@ -40,9 +40,10 @@ The following are not considered as part of the adversarial model:
 # Wire Specification
 Peers communicate with each other using a request / response API. 
 The messages sent are Protobuf RPC messages. 
+Payloads are implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
 The followings are the specifications of the Protobuf messages. 
 
-## Payload
+## Payloads
 
 ```protobuf
 syntax = "proto3";
