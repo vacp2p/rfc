@@ -139,15 +139,16 @@ However, one can consider preserving anonymity through one of the following ways
 
 # Changelog
 
-### Next 
+## Next 
 - Added the initial threat model and security analysis.
-- Replaced the `topics` field of `HistoryQuery` with a newly defined message type `HistoryContentFilter`.
+### Changed
+- The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `HistoryContentFilter`.
 
-### 2.0.0-beta2 
+## 2.0.0-beta2 
 Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
 - Added pagination support.
   
-### 2.0.0-beta1
+## 2.0.0-beta1
 Released [2020-10-06](https://github.com/vacp2p/specs/commit/75b4c39e7945eb71ad3f9a0a62b99cff5dac42cf)
 - Initial draft version. 
 
