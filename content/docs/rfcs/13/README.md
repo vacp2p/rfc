@@ -28,7 +28,7 @@ For example, the signature verification key, and the hash of one's static IP add
 
 # Adversarial Model
 Any peer running the `WakuStore` protocol i.e., both the querying node and the queried node are considered as an adversary. 
-Furthermore, we consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
+Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
 For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `WakuStore` protocol. 
 
 The following are not considered as part of the adversarial model:
@@ -68,7 +68,7 @@ message HistoryContentFilter {
 
 message HistoryQuery {
   repeated HistoryContentFilter contentFilters = 2;
-  PagingInfo pagingInfo = 3; // used for pagination
+  PagingInfo pagingInfo = 3;
 }
 
 message HistoryResponse {
@@ -100,6 +100,7 @@ To perform pagination, each `WakuMessage` stored at a node running the `WakuStor
 `HistoryContentFilter` carries the information required for filtering historical messages. 
 - `contentTopic` represents the content topic of the queried historical Waku messages.
   This field maps to the `contentTopic` field of the [14/WAKU2-MESSAGE](/spec/14).
+  
 ### HistoryQuery
 
 RPC call to query historical messages.
