@@ -140,7 +140,8 @@ However, one can consider preserving anonymity through one of the following ways
 # Changelog
 
 ## Next 
-- Added the initial threat model and security analysis.
+### Added
+- The initial threat model and security analysis.
 ### Changed
 - The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `HistoryContentFilter`.
 
