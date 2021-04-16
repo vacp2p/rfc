@@ -151,6 +151,7 @@ However, one can consider preserving anonymity through one of the following ways
 ## Next 
 ### Added
 - The initial threat model and security analysis.
+- Enables filtering message history based on the pubsub topic on which waku messages are published.
 ### Changed
 - The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `HistoryContentFilter`.
 
