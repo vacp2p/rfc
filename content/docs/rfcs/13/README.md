@@ -15,20 +15,21 @@ It also supports pagination for more efficient querying of historical messages.
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
 
 # Design Requirements
-Nodes willing to provide storage service in `WAKU2-STORE` protocol SHOULD be able to provide the complete and intact view of message history. 
+Nodes willing to provide storage service using `WAKU2-STORE` protocol SHOULD provide a complete and full view of message history.
 As such, they are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. 
 The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes.
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
 # Security Consideration
-The main security consideration to be taken into account while using `WAKU2-STORE` is to notice that the querying nodes have to reveal their content filters of interest to the queried nodes hence compromising their privacy. 
+
+The main security consideration to take into account while using `WAKU2-STORE` is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.
 
 ## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. 
 For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
-Any peer running the `WAKU2-STORE` protocol i.e., both the querying node and the queried node are considered as an adversary. 
+Any peer running the `WAKU2-STORE` protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
 Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
 As we evolve the protocol, further adversarial models will be considered.
 For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `WAKU2-STORE` protocol. 
