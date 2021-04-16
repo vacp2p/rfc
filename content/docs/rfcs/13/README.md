@@ -15,24 +15,24 @@ It also supports pagination for more efficient querying of historical messages.
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta2`
 
 # Design Requirements
-Nodes willing to provide storage service using `WAKU2-STORE` protocol SHOULD provide a complete and full view of message history.
+Nodes willing to provide storage service using `13/WAKU2-STORE` protocol SHOULD provide a complete and full view of message history.
 As such, they are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. 
 The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes.
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
 # Security Consideration
 
-The main security consideration to take into account while using `WAKU2-STORE` is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.
+The main security consideration to take into account while using `13/WAKU2-STORE` is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.
 
 ## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. 
 For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
-Any peer running the `WAKU2-STORE` protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
+Any peer running the `13/WAKU2-STORE` protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
 Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
 As we evolve the protocol, further adversarial models will be considered.
-For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `WAKU2-STORE` protocol. 
+For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `13/WAKU2-STORE` protocol. 
 
 The following are not considered as part of the adversarial model:
 - An adversary with a global view of all the peers and their connections.
@@ -88,9 +88,9 @@ message HistoryRPC {
 
 ### Index
 
-To perform pagination, each `WakuMessage` stored at a node running the `WAKU2-STORE` protocol is associated with a unique `Index` that encapsulates the following parts. 
+To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is associated with a unique `Index` that encapsulates the following parts. 
 - `digest`:  a sequence of bytes representing the hash of a `WakuMessage`.
-- `receivedTime`: the UNIX time at which the waku message is received by the node running the `WAKU2-STORE` protocol.
+- `receivedTime`: the UNIX time at which the waku message is received by the node running the `13/WAKU2-STORE` protocol.
 
 ### PagingInfo
 
@@ -126,8 +126,8 @@ RPC call to respond to a HistoryQuery call.
 # Future Work
 
 - **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes i.e., without disclosing the exact topics of waku messages they are interested in.  
-As such, no adversary in the `WAKU2-STORE` protocol would be able to learn which peer is interested in which content filters i.e., content topics of waku message. 
-The current version of the `WAKU2-STORE` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `WAKU2-STORE` protocol and explicitly disclose the content filters of its interest to retrieve the corresponding messages. 
+As such, no adversary in the `13/WAKU2-STORE` protocol would be able to learn which peer is interested in which content filters i.e., content topics of waku message. 
+The current version of the `13/WAKU2-STORE` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `13/WAKU2-STORE` protocol and explicitly disclose the content filters of its interest to retrieve the corresponding messages. 
 However, one can consider preserving anonymity through one of the following ways: 
   - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address.
   This can happen by the utilization of a proxy server or by using Tor. 
