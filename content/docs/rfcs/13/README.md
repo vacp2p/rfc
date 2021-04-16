@@ -114,7 +114,7 @@ RPC call to query historical messages.
   As such, to retrieve historical messages regardless of their content topics of waku messages this field SHOULD be left empty.
 - The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
   This field denotes the pubsub topic on which waku messages are published.
-  This field maps to `topicIDs` field of `Message` in `11/WAKU2-RELAY`.
+  This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
   Leaving this field empty means no filter on the pubsub topic is requested.
   Thus, to retrieve the historical messages regardless of the pubsub topics of waku messages this field SHOULD be left empty.
 - `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
