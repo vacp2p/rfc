@@ -146,23 +146,6 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
-<!-- # Changelog
-
-## Next 
-### Added
-- The initial threat model and security analysis.
-- Querying message history based on the pubsub topic on which waku messages are published.
-### Changed
-- The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `HistoryContentFilter`.
-
-## 2.0.0-beta2 
-Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
-- Added pagination support.
-  
-## 2.0.0-beta1
-Released [2020-10-06](https://github.com/vacp2p/specs/commit/75b4c39e7945eb71ad3f9a0a62b99cff5dac42cf)
-- Initial draft version.  -->
-
 # Copyright
 
 Copyright and related rights waived via
