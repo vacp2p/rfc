@@ -65,12 +65,12 @@ message PagingInfo {
   Direction direction = 3;
 }
 
-message HistoryContentFilter {
+message ContentFilter {
   string contentTopic = 1;
 }
 
 message HistoryQuery {
-  repeated HistoryContentFilter contentFilters = 2;
+  repeated ContentFilter contentFilters = 2;
   string pubsubtopic = 3;
   PagingInfo pagingInfo = 4;
 }
@@ -100,8 +100,8 @@ To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2
 - `cursor`: holds the `Index` of a `WakuMessage`.
 - `direction`: indicates the direction of paging which can be either `FORWARD` or `BACKWARD`.
 
-### HistoryContentFilter
-`HistoryContentFilter` carries the information required for filtering historical messages. 
+### ContentFilter
+`ContentFilter` carries the information required for filtering historical messages. 
 - `contentTopic` represents the content topic of the queried historical Waku messages.
   This field maps to the `contentTopic` field of the [14/WAKU2-MESSAGE](/spec/14).
   
@@ -146,7 +146,7 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
-# Changelog
+<!-- # Changelog
 
 ## Next 
 ### Added
@@ -161,7 +161,7 @@ Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6
   
 ## 2.0.0-beta1
 Released [2020-10-06](https://github.com/vacp2p/specs/commit/75b4c39e7945eb71ad3f9a0a62b99cff5dac42cf)
-- Initial draft version. 
+- Initial draft version.  -->
 
 # Copyright
 
