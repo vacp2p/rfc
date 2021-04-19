@@ -110,13 +110,13 @@ To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2
 RPC call to query historical messages.
 
 - The `contentFilters` field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
-  Leaving this field empty means no content filtering is required.
+  Leaving this field empty means no filter on the content topic of message history is required.
   This field SHOULD be left empty in order to retrieve historical waku messages regardless of their content topics.
 - The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
   This field denotes the pubsub topic on which waku messages are published.
   This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
-  Leaving this field empty means no filter on the pubsub topic is requested.
-  This field SHOULD be left empty in order to retrieve the historical waku messages regardless of their pubsub topics.
+  Leaving this field empty means no filter on the pubsub topic of message history is requested.
+  This field SHOULD be left empty in order to retrieve the historical waku messages regardless of the pubsub topics on which they are published.
 - `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `receivedTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 
