@@ -65,12 +65,12 @@ message PagingInfo {
   Direction direction = 3;
 }
 
-message HistoryContentFilter {
+message ContentFilter {
   string contentTopic = 1;
 }
 
 message HistoryQuery {
-  repeated HistoryContentFilter contentFilters = 2;
+  repeated ContentFilter contentFilters = 2;
   PagingInfo pagingInfo = 3;
 }
 
@@ -99,8 +99,8 @@ To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2
 - `cursor`: holds the `Index` of a `WakuMessage`.
 - `direction`: indicates the direction of paging which can be either `FORWARD` or `BACKWARD`.
 
-### HistoryContentFilter
-`HistoryContentFilter` carries the information required for filtering historical messages. 
+### ContentFilter
+`ContentFilter` carries the information required for filtering historical messages. 
 - `contentTopic` represents the content topic of the queried historical Waku messages.
   This field maps to the `contentTopic` field of the [14/WAKU2-MESSAGE](/spec/14).
   
@@ -144,7 +144,7 @@ However, one can consider preserving anonymity through one of the following ways
 ### Added
 - The initial threat model and security analysis.
 ### Changed
-- The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `HistoryContentFilter`.
+- The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `ContentFilter`.
 
 ## 2.0.0-beta2 
 Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
