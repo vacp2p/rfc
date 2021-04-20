@@ -61,6 +61,13 @@ These protocols and their semantics are elaborated on in their own specs.
 
 For the actual content being passed around, see the [7/WAKU-DATA](/spec/7) spec.
 
+## Use of libp2p and protobuf
+
+Unless otherwise specified, all protocols are implemented over libp2p and use Protobuf by default.
+Since messages are exchanged over a [bi-directional binary stream](https://docs.libp2p.io/concepts/protocols/),
+as a convention, libp2p protocols prefix binary message payloads with the length of the message in bytes.
+This length integer is encoded as a [protobuf varint](https://developers.google.com/protocol-buffers/docs/encoding#varints).
+
 ## Gossip domain
 
 **Protocol identifier**: `/vac/waku/relay/2.0.0-beta2`
@@ -293,22 +300,24 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 4. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
-5. [7/WAKU-DATA spec](/spec/7)
+5. [Protobuf varint encoding](https://developers.google.com/protocol-buffers/docs/encoding#varints)
 
-6. [11/WAKU2-RELAY spec](/spec/11)
+6. [7/WAKU-DATA spec](/spec/7)
 
-7. [13/WAKU2-STORE spec](/spec/13)
+7. [11/WAKU2-RELAY spec](/spec/11)
 
-8. [12/WAKU2-FILTER spec](/spec/12)
+8. [13/WAKU2-STORE spec](/spec/13)
 
-9. [15/WAKU2-BRIDGE spec](/spec/15)
+9. [12/WAKU2-FILTER spec](/spec/12)
 
-10. [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/)
+10. [15/WAKU2-BRIDGE spec](/spec/15)
 
-11. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
+11. [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/)
 
-14. [14/WAKU2-MESSAGE spec](/spec/14)
+12. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-17. [14/WAKU2-RLNRELAY spec](/spec/17)
+13. [14/WAKU2-MESSAGE spec](/spec/14)
 
-18. [18/WAKU2-SWAP spec](/spec/18)
+14. [14/WAKU2-RLNRELAY spec](/spec/17)
+
+15. [18/WAKU2-SWAP spec](/spec/18)
