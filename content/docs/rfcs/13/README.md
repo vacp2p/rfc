@@ -70,11 +70,13 @@ message ContentFilter {
 }
 
 message HistoryQuery {
+  // the first field is reserved
   repeated ContentFilter contentFilters = 2;
   PagingInfo pagingInfo = 3;
 }
 
 message HistoryResponse {
+  // the first field is reserved
   repeated WakuMessage messages = 2;
   PagingInfo pagingInfo = 3; // used for pagination
 }
