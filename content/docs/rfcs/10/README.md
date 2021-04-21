@@ -265,12 +265,14 @@ Below you can find an overview of the specs that they implement as they relate t
 |[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
 |[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|🚧|
 |[12/WAKU2-FILTER](/spec/12)|✔|||
-|[13/WAKU2-STORE](/spec/13)|✔|🚧|🚧|
+|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|🚧|
 |[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
 |[15/WAKU2-BRIDGE](/spec/15)|✔|||
 |[16/WAKU2-RPC](/spec/16)|✔|||
 |[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
 |[18/WAKU2-SWAP](/spec/18)|🚧|||
+
+*js-waku implements 13/WAKU2-STORE as a querying node only.
 
 ### Recommendations for clients
 
