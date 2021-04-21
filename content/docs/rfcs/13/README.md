@@ -76,7 +76,7 @@ message HistoryQuery {
 }
 
 message HistoryResponse {
-  // the first field is reserved
+  // the first field is reserved for future use
   repeated WakuMessage messages = 2;
   PagingInfo pagingInfo = 3; // used for pagination
 }
