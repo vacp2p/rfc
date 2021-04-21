@@ -202,6 +202,14 @@ The following structured types are defined for use on the Store API:
 | `digest` | `String` | mandatory | A hash for the message at this [`Index`](#Index) |
 | `receivedTime` | `Number` | mandatory | UNIX timestamp at which the message at this [`Index`](#Index) was received |
 
+#### ContentFilter
+
+`ContentFilter` is an `Object` containing the following fields:
+
+| Field | Type | Inclusion | Description |
+| ----: | :---: | :---: |----------- |
+| `contentTopic` | `String` | mandatory | The content topic of a [`WakuMessage`](#WakuMessage) |
+
 ### `get_waku_v2_store_v1_messages`
 
 The `get_waku_v2_store_v1_messages` method retrieves historical messages on specific content topics. This method MAY be called with [`PagingOptions`](#PagingOptions), to retrieve historical messages on a per-page basis. If the request included [`PagingOptions`](#PagingOptions), the node MUST return messages on a per-page basis and include [`PagingOptions`](#PagingOptions) in the response. These [`PagingOptions`](#PagingOptions) MUST contain a `cursor` pointing to the [`Index`](#Index) from which a new page can be requested.
@@ -210,7 +218,7 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
-| `topics` | `Array`[`String`] | mandatory | Array of content topics to query for historical messages |
+| `contentFilters` | `Array`[[`ContentFilter`](#contentfilter)] | mandatory | Array of content filters to query for historical messages |
 | `pagingOptions` | [`PagingOptions`](#PagingOptions) | optional | Pagination information |
 
 #### Response
@@ -452,7 +460,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      "/waku/2/default-content/proto"
+      {"contentTopic": "/waku/2/default-content/proto"}
     ]
   ]
 }
@@ -509,7 +517,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      "/waku/2/default-content/proto"
+      {"contentTopic": "/waku/2/default-content/proto"}
     ],
     {
       "pageSize": 2,
@@ -570,7 +578,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "method": "get_waku_v2_store_v1_messages",
   "params": [
     [
-      "/waku/2/default-content/proto"
+      {"contentTopic": "/waku/2/default-content/proto"}
     ],
     {
       "pageSize": 2,
