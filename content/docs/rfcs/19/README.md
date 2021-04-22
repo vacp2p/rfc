@@ -11,7 +11,8 @@ contributors:
 
 # Motivation and goals
 
-Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there sometimes is a need for confirmation that a message has been received "by the network".
+Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network.
+Additionally, there sometimes is a need for confirmation that a message has been received "by the network".
 
 `19/LIGHTPUSH` is a request/reply protocol for this.
 
@@ -38,7 +39,8 @@ message PushRPC {
 
 ## Message relaying
 
-Nodes that respond to `PushRequests` MUST relay this via `RELAY` protocol. If they are unable to do so for some reason, they SHOULD return an error code in `PushResponse`.
+Nodes that respond to `PushRequests` MUST relay this via `RELAY` protocol on the specified `pubsub_topic`.
+If they are unable to do so for some reason, they SHOULD return an error code in `PushResponse`.
 
 ## Notes
 
