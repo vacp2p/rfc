@@ -19,7 +19,8 @@ Light nodes with short connection windows and limited bandwidth wish to publish 
 
 ```protobuf
 message PushRequest {
-    WakuMessage message = 1;
+    string pubsub_topic = 1;
+    WakuMessage message = 2;
 }
 
 message PushResponse {
