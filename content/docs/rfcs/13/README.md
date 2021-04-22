@@ -91,7 +91,8 @@ message HistoryRPC {
 ### Index
 
 To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is associated with a unique `Index` that encapsulates the following parts. 
-- `digest`:  a sequence of bytes representing the hash of a `WakuMessage`.
+- `digest`:  a sequence of bytes representing the SHA256 hash of a `WakuMessage`.
+  The hash is computed over the concatenation of `contentTopic` and `payload` fields of a `WakuMessage` (see [14/WAKU2-MESSAGE](/spec/14)).
 - `receivedTime`: the UNIX time at which the waku message is received by the node running the `13/WAKU2-STORE` protocol.
 
 ### PagingInfo
