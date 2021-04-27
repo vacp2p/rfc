@@ -218,6 +218,7 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
+| `pubsubTopic` | `String`| mandatory | The pubsub topic on which a  [`WakuMessage`](#WakuMessage) is published|
 | `contentFilters` | `Array`[[`ContentFilter`](#contentfilter)] | mandatory | Array of content filters to query for historical messages |
 | `pagingOptions` | [`PagingOptions`](#PagingOptions) | optional | Pagination information |
 
