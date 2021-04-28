@@ -72,7 +72,8 @@ message ContentFilter {
 message HistoryQuery {
   // the first field is reserved for future use
   repeated ContentFilter contentFilters = 2;
-  PagingInfo pagingInfo = 3;
+  string pubsubtopic = 3;
+  PagingInfo pagingInfo = 4;
 }
 
 message HistoryResponse {
@@ -112,6 +113,13 @@ To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2
 RPC call to query historical messages.
 
 - The `contentFilters` field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
+  Leaving this field empty means no filter on the content topic of message history is required.
+  This field SHOULD be left empty in order to retrieve historical waku messages regardless of their content topics.
+- The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
+  This field denotes the pubsub topic on which waku messages are published.
+  This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
+  Leaving this field empty means no filter on the pubsub topic of message history is requested.
+  This field SHOULD be left empty in order to retrieve the historical waku messages regardless of the pubsub topics on which they are published.
 - `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `receivedTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 
@@ -140,22 +148,6 @@ However, one can consider preserving anonymity through one of the following ways
   Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI). 
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
-
-<!-- # Changelog
-
-## Next 
-### Added
-- The initial threat model and security analysis.
-### Changed
-- The `topics` field of `HistoryQuery` is replaced with a newly defined protobuf message `ContentFilter`.
-
-## 2.0.0-beta2 
-Released [2020-11-05](https://github.com/vacp2p/specs/commit/edc90625ffb5ce84cc6eb6ec4ec1a99385fad125)
-- Added pagination support.
-  
-## 2.0.0-beta1
-Released [2020-10-06](https://github.com/vacp2p/specs/commit/75b4c39e7945eb71ad3f9a0a62b99cff5dac42cf)
-- Initial draft version.  -->
 
 # Copyright
 
