@@ -452,7 +452,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"]]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":["", ["/waku/2/default-content/proto"]]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -460,6 +460,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "id": "id",
   "method": "get_waku_v2_store_v1_messages",
   "params": [
+    "",
     [
       {"contentTopic": "/waku/2/default-content/proto"}
     ]
@@ -509,7 +510,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"],{"pageSize":2,"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[ "", ["/waku/2/default-content/proto"],{"pageSize":2,"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -517,6 +518,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "id": "id",
   "method": "get_waku_v2_store_v1_messages",
   "params": [
+    "",
     [
       {"contentTopic": "/waku/2/default-content/proto"}
     ],
@@ -570,7 +572,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
 
 #### Request
 
-```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[["/waku/2/default-content/proto"],{"pageSize":2,"cursor":{"digest":"abcdef","receivedTime":1605887187.00},"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
+```curl -d '{"jsonrpc":"2.0","id":"id","method":"get_waku_v2_store_v1_messages", "params":[ "", ["/waku/2/default-content/proto"],{"pageSize":2,"cursor":{"digest":"abcdef","receivedTime":1605887187.00},"forward":false}]}' --header "Content-Type: application/json" http://localhost:8545```
 
 ```jsonrpc
 {
@@ -578,6 +580,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
   "id": "id",
   "method": "get_waku_v2_store_v1_messages",
   "params": [
+    "",
     [
       {"contentTopic": "/waku/2/default-content/proto"}
     ],
