@@ -448,7 +448,7 @@ Before returning the messages, the server decrypts the message payloads using th
 
 This method is part of the `store` API and the specific resources to retrieve are (historical) `messages`. The protocol (`waku`) is on `v2`, whereas the Store API definition is on `v1`.
 
-1. `get` *all* the historical messages for content topic **"/waku/2/default-content/proto"** regardless of pubsub topic; no paging required
+1. `get` *all* the historical messages for content topic **"/waku/2/default-content/proto"**; no paging required
 
 #### Request
 
