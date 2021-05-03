@@ -240,7 +240,7 @@ The following structured types are defined for use on the Filter API:
 
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
-| `topics` | `Array`[`String`] | mandatory | Array of message content topics |
+| `contentTopic` | `String` | mandatory | message content topic |
 
 ### `post_waku_v2_filter_v1_subscription`
 
