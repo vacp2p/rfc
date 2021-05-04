@@ -8,6 +8,7 @@ contributors:
   - Dean Eigenmann <dean@status.im>
   - Oskar Thorén <oskar@status.im>
   - Sanaz Taheri <sanaz@status.im>
+  - Ebube Ud <ebube@status.im>
 ---
 
 `WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
@@ -65,7 +66,7 @@ message FilterRequest {
   repeated ContentFilter contentFilters = 3;
 
   message ContentFilter {
-    repeated string contentTopics = 1;
+    string contentTopic = 1;
   }
 }
 
@@ -148,7 +149,7 @@ implementation, though a reasonable default is one minute.
 ### 2.0.0-beta2
 
 Initial draft version. Released [2020-10-28](https://github.com/vacp2p/specs/commit/5ceeb88cee7b918bb58f38e7c4de5d581ff31e68)
-- Fix: Ensure contentFilter and contentTopic are repeated fields, per implementation
+- Fix: Ensure contentFilter is a repeated field, on implementation
 - Change: Add ability to unsubscribe from filters. Make `subscribe` an explicit boolean indication. Edit protobuf field order to be consistent with libp2p.
 
 ### 2.0.0-beta1
