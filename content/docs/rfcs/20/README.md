@@ -50,14 +50,14 @@ and Carole can see that how many messages a recipient `Bw` is receiving (unlinka
 4. Alice encrypts `M'` using `Bw`, resulting in `m'`,
 5. Alice creates waku message `Mw` with
    `payload` `m'` and
-   `contentTopic` `/waku/2/direct-message/eth-pubkey/Bw/proto`,
+   `contentTopic` `/waku/2/eth-dm/child-pubkey/Bw/proto`,
    with `Bw` in hex format (`0xAb1..`),
 6. Alice publishes `Mw` via [11/WAKU2-RELAY](/spec/11),
-7. Bob captures received messages via [11/WAKU2-RELAY](/spec/11) that have `contentTopic` `/waku/2/direct-message/eth-pubkey/Bw/proto`,
-8. Bob queries [13/WAKU2-STORE](/spec/13) with `contentTopics` set to `["/waku/2/direct-message/eth-pubkey/Bw/proto"]`,
+7. Bob captures received messages via [11/WAKU2-RELAY](/spec/11) that have `contentTopic` `/waku/2/eth-dm/child-pubkey/Bw/proto`,
+8. Bob queries [13/WAKU2-STORE](/spec/13) with `contentTopics` set to `["/waku/2/eth-dm/child-pubkey/Bw/proto"]`,
 9. When retrieving `Mw` Bob derives `bw` from `b`,
 10. Bob uses `bw` to decrypt message `Mw`, he learns `m` and `Aw`,
-11. Bob replies to Alice in the same manner, setting the `contentTopic` to `/waku/2/direct-message/eth-pubkey/Aw/proto`.
+11. Bob replies to Alice in the same manner, setting the `contentTopic` to `/waku/2/eth-dm/child-pubkey/Aw/proto`.
 
 ## Derivation
 
@@ -82,7 +82,7 @@ To satisfy design requirements 3 and 4, we are using the `contentTopic` as a low
 
 Using a prefix such as `direct-message/eth-pubkey` reduces possible conflicts with other use cases that would also use a key or 32 byte array.
 
-We could also consider adding a version to allow an evolution of the field and its usage, e.g. `/waku/2/direct-message/eth-pubkey/1/Aw/proto`
+We could also consider adding a version to allow an evolution of the field and its usage, e.g. `/waku/2/eth-dm/child-pubkey/1/Aw/proto`
 
 TODO: Point to spec recommending formatting of `contentTopic`, currently tracked in issue [#364](https://github.com/vacp2p/rfc/issues/364) [2].
 
