@@ -28,17 +28,17 @@ Here are the variables used in the protocol and their definition:
 
 The proposed protocol MUST adhere to the following design requirements:
 
-a. Alice knows Bob's Ethereum root HD public key `B`,
-b. Alice wants to send message `M` to Bob using waku,
-c. Bob SHOULD be able to get `M` using [13/WAKU2-STORE](/spec/13), when querying a store node that hosts `M`,
-d. Bob MUST recognize he is `M`'s recipient when relaying it via [11/WAKU2-RELAY](/spec/11),
-e. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it.
+1. Alice knows Bob's Ethereum root HD public key `B`,
+2. Alice wants to send message `M` to Bob using waku,
+3. Bob SHOULD be able to get `M` using [13/WAKU2-STORE](/spec/13), when querying a store node that hosts `M`,
+4. Bob MUST recognize he is `M`'s recipient when relaying it via [11/WAKU2-RELAY](/spec/11),
+5. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it.
 
 ### Out of scope
 
 At this stage, we acknowledge that:
 
-i. Because `Bw` is part of the message in clear,
+1. Because `Bw` is part of the message in clear,
 Alice can know how many messages from other parties Bob receive,
 and Carole can see that how many messages a recipient `Bw` is receiving (unlinkability is broken).
 
