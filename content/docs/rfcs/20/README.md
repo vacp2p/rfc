@@ -78,7 +78,7 @@ Because of that, Alice only includes `Aw` in `M'`.
 
 ## Message retrieval
 
-To satisfy (c) and (d), we are using the `contentTopic` as a low-computation way (for Bob) to retrieve messages.
+To satisfy design requirements 3 and 4, we are using the `contentTopic` as a low-computation method to retrieve messages.
 
 Using a prefix such as `direct-message/eth-pubkey` reduces possible conflicts with other use cases that would also use a key or 32 byte array.
 
