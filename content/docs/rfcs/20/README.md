@@ -47,7 +47,7 @@ and Carole can see that how many messages a recipient `Bw` is receiving (unlinka
 1. Alice MUST derive Bob's waku public Key `Bw` from `B`,
 2. Alice SHOULD derive her own waku public key `Aw` from `A`,
 3. Alice creates `M'` which MUST contain `M` and `Aw`, it MAY contain `A`,
-4. Alice encrypts `M'` using `Bw`, resulting in `m'`, TODO: define encryption method,
+4. Alice encrypts `M'` using `Bw`, resulting in `m'`,
 5. Alice creates waku message `Mw` with
    `payload` `m'` and
    `contentTopic` `/waku/2/direct-message/eth-pubkey/Bw/proto`,
@@ -64,6 +64,10 @@ and Carole can see that how many messages a recipient `Bw` is receiving (unlinka
 Public parent key (`B`) to public child key (`Bw`) derivation is only possible with non-hardened paths [\[1\]](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki).
 
 TODO: Investigate commonly used derivation path to decide on one.
+
+## Encryption
+
+TODO: Define encryption method to use.
 
 ## Reply
 
