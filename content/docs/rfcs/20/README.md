@@ -11,30 +11,30 @@ This specification explains the Ethereum Direct Message protocol
 which enables a peer to send a direct message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 
-# Send message only knowing recipient's Ethereum Public Key
+# Goal
 
-We assume that Alice sends a direct message to Bob.
+Alice wants to send an encrypted message to Bob, where only Bob can decrypt the message.
 
-## Variables
+# Variables
 
 Here are the variables used in the protocol and their definition:
 
-- `A` is Alice's Ethereum root HD public key,
-- `B` is Bob's Ethereum root HD public key,
+- `A` is Alice's Ethereum root HD public key (also named account, address),
+- `B` is Bob's Ethereum root HD public key (also named account, address),
 - `a` is the private key of `A`, and is only known by Alice,
 - `b` is the private key of `B`, and is only known by Bob.
 
-## Design Requirements
+# Design Requirements
 
 The proposed protocol MUST adhere to the following design requirements:
 
 1. Alice knows Bob's Ethereum root HD public key `B`,
-2. Alice wants to send message `M` to Bob using waku,
+2. Alice wants to send message `M` to Bob,
 3. Bob SHOULD be able to get `M` using [13/WAKU2-STORE](/spec/13), when querying a store node that hosts `M`,
 4. Bob MUST recognize he is `M`'s recipient when relaying it via [11/WAKU2-RELAY](/spec/11),
 5. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it.
 
-### Out of scope
+## Out of scope
 
 At this stage, we acknowledge that:
 
@@ -42,8 +42,7 @@ At this stage, we acknowledge that:
 Alice can know how many messages from other parties Bob receive,
 and Carole can see that how many messages a recipient `Bw` is receiving (unlinkability is broken).
 
-
-## Steps
+# Steps
 
 1. Alice MUST derive Bob's waku public Key `Bw` from `B`,
 2. Alice SHOULD derive her own waku public key `Aw` from `A`,
@@ -60,20 +59,20 @@ and Carole can see that how many messages a recipient `Bw` is receiving (unlinka
 10. Bob uses `bw` to decrypt message `Mw`, he learns `m` and `Aw`,
 11. Bob replies to Alice in the same manner, setting the `contentTopic` to `/waku/2/direct-message/eth-pubkey/Aw/proto`.
 
-### Derivation
+## Derivation
 
 Public parent key (`B`) to public child key (`Bw`) derivation is only possible with non-hardened paths [\[1\]](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki).
 
 TODO: Investigate commonly used derivation path to decide on one.
 
-### Reply
+## Reply
 
 To ascertain the fact that Alice receives Bob's reply, she could include connection details such as her peer id and multiaddress in the message.
 However, this leads to privacy concerns if she does not use an anonymizing network such as tor.
 
 Because of that, Alice only includes `Aw` in `M'`.
 
-### Message retrieval
+## Message retrieval
 
 To satisfy (c) and (d), we are using the `contentTopic` as a low-computation way (for Bob) to retrieve messages.
 
@@ -83,7 +82,7 @@ We could also consider adding a version to allow an evolution of the field and i
 
 TODO: Point to spec recommending formatting of `contentTopic`, currently tracked in issue [#364](https://github.com/vacp2p/rfc/issues/364) [2].
 
-## Payloads
+# Payloads
 
 ```protobuf
 syntax = "proto3";
