@@ -9,6 +9,7 @@ bookMenuLevels: 1
   - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
   - [18/WAKU2-SWAP]({{< relref "/docs/rfcs/18/README.md" >}})
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
+  - [20/ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
 
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
