@@ -2,7 +2,7 @@
 slug: 21
 title: 21/WAKU2-FAULT-TOLERANT-STORE
 name: Waku v2 Fault-Tolerant Store
-status: draft
+status: raw
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
 ---
