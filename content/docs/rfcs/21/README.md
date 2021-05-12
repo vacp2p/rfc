@@ -55,7 +55,7 @@ RPC call to query historical messages.
 If both `start_time` and `end_time` are omitted then no time-window filter takes place. 
 
 In order to count for nodes asynchrony, and assuming that nodes may be out of sync for at most 20 seconds, then querying nodes SHOULD add an offset of 20 seconds to their offline time window. 
-That is if the original window is [`s`,`e`] then the history query SHOULD be made for `[start_time: s - 20 sec, end_time: e + 20 sec]`.
+That is if the original window is [`l`,`r`] then the history query SHOULD be made for `[start_time: l - 20s, end_time: r + 20s]`.
 
 Note that `HistoryQuery` preserves `AND` operation among the queried attributes. 
 As such,  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages that satisfy the indicated  `pubsubtopic` AND `contentFilters` AND the time range [`start_time`, `end_time`]. 
