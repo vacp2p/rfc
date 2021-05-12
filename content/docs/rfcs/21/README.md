@@ -23,7 +23,7 @@ The main security consideration to take into account while using this method is 
 This will gradually result in the extraction of the node's activity pattern which can lead to inference attacks. 
 
 # Wire Specification
-We extend the [HistoryQuery](/spec/13#payloads) protobuf message with two fields of `StartTime` and `EndTime` to signify the time range to be queried. 
+We extend the [HistoryQuery](/spec/13#payloads) protobuf message with two fields of `startTime` and `endTime` to signify the time range to be queried. 
 
 ## Payloads
 
@@ -35,8 +35,8 @@ message HistoryQuery {
   string pubsubtopic = 2;
   repeated ContentFilter contentFilters = 3;
   PagingInfo pagingInfo = 4;
-  + double StartTime = 5;
-  + double EndTime = 6;
+  + double startTime = 5;
+  + double endTime = 6;
 }
 
 ```
@@ -44,17 +44,17 @@ message HistoryQuery {
 ### HistoryQuery
 
 RPC call to query historical messages.
-- `StartTime`: this field MAY be filled out to signify the starting point of the queried time window. 
+- `startTime`: this field MAY be filled out to signify the starting point of the queried time window. 
   This field holds the Unix epoch time.  
-  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages whose [`timestamp`](/spec/14#Payloads) is larger than or equal to the `StartTime`.
-- `EndTime` this field MAY be filled out to signify the ending point of the queried time window. 
+  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages whose [`timestamp`](/spec/14#Payloads) is larger than or equal to the `startTime`.
+- `endTime` this field MAY be filled out to signify the ending point of the queried time window. 
   This field holds the Unix epoch time. 
-  A time-based query is considered valid if its `EndTime` is larger than or equal to the `StartTime`. 
-  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages whose [`timestamp`](/spec/14#Payloads) is less than or equal to the `EndTime`.
+  A time-based query is considered valid if its `endTime` is larger than or equal to the `startTime`. 
+  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages whose [`timestamp`](/spec/14#Payloads) is less than or equal to the `endTime`.
 
-If both `StartTime` and `EndTime` are omitted then no time-window filter takes place. 
+If both `startTime` and `endTime` are omitted then no time-window filter takes place. 
 Note that `HistoryQuery` preserves `AND` operation among the queried attributes. 
-As such,  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages that satisfy the indicated  `pubsubtopic` AND `contentFilters` AND the time range [`StartTime`, `EndTime`]. 
+As such,  The `messages` field of the corresponding [`HistoryResponse`](/spec/13#HistoryResponse) MUST contain historical waku messages that satisfy the indicated  `pubsubtopic` AND `contentFilters` AND the time range [`startTime`, `endTime`]. 
 
 # Copyright
 
