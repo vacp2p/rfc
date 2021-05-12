@@ -54,7 +54,7 @@ RPC call to query historical messages.
 
 If both `start_time` and `end_time` are omitted then no time-window filter takes place. 
 
-In order to count for nodes asynchrony, and assuming that nodes may be out of sync for at most 20 seconds, then querying nodes SHOULD add an offset of 20 seconds to their offline time window. 
+In order to count for nodes asynchrony, and assuming that nodes may be out of sync for at most 20 seconds, the querying nodes SHOULD add an offset of 20 seconds to their offline time window. 
 That is if the original window is [`l`,`r`] then the history query SHOULD be made for `[start_time: l - 20s, end_time: r + 20s]`.
 
 Note that `HistoryQuery` preserves `AND` operation among the queried attributes. 
