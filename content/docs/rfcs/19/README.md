@@ -34,7 +34,7 @@ message PushResponse {
 
 message PushRPC {
     string request_id = 1;
-    PushRequest query = 2;
+    PushRequest request = 2;
     PushResponse response = 3;
 }
 ```
