@@ -19,20 +19,22 @@ Additionally, there sometimes is a need for confirmation that a message has been
 # Payloads
 
 ```protobuf
+syntax = "proto3";
+
 message PushRequest {
     string pubsub_topic = 1;
     WakuMessage message = 2;
 }
 
 message PushResponse {
-    boolean is_success = 1;
+    bool is_success = 1;
     // Error messages, etc
     string info = 2;
 }
 
 message PushRPC {
     string request_id = 1;
-    PushRequest query = 2;
+    PushRequest request = 2;
     PushResponse response = 3;
 }
 ```
