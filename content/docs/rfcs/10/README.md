@@ -274,7 +274,7 @@ Below you can find an overview of the specs that they implement as they relate t
 |[16/WAKU2-RPC](/spec/16)|✔|||
 |[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
 |[18/WAKU2-SWAP](/spec/18)|🚧|||
-|[19/WAKU2-LIGHTPUSH](/spec/19)| | |✔\**|✔\**|
+|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
 
 *js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
 **js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
