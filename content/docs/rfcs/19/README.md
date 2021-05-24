@@ -2,7 +2,7 @@
 slug: 19
 title: 19/WAKU2-LIGHTPUSH
 name: Waku v2 Light Push
-status: raw
+status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
 ---
@@ -11,10 +11,12 @@ contributors:
 
 # Motivation and goals
 
-Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network.
-Additionally, there sometimes is a need for confirmation that a message has been received "by the network".
+Light nodes with short connection windows and limited bandwidth wish to publish
+messages into the Waku network. Additionally, there is sometimes a need for
+confirmation that a message has been received "by the network" (here, at least
+one node).
 
-`19/LIGHTPUSH` is a request/reply protocol for this.
+`19/WAKU2-LIGHTPUSH` is a request/response protocol for this.
 
 # Payloads
 
@@ -41,16 +43,15 @@ message PushRPC {
 
 ## Message relaying
 
-Nodes that respond to `PushRequests` MUST relay this via `RELAY` protocol on the specified `pubsub_topic`.
+Nodes that respond to `PushRequests` MUST relay this via [11/WAKU2-RELAY](/spec/11) protocol on the specified `pubsub_topic`.
 If they are unable to do so for some reason, they SHOULD return an error code in `PushResponse`.
 
-## Notes
+## Security considerations
 
-<!--
-TODO: Check current message confirmation setup
--->
+Since this can introduce amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to extra precaution. This can be done by various forms of rate limiting, or by using [18/WAKU2-SWAP](/spec/18) to account for the service provided.
+
+Note that the above is currently not fully implemented.
 
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
