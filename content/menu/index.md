@@ -9,7 +9,7 @@ bookMenuLevels: 1
   - [18/WAKU2-SWAP]({{< relref "/docs/rfcs/18/README.md" >}})
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
   - [20/ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
-  - [21/WAKU2-FAULT-TOLERANT-STORE]({{< relref "/docs/rfcs/21/README.md" >}})
+  - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
 
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
