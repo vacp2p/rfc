@@ -2,7 +2,7 @@
 slug: 15
 title: 15/WAKU-BRIDGE
 name: Waku Bridge
-status: raw
+status: draft
 editor: Hanno Cornelius <hanno@status.im>
 ---
 
