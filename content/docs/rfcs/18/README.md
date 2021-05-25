@@ -58,7 +58,9 @@ This can be complemented with node selection mechanisms.
 
 # SWAP Accounting
 
-See [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf) section 3.2. on Peer-to-peer accounting etc., for more context and details.
+See [Book of Swarm](https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth) section 3.2. on Peer-to-peer accounting etc., for more context and details.
+
+<!-- TODO Find new link for book of swarm -->
 
 This approach is based on communicating payment thresholds and sending cheques
 as indications of later payments. The first part is done with a handshake, the
@@ -135,7 +137,7 @@ are better thought of as a form of Karma.
 
 3. [Axelrod - Evolution of Cooperation (book)](https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation)
 
-4. [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf)
+4. [Book of Swarm](https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth/)
 
 # Changelog
 
