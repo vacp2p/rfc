@@ -78,7 +78,7 @@ See [Book of Swarm](https://web.archive.org/web/20210126130038/https://gateway.e
 
 Nodes perform their own accounting for each relevant peer based on some "volume"/bandwidth metric. For now we take this to mean the number of `WakuMessage`s exchanged.
 
-Additionally, a price is attached to each unit. Currently, this is is simple a "karma counter" and equal to 1 per message.
+Additionally, a price is attached to each unit. Currently, this is simply a "karma counter" and equal to 1 per message.
 
 Each accounting balance SHOULD be w.r.t. to a given protocol it is accounting for.
 
@@ -185,4 +185,3 @@ General TODOs:
 - Specify chequeboo
 
 -->
-
