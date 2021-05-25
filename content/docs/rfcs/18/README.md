@@ -128,7 +128,7 @@ To incrementally integrate this into Waku v2, we have divided up the roll-out in
 - Hard Test - blockchain integration and deployed to public testnet (Goerli, Optimism testnet or similar)
 - Hard Main - deployed to a public mainnet
 
-An implementation MAY support and of these phases.
+An implementation MAY support any of these phases.
 
 ## Soft phase
 
