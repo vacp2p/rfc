@@ -82,11 +82,10 @@ This means you are likely to have to run your own full nodes which may make your
 
 The other type of topic that exists in Waku v2 is content topics.
 This is used for content based filtering.
-This is specified in the [14/WAKU2-MESSAGE spec](/spec/14).
+See [14/WAKU2-MESSAGE spec](/spec/14) for where this is specified.
 Note that this doesn't impact routing of messages between relaying nodes,
 but it does impact how request/reply protocols such as 
-[12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
-[13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) are used.
+[12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) and [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) are used.
 
 This is especially useful for nodes that have limited bandwidth,
 and only want to pull down messages that match this filter.
@@ -110,7 +109,7 @@ All messages are sent to all other nodes.
 This means that we are implicitly using the same PubSub topic that would be something like:
 
 ```
-/waku/1/default-waku/rlp/
+/waku/1/default-waku/rlp
 ```
 
 Topics in Waku v1 correspond to Content Topics in Waku v2.
