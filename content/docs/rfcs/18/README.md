@@ -56,29 +56,31 @@ A tit-for-tat strategy basically means:
 
 This can be complemented with node selection mechanisms.
 
-# SWAP Accounting
+# SWAP protocol overview
 
-See [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf) section 3.2. on Peer-to-peer accounting etc., for more context and details.
+We use SWAP for accounting and settlement in conjunction with other request/reply protocols in Waku v2,
+where accounting is done in a pairwise manner.
+It is an acronym with several possible meanings (as defined in the Book
+of Swarm), for example:
 
-This approach is based on communicating payment thresholds and sending cheques
-as indications of later payments. The first part is done with a handshake, the
-second done once payment threshold is hit.
+- service wanted and provided
+- settle with automated payments
+- send waiver as payment
+- start without a penny
 
-TODO: Illustrate payment and disconnection thresholds
+This approach is based on communicating payment thresholds and sending cheques as indications of later payments.
+Communicating payment thresholds MAY be done out-of-band or as part of the handshake.
+Sending cheques is done once payment threshold is hit.
 
-TODO: Elaborate on how accounting works with amount in the context of e.g. store
-
-TODO: Illustrate flow
-
-A cheque is best thought of as a promise to pay at a later date.
-
-TODO Specify chequebook
+See [Book of Swarm](https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth) section 3.2. on Peer-to-peer accounting etc., for more context and details.
 
 ## Accounting
 
 Nodes perform their own accounting for each relevant peer based on some "volume"/bandwidth metric. For now we take this to mean the number of `WakuMessage`s exchanged.
 
-Additionally, a price is attached to each unit. For now, this is is simple a "karma counter" and equal to 1 per message.
+Additionally, a price is attached to each unit. Currently, this is simply a "karma counter" and equal to 1 per message.
+
+Each accounting balance SHOULD be w.r.t. to a given protocol it is accounting for.
 
 NOTE: This may later be complemented with other metrics, either as part of SWAP or more likely outside of it. For example, online time can be communicated and attested to as a form of enhanced quality of service to inform peer selection.
 
@@ -89,20 +91,18 @@ Assuming we have two store nodes, one operating mostly as a client (A) and anoth
 1. Node A performs a handshake with B node. B node responds and both nodes communicate their payment threshold.
 2. Node A and B creates an accounting entry for the other peer, keep track of peer and current balance.
 3. Node A issues a `HistoryRequest`, and B responds with a `HistoryResponse`. Based on the number of WakuMessages in the response, both nodes update their accounting records.
-4. When payment threshold is reached, Node A sends over a cheque to reach a neutral balance. Settlement of this is currently out of scope, but would occur through a SWAP contract (to be specified).
-5. If disconnect threshold is reached, Node B disconnects Node A.
+4. When payment threshold is reached, Node A sends over a cheque to reach a neutral balance. Settlement of this is currently out of scope, but would occur through a SWAP contract (to be specified). (mock and hard phase).
+5. If disconnect threshold is reached, Node B disconnects Node A (mock and hard phase).
 
-## Policy
+Note that not all of these steps are mandatory in initial stages, see below for more details. For example, the payment threshold MAY initially be set out of bounds, and policy is only activated in the mock and hard phase.
 
-- If a node reaches a disconnect threshold, which MUST be outside the payment threshold, it SHOULD disconnect the other peer. For the PoC, this behavior can be mocked.
-- If a node is within payment balance, the other node SHOULD stay connected to it.
-- If a node receives a valid Cheque it SHOULD update its internal accounting records.
-- If any node behaves badly, the other node is free to disconnect and pick another node. Peer rating is out of scope of this specification.
+## Protobufs
 
-## Protobuf
+We use protobuf to specify the handshake and signature. This current protobuf is a work in progress. This is needed for mock and hard phase.
+
+A handshake gives initial information about payment thresholds and possibly other information. A cheque is best thought of as a promise to pay at a later date.
 
 ```
-// TODO What information to include here? For now "payment" threshold
 message Handshake {
     bytes payment_threshold = 1;
 }
@@ -119,14 +119,46 @@ message Cheque {
 }
 ```
 
-## Enhancements
+# Incremental integration and roll-out
 
-1. Settlements. At a later stage, these cheques can be redeemed. For now they
-are better thought of as a form of Karma.
+To incrementally integrate this into Waku v2, we have divided up the roll-out into three phases:
 
-2. More information to make a decision. E.g. incorporate QoS metrics such as
-   online time to inform peer selection (slightly orthogonal to this).
-   
+- Soft - accounting only
+- Mock - send mock cheques and take word for it
+- Hard Test - blockchain integration and deployed to public testnet (Goerli, Optimism testnet or similar)
+- Hard Main - deployed to a public mainnet
+
+An implementation MAY support any of these phases.
+
+## Soft phase
+
+In the soft phase only accounting is performed, without consequence for the
+peers. No disconnect or sending of cheques is performed at this tage.
+
+SWAP protocol is performed in conjunction with another request-reply protocol to account for its usage.
+It SHOULD be done for [13/WAKU2-STORE](/spec/13/)
+and it MAY be done for other request/reply protocols.
+
+A client SHOULD log accounting state per peer
+and SHOULD indicate when a peer is out of bounds (either of its thresholds met).
+
+## Mock phase
+
+In the mock phase, we send mock cheques and send cheques/disconnect peers as appropriate.
+
+- If a node reaches a disconnect threshold, which MUST be outside the payment threshold, it SHOULD disconnect the other peer.
+- If a node is within payment balance, the other node SHOULD stay connected to it.
+- If a node receives a valid Cheque it SHOULD update its internal accounting records.
+- If any node behaves badly, the other node is free to disconnect and pick another node.
+  - Peer rating is out of scope of this specification.
+
+## Hard phase
+
+In the hard phase, in addition to sending cheques and activating policy, this is
+done with blockchain integration on a public testnet. More details TBD.
+
+This also includes settlements where cheques can be redeemed.
+
 ## References
 
 1. [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
@@ -135,12 +167,21 @@ are better thought of as a form of Karma.
 
 3. [Axelrod - Evolution of Cooperation (book)](https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation)
 
-4. [Book of Swarm](https://swarm-gateways.net/bzz:/latest.bookofswarm.eth/the-book-of-swarm.pdf)
-
-# Changelog
-
-TBD.
+4. [Book of Swarm](https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth/)
 
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+<!--
+
+General TODOs:
+
+- Find new link for book of swarm
+- Illustrate payment and disconnection thresholds (mscgen not great for this?)
+- Elaborate on how accounting works with amount in the context of e.g. store
+- Illustrate flow
+- Specify chequeboo
+
+-->
