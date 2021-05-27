@@ -128,7 +128,7 @@ This creates a direct mapping between the two protocols.
 For example:
 
 ```
-/waku/v1/0x007f80ff/rlp
+/waku/1/0x007f80ff/rlp
 ```
 
 # Copyright
