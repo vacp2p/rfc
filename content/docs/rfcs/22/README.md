@@ -9,7 +9,7 @@ contributors:
    - Hanno Cornelius <hanno@status.im>
 ---
 
-**Content Topic**: `dingpu`.
+**Content Topic**: `/waku/2/huilong/proto`.
 
 This specification explains a toy chat example using Waku v2.
 This protocol is mainly used to:
@@ -29,7 +29,7 @@ Note that this is completely separate from the protocol the Status app is using 
 The chat protocol enables sending and receiving messages in a unique chat room.
 The messages SHOULD NOT be encrypted.
 
-The `contentTopic` MUST be set to `dingpu`.
+The `contentTopic` MUST be set to `/waku/2/huilong/proto`.
 
 # Payloads
 
