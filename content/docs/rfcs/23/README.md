@@ -25,7 +25,7 @@ This indicates that
 1) It relates to the Waku problem domain
 2) version is 2
 3) name indicates what is being exchanged, which in this case is WakuMessages over a single topic and
-4) that the data in PubSub field is protobuf (unlike Eth2 where it is `ssz_snappy`) as determined by WakuMessage.
+4) that the [data field](/spec/11/#protobuf-definition) in PubSub is serialized/encoded as protobuf as determined by WakuMessage.
 
 ### Pubsub topic format
 
@@ -50,7 +50,7 @@ If you use another PubSub topic, be aware that metadata protection might be weak
 and other nodes in the network might not subscribe or store messages for your given Pubsub topic.
 This means you are likely to have to run your own full nodes which may make your application less robust.
 
-Below we outline some examples where this might apply.
+Below we outline some scenarios where this might apply.
 
 ### Separation of two applications example
 
@@ -95,17 +95,31 @@ but it does impact how request/reply protocols such as
 This is especially useful for nodes that have limited bandwidth,
 and only want to pull down messages that match this filter.
 
-Since all messages are relayed regardless of content topic, you MAY use any content topic you wish without impacting how messages are relayed.
+Since all messages are relayed using the relay protocol regardless of content topic,
+you MAY use any content topic you wish without impacting how messages are relayed.
 
 ### Content topic format
 
-The format of content topics is as follows:
+The format for content topics is as follows:
 
-`/waku/2/ContentTopic/Encoding`
+`/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 
-The name of ContentTopic is application-specific. As an example, here's the content topic used for an upcoming testnet:
+The name of a content topic is application-specific.
+As an example, here's the content topic used for an upcoming testnet:
 
 `/waku/2/huilong/proto`
+
+<!-- TODO Consider if this should be /toychat/2/huilong/proto -->
+
+## Using content topics for your application
+
+Make sure you have a unique application-name to avoid conflicting issues with other protocols.
+
+If you have different versions of your protocol, this can be specified in the version field.
+
+The name of the content topic is up to your application and depends on the problem domain, how you want to separate content, what the bandwidth and privacy guarantees are, etc.
+
+The encoding field indicates the serialization/encoding scheme for the [WakuMessage payload](/spec/14/#payloads) field.
 
 ## Differences with Waku v1
 
@@ -123,7 +137,7 @@ Topics in Waku v1 correspond to Content Topics in Waku v2.
 
 To bridge Waku v1 and Waku v2 we have a [15/WAKU-BRIDGE](/spec/15).
 For mapping Waku v1 topics to Waku v2 content topics,
-the following structure is used:
+the following structure for the content topic is used:
 
 ```
 /waku/v1/<4bytes-waku-v1-topic>/rlp
