@@ -113,9 +113,7 @@ The format for content topics is as follows:
 The name of a content topic is application-specific.
 As an example, here's the content topic used for an upcoming testnet:
 
-`/waku/2/huilong/proto`
-
-<!-- TODO Consider if this should be /toychat/2/huilong/proto -->
+`/toychat/2/huilong/proto`
 
 ## Using content topics for your application
 
