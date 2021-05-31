@@ -2,7 +2,7 @@
 slug: 18
 title: 18/WAKU2-SWAP
 name: Waku SWAP Accounting
-status: raw
+status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributor: Ebube Ud <ebube@status.im>
 ---
