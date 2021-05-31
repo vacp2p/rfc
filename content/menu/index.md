@@ -9,7 +9,7 @@ bookMenuLevels: 1
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
   - [20/ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
-
+  - [22/TOY-CHAT]({{< relref "/docs/rfcs/22/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
