@@ -21,6 +21,7 @@ bookMenuLevels: 1
   - [14/WAKU2-MESSAGE]({{< relref "/docs/rfcs/14/README.md" >}})
   - [15/WAKU2-BRIDGE]({{< relref "/docs/rfcs/15/README.md" >}})
   - [16/WAKU2-RPC]({{< relref "/docs/rfcs/16/README.md" >}})
+  - [23/WAKU2-TOPICS]({{< relref "/docs/rfcs/23/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
