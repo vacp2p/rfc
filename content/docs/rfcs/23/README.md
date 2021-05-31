@@ -27,12 +27,23 @@ This indicates that
 3) name indicates what is being exchanged, which in this case is WakuMessages over a single topic and
 4) that the data in PubSub field is protobuf (unlike Eth2 where it is `ssz_snappy`) as determined by WakuMessage.
 
+### Default PubSub topic
+
 The default PubSub topic SHOULD be used for all protocols.
 However, in certain situations other topics MAY be used.
 
+Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
+See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
+
+If you use another PubSub topic, be aware that metadata protection might be weakened,
+and other nodes in the network might not subscribe or store messages for your given Pubsub topic.
+This means you are likely to have to run your own full nodes which may make your application less robust.
+
+Below we outline some examples where this might apply.
+
 ### Pubsub topic format
 
-PubSub topics SHOULD follow the folloing structure:
+PubSub topics SHOULD follow the following structure:
 
 `/waku/2/TopicName/Encoding`
 
@@ -54,7 +65,7 @@ This indicates that they are WakuMessages but for different domains completely.
 
 ### Topic sharding example
 
-Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic. Here's a sketch for what this might look like:
+Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic. Here's an example of what this might look like:
 
 ```
 waku/2/waku-9_shard-0/proto
@@ -69,14 +80,6 @@ This indicates explicitly that the network traffic has been partitioned into 10 
 Not yet implemented, but would be easy to add with:
 
 `/waku/2/default-waku/proto_snappy`
-
-### Why use a single PubSub topic by default?
-
-Using a single PubSub topic ensures a connected network, as well some degree of metadata protection. See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
-
-If you use another PubSub topic, be aware that metadata protection might be weakened,
-and other nodes in the network might not subscribe or store messages for your given Pubsub topic.
-This means you are likely to have to run your own full nodes which may make your application less robust.
 
 ## Content topics
 
