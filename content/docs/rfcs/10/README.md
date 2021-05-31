@@ -56,9 +56,8 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 1. `/vac/waku/relay/2.0.0-beta2`
 2. `/vac/waku/store/2.0.0-beta3`
 3. `/vac/waku/filter/2.0.0-beta1`
-4. `/vac/waku/swap/2.0.0-alpha1`
+4. `/vac/waku/swap/2.0.0-beta1`
 5. `/vac/waku/lightpush/2.0.0-alpha1`
-
 
 These protocols and their semantics are elaborated on in their own specs.
 
@@ -109,7 +108,7 @@ such as low bandwidth or being mostly offline.
 
 ### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-beta1`
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta3`
 
 See [13/WAKU2-STORE](/spec/13) spec for more details.
 
