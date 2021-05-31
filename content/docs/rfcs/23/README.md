@@ -27,9 +27,20 @@ This indicates that
 3) name indicates what is being exchanged, which in this case is WakuMessages over a single topic and
 4) that the data in PubSub field is protobuf (unlike Eth2 where it is `ssz_snappy`) as determined by WakuMessage.
 
+### Pubsub topic format
+
+PubSub topics SHOULD follow the following structure:
+
+`/waku/2/{topic-name}/{encoding}`
+
+This namespaced structure makes things like compatibility and discoverability and automatic handling of new topics easier.
+For example, if the encoding of the payload is changed, compression is introduced, etc.
+
+For more on this format of PubSub topics, see [Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages) where inspiration for this format was taken from.
+
 ### Default PubSub topic
 
-The default PubSub topic SHOULD be used for all protocols.
+Unless there's a good reason, the default PubSub topic SHOULD be used for all protocols.
 However, in certain situations other topics MAY be used.
 
 Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
@@ -41,20 +52,10 @@ This means you are likely to have to run your own full nodes which may make your
 
 Below we outline some examples where this might apply.
 
-### Pubsub topic format
-
-PubSub topics SHOULD follow the following structure:
-
-`/waku/2/TopicName/Encoding`
-
-This namespaced structure makes things like compatibility and discoverability and automatic handling of new topics easier.
-For example, if the encoding of the payload is changed, compression is introduced, etc.
-
-For more on this format of PubSub topics, see [Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages) where inspiration for this format was taken from.
-
 ### Separation of two applications example
 
-Let's say we have some M2M topic that is heavy and experience a lot of heavy traffic and a Status Network one. This can be segregated into:
+Let's say we have two different topics that are both experience heavy traffic but are completely separate in terms of problem domain and infrastructure.
+This can be segregated into:
 
 ```
 /waku/2/waku-status/proto
@@ -65,7 +66,8 @@ This indicates that they are WakuMessages but for different domains completely.
 
 ### Topic sharding example
 
-Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic. Here's an example of what this might look like:
+Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic.
+Here's an example of what this might look like:
 
 ```
 waku/2/waku-9_shard-0/proto
