@@ -26,7 +26,8 @@ Note that this is completely separate from the protocol the Status app is using 
 
 # Design
 
-The chat protocol enables sending and receiving messages in a unique chat room.
+The chat protocol enables sending and receiving messages in a chat room.
+There is currently only one chat room, which is tied to the content topic.
 The messages SHOULD NOT be encrypted.
 
 The `contentTopic` MUST be set to `/waku/2/huilong/proto`.
