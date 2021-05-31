@@ -24,8 +24,8 @@ This indicates that
 
 1) It relates to the Waku problem domain
 2) version is 2
-3) name indicates what is being exchanged, which in this case is WakuMessages over a single topic and
-4) that the [data field](/spec/11/#protobuf-definition) in PubSub is serialized/encoded as protobuf as determined by WakuMessage.
+3) `default-waku` indicates that it is the default topic for exchanging WakuMessages
+4) that the [data field](/spec/11/#protobuf-definition) in PubSub is serialized/encoded as protobuf as determined by WakuMessage
 
 ### Pubsub topic format
 
@@ -58,8 +58,8 @@ Let's say we have two different topics that are both experience heavy traffic bu
 This can be segregated into:
 
 ```
-/waku/2/waku-status/proto
-/waku/2/waku-walletconnect/proto
+/waku/2/status/proto
+/waku/2/walletconnect/proto
 ```
 
 This indicates that they are WakuMessages but for different domains completely.
