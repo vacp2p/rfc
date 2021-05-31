@@ -7,16 +7,17 @@ editor: Oskar Thoren <oskar@status.im>
 contributors:
 ---
 
-This document outlines recommended usage of topics in Waku v2. In [10/WAKU2 spec](/spec/10) there are two types of topics:
+This document outlines recommended usage of topics in Waku v2.
+In [10/WAKU2 spec](/spec/10) there are two types of topics:
 
-- Pubsub topics, used for routing
+- PubSub topics, used for routing
 - Content topics, used for content-based filtering
 
-## Pubsub topics
+## PubSub topics
 
-Pubsub topics are used for routing of mesages, see [11/WAKU2-RELAY](/spec/11) spec for more details of how this routing works.
+PubSub topics are used for routing of messages, see [11/WAKU2-RELAY](/spec/11) spec for more details of how this routing works.
 
-As written in [10/WAKU2 spec](/spec/10) there is a default Pubsub topic:
+As written in [10/WAKU2 spec](/spec/10) there is a default PubSub topic:
 
 `/waku/2/default-waku/proto`
 
@@ -27,7 +28,7 @@ This indicates that
 3) `default-waku` indicates that it is the default topic for exchanging WakuMessages
 4) that the [data field](/spec/11/#protobuf-definition) in PubSub is serialized/encoded as protobuf as determined by WakuMessage
 
-### Pubsub topic format
+### PubSub topic format
 
 PubSub topics SHOULD follow the following structure:
 
@@ -46,8 +47,13 @@ However, in certain situations other topics MAY be used.
 Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
 See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
 
-If you use another PubSub topic, be aware that metadata protection might be weakened,
-and other nodes in the network might not subscribe or store messages for your given Pubsub topic.
+If you use another PubSub topic, be aware that:
+
+- Metadata protection might be weakened
+- Nodes subscribing to other topics might not be connected to the rest of the network
+- Other nodes in the network might not subscribe and relay on your given PubSub topic
+- Store nodes might not store messages for your given PubSub topic
+
 This means you are likely to have to run your own full nodes which may make your application less robust.
 
 Below we outline some scenarios where this might apply.
@@ -85,7 +91,7 @@ Not yet implemented, but would be easy to add with:
 
 ## Content topics
 
-The other type of topic that exists in Waku v2 is content topics.
+The other type of topic that exists in Waku v2 is a content topic.
 This is used for content based filtering.
 See [14/WAKU2-MESSAGE spec](/spec/14) for where this is specified.
 Note that this doesn't impact routing of messages between relaying nodes,
@@ -93,7 +99,7 @@ but it does impact how request/reply protocols such as
 [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) and [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) are used.
 
 This is especially useful for nodes that have limited bandwidth,
-and only want to pull down messages that match this filter.
+and only want to pull down messages that match this given content topic.
 
 Since all messages are relayed using the relay protocol regardless of content topic,
 you MAY use any content topic you wish without impacting how messages are relayed.
