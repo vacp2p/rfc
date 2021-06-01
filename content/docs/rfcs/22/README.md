@@ -1,7 +1,7 @@
 ---
 slug: 22
 title: 22/TOY-CHAT
-name: Waku v2 Chat
+name: Waku v2 Toy Chat
 status: raw
 category: application
 editor: Franck Royer <franck@status.im>
