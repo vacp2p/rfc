@@ -57,7 +57,7 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 2. `/vac/waku/store/2.0.0-beta3`
 3. `/vac/waku/filter/2.0.0-beta1`
 4. `/vac/waku/swap/2.0.0-beta1`
-5. `/vac/waku/lightpush/2.0.0-alpha1`
+5. `/vac/waku/lightpush/2.0.0-beta1`
 
 These protocols and their semantics are elaborated on in their own specs.
 
