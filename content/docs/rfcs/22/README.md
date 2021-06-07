@@ -9,7 +9,7 @@ contributors:
    - Hanno Cornelius <hanno@status.im>
 ---
 
-**Content Topic**: `/waku/2/huilong/proto`.
+**Content Topic**: `/toy-chat/2/huilong/proto`.
 
 This specification explains a toy chat example using Waku v2.
 This protocol is mainly used to:
@@ -30,7 +30,7 @@ The chat protocol enables sending and receiving messages in a chat room.
 There is currently only one chat room, which is tied to the content topic.
 The messages SHOULD NOT be encrypted.
 
-The `contentTopic` MUST be set to `/waku/2/huilong/proto`.
+The `contentTopic` MUST be set to `/toy-chat/2/huilong/proto`.
 
 # Payloads
 
