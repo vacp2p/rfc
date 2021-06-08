@@ -142,6 +142,7 @@ Where possible editors and contributors are encouraged to:
 * Refer to and build on existing work when possible, especially IETF specifications.
 * Contribute to existing specifications rather than reinvent their own.
 * Use collaborative branching and merging as a tool for experimentation.
+* Use Semantic Line Breaks: https://sembr.org/.
 
 ## Appendix A. Color Coding
 
