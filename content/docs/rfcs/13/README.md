@@ -3,6 +3,7 @@ slug: 13
 title: 13/WAKU2-STORE
 name: Waku v2 Store
 status: draft
+category: core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
