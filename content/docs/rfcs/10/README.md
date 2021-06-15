@@ -6,6 +6,7 @@ status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
+  - Hanno Cornelius <hanno@status.im>
 ---
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices.
