@@ -3,7 +3,6 @@ slug: 2
 title: 2/MVDS
 name: Minimum Viable Data Synchronization
 status: stable
-category: core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>

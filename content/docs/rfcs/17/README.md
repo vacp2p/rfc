@@ -3,7 +3,7 @@ slug: 17
 title: 17/WAKU-RLN
 name: Waku v2 RLN Relay
 status: raw
-category: core
+tags: core
 editor: Sanaz Taheri <sanaz@status.im>
 ---
 
