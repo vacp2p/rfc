@@ -6,6 +6,7 @@ status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
+  - Hanno Cornelius <hanno@status.im>
 ---
 
 Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices.
@@ -60,6 +61,14 @@ The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) a
 5. `/vac/waku/lightpush/2.0.0-beta1`
 
 These protocols and their semantics are elaborated on in their own specs.
+
+In addition, Waku v2 MAY make use of [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping) with protocol id
+
+```
+/ipfs/ping/1.0.0
+```
+
+for liveness checks between peers, or to keep peer-to-peer connections alive.
 
 For the actual content being passed around, see the [7/WAKU-DATA](/spec/7) spec.
 
@@ -293,6 +302,11 @@ To get compatibility with Waku v1:
 - [7/WAKU-DATA](/spec/7)
 - [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
 
+For an interoperable keep-alive mechanism:
+
+- [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
+with periodic pings to connected peers
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -328,3 +342,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 14. [14/WAKU2-RLNRELAY spec](/spec/17)
 
 15. [18/WAKU2-SWAP spec](/spec/18)
+
+16. [Ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
