@@ -3,7 +3,7 @@ slug: 11
 title: 11/WAKU2-RELAY
 name: Waku v2 Relay
 status: draft
-category: core
+tags: waku-core
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
   - Oskar Thorén <oskar@status.im>
