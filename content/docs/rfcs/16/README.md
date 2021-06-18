@@ -3,7 +3,7 @@ slug: 16
 title: 16/WAKU2-RPC
 name: Waku v2 RPC API
 status: draft
-category: core
+tags: waku-core
 editor: Hanno Cornelius <hanno@status.im>
 ---
 
