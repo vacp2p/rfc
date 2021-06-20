@@ -168,4 +168,4 @@ to specification metadata.
 | **status**       | status               | string | draft               |
 | **category**     | category             | string | application         |
 | **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im> |
-| **contributors** | contributors         | list   | - Dean Eigenmann <dean@status.im><br> - Andrea Maria Piana <andreap@status.im><br> - Oskar Thorén <oskar@status.im> |
+| **contributors** | contributors         | list   | - Pieter Hintjens <ph@imatix.com><br> - André Rebentisch <andre@openstandards.de><br> - Alberto Barrionuevo <abarrio@opentia.es><br> - Chris Puttick <chris.puttick@thehumanjourney.net><br> - Yurii Rashkovskii <yrashk@gmail.com> |
