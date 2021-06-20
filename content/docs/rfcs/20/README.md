@@ -3,7 +3,7 @@ slug: 20
 title: 20/ETH-DM
 name: Ethereum Direct Message
 status: raw
-category: application
+tags: waku-application
 editor: Franck Royer <franck@status.im>
 contributors:
 ---
