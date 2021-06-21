@@ -37,6 +37,7 @@ The proposed protocol MUST adhere to the following design requirements:
 1. Bob is willing to participate to Eth-DM, and publishes `B'`, 
 1. Alice wants to send message `M` to Bob,
 1. Bob SHOULD be able to get `M` using [10/WAKU2](/spec/13),
+1. Participants only have access to their Ethereum Wallet via the Web3 API,
 1. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it,
 1. ECDSA Elliptic curve cryptography is used,
 1. [eth-crypto](https://www.npmjs.com/package/eth-crypto),
