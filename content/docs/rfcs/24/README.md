@@ -8,7 +8,7 @@ contributors:
 ---
 
 `24/WAKU2-DNS-DISCOVERY` specifies a scheme to implement [`libp2p`](https://libp2p.io/) peer discovery via DNS for Waku v2.
-The generalised purpose is to retrieve an arbitrarily long, authenticated, updateable list of [`libp2p`  peers](https://docs.libp2p.io/concepts/peer-id/) to bootstrap connection to a `libp2p` network.
+The generalised purpose is to retrieve an arbitrarily long, authenticated, updateable list of [`libp2p` peers](https://docs.libp2p.io/concepts/peer-id/) to bootstrap connection to a `libp2p` network.
 Since [`10/WAKU2`](https://rfc.vac.dev/spec/10/) currently specifies use of [`libp2p` peer identities](https://docs.libp2p.io/concepts/peer-id/),
 this method is suitable for a new Waku v2 node to discover other Waku v2 nodes to connect to.
 
