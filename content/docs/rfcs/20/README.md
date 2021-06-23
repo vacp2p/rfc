@@ -16,6 +16,10 @@ This specification explains the Ethereum Direct Message protocol
 which enables a peer to send a direct message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 
+The main purpose of this specification is to demonstrate how Waku v2 can be used for direct messaging purposes.
+In the current state, the protocol has privacy and features [limitations](#limitations),
+we hope this can be an inspiration for developers wishing to build on top of Waku v2.
+
 # Goal
 
 Alice wants to send an encrypted message to Bob, where only Bob can decrypt the message.
@@ -46,8 +50,12 @@ The proposed protocol MUST adhere to the following design requirements:
 
 ## Limitations
 
-At this stage, we acknowledge that Bob's Ethereum Address is present in clear in Direct Messages,
+Bob's Ethereum Address is present in clear in Direct Messages,
 meaning that anyone who is monitoring the Waku network know how many messages Bob receives.
+
+Alice's details are not included in the message's structure,
+meaning that there is no programmatic way for Bob to reply to Alice
+or verify her identity.
 
 # The protocol
 
