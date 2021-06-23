@@ -8,106 +8,153 @@ editor: Franck Royer <franck@status.im>
 contributors:
 ---
 
+**Content Topics**:
+
+- Public Key Broadcast: `/eth-dm/1/public-key/json`,
+- Direct Message: `/eth-dm/1/direct-message/json`.
+
 This specification explains the Ethereum Direct Message protocol
 which enables a peer to send a direct message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 
+The main purpose of this specification is to demonstrate how Waku v2 can be used for direct messaging purposes.
+In the current state, the protocol has privacy and features [limitations](#limitations),
+we hope this can be an inspiration for developers wishing to build on top of Waku v2.
+
 # Goal
 
 Alice wants to send an encrypted message to Bob, where only Bob can decrypt the message.
+Alice only knows Bob's Ethereum Address.
 
 # Variables
 
 Here are the variables used in the protocol and their definition:
 
-- `A` is Alice's Ethereum root HD public key (also named account, address),
-- `B` is Bob's Ethereum root HD public key (also named account, address),
-- `a` is the private key of `A`, and is only known by Alice,
+- `B` is Bob's Ethereum address (or account),
 - `b` is the private key of `B`, and is only known by Bob.
+- `B'` is Bob's Eth-DM Public Key, which has `b'` as private key.
 
 # Design Requirements
 
 The proposed protocol MUST adhere to the following design requirements:
 
-1. Alice knows Bob's Ethereum root HD public key `B`,
-2. Alice wants to send message `M` to Bob,
-3. Bob SHOULD be able to get `M` using [13/WAKU2-STORE](/spec/13), when querying a store node that hosts `M`,
-4. Bob MUST recognize he is `M`'s recipient when relaying it via [11/WAKU2-RELAY](/spec/11),
-5. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it.
+1. Alice knows Bob's Ethereum address, 
+1. Bob is willing to participate to Eth-DM, and publishes `B'`, 
+1. Alice wants to send message `M` to Bob,
+1. Bob SHOULD be able to get `M` using [10/WAKU2](/spec/13),
+1. Participants only have access to their Ethereum Wallet via the Web3 API,
+1. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it,
+1. ECDSA Elliptic curve cryptography is used,
+1. [eth-crypto](https://www.npmjs.com/package/eth-crypto),
+   which uses [eccrypto](https://www.npmjs.com/package/eccrypto),
+   is used for encryption and decryption purposes.
 
-## Out of scope
+## Limitations
 
-At this stage, we acknowledge that:
+Bob's Ethereum Address is present in clear in Direct Messages,
+meaning that anyone who is monitoring the Waku network know how many messages Bob receives.
 
-1. Because `Bw` is part of the message in clear,
-Alice can know how many messages from other parties Bob receive,
-and Carole can see that how many messages a recipient `Bw` is receiving (unlinkability is broken).
+Alice's details are not included in the message's structure,
+meaning that there is no programmatic way for Bob to reply to Alice
+or verify her identity.
 
-# Steps
+# The protocol
 
-1. Alice MUST derive Bob's waku public Key `Bw` from `B`,
-2. Alice SHOULD derive her own waku public key `Aw` from `A`,
-3. Alice creates `M'` which MUST contain `M` and `Aw`, it MAY contain `A`,
-4. Alice encrypts `M'` using `Bw`, resulting in `m'`,
-5. Alice creates waku message `Mw` with
-   `payload` `m'` and
-   `contentTopic` `/waku/2/eth-dm/child-pubkey/Bw/proto`,
-   with `Bw` in hex format (`0xAb1..`),
-6. Alice publishes `Mw` via [11/WAKU2-RELAY](/spec/11),
-7. Bob captures received messages via [11/WAKU2-RELAY](/spec/11) that have `contentTopic` `/waku/2/eth-dm/child-pubkey/Bw/proto`,
-8. Bob queries [13/WAKU2-STORE](/spec/13) with `contentTopics` set to `["/waku/2/eth-dm/child-pubkey/Bw/proto"]`,
-9. When retrieving `Mw` Bob derives `bw` from `b`,
-10. Bob uses `bw` to decrypt message `Mw`, he learns `m` and `Aw`,
-11. Bob replies to Alice in the same manner, setting the `contentTopic` to `/waku/2/eth-dm/child-pubkey/Aw/proto`.
+## Eth-DM Key Generation
 
-## Derivation
+First, Bob needs to generate an Eth-DM keypair.
+To avoid Bob having to save an additional private key or recovery phrase for Eth-DM purposes,
+we generate the Eth-DM keypair using Bob's Ethereum account.
+This will allow Bob to recover his Eth-DM private key as long as he has access to his Ethereum private key. 
 
-Public parent key (`B`) to public child key (`Bw`) derivation is only possible with non-hardened paths [\[1\]](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki).
 
-TODO: Investigate commonly used derivation path to decide on one.
+To generate his Eth-DM keypair, Bob MUST use his Ethereum private key 'b' to sign the Eth-DM salt message:
+   `Salt for Eth-Dm, do not share a signature of this message or others could decrypt your messages`.
 
-## Encryption
+The resulting signature 's' is then concatenated with itself once and hashed using keccak256.
+The resulting hash is Bob's Eth-DM private key `b'`:
 
-TODO: Define encryption method to use.
+```
+b' = keccak256(s + s)
+```
 
-## Reply
+The signature process is as per the current Ethereum best practice:
 
-To ascertain the fact that Alice receives Bob's reply, she could include connection details such as her peer id and multiaddress in the message.
-However, this leads to privacy concerns if she does not use an anonymizing network such as tor.
+1. Convert the salt message to a byte array using utf-8 encoding,
+2. Use [`eth_sign`](https://eth.wiki/json-rpc/API#eth_sign) Ethereum JSON-RPC command or equivalent.
 
-Because of that, Alice only includes `Aw` in `M'`.
+# Eth-DM Public Key Broadcast
 
-## Message retrieval
+For Bob to be reachable, he SHOULD broadcast his Eth-DM Public Key `B'`.
+To prove that he is indeed the owner of his Ethereum account `B`, he MUST sign his Eth-DM Public Key.
 
-To satisfy design requirements 3 and 4, we are using the `contentTopic` as a low-computation method to retrieve messages.
+To do so, Bob MUST format his Public Key to lower case hex (no prefix) in a JSON Object on the property `ethDmPublicKey`, e.g.:
 
-Using a prefix such as `direct-message/eth-pubkey` reduces possible conflicts with other use cases that would also use a key or 32 byte array.
-
-We could also consider adding a version to allow an evolution of the field and its usage, e.g. `/waku/2/eth-dm/child-pubkey/1/Aw/proto`
-
-TODO: Point to spec recommending formatting of `contentTopic`, currently tracked in issue [#364](https://github.com/vacp2p/rfc/issues/364) [2].
-
-# Payloads
-
-```protobuf
-syntax = "proto3";
-
-message DirectMessage {
-  DirectMessageContent message = 1; // `M`
-  bytes sender_waku_public_key = 2; // `Aw`
-  bytes sender_root_public_key = 3; // `A`
-}
-
-message DirectMessageContent {
-  bytes message = 1;
-  string encoding = 2; // Encoding of the message, utf-8 if not present.
+```json
+{
+   "ethDmPublicKey": "abcd...0123"
 }
 ```
 
-# References
+Then, Bob MUST sign the stringified JSON using [`eth_sign`](https://eth.wiki/json-rpc/API#eth_sign).
+This results in the `sigEthDmPubKey` signature.
 
-- [\[1\] https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
-- [\[2\] https://github.com/vacp2p/rfc/issues/364](https://github.com/vacp2p/rfc/issues/364)
+Bob then creates an Eth-DM Public Key Message containing:
+
+- Bob's Eth-DM Public Key `B'` on property `ethDmPublicKey`,
+- Bob's Ethereum Address `B` on property `ethAddress`,
+- The signature of Bob's Eth-DM Public Key `sigEthDmPubKey` on property `sig`.
+
+In JSON format as follows:
+
+```json
+{
+   "ethDmPublicKey": "abcd...0123",
+   "ethAddress": "0x01234...eF",
+   "sig": "0x2eb...a1b"
+}
+```
+
+Finally, Bob SHOULD publish the message on Waku v2 with the Public Key Broadcast content topic. 
+
+# Send Direct Message
+
+Alice MAY monitor the Waku v2 to collect Ethereum Address/Eth-DM Public Key tuples.
+Alice SHOULD verify that the `sig` property of said message contains a valid signature as constructed above.
+She SHOULD drop any message without a signature or with an invalid signature.
+
+Using Bob's Eth-DM Public Key, retrieved via [10/WAKU2](/spec/13), Alice MAY now send an encrypted message to Bob.
+
+If she wishes to do so, Alice MUST encrypt her message `M` using Bob's Eth-DM Public Key `B'`.
+
+The result of the encryption is as follows
+(see [eth-crypto's encryptWithPublicKey](https://www.npmjs.com/package/eth-crypto#encryptwithpublickey)):
+
+```json
+{
+   "iv": "...",
+   "ephemPublicKey": "...",
+   "ciphertext": "...",
+   "mac": "..."
+}
+```
+
+Alice MUST then set this result in a Direct Message's property `encMessage`,
+with Bob's Ethereum address `B` set to property `toAddress`.
+
+```json
+{
+   "toAddress": "...",
+   "encMessage": {
+      "iv": "...",
+      "ephemPublicKey": "...",
+      "ciphertext": "...",
+      "mac": "..."
+   }
+}
+```
+
+Alice SHOULD now publish this message on the Direct Message content topic.
 
 # Copyright
 
