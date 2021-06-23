@@ -142,6 +142,7 @@ Where possible editors and contributors are encouraged to:
 * Refer to and build on existing work when possible, especially IETF specifications.
 * Contribute to existing specifications rather than reinvent their own.
 * Use collaborative branching and merging as a tool for experimentation.
+* Use Semantic Line Breaks: https://sembr.org/.
 
 ## Appendix A. Color Coding
 
@@ -165,5 +166,6 @@ to specification metadata.
 | **shortname**    | short name           | string | 1/COSS              |
 | **name**         | full name            | string | Consensus-Oriented Specification System |
 | **status**       | status               | string | draft               |
+| **tags**         | 0 or several tags    | list   | waku-application, waku-core |
 | **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im> |
-| **contributors** | contributors         | list   | Pieter Hintjens <ph@imatix.com>, André Rebentisch <andre@openstandards.de>, Alberto Barrionuevo <abarrio@opentia.es>, Chris Puttick <chris.puttick@thehumanjourney.net>, Yurii Rashkovskii <yrashk@gmail.com> |
+| **contributors** | contributors         | list   | - Pieter Hintjens <ph@imatix.com><br> - André Rebentisch <andre@openstandards.de><br> - Alberto Barrionuevo <abarrio@opentia.es><br> - Chris Puttick <chris.puttick@thehumanjourney.net><br> - Yurii Rashkovskii <yrashk@gmail.com> |

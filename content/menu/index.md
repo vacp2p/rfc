@@ -10,6 +10,7 @@ bookMenuLevels: 1
   - [20/ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [22/TOY-CHAT]({{< relref "/docs/rfcs/22/README.md" >}})
+  - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [25/LIBP2P-DNS-DISCOVERY]({{< relref "/docs/rfcs/25/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
