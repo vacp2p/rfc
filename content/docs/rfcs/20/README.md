@@ -1,7 +1,7 @@
 ---
 slug: 20
-title: 20/ETH-DM
-name: Ethereum Direct Message
+title: 20/TOY-ETH-DM
+name: Toy Ethereum Direct Message
 status: raw
 tags: waku-application
 editor: Franck Royer <franck@status.im>
@@ -13,7 +13,7 @@ contributors:
 - Public Key Broadcast: `/eth-dm/1/public-key/json`,
 - Direct Message: `/eth-dm/1/direct-message/json`.
 
-This specification explains the Ethereum Direct Message protocol
+This specification explains the Toy Ethereum Direct Message protocol
 which enables a peer to send a direct message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 

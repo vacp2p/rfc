@@ -7,7 +7,7 @@ bookMenuLevels: 1
   - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
   - [18/WAKU2-SWAP]({{< relref "/docs/rfcs/18/README.md" >}})
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
-  - [20/ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
+  - [20/TOY-ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [22/TOY-CHAT]({{< relref "/docs/rfcs/22/README.md" >}})
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
