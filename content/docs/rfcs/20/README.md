@@ -63,26 +63,12 @@ or verify her identity.
 
 ## Eth-DM Key Generation
 
-First, Bob needs to generate an Eth-DM keypair.
-To avoid Bob having to save an additional private key or recovery phrase for Eth-DM purposes,
-we generate the Eth-DM keypair using Bob's Ethereum account.
-This will allow Bob to recover his Eth-DM private key as long as he has access to his Ethereum private key. 
+First, Bob MUST generate a new Ethereum private key, `B'`.
+This private key will be used as the Eth-DM encryption key.
 
+This key pair is like any other Ethereum key pair apart that it will not be used to store assets.
 
-To generate his Eth-DM keypair, Bob MUST use his Ethereum private key 'b' to sign the Eth-DM salt message:
-   `Salt for Eth-Dm, do not share a signature of this message or others could decrypt your messages`.
-
-The resulting signature 's' is then concatenated with itself once and hashed using keccak256.
-The resulting hash is Bob's Eth-DM private key `b'`:
-
-```
-b' = keccak256(s + s)
-```
-
-The signature process is as per the current Ethereum best practice:
-
-1. Convert the salt message to a byte array using utf-8 encoding,
-2. Use [`eth_sign`](https://eth.wiki/json-rpc/API#eth_sign) Ethereum JSON-RPC command or equivalent.
+The application MAY provide a way for the user to securely backup this key pair for future usage.
 
 # Eth-DM Public Key Broadcast
 
