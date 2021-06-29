@@ -54,7 +54,7 @@ interaction domains:
 
 The current [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
-1. `/vac/waku/relay/2.0.0-beta2`
+1. `/vac/waku/relay/2.0.0`
 2. `/vac/waku/store/2.0.0-beta3`
 3. `/vac/waku/filter/2.0.0-beta1`
 4. `/vac/waku/swap/2.0.0-beta1`
@@ -81,7 +81,7 @@ This length integer is encoded as a [protobuf varint](https://developers.google.
 
 ## Gossip domain
 
-**Protocol identifier**: `/vac/waku/relay/2.0.0-beta2`
+**Protocol identifier**: `/vac/waku/relay/2.0.0`
 
 See [11/WAKU2-RELAY](/spec/11) spec for more details.
 

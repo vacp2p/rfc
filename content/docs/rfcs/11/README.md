@@ -2,7 +2,7 @@
 slug: 11
 title: 11/WAKU2-RELAY
 name: Waku v2 Relay
-status: draft
+status: stable
 tags: waku-core
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
@@ -14,7 +14,7 @@ contributors:
 Its current implementation is a minor extension of the [libp2p GossipSub protocol](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) and prescribes gossip-based dissemination.
 As such the scope is limited to defining a separate [`protocol id`](https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation) for `11/WAKU2-RELAY`, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.
 
-**Protocol identifier**: `/vac/waku/relay/2.0.0-beta2`
+**Protocol identifier**: `/vac/waku/relay/2.0.0`
 
 # Security Requirements
 
