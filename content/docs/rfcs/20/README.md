@@ -45,10 +45,6 @@ The proposed protocol MUST adhere to the following design requirements:
 1. Bob SHOULD be able to get `M` using [10/WAKU2](/spec/13),
 1. Participants only have access to their Ethereum Wallet via the Web3 API,
 1. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it,
-1. ECDSA Elliptic curve cryptography is used,
-1. [eth-crypto](https://www.npmjs.com/package/eth-crypto),
-   which uses [eccrypto](https://www.npmjs.com/package/eccrypto),
-   is used for encryption and decryption purposes.
 
 ## Limitations
 
@@ -63,17 +59,16 @@ or verify her identity.
 
 ## Eth-DM Key Generation
 
-First, Bob MUST generate a new Ethereum private key, `B'`.
-This private key will be used as the Eth-DM encryption key.
+The Eth-DM keypair MUST be a secp256k1 keypair.
 
-This key pair is like any other Ethereum key pair apart that it will not be used to store assets.
+First, Bob MUST generate a new Eth-DM private key, `b'` and compute the associated public key `B'`.
 
 The application MAY provide a way for the user to securely backup this key pair for future usage.
 
 # Eth-DM Public Key Broadcast
 
 For Bob to be reachable, he SHOULD broadcast his Eth-DM Public Key `B'`.
-To prove that he is indeed the owner of his Ethereum account `B`, he MUST sign his Eth-DM Public Key.
+To prove that he is indeed the owner of his Ethereum account `B`, he MUST sign his Eth-DM Public Key `B'`.
 
 To do so, Bob MUST format his Public Key to lower case hex (no prefix) in a JSON Object on the property `ethDmPublicKey`, e.g.:
 
@@ -112,10 +107,12 @@ She SHOULD drop any message without a signature or with an invalid signature.
 
 Using Bob's Eth-DM Public Key, retrieved via [10/WAKU2](/spec/13), Alice MAY now send an encrypted message to Bob.
 
-If she wishes to do so, Alice MUST encrypt her message `M` using Bob's Eth-DM Public Key `B'`.
+If she wishes to do so, Alice MUST encrypt her message `M` using Bob's Eth-DM Public Key `B'`
+using ECIES (secp256k1, AES-256-CBC, HMAC-SHA256).
 
 The result of the encryption is as follows
-(see [eth-crypto's encryptWithPublicKey](https://www.npmjs.com/package/eth-crypto#encryptwithpublickey)):
+(see [eth-crypto's encryptWithPublicKey](https://www.npmjs.com/package/eth-crypto#encryptwithpublickey)),
+all properties are hex strings:
 
 ```json
 {
