@@ -9,6 +9,12 @@ contributors:
 
 This specification describes the encryption, decryption and signing of the content in the [data field used in Waku](/spec/6/#abnf-specification).
 
+## Payload Encryption
+
+Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.
+
+Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.
+
 ## Specification
 
 The `data` field is used within the `waku envelope`, the field MUST contain the encrypted payload of the envelope.
