@@ -31,9 +31,11 @@ Symmetric encryption uses AES-256-GCM for authenticated encryption [TODO], with 
 
 ## Specification
 
-The `data` field is used within the `waku envelope`, the field MUST contain the encrypted payload of the envelope.
+For 6/WAKU1, the `data` field is used within the `waku envelope`, the field MUST contain the encrypted payload of the `waku envelope`.
 
-The fields that are concatenated and encrypted as part of the `data` field are:
+For 10/WAKU2, the `payload` field is used within the `WakuMessage` and MUST contain the encrypted payload of `Waku Message`.
+
+The fields that are concatenated and encrypted as part of the field are:
  - flags
  - auxiliary field
  - payload
