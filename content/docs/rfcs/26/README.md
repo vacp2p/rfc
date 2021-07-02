@@ -50,8 +50,6 @@ The fields that are concatenated and encrypted as part of the field are:
  - payload
  - padding
  - signature
- 
-In case of symmetric encryption, a `salt`  (a.k.a. AES Nonce, 12 bytes) field MUST be appended. 
 
 ### ABNF
 
@@ -63,9 +61,9 @@ Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) w
 flags           = 1OCTET
 
 ; contains the size of payload.
-auxiliary-field = 4*OCTET
+payload-length  = 4*OCTET
 
-; byte array of arbitrary size (may be zero)
+; byte array of arbitrary size (may be zero).
 payload         = *OCTET
 
 ; byte array of arbitrary size (may be zero).
@@ -75,29 +73,40 @@ padding         = *OCTET
 signature       = 65OCTET
 
 ; 12 bytes, if present (in case of symmetric encryption).
-salt            = 12OCTET
+iv              = 12OCTET
 
-data        = flags auxiliary-field payload padding [signature] [salt]
+; 16 bytes, if present (in case of symmetric encryption).
+tag             = 16OCTET
+
+data            = flags auxiliary-field payload padding [signature]
 ```
+
+### Asymmetric encryption
+
+Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
+For more details, see the section below on ECIES encryption.
+
+### Symmetric encryption
+
+Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag and a 12 byte IV (nonce).
+The message authentication `tag` and initialization vector `iv` field MUST be appended to the resulting `ciphertext`, in that order.
+Note that previous specifications and some implementations might refer to `iv` as `nonce` or `salt`.
 
 ### Signature
 
-Those unable to decrypt the envelope data are also unable to access the signature. The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity. The signature is serialized as the concatenation of the `R`, `S` and `V` parameters of the SECP-256k1 ECDSA signature, in that order. `R` and `S` MUST be big-endian encoded, fixed-width 256-bit unsigned. `V` MUST be an 8-bit big-endian encoded, non-normalized and should be either 27 or 28.
+Those unable to decrypt the envelope data are also unable to access the signature.
+The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity.
+The signature is serialized as the concatenation of the `r`, `s` and `v` parameters of the SECP-256k1 ECDSA signature, in that order.
+`r` and `s` MUST be big-endian encoded, fixed-width 256-bit unsigned.
+`v` MUST be an 8-bit big-endian encoded, non-normalized and should be either 27 or 28.
 
 ### Padding
 
-The padding field is used to align data size, since data size alone might reveal important metainformation. Padding can be arbitrary size. However, it is recommended that the size of Data Field (excluding the Salt) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
+The padding field is used to align data size, since data size alone might reveal important metainformation.
+Padding can be arbitrary size.
+However, it is recommended that the size of Data Field (excluding the IV) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.
 
-
-### Payload encryption
-
-Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
-For more details, see the section below.
-In case of a signature being provided, the public key is recoverable by utilizing the `v` parameter.
-
-Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag 16 and a 12 byte IV (nonce).
-
-### ECIES Encryption
+### ECIES encryption
 
 This section originates from the [RLPx Transport Protocol spec](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption) spec with minor modifications.
 
