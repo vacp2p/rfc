@@ -121,6 +121,12 @@ Bob verifies the authenticity of the message by checking whether `d == MAC(sha25
 
 - Authenticated encryption: https://en.wikipedia.org/wiki/Authenticated_encryption
 
+- RLPx Transport Protocol (ECIES encryption): https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
+
+- EIP-627: Whisper specification: https://eips.ethereum.org/EIPS/eip-627
+
+- Status 5/SECURE-TRANSPORT: https://specs.status.im/spec/5
+
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
