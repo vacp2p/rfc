@@ -128,16 +128,60 @@ Alice sends the encrypted message `R || iv || c || d` where `c = AES(kE, iv , m)
 For Bob to decrypt the message `R || iv || c || d`, he derives the shared secret `S = Px` where `(Px, Py) = kB * R` as well as the encryption and authentication keys `kE || kM = KDF(S, 32)`.
 Bob verifies the authenticity of the message by checking whether `d == MAC(sha256(kM), iv || c)` then obtains the plaintext as `m = AES(kE, iv || c)`.
 
+### Decoding a message
+
+In order to decode a message, a node SHOULD try to apply both symmetric and asymmetric decryption operations.
+
 ## References
 
-- Authenticated encryption: https://en.wikipedia.org/wiki/Authenticated_encryption
-
-- RLPx Transport Protocol (ECIES encryption): https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
-
-- EIP-627: Whisper specification: https://eips.ethereum.org/EIPS/eip-627
-
-- Status 5/SECURE-TRANSPORT: https://specs.status.im/spec/5
+1. [6/WAKU1](/spec/6)
+2. [10/WAKU2](/spec/10)
+3. [14/WAKU-MESSAGE version 1](/spec/14/#version1)
+4. [7/WAKU-DATA](/spec/7)
+5. [6/WAKU1 Payload encryption](/spec/6/#payload-encryption)
+6. [EIP-627: Whisper spec](https://eips.ethereum.org/EIPS/eip-627)
+7. [RLPx Transport Protocol spec (ECIES encryption)](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption)
+8. [Status 5/SECURE-TRANSPORT](https://specs.status.im/spec/5)
+9. [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234)
+10. [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption)
 
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+## Scratch
+
+- Refer to different for WakuMessage spec
+- Create separate issue for issue with v parameter
+- How to encrypt encode/decode try both
+- Because sig is inside only meant for can see...
+- Between one or more peers...
+- Confirm Kim "However, it is recommended that the size of Data Field (excluding the IV) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.""
+
+### Issue with v parameter
+
+
+This should be 0,1, but due to Bitcoin standard it is 27, 28. Later on, this has moved in Ethereum to:
+
+V = CHAIN_ID * 2 + 35:
+
+See:
+- https://eips.ethereum.org/EIPS/eip-155
+- https://github.com/ethereum/go-ethereum/issues/19751#issuecomment-504900739
+- https://coders-errand.com/ecrecover-signature-verification-ethereum/
+
+### Where is ephemeral key in ECIES?
+
+https://github.com/ethereum/go-ethereum/blob/master/crypto/ecies/ecies.go#L232
+
+Looks like: receiver pub key Rb + symencrypt + messagetag
+
+https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
+
+### Does RLPx known crypto issue impacts us?
+
+Here: https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
+
+https://crypto.stackexchange.com/questions/63047/ethereum-rlpx-protocol-for-inter-node-communication-flaws-in-the-encryption
+
+--
