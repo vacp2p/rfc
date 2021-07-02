@@ -7,13 +7,9 @@ editor: Oskar Thoren <oskar@status.im>
 contributors:
 ---
 
-This specification describes how encryption, decryption and signing works in
-[6/WAKU1](/spec/6) and in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version
-1](/spec/14/#version1).
+This specification describes how encryption, decryption and signing works in [6/WAKU1](/spec/6) and in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 1](/spec/14/#version1).
 
-It effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload
-encryption](/spec/6/#payload-encryption) but written in a way that is agnostic
-and self-contained for Waku v1 and Waku v2.
+It effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload encryption](/spec/6/#payload-encryption) but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
 
 ## Cryptographic primitives
 
@@ -27,7 +23,8 @@ and self-contained for Waku v1 and Waku v2.
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
 In case of a signature being provided, the public key is recoverable from by utilizing the `v` parameter.
 
-Symmetric encryption uses AES-256-GCM for authenticated encryption [TODO], with a 16 byte authentication tag 16 and a 12 byte IV (nonce).
+Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag 16 and a 12 byte IV (nonce).
+
 
 ## Specification
 
