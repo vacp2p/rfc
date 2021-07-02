@@ -37,12 +37,12 @@ It is RECOMMENDED that a Waku v2 client tracks at least the following informatio
 ## Peer connectivity
 
 A Waku v2 client SHOULD track _at least_ the following connectivity states for each of its peers:
- - **NOT CONNECTED**: The peer has been discovered or configured on this client,
+ - **`NotConnected`**: The peer has been discovered or configured on this client,
  but no attempt has yet been made to connect to this peer.
  This is the default state for a new peer.
- - **CANNOT CONNECT**: The client attempted to connect to this peer, but failed.
- - **CAN CONNECT**: The client was recently connected to this peer and disconnected gracefully.
- - **CONNECTED**: The client is actively connected to this peer.
+ - **`CannotConnect`**: The client attempted to connect to this peer, but failed.
+ - **`CanConnect`**: The client was recently connected to this peer and disconnected gracefully.
+ - **`Connected`**: The client is actively connected to this peer.
 
 This list does not preclude clients from tracking more advanced connectivity metadata,
 such as a peer's blacklist status (see (`18/WAKU2-SWAP`)[https://rfc.vac.dev/spec/18/]).
