@@ -8,10 +8,20 @@ contributors:
 ---
 
 This specification describes how encryption, decryption and signing works in [6/WAKU1](/spec/6) and in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 1](/spec/14/#version1).
+It provides confidentiality, authenticity, and integrity over an asynchronous network.
 
 It effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload encryption](/spec/6/#payload-encryption) but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
 
-Large sections of the spec originate from [EIP-627: Whisper spec](https://eips.ethereum.org/EIPS/eip-627) as well from [RLPx Transport Protocol spec (ECIES encryption)](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption).
+Large sections of the spec originate from [EIP-627: Whisper spec](https://eips.ethereum.org/EIPS/eip-627) as well from [RLPx Transport Protocol spec (ECIES encryption)](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption) with some modifications.
+
+## Design requirements
+
+- *Confidentiality*: The adversary should not be able to learn what data is being exchanged between two Waku nodes.
+- *Authenticity*: The adversary should not be able to cause either of two Waku endpoint to accept data from any third party as though it came from the other endpoint.
+- *Integrity*: The adversary should not be able to cause either of two Waku endpoints to accept data that has been tampered with.
+
+Notable, *forward secrecy* is not provided for at this layer.
+If this property is desired, a more fully featured secure communication protocol can be used on top, such as [Status 5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
 
 ## Cryptographic primitives
 
