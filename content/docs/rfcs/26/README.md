@@ -11,6 +11,8 @@ This specification describes how encryption, decryption and signing works in [6/
 
 It effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload encryption](/spec/6/#payload-encryption) but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
 
+Large sections of the spec originate from [EIP-627: Whisper spec](https://eips.ethereum.org/EIPS/eip-627) as well from [RLPx Transport Protocol spec (ECIES encryption)](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption).
+
 ## Cryptographic primitives
 
 - AES-256-GCM
