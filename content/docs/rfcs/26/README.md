@@ -16,14 +16,16 @@ Large sections of the specification originate from [EIP-627: Whisper spec](https
 
 ## Design requirements
 
-- *Confidentiality*: The adversary should not be able to learn what data is being exchanged between two Waku nodes.
-- *Authenticity*: The adversary should not be able to cause either of two Waku endpoint to accept data from any third party as though it came from the other endpoint.
-- *Integrity*: The adversary should not be able to cause either of two Waku endpoints to accept data that has been tampered with.
+- *Confidentiality*: The adversary should not be able to learn what data is being sent from one Waku node to one or several other Waku nodes.
+- *Authenticity*: The adversary should not be able to cause Waku endpoint to accept data from any third party as though it came from the other endpoint.
+- *Integrity*: The adversary should not be able to cause a Waku endpoint to accept data that has been tampered with.
 
 Notable, *forward secrecy* is not provided for at this layer.
 If this property is desired, a more fully featured secure communication protocol can be used on top, such as [Status 5/SECURE-TRANSPORT](https://specs.status.im/spec/5).
 
-Because (a) only participants who are able to decrypt a message can see its signature (b) padding is used, it also provides some form of *unlinkability*.
+It also provides some form of *unlinkability* since:
+- only participants who are able to decrypt a message can see its signature
+- payload are padded to a fixed length
 
 ## Cryptographic primitives
 
@@ -148,40 +150,3 @@ In order to decode a message, a node SHOULD try to apply both symmetric and asym
 ## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-## Scratch
-
-- Refer to different for WakuMessage spec
-- Create separate issue for issue with v parameter
-- How to encrypt encode/decode try both
-- Because sig is inside only meant for can see...
-- Between one or more peers...
-- Confirm Kim "However, it is recommended that the size of Data Field (excluding the IV) before encryption (i.e. plain text) SHOULD be factor of 256 bytes.""
-
-### Issue with v parameter
-
-
-This should be 0,1, but due to Bitcoin standard it is 27, 28. Later on, this has moved in Ethereum to:
-
-V = CHAIN_ID * 2 + 35:
-
-See:
-- https://eips.ethereum.org/EIPS/eip-155
-- https://github.com/ethereum/go-ethereum/issues/19751#issuecomment-504900739
-- https://coders-errand.com/ecrecover-signature-verification-ethereum/
-
-### Where is ephemeral key in ECIES?
-
-https://github.com/ethereum/go-ethereum/blob/master/crypto/ecies/ecies.go#L232
-
-Looks like: receiver pub key Rb + symencrypt + messagetag
-
-https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
-
-### Does RLPx known crypto issue impacts us?
-
-Here: https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption
-
-https://crypto.stackexchange.com/questions/63047/ethereum-rlpx-protocol-for-inter-node-communication-flaws-in-the-encryption
-
---
