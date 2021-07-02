@@ -26,7 +26,6 @@ ECIES is using the following cryptosystem:
 - MAC: HMAC with SHA-256
 - AES: AES-128-CTR
 
-
 ## Payload encryption
 
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
@@ -42,11 +41,11 @@ This section originates from the [RLPx Transport Protocol spec](https://github.c
 The cryptosystem used is:
 
 - The elliptic curve secp256k1 with generator `G`.
-- `KDF(k, len)`: the NIST SP 800-56 Concatenation Key Derivation Function
+- `KDF(k, len)`: the NIST SP 800-56 Concatenation Key Derivation Function.
 - `MAC(k, m)`: HMAC using the SHA-256 hash function.
 - `AES(k, iv, m)`: the AES-128 encryption function in CTR mode.
 
-Notiation used in the following section: `X || Y` denotes concatenation of X and Y.
+Special notation used: `X || Y` denotes concatenation of X and Y.
 
 Alice wants to send an encrypted message that can be decrypted by Bobs static private key `kB`. Alice knows about Bobs static public key `KB`.
 
