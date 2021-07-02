@@ -18,13 +18,42 @@ It effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload encry
 - ECSDA
 - KECCAK-256
 
+ECIES is using the following cryptosystem:
+- Curve: secp256k1
+- KDF: NIST SP 800-56 Concatenation Key Derivation Function
+- MAC: HMAC with SHA-256
+- AES: AES-128-CTR
+
+
 ## Payload encryption
 
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
+For more details, see the section below.
 In case of a signature being provided, the public key is recoverable from by utilizing the `v` parameter.
 
 Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag 16 and a 12 byte IV (nonce).
 
+## ECIES Encryption
+
+This section originates from the [RLPx Transport Protocol spec](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption) spec with minor modifications.
+
+The cryptosystem used is:
+
+- The elliptic curve secp256k1 with generator `G`.
+- `KDF(k, len)`: the NIST SP 800-56 Concatenation Key Derivation Function
+- `MAC(k, m)`: HMAC using the SHA-256 hash function.
+- `AES(k, iv, m)`: the AES-128 encryption function in CTR mode.
+
+Notiation used in the following section: `X || Y` denotes concatenation of X and Y.
+
+Alice wants to send an encrypted message that can be decrypted by Bobs static private key `kB`. Alice knows about Bobs static public key `KB`.
+
+To encrypt the message `m`, Alice generates a random number `r` and corresponding elliptic curve public key `R = r * G` and computes the shared secret `S = Px` where `(Px, Py) = r * KB`.
+She derives key material for encryption and authentication as `kE || kM = KDF(S, 32)` as well as a random initialization vector `iv`.
+Alice sends the encrypted message `R || iv || c || d` where `c = AES(kE, iv , m)` and `d = MAC(sha256(kM), iv || c)` to Bob.
+
+For Bob to decrypt the message `R || iv || c || d`, he derives the shared secret `S = Px` where `(Px, Py) = kB * R` as well as the encryption and authentication keys `kE || kM = KDF(S, 32)`.
+Bob verifies the authenticity of the message by checking whether `d == MAC(sha256(kM), iv || c)` then obtains the plaintext as `m = AES(kE, iv || c)`.
 
 ## Specification
 
