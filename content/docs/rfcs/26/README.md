@@ -72,8 +72,8 @@ padding         = *OCTET
 ; 65 bytes, if present.
 signature       = 65OCTET
 
-; 2 bytes, if present (in case of symmetric encryption).
-salt            = 2OCTET
+; 12 bytes, if present (in case of symmetric encryption).
+salt            = 12OCTET
 
 data        = flags auxiliary-field payload padding [signature] [salt]
 ```
