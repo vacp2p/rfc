@@ -29,7 +29,7 @@ ECIES is using the following cryptosystem:
 
 Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
 For more details, see the section below.
-In case of a signature being provided, the public key is recoverable from by utilizing the `v` parameter.
+In case of a signature being provided, the public key is recoverable by utilizing the `v` parameter.
 
 Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag 16 and a 12 byte IV (nonce).
 
