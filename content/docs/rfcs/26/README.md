@@ -74,12 +74,6 @@ padding         = *OCTET
 ; 65 bytes, if present.
 signature       = 65OCTET
 
-; 12 bytes, if present (in case of symmetric encryption).
-iv              = 12OCTET
-
-; 16 bytes, if present (in case of symmetric encryption).
-tag             = 16OCTET
-
 data            = flags payload-length payload padding [signature]
 ```
 
