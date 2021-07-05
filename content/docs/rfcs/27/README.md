@@ -19,7 +19,7 @@ e.g. triggering reconnects/disconnects, keeping certain connections alive, etc.
 # Peer store
 
 The peer store SHOULD be an in-memory data structure where information about discovered or configured peers are stored.
-It SHOULD be considered the central authority for peer-related information in a Waku v2 client.
+It SHOULD be considered the main source of truth for peer-related information in a Waku v2 client.
 Clients MAY choose to persist this store on-disk.
 
 ## Tracked peer metadata
