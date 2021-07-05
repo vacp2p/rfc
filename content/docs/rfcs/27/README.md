@@ -51,7 +51,7 @@ such as a peer's blacklist status (see (`18/WAKU2-SWAP`)[https://rfc.vac.dev/spe
 
 A Waku v2 client MAY choose to persist peers across restarts,
 using any offline storage technology, such as an on-disk database.
-Peer persistence COULD be used to resume peer connections after a client restart.
+Peer persistence MAY be used to resume peer connections after a client restart.
 
 # Peer management
 
@@ -95,4 +95,3 @@ Copyright and related rights waived via
 1. [`libp2p` ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
 1. [`libp2p` protocol IDs](https://docs.libp2p.io/concepts/protocols/#protocol-ids)
 1. [`multiaddrs`](https://docs.libp2p.io/concepts/addressing/)
-
