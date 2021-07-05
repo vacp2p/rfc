@@ -80,7 +80,7 @@ iv              = 12OCTET
 ; 16 bytes, if present (in case of symmetric encryption).
 tag             = 16OCTET
 
-data            = flags auxiliary-field payload padding [signature]
+data            = flags payload-length payload padding [signature]
 ```
 
 ### Asymmetric encryption
