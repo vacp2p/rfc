@@ -68,7 +68,7 @@ Such conditions include, but are not limited to:
 
 If a client chooses to automatically reconnect to previous peers,
 it MUST respect the [backing off period](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange) specified for GossipSub v1.1 before attempting to reconnect.
-This requires keeping track of the [last time each peer was disconnected](#Tracked-peer-metadata).
+This requires keeping track of the [last time each peer was disconnected](#tracked-peer-metadata).
 
 ## Connection keep-alive
 
