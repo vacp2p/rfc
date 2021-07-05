@@ -46,7 +46,7 @@ For 6/WAKU1, the `data` field is used in the `waku envelope`, and the field MUST
 
 For 10/WAKU2, the `payload` field is used in `WakuMessage` and MUST contain the encrypted payload.
 
-The fields that are concatenated and encrypted as part of the field are:
+The fields that are concatenated and encrypted as part of the `data`/`payload` field are:
  - flags
  - auxiliary field
  - payload
