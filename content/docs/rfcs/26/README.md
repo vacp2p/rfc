@@ -42,9 +42,9 @@ ECIES is using the following cryptosystem:
 
 ## Specification
 
-For 6/WAKU1, the `data` field is used in the `waku envelope`, and the field MUST contain the encrypted payload.
+For 6/WAKU1, the `data` field is used in the `waku envelope`, and the field MAY contain the encrypted payload.
 
-For 10/WAKU2, the `payload` field is used in `WakuMessage` and MUST contain the encrypted payload.
+For 10/WAKU2, the `payload` field is used in `WakuMessage` and MAY contain the encrypted payload.
 
 The fields that are concatenated and encrypted as part of the `data`/`payload` field are:
  - flags
