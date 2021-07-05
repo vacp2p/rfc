@@ -100,7 +100,7 @@ The signature is serialized as the concatenation of the `r`, `s` and `v` paramet
 
 The padding field is used to align data size, since data size alone might reveal important metainformation.
 Padding can be arbitrary size.
-However, it is recommended that the size of Data Field (excluding the IV and tag) before encryption (i.e. plain text) SHOULD be multiple of 256 bytes.
+However, it is recommended that the size of Data Field (excluding the IV and tag) before encryption (i.e. plain text) SHOULD be a multiple of 256 bytes.
 
 ### ECIES encryption
 
