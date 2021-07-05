@@ -2,7 +2,7 @@
 slug: 27
 title: 27/WAKU2-PEERS
 name: Waku v2 Client Peer Management Recommendations
-status: raw
+status: draft
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
 ---
@@ -31,8 +31,8 @@ It is RECOMMENDED that a Waku v2 client tracks at least the following informatio
 | _Public key_  | The public key for this peer. This is related to the libp2p [`Peer ID`](https://docs.libp2p.io/concepts/peer-id/). |
 | _Addresses_ | Known transport layer [`multiaddrs`](https://docs.libp2p.io/concepts/addressing/) for this peer. |
 | _Protocols_ | The libp2p [`protocol IDs`](https://docs.libp2p.io/concepts/protocols/#protocol-ids) supported by this peer. This can be used to track the client's connectivity to peers supporting different Waku v2 protocols, e.g. [`11/WAKU2-RELAY`](https://rfc.vac.dev/spec/11/) or [`13/WAKU2-STORE`](https://rfc.vac.dev/spec/13/). |
-| _Connectivity_ | Tracks the peer's current connectedness state. See [**Peer connectivity**](#Peer-connectivity) below. |
-| _Disconnect time_ | The timestamp at which this peer last disconnected. This becomes important when managing [peer reconnections](#Reconnecting-peers) |
+| _Connectivity_ | Tracks the peer's current connectedness state. See [**Peer connectivity**](#peer-connectivity) below. |
+| _Disconnect time_ | The timestamp at which this peer last disconnected. This becomes important when managing [peer reconnections](#reconnecting-peers) |
 
 ## Peer connectivity
 
@@ -55,16 +55,16 @@ Peer persistence MAY be used to resume peer connections after a client restart.
 
 # Peer management
 
-Waku v2 clients will have different requirements when it comes to managing the peers tracked in the [**peer store**](#Peer-store).
+Waku v2 clients will have different requirements when it comes to managing the peers tracked in the [**peer store**](#peer-store).
 It is RECOMMENDED that clients support:
-- [automatic reconnection](#Reconnecting-peers) to peers under certain conditions
-- [connection keep-alive](#Connection-keep-alive)
+- [automatic reconnection](#reconnecting-peers) to peers under certain conditions
+- [connection keep-alive](#connection-keep-alive)
 
 ## Reconnecting peers
 
-A Waku v2 client MAY choose to reconnect to previously connected, and managed, peers under certain conditions.
+A Waku v2 client MAY choose to reconnect to previously connected, managed peers under certain conditions.
 Such conditions include, but are not limited to:
-- Reconnecting to all `relay`-capable peers after a client restart. This will require [persistent peer storage](#Persistence).
+- Reconnecting to all `relay`-capable peers after a client restart. This will require [persistent peer storage](#persistence).
 
 If a client chooses to automatically reconnect to previous peers,
 it MUST respect the [backing off period](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#prune-backoff-and-peer-exchange) specified for GossipSub v1.1 before attempting to reconnect.
