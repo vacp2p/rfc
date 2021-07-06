@@ -103,11 +103,10 @@ It MAY be different if or when:
 
 ## Discovery domain
 
-The discovery domain is not yet specified.
-As such, currently static nodes should be used.
-Please refer to specific implementations for details on publicly available nodes, as these may change over time.
+Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
+It is possible to bypass the discovery domain by specifying static nodes.
 
-<!-- TODO: To document how we use Discovery v5, EIP-1459 (DNS- based) etc. -->
+<!-- TODO: Document (a) how we map ENR to multiaddr for EIP-1459, once specified, (b) ambient peer discovery. -->
 
 ## Request/reply domain
 
@@ -344,3 +343,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 15. [18/WAKU2-SWAP spec](/spec/18)
 
 16. [Ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
+
+17. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459)
