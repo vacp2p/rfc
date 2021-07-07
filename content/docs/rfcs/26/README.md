@@ -46,9 +46,9 @@ For 6/WAKU1, the `data` field is used in the `waku envelope`, and the field MAY 
 
 For 10/WAKU2, the `payload` field is used in `WakuMessage` and MAY contain the encrypted payload.
 
-The fields that are concatenated and encrypted as part of the `data`/`payload` field are:
+The fields that are concatenated and encrypted as part of the `data` (Waku v1) / `payload` (Waku v2) field are:
  - flags
- - payload length
+ - payload-length
  - payload
  - padding
  - signature
@@ -75,6 +75,9 @@ padding         = *OCTET
 signature       = 65OCTET
 
 data            = flags payload-length payload padding [signature]
+
+; This field is called payload in Waku v2
+payload         = data
 ```
 
 ### Signature
