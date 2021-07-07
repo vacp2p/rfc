@@ -84,7 +84,8 @@ For more details, see the section below on ECIES encryption.
 
 ### Symmetric encryption
 
-Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption), with a 16 byte authentication tag and a 12 byte IV (nonce).
+Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption). 
+The output of encryption is of the form (`ciphertext`, `tag`, `iv`) where `ciphertext` is the encrypted message, `tag` is a 16 byte message authentication tag and `iv` is a 12 byte initialization vector  (nonce). 
 The message authentication `tag` and initialization vector `iv` field MUST be appended to the resulting `ciphertext`, in that order.
 Note that previous specifications and some implementations might refer to `iv` as `nonce` or `salt`.
 
