@@ -31,7 +31,7 @@ It also provides some form of *unlinkability* since:
 
 - AES-256-GCM
 - ECIES
-- ECSDA
+- ECDSA
 - KECCAK-256
 
 ECIES is using the following cryptosystem:
