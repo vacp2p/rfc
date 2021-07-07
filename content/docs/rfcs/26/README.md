@@ -29,7 +29,7 @@ It also provides some form of *unlinkability* since:
 
 ## Cryptographic primitives
 
-- AES-256-GCM
+- AES-256-GCM (for symmetric encryption)
 - ECIES
 - ECDSA
 - KECCAK-256
