@@ -115,7 +115,7 @@ The cryptosystem used is:
 
 Special notation used: `X || Y` denotes concatenation of `X` and `Y`.
 
-Alice wants to send an encrypted message that can be decrypted by Bobs static private key `kB`. Alice knows about Bobs static public key `KB`.
+Alice wants to send an encrypted message that can be decrypted by Bob's static private key `kB`. Alice knows about Bobs static public key `KB`.
 
 To encrypt the message `m`, Alice generates a random number `r` and corresponding elliptic curve public key `R = r * G` and computes the shared secret `S = Px` where `(Px, Py) = r * KB`.
 She derives key material for encryption and authentication as `kE || kM = KDF(S, 32)` as well as a random initialization vector `iv`.
