@@ -158,7 +158,7 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
-- **Robust timestamps**: Having reliable timestamps for waku messages prevents range of attacks, including injecting messages with timestamps pointing to the far future. 
+- **Robust timestamps**: Having reliable timestamps for waku messages prevents a range of attacks, including injecting messages with timestamps pointing to the far future. 
   Such messages will always be considered recent and occupy the front side of the message list. 
   Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in a Blockchain based timestamps. 
   That is messages contain the most recent block height perceived by their senders at the time of message generation. 
