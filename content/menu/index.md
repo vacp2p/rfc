@@ -23,6 +23,7 @@ bookMenuLevels: 1
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
   - [22/TOY-CHAT]({{< relref "/docs/rfcs/22/README.md" >}})
   - [23/WAKU2-TOPICS]({{< relref "/docs/rfcs/23/README.md" >}})
+  - [26/WAKU2-PAYLOAD]({{< relref "/docs/rfcs/26/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
