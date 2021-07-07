@@ -82,11 +82,13 @@ payload         = data
 
 ### Signature
 
-Those unable to decrypt the envelope data are also unable to access the signature.
+Those unable to decrypt the payload/data are also unable to access the signature.
 The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity.
 The signature is serialized as the concatenation of the `r`, `s` and `v` parameters of the SECP-256k1 ECDSA signature, in that order.
 `r` and `s` MUST be big-endian encoded, fixed-width 256-bit unsigned.
 `v` MUST be an 8-bit big-endian encoded, non-normalized and should be either 27 or 28.
+
+See [Ethereum "Yellow paper": Appendix F Signing transactions](https://ethereum.github.io/yellowpaper/paper.pdf) for more information on signature generation, parameters and public key recovery.
 
 ### Encryption
 
@@ -145,7 +147,8 @@ This is because the type of encryption is not included in the message.
 7. [RLPx Transport Protocol spec (ECIES encryption)](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption)
 8. [Status 5/SECURE-TRANSPORT](https://specs.status.im/spec/5)
 9. [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234)
-10. [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption)
+10. [Ethereum "Yellow paper": Appendix F Signing transactions](https://ethereum.github.io/yellowpaper/paper.pdf)
+11. [Authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption)
 
 ## Copyright
 
