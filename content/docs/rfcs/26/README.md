@@ -113,7 +113,7 @@ The cryptosystem used is:
 - `MAC(k, m)`: HMAC using the SHA-256 hash function.
 - `AES(k, iv, m)`: the AES-128 encryption function in CTR mode.
 
-Special notation used: `X || Y` denotes concatenation of X and Y.
+Special notation used: `X || Y` denotes concatenation of `X` and `Y`.
 
 Alice wants to send an encrypted message that can be decrypted by Bobs static private key `kB`. Alice knows about Bobs static public key `KB`.
 
