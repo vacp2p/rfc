@@ -126,9 +126,10 @@ RPC call to query historical messages.
 - `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 
-Alternatively, the `receiverTime` (instead of `senderTime` ) can be used to sort `WakuMessage`s during the paging process. 
+Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
 However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and consistent across all the nodes.
-The `WAKU2` implementation also follows this recommendation.
+This has the benefit of `cursor` reusability i.e., a `cursor` obtained from one node can be consistently used to query from another node.
+However, this reusability of the `cursor` does not hold when the `receiverTime` is utilized due to the network delay and nodes' asynchronicity.
 
 ### HistoryResponse
 
@@ -156,6 +157,12 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
+- **Robust timestamps**: Having reliable timestamps for waku messages prevents range of attacks, including injecting messages with timestamps pointing to the far future. 
+  Such messages will always be considered recent and occupy the front side of the message list. 
+  Potential solutions include the use of open timestamps e.g.,  block height in a Blockchain based timestamps. 
+  That is messages contain the most recent block height perceived by their senders at the time of message generation. 
+  This proves accuracy within a range of minutes (e.g., in a Bitcoin blockchain) or seconds (e.g., in the Ethereum 2.0) from time of origination. 
+  
 # Copyright
 
 Copyright and related rights waived via
