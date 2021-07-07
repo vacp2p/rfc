@@ -128,6 +128,7 @@ Bob verifies the authenticity of the message by checking whether `d == MAC(sha25
 ### Decoding a message
 
 In order to decode a message, a node SHOULD try to apply both symmetric and asymmetric decryption operations.
+This is because the type of encryption is not included in the message.
 
 ## References
 
