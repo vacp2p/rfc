@@ -36,7 +36,7 @@ It also provides some form of *unlinkability* since:
 
 ECIES is using the following cryptosystem:
 - Curve: secp256k1
-- KDF: NIST SP 800-56 Concatenation Key Derivation Function
+- KDF: NIST SP 800-56 Concatenation Key Derivation Function, with SHA-256 option
 - MAC: HMAC with SHA-256
 - AES: AES-128-CTR
 
