@@ -77,18 +77,6 @@ signature       = 65OCTET
 data            = flags payload-length payload padding [signature]
 ```
 
-### Asymmetric encryption
-
-Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
-For more details, see the section below on ECIES encryption.
-
-### Symmetric encryption
-
-Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption). 
-The output of encryption is of the form (`ciphertext`, `tag`, `iv`) where `ciphertext` is the encrypted message, `tag` is a 16 byte message authentication tag and `iv` is a 12 byte initialization vector  (nonce). 
-The message authentication `tag` and initialization vector `iv` field MUST be appended to the resulting `ciphertext`, in that order.
-Note that previous specifications and some implementations might refer to `iv` as `nonce` or `salt`.
-
 ### Signature
 
 Those unable to decrypt the envelope data are also unable to access the signature.
@@ -97,13 +85,20 @@ The signature is serialized as the concatenation of the `r`, `s` and `v` paramet
 `r` and `s` MUST be big-endian encoded, fixed-width 256-bit unsigned.
 `v` MUST be an 8-bit big-endian encoded, non-normalized and should be either 27 or 28.
 
-### Padding
+### Encryption
 
-The padding field is used to align data size, since data size alone might reveal important metainformation.
-Padding can be arbitrary size.
-However, it is recommended that the size of Data Field (excluding the IV and tag) before encryption (i.e. plain text) SHOULD be a multiple of 256 bytes.
+#### Symmetric
 
-### ECIES encryption
+Symmetric encryption uses AES-256-GCM for [authenticated encryption](https://en.wikipedia.org/wiki/Authenticated_encryption). 
+The output of encryption is of the form (`ciphertext`, `tag`, `iv`) where `ciphertext` is the encrypted message, `tag` is a 16 byte message authentication tag and `iv` is a 12 byte initialization vector  (nonce). 
+The message authentication `tag` and initialization vector `iv` field MUST be appended to the resulting `ciphertext`, in that order.
+Note that previous specifications and some implementations might refer to `iv` as `nonce` or `salt`.
+
+#### Asymmetric
+
+Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.
+
+#### ECIES
 
 This section originates from the [RLPx Transport Protocol spec](https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption) spec with minor modifications.
 
@@ -124,6 +119,12 @@ Alice sends the encrypted message `R || iv || c || d` where `c = AES(kE, iv , m)
 
 For Bob to decrypt the message `R || iv || c || d`, he derives the shared secret `S = Px` where `(Px, Py) = kB * R` as well as the encryption and authentication keys `kE || kM = KDF(S, 32)`.
 Bob verifies the authenticity of the message by checking whether `d == MAC(sha256(kM), iv || c)` then obtains the plaintext as `m = AES(kE, iv || c)`.
+
+### Padding
+
+The padding field is used to align data size, since data size alone might reveal important metainformation.
+Padding can be arbitrary size.
+However, it is recommended that the size of Data Field (excluding the IV and tag) before encryption (i.e. plain text) SHOULD be a multiple of 256 bytes.
 
 ### Decoding a message
 
