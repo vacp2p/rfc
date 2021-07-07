@@ -104,6 +104,9 @@ It MAY be different if or when:
 ## Discovery domain
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
+While this is a useful way of bootstrapping connection to a set of peers,
+it MAY be used in conjunction with an [ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery) procedure to find still other nodes to connect to.
+Mechanisms for ambient peer discovery are not yet specified for Waku v2.
 It is possible to bypass the discovery domain by specifying static nodes.
 
 <!-- TODO: Document (a) how we map ENR to multiaddr for EIP-1459, once specified, (b) ambient peer discovery. -->
@@ -345,3 +348,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 16. [Ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
 
 17. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459)
+
+18. [Ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
