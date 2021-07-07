@@ -48,8 +48,8 @@ For 10/WAKU2, the `payload` field is used in `WakuMessage` and MAY contain the e
 
 The fields that are concatenated and encrypted as part of the `data`/`payload` field are:
  - flags
- - payload length
- - payload
+ - payload/data length
+ - payload/data
  - padding
  - signature
 
