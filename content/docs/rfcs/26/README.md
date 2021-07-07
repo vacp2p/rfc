@@ -7,7 +7,7 @@ editor: Oskar Thoren <oskar@status.im>
 contributors:
 ---
 
-This specification describes how Waku provides provides confidentiality, authenticity, and integrity, as well as some form unlinkability.
+This specification describes how Waku provides confidentiality, authenticity, and integrity, as well as some form of unlinkability.
 Specifically, it describes how encryption, decryption and signing works in [6/WAKU1](/spec/6) and in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 1](/spec/14/#version1).
 
 This specification effectively replaces [7/WAKU-DATA](/spec/7) as well as [6/WAKU1 Payload encryption](/spec/6/#payload-encryption) but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
