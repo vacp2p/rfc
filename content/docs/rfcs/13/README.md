@@ -162,7 +162,7 @@ However, one can consider preserving anonymity through one of the following ways
   Such messages will always be considered recent and occupy the front side of the message list. 
   Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in Blockchain-based timestamps. 
   That is, messages contain the most recent block height perceived by their senders at the time of message generation. 
-  This proves accuracy within a range of minutes (e.g., in a Bitcoin blockchain) or seconds (e.g., in the Ethereum 2.0) from the time of origination. 
+  This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination. 
 
 # Copyright
 
