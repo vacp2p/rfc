@@ -130,7 +130,7 @@ As such, the retrieved page contains an ordered list of `WakuMessage`s from the 
 Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
 However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and consistent across all the nodes.
 This has the benefit of `cursor` reusability i.e., a `cursor` obtained from one node can be consistently used to query from another node.
-However, this reusability of the `cursor` does not hold when the `receiverTime` is utilized due to the network delay and nodes' asynchronicity.
+However, this `cursor` reusability  does not hold when the `receiverTime` is utilized as the receiver time is affected by the network delay and nodes' clock asynchrony.
 
 ### HistoryResponse
 
