@@ -58,7 +58,7 @@ The fields that are concatenated and encrypted as part of the `data`/`payload` f
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
 ```abnf
-; 1 byte; first two bits contain the size of auxiliary field, 
+; 1 byte; first two bits contain the size of payload-length field,
 ; third bit indicates whether the signature is present.
 flags           = 1OCTET
 
