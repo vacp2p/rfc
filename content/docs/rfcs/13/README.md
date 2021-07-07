@@ -159,10 +159,10 @@ However, one can consider preserving anonymity through one of the following ways
 
 - **Robust timestamps**: Having reliable timestamps for waku messages prevents range of attacks, including injecting messages with timestamps pointing to the far future. 
   Such messages will always be considered recent and occupy the front side of the message list. 
-  Potential solutions include the use of open timestamps e.g.,  block height in a Blockchain based timestamps. 
+  Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in a Blockchain based timestamps. 
   That is messages contain the most recent block height perceived by their senders at the time of message generation. 
   This proves accuracy within a range of minutes (e.g., in a Bitcoin blockchain) or seconds (e.g., in the Ethereum 2.0) from time of origination. 
-  
+
 # Copyright
 
 Copyright and related rights waived via
