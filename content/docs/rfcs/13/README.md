@@ -158,13 +158,19 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
-- **Robust timestamps**: Having reliable timestamps for waku messages prevents a range of attacks, including injecting messages with timestamps pointing to the far future. 
-  Such messages will always be considered recent and occupy the front side of the message list. 
-  Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in Blockchain-based timestamps. 
-  That is, messages contain the most recent block height perceived by their senders at the time of message generation. 
-  This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination. 
+- **Robust timestamps**: Having reliable timestamps for waku messages prevents a range of attacks, including injecting messages with timestamps pointing to the far future.   
+Such messages will be considered the most recent and served as the last messages to the users irrespective of how many other messages are received afterward.
+Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in Blockchain-based timestamps. 
+That is, messages contain the most recent block height perceived by their senders at the time of message generation. 
+This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination. 
 
+# References
+1. [Open timestamps](https://opentimestamps.org/) 
+   
 # Copyright
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+
+
