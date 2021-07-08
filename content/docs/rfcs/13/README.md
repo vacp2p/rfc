@@ -163,7 +163,7 @@ To better understand the attack, consider a store node whose current clock shows
 The store node already has a list of messages `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20)` that are sorted based on their timestamp.  
 An attacker sends a message with an arbitrary large timestamp e.g., 10 hours ahead of the correct clock `(m',2021-01-01 10:00:30)`. 
 The store node places `m'` at the end of the list `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m',2021-01-01 10:00:30)`. 
-Now another message arrives with a valid timestamp e.g., `(m11, 2021-01-01 00:00:30)`. However, since its timestamp precedes the malicious message `m'`, it gets placed before `m'` in the list i.e.,  `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m11, 2021-01-01 00:00:30), (m',2021-01-01 10:00:30)`.
+Now another message arrives with a valid timestamp e.g., `(m11, 2021-01-01 00:00:45)`. However, since its timestamp precedes the malicious message `m'`, it gets placed before `m'` in the list i.e.,  `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m11, 2021-01-01 00:00:45), (m',2021-01-01 10:00:30)`.
 In fact, for the next 10 hours, `m'` will always be considered as the most recent message and served as the last messages to the querying nodes irrespective of how many other messages arrive afterward. 
 
 A robust and verifiable timestamp allows the receiver of a message to verify that a message has been generated prior to the claimed timestamp. 
