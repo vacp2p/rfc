@@ -158,9 +158,16 @@ However, one can consider preserving anonymity through one of the following ways
   <!-- TODO: add a reference for PSIs? --> <!-- TODO: more techniques to be included --> 
 <!-- TODO: Censorship resistant: this is about a node that hides the historical messages from other nodes. This attack is not included in the specs since it does not fit the passive adversarial model (the attacker needs to deviate from the store protocol).-->
 
-- **Robust timestamps**: Having reliable timestamps for waku messages prevents a range of attacks, including injecting messages with timestamps pointing to the far future.   
-Such messages will be considered the most recent and served as the last messages to the users irrespective of how many other messages are received afterward.
-Potential solutions include the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in Blockchain-based timestamps. 
+- **Robust and verifiable timestamps**: Messages timestamp is a way to show that the message existed prior to some point in time. However, the lack of verifiability can create room for a range of attacks, including injecting messages with invalid timestamps pointing to the far future.   
+To better understand the attack, consider a store node whose current clock shows `2021-01-01 00:00:30` (and assume all the other nodes have a synchronized clocks +-20seconds).
+The store node already has a list of messages `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20)` that are sorted based on their timestamp.  
+An attacker sends a message with an arbitrary large timestamp e.g., 10 hours ahead of the correct clock `(m',2021-01-01 10:00:30)`. 
+The store node places `m'` at the end of the list `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m',2021-01-01 10:00:30)`. 
+Now another message arrives with a valid timestamp e.g., `(m11, 2021-01-01 00:00:30)`. However, since its timestamp precedes the malicious message `m'`, it gets placed before `m'` in the list i.e.,  `(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m11, 2021-01-01 00:00:30), (m',2021-01-01 10:00:30)`.
+In fact, for the next 10 hours, `m'` will always be considered as the most recent message and served as the last messages to the querying nodes irrespective of how many other messages arrive afterward. 
+
+A robust and verifiable timestamp allows the receiver of a message to verify that a message has been generated prior to the claimed timestamp. 
+One solution is the use of [open timestamps](https://opentimestamps.org/) e.g.,  block height in Blockchain-based timestamps. 
 That is, messages contain the most recent block height perceived by their senders at the time of message generation. 
 This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination. 
 
