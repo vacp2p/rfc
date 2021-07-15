@@ -1,7 +1,9 @@
-name: Add new issues Vac PM Board
+name: Add new issues and PRs to vac-research PM Board
 
 on:
   issues:
+    types: [opened]
+  pull_request:
     types: [opened]
 
 jobs:
@@ -10,6 +12,13 @@ jobs:
     steps:
       - uses: alex-page/github-project-automation-plus@v0.6.0
         with:
-          project: Vac PM Board
+          project: vac-research
           column: New
+          repo-token: ${{ secrets.GH_ACTION_PROJECT_MGMT }}
+      - name: Add pull request to column "Review/QA"
+        if: ${{ !!github.event.pull_request }}
+        uses: alex-page/github-project-automation-plus@v0.6.0
+        with:
+          project: vac-research
+          column: Review/QA
           repo-token: ${{ secrets.GH_ACTION_PROJECT_MGMT }}
