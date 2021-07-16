@@ -147,7 +147,7 @@ RPC call to respond to a HistoryQuery call.
   In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). 
   The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  
   The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
-- The `error` field contains information about whether any error has occurred while processing the corresponding `HistoryQuery`.
+- The `error` field contains information about any error that has occurred while processing the corresponding `HistoryQuery`.
   `NONE` stands for no error. 
   `INVALID_CURSOR` signifies the situation that the  `cursor` of the `HistoryQuery` does not match with the `Index` of any of the  `WakuMessage`s persisted by the queried node.
 
