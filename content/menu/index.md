@@ -9,6 +9,7 @@ bookMenuLevels: 1
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [25/LIBP2P-DNS-DISCOVERY]({{< relref "/docs/rfcs/25/README.md" >}})
+  - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
