@@ -82,6 +82,11 @@ message HistoryResponse {
   // the first field is reserved for future use
   repeated WakuMessage messages = 2;
   PagingInfo pagingInfo = 3;
+  enum Error {
+    NONE = 0;
+    INVALID_CURSOR = 1;
+  }
+  Error error = 4;
 }
 
 message HistoryRPC {
@@ -142,6 +147,9 @@ RPC call to respond to a HistoryQuery call.
   In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). 
   The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  
   The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
+- The `error` field contains information about any error that has occurred while processing the corresponding `HistoryQuery`.
+  `NONE` stands for no error. This is also the default value.
+  `INVALID_CURSOR` means that the  `cursor` field of `HistoryQuery` does not match with the `Index` of any of the  `WakuMessage`s persisted by the queried node.
 
 # Future Work
 
@@ -178,6 +186,4 @@ This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or 
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-
 
