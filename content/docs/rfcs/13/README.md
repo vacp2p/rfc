@@ -148,7 +148,7 @@ RPC call to respond to a HistoryQuery call.
   The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  
   The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
 - The `error` field contains information about any error that has occurred while processing the corresponding `HistoryQuery`.
-  `NONE` stands for no error. 
+  `NONE` stands for no error. This is also the default value.
   `INVALID_CURSOR` means that the  `cursor` field of `HistoryQuery` does not match with the `Index` of any of the  `WakuMessage`s persisted by the queried node.
 
 # Future Work
@@ -186,5 +186,4 @@ This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or 
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
 
