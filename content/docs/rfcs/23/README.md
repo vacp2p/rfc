@@ -148,7 +148,7 @@ the following structure for the content topic SHOULD be used:
 ```
 
 The `<4bytes-waku-v1-topic>` SHOULD be the lowercase hex representation of the 4-byte Waku v1 topic.
-A `0x` prefix SHOULD be added to the hex string.
+A `0x` prefix SHOULD be used.
 
 This creates a direct mapping between the two protocols.
 For example:
