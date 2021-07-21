@@ -4,7 +4,7 @@ title: 23/WAKU2-TOPICS
 name: Waku v2 Topic Usage Recommendations
 status: draft
 editor: Oskar Thoren <oskar@status.im>
-contributors:
+contributors: Hanno Cornelius <hanno@status.im>
 ---
 
 This document outlines recommended usage of topics in Waku v2.
