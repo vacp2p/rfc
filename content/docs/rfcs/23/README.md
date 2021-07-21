@@ -5,6 +5,7 @@ name: Waku v2 Topic Usage Recommendations
 status: draft
 editor: Oskar Thoren <oskar@status.im>
 contributors:
+  - Hanno Cornelius <hanno@status.im>
 ---
 
 This document outlines recommended usage of topics in Waku v2.
@@ -141,11 +142,14 @@ Topics in Waku v1 correspond to Content Topics in Waku v2.
 
 To bridge Waku v1 and Waku v2 we have a [15/WAKU-BRIDGE](/spec/15).
 For mapping Waku v1 topics to Waku v2 content topics,
-the following structure for the content topic is used:
+the following structure for the content topic SHOULD be used:
 
 ```
-/waku/v1/<4bytes-waku-v1-topic>/rlp
+/waku/1/<4bytes-waku-v1-topic>/rlp
 ```
+
+The `<4bytes-waku-v1-topic>` SHOULD be the lowercase hex representation of the 4-byte Waku v1 topic.
+A `0x` prefix SHOULD be used.
 
 This creates a direct mapping between the two protocols.
 For example:
