@@ -231,7 +231,60 @@ Compatibility can be achieved only by using a bridge that not only talks both de
 
 See [15/WAKU-BRIDGE](/spec/15) for details on a bidirectional bridge mode.
 
-# Security 
+## Appendix A: Implementation Notes
+
+### Implementation Matrix
+
+There are multiple implementations of Waku v2 and its protocols:
+
+- [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
+- [go-waku (Go)](https://github.com/status-im/go-waku/)
+- [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
+
+Below you can find an overview of the specs that they implement as they relate to Waku.
+This includes Waku v1 specs, as they are used for bridging between the two networks.
+
+| Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
+| ---- | -------------- | ------------ | ----------------- | -------------------- |
+|[6/WAKU1](/spec/6)|✔|||
+|[7/WAKU-DATA](/spec/7)|✔|✔||
+|[8/WAKU-MAIL](/spec/8)|✔|||
+|[9/WAKU-RPC](/spec/9)|✔|||
+|[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
+|[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|✔|
+|[12/WAKU2-FILTER](/spec/12)|✔|||
+|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|✔\*|
+|[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
+|[15/WAKU2-BRIDGE](/spec/15)|✔|||
+|[16/WAKU2-RPC](/spec/16)|✔|||
+|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
+|[18/WAKU2-SWAP](/spec/18)|🚧|||
+|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
+
+*js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
+**js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
+
+
+### Recommendations for clients
+
+To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:
+
+- [10/WAKU2](/spec/10) - this spec
+- [11/WAKU2-RELAY](/spec/11) - for basic operation
+- [14/WAKU2-MESSAGE](/spec/14) - version 0 (unencrypted)
+- [13/WAKU2-STORE](/spec/13) - for historical messaging (query mode only)
+
+To get compatibility with Waku v1:
+
+- [7/WAKU-DATA](/spec/7)
+- [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
+
+For an interoperable keep-alive mechanism:
+
+- [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
+with periodic pings to connected peers
+
+# Appendix B: Security 
 
 Each protocol layer of Waku v2 provides a distinct service and is associated with a separate set of security features and concerns.
 Therefore, the overall security of Waku v2 depends on how the different layers are utilized.
@@ -301,9 +354,9 @@ Likewise, in the `12/WAKU2-FILTER`, a full node can link the light node's `PeerI
 
 <!--TODO: might be good to add a figure visualizing the Waku protocol stack and the security features of each layer-->
 
-## Future work
+## Appendix C: Future work
 
-We are actively working on the following features to be added to Waku v2.
+The following features are currently experimental and under research and initial implementation:
 
 **Economic Spam resistance**:
 We aim to enable an incentivized spam protection technique to enhance `11/WAKU2-RELAY` by using rate limiting nullifiers.
@@ -320,57 +373,6 @@ The accounting model can be used in `13/WAKU2-STORE` and `12/WAKU2-FILTER` to pr
 Additionally, this gives node operators who provide a useful service to the network an incentive to perform that service.
 See [18/WAKU2-SWAP](/spec/18) for more details on this piece of work.
 
-## Appendix A: Implementation Notes
-
-### Implementation Matrix
-
-There are multiple implementations of Waku v2 and its protocols:
-
-- [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
-- [go-waku (Go)](https://github.com/status-im/go-waku/)
-- [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
-
-Below you can find an overview of the specs that they implement as they relate to Waku. This includes Waku v1 specs, as they are used for bridging between the two networks.
-
-| Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
-| ---- | -------------- | ------------ | ----------------- | -------------------- |
-|[6/WAKU1](/spec/6)|✔|||
-|[7/WAKU-DATA](/spec/7)|✔|✔||
-|[8/WAKU-MAIL](/spec/8)|✔|||
-|[9/WAKU-RPC](/spec/9)|✔|||
-|[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
-|[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|✔|
-|[12/WAKU2-FILTER](/spec/12)|✔|||
-|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|✔\*|
-|[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
-|[15/WAKU2-BRIDGE](/spec/15)|✔|||
-|[16/WAKU2-RPC](/spec/16)|✔|||
-|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
-|[18/WAKU2-SWAP](/spec/18)|🚧|||
-|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
-
-*js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
-**js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
-
-
-### Recommendations for clients
-
-To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:
-
-- [10/WAKU2](/spec/10) - this spec
-- [11/WAKU2-RELAY](/spec/11) - for basic operation
-- [14/WAKU2-MESSAGE](/spec/14) - version 0 (unencrypted)
-- [13/WAKU2-STORE](/spec/13) - for historical messaging (query mode only)
-
-To get compatibility with Waku v1:
-
-- [7/WAKU-DATA](/spec/7)
-- [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
-
-For an interoperable keep-alive mechanism:
-
-- [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
-with periodic pings to connected peers
 
 # Copyright
 
