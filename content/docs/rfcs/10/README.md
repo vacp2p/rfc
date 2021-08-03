@@ -9,43 +9,63 @@ contributors:
   - Hanno Cornelius <hanno@status.im>
 ---
 
-Waku is a privacy-preserving peer-to-peer messaging protocol for resource restricted devices.
-It implements PubSub over libp2p and adds capabilities on top of it. These capabilities are:
+Waku v2 is family of modular peer-to-peer protocols for secure communication.
+The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments.
+At a high level, it implements Pub/Sub over [libp2p](https://github.com/libp2p/specs) and adds a set of capabilities to it.
+These capabilities are things such as:
 (i) retrieving historical messages for mostly-offline devices
-(ii) adaptive nodes, allowing for heterogeneous nodes to contribute, and
-(iii) bandwidth preservation for light nodes.
-This makes it ideal for running a p2p protocol on mobile and in similarly restricted environments.
+(ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network
+(iii) preserving bandwidth usage for resource-restriced devices
 
-Historically, it has its roots in [Waku v1](/spec/6), which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack.
+This makes Waku ideal for running a p2p protocol on mobile and in similarly restricted environments.
+
+Historically, it has its roots in [Waku v1](/spec/6),
+which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack.
 However, Waku v2 acts more as a thin wrapper for PubSub and has a different API.
 It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p.
-See [rough road map](https://vac.dev/waku-v2-plan).
+See [rough road map (2020)](https://vac.dev/waku-v2-plan) for more historical context.
 
 # Motivation and goals
 
-1. **Generalized messaging.**
+Waku as a family of protocols is designed to have a set of properties that are useful for many applications:
+
+1. **Useful for generalized messaging.**
 Many applications require some form of messaging protocol to communicate between different subsystems or different nodes.
 This messaging can be human-to-human or machine-to-machine or a mix.
+Waku is designed to work for all these scenarios.
 
 2. **Peer-to-peer.**
-These applications sometimes have requirements that make them suitable for peer-to-peer solutions.
+Applications sometimes have requirements that make them suitable for peer-to-peer solutions:
+- Censorship-resistant with no single point of failure 
+- Adaptive and scalable network
+- Shared infrastructure
 
-3. **Resource restricted**.
-These applications often run in constrained environments, where resources or the environment is restricted in some fashion. E.g.:
+3. **Runs anywhere**.
+Applications often run in restricted environments, where resources or the environment is restricted in some fashion.
+For example:
 
 - limited bandwidth, CPU, memory, disk, battery, etc
 - not being publicly connectable
 - only being intermittently connected; mostly-offline
 
-4. **Privacy.**
-These applications have a desire for some privacy guarantees, such as pseudonymity, metadata protection in transit, etc.
+4. **Privacy-preserving.**
+ Applications often have a desire for some privacy guarantees, such as:
+ - Pseudonymity and not being tied to any personally identifiable information (PII)
+ - Metadata protection in transit
+ - Various forms of unlinkability, etc
 
-Waku provides a solution that satisfies these goals in a reasonable matter.
+5. **Modular design.**
+Applications often have different trade-offs when it comes to what properties they and their users value.
+Waku is designed in a modular fashion where an application protocol or node can choose what protocols they run.
+We call this concept *adaptive nodes*.
+For example:
+- resource usage vs metadata protection
+- providing useful services to the network vs mostly using it
+- stronger guarantees for spam protection vs economic registration cost
 
 # Network interaction domains
 
-While Waku is best though of as a single cohesive thing, there are three network
-interaction domains:
+While Waku is best though of as a single cohesive thing, there are three network interaction domains:
 (a) gossip domain
 (b) discovery domain
 (c) req/resp domain.
