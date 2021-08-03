@@ -9,6 +9,8 @@ contributors:
   - Hanno Cornelius <hanno@status.im>
 ---
 
+## Abstract
+
 Waku v2 is family of modular peer-to-peer protocols for secure communication.
 The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments.
 At a high level, it implements Pub/Sub over [libp2p](https://github.com/libp2p/specs) and adds a set of capabilities to it.
@@ -25,7 +27,7 @@ However, Waku v2 acts more as a thin wrapper for PubSub and has a different API.
 It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p.
 See [rough road map (2020)](https://vac.dev/waku-v2-plan) for more historical context.
 
-# Motivation and goals
+## Motivation and goals
 
 Waku as a family of protocols is designed to have a set of properties that are useful for many applications:
 
@@ -69,7 +71,7 @@ For example:
 - providing useful services to the network vs mostly using it
 - stronger guarantees for spam protection vs economic registration cost
 
-# Network interaction domains
+## Network interaction domains
 
 While Waku is best though of as a single cohesive thing, there are three network interaction domains:
 
@@ -77,7 +79,7 @@ While Waku is best though of as a single cohesive thing, there are three network
 (b) discovery domain
 (c) req/resp domain
 
-## Protocols and identifiers
+### Protocols and identifiers
 
 Since Waku v2 is built on top of libp2p, many protocols have a libp2p protocol identifier.
 The current main [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
@@ -111,14 +113,14 @@ for liveness checks between peers, or to keep peer-to-peer connections alive.
 
 For the actual content being passed around, see the [14/WAKU2-MESSAGE](/spec/14) and [26/WAKU2-PAYLOAD](/spec/26).
 
-## Use of libp2p and protobuf
+### Use of libp2p and protobuf
 
 Unless otherwise specified, all protocols are implemented over libp2p and use Protobuf by default.
 Since messages are exchanged over a [bi-directional binary stream](https://docs.libp2p.io/concepts/protocols/),
 as a convention, libp2p protocols prefix binary message payloads with the length of the message in bytes.
 This length integer is encoded as a [protobuf varint](https://developers.google.com/protocol-buffers/docs/encoding#varints).
 
-## Gossip domain
+### Gossip domain
 
 Waku is using gossiping to disseminate messages throughout the network.
 
@@ -128,25 +130,9 @@ See [11/WAKU2-RELAY](/spec/11) spec for more details.
 
 For an experimental privacy-preserving economic spam protection mechanism, see [17/WAKU2-RLNRELAY](/spec/17).
 
-### Default pubsub topic
-
-The default PubSub topic being used for Waku is currently:
-`/waku/2/default-waku/proto`
-
-This indicates that it relates to Waku, is version 2, is the default topic, and
-that the encoding of data field is protobuf.
-
-The default PubSub topic SHOULD be used for all protocols.
-This ensures a connected network, as well some degree of metadata protection.
-It MAY be different if or when:
-- Different applications have different message volume
-- Topic sharding is introduced
-- Encoding is changed
-- Version is changed
-
 See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usage.
 
-## Discovery domain
+### Discovery domain
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
 While this is a useful way of bootstrapping connection to a set of peers,
@@ -156,14 +142,14 @@ It is possible to bypass the discovery domain by specifying static nodes.
 
 <!-- TODO: Document (a) how we map ENR to multiaddr for EIP-1459, once specified, (b) ambient peer discovery. -->
 
-## Request/Reply domain
+### Request/Reply domain
 
 In addition to the Gossip domain,
 Waku provides a set of Request/Reply protocols.
 They are primarily used in order to get Waku to run in resource restricted environments,
 such as low bandwidth or being mostly offline.
 
-### Historical message support
+#### Historical message support
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta3`
 
@@ -173,26 +159,26 @@ See [13/WAKU2-STORE](/spec/13) spec for more details.
 There is also an experimental fault-tolerant addition to the store protocol that relaxes the high availability requirement.
 See [21/WAKU2-FT-STORE](/spec/21)
 
-### Content filtering
+#### Content filtering
 
 **Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
 
 This is used to make fetching of a subset of messages more bandwidth preserving.
 See [12/WAKU2-FILTER](/spec/12) spec for more details.
 
-### Light push
+#### Light push
 
 **Protocol identifier***: `/vac/waku/lightpush/2.0.0-beta1`
 
 This is used for nodes with short connection windows and limited bandwidth to publish messages into the Waku network.
 See [19/WAKU2-LIGHTPUSH](/spec/19) spec for more details.
 
-### Other Request/Reply protocols
+#### Other protocols
 
 The above is a non-exhaustive list,
 and due to the modular design of Waku there may be other protocols here that provide a useful service to the Waku network.
 
-## Overview
+### Overview of protocol interaction
 
 See the sequence diagram below for an overview of how different protocols interact.
 
@@ -226,9 +212,9 @@ See [12/WAKU2-FILTER](/spec/12).
 It then requests messages matching `pubtopic1` and `contentTopic1` from Node D.
 Node D responds with messages meeting this (and possibly other) criteria. See [13/WAKU2-STORE](/spec/13).
 
-# Upgradability and Compatibility
+## Appendix A: Upgradability and Compatibility
 
-## Compatibility with Waku v1
+### Compatibility with Waku v1
 
 Waku v1 and Waku v2 are different protocols all together.
 They use a different transport protocol underneath; Waku v1 is devp2p RLPx based while Waku v2 uses libp2p.
@@ -236,59 +222,6 @@ The protocols themselves also differ as does their data format.
 Compatibility can be achieved only by using a bridge that not only talks both devp2p RLPx and libp2p, but that also transfers (partially) the content of a packet from one version to the other.
 
 See [15/WAKU-BRIDGE](/spec/15) for details on a bidirectional bridge mode.
-
-## Appendix A: Implementation Notes
-
-### Implementation Matrix
-
-There are multiple implementations of Waku v2 and its protocols:
-
-- [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
-- [go-waku (Go)](https://github.com/status-im/go-waku/)
-- [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
-
-Below you can find an overview of the specs that they implement as they relate to Waku.
-This includes Waku v1 specs, as they are used for bridging between the two networks.
-
-| Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
-| ---- | -------------- | ------------ | ----------------- | -------------------- |
-|[6/WAKU1](/spec/6)|✔|||
-|[7/WAKU-DATA](/spec/7)|✔|✔||
-|[8/WAKU-MAIL](/spec/8)|✔|||
-|[9/WAKU-RPC](/spec/9)|✔|||
-|[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
-|[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|✔|
-|[12/WAKU2-FILTER](/spec/12)|✔|||
-|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|✔\*|
-|[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
-|[15/WAKU2-BRIDGE](/spec/15)|✔|||
-|[16/WAKU2-RPC](/spec/16)|✔|||
-|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
-|[18/WAKU2-SWAP](/spec/18)|🚧|||
-|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
-
-*js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
-**js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
-
-
-### Recommendations for clients
-
-To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:
-
-- [10/WAKU2](/spec/10) - this spec
-- [11/WAKU2-RELAY](/spec/11) - for basic operation
-- [14/WAKU2-MESSAGE](/spec/14) - version 0 (unencrypted)
-- [13/WAKU2-STORE](/spec/13) - for historical messaging (query mode only)
-
-To get compatibility with Waku v1:
-
-- [7/WAKU-DATA](/spec/7)
-- [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
-
-For an interoperable keep-alive mechanism:
-
-- [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
-with periodic pings to connected peers
 
 # Appendix B: Security 
 
@@ -360,7 +293,60 @@ Likewise, in the `12/WAKU2-FILTER`, a full node can link the light node's `PeerI
 
 <!--TODO: might be good to add a figure visualizing the Waku protocol stack and the security features of each layer-->
 
-## Appendix C: Future work
+## Appendix C: Implementation Notes
+
+### Implementation Matrix
+
+There are multiple implementations of Waku v2 and its protocols:
+
+- [nim-waku (Nim)](https://github.com/status-im/nim-waku/)
+- [go-waku (Go)](https://github.com/status-im/go-waku/)
+- [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
+
+Below you can find an overview of the specs that they implement as they relate to Waku.
+This includes Waku v1 specs, as they are used for bridging between the two networks.
+
+| Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
+| ---- | -------------- | ------------ | ----------------- | -------------------- |
+|[6/WAKU1](/spec/6)|✔|||
+|[7/WAKU-DATA](/spec/7)|✔|✔||
+|[8/WAKU-MAIL](/spec/8)|✔|||
+|[9/WAKU-RPC](/spec/9)|✔|||
+|[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
+|[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|✔|
+|[12/WAKU2-FILTER](/spec/12)|✔|||
+|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|✔\*|
+|[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
+|[15/WAKU2-BRIDGE](/spec/15)|✔|||
+|[16/WAKU2-RPC](/spec/16)|✔|||
+|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
+|[18/WAKU2-SWAP](/spec/18)|🚧|||
+|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
+
+*js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
+**js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
+
+
+### Recommendations for clients
+
+To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:
+
+- [10/WAKU2](/spec/10) - this spec
+- [11/WAKU2-RELAY](/spec/11) - for basic operation
+- [14/WAKU2-MESSAGE](/spec/14) - version 0 (unencrypted)
+- [13/WAKU2-STORE](/spec/13) - for historical messaging (query mode only)
+
+To get compatibility with Waku v1:
+
+- [7/WAKU-DATA](/spec/7)
+- [14/WAKU2-MESSAGE](/spec/14) - version 1 (encrypted with `7/WAKU-DATA`)
+
+For an interoperable keep-alive mechanism:
+
+- [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
+with periodic pings to connected peers
+
+## Appendix D: Future work
 
 The following features are currently experimental and under research and initial implementation:
 
@@ -380,11 +366,11 @@ Additionally, this gives node operators who provide a useful service to the netw
 See [18/WAKU2-SWAP](/spec/18) for more details on this piece of work.
 
 
-# Copyright
+## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-# References
+## References
 
 1. [libp2p specs](https://github.com/libp2p/specs)
 
