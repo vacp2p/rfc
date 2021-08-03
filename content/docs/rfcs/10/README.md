@@ -89,7 +89,7 @@ The current main [protocol identifiers](https://docs.libp2p.io/concepts/protocol
 3. `/vac/waku/filter/2.0.0-beta1`
 4. `/vac/waku/lightpush/2.0.0-beta1`
 
-This is in addition to protocols that specify mesages, payloads, and recommend usages.
+This is in addition to protocols that specify messages, payloads, and recommended usages.
 Since these aren't negotiated libp2p protocols, they are referred to by their RFC ID.
 For example:
 
