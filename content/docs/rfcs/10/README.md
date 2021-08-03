@@ -30,17 +30,20 @@ See [rough road map (2020)](https://vac.dev/waku-v2-plan) for more historical co
 Waku as a family of protocols is designed to have a set of properties that are useful for many applications:
 
 1. **Useful for generalized messaging.**
+
 Many applications require some form of messaging protocol to communicate between different subsystems or different nodes.
 This messaging can be human-to-human or machine-to-machine or a mix.
 Waku is designed to work for all these scenarios.
 
 2. **Peer-to-peer.**
+
 Applications sometimes have requirements that make them suitable for peer-to-peer solutions:
 - Censorship-resistant with no single point of failure 
 - Adaptive and scalable network
 - Shared infrastructure
 
 3. **Runs anywhere**.
+
 Applications often run in restricted environments, where resources or the environment is restricted in some fashion.
 For example:
 
@@ -49,15 +52,18 @@ For example:
 - only being intermittently connected; mostly-offline
 
 4. **Privacy-preserving.**
+
  Applications often have a desire for some privacy guarantees, such as:
  - Pseudonymity and not being tied to any personally identifiable information (PII)
  - Metadata protection in transit
  - Various forms of unlinkability, etc
 
 5. **Modular design.**
+
 Applications often have different trade-offs when it comes to what properties they and their users value.
 Waku is designed in a modular fashion where an application protocol or node can choose what protocols they run.
 We call this concept *adaptive nodes*.
+
 For example:
 - resource usage vs metadata protection
 - providing useful services to the network vs mostly using it
