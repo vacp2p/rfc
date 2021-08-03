@@ -84,7 +84,7 @@ The application layer decides on how the `payload` of a `WakuMessage` shall be e
 
 ## Reliability of WakuMessage timestamp 
 The `timestamp` field in `WakuMessage` is set by its sender. 
-Without a proper `timestamp` verification and validation, this field should not be relied upon for critical operations like message ordering.
+Without a proper `timestamp` verification and validation, this field is prone to exploit and should not be relied upon for critical operations like message ordering.
 This is because an attacker can set the `timestamp` arbitrarily and e.g., bump it to a high value so that it always be the *latest* in a chat.
 Applications relying on the `WakuMessage`'s `timestamp` are recommended to utilize a proper timestamp validation method.
 For example, Status specs deal with message ordering against adversarial message timestamps as described in [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
