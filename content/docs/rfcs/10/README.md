@@ -380,40 +380,38 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 1. [libp2p specs](https://github.com/libp2p/specs)
 
-TODO
+2. [6/WAKU1 spec](/spec/6)
 
-1. [6/WAKU1 spec](/spec/6)
+3. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
 
-2. [Whisper spec (EIP627)](https://eips.ethereum.org/EIPS/eip-627)
+4. [Waku v2 plan](https://vac.dev/waku-v2-plan)
 
-3. [Waku v2 plan](https://vac.dev/waku-v2-plan)
+5. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
 
-4. [Protocol Identifiers](https://docs.libp2p.io/concepts/protocols/)
+6. [Protobuf varint encoding](https://developers.google.com/protocol-buffers/docs/encoding#varints)
 
-5. [Protobuf varint encoding](https://developers.google.com/protocol-buffers/docs/encoding#varints)
+7. [7/WAKU-DATA spec](/spec/7)
 
-6. [7/WAKU-DATA spec](/spec/7)
+8. [11/WAKU2-RELAY spec](/spec/11)
 
-7. [11/WAKU2-RELAY spec](/spec/11)
+9. [13/WAKU2-STORE spec](/spec/13)
 
-8. [13/WAKU2-STORE spec](/spec/13)
+10. [12/WAKU2-FILTER spec](/spec/12)
 
-9. [12/WAKU2-FILTER spec](/spec/12)
+11. [15/WAKU2-BRIDGE spec](/spec/15)
 
-10. [15/WAKU2-BRIDGE spec](/spec/15)
+12. [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/)
 
-11. [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/)
+13. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 
-12. [GossipSub v1.1](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
+14. [14/WAKU2-MESSAGE spec](/spec/14)
 
-13. [14/WAKU2-MESSAGE spec](/spec/14)
+15. [14/WAKU2-RLNRELAY spec](/spec/17)
 
-14. [14/WAKU2-RLNRELAY spec](/spec/17)
+16. [18/WAKU2-SWAP spec](/spec/18)
 
-15. [18/WAKU2-SWAP spec](/spec/18)
+17. [Ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
 
-16. [Ping protocol](https://docs.libp2p.io/concepts/protocols/#ping)
+18. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459)
 
-17. [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459)
-
-18. [Ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
+19. [Ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery)
