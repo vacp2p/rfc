@@ -77,8 +77,17 @@ The previous `data` field corresponds to the `payload` field.
 
 # Security Consideration
 
-In Waku, the confidentiality, integrity, and authenticity of the data must be addressed at the `WakuMessage` level.
-That is, the `payload` shall be encrypted or signed properly to meet the application-specific privacy needs.
+## Confidentiality, integrity, and authenticity 
+In Waku, the data confidentiality, integrity, and authenticity is an application layer concern. 
+The application layer decides on how the `payload` of a `WakuMessage` shall be encrypted or signed to meet the privacy needs.
+[WAKU2-PAYLOAD](/content/docs/rfcs/26/README.md) presents the set of available tools in this regard.
+
+## Reliability of WakuMessage timestamp 
+The `timestamp` field in `WakuMessage` is set by its sender. 
+Without a proper `timestamp` verification and validation, this field should not be relied upon for critical operations like message ordering.
+This is because an attacker can set the `timestamp` arbitrarily and e.g., bump it to a high value so that it always be the *latest* in a chat.
+Applications relying on the `WakuMessage`'s `timestamp` are recommended to utilize a timestamp validation method that fits their context.
+For example, Status specs deal with message ordering against adversarial message timestamps as described in [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
 
 # Copyright
 
