@@ -73,7 +73,7 @@ For example:
 
 ## Network interaction domains
 
-While Waku is best though of as a single cohesive thing, there are three network interaction domains:
+While Waku is best thought of as a single cohesive thing, there are three network interaction domains:
 
 (a) gossip domain
 (b) discovery domain
