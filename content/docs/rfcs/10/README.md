@@ -67,9 +67,9 @@ Waku is designed in a modular fashion where an application protocol or node can 
 We call this concept *adaptive nodes*.
 
 For example:
-- resource usage vs metadata protection
-- providing useful services to the network vs mostly using it
-- stronger guarantees for spam protection vs economic registration cost
+- Resource usage vs metadata protection
+- Providing useful services to the network vs mostly using it
+- Stronger guarantees for spam protection vs economic registration cost
 
 ## Network interaction domains
 
