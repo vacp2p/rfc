@@ -303,7 +303,7 @@ There are multiple implementations of Waku v2 and its protocols:
 - [go-waku (Go)](https://github.com/status-im/go-waku/)
 - [js-waku (NodeJS and Browser)](https://github.com/status-im/js-waku/)
 
-Below you can find an overview of the specs that they implement as they relate to Waku.
+Below you can find an overview of the specs that they implement as they relate to Waku v2.
 This includes Waku v1 specs, as they are used for bridging between the two networks.
 
 | Spec | nim-waku (Nim) | go-waku (Go) | js-waku (Node JS) | js-waku (Browser JS) |
