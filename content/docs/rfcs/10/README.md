@@ -49,9 +49,9 @@ Applications sometimes have requirements that make them suitable for peer-to-pee
 Applications often run in restricted environments, where resources or the environment is restricted in some fashion.
 For example:
 
-- limited bandwidth, CPU, memory, disk, battery, etc
-- not being publicly connectable
-- only being intermittently connected; mostly-offline
+- Limited bandwidth, CPU, memory, disk, battery, etc
+- Not being publicly connectable
+- Only being intermittently connected; mostly-offline
 
 4. **Privacy-preserving.**
 
