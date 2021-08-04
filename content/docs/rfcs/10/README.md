@@ -44,7 +44,7 @@ Applications sometimes have requirements that make them suitable for peer-to-pee
 - Adaptive and scalable network
 - Shared infrastructure
 
-3. **Runs anywhere**.
+3. **Runs anywhere.**
 
 Applications often run in restricted environments, where resources or the environment is restricted in some fashion.
 For example:
