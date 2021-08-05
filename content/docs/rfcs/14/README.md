@@ -78,9 +78,9 @@ The previous `data` field corresponds to the `payload` field.
 # Security Consideration
 
 ## Confidentiality, integrity, and authenticity 
-Data confidentiality, integrity, and authenticity is an application layer concern. 
-The application layer decides on how the `payload` of a `WakuMessage` shall be encrypted or signed to meet the privacy needs.
-[WAKU2-PAYLOAD](/specs/26) presents the set of supported encryption and signature schemes in WAKU2.
+It is up to the application layer as to what level confidentiality, integrity and authenticity of the `payload` of `WakuMessage` matters. 
+Accordingly, the application layer shall utilize the encryption and signature schemes supported in WAKU2 to meet the application-specific privacy needs.
+The set of supported schemes in WAKU2 is presented in [WAKU2-PAYLOAD](/specs/26).
 
 ## Reliability of the WakuMessage timestamp
 
