@@ -82,12 +82,15 @@ Data confidentiality, integrity, and authenticity is an application layer concer
 The application layer decides on how the `payload` of a `WakuMessage` shall be encrypted or signed to meet the privacy needs.
 [WAKU2-PAYLOAD](/content/docs/rfcs/26/README.md) presents the set of supported encryption and signature schemes in WAKU2.
 
-## Reliability of WakuMessage timestamp 
-The `timestamp` field in `WakuMessage` is set by its sender. 
-Without a proper `timestamp` verification and validation, this field is prone to exploit and should not be relied upon for critical operations like message ordering.
-This is because an attacker can set the `timestamp` arbitrarily and e.g., bump it to a high value so that it always be the *latest* in a chat.
-Applications relying on the `WakuMessage`'s `timestamp` are recommended to utilize a proper timestamp validation method.
-For example, Status specs deal with message ordering against adversarial message timestamps as described in [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
+## Reliability of the WakuMessage timestamp
+
+The `timestamp` field in `WakuMessage` is set by the sender.
+Because `timestamp` isn't independently verified, this field is prone to exploit and misuse.
+It should not solely be relied upon for operations such as message ordering.
+
+For example, a malicious node can arbitrarily set the  `timestamp` of a `WakuMessage` to a high value so that it always shows up as the most recent message in a chat application.
+Applications using the `WakuMessage`'s `timestamp` field are recommended to use additional methods for more robust message ordering.
+An example of how to deal with message ordering against adversarial message timestamps can be found in the Status protocol, see [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
 
 # Copyright
 
