@@ -93,8 +93,8 @@ This is in addition to protocols that specify messages, payloads, and recommende
 Since these aren't negotiated libp2p protocols, they are referred to by their RFC ID.
 For example:
 
-- 14/WAKU2-MESSAGE and 26/WAKU2-PAYLOAD for message payloads
-- 23/WAKU2-TOPICS and 27/WAKU2-PEERS for recommendations around usage
+- [14/WAKU2-MESSAGE](/spec/14)and [26/WAKU2-PAYLOAD](/spec/26) for message payloads
+- [23/WAKU2-TOPICS](/spec/23) and [27/WAKU2-PEERS](/spec/27) for recommendations around usage
 
 There are also more experimental libp2p protocols such as:
 
@@ -110,8 +110,6 @@ In addition, Waku v2 MAY make use of [libp2p ping protocol](https://docs.libp2p.
 ```
 
 for liveness checks between peers, or to keep peer-to-peer connections alive.
-
-For the actual content being passed around, see the [14/WAKU2-MESSAGE](/spec/14) and [26/WAKU2-PAYLOAD](/spec/26).
 
 ### Use of libp2p and protobuf
 
