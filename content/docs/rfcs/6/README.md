@@ -472,14 +472,14 @@ Waku currently lacks incentives to run nodes, which means node operators are mor
 
 #### Light node privacy:
 
-The main privacy concern with light nodes is that they have to trust their directly connected peers with regard to their ID, IP and their topic interests. The reason for this trust requirement is that when a light node publishes an envelope, its directed peers will know that the light node owns that envelope (as light nodes do not relay other envelopes). Therefore, the directed peers of a light node can make assumptions about what envelopes (topics) the light node is interested in.
+The main privacy concern with a light node is that it has to reveal its topic interests (in addition to its IP and ID) to its directed peers. This is because when a light node publishes an envelope, its directed peers will know that the light node owns that envelope (as light nodes do not relay other envelopes). Therefore, the directed peers of a light node can make assumptions about what envelopes (topics) the light node is interested in.
 
 
 #### Mailserver client privacy:
 
-A mailserver client fetches archival envelopes from a mailserver through direct connection. 
+A mailserver client fetches archival envelopes from a mailserver through a direct connection. 
 In this direct connection, the client discloses its IP and ID as well as the topics/ bloom filter it is interested in to the mailserver.
-The collection of such information allows the mailserver to link clients IP/IDs to their topic interests and build a profile for each client over the time.
+The collection of such information allows the mailserver to link clients' IP/IDs to their topic interests and build a profile for each client over time.
 As such, the mailserver client has to trust the mailserver with this level of information. 
 
 #### Bloom filter privacy:
