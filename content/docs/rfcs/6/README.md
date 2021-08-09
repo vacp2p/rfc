@@ -126,7 +126,7 @@ ttl = 4OCTET
 
 ; 4 bytes of arbitrary data
 topic = 4OCTET
-x
+
 ; byte array of arbitrary size
 ; (contains encrypted payload)
 data = *OCTET
