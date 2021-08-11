@@ -96,7 +96,11 @@ A mailserver has to be online to receive envelopes for other nodes, this puts a 
 
 **Mailserver client privacy:**
 
-A mailserver client has to trust a mailserver, which means they can send direct traffic. This reveals what topics / bloom filter a node is interested in, along with its peerID (with IP).
+A mailserver client fetches archival envelopes from a mailserver through a direct connection. 
+In this direct connection, the client discloses its IP/ID as well as the topics/ bloom filter it is interested in to the mailserver.
+The collection of such information allows the mailserver to link clients' IP/IDs to their topic interests and build a profile for each client over time.
+As such, the mailserver client has to trust the mailserver with this level of information.
+A similar concern exists for the light nodes and their direct peers which is discussed in the security considerations of [6/WAKU1](/spec/7).
 
 **Mailserver trusted connection:**
 
