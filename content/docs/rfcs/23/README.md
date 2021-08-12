@@ -145,19 +145,19 @@ For mapping Waku v1 topics to Waku v2 content topics,
 the following structure for the content topic SHOULD be used:
 
 ```
-/waku/1/<4bytes-waku-v1-topic>/rfc7
+/waku/1/<4bytes-waku-v1-topic>/rfc26
 ```
 
 The `<4bytes-waku-v1-topic>` SHOULD be the lowercase hex representation of the 4-byte Waku v1 topic.
 A `0x` prefix SHOULD be used.
-`/rfc7` indicates that the bridged content is encoded according to RFC [7/WAKU-DATA](/spec/7).
+`/rfc26` indicates that the bridged content is encoded according to RFC [26/WAKU-PAYLOAD](/spec/26).
 See [15/WAKU-BRIDGE](/spec/15) for a description of the bridged fields.
 
 This creates a direct mapping between the two protocols.
 For example:
 
 ```
-/waku/1/0x007f80ff/rfc7
+/waku/1/0x007f80ff/rfc26
 ```
 
 # Copyright
@@ -183,4 +183,4 @@ Copyright and related rights waived via
 
 8. [15/WAKU-BRIDGE](/spec/15)
 
-9. [7/WAKU-DATA](/spec/7)
+9. [26/WAKU-PAYLOAD](/spec/26)
