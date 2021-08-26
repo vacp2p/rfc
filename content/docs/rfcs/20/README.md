@@ -34,7 +34,7 @@ Here are the variables used in the protocol and their definition:
 - `B` is Bob's Ethereum address (or account),
 - `b` is the private key of `B`, and is only known by Bob.
 - `B'` is Bob's Encryption Public Key, for which `b'` is the private key.
-- `M` is the privaate message that Alice sends to Bob.
+- `M` is the private message that Alice sends to Bob.
 
 # Design Requirements
 
@@ -71,7 +71,8 @@ Then Bob can compute the corresponding SECP-256k1 Public Key, `B'`.
 
 For Alice to encrypt messages for Bob,
 Bob SHOULD broadcast his Encryption Public Key `B'`.
-To prove that he is indeed the owner of his Ethereum account `B`, he MUST sign his Encryption Public Key.
+To prove that the Encryption Public Key `B'` is indeed owned by the owner of Bob's Ethereum Account `B`,
+Bob MUST sign `B'` using `B`.
 
 ## Sign Encryption Public Key
 
@@ -83,7 +84,7 @@ Note: While v4 also exists,
 it is not available on all wallets and the features brought by v4 is not needed for the current use case.
 
 The `TypedData` to be passed to `eth_signTypedData_v3` MUST be as follows, where:
- and sent to the Waku network.
+
 - `encryptionPublicKey` is Bob's Encryption Public Key, `B'`, in hex format, **without** `0x` prefix.
 - `bobAddress` is Bob's Ethereum address, corresponding to `B`, in hex format, **with** `0x` prefix.
 
