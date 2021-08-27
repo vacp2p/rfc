@@ -18,7 +18,8 @@ which enables a peer to send an encrypted message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 
 The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes,
-using Ethereum accounts for identity. 
+using Ethereum accounts for identity.
+This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API.
 In the current state, the protocol has privacy and features [limitations](#limitations), has not been audited
 and hence is not fit for production usage.
 We hope this can be an inspiration for developers wishing to build on top of Waku v2.
