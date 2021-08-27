@@ -2,7 +2,7 @@
 slug: 20
 title: 20/TOY-ETH-PM
 name: Toy Ethereum Private Message
-status: raw
+status: draft
 tags: waku-application
 editor: Franck Royer <franck@status.im>
 contributors:
@@ -17,7 +17,8 @@ This specification explains the Toy Ethereum Private Message protocol
 which enables a peer to send an encrypted message to another peer
 using the Waku v2 network, and the peer's Ethereum address.
 
-The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes.
+The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes,
+using Ethereum accounts for identity. 
 In the current state, the protocol has privacy and features [limitations](#limitations), has not been audited
 and hence is not fit for production usage.
 We hope this can be an inspiration for developers wishing to build on top of Waku v2.
