@@ -137,6 +137,47 @@ message PublicKeyMessage {
 This MUST be wrapped in a Waku Message version 0, with the Public Key Broadcast content topic.
 Finally, Bob SHOULD publish the message on Waku v2. 
 
+## Consideration for a non-interactive protocol
+
+Alice has to get Bob's public Key to send a message to Bob.
+Because an Ethereum Address is part of the hash of the public key's account,
+it is not enough in itself to deduce Bob's Public Key.
+
+This is why the protocol dictates that Bob MUST send his Public Key first,
+and Alice MUST receive it before she can send him a message.
+
+Moreover, nim-waku, the reference implementation of [13/WAKU2-STORE](/spec/13/),
+stores messages for a maximum period of 30 days.
+This means that Bob would need to broadcast his public key at least every 30 days to be reachable.
+
+Below we are reviewing possible solutions to mitigate this "sign up" step.
+
+### Retrieve the public key from the blockchain
+
+If Bob has signed at least one transaction with his account then his Public Key can be extracted from the transaction's ECDSA signature.
+The drawback of this method is that standard Web3 Wallet APIs does not allow Alice to specifically retrieve all/any transaction sent by Bob.
+
+Alice would instead need to use the `eth.getBlock` API to retrieve Ethereum blocks one by one.
+For each block, she would need to check the `from` value of each transaction until she finds a transaction sent by Bob.
+
+This process is resource intensive and can be slow when using services such as Infura due to rate limits in place,
+which makes it inappropriate for a browser or mobile phone environment.
+
+An alternative would be to either run a backend that can connect directly to an Ethereum node
+or use a centralized blockchain explorer.
+
+Not only these solutions have drawback (need of a backend or usage of a centralized service),
+they do not really solve any UX issue.
+Indeed, if Bob does not publish his Public Key in the first place
+then it can be an indication that he simply does not participate in this protocol and hence will not receive messages.
+
+### Publishing the public in long term storage
+
+Another improvement would be for Bob not having to re-publish his public key every 30 days or less.
+Similarly to above, if Bob stops publishing his public key then it may be an indication that he does not participate in the protocol anymore.
+
+In any case, the protocol could be modified to store the Public Key in a more permanent storage, such as a dedicated smart contract on the blockchain.
+
 # Send Private Message
 
 Alice MAY monitor the Waku v2 to collect Ethereum Address and Encryption Public Key tuples.
