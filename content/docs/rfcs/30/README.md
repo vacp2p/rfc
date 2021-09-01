@@ -13,7 +13,7 @@ This is an informational spec that show cases the concept of adaptive nodes.
 
 We can look at node types as a continuum, from more restricted to less restricted, fewer resources to more resources.
 
-![Node types - a continuum](../../../../rfcs/30/adaptive_node_continuum2.jpg)
+![Node types - a continuum](../../../../rfcs/30/adaptive_node_continuum2.png)
 
 ## Possible limitations
 
@@ -53,7 +53,7 @@ Incentives to run a node is currently planned around:
 
 Each node can choose which protocols to support, depending on its resources and goals.
 
-![Protocol selection](../../../../rfcs/30/adaptive_protocol_selection2.jpg)
+![Protocol selection](../../../../rfcs/30/adaptive_protocol_selection2.png)
 
 In the case of protocols like 11/WAKU2-RELAY etc (12, 13, 19, 21) these correspond to Libp2p protocols.
 
@@ -69,11 +69,11 @@ We can better visualize the network with some illustrative examples.
 
 The first one shows an example topology with different PubSub topics for the relay protocol.
 
-![Waku Network visualization](../../../../rfcs/30/adaptive_network_topology_protocols2.jpg)
+![Waku Network visualization](../../../../rfcs/30/adaptive_network_topology_protocols2.png)
 
 ## Legend
 
-![Waku Network visualization legend](../../../../rfcs/30/adaptive_network_topology_protocols_legend.jpg)
+![Waku Network visualization legend](../../../../rfcs/30/adaptive_network_topology_protocols_legend.png)
 
 The dotted box shows what content topics (application-specific) a node is interested in.
 
@@ -91,7 +91,7 @@ Behavior and interaction with other protocols specified in Vac RFCs, e.g. 25/LIB
 
 This one shows a cross-section of nodes in different dimensions and shows how the connections look different for different protocols.
 
-![Node Cross Section](../../../../rfcs/30/adaptive_node_cross_section2.jpg)
+![Node Cross Section](../../../../rfcs/30/adaptive_node_cross_section2.png)
 
 # Copyright
 
