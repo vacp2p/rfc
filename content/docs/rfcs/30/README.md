@@ -53,7 +53,7 @@ Incentives to run a node is currently planned around:
 
 Each node can choose which protocols to support, depending on its resources and goals.
 
-![Protocol selection](../../../../rfcs/30/adaptive_protocol_selection2.png)
+![Protocol selection](../../../../rfcs/30/adaptive_node_protocol_selection2.png)
 
 In the case of protocols like 11/WAKU2-RELAY etc (12, 13, 19, 21) these correspond to Libp2p protocols.
 
@@ -69,11 +69,11 @@ We can better visualize the network with some illustrative examples.
 
 The first one shows an example topology with different PubSub topics for the relay protocol.
 
-![Waku Network visualization](../../../../rfcs/30/adaptive_network_topology_protocols2.png)
+![Waku Network visualization](../../../../rfcs/30/adaptive_node_network_topology_protocols2.png)
 
 ## Legend
 
-![Waku Network visualization legend](../../../../rfcs/30/adaptive_network_topology_protocols_legend.png)
+![Waku Network visualization legend](../../../../rfcs/30/adaptive_node_network_topology_protocols_legend.png)
 
 The dotted box shows what content topics (application-specific) a node is interested in.
 
