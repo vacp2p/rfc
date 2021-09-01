@@ -71,6 +71,9 @@ For example:
 - Providing useful services to the network vs mostly using it
 - Stronger guarantees for spam protection vs economic registration cost
 
+For more on the concept of adaptive nodes and what this means in practice,
+please see the [30/ADAPTIVE-NODES](/spec/30) spec.
+
 ## Network interaction domains
 
 While Waku is best thought of as a single cohesive thing, there are three network interaction domains:
