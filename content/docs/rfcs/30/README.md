@@ -2,7 +2,7 @@
 slug: 30
 title: 30/ADAPTIVE-NODES
 name: Adaptive nodes
-status: raw
+status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
 ---
@@ -27,7 +27,7 @@ Some examples:
 
 - Opening broser window: costs nothing, but contribute nothing
 - Desktop: download, leave in background, contribute somewhat
-- ClusteR: expensive, upkeep, but can contribute a lot
+- Cluster: expensive, upkeep, but can contribute a lot
 
 These are also illustrative, so a node in a browser in certain environment might contribute similarly to Desktop.
 
