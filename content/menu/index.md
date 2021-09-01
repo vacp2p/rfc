@@ -10,7 +10,6 @@ bookMenuLevels: 1
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [25/LIBP2P-DNS-DISCOVERY]({{< relref "/docs/rfcs/25/README.md" >}})
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
-  - [30/ADAPTIVE-NODES]({{< relref "/docs/rfcs/30/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
@@ -28,6 +27,7 @@ bookMenuLevels: 1
   - [26/WAKU2-PAYLOAD]({{< relref "/docs/rfcs/26/README.md" >}})
   - [27/WAKU2-PEERS]({{< relref "/docs/rfcs/27/README.md" >}})
   - [29/WAKU2-CONFIG]({{< relref "/docs/rfcs/29/README.md" >}})
+  - [30/ADAPTIVE-NODES]({{< relref "/docs/rfcs/30/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
