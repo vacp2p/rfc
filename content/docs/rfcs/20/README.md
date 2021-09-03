@@ -137,7 +137,7 @@ message PublicKeyMessage {
 This MUST be wrapped in a Waku Message version 0, with the Public Key Broadcast content topic.
 Finally, Bob SHOULD publish the message on Waku v2. 
 
-## Consideration for a non-interactive protocol
+## Consideration for a non-interactive/uncoordinated protocol
 
 Alice has to get Bob's public Key to send a message to Bob.
 Because an Ethereum Address is part of the hash of the public key's account,
@@ -155,7 +155,7 @@ Below we are reviewing possible solutions to mitigate this "sign up" step.
 ### Retrieve the public key from the blockchain
 
 If Bob has signed at least one transaction with his account then his Public Key can be extracted from the transaction's ECDSA signature.
-The drawback of this method is that standard Web3 Wallet APIs does not allow Alice to specifically retrieve all/any transaction sent by Bob.
+The challenge with this method is that standard Web3 Wallet API does not allow Alice to specifically retrieve all/any transaction sent by Bob.
 
 Alice would instead need to use the `eth.getBlock` API to retrieve Ethereum blocks one by one.
 For each block, she would need to check the `from` value of each transaction until she finds a transaction sent by Bob.
@@ -163,13 +163,22 @@ For each block, she would need to check the `from` value of each transaction unt
 This process is resource intensive and can be slow when using services such as Infura due to rate limits in place,
 which makes it inappropriate for a browser or mobile phone environment.
 
-An alternative would be to either run a backend that can connect directly to an Ethereum node
-or use a centralized blockchain explorer.
+An alternative would be to either run a backend that can connect directly to an Ethereum node,
+use a centralized blockchain explorer
+or use a decentralized indexing service such as [The Graph](https://thegraph.com/).
 
-Not only these solutions have drawback (need of a backend or usage of a centralized service),
-they do not really solve any UX issue.
+Note that these would resolve a UX issue only if a sender wants to proceed with _air drops_.
+
 Indeed, if Bob does not publish his Public Key in the first place
 then it can be an indication that he simply does not participate in this protocol and hence will not receive messages.
+
+However, these solutions would be helpful if the sender wants to proceed with an _air drop_ of messages:
+Send messages over Waku for users to retrieve later, once they decide to participate in this protocol.
+Bob may not want to participate first but may decide to participate at a later stage
+and would like to access previous messages.
+This could make sense in an NFT offer scenario:
+Users send offers to any NFT owner,
+NFT owner may decide at some point to participate in the protocol and retrieve previous offers.
 
 ### Publishing the public in long term storage
 
