@@ -60,6 +60,12 @@ or verify her identity.
 Private messages are sent on the same content topic for all users.
 As the recipient data is encrypted, all participants must decrypt all messages which can lead to scalability issues.
 
+This protocol does not guarantee Perfect Forward Secrecy nor Future Secrecy:
+If Bob's private key compromising, past and future messages can be decrypted.
+A solution combining regular [X3DH](https://www.signal.org/docs/specifications/x3dh/)
+bundle broadcast with [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) encryption would remove these limitations;
+See the [Status specs](https://specs.status.im/spec/5) for more information.
+
 # The protocol
 
 ## Generate Encryption KeyPair
