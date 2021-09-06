@@ -25,7 +25,7 @@ We can look at node types as a continuum, from more restricted to less restricte
 
 Some examples:
 
-- Opening broser window: costs nothing, but contribute nothing
+- Opening browser window: costs nothing, but contribute nothing
 - Desktop: download, leave in background, contribute somewhat
 - Cluster: expensive, upkeep, but can contribute a lot
 
@@ -79,7 +79,7 @@ The dotted box shows what content topics (application-specific) a node is intere
 
 A node that is purely providing a service to the network might not care.
 
-In this example, we see support for toy chat, a topic in Waku v1 (Status chat), WalletConnect, and SuperRare community).
+In this example, we see support for toy chat, a topic in Waku v1 (Status chat), WalletConnect, and SuperRare community.
 
 ## Auxiliary network
 
