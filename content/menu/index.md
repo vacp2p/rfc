@@ -5,7 +5,7 @@ bookMenuLevels: 1
 
 - Raw
   - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
-  - [20/TOY-ETH-DM]({{< relref "/docs/rfcs/20/README.md" >}})
+  - [20/TOY-ETH-PM]({{< relref "/docs/rfcs/20/README.md" >}})
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [25/LIBP2P-DNS-DISCOVERY]({{< relref "/docs/rfcs/25/README.md" >}})
