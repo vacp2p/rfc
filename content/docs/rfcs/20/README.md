@@ -60,6 +60,15 @@ or verify her identity.
 Private messages are sent on the same content topic for all users.
 As the recipient data is encrypted, all participants must decrypt all messages which can lead to scalability issues.
 
+This protocol does not guarantee Perfect Forward Secrecy nor Future Secrecy:
+If Bob's private key is compromised, past and future messages could be decrypted.
+A solution combining regular [X3DH](https://www.signal.org/docs/specifications/x3dh/)
+bundle broadcast with [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) encryption would remove these limitations;
+See the [Status secure transport spec](https://specs.status.im/spec/5) for an example of a protocol that achieves this in a peer-to-peer setting.
+
+Bob MUST decide to participate in the protocol before Alice can send him a message.
+This is discussed in more in details in [Consideration for a non-interactive/uncoordinated protocol](#consideration-for-a-non-interactiveuncoordinated-protocol)
+
 # The protocol
 
 ## Generate Encryption KeyPair
