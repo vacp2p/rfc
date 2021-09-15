@@ -6,7 +6,6 @@ bookMenuLevels: 1
 - Raw
   - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
   - [20/TOY-ETH-PM]({{< relref "/docs/rfcs/20/README.md" >}})
-  - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [25/LIBP2P-DNS-DISCOVERY]({{< relref "/docs/rfcs/25/README.md" >}})
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
@@ -22,6 +21,7 @@ bookMenuLevels: 1
   - [16/WAKU2-RPC]({{< relref "/docs/rfcs/16/README.md" >}})
   - [18/WAKU2-SWAP]({{< relref "/docs/rfcs/18/README.md" >}})
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
+  - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
   - [22/TOY-CHAT]({{< relref "/docs/rfcs/22/README.md" >}})
   - [23/WAKU2-TOPICS]({{< relref "/docs/rfcs/23/README.md" >}})
   - [26/WAKU2-PAYLOAD]({{< relref "/docs/rfcs/26/README.md" >}})
