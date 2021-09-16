@@ -323,6 +323,7 @@ This includes Waku v1 specs, as they are used for bridging between the two netwo
 |[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
 |[18/WAKU2-SWAP](/spec/18)|🚧|||
 |[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
+|[21/WAKU2-FAULT-TOLERANT-STORE](/spec/21)|✔|||
 
 *js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
 **js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
