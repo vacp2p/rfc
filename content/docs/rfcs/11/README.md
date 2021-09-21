@@ -95,18 +95,18 @@ The [`TopicDescriptor`](https://github.com/libp2p/specs/blob/master/pubsub/READM
 The `Message` protobuf defines the format in which content is relayed between peers.
 `11/WAKU2-RELAY` specifies the following usage requirements for each field:
 
-- The `from` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
+- The `from` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-policy).
 
 - The `data` field MUST be filled out with a `WakuMessage`.
 See [`14/WAKU2-MESSAGE`](/spec/14) for more details.
 
-- The `seqno` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
+- The `seqno` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-policy).
 
 - The `topicIDs` field MUST contain the topics that a message is being published on.
 
-- The `signature` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
+- The `signature` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-policy).
 
-- The `key` field MUST NOT be used, following the [`StrictNoSign` signature policy](#Signature-Policy).
+- The `key` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-solicy).
 
 ## SubOpts fields
 
