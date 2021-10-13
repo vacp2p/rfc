@@ -161,7 +161,7 @@ The `epoch` is used for the generation of the `proof`.  It is an array of 32 byt
 <!-- TODO epoch is going to change to a different type -->
 
 `share_x` and `share_y` are shares of the user's identity key.
-These shares are created using Shamir's secret sharing scheme. 
+These shares are created using Shamir secret sharing scheme. 
 `share_x` is an array of 32 bytes and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
 <!-- TODO hash other fields if necessary-->
 `share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
