@@ -153,22 +153,22 @@ message WakuMessage {
 ## RateLimitProof
 
 The `proof` field is an array of 256 bytes and carries the actual zkSNARK proof. 
-Other fields of the `RateLimitProof` message are the public inputs to the rln circuit as defined in [rln documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs).
+Other fields of the `RateLimitProof` message are the [public inputs to the rln circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs).
 
-The `merkleRoot` indicates the root of the Merkle tree used for the generation of the `proof`. It is a 32-byte value.
+The `merkleRoot` indicates the root of the Merkle tree used for the generation of the `proof`. It is an array of 32 bytes.
 
-The `epoch` is used for the generation of the `proof`.  It is a 32-byte value. 
+The `epoch` is used for the generation of the `proof`.  It is an array of 32 bytes.
 <!-- TODO epoch is going to change to a different type -->
 
 `share_x` and `share_y` are shares of the user's identity key.
 These shares are created using Shamir's secret sharing scheme. 
-`share_x` is a 32-byte value and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
+`share_x` is an array of 32 bytes and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
 <!-- TODO hash other fields if necessary-->
-`share_y` is also a 32-byte value which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
+`share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
 
-The `nullifier` corresponds to the internal nullifier described in [rln documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers). 
-It allows specifying whether two messages are published by the same publisher during the same `epoch`.
-It is a 32-byte value.
+The `nullifier` is an [internal nullifier](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers) 
+which allows specifying whether two messages are published by the same publisher during the same `epoch`.
+It is an array of 32 bytes.
 
 <!-- TODO to reflect this change on WakuMessage spec once the PR gets mature -->
 
