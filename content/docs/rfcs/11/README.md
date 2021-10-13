@@ -150,7 +150,7 @@ Spam protection is partly provided by GossipSub v1.1 through [scoring mechanism]
 At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.
 `11/WAKU2-RELAY` aims at enabling an advanced spam protection mechanism with economic disincentives by utilizing Rate Limiting Nullifiers.
 In a nutshell, peers must conform to a certain message publishing rate per a system-defined epoch, otherwise, they get financially penalized for exceeding the rate.
-More details on this new technique can be found in [`17/WAKU-RLN`](/spec/17). 
+More details on this new technique can be found in [`17/WAKU-RLN-RELAY`](/spec/17). 
   <!-- TODO havn't checked if all the measures in libp2p GossipSub v1.1 are taken in the nim-libp2p as well, may need to audit the code --> 
 
 - Providing **Unlinkability**, **Integrity** and  **Authenticity** simultaneously:
