@@ -130,16 +130,16 @@ syntax = "proto3";
 
 message RateLimitProof {
   bytes proof = 1;
-  bytes merkleRoot = 2;
+  bytes merkle_root = 2;
   bytes epoch = 3;
-  bytes shareX = 4;
-  bytes shareY = 5;
+  bytes share_x = 4;
+  bytes share_y = 5;
   bytes nullifier = 6;
 }
 
 message WakuMessage {
   bytes payload = 1;
-  string content_topic = 2;
+  string contentTopic = 2;
   uint32 version = 3;
   double timestamp = 4;
 + RateLimitProof rate_limit_proof = 21;
@@ -160,11 +160,11 @@ The `merkleRoot` indicates the root of the Merkle tree used for the generation o
 The `epoch` is used for the generation of the `proof`.  It is a 32-byte value. 
 <!-- TODO epoch is going to change to a different type -->
 
-`shareX` and `shareY` are shares of the user's identity key.
+`share_x` and `share_y` are shares of the user's identity key.
 These shares are created using Shamir's secret sharing scheme. 
-`shareX` is a 32-byte value and contains the hash of the `WakuMessage`'s `payload` concatenated with its `content_topic`. 
+`share_x` is a 32-byte value and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
 <!-- TODO hash other fields if necessary-->
-`shareY` is also a 32-byte value which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
+`share_y` is also a 32-byte value which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
 
 The `nullifier` corresponds to the internal nullifier described in [rln documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers). 
 It allows specifying whether two messages are published by the same publisher during the same `epoch`.
