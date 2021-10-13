@@ -1,6 +1,6 @@
 ---
 slug: 17
-title: 17/WAKU-RLN
+title: 17/WAKU-RLN-RELAY
 name: Waku v2 RLN Relay
 status: raw
 tags: waku-core
@@ -128,15 +128,48 @@ Nodes MAY extend the  [14/WAKU2-MESSAGE](/spec/14) with a `proof` field to indic
 
 syntax = "proto3";
 
+message RateLimitProof {
+  bytes proof = 1;
+  bytes merkleRoot = 2;
+  bytes epoch = 3;
+  bytes shareX = 4;
+  bytes shareY = 5;
+  bytes nullifier = 6;
+}
+
 message WakuMessage {
   bytes payload = 1;
-  string contentTopic = 2;
+  string content_topic = 2;
   uint32 version = 3;
   double timestamp = 4;
-+ bytes proof = 21;
++ RateLimitProof rate_limit_proof = 21;
 }
 
 ```
+## WakuMessage
+
+`rate_limit_proof` holds the information required to prove that the message owner has not exceeded the message rate limit.
+ 
+## RateLimitProof
+
+The `proof` field is an array of 256 bytes and carries the actual zkSNARK proof. 
+Other fields of the `RateLimitProof` message are the public inputs to the rln circuit as defined in [rln documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs).
+
+The `merkleRoot` indicates the root of the Merkle tree used for the generation of the `proof`. It is a 32-byte value.
+
+The `epoch` is used for the generation of the `proof`.  It is a 32-byte value. 
+<!-- TODO epoch is going to change to a different type -->
+
+`shareX` and `shareY` are shares of the user's identity key.
+These shares are created using Shamir's secret sharing scheme. 
+`shareX` is a 32-byte value and contains the hash of the `WakuMessage`'s `payload` concatenated with its `content_topic`. 
+<!-- TODO hash other fields if necessary-->
+`shareY` is also a 32-byte value which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
+
+The `nullifier` corresponds to the internal nullifier described in [rln documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers). 
+It allows specifying whether two messages are published by the same publisher during the same `epoch`.
+It is a 32-byte value.
+
 <!-- TODO to reflect this change on WakuMessage spec once the PR gets mature -->
 
 # Copyright
