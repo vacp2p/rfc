@@ -152,22 +152,26 @@ message WakuMessage {
  
 ## RateLimitProof
 
-The `proof` field is an array of 256 bytes and carries the actual zkSNARK proof. 
-Other fields of the `RateLimitProof` message are the [public inputs to the rln circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs).
+The `proof` field is an array of 256 bytes and carries the zkSNARK proof as explained in the [Publishing process](##Publishing).
+The proof asserts that:
+1. The message publisher is the current member of the group i.e., her/his identity commitment key is part of the membership group Merkle tree with the root `merkleRoot`.
+2. `share_x` and `share_y`  are correctly computed.
+3. The `nullifier` is constructed correctly.
 
-The `merkleRoot` indicates the root of the Merkle tree used for the generation of the `proof`. It is an array of 32 bytes.
+Other fields of the `RateLimitProof` message are the public inputs to the rln circuit and used for the generation of the `proof`.
 
-The `epoch` is used for the generation of the `proof`.  It is an array of 32 bytes.
+The `merkleRoot` is an array of 32 bytes which holds the root of membership group Merkle tree at the time of publishing the message.
+
+The `epoch` is an array of 32 bytes that represents the epoch in which the message is published.
 <!-- TODO epoch is going to change to a different type -->
 
 `share_x` and `share_y` are shares of the user's identity key.
-These shares are created using Shamir secret sharing scheme. 
+These shares are created using [Shamir secret sharing scheme](##Publishing). 
 `share_x` is an array of 32 bytes and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
 <!-- TODO hash other fields if necessary-->
-`share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS).
+`share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](##Publishing).
 
-The `nullifier` is an [internal nullifier](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers) 
-which allows specifying whether two messages are published by the same publisher during the same `epoch`.
+The `nullifier` is an internal nullifier which allows specifying whether two messages are published by the same publisher during the same `epoch`.
 It is an array of 32 bytes.
 
 <!-- TODO to reflect this change on WakuMessage spec once the PR gets mature -->
@@ -175,3 +179,10 @@ It is an array of 32 bytes.
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+# References
+
+1. [RLN documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view)
+2. [Public inputs to the rln circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs)
+3. [Shamir secret sharing scheme used in RLN](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS)
+4. [RLN internal nullifier](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers)
