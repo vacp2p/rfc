@@ -176,13 +176,14 @@ It is an array of 32 bytes.
 
 <!-- TODO to reflect this change on WakuMessage spec once the PR gets mature -->
 
-# Copyright
-
-Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
 # References
 
 1. [RLN documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view)
 2. [Public inputs to the rln circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs)
 3. [Shamir secret sharing scheme used in RLN](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS)
 4. [RLN internal nullifier](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers)
+
+# Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
