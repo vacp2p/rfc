@@ -12,7 +12,7 @@ contributors:
 This RFC describes the usage of the ENR (Ethereum Node Records) format for [10/WAKU2](/specs/10) purposes.
 The ENR format is defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778).
 
-This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-718 and 31/WAKU2-ENR.
+This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
 
 # Motivation
 
@@ -59,14 +59,14 @@ We propose the definition of the `multiaddrs` key.
 - The `secp256k1` MUST be present on the record.
 - The node's peer id SHOULD be deduced from the `secp256k1` value.
 - The multiaddresses SHOULD NOT contain a peer id.
-- TCP, UDP, IP (ip4 and ip6) connection details SHOULD be encoded using the respecting pre-defined ENR keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6, `ip6` for ip6);
+- TCP, UDP, IP (IPv4 and IPv6) connection details SHOULD be encoded using the respecting pre-defined ENR keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6);
   Multiaddr format can be large, using the predefined keys when available allows more connection details to be encoded in one ENR.
-- The 300 bytes size limit as defined by [EIP-778](https://eips.ethereum.org/EIPS/eip-778) still applies,
-  meaning that an ENR MAY hold up to 3 multiaddresses, depending on the size of each multiaddress.
+- The 300 bytes size limit as defined by [EIP-778](https://eips.ethereum.org/EIPS/eip-778) still applies;
+  In practice, an ENR MAY hold up to 3 multiaddresses, depending on the size of each multiaddress.
 
 ## Usage
 
-Alice is a node operator, she runs a node that supports inbound connection on the following for the following protocols:
+Alice is a node operator, she runs a node that supports inbound connection for the following protocols:
 - TCP 10101 on 1.2.3.4
 - UDP 20202 on 1.2.3.4
 - TCP 30303 on 1234:5600:100:1::142
