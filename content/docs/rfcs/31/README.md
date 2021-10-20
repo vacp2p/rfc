@@ -16,7 +16,7 @@ This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP
 
 # Motivation
 
-EIP-1459 with the usage of ENR has been implemented [[1]](#ref1) [[2]](#ref2) as a discovery protocol for Waku v2.
+EIP-1459 with the usage of ENR has been implemented [[1]](#references) [[2]](#references) as a discovery protocol for Waku v2.
 
 EIP-778 specifies a number of pre-defined keys.
 However, the usage of these keys alone does not allow for certain transport capabilities to be encoded,
@@ -98,5 +98,5 @@ Supported key type is `secp256k1` only.
 
 # References
 
-- <a id="ref1"></a>[1] https://github.com/status-im/nim-waku/pull/690
-- <a id="ref2"></a>[2] https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940 
+- [1] https://github.com/status-im/nim-waku/pull/690
+- [2] https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940 
