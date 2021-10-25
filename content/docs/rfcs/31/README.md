@@ -10,7 +10,7 @@ contributors:
 # Abstract
 
 This RFC describes the usage of the ENR (Ethereum Node Records) format for [10/WAKU2](/specs/10) purposes.
-The ENR format is defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778).
+The ENR format is defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778) [[3]](#references).
 
 This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
 
@@ -57,10 +57,10 @@ We propose the definition of the `multiaddrs` key.
 - The size of the multiaddr MUST be encoded in a Big Endian unsigned 16-bit integer.
 - The size of the multiaddr MUST be encoded in 2 bytes.
 - The `secp256k1` value MUST be present on the record;
-  `secp256k1` is pre-defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778) and contains the compressed secp256k1 public key.
+  `secp256k1` is defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778) and contains the compressed secp256k1 public key.
 - The node's peer id SHOULD be deduced from the `secp256k1` value.
 - The multiaddresses SHOULD NOT contain a peer id.
-- For raw TCP & UDP connections details, then [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys SHOULD be used;
+- For raw TCP & UDP connections details, [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys SHOULD be used;
   The keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6) are enough to convey all necessary information;
 - To save space, `multiaddrs` key SHOULD only be used for connection details that cannot be represented using the [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys.
 - The 300 bytes size limit as defined by [EIP-778](https://eips.ethereum.org/EIPS/eip-778) still applies;
@@ -88,7 +88,7 @@ Alice SHOULD structure the ENR for her node as follows:
 | `udp6` | `40404` |
 | `ip`   | `1.2.3.4` |
 | `ip6`  | `1234:5600:101:1::142` |
-| `secp256k1` | Alice's public key |
+| `secp256k1` | Alice's compressed secp256k1 public key, 33 bytes |
 | `multiaddrs` | <code>len1 &#124; /dns4/example.com/tcp/443/wss &#124; len2 &#124; /dns4/quic.examle.com/tcp/443/quic</cpoode> |
 
 Where:
@@ -107,15 +107,19 @@ Bob SHOULD structure the ENR for her node as follows:
 |---     |---      |
 | `tcp`  | `10101` |
 | `ip`   | `1.2.3.4` |
-| `secp256k1` | Bob's public key |
+| `secp256k1` | Bob's compressed secp256k1 public key, 33 bytes |
+
+Indeed, as Bob's node's connection details can be represented with EIP-778's pre-defined keys only
+then it is not needed to use the `multiaddrs` key.
 
 ## Limitations
 
 Supported key type is `secp256k1` only.
 
-In the future, an extension of the proposed format could be made to support other elliptic curve cryptography such as `ed25519`.
+In the future, an extension of this RFC could be made to support other elliptic curve cryptography such as `ed25519`.
 
 # References
 
 - [1] https://github.com/status-im/nim-waku/pull/690
 - [2] https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940 
+- [3] https://eips.ethereum.org/EIPS/eip-778
