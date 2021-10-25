@@ -64,7 +64,7 @@ We propose the definition of the `multiaddrs` key.
   The keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6) are enough to convey all necessary information;
 - To save space, `multiaddrs` key SHOULD only be used for connection details that cannot be represented using the [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys.
 - The 300 bytes size limit as defined by [EIP-778](https://eips.ethereum.org/EIPS/eip-778) still applies;
-  In practice, an ENR MAY hold up to 3 multiaddresses, depending on the size of each multiaddress.
+  In practice, it is possible to encode 3 multiaddresses in ENR, more or less could be encoded depending on the size of each multiaddress.
 
 ## Usage
 
