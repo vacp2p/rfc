@@ -24,7 +24,7 @@ such as Websocket.
 Currently, Waku v2 nodes running in a Browser only support websocket transport protocol.
 Hence, new ENR keys needs to be defined to allow for the encoding of transport protocol other than raw TCP.
 
-## Usage of multiaddr format
+## Usage of Multiaddr Format Rationale
 
 One solution would be to define new keys such as `ws` to encode the websocket port of a node.
 However, we expect new transport protocols to be added overtime such as quic.
@@ -56,23 +56,27 @@ We propose the definition of the `multiaddrs` key.
 - The value MUST be a list of binary encoded multiaddr prefixed by their size.
 - The size of the multiaddr MUST be encoded in a Big Endian unsigned 16-bit integer.
 - The size of the multiaddr MUST be encoded in 2 bytes.
-- The `secp256k1` MUST be present on the record.
+- The `secp256k1` value MUST be present on the record;
+  `secp256k1` is pre-defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778) and contains the compressed secp256k1 public key.
 - The node's peer id SHOULD be deduced from the `secp256k1` value.
 - The multiaddresses SHOULD NOT contain a peer id.
-- TCP, UDP, IP (IPv4 and IPv6) connection details SHOULD be encoded using the respecting pre-defined ENR keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6);
-  Multiaddr format can be large, using the predefined keys when available allows more connection details to be encoded in one ENR.
+- For raw TCP & UDP connections details, then [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys SHOULD be used;
+  The keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6) are enough to convey all necessary information;
+- To save space, `multiaddrs` key SHOULD only be used for connection details that cannot be represented using the [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys.
 - The 300 bytes size limit as defined by [EIP-778](https://eips.ethereum.org/EIPS/eip-778) still applies;
   In practice, an ENR MAY hold up to 3 multiaddresses, depending on the size of each multiaddress.
 
 ## Usage
 
+### Many connection types
+
 Alice is a node operator, she runs a node that supports inbound connection for the following protocols:
-- TCP 10101 on 1.2.3.4
-- UDP 20202 on 1.2.3.4
-- TCP 30303 on 1234:5600:100:1::142
-- UDP 40404 on 1234:5600:100:1::142
-- Secure Websocket on wss://example.com:443/
-- QUIC on quic://quic.example.com:443/
+- TCP 10101 on `1.2.3.4`
+- UDP 20202 on `1.2.3.4`
+- TCP 30303 on `1234:5600:101:1::142`
+- UDP 40404 on `1234:5600:101:1::142`
+- Secure Websocket on `wss://example.com:443/`
+- QUIC on `quic://quic.example.com:443/`
 
 Alice SHOULD structure the ENR for her node as follows:
 
@@ -83,7 +87,7 @@ Alice SHOULD structure the ENR for her node as follows:
 | `tcp6` | `30303` |
 | `udp6` | `40404` |
 | `ip`   | `1.2.3.4` |
-| `ip6`  | `1234:5600:100:1::142` |
+| `ip6`  | `1234:5600:101:1::142` |
 | `secp256k1` | Alice's public key |
 | `multiaddrs` | <code>len1 &#124; /dns4/example.com/tcp/443/wss &#124; len2 &#124; /dns4/quic.examle.com/tcp/443/quic</cpoode> |
 
@@ -92,9 +96,24 @@ Where:
 - `len1` is the length of `/dns4/example.com/tcp/443/wss` byte representation,
 - `len2` is the length of `/dns4/quic.examle.com/tcp/443/quic` byte representation.
 
+### Raw TCP only
+
+Bob is a node operator, he runs a node that supports inbound connection for the following protocols:
+- TCP 10101 on `1.2.3.4`
+
+Bob SHOULD structure the ENR for her node as follows:
+
+| key    | value   |
+|---     |---      |
+| `tcp`  | `10101` |
+| `ip`   | `1.2.3.4` |
+| `secp256k1` | Bob's public key |
+
 ## Limitations
 
 Supported key type is `secp256k1` only.
+
+In the future, an extension of the proposed format could be made to support other elliptic curve cryptography such as `ed25519`.
 
 # References
 
