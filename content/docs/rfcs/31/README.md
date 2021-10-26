@@ -22,7 +22,7 @@ EIP-778 specifies a number of pre-defined keys.
 However, the usage of these keys alone does not allow for certain transport capabilities to be encoded,
 such as Websocket.
 Currently, Waku v2 nodes running in a Browser only support websocket transport protocol.
-Hence, new ENR keys needs to be defined to allow for the encoding of transport protocol other than raw TCP.
+Hence, new ENR keys need to be defined to allow for the encoding of transport protocol other than raw TCP.
 
 ## Usage of Multiaddr Format Rationale
 
