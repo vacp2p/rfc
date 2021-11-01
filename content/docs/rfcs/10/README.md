@@ -315,15 +315,15 @@ This includes Waku v1 specs, as they are used for bridging between the two netwo
 |[9/WAKU-RPC](/spec/9)|✔|||
 |[10/WAKU2](/spec/10)|✔|🚧|🚧|🚧|
 |[11/WAKU2-RELAY](/spec/11)|✔|✔|✔|✔|
-|[12/WAKU2-FILTER](/spec/12)|✔|||
-|[13/WAKU2-STORE](/spec/13)|✔|🚧|✔\*|✔\*|
+|[12/WAKU2-FILTER](/spec/12)|✔|✔||
+|[13/WAKU2-STORE](/spec/13)|✔|✔|✔\*|✔\*|
 |[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
 |[15/WAKU2-BRIDGE](/spec/15)|✔|||
 |[16/WAKU2-RPC](/spec/16)|✔|||
 |[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
 |[18/WAKU2-SWAP](/spec/18)|🚧|||
-|[19/WAKU2-LIGHTPUSH](/spec/19)|✔| |✔\**|✔\**|
-|[21/WAKU2-FAULT-TOLERANT-STORE](/spec/21)|✔|||
+|[19/WAKU2-LIGHTPUSH](/spec/19)|✔|✔|✔\**|✔\**|
+|[21/WAKU2-FAULT-TOLERANT-STORE](/spec/21)|✔|✔||
 
 *js-waku implements [13/WAKU2-STORE](/spec/13) as a querying node only.
 **js-waku only implements [19/WAKU2-LIGHTPUSH](/spec/19) requests.
