@@ -7,7 +7,7 @@ editor: Reeshav Khan <reeshav@status.im>
 contributors:
 ---
 
-`31/WAKU2-TRANSPORT` describes the specification for Protocols supported by waku. While Waku strives to be transport agonistic, however any underlying transport layer MUST be IETF standardized transport protocol, this document underlines the baseline for interoperability between different waku clients.
+`31/WAKU2-TRANSPORT` describes the specification for Protocols supported by Waku v2. While Waku v2 strives to be transport agonistic, however any underlying transport layer MUST be IETF standardized transport protocol, this document underlines the baseline for interoperability between different Waku v2 clients.
 
 # Transport Protocol Specification 
 
