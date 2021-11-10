@@ -118,8 +118,42 @@ Supported key type is `secp256k1` only.
 
 In the future, an extension of this RFC could be made to support other elliptic curve cryptography such as `ed25519`.
 
+# `waku2` ENR key
+
+We propose the definition of a `waku2` field key:
+
+- The value MUST be an 8-bit flag field,
+where bits set to `1` indicate `true` and bits set to `0` indicate `false` for the relevant flags.
+- The flag values already defined are set out below,
+with `bit 7` the most significant bit and `bit 0` the least significant bit.
+
+| bit 7 | bit 6 | bit 5 | bit 4 | bit 3 | bit 2 | bit 1 | bit 0 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `undef` | `undef` | `undef` | `undef` | `lightpush` | `filter` | `store` | `relay` |
+
+- In the scheme above, the flags `lightpush`, `filter`, `store` and `relay` correlates with support for protocols with the same name.
+If a protocol is not supported, the corresponding field MUST NOT be set to `true`.
+Indicating positive support for any specific protocol is OPTIONAL,
+though it MAY be required by the relevant application or discovery process.
+- Flags marked as `undef` is not yet defined.
+These SHOULD be set to `false` by default.
+
+## Usage
+
+- A Waku v2 node MAY choose to populate the `waku2` field for enhanced discovery capabilities,
+such as indicating supported protocols.
+Such a node MAY indicate support for any specific protocol by setting the corresponding flag to `true`.
+- Waku v2 nodes that want to participate in [Node Discovery Protocol v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) [[4]](#references), however,
+MUST implement the `waku2` key with at least one flag set to `true`.
+- Waku v2 nodes that discovered other participants using Discovery v5,
+MUST filter out participant records that do not implement this field or do not have at least one flag set to `true`.
+- In addition, such nodes MAY choose to filter participants on specific flags (such as supported protocols),
+or further interpret the `waku2` field as required by the application.
+
+
 # References
 
 - [1] https://github.com/status-im/nim-waku/pull/690
 - [2] https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940 
 - [3] https://eips.ethereum.org/EIPS/eip-778
+- [4] https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md
