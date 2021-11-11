@@ -51,7 +51,7 @@ Directly storing one or several multiaddresses in the ENR would fix the issues l
 
 # `multiaddrs` ENR key
 
-We propose the definition of the `multiaddrs` key.
+We define a  `multiaddrs` key.
 
 - The value MUST be a list of binary encoded multiaddr prefixed by their size.
 - The size of the multiaddr MUST be encoded in a Big Endian unsigned 16-bit integer.
@@ -120,7 +120,7 @@ In the future, an extension of this RFC could be made to support other elliptic 
 
 # `waku2` ENR key
 
-We propose the definition of a `waku2` field key:
+We define a `waku2` field key:
 
 - The value MUST be an 8-bit flag field,
 where bits set to `1` indicate `true` and bits set to `0` indicate `false` for the relevant flags.
@@ -132,7 +132,7 @@ with `bit 7` the most significant bit and `bit 0` the least significant bit.
 | `undef` | `undef` | `undef` | `undef` | `lightpush` | `filter` | `store` | `relay` |
 
 - In the scheme above, the flags `lightpush`, `filter`, `store` and `relay` correlates with support for protocols with the same name.
-If a protocol is not supported, the corresponding field MUST NOT be set to `true`.
+If a protocol is not supported, the corresponding field MUST be set to `false`.
 Indicating positive support for any specific protocol is OPTIONAL,
 though it MAY be required by the relevant application or discovery process.
 - Flags marked as `undef` is not yet defined.
