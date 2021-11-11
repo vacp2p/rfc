@@ -135,7 +135,7 @@ See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usa
 
 # Transport Protocol Specification
 
-This section describes the specification for Protocols supported by waku v2. While Waku strives to be transport agonistic, however any underlying transport layer MUST be a reliable transport.
+This section describes the specification for transport protocols supported by waku v2. While Waku strives to be transport agonistic, however any underlying transport layer MUST be a reliable transport.
 
 Waku client implementations SHOULD support the TCP transport, and MUST be enabled for both dialing and listening even if other transports are available if TCP is available.
 The underlying transports SHOULD support secure websocket and MAY support websockets for bidirectional communication streams and web browser context.
