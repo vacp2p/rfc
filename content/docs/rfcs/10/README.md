@@ -145,9 +145,12 @@ Waku client implementations SHOULD support the TCP transport.
 
 Where TCP is supported it MUST be enabled for both dialing and listening, even if other transports are available.
 
+Waku v2 nodes where the environment do not allow to use TCP directly, MAY use other transports. 
+
 A Waku v2 node SHOULD support secure websockets for bidirectional communication streams, for example in a web browser context.
 
 A node MAY support unsecure websockets if required by the application or running environment.
+
 ### Discovery domain
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
