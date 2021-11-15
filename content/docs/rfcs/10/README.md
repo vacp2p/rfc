@@ -7,6 +7,7 @@ editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Hanno Cornelius <hanno@status.im>
+  - Reeshav Khan <reeshav@status.im>
 ---
 
 ## Abstract
@@ -133,12 +134,20 @@ For an experimental privacy-preserving economic spam protection mechanism, see [
 
 See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usage.
 
-# Transport Protocol Specification
+# Transports
 
-This section describes the specification for transport protocols supported by waku v2. While Waku strives to be transport agonistic, however any underlying transport layer MUST be a reliable transport.
+Waku v2 is built in top of libp2p, and like libp2p it strives to be transport agnostic.
+We define a set of recommended transports in order to achieve a baseline of interoperability between clients.
 
-Waku client implementations SHOULD support the TCP transport, and MUST be enabled for both dialing and listening even if other transports are available if TCP is available.
-The underlying transports SHOULD support secure websocket and MAY support websockets for bidirectional communication streams and web browser context.
+This section describes these recommended transports.
+
+Waku client implementations SHOULD support the TCP transport.
+
+Where TCP is supported it MUST be enabled for both dialing and listening, even if other transports are available.
+
+A Waku v2 node SHOULD support secure websockets for bidirectional communication streams, for example in a web browser context.
+
+A node MAY support unsecure websockets if required by the application or running environment.
 ### Discovery domain
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
