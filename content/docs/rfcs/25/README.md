@@ -2,7 +2,7 @@
 slug: 25
 title: 25/LIBP2P-DNS-DISCOVERY
 name: Libp2p Peer Discovery via DNS
-status: raw
+status: deleted
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
 ---
