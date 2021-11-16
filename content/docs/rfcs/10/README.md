@@ -7,6 +7,7 @@ editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Hanno Cornelius <hanno@status.im>
+  - Reeshav Khan <reeshav@status.im>
 ---
 
 ## Abstract
@@ -132,6 +133,24 @@ See [11/WAKU2-RELAY](/spec/11) spec for more details.
 For an experimental privacy-preserving economic spam protection mechanism, see [17/WAKU2-RLNRELAY](/spec/17).
 
 See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usage.
+
+# Transports
+
+Waku v2 is built in top of libp2p, and like libp2p it strives to be transport agnostic.
+We define a set of recommended transports in order to achieve a baseline of interoperability between clients.
+
+This section describes these recommended transports.
+
+Waku client implementations SHOULD support the TCP transport.
+
+Where TCP is supported it MUST be enabled for both dialing and listening, even if other transports are available.
+
+Waku v2 nodes where the environment do not allow to use TCP directly, MAY use other transports. 
+
+A Waku v2 node SHOULD support secure websockets for bidirectional communication streams, for example in a web browser context.
+
+A node MAY support unsecure websockets if required by the application or running environment.
+
 
 ### Discovery domain
 
