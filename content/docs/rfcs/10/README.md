@@ -151,6 +151,7 @@ A Waku v2 node SHOULD support secure websockets for bidirectional communication 
 
 A node MAY support unsecure websockets if required by the application or running environment.
 
+
 ### Discovery domain
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
