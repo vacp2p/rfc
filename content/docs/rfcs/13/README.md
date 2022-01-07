@@ -128,7 +128,12 @@ RPC call to query historical messages.
 - The `contentFilters` field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
   Leaving this field empty means no filter on the content topic of message history is required.
   This field SHOULD be left empty in order to retrieve historical waku messages regardless of their content topics.
-- `PagingInfo` holds the information required for pagination.  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
+- `PagingInfo` holds the information required for pagination.  
+  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. 
+  All the `HistoryResponse`s are auto-paginated to pages with the maximum size of 100 `WakuMessage`s each unless a non-zero `pageSize` is specified. 
+  If the `pageSize` is unspecified i.e. its value is zero, the maximum page size of 100 will be applied. 
+  If the `pageSize` is larger than the default maximum of 100, then the maximum page size of 100 will be used instead. 
+  If the `pageSize` is zero then no pagination is required. If the `pageSize` exceeds a threshold then the threshold value shall be used instead. In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
 As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 
