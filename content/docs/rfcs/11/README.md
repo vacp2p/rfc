@@ -13,6 +13,7 @@ contributors:
 `11/WAKU2-RELAY` specifies a [Publish/Subscribe approach](https://docs.libp2p.io/concepts/publish-subscribe/) to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability.
 Its current implementation is a minor extension of the [libp2p GossipSub protocol](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) and prescribes gossip-based dissemination.
 As such the scope is limited to defining a separate [`protocol id`](https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation) for `11/WAKU2-RELAY`, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.
+`11/WAKU2-RELAY` should not be confused with [libp2p circuit relay](https://github.com/libp2p/specs/tree/master/relay).
 
 **Protocol identifier**: `/vac/waku/relay/2.0.0`
 
