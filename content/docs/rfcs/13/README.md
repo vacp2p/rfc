@@ -130,9 +130,11 @@ RPC call to query historical messages.
   This field SHOULD be left empty in order to retrieve historical waku messages regardless of their content topics.
 - `PagingInfo` holds the information required for pagination.  
   Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. 
-  All the `HistoryResponse`s are auto-paginated to pages with the maximum size of 100 `WakuMessage`s each unless a non-zero `pageSize` is specified. 
-  If the `pageSize` is unspecified i.e. its value is zero, the maximum page size of 100 will be applied. 
-  If the `pageSize` is larger than the default maximum of 100, then the maximum page size of 100 will be used instead. 
+  It is RECOMMENDED that the queried node defines a maximum page size internally.
+  If the querying node leaves the `pageSize` unspecified,
+  or if the `pageSize` exceeds the maximum page size,
+  the queried node SHOULD auto-paginate the `HistoryResponse` to no more than the configured maximum page size.
+  This allows mitigation of long response time for `HistoryQuery`.
   In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). 
   Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
