@@ -83,7 +83,7 @@ The previous `data` field corresponds to the `payload` field.
 ## Confidentiality, integrity, and authenticity 
 It is up to the application layer as to what level confidentiality, integrity and authenticity of the `payload` of `WakuMessage` matters. 
 Accordingly, the application layer shall utilize the encryption and signature schemes supported in WAKU2 to meet the application-specific privacy needs.
-The set of supported schemes in WAKU2 is presented in [WAKU2-PAYLOAD](/specs/26).
+The set of supported schemes in WAKU2 is presented in [WAKU2-PAYLOAD](/spec/26).
 
 ## Reliability of the WakuMessage timestamp
 
