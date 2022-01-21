@@ -67,19 +67,23 @@ To construct `authPath`, peers need to locally store a Merkle tree out of the gr
 Peers need to keep the tree updated with the recent state of the group.  
 Further inputs to the proof generation which are public are tree's `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
 The tree `root` can be obtained from the locally maintained Merkle tree.
-The proof generation results in the following data items which are encoded inside the `proof`:  
+In addition to the `proof` the peer also generates the followings:  
 1. `share_x`
 2. `share_y`
 3. `nullifier`
 4. `zkSNARKs`
 
-The preceding values as well as the tree `root` (based on which the proof is generated) are encoded inside the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`.
-The numbers enclosed in angle brackets indicate the bit length of the corresponding data item.
-The tuple of (`nullifier`, `share_x`, `share_y`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.
-Given two such tuples with identical `nullifier` but distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
-Note that the `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
+The preceding values as well as the tree `root` (based on which the proof is generated) are contained inside `RateLimitProof` field of the `WakuMessage`.
+ <!-- the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`. -->
+<!-- The numbers enclosed in angle brackets indicate the bit length of the corresponding data item. -->
 
-Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register).
+`nullifier` is peer's finger print for the current epoch and calculated as `H(H(sk, epoch))` where `H` indicates Poseidon hash. 
+As the `nullifier` is a deterministic value derived from `sk` and `epoch`, any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
+`share_x`, `share_y`  can be seen as partial disclosure of peer's `sk` for the intended `epoch`. 
+Given two distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
+
+
+A word of caution: The `authPath` of each peer depends on the current status of the membership tree (hence changes when new peers register).
 As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the group and attempts the proof using her updated `authPath`.
 
 
