@@ -154,13 +154,13 @@ message WakuMessage {
 
 The `proof` field is an array of 256 bytes and carries the zkSNARK proof as explained in the [Publishing process](##Publishing).
 The proof asserts that:
-1. The message publisher is the current member of the group i.e., her/his identity commitment key is part of the membership group Merkle tree with the root `merkleRoot`.
+1. The message publisher is the current member of the group i.e., her/his identity commitment key is part of the membership group Merkle tree with the root `merkle_root`.
 2. `share_x` and `share_y`  are correctly computed.
 3. The `nullifier` is constructed correctly.
 
 Other fields of the `RateLimitProof` message are the public inputs to the rln circuit and used for the generation of the `proof`.
 
-The `merkleRoot` is an array of 32 bytes which holds the root of membership group Merkle tree at the time of publishing the message.
+The `merkle_root` is an array of 32 bytes which holds the root of membership group Merkle tree at the time of publishing the message.
 
 The `epoch` is an array of 32 bytes that represents the epoch in which the message is published.
 <!-- TODO epoch is going to change to a different type -->
