@@ -54,37 +54,33 @@ Note that  `sk` is initially only known by the owning peer however it may get ex
 
 ## Publishing
 
-In order to publish at a given `epoch`, the publishing peer proceeds based on the regular relay protocol.  
-However, in order to protect against spamming, each PubSub message must carry a `proof`. 
-At a high level, the `proof` is a zero-knowledge proof signifying that the publishing peer is a  registered member, and she has not exceeded the messaging rate at the given `epoch`. 
-<!-- TODO: to clarify what a zero-knowledge proof means  -->
+In order to publish at a given `epoch`, the publishing peer proceeds based on the regular `Waku2-Relay` protocol.  
+However, in order to protect against spamming, each `WakuMessage` SHOULD carry a `RateLimitPRoof`  which encapsulates the following data items:
 
-The `proof` is embedded inside the `data` field of the PubSub message, which, in the [11/WAKU2-RELAY](/spec/11) protocol, corresponds to the [14/WAKU2-MESSAGE](/spec/14). 
+- `epoch`: the epoch at which the message is published.
+- `proof`: is a zero-knowledge proof signifying that the publishing peer is a  registered member, and  has not exceeded the messaging rate at the given `epoch`.
+  <!-- TODO: to clarify what a zero-knowledge proof means  -->
 
 The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
-`authPath` is  the information by which one can prove its membership in the group. <!-- TODO explain what is atuh path -->
+`authPath` is  the information by which one can prove its membership in the group.
+ <!-- TODO explain what is atuh path -->
+
 To construct `authPath`, peers need to locally store a Merkle tree out of the group members public keys. 
 Peers need to keep the tree updated with the recent state of the group.  
-Further inputs to the proof generation which are public are tree's `root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
-The tree `root` can be obtained from the locally maintained Merkle tree.
-In addition to the `proof` the peer also generates the followings:  
-1. `share_x`
-2. `share_y`
-3. `nullifier`
-4. `zkSNARKs`
 
-The preceding values as well as the tree `root` (based on which the proof is generated) are contained inside `RateLimitProof` field of the `WakuMessage`.
- <!-- the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`. -->
-<!-- The numbers enclosed in angle brackets indicate the bit length of the corresponding data item. -->
-
-`nullifier` is peer's finger print for the current epoch and calculated as `H(H(sk, epoch))` where `H` indicates Poseidon hash. 
-As the `nullifier` is a deterministic value derived from `sk` and `epoch`, any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
-`share_x`, `share_y`  can be seen as partial disclosure of peer's `sk` for the intended `epoch`. 
-Given two distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
+Public inputs to the proof generation are tree's `merkle_root`, `epoch` and `payload||contentTopic`  where `payload` and `contentTopic` come from the `WakuMessage`. 
 
 
-A word of caution: The `authPath` of each peer depends on the current status of the membership tree (hence changes when new peers register).
-As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the group and attempts the proof using her updated `authPath`.
+- `merkle_root`: The root of membership tree at the time of publishing the message.
+The `merkle_root` can be obtained from the locally maintained Merkle tree.
+Peers are recommended to always stay updated with the state of the group and use the latest merkle tree root. 
+Using older roots would allow inference about the node's `pk` index in the tree hence harming user anonymity.
+
+- `share_x` and `share_y` which can be seen as partial disclosure of peer's `sk` for the intended `epoch`. 
+Having two distinct pairs of `share_x`, `share_y` allows full disclosure of peer's `sk` and hence burning the associated deposit.
+- `nullifier` is peer's finger print for the current epoch and calculated as `H(H(sk, epoch))` where `H` indicates Poseidon hash. 
+As the `nullifier` is a deterministic value derived from peer's `sk` and `epoch`.
+Any two distinct messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
 
 
 ## Routing
