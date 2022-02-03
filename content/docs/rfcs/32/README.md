@@ -13,7 +13,7 @@ The following document covers the specification of the RLN construct as well as 
 
 # Motivation
 
-RLN (Rate limiting nullfier) is a construct based on zero-knowledge proofs that enables spam prevention mechanism for decentralized, anonymous environments. In anonymous environments, the identity of the entities is unknown, and thus it is very hard to prevent spam attacks. Many applications would benefit from anonimity, but potential for spam could worsen their UX by large extent. RLN allows for anonymous signaling, while enabling spam prevention on protocol level.
+RLN (Rate limiting nullfier) is a construct based on zero-knowledge proofs that enables spam prevention mechanism for decentralized, anonymous environments. In anonymous environments, the identity of the entities is unknown, and thus it is very hard to prevent spam attacks. Many applications would benefit from anonymity, but the potential for spam could worsen their UX to a large extent. RLN allows for anonymous signaling while enabling spam prevention on protocol level.
 
 # Technical overview
 
