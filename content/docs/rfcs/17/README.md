@@ -30,23 +30,19 @@ We augment the `relay` protocol with a novel, light, and effective spam preventi
 ## SetUp and Registration
 A peer willing to publish a message is required to register. 
 Registration is moderated through a smart contract deployed on the Ethereum blockchain. 
-The state of the contract contains the list of registered members. 
+The state of the contract contains the list of registered members public keys `pk`. 
 An overview of registration is illustrated in Figure 1.
 
-For the registration, a peer creates a transaction that sends x (TODO to be specified) ETH to the contract. 
-The peer who has the "private key" `sk` associated with that deposit would be able to withdraw x ETH by providing valid proof. 
-Note that  `sk` is initially only known by the owning peer however it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per epoch.
+For the registration, a peer creates a transaction that registers its `pk` into the group.
+The transaction also transfers x (TODO to be specified) amount of ETH to the contract to be staked. 
+<!-- some portion of fund might be burnt at the registration -->
+The peer can later remove itself by sending a valid `sk` whose `pk` belongs to the group.
+The corresponding deposit would be sent x to the peer who performs deletion. 
+Each `sk` is initially only known by the owning peer however it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per epoch.
+More details on that are given in the slashing section.
+`sk` is a private information and the peer MUST persist it safely. 
+Losing `sk` means losing the associated fund and inability to participate in the waku-rln-relay network.
 
-<!-- TODO: the interaction with the contract is subject to change depending on the final implementation -->
-
-<!-- Once registered, the peer obtains the root of the tree (after the registration of the current peer) i.e., `root`  as well as the authenticity path `authPath`. A peer can prove her membership using the `authPath`. -->
-
-
-<!-- `sk`  and `authPath`  are secret data and MUST be permanently and locally stored by the peer.  -->
-
-<!-- TODO: To specify the details of protobuf messages for the interaction with the contract -->
-
-<!-- diagram -->
 
 ![Figure 1: Registration.](../../../../rfcs/17/rln-relay.png)
 
