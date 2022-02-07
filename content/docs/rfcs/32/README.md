@@ -35,7 +35,7 @@ Anonymous signaling with spam detection is enabled by proving that the user is p
 enabling secret reveal if more signals are produced than the spam threshold (system parameter) per epoch.
 The membership part is implemented using membership [merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) and merkle proofs, 
 while the secret reveal part is enabled by using the Shamir's Secret Sharing scheme. 
-Esentially the protocol requires the users to generate zero-knowledge proof to be able to send signals and participate in the application. 
+Essentially the protocol requires the users to generate zero-knowledge proof to be able to send signals and participate in the application. 
 The zero knowledge proof proves that the user is member of a group, 
 but also enforces the user to share part of their secret for each signal in an epoch.
 The epoch is an external nullifier which is usually represented by timestamp or a time interval. 
