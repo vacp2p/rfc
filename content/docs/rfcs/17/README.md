@@ -10,7 +10,8 @@ editor: Sanaz Taheri <sanaz@status.im>
 The `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam-protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
 
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
-Peers that violate the messaging rate are considered spammer, financially punished and removed from the system. 
+Peers that violate the messaging rate are considered spammer and their message is considered as spam.
+Spammers are also financially punished and removed from the system. 
 
 
 **Protocol identifier***: `/vac/waku/waku-rln-relay/2.0.0-alpha1`
@@ -118,7 +119,7 @@ Upon the receipt of a PubSub message, the routing peer parses the `data` field a
 The peer then validates the `RateLimitProof`  as explained next.
 
 **Epoch Validation**
-If the `epoch` attached to the message has a more than a threshold difference with the routing peer's current `epoch` then the message is discarded and considered invalid.
+If the `epoch` attached to the message has more than a threshold difference with the routing peer's current `epoch` then the message is discarded and considered invalid.
 This is to prevent a newly registered peer spamming the system by messaging for all the past epochs. 
 
 **Proof Verification**
@@ -127,8 +128,8 @@ It does so by running the zk verification algorithm as explained in [RLN](/spec/
 If `proof` is invalid then the message is discarded. 
 
 **Spam detection**
-In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `share_x`, and `share_y` of incoming messages if not discarded i.e., not found spam or with invalid proof or epoch.
-To do so, the peer checks whether a message with an identical `nullifier` has already been relayed. 
+In order to enable local spam detection and slashing, routing peers MUST record the `nullifier`, `share_x`, and `share_y` of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
+To spot spam messages, the peer checks whether a message with an identical `nullifier` has already been relayed. 
 1. If such message exists and its `share_x` and `share_y` components are different from the incoming message, then slashing takes place.
 That is, the peer uses the  `share_x` and `share_y`  of the new message and the  `share'_x` and `share'_y` of the old record to reconstruct the `sk` of the message owner.
 The `sk` than can be used to withdraw the reward i.e., the deposit of the message owner from the membership contract.
