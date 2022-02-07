@@ -39,7 +39,7 @@ Essentially the protocol requires the users to generate zero-knowledge proof to 
 The zero knowledge proof proves that the user is member of a group, 
 but also enforces the user to share part of their secret for each signal in an epoch.
 The epoch is an external nullifier which is usually represented by timestamp or a time interval. 
-It can also be tought as voting booth in voting applications.
+It can also be thought of as a voting booth in voting applications.
 
 The ZK Circuit is implemented using a [Groth-16 ZK-SNARK](https://eprint.iacr.org/2016/260.pdf), 
 using the [circomlib](https://docs.circom.io/) library.
