@@ -31,7 +31,7 @@ which together with the ZK-SNARK circuit enable the above mentioned features.
 
 ## ZK Circuits specification
 
-Anonymous signaling with spam detection is enabled by proving that the user is part of a group which has high bariers for entry (form of stake) and 
+Anonymous signaling with spam detection is enabled by proving that the user is part of a group which has high barriers to entry (form of stake) and 
 enabling secret reveal if more signals are produced than the spam threshold (system parameter) per epoch.
 The membership part is implemented using membership [merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) and merkle proofs, 
 while the secret reveal part is enabled by using the Shamir's Secret Sharing scheme. 
