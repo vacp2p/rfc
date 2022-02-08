@@ -218,7 +218,7 @@ they need to generate a ZK-Proof by using the circuit with the specification des
 For generating a proof, 
 the users need to obtain the required parameters or compute them themselves, 
 depending on the application implementation and client libraries supported by the application.
-For example the users can store the memebrship merkle tree on their end and 
+For example the users can store the membership merkle tree on their end and 
 generate a merkle proof whenever they want to generate a signal. 
 
 ### Signal hash
