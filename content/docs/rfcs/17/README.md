@@ -95,31 +95,6 @@ This can be done by listening to the registration and deletion events emitted by
 For the group synchronization, one important security consideration is that peers MUST make sure they always use the most recent Merkle tree root in their proof generation.
 The reason is that using an old root can allow inference about the index of the user's `pk` in the membership tree hence compromising user privacy and breaking message unlinkability.
 
-<!-- `sk`  and `authPath`  are secret data and MUST be permanently and locally stored by the peer.  -->
-
-<!-- The `proof` is embedded inside the `data` field of the PubSub message, which, in the [11/WAKU2-RELAY](/spec/11) protocol, corresponds to the [14/WAKU2-MESSAGE](/spec/14).  -->
-
-<!-- To construct `authPath`, peers need to locally store a Merkle tree based on the list of public keys available in the state of membership contract. 
-Peers need to keep the tree updated with the recent state of the group.   -->
-
-
-<!-- The tree `root` can be obtained from the locally maintained Merkle tree.
-The proof generation results in the following data items which are encoded inside the `proof`:  
-1. `share_x`
-2. `share_y`
-3. `nullifier`
-4. `zkSNARKs`
-
-The preceding values as well as the tree `root` (based on which the proof is generated) are encoded inside the `proof` as `|zkSNARKs<256>|root<32>|epoch<32>|share_x<32>|share_y<32>|nullifier<32>|`.
-The numbers enclosed in angle brackets indicate the bit length of the corresponding data item.
-The tuple of (`nullifier`, `share_x`, `share_y`)  can be seen as partial disclosure of peer's `sk` for the intended `epoch`.
-Given two such tuples with identical `nullifier` but distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence burning the associated deposit.
-Note that the `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
-
-Note that the `authPath` of each peer depends on the current status of the registration tree (hence changes when new peers register).
-As such, it is recommended (and necessary for anonymity) that the publisher updates her `authPath` based on the latest status of the group and attempts the proof using her updated `authPath`. -->
-
-
 ## Routing
 
 Upon the receipt of a PubSub message via [`11/WAKU2-RELAY`](/spec/11) protocol, the routing peer parses the `data` field as a `WakuMessage` and gets access to the `RateLimitProof` field.  
@@ -204,10 +179,10 @@ The `nullifier` is the internal nullifier encoded as an array of 32 bytes.
 
 # Recommended System Parameters
 ## Epoch 
-A sensible value for the epoch heavily depends on the application for which the spam-protection is going to be used.
+A sensible value for the epoch depends on the application for which the spam-protection is going to be used.
 For example, while the epoch value of `1` second i.e., messaging rate of 1 per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
 One should look at the desired throughput of the application to decide on a proper epoch value.
-In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the messaging rate is set to 1 per second i.e. `T=1 second`.
+In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the messaging rate is set to 1 per second i.e. `T = 1 second`.
 Nevertheless, this value is also subject to change depending on user experience.
 
 ## Maximum Epoch Gap
@@ -215,9 +190,9 @@ We discussed in the [Routing](#routing) section that the gap between the epoch o
 The value of `D` can be measured based on the following factors.
 - `ND`: Network transmission delay: the time that it takes for a message to be routed between the furthest peers in the GossipSub network.
 - `CA`: Clock asynchrony: The maximum clock drifts among the peers.
-With a reasonable approximate of the preceding values, one can set `D`  as `D = (ND+CA)/T` where `T` is the length of epoch in seconds.
- `ND` and `CA` are also in seconds (i.e., the same unit used for epoch).
-`D` indeed measures the maximum number of epochs that are elapsed since a message gets routed from its origin to all the other peers in the network.
+With a reasonable approximate of the preceding values, one can set `D`  as `D = (ND+CA)/T` where `T` is the length of the `epoch` in seconds.
+`ND` and `CA` should have the same resolution as `T`.
+By this formulation, `D` indeed measures the maximum number of epochs that can elapse since a message gets routed from its origin to all the other peers in the network.
 
 # Copyright
 
