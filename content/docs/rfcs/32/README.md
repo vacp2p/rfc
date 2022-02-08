@@ -235,7 +235,7 @@ converting the hashed value to number and padding it:
 
 ### Epoch
 
-The epoch (or external nullifier) is also obtained by hasing a raw string value using `keccak256`:
+The epoch (or external nullifier) is also obtained by hashing a raw string value using `keccak256`:
 
 ```
     raw_epoch: string = "1234"
