@@ -188,8 +188,8 @@ Nevertheless, this value is also subject to change depending on user experience.
 ## Maximum Epoch Gap
 We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by `D`.
 The value of `D` can be measured based on the following factors.
-- `ND`: Network transmission delay: the time that it takes for a message to be routed between the furthest peers in the GossipSub network.
-- `CA`: Clock asynchrony: The maximum clock drifts among the peers.
+- `ND`: Network transmission delay: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.
+- `CA`: Clock asynchrony: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.
 With a reasonable approximation of the preceding values, one can set `D`  as `D = (ND+CA)/T` where `T` is the length of the `epoch` in seconds.
 `ND` and `CA` should have the same resolution as `T`.
 By this formulation, `D` indeed measures the maximum number of epochs that can elapse since a message gets routed from its origin to all the other peers in the network.
