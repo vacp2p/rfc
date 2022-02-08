@@ -166,7 +166,6 @@ The `proof` field is an array of 256 bytes and carries the zkSNARK proof as expl
 Other fields of the `RateLimitProof` message are the public inputs to the [rln circuit](/spec/32) and used for the generation of the `proof`.
 
 The `merkle_root` is an array of 32 bytes in little-endian order which holds the root of membership group Merkle tree at the time of publishing the message.
-The `merkle_root` is an array of 32 bytes which holds the root of membership group Merkle tree at the time of publishing the message.
 
 The `epoch` is an array of 32 bytes in little-endian order that represents the epoch in which the message is published.
 
