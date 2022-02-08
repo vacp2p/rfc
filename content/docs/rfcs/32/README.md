@@ -74,7 +74,7 @@ as implemented in the circomlib library, according to the Poseidon paper.
 
 ### Membership implementation
 
-For a valid signal, user's `identity commitment` (more on identity commitments below) must be exists in identity membership tree.
+For a valid signal, a user's `identity commitment` must exist in the identity membership tree. More on identity commitments below.
 Membership is proven by providing a membership proof (witness). 
 The fields from the membership proof required for the verification are: 
 `path_elements` and `identity_path_index`.
