@@ -22,19 +22,20 @@ In open and anonymous p2p messaging networks, one big problem is spam-resistance
 Existing solutions, such as Whisper’s proof of work are computationally expensive hence not suitable for resource-limited nodes. 
 Other reputation-based approaches might not be desirable, due to issues around arbitrary exclusion and privacy.
 
-We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [RLN](/spec/32) to enable an efficient and economic spam prevention mechanism suitable for the resource-constrained peers.
+We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [RLN](/spec/32) to enable an efficient economic spam prevention mechanism that can be run in resource-constrained environments.
 
 
 # Flow
 The messaging rate is set to 1 per `epoch`, 
 where `epoch` indicates the number of `T` seconds elapsed since Unix epoch event.
 The value of `T` is application dependent.
+See section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `T` value.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`
 (messaging rate MAY be enforced for `WakuMessages` with a specific `contetTopic` published on a `pubsubTopic`, but that is an implementation choice).
 
 ## SetUp and Registration
 Peers subscribed to a specific `pubsubTopic` form a [rln group](/spec/32).
-<!-- will later provide a link to the rln group definition in the rln rfc -->
+<!-- link to the rln group definition in the rln rfc -->
 Peers MUST be registered to the rln group to be able to publish message.
 Registration is moderated through a smart contract deployed on the Ethereum blockchain. 
 Each peer has an [rln key pair](/spec/32) denoted by `sk`  and `pk`.
@@ -43,7 +44,7 @@ The state of the membership contract contains the list of registered members' pu
 For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its `pk` in the group. 
 The transaction also transfers  `v` amount of ether to the contract to be staked. 
 `v` is a system parameter.
-The peer who has the "private key" `sk` associated with a registered `pk` would be able to withdraw a portion `p` of that staked fund by providing a valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
+The peer who has the "private key" `sk` associated with a registered `pk` would be able to withdraw a portion `p` of the staked fund by providing a valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
 `p` is also a system parameter.
 
 Note that  `sk` is initially only known to its owning peer however, it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per `epoch`.
@@ -56,37 +57,43 @@ An overview of registration is illustrated in Figure 1.
 
 In order to publish at a given `epoch`, the publishing peer proceeds based on the regular [`11/WAKU2-RELAY`](/spec/11) protocol.  
 However, in order to protect against spamming, each `WakuMessage` (which is wrapped inside the `data` field of a PubSub message) MUST carry a [`RateLimitProof`](##RateLimitProof) with the following fields. 
-
-The `proof` field which is a zero-knowledge proof signifying that the publishing peer is a  registered member, and she has not exceeded the messaging rate at the given `epoch`. 
-The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
-The `authPath` is a subset of Merkle tree nodes by which a peer can prove the inclusion of its `pk` in the group. <!-- TODO refer to RLN rfc for authPath def -->
-The proof generation also requires a set of public inputs which are: the Merkle tree root `merkle_root`, the current `epoch` and the message for which the proof is going to be generated. 
-In `17/WAKU-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
-For more details about the proof generation, please check [RLN](/spec/32)
-
+Section [Payload](#payloads) covers the details about the type and encoding of these fields.
 
 The `merkle_root` contains the root of the Merkle tree.
 
 The `epoch` represents the current epoch.
 
 The `nullifier` is an internal nullifier acting as a fingerprint which allows specifying whether two messages are published by the same peer during the same `epoch`.
-The `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., sing the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
+The `nullifier` is a deterministic value derived from `sk` and `epoch` therefore any two messages issued by the same peer (i.e., using the same `sk`) for the same `epoch` are guaranteed to have identical `nullifier`s.
 
 The `share_x` and `share_y` can be seen as partial disclosure of peer's `sk` for the intended `epoch`.
-These shares are created using [Shamir secret sharing scheme](/spec/32). 
-Given two such tuples with identical `nullifier` but distinct `share_x`, `share_y` results in full disclosure of peer's `sk` and hence getting access to the peer's staked fund in the membership contract.
+They are derived determnistically from peer's `sk` and current `epoch` using [Shamir secret sharing scheme](/spec/32). 
+If a peer discloses more than one such pair (`share_x`, `share_y`) for the same `epoch`, it would allow full disclosure of its  `sk` and hence getting access to its staked fund in the membership contract.
+
+
+The `proof` field which is a zero-knowledge proof signifying that: 
+1. The message owner is the current member of the group i.e., her/his identity commitment key `pk` is part of the membership group Merkle tree with the root `merkle_root`.
+2. `share_x` and `share_y`  are correctly computed.
+3. The `nullifier` is constructed correctly.
+For more details about the proof generation check [RLN](/spec/32)
+The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
+The `authPath` is a subset of Merkle tree nodes by which a peer can prove the inclusion of its `pk` in the group. <!-- TODO refer to RLN rfc for authPath def -->
+The proof generation also requires a set of public inputs which are: the Merkle tree root `merkle_root`, the current `epoch` and the message for which the proof is going to be generated. 
+In `17/WAKU-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
+
+
 
 
 
 ## Group  Synchronization
 
 Proof generation relies on the knowledge of Merkle tree root `merkle_root` and `authPath` which both require access to the membership Merkle tree. 
-Getting access to the Merkle tree can be done in various way. 
+Getting access to the Merkle tree can be done in various ways. 
 One way is that all the peers construct the tree locally.
 This can be done by listening to the registration and deletion events emitted by the membership contract.
 
-One important security consideration is that peers MUST make sure they always use the most recent Merkle tree root in their proof generation.
-The reason is that using an old root can allow inference about the index of the user `pk` in the membership tree hence compromising user privacy and breaking message unlinkability.
+For the group synchronization, one important security consideration is that peers MUST make sure they always use the most recent Merkle tree root in their proof generation.
+The reason is that using an old root can allow inference about the index of the user's `pk` in the membership tree hence compromising user privacy and breaking message unlinkability.
 
 <!-- `sk`  and `authPath`  are secret data and MUST be permanently and locally stored by the peer.  -->
 
@@ -115,12 +122,13 @@ As such, it is recommended (and necessary for anonymity) that the publisher upda
 
 ## Routing
 
-Upon the receipt of a PubSub message, the routing peer parses the `data` field as a `WakuMessage` and gets access to the `RateLimitProof` field.  
+Upon the receipt of a PubSub message via [`11/WAKU2-RELAY`](/spec/11) protocol, the routing peer parses the `data` field as a `WakuMessage` and gets access to the `RateLimitProof` field.  
 The peer then validates the `RateLimitProof`  as explained next.
 
 **Epoch Validation**
-If the `epoch` attached to the message has more than a threshold difference with the routing peer's current `epoch` then the message is discarded and considered invalid.
+If the `epoch` attached to the message has more than a threshold `D` gap with the routing peer's current `epoch` then the message is discarded and considered invalid.
 This is to prevent a newly registered peer spamming the system by messaging for all the past epochs. 
+`D` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
@@ -132,7 +140,7 @@ In order to enable local spam detection and slashing, routing peers MUST record 
 To spot spam messages, the peer checks whether a message with an identical `nullifier` has already been relayed. 
 1. If such message exists and its `share_x` and `share_y` components are different from the incoming message, then slashing takes place.
 That is, the peer uses the  `share_x` and `share_y`  of the new message and the  `share'_x` and `share'_y` of the old record to reconstruct the `sk` of the message owner.
-The `sk` than can be used to withdraw the reward i.e., the deposit of the message owner from the membership contract.
+The `sk` than can be used to delete the spammer from the group and  withdraw a portion of its staked fund.
 2. If the `share_x` and `share_y` fields of the previously relayed message is identical to the incoming message, then the message is a duplicate and shall be discarded.
 3. If none found, then the message gets relayed.
 
@@ -142,11 +150,6 @@ An overview of the routing procedure and slashing is provided in Figure 2.
 <!-- TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection -->
 
 ![Figure 2: Publishing, Routing and Slashing workflow.](../../../../rfcs/17/rln-message-verification.png)
-
-# Security Considerations
-
-
-<!-- TODO: discuss about the economic spam guarantees -->
 
 -------
 
@@ -184,10 +187,6 @@ message WakuMessage {
 ## RateLimitProof
 
 The `proof` field is an array of 256 bytes and carries the zkSNARK proof as explained in the [Publishing process](##Publishing).
-The proof asserts that:
-1. The message publisher is the current member of the group i.e., her/his identity commitment key is part of the membership group Merkle tree with the root `merkle_root`.
-2. `share_x` and `share_y`  are correctly computed.
-3. The `nullifier` is constructed correctly.
 
 Other fields of the `RateLimitProof` message are the public inputs to the [rln circuit](/spec/32) and used for the generation of the `proof`.
 
@@ -195,12 +194,30 @@ The `merkle_root` is an array of 32 bytes in little-endian order which holds the
 
 The `epoch` is an array of 32 bytes in little-endian order that represents the epoch in which the message is published.
 
-`share_x` and `share_y` are shares of the user's identity key.
+`share_x` and `share_y` are shares of the user's secret identity key `sk`.
 `share_x` is an array of 32 bytes and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
 <!-- We may include other fields in the hash if necessary-->
 `share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](/spec/32).
 
 The `nullifier` is the internal nullifier encoded as an array of 32 bytes.
+
+
+# Recommended System Parameters
+## Epoch 
+A sensible value for the epoch heavily depends on the application for which the spam-protection is going to be used.
+For example, while the epoch value of `1` second i.e., messaging rate of 1 per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
+One should look at the desired throughput of the application to decide on a proper epoch value.
+In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the messaging rate is set to 1 per second i.e. `T=1 second`.
+Nevertheless, this value is also subject to change depending on user experience.
+
+## Maximum Epoch Gap
+We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by `D`.
+The value of `D` can be measured based on the following factors.
+- `ND`: Network transmission delay: the time that it takes for a message to be routed between the furthest peers in the GossipSub network.
+- `CA`: Clock asynchrony: The maximum clock drifts among the peers.
+With a reasonable approximate of the preceding values, one can set `D`  as `D = (ND+CA)/T` where `T` is the length of epoch in seconds.
+ `ND` and `CA` are also in seconds (i.e., the same unit used for epoch).
+`D` indeed measures the maximum number of epochs that are elapsed since a message gets routed from its origin to all the other peers in the network.
 
 # Copyright
 
