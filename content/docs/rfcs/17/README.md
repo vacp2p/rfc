@@ -31,7 +31,7 @@ where `epoch` indicates the number of `T` seconds elapsed since the Unix epoch e
 The value of `T` is application-dependent.
 See section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `T` value.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`
-(messaging rate MAY be enforced for `WakuMessages` with a specific `contetTopic` published on a `pubsubTopic`, but that is an implementation choice).
+(messaging rate MAY be enforced for `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`, but that is an implementation choice).
 
 ## SetUp and Registration
 Peers subscribed to a specific `pubsubTopic` form a [rln group](/spec/32).
