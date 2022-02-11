@@ -26,26 +26,29 @@ We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [
 
 
 # Flow
-The messaging rate is set to 1 per `epoch`, 
-where `epoch` indicates the number of `T` seconds elapsed since the Unix epoch event.
-The value of `T` is application-dependent.
-See section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `T` value.
-Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`
-(messaging rate MAY be enforced for `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`, but that is an implementation choice).
+The messaging rate is hardcoded to `1` message per `epoch` per definition. 
+The `epoch` is measured as `epoch` = $\lceil$ current Unix epoch time in seconds / `Epoch_Length` $\rceil$ where `Epoch_Length` indicates the length of the `epoch` in seconds. 
+In other words, the `epoch` value gets incremented after every  `Epoch_Length` passed from the Unix epoch event.
+The messaging rate `1` is a fixed value whereas the epoch duration  `Epoch_Length`  is  application-dependent.
+See section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible  `Epoch_Length`  value.
+Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
+The higher-level layers adopting `17/WAKU-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
 
-## SetUp and Registration
-Peers subscribed to a specific `pubsubTopic` form a [rln group](/spec/32).
-<!-- link to the rln group definition in the rln RFC -->
-Peers MUST be registered to the rln group to be able to publish messages.
+
+
+## Setup and Registration
+Peers subscribed to a specific `pubsubTopic` form a [RLN group](/spec/32).
+<!-- link to the RLN group definition in the RLN RFC -->
+Peers MUST be registered to the RLN group to be able to publish messages.
 Registration is moderated through a smart contract deployed on the Ethereum blockchain. 
-Each peer has an [rln key pair](/spec/32) denoted by `sk`  and `pk`.
-The `sk` is secret data and MUST be persisted securely by the peer.
+Each peer has an [RLN key pair](/spec/32) denoted by `sk`  and `pk`.
+The  secret key `sk` is secret data and MUST be persisted securely by the peer.
 The state of the membership contract contains the list of registered members' public identity keys i.e., `pk`s. 
 For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its `pk` in the group. 
-The transaction also transfers  `v` amount of ether to the contract to be staked. 
-`v` is a system parameter.
-The peer who has the "private key" `sk` associated with a registered `pk` would be able to withdraw a portion `p` of the staked fund by providing valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
-`p` is also a system parameter.
+The transaction also transfers some amount of ether to the contract to be staked. 
+This amount is denoted by `Staked_Fund` and is a system parameter.
+The peer who has the secret key `sk` associated with a registered `pk` would be able to withdraw a portion `Reward_Portion` of the staked fund by providing valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
+`Reward_Portion` is also a system parameter.
 
 Note that  `sk` is initially only known to its owning peer however, it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per `epoch`.
 An overview of registration is illustrated in Figure 1.
@@ -81,17 +84,16 @@ The `authPath` is a subset of Merkle tree nodes by which a peer can prove the in
 The proof generation also requires a set of public inputs which are: the Merkle tree root `merkle_root`, the current `epoch`, and the message for which the proof is going to be generated. 
 In `17/WAKU-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
 
-
-
-
-
-## Group  Synchronization
+## Group Synchronization
 
 Proof generation relies on the knowledge of Merkle tree root `merkle_root` and `authPath` which both require access to the membership Merkle tree. 
 Getting access to the Merkle tree can be done in various ways. 
 One way is that all the peers construct the tree locally.
 This can be done by listening to the registration and deletion events emitted by the membership contract.
-
+Another approach for synchronizing the state of slashed `pk`s is to disseminate such information through a p2p GossipSub network to which all peers are subscribed. 
+This is in addition to sending the deletion transaction to the membership contract.
+The benefit of an off-chain slashing is that it allows real-time removal of spammers as opposed to on-chain slashing in which peers get informed with a delay,
+where the delay is due to mining the slashing transaction.
 For the group synchronization, one important security consideration is that peers MUST make sure they always use the most recent Merkle tree root in their proof generation.
 The reason is that using an old root can allow inference about the index of the user's `pk` in the membership tree hence compromising user privacy and breaking message unlinkability.
 
@@ -101,9 +103,9 @@ Upon the receipt of a PubSub message via [`11/WAKU2-RELAY`](/spec/11) protocol, 
 The peer then validates the `RateLimitProof`  as explained next.
 
 **Epoch Validation**
-If the `epoch` attached to the message has more than a threshold `D` gap with the routing peer's current `epoch` then the message is discarded and considered invalid.
+If the `epoch` attached to the message is more than `Max_Epoch_Gap` apart from the routing peer's current `epoch` then the message is discarded and considered invalid.
 This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs. 
-`D` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
+`Max_Epoch_Gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
@@ -111,7 +113,7 @@ It does so by running the zk verification algorithm as explained in [RLN](/spec/
 If `proof` is invalid then the message is discarded. 
 
 **Spam detection**
-To enable local spam detection and slashing routing peers MUST record the `nullifier`, `share_x`, and `share_y` of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
+To enable local spam detection and slashing, routing peers MUST record the `nullifier`, `share_x`, and `share_y` of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
 To spot spam messages, the peer checks whether a message with an identical `nullifier` has already been relayed. 
 1. If such a message exists and its `share_x` and `share_y` components are different from the incoming message, then slashing takes place.
 That is, the peer uses the  `share_x` and `share_y`  of the new message and the  `share'_x` and `share'_y` of the old record to reconstruct the `sk` of the message owner.
@@ -163,7 +165,7 @@ message WakuMessage {
 
 The `proof` field is an array of 256 bytes and carries the zkSNARK proof as explained in the [Publishing process](##Publishing).
 
-Other fields of the `RateLimitProof` message are the public inputs to the [rln circuit](/spec/32) and used for the generation of the `proof`.
+Other fields of the `RateLimitProof` message are the public inputs to the [RLN circuit](/spec/32) and used for the generation of the `proof`.
 
 The `merkle_root` is an array of 32 bytes in little-endian order which holds the root of membership group Merkle tree at the time of publishing the message.
 
@@ -178,21 +180,32 @@ The `nullifier` is the internal nullifier encoded as an array of 32 bytes.
 
 
 # Recommended System Parameters
-## Epoch 
-A sensible value for the epoch depends on the application for which the spam protection is going to be used.
-For example, while the epoch value of `1` second i.e., messaging rate of 1 per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
-One should look at the desired throughput of the application to decide on a proper epoch value.
-In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the messaging rate is set to 1 per second i.e. `T = 1 second`.
+The system parameters are summarized in the following table, and the recommended values for a subset of them are presented next.
+
+| Parameter | Description |
+| ----: |----------- |
+|  `Epoch_Length`  | the length of `epoch` in seconds |
+| `Staked_Fund` | the amount of ether to be staked by peers at the registration |
+| `Reward_Portion` | the percentage of `Staked_Fund` to be rewarded to the slashers |
+| `Max_Epoch_Gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
+
+## Epoch Length
+A sensible value for the `Epoch_Length` depends on the application for which the spam protection is going to be used.
+For example, while the `Epoch_Length` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
+One should look at the desired throughput of the application to decide on a proper `Epoch_Length` value.
+In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `Epoch_Length` is set to `1` second.
 Nevertheless, this value is also subject to change depending on user experience.
 
 ## Maximum Epoch Gap
-We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by `D`.
-The value of `D` can be measured based on the following factors.
-- `ND`: Network transmission delay: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.
-- `CA`: Clock asynchrony: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.
-With a reasonable approximation of the preceding values, one can set `D`  as `D = (ND+CA)/T` where `T` is the length of the `epoch` in seconds.
-`ND` and `CA` should have the same resolution as `T`.
-By this formulation, `D` indeed measures the maximum number of epochs that can elapse since a message gets routed from its origin to all the other peers in the network.
+We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by  `Max_Epoch_Gap` .
+The value of  `Max_Epoch_Gap`  can be measured based on the following factors.
+- Network transmission delay `Network_Delay`: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.
+- Clock asynchrony `Clock_Asynchrony`: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.
+  
+With a reasonable approximation of the preceding values, one can set  `Max_Epoch_Gap`   as 
+`Max_Epoch_Gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `Epoch_Length`  is the length of the `epoch` in seconds.
+`Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `Epoch_Length` .
+By this formulation,  `Max_Epoch_Gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
 
 # Copyright
 
@@ -201,6 +214,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 1. [RLN documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view)
-2. [Public inputs to the rln circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs)
+2. [Public inputs to the RLN circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs)
 3. [Shamir secret sharing scheme used in RLN](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS)
 4. [RLN internal nullifier](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers)
