@@ -53,8 +53,8 @@ syntax = "proto3";
 
 message Index {
   bytes digest = 1;
-  Timestamp receiverTime = 2;
-  Timestamp senderTime = 3;
+  sint64 receiverTime = 2;
+  sint64 senderTime = 3;
 }
 
 message PagingInfo {
