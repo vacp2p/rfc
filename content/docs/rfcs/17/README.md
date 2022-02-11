@@ -162,21 +162,14 @@ message WakuMessage {
 `rate_limit_proof` holds the information required to prove that the message owner has not exceeded the message rate limit.
  
 ## RateLimitProof
+Below is the description of the fields of `RateLimitProof` and their types.
 
-The `proof` field is an array of 256 bytes and carries the zkSNARK proof as explained in the [Publishing process](##Publishing).
-
-Other fields of the `RateLimitProof` message are the public inputs to the [RLN circuit](/spec/32) and used for the generation of the `proof`.
-
-The `merkle_root` is an array of 32 bytes in little-endian order which holds the root of membership group Merkle tree at the time of publishing the message.
-
-The `epoch` is an array of 32 bytes in little-endian order that represents the epoch in which the message is published.
-
-`share_x` and `share_y` are shares of the user's secret identity key `sk`.
-`share_x` is an array of 32 bytes and contains the hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic`. 
-<!-- We may include other fields in the hash if necessary-->
-`share_y` is also an array of 32 bytes which is calculated using [Shamir secret sharing scheme](/spec/32).
-
-The `nullifier` is the internal nullifier encoded as an array of 32 bytes.
+| Parameter | Type | Description | 
+| ----: | ----------- | ----------- |
+| `proof` | array of 256 bytes | the zkSNARK proof as explained in the [Publishing process](##Publishing) |
+| `merkle_root` | array of 32 bytes in little-endian order | the root of membership group Merkle tree at the time of publishing the message |
+| `share_x` and `share_y`| array of 32 bytes each | Shamir secret shares of the user's secret identity key `sk` . `share_x` is the Poseidon hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic` . `share_y` is calculated using [Shamir secret sharing scheme](/spec/32) | <!-- todo specify the poseidon hash setting -->
+| `nullifier`  | array of 32 bytes | internal nullifier derived from `epoch` and peer's `sk` as explained in [RLN construct](/spec/32)|
 
 
 # Recommended System Parameters
