@@ -35,8 +35,8 @@ message HistoryQuery {
   string pubsubtopic = 2;
   repeated ContentFilter contentFilters = 3;
   PagingInfo pagingInfo = 4;
-  + Timestamp start_time = 5;
-  + Timestamp end_time = 6;
+  + int64 start_time = 5;
+  + int64 end_time = 6;
 }
 
 ```
