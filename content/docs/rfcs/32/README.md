@@ -66,15 +66,15 @@ which together with the ZK-SNARK circuit enable the above mentioned features.
 
 ## ZK Circuits specification
 
-Anonymous signaling with spam detection is enabled by proving that the user is part of a group which has high bariers for entry (form of stake) and 
+Anonymous signaling with spam detection is enabled by proving that the user is part of a group which has high barriers to entry (form of stake) and 
 enabling secret reveal if more signals are produced than the spam threshold (system parameter) per epoch.
 The membership part is implemented using membership [merkle trees](https://en.wikipedia.org/wiki/Merkle_tree) and merkle proofs, 
 while the secret reveal part is enabled by using the Shamir's Secret Sharing scheme. 
-Esentially the protocol requires the users to generate zero-knowledge proof to be able to send signals and participate in the application. 
+Essentially the protocol requires the users to generate zero-knowledge proof to be able to send signals and participate in the application. 
 The zero knowledge proof proves that the user is member of a group, 
 but also enforces the user to share part of their secret for each signal in an epoch.
 The epoch is an external nullifier which is usually represented by timestamp or a time interval. 
-It can also be tought as voting booth in voting applications.
+It can also be thought of as a voting booth in voting applications.
 
 The ZK Circuit is implemented using a [Groth-16 ZK-SNARK](https://eprint.iacr.org/2016/260.pdf), 
 using the [circomlib](https://docs.circom.io/) library.
@@ -114,7 +114,7 @@ This Poseidon hash version (canonical implementation) is uses the following para
 
 ### Membership implementation
 
-For a valid signal, user's `identity_commitment` (more on identity commitments below) must be exists in identity membership tree.
+For a valid signal, a user's `identity_commitment` (more on identity commitments below) must exist in identity membership tree.
 Membership is proven by providing a membership proof (witness). 
 The fields from the membership proof required for the verification are: 
 `path_elements` and `identity_path_index`.
@@ -269,7 +269,7 @@ they need to generate a ZK-Proof by using the circuit with the specification des
 For generating a proof, 
 the users need to obtain the required parameters or compute them themselves, 
 depending on the application implementation and client libraries supported by the application.
-For example the users can store the memebrship merkle tree on their end and 
+For example the users can store the membership merkle tree on their end and 
 generate a merkle proof whenever they want to generate a signal. 
 
 ### Implementation notes
