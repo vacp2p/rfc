@@ -1,6 +1,6 @@
 ---
 slug: 32
-title: 32/RLN-SPEC
+title: 32/RLN
 name: RLN specification
 status: raw
 editor: Blagoj Dimovski <blagoj.dimovski@yandex.com>
@@ -29,6 +29,41 @@ The main RLN construct is implemented using a [ZK-SNARK](https://z.cash/technolo
 However it is helpful to describe the other necessary outside components for interaction with the circuit, 
 which together with the ZK-SNARK circuit enable the above mentioned features.
 
+
+## Terminology
+
+| Term                      | Description                                                                         |
+|---------------------------|-------------------------------------------------------------------------------------|
+| **ZK-SNARK**    | https://z.cash/technology/zksnarks/              |
+| **Stake**                 | Financial or social stake required for registering in the RLN applications. The staking requirement is necessary for disincentivising the end users to spam. A common stake examples are: locking cryptocurrency (financial), linking reputable social identity. |
+| **RLN Registration**    | The process of the user registering themselves to the RLN protocol. The registrations can occur onchain or offchain. Financial or social stake is required for registering to the protocol.   |
+| **Slashing**              | The process of retreiving the secret hash from the user that spams, and from the secret hash generating the identity commitment. Having the secret hash of a user implies that anyone could reveal their "identity" and also retreive their financial stake if it is enabled by the app.      |
+| **Identity nullifier**    | Random 32 byte value used as component for identity secret generation.              |
+| **Identity trapdoor**     | Random 32 byte value used as component for identity secret generation.              |
+| **Identity secret**       | An array of two unique random components (identity nullifier and identity trapdoor), which must be kept secret from the users. Secret hash and identity commitment are derived from this array.        |
+| **Identity secret hash**  | The hash of the identity secret, obtained using the Poseidon hash function. It is used for deriving the identity commitment of the user, and as a private input for zk proof generation. The secret hash should be treated as "private key" for the RLN protocol. The anonymity and security of the user is dependent on the secret hash.                                       |
+| **Identity commitment**   | Hash obtained from the `Identity secret hash` by using the poseidon hash function. It is used by the users for registering in the protocol.                                       |
+| **Signal**                | The message that needs to be sent by the user in a privacy preserving way. The message can be of different type, depending on the application. It can be a chat message, url request, protobuf message. |
+| **Signal hash**           | Hash of the signal, used as an input in the RLN circuit. |
+| **Epoch**                 | An identifier that groups signals and determines the validity of the signal. Can be though ot as voting booth. Usually a timestamp or time interval in the RLN apps. |
+| **RLN Identifier**        | Random finite field value unique per RLN app. It is used for additional cross-application security. The role of the RLN identifier is protection of the user secrets being compromised if signals are being generated with the same credentials at different apps. |
+| **RLN membership tree**   | Merkle tree data structure, filled with identity commitments of the users. Serves as a data structure that ensures user registrations.   |
+| **Merkle proof**          | Proof that a user is member of the RLN membership tree.    |
+
+
+## RLN ZK-Circuit specific terms
+
+| Term           | Description                                                       |
+|---------------------------|-------------------------------------------------------------------------------------|
+| **X Share**               | Hash of the signal, public input in the RLN circuit.    |
+| **A0**               | The identity secret hash.    |
+| **A1**               | Poseidon hash of [a0, external_nullifier] (see about External nullifier below).    |
+| **Y Share**          | The result of the polynomial equation (y = a0 + a1*x). Public output of the circuit.    |
+| **External nullifier**    | `keccak256` hash of the Epoch.    |
+| **Internal nullifier**    | Poseidon hash of [a1, rln_identifier]. This field ensures that a user can send only one valid signal per epoch without risking being slashed. Public output of the circuit.   |
+
+
+
 ## ZK Circuits specification
 
 Anonymous signaling with spam detection is enabled by proving that the user is part of a group which has high bariers for entry (form of stake) and 
@@ -53,33 +88,38 @@ using the [circomlib](https://docs.circom.io/) library.
 ### Circuit parameters
 
 **Public Inputs**
-- `x` - signal hash
-- `epoch` - epoch
-- `rln_identifier` - random finite field value, unique per RLN app (see below for more description)
+- `x` 
+- `epoch`
+- `rln_identifier`
 
 **Private Inputs**
-* `identity_secret_hash` - the identity secret hash of the user
-* `path_elements` - merkle tree membership proof component
-* `identity_path_index` - merkle tree membership proof component
+* `identity_secret_hash`
+* `path_elements` - rln membership proof component
+* `identity_path_index` - rln membership proof component
 
 **Outputs**
-- `y` - the output of the secret equation
-- `root` - the membership tree root
-- `nullifier` - the internal nullifier
+- `y`
+- `root` - the rln membership tree root
+- `internal_nullifier`
 
 ### Hash function
 
 Canonical [Poseidon hash implementation](https://eprint.iacr.org/2019/458.pdf) is used, 
-as implemented in the circomlib library, according to the Poseidon paper.
+as implemented in the [circomlib library](https://github.com/iden3/circomlib/blob/master/circuits/poseidon.circom), according to the Poseidon paper.
+This Poseidon hash version (canonical implementation) is uses the following parameters:
+
+- `t`: 3
+- `RF`: 8
+- `RP`: 57
 
 ### Membership implementation
 
-For a valid signal, user's `identity commitment` (more on identity commitments below) must be exists in identity membership tree.
+For a valid signal, user's `identity_commitment` (more on identity commitments below) must be exists in identity membership tree.
 Membership is proven by providing a membership proof (witness). 
 The fields from the membership proof required for the verification are: 
 `path_elements` and `identity_path_index`.
 
-[IncrementalQuinTree](https://github.com/appliedzkp/incrementalquintree) structure is used for the Membership tree. 
+[IncrementalQuinTree](https://github.com/appliedzkp/incrementalquintree) algorithm is used for constructing the Membership merkle tree. 
 The circuits are reused from this repository. 
 You can find out more details about the IncrementalQuinTree algorithm [here](https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446).
 
@@ -98,16 +138,16 @@ Along with the generated proof,
 the users need to provide a (x, y) share which satisfies the line equation, 
 in order for their proof to be verified. 
 `x` is the hashed signal, while the `y` is the circuit output. 
-With more that the `limit` number of shares anyone can derive `a_0`, the `identity_secret_hash`  key. 
+With more than one pair of unique shares, anyone can derive `a_0`, the `identity_secret_hash` . 
 Hash of a signal will be evaluation point x. 
-So that a member who sends more that `limit` number of signals per epoch reveals the secret key.
+So that a member who sends more that one unique signal per epoch risks their identity secret being revealed.
 
-Note that shares used in different epochs cannot be used to derive the secret key.
+Note that shares used in different epochs and different RLN apps cannot be used to derive the secret key.
 
 ### Nullifiers
-`epoch` is external nullfier.
+`epoch` is external nullfier (`external_nullifier`).
 
-The internal nullifier is calculated as `nullifier = hash(a_1, rln_identifier)`. 
+The internal nullifier is calculated as `internal_nullifier = hash(a_1, rln_identifier)`. 
 Note that `a_1` already contains a secret ingredient `a_0` and epoch ingredient, 
 so each epoch a member can signal to only one nullifier. 
 
@@ -177,6 +217,13 @@ If a user generates more signals than allowed in an epoch,
 the user risks being slashed - by revealing his secret and revealing his identity commitment. 
 If financial stake is put in place, the user also risks his stake being taken.
 
+Generally the flow can be described by the following steps:
+
+1. Registration
+2. Signaling
+3. Verification and slashing
+
+
 ## Registration
 
 Depending on the application requirements, the registration can be implemented in different ways, for example: 
@@ -193,17 +240,21 @@ An example for financial stake is: For each registration a certain amount of ETH
 An example for social stake is using InterRep as a registry - 
 users need to prove that they have a highly reputable social media account.
 
+### Implementation notes
+
+#### User identity
+
 The user's identity is composed of:
 
 ```
 {
-    identity_secret: secret_component_arr,
+    identity_secret: [identity_nullifier, identity_trapdoor],
     identity_secret_hash: poseidonHash(identity_secret),
     identity_commitment: poseidonHash([identity_secret_hash])
 }
 ```
 
-For registration, the user needs to submit their `identity_commitment` (along with any additional registration requirements) to the registry party. 
+For registration, the user needs to submit their `identity_commitment` (along with any additional registration requirements) to the registry. 
 Upon registration, they should receive `leaf_index` value which represents their position in the merkle tree. 
 Receiving a `leaf_index` is not a hard requirement and is application specific. 
 The other way around is the users calculating the `leaf_index` themselves upon successful registration.
@@ -221,34 +272,20 @@ depending on the application implementation and client libraries supported by th
 For example the users can store the memebrship merkle tree on their end and 
 generate a merkle proof whenever they want to generate a signal. 
 
-### Signal hash
+### Implementation notes
 
-The signal hash is generated by hashing the raw signal (or content) using the `keccak256` hash function, 
-converting the hashed value to number and padding it:
+#### Signal hash
 
-```
-  signal: string = "signal"
-  converted: string = toHex(toUtf8Bytes(signal))
-  signal_hash: bigint = BigInt(keccak256(converted)) >> BigInt(8)
-```
+The signal hash can be generated by hashing the raw signal (or content) using the `keccak256` hash function.
 
+#### Epoch
 
-### Epoch
+The epoch can be generated by hashing a raw string (i.e UNIX timestamp) value using `keccak256`.
 
-The epoch (or external nullifier) is also obtained by hasing a raw string value using `keccak256`:
-
-```
-    raw_epoch: string = "1234"
-    converted: string = keccak256(raw_epoch)
-    hex_string: string = converted.slice(8, 64)
-    epoch: string = "0x" + hex_string.padStart(64, "0")
-```
-
-
-### Merkle proof
+####  Obtaining merkle proof
 
 The merkle proof should be obtained locally or from a trusted third party. 
-By using the incremental merkle tree algorithm, 
+By using the [incremental merkle tree algorithm](https://github.com/appliedzkp/incrementalquintree/blob/master/ts/IncrementalQuinTree.ts), 
 the merkle can be obtained by providing the `leaf_index` of the `identity_commitment`. 
 The proof (`merkle_proof`) is composed of the following fields:
 
@@ -261,7 +298,7 @@ The proof (`merkle_proof`) is composed of the following fields:
 ```
 
 
-### Generating proof
+#### Generating proof
 
 For proof generation, 
 the user need to submit the following fields to the circuit:
@@ -273,40 +310,28 @@ the user need to submit the following fields to the circuit:
       identity_path_index: merkle_proof.indices,
       x: signal_hash,
       epoch: epoch,
-      rln_identifier: rlnIdentifier
+      rln_identifier: rln_identifier
     }
 ```
 
-The generated proof (`zk_proof`) is composed of the following fields:
 
-```
-{
-  pi_a: Array<string>,
-  pi_b: [ [Array<string>], [Array<string>], [Array<string>] ],
-  pi_c: Array<string>
-  protocol: string,
-  curve: string
-}
-```
-
-### Calculating output
+#### Calculating output
 
 The proof output is calculated locally, 
 in order for the required fields for proof verification to be sent along with the proof. 
-The proof output is composed of the `y` share of the secret equation and the `nullifier`. 
+The proof output is composed of the `y` share of the secret equation and the `internal_nullifier`. 
 The following fields are needed for proof output calculation:
 
 ```
 {
-  identity_secret: bigint, 
+  identity_secret_hash: bigint, 
   epoch: bigint, 
+  rln_identifier: bigint,
   x: bigint, 
-  limit: number, 
-  rln_identifier: bigint
 }
 ```
 
-The output `[y, nullifier]` is calculated in the following way:
+The output `[y, internal_nullifier]` is calculated in the following way:
 
 ```
 a_0 = identity_secret
@@ -314,12 +339,11 @@ a_1 = poseidonHash([a0, epoch])
 
 y = a_0 + x * a_1
 
-nullifier = poseidonHash([a_1, rln_identifier])
+internal_nullifier = poseidonHash([a_1, rln_identifier])
 ```
 
 
-
-### Sending proof
+#### Sending the output message
 
 The user's output message (`output_message`), 
 containing the signal should contain the following fields at minimum:
@@ -328,7 +352,7 @@ containing the signal should contain the following fields at minimum:
 {
     content: signal, # non-hashed signal
     proof: zk_proof,
-    nullifier: nullifier,
+    internal_nullifier: internal_nullifier,
     x: x, # signal_hash
     y: y,
     rln_identifier: rln_identifier
@@ -355,12 +379,14 @@ the slashing will be implemented only on the server.
 Otherwise if the application is distributed, 
 the slashing will be implemented on each user's client.
 
+### Implementation notes
+
 Each user of the protocol (server or otherwise) will need to store metadata for each message received by each user, 
 for the given epoch. 
 The data can be deleted when the epoch passes. 
-Storing metadata is required, so that if a user sends more than the 2 messages per epoch, 
+Storing metadata is required, so that if a user sends more than one unique signal per epoch, 
 they can be slashed and removed from the protocol. 
-The metadata stored contains the `x`, `y` shares and the `nullifier` for the user for each message. 
+The metadata stored contains the `x`, `y` shares and the `internal_nullifier` for the user for each message. 
 If enough such shares are present, the user's secret can be retreived.
 
 One way of storing received metadata (`messaging_metadata`) is the following format: 
@@ -376,7 +402,7 @@ One way of storing received metadata (`messaging_metadata`) is the following for
 }
 ```
 
-### Verification
+#### Verification
 
 The output message verification consists of the following steps:
 - `epoch` correctness
@@ -392,7 +418,7 @@ If the epoch is correct the verification continues, otherwise the message is dis
 **2. non-duplicate message check**
 The received message is checked to ensure it is not duplicate. 
 The duplicate message check is performed by verifying that the `x` and `y` fields do not exist in the `messaging_metadata` object. 
-If the `x` and `y` fields exist in the `x_shares` and `y_shares` array for the `epoch` and the `nullifier` the message can be considered as a duplicate. 
+If the `x` and `y` fields exist in the `x_shares` and `y_shares` array for the `epoch` and the `internal_nullifier` the message can be considered as a duplicate. 
 Duplicate messages are discarded.
 
 **3. `zk_proof` verification**
@@ -403,7 +429,7 @@ The `zk_proof` should be verified by providing the `zk_proof` field to the circu
 [
     y,
     merkle_proof.root,
-    nullifier,
+    internal_nullifier,
     signal_hash,
     epoch,
     rln_identifier
@@ -415,13 +441,13 @@ the verification continues, otherwise the message is discarded.
 
 **4. spam verification**
 
-After the proof is verified The `x`, and `y` fields are added to the `x_shares` and `y_shares` arrays of the `messaging_metadata` `epoch` and `nullifier` object. 
+After the proof is verified The `x`, and `y` fields are added to the `x_shares` and `y_shares` arrays of the `messaging_metadata` `epoch` and `internal_nullifier` object. 
 If the length of the arrays is equal to the spam threshold (`limit`), the user can be slashed.
 
-### Slashing
+#### Slashing
 
 After the verification, the user can be slashed if enough shares are present to reconstruct their `identity_secret_hash` from `x_shares` and `y_shares` fields, 
-for their `nullifier` in an `epoch`.
+for their `internal_nullifier` in an `epoch`.
 The secret can be retreived by the properties of the Shamir's secret sharing scheme. 
 In particular the secret (`a_0`) can be retrieved by computing `Lagrange polynomials`. 
 
@@ -429,7 +455,17 @@ After the secret is retreived,
  the user's `identity_commitment` can be generated from the secret and it can be used for removing the user from the membership merkle tree (zeroing out the leaf that contains the user's `identity_commitment`). 
 Additionally, depending on the application the `identity_secret_hash` can be used for taking the user's provided stake.
 
-# Auxiliary tooling
+
+# Appendix A: Security considerations
+
+RLN is an experimental and still un-audited technology. This means that the circuits have not been yet audited. 
+Another consideration is the security of the underlying primitives. 
+zk-SNARKS require a trusted setup for generating a prover and verifier keys.
+The standard for this is to use trusted [Multi-Party Computation (MPC)](https://en.wikipedia.org/wiki/Secure_multi-party_computation) ceremony, 
+which requires two phases. 
+Trusted MPC ceremony has not yet been performed for the RLN circuits.
+
+# Apendix B: Auxiliary tooling
 
 There are few additional tools implemented for easier integrations and usage of the RLN protocol.
 
@@ -441,6 +477,77 @@ It supports various protocols (`Semaphore`, `RLN`),.
 You can think of MetaMask for ZK-Proofs. 
 It uses `zk-kit` under the hood.
 
+# Apendix C: Example usage
+
+The following examples are code snippets using the `zk-kit` library. 
+The examples are written in [typescript](https://www.typescriptlang.org/).
+
+
+## Generating identity credentials
+
+```typescript
+      import { ZkIdentity } from "@zk-kit/identity"
+
+      const identity = new ZkIdentity()
+      const identityCommitment = identity.genIdentityCommitment()
+      const secretHash = identity.getSecretHash()
+```
+
+## Generating proof
+
+```typescript
+    import { RLN, MerkleProof, FullProof, genSignalHash, generateMerkleProof, genExternalNullifier } from '@zk-kit/protocols'
+    import { ZkIdentity } from '@zk-kit/identity'
+    import { bigintToHex, hexToBigint } from 'bigint-conversion'
+    
+      const ZERO_VALUE = BigInt(0);
+      const TREE_DEPTH = 15;
+      const LEAVES_PER_NODE = 2;
+      const LEAVES = [...]; // leaves should be an array of the leaf values of the membership merkle tree
+      // the identity commitment generated below should be present in the LEAVES array
+
+      // this is for illustrative purposes only. The identityCommitment should be present in the LEAVES array above.
+      const identity = new ZkIdentity()
+      const secretHash = identity.getSecretHash()
+      const identityCommitment = identity.genIdentityCommitment()
+
+      const signal = "hey"
+      const signalHash = genSignalHash(signal)
+      const epoch = genExternalNullifier("test-epoch")
+      const rlnIdentifier = RLN.genIdentifier()
+
+      const merkleProof = generateMerkleProof(TREE_DEPTH, ZERO_VALUE, LEAVES_PER_NODE, LEAVES, identityCommitment)
+      const witness = RLN.genWitness(secretHash, merkleProof, epoch, signal, rlnIdentifier)
+
+      const [y, nullifier] = RLN.calculateOutput(secretHash, BigInt(epoch), rlnIdentifier, signalHash)
+      const publicSignals = [y, merkleProof.root, nullifier, signalHash, epoch, rlnIdentifier]
+
+      const wasmFilePath = path.join(zkeyFiles, "rln", "rln.wasm") // path to the WASM compiled circuit
+      const finalZkeyPath = path.join(zkeyFiles, "rln", "rln_final.zkey") // path to the prover key
+
+      const fullProof = await RLN.genProof(witness, wasmFilePath, finalZkeyPath)
+```
+
+## Verifiying proof
+
+```typescript
+    import { RLN } from '@zk-kit/protocols'
+    
+    // Public signal and the proof are received from the proving party
+    // const publicSignals = [y, merkleProof.root, nullifier, signalHash, epoch, rlnIdentifier]
+    // const proof = (await RLN.genProof(witness, wasmFilePath, finalZkeyPath)).proof
+
+    const vkeyPath = path.join(zkeyFiles, "rln", "verification_key.json") // Path to the verifier key
+    const vKey = JSON.parse(fs.readFileSync(vkeyPath, "utf-8")) // The verifier key
+
+    const response = await RLN.verifyProof(vKey, { proof: proof, publicSignals })
+```
+
+For more details please visit the [`zk-kit`](https://github.com/appliedzkp/zk-kit) library.
+
+# Copyright 
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/)
 
 # References
 
@@ -455,3 +562,4 @@ It uses `zk-kit` under the hood.
 - [9] https://github.com/appliedzkp/incrementalquintree
 - [10] https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446
 - [11] https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing
+- [12] https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/
