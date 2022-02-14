@@ -38,7 +38,7 @@ The `contentTopic` MUST be set to `/toy-chat/2/huilong/proto`.
 syntax = "proto3";
 
 message Chat2Message {
-   sint64 timestamp = 1;
+   uint64 timestamp = 1;
    string nick = 2;
    bytes payload = 3;
 }
