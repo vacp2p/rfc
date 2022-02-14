@@ -1,7 +1,7 @@
 ---
-slug: 33
-title: 33/WAKU2-STANDARD-Template
-name: Waku v2 usage of ENR
+slug: 42
+title: 42/WAKU2-STANDARD-Template
+name: Waku v2 Stadard Template
 status: raw
 category: WAKU standard
 editor: Daniel Kaiser <danielkaiser@status.im>
