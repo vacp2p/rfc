@@ -89,7 +89,7 @@ Since Waku v2 is built on top of libp2p, many protocols have a libp2p protocol i
 The current main [protocol identifiers](https://docs.libp2p.io/concepts/protocols/) are:
 
 1. `/vac/waku/relay/2.0.0`
-2. `/vac/waku/store/2.0.0-beta3`
+2. `/vac/waku/store/2.0.0-beta4`
 3. `/vac/waku/filter/2.0.0-beta1`
 4. `/vac/waku/lightpush/2.0.0-beta1`
 
@@ -182,7 +182,7 @@ such as low bandwidth or being mostly offline.
 
 #### Historical message support
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-beta3`
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta4`
 
 This is used to fetch historical messages for mostly offline devices.
 See [13/WAKU2-STORE](/spec/13) spec for more details.

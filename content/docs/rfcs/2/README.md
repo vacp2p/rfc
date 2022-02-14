@@ -45,7 +45,7 @@ message Payload {
 
 message Message {
   bytes group_id = 6001;
-  int64 timestamp = 6002;
+  sint64 timestamp = 6002;
   bytes body = 6003;
 }
 ```

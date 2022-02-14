@@ -49,7 +49,7 @@ message WakuMessage {
   bytes payload = 1;
   string contentTopic = 2;
   uint32 version = 3;
-  int64 timestamp = 4;
+  sint64 timestamp = 4;
 }
 ```
 
