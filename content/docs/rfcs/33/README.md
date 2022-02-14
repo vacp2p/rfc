@@ -99,8 +99,21 @@ Existing discv5 implementations
 
 # Security Considerations
 
-* Eclipse attack
-* Sybil attack
+
+## Eclipse attack
+TODO
+
+## Sybil attack
+TODO
+
+## Security Implications of a Separate Discovery Network
+
+A dedicated Waku discovery network can be subject to eclipse attacks if not properly secured.
+Properly protecting against eclipse attacks is challenging and raises research questions that we will address in future stages of our discv5 roadmap.
+
+Using the Ethereum discv5 network would mitigate eclipse attacks targeted at specific capabilities, e.g. Waku.
+However, this is because eclipse attacks aim at the DHT overlay structure, which an Ethereum network based capability discovery approach would not use.
+So, this mitigation would come at the cost of giving up overlay routing efficiency.
 
 # References
 
