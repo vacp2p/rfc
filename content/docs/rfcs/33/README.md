@@ -37,11 +37,11 @@ Being a P2P network on its own, it also depends on bootstrap nodes.
 The advantage of having a separate discovery network is reducing load on the bootstrap nodes as the actual work is done by randomly discovered nodes, which in turn increases decentralization.
 
 
-### w.r.t. Etherium Discovery v5
-`33/WAKU2-DISCV5` spans a discovery network isolated from the Etherium Discovery v5 network.
+### w.r.t. Ethereum Discovery v5
+`33/WAKU2-DISCV5` spans a discovery network isolated from the Ethereum Discovery v5 network.
 This separation allows for efficient queries.
 Using a dedicated Waku2 discovery network, Waku2 nodes can query this discovery network for a random set of nodes and directly use these randomly distributed nodes as bootstrap into the Waku2 network.
-If Waku2 would use the Etherium discovery v5 network a retrieved set of random nodes is not guaranteed to contain a Waku2 node leading to a needle-in-the-haystack problem.
+If Waku2 would use the Ethereum discovery v5 network a retrieved set of random nodes is not guaranteed to contain a Waku2 node leading to a needle-in-the-haystack problem.
 Having to search for random nodes until finding one that supports Waku does not leverage the DHT structure to its full extend.
 
 # Semantics
