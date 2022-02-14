@@ -38,6 +38,9 @@ An optional *implementation suggestions* section may provide suggestions on how 
 
 # Security/Privacy Considerations
 
+# Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
 
