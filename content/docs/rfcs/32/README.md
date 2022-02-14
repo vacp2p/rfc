@@ -1,7 +1,7 @@
 ---
 slug: 32
 title: 32/WAKU2-DISCV5
-name: Waku v2 usage of ENR
+name: WAKU v2 Discv5 Ambient Peer Discovery
 status: raw
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
