@@ -43,7 +43,7 @@ The advantage of having a separate discovery network is reducing load on the boo
 This separation allows for efficient queries.
 Using a dedicated Waku2 discovery network, Waku2 nodes can query this discovery network for a random set of nodes and directly use these randomly distributed nodes as bootstrap into the Waku2 network.
 If Waku2 would use the Ethereum discovery v5 network a retrieved set of random nodes is not guaranteed to contain a Waku2 node leading to a needle-in-the-haystack problem.
-Having to search for random nodes until finding one that supports Waku does not leverage the DHT structure to its full extend.
+Having to search for random nodes until finding one that supports Waku does not leverage the DHT structure to its full extent.
 
 # Semantics
 
