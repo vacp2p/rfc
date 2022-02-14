@@ -32,6 +32,7 @@ Future iterations of this document will add the possibility of efficiently disco
 ## Separate Discovery Network
 
 ### w.r.t. Waku2 Relay Network
+
 `33/WAKU2-DISCV5` spans an overlay network separate from the [GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) network [11/WAKU2-RELAY](/specs/11) builds on.
 Being a P2P network on its own, it also depends on bootstrap nodes.
 The advantage of having a separate discovery network is reducing load on the bootstrap nodes as the actual work is done by randomly discovered nodes, which in turn increases decentralization.
