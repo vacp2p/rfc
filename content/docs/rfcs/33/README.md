@@ -1,6 +1,6 @@
 ---
-slug: 32
-title: 32/WAKU2-DISCV5
+slug: 33
+title: 33/WAKU2-DISCV5
 name: WAKU v2 Discv5 Ambient Peer Discovery
 status: raw
 editor: Daniel Kaiser <danielkaiser@status.im>
@@ -9,9 +9,9 @@ contributors:
 
 # Abstract
 
-`32/WAKU2-DISCV5` specifies a modified version of [Ethereum's Node Discovery Protocol v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) as a means for ambient node discovery.
-[10/WAKU2](/specs/10) uses the `32/WAKU2-DISCV5` ambient node discovery network for establishing a decentralized network of interconnected Waku2 nodes.
-The `32/WAKU2-DISCV5` discovery network is isolated from the Ethereum Discovery v5 network; this isolation greatly improves discovery efficiency.
+`33/WAKU2-DISCV5` specifies a modified version of [Ethereum's Node Discovery Protocol v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) as a means for ambient node discovery.
+[10/WAKU2](/specs/10) uses the `33/WAKU2-DISCV5` ambient node discovery network for establishing a decentralized network of interconnected Waku2 nodes.
+The `33/WAKU2-DISCV5` discovery network is isolated from the Ethereum Discovery v5 network; this isolation greatly improves discovery efficiency.
 
 # Background and Rationale
 
@@ -22,23 +22,23 @@ For establishing and growing this network, new nodes trying to join the Waku2 ne
 * hard coded bootstrap nodes
 * `DNS discovery`
 * `peer-exchange` protocol
-* `32/WAKU2-DISCV5` (specified in this document)
+* `33/WAKU2-DISCV5` (specified in this document)
 
 The purpose of ambient node discovery within [10/WAKU2](/specs/10) is discovering Waku2 nodes in a decentralized way.
-The unique selling point of `32/WAKU2-DISCV5` is its holistic view of the network, which allows avoiding hotspots and allows merging the network after a split.
-While the other methods provide either a fixed or local set of nodes, `32/WAKU2-DISCV5` can provide a random sample of Waku2 nodes.
+The unique selling point of `33/WAKU2-DISCV5` is its holistic view of the network, which allows avoiding hotspots and allows merging the network after a split.
+While the other methods provide either a fixed or local set of nodes, `33/WAKU2-DISCV5` can provide a random sample of Waku2 nodes.
 Future iterations of this document will add the possibility of efficiently discovering Waku2 nodes that have certain capabilities, e.g. holding messages of a certain time frame during which the querying node was offine.
 
 ## Separate Discovery Network
 
 ### w.r.t. Waku2 Relay Network
-`32/WAKU2-DISCV5` spans an overlay network separate from the [GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) network [11/WAKU2-RELAY](/specs/11) builds on.
+`33/WAKU2-DISCV5` spans an overlay network separate from the [GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) network [11/WAKU2-RELAY](/specs/11) builds on.
 Being a P2P network on its own, it also depends on bootstrap nodes.
 The advantage of having a separate discovery network is reducing load on the bootstrap nodes as the actual work is done by randomly discovered nodes, which in turn increases decentralization.
 
 
 ### w.r.t. Etherium Discovery v5
-`32/WAKU2-DISCV5` spans a discovery network isolated from the Etherium Discovery v5 network.
+`33/WAKU2-DISCV5` spans a discovery network isolated from the Etherium Discovery v5 network.
 This separation allows for efficient queries.
 Using a dedicated Waku2 discovery network, Waku2 nodes can query this discovery network for a random set of nodes and directly use these randomly distributed nodes as bootstrap into the Waku2 network.
 If Waku2 would use the Etherium discovery v5 network a retrieved set of random nodes is not guaranteed to contain a Waku2 node leading to a needle-in-the-haystack problem.
@@ -46,12 +46,12 @@ Having to search for random nodes until finding one that supports Waku does not 
 
 # Semantics
 
-`32/WAKU2-DISCV5` fully inherits the [discv5 semantics](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md).
+`33/WAKU2-DISCV5` fully inherits the [discv5 semantics](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md).
 
 
 # Wire Format Specification
 
-`32/WAKU2-DISCV5` inherits the [discv5 wire protocol](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-wire.md) except for the following differences
+`33/WAKU2-DISCV5` inherits the [discv5 wire protocol](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-wire.md) except for the following differences
 
 ## WAKU2-Specific `protocol-id`
 
@@ -69,7 +69,7 @@ nonce         = uint96    -- nonce of message
 </code>
 </pre>
 
-`32/WAKU2-DISCV5`:
+`33/WAKU2-DISCV5`:
 
 <pre>
 kcode>
