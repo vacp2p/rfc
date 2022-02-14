@@ -39,11 +39,15 @@ The advantage of having a separate discovery network is reducing load on the boo
 
 
 ### w.r.t. Ethereum Discovery v5
+
 `33/WAKU2-DISCV5` spans a discovery network isolated from the Ethereum Discovery v5 network.
-This separation allows for efficient queries.
-Using a dedicated Waku2 discovery network, Waku2 nodes can query this discovery network for a random set of nodes and directly use these randomly distributed nodes as bootstrap into the Waku2 network.
-If Waku2 would use the Ethereum discovery v5 network a retrieved set of random nodes is not guaranteed to contain a Waku2 node leading to a needle-in-the-haystack problem.
-Having to search for random nodes until finding one that supports Waku does not leverage the DHT structure to its full extent.
+Ethereum discv5 capability discovery (topic discovery) boils down to random walks and does not offer a O(log(n)) hop bound.
+Contrary to Kademlia, discv5 only maps node-ids into the DHT hash space, and not identifiers for arbitrary data.
+So, while the Ethereum discv5 network is very efficient in finding other discv5 nodes, it is not so efficient for finding discv5 nodes that have a specific property or offer specific services, e.g. Waku.
+The rarer the requested property, the longer a random walk will take until finding an appropriate node, which leads to a needle-in-the-haystack problem.
+
+Using a dedicated Waku2 discovery network, nodes can query this discovery network for a random set of nodes
+and all (well-behaving) returned nodes can serve as bootstrap nodes for other Waku2 protocols.
 
 # Semantics
 
