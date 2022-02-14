@@ -51,6 +51,3 @@ See [RFC3967 Section 1.1](https://datatracker.ietf.org/doc/html/rfc3967#section-
 ## informative
 A list of additional references.
 
-# Copyright
-
-Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
