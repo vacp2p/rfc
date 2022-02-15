@@ -5,6 +5,7 @@ name: Waku v2 RLN Relay
 status: draft
 tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
+contributors: Oskar Thoren <oskar@status.im>
 ---
 
 The `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
@@ -14,7 +15,7 @@ Peers that violate the messaging rate are considered spammers and their message 
 Spammers are also financially punished and removed from the system. 
 
 
-**Protocol identifier***: `/vac/waku/waku-rln-relay/2.0.0-alpha1`
+<!-- **Protocol identifier***: `/vac/waku/waku-rln-relay/2.0.0-alpha1` -->
 
 # Motivation
 
@@ -26,11 +27,12 @@ We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [
 
 
 # Flow
-The messaging rate is hardcoded to `1` message per `epoch` per definition. 
-The `epoch` is measured as `epoch` = $\lceil$ current Unix epoch time in seconds / `Epoch_Length` $\rceil$ where `Epoch_Length` indicates the length of the `epoch` in seconds. 
-In other words, the `epoch` value gets incremented after every  `Epoch_Length` passed from the Unix epoch event.
-The messaging rate `1` is a fixed value whereas the epoch duration  `Epoch_Length`  is  application-dependent.
-See section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible  `Epoch_Length`  value.
+
+
+The messaging rate is defined by the `period` which indicates how many messages can be sent in a given period.
+We define an `epoch` as $\lceil$ `unix_time` / `period` $\rceil$. For example, if `unix_time` is `1644810116` and we set `period` to `30`, then `epoch` is  $\lceil$`(unix_time/period)`$\rceil$ `= 54827003`.
+Note that `epoch` refers to epoch in RLN and not Unix epoch. This means a message can only be sent every period, where period is up to the application.
+See see section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `period` value depending on the application.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
 The higher-level layers adopting `17/WAKU-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
 
@@ -46,9 +48,9 @@ The  secret key `sk` is secret data and MUST be persisted securely by the peer.
 The state of the membership contract contains the list of registered members' public identity keys i.e., `pk`s. 
 For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its `pk` in the group. 
 The transaction also transfers some amount of ether to the contract to be staked. 
-This amount is denoted by `Staked_Fund` and is a system parameter.
-The peer who has the secret key `sk` associated with a registered `pk` would be able to withdraw a portion `Reward_Portion` of the staked fund by providing valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
-`Reward_Portion` is also a system parameter.
+This amount is denoted by `staked_fund` and is a system parameter.
+The peer who has the secret key `sk` associated with a registered `pk` would be able to withdraw a portion `reward_portion` of the staked fund by providing valid proof. <!-- a secure way to prove the possession of a pk is yet under discussion, maybe via commit and reveal -->
+`reward_portion` is also a system parameter.
 
 Note that  `sk` is initially only known to its owning peer however, it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per `epoch`.
 An overview of registration is illustrated in Figure 1.
@@ -103,9 +105,9 @@ Upon the receipt of a PubSub message via [`11/WAKU2-RELAY`](/spec/11) protocol, 
 The peer then validates the `RateLimitProof`  as explained next.
 
 **Epoch Validation**
-If the `epoch` attached to the message is more than `Max_Epoch_Gap` apart from the routing peer's current `epoch` then the message is discarded and considered invalid.
+If the `epoch` attached to the message is more than `max_epoch_gap` apart from the routing peer's current `epoch` then the message is discarded and considered invalid.
 This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs. 
-`Max_Epoch_Gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
+`max_epoch_gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
@@ -117,7 +119,7 @@ To enable local spam detection and slashing, routing peers MUST record the `null
 To spot spam messages, the peer checks whether a message with an identical `nullifier` has already been relayed. 
 1. If such a message exists and its `share_x` and `share_y` components are different from the incoming message, then slashing takes place.
 That is, the peer uses the  `share_x` and `share_y`  of the new message and the  `share'_x` and `share'_y` of the old record to reconstruct the `sk` of the message owner.
-The `sk` then can be used to delete the spammer from the group and withdraw a portion of its staked fund.
+The `sk` then can be used to delete the spammer from the group and withdraw a portion `reward_portion` of its staked fund.
 2. If the `share_x` and `share_y` fields of the previously relayed message are identical to the incoming message, then the message is a duplicate and shall be discarded.
 3. If none is found, then the message gets relayed.
 
@@ -177,28 +179,28 @@ The system parameters are summarized in the following table, and the recommended
 
 | Parameter | Description |
 | ----: |----------- |
-|  `Epoch_Length`  | the length of `epoch` in seconds |
-| `Staked_Fund` | the amount of ether to be staked by peers at the registration |
-| `Reward_Portion` | the percentage of `Staked_Fund` to be rewarded to the slashers |
-| `Max_Epoch_Gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
+|  `period`  | the length of `epoch` in seconds |
+| `staked_fund` | the amount of ether to be staked by peers at the registration |
+| `reward_portion` | the percentage of `staked_fund` to be rewarded to the slashers |
+| `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
 
 ## Epoch Length
-A sensible value for the `Epoch_Length` depends on the application for which the spam protection is going to be used.
-For example, while the `Epoch_Length` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
-One should look at the desired throughput of the application to decide on a proper `Epoch_Length` value.
-In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `Epoch_Length` is set to `1` second.
+A sensible value for the `period` depends on the application for which the spam protection is going to be used.
+For example, while the `period` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
+One should look at the desired throughput of the application to decide on a proper `period` value.
+In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
 Nevertheless, this value is also subject to change depending on user experience.
 
 ## Maximum Epoch Gap
-We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by  `Max_Epoch_Gap` .
-The value of  `Max_Epoch_Gap`  can be measured based on the following factors.
+We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by  `max_epoch_gap` .
+The value of  `max_epoch_gap`  can be measured based on the following factors.
 - Network transmission delay `Network_Delay`: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.
 - Clock asynchrony `Clock_Asynchrony`: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.
   
-With a reasonable approximation of the preceding values, one can set  `Max_Epoch_Gap`   as 
-`Max_Epoch_Gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `Epoch_Length`  is the length of the `epoch` in seconds.
-`Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `Epoch_Length` .
-By this formulation,  `Max_Epoch_Gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
+With a reasonable approximation of the preceding values, one can set  `max_epoch_gap`   as 
+`max_epoch_gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `period`  is the length of the `epoch` in seconds.
+`Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `period` .
+By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
 
 # Copyright
 
