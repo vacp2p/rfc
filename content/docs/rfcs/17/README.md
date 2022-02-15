@@ -5,7 +5,7 @@ name: Waku v2 RLN Relay
 status: draft
 tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
-contributors: Oskar Thoren <oskar@status.im>
+contributors: Oskar Thorén <oskar@status.im>
 ---
 
 The `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
