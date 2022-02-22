@@ -3,6 +3,7 @@ slug: 22
 title: 22/TOY-CHAT
 name: Waku v2 Toy Chat
 status: draft
+tags: waku-application
 editor: Franck Royer <franck@status.im>
 contributors:
    - Hanno Cornelius <hanno@status.im>
