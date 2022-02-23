@@ -54,7 +54,7 @@ which together with the ZK-SNARK circuit enable the above mentioned features.
 
 | Term           | Description                                                       |
 |---------------------------|-------------------------------------------------------------------------------------|
-| **X Share**               | Hash of the signal, public input in the RLN circuit.    |
+| **share_x**               | Hash of the signal.    |
 | **A0**               | The identity secret hash.    |
 | **A1**               | Poseidon hash of [A0, External nullifier] (see about External nullifier below).    |
 | **Y Share**          | The result of the polynomial equation (y = a0 + a1*x). Public output of the circuit.    |
