@@ -34,7 +34,7 @@ which together with the ZK-SNARK circuit enable the above mentioned features.
 | Term                      | Description                                                                         |
 |---------------------------|-------------------------------------------------------------------------------------|
 | **ZK-SNARK**    | https://z.cash/technology/zksnarks/              |
-| **Stake**                 | Financial or social stake required for registering in the RLN applications. The staking requirement is necessary for disincentivising the end users to spam. A common stake examples are: locking cryptocurrency (financial), linking reputable social identity. |
+| **Stake**                 | Financial or social stake required for registering in the RLN applications.  Common stake examples are: locking cryptocurrency (financial), linking reputable social identity. |
 | **RLN Registration**    | The process of the user registering themselves to the RLN protocol. The registrations can occur onchain or offchain. Financial or social stake is required for registering to the protocol.   |
 | **Slashing**              | The process of retreiving the secret hash from the user that spams, and from the secret hash generating the identity commitment. Having the secret hash of a user implies that anyone could reveal their "identity" and also retreive their financial stake if it is enabled by the app.      |
 | **Identity nullifier**    | Random 32 byte value used as component for identity secret generation.              |
