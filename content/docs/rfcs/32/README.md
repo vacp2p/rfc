@@ -205,16 +205,15 @@ identity_commitment = poseidonHash([identity_secret_hash])
 
 # Flow
 
-The users participate in the protocol by first registering to the application. 
-The application can have different form of registration. 
-The goal of this step is the user to become a member of the group.
-Usually the membership requires financial or social stake. 
-Barrier for entry is required for dis-incentivising the users from spamming.
-After they are part of the memebrship group, 
-the users can generate ZK-Proofs for their signals and can participate in the application. 
+The users participate in the protocol by first registering to an application-defined group referred by the _membership group_.
+Registration to the group is mandatory for signaling in the application. 
+After registration, group members can generate Zero-knowledge Proof of membership for their signals and can participate in the application. 
+Usually, the membership requires a financial or social stake which 
+is beneficial for the prevention of Sybil attacks and double-signaling.
+Group members are allowed to send one signal per epoch.
 If a user generates more signals than allowed in an epoch, 
-the user risks being slashed - by revealing his secret and revealing his identity commitment. 
-If financial stake is put in place, the user also risks his stake being taken.
+the user risks being slashed - by revealing his membership secret credentials. secret and revealing his identity commitment. 
+If the financial stake is put in place, the user also risks his stake being taken.
 
 Generally the flow can be described by the following steps:
 
