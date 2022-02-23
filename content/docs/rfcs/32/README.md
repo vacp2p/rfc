@@ -57,7 +57,7 @@ which together with the ZK-SNARK circuit enable the above mentioned features.
 | **share_x**               | Hash of the signal.    |
 | **A0**               | The identity secret hash.    |
 | **A1**               | Poseidon hash of [A0, External nullifier] (see about External nullifier below).    |
-| **Y Share**          | The result of the polynomial equation (y = a0 + a1*x). Public output of the circuit.    |
+| **share_y**          | The result of the polynomial equation (y = a0 + a1*x). The public output of the circuit.    |
 | **External nullifier**    | `keccak256` hash of the Epoch.    |
 | **Internal nullifier**    | Poseidon hash of [a1, rln_identifier]. This field ensures that a user can send only one valid signal per epoch without risking being slashed. Public output of the circuit.   |
 
