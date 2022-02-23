@@ -160,12 +160,12 @@ It is RECOMMENDED to use color coding to indicate specification's status. Color 
 It is RECOMMENDED that specification metadata is specified as a YAML header (where possible) or a separate YAML file. This will enable programmatic access
 to specification metadata.
 
-| Key              | Value                | Type   | Example             |
-|------------------|----------------------|--------|---------------------|
-| **domain**       | specification domain | string | rfc.vac.dev |
-| **shortname**    | short name           | string | 1/COSS              |
-| **name**         | full name            | string | Consensus-Oriented Specification System |
-| **status**       | status               | string | draft               |
-| **tags**         | 0 or several tags    | list   | waku-application, waku-core |
-| **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im> |
+| Key              | Value                | Type   | Example                                                                                                                                                                                                                             |
+|------------------|----------------------|--------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **domain**       | specification domain | string | rfc.vac.dev                                                                                                                                                                                                                         |
+| **shortname**    | short name           | string | 1/COSS                                                                                                                                                                                                                              |
+| **name**         | full name            | string | Consensus-Oriented Specification System                                                                                                                                                                                             |
+| **status**       | status               | string | draft                                                                                                                                                                                                                               |
+| **tags**         | 0 or several tags    | list   | waku-application, waku-core-protocol                                                                                                                                                                                                |
+| **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im>                                                                                                                                                                                                      |
 | **contributors** | contributors         | list   | - Pieter Hintjens <ph@imatix.com><br> - André Rebentisch <andre@openstandards.de><br> - Alberto Barrionuevo <abarrio@opentia.es><br> - Chris Puttick <chris.puttick@thehumanjourney.net><br> - Yurii Rashkovskii <yrashk@gmail.com> |
