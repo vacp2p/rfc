@@ -13,14 +13,13 @@ The following document covers the specification of the RLN construct as well as 
 
 # Motivation
 
-Spamming is the use of messaging systems to send multiple unsolicited messages (spam) to large numbers of recipients for the purpose of commercial advertising, for the purpose of non-commercial proselytizing, for any prohibited purpose (especially the fraudulent purpose of phishing), or simply sending the same message over and over to the same user. 
-Spamming by certain entities can worsen the user experience for the other entities in the application, 
-and in some cases can be detrimental for the applications.
-
-RLN (Rate limiting nullfier) is a construct based on zero-knowledge proofs that enables spam prevention mechanism for decentralized, anonymous environments. 
-In anonymous environments, the identity of the entities is unknown, and thus it is very hard to prevent spam attacks. 
-Many applications would benefit from anonymity, but the potential for spam could worsen their UX to a large extent. 
-RLN allows for anonymous signaling while enabling spam prevention on protocol level.
+Rate limiting nullified (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. 
+Anonymity refers to the unlinkability of messages to their owner.
+RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.
+A wide range of applications can benefit from RLN and provide desirable security features. 
+For example, an e-voting system can integrate RLN to contain the voting rate while protecting the voters-vote unlinkability. 
+Another use case is to protect an anonymous messaging system against DDoS and spam attacks by containing messaging rate of users. 
+This latter use case is explained in [17/Waku-RLN-Relay RFC](/spec/17).
 
 
 # Technical overview
