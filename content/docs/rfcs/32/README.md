@@ -47,7 +47,7 @@ Depending on the application requirements, the registration can be implemented i
 - centralized registrations, by using a central server
 - decentralized registrations, by using a smart contract
 
-What is important is that the user's identity commitment is stored in a merkle tree, 
+What is important is that the users' identity commitments (explained in section [User Indetity](#user-identity)) are stored in a Merkle tree, 
 and the users can obtain a merkle proof proving that they are part of the group.
 
 Also depending on the application requirements, 
