@@ -1,7 +1,7 @@
 ---
 slug: 32
 title: 32/RLN
-name: Rate Limit Nullifier specification
+name: Rate Limit Nullifier
 status: raw
 editor: Blagoj Dimovski <blagoj.dimovski@yandex.com>
 contributors: 
