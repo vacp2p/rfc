@@ -9,7 +9,7 @@ contributors:
 
 # Abstract
 
-The following document covers the specification of the RLN construct as well as the auxiliary libraries necessary for interaction with it.
+The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it.
 
 # Motivation
 
