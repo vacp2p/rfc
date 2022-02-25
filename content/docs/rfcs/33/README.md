@@ -20,14 +20,14 @@ For establishing and growing this network, new nodes trying to join the Waku2 ne
 [10/WAKU2](/specs/10) supports the following discovery methods in order of increasing decentralization
 
 * hard coded bootstrap nodes
-* `DNS discovery`
+* `DNS discovery` 
 * `peer-exchange` protocol
 * `33/WAKU2-DISCV5` (specified in this document)
 
 The purpose of ambient node discovery within [10/WAKU2](/specs/10) is discovering Waku2 nodes in a decentralized way.
 The unique selling point of `33/WAKU2-DISCV5` is its holistic view of the network, which allows avoiding hotspots and allows merging the network after a split.
 While the other methods provide either a fixed or local set of nodes, `33/WAKU2-DISCV5` can provide a random sample of Waku2 nodes.
-Future iterations of this document will add the possibility of efficiently discovering Waku2 nodes that have certain capabilities, e.g. holding messages of a certain time frame during which the querying node was offine.
+Future iterations of this document will add the possibility of efficiently discovering Waku2 nodes that have certain capabilities, e.g. holding messages of a certain time frame during which the querying node was offline.
 
 ## Separate Discovery Network
 
