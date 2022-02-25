@@ -31,7 +31,7 @@ Usually, the membership requires a financial or social stake which
 is beneficial for the prevention of Sybil attacks and double-signaling.
 Group members are allowed to send one signal per epoch.
 If a user generates more signals than allowed in an epoch, 
-the user risks being slashed - by revealing his membership secret credentials. secret and revealing his identity commitment. 
+the user risks being slashed - by revealing his membership secret credentials. 
 If the financial stake is put in place, the user also risks his stake being taken.
 
 Generally the flow can be described by the following steps:
