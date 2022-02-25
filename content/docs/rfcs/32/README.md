@@ -13,7 +13,7 @@ The following document covers the specification of the RLN construct as well as 
 
 # Motivation
 
-Rate limiting nullified (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. 
+Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. 
 Anonymity refers to the unlinkability of messages to their owner.
 RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.
 A wide range of applications can benefit from RLN and provide desirable security features. 
