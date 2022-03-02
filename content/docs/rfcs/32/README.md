@@ -201,9 +201,9 @@ the slashing will be implemented on each user's client.
 ### Implementation notes
 
 Each user of the protocol (server or otherwise) will need to store metadata for each message received by each user, 
-for the given external_nullifier. 
-The data can be deleted when the external_nullifier passes. 
-Storing metadata is required, so that if a user sends more than one unique signal per external_nullifier, 
+for the given `external_nullifier`. 
+The data can be deleted when the `external_nullifier` passes. 
+Storing metadata is required, so that if a user sends more than one unique signal per `external_nullifier`, 
 they can be slashed and removed from the protocol. 
 The metadata stored contains the `x`, `y` shares and the `internal_nullifier` for the user for each message. 
 If enough such shares are present, the user's secret can be retreived.
