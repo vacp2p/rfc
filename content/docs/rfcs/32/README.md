@@ -354,7 +354,7 @@ using the [circomlib](https://docs.circom.io/) library.
 
 Canonical [Poseidon hash implementation](https://eprint.iacr.org/2019/458.pdf) is used, 
 as implemented in the [circomlib library](https://github.com/iden3/circomlib/blob/master/circuits/poseidon.circom), according to the Poseidon paper.
-This Poseidon hash version (canonical implementation) is uses the following parameters:
+This Poseidon hash version (canonical implementation) uses the following parameters:
 
 - `t`: 3
 - `RF`: 8
