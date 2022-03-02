@@ -261,7 +261,7 @@ the verification continues, otherwise the message is discarded.
 **4. Double signaling verification**
 
 After the proof is verified the `x`, and `y` fields are added to the `x_shares` and `y_shares` arrays of the `messaging_metadata` `external_nullifier` and `internal_nullifier` object. 
-If the length of the arrays is equal to the spam threshold (`limit`), the user can be slashed.
+If the length of the arrays is equal to the signaling threshold (`limit`), the user can be slashed.
 
 #### Slashing
 
