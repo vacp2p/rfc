@@ -388,7 +388,7 @@ in order for their proof to be verified.
 `x` is the hashed signal, while the `y` is the circuit output. 
 With more than one pair of unique shares, anyone can derive `a_0`, the `identity_secret_hash` . 
 Hash of a signal will be evaluation point x. 
-So that a member who sends more that one unique signal per external_nullifier risks their identity secret being revealed.
+So that a member who sends more than one unique signal per `external_nullifier` risks their identity secret being revealed.
 
 Note that shares used for different external nullifiers and different RLN apps cannot be used to derive the secret key.
 
