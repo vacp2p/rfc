@@ -230,9 +230,9 @@ The output message verification consists of the following steps:
 - spam verification
 
 **1. `external_nullifier` correctness**
-Upon received `output_message`, first the `external_nullifierexternal_nullifier` field is checked, 
-to ensure that the message matches the current external_nullifier. 
-If the external_nullifier is correct the verification continues, otherwise the message is discarded.
+Upon received `output_message`, first the `external_nullifier` field is checked, 
+to ensure that the message matches the current `external_nullifier`. 
+If the `external_nullifier` is correct the verification continues, otherwise, the message is discarded.
 
 **2. non-duplicate message check**
 The received message is checked to ensure it is not duplicate. 
