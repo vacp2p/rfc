@@ -11,7 +11,16 @@ contributors:
 
 `33/WAKU2-DISCV5` specifies a modified version of [Ethereum's Node Discovery Protocol v5](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) as a means for ambient node discovery.
 [10/WAKU2](/specs/10) uses the `33/WAKU2-DISCV5` ambient node discovery network for establishing a decentralized network of interconnected Waku2 nodes.
-The `33/WAKU2-DISCV5` discovery network is isolated from the Ethereum Discovery v5 network; this isolation greatly improves discovery efficiency.
+In its current version, the `33/WAKU2-DISCV5` discovery network is isolated from the Ethereum Discovery v5 network.
+Isolation improves discovery efficiency, which is especially significant with a low number of Waku nodes compared to the total number of Ethereum nodes.
+
+# Disclaimer
+
+This version of `33/WAKU2-DISCV5` has a focus on timely deployment of an efficient discovery method for [10/WAKU2](/specs/10).
+Establishing a separate discovery network is in line with this focus.
+However, we are aware of potential resilience problems (see section on security considerations) and are [discussing](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121/8)
+and researching hybrid approaches.
+
 
 # Background and Rationale
 
@@ -20,8 +29,8 @@ For establishing and growing this network, new nodes trying to join the Waku2 ne
 [10/WAKU2](/specs/10) supports the following discovery methods in order of increasing decentralization
 
 * hard coded bootstrap nodes
-* `DNS discovery` 
-* `peer-exchange` protocol
+* [`DNS discovery`](https://rfc.vac.dev/spec/10/#discovery-domain) (based on [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459))
+* `peer-exchange` (work in progress)
 * `33/WAKU2-DISCV5` (specified in this document)
 
 The purpose of ambient node discovery within [10/WAKU2](/specs/10) is discovering Waku2 nodes in a decentralized way.
@@ -34,20 +43,33 @@ Future iterations of this document will add the possibility of efficiently disco
 ### w.r.t. Waku2 Relay Network
 
 `33/WAKU2-DISCV5` spans an overlay network separate from the [GossipSub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md) network [11/WAKU2-RELAY](/specs/11) builds on.
-Being a P2P network on its own, it also depends on bootstrap nodes.
-The advantage of having a separate discovery network is reducing load on the bootstrap nodes as the actual work is done by randomly discovered nodes, which in turn increases decentralization.
+Because it is a P2P network on its own, it also depends on bootstrap nodes.
+Having a separate discovery network reduces load on the bootstrap nodes, because the actual work is done by randomly discovered nodes.
+This also increases decentralization.
 
 
 ### w.r.t. Ethereum Discovery v5
 
 `33/WAKU2-DISCV5` spans a discovery network isolated from the Ethereum Discovery v5 network.
-Ethereum discv5 capability discovery (topic discovery) boils down to random walks and does not offer a O(log(n)) hop bound.
-Contrary to Kademlia, discv5 only maps node-ids into the DHT hash space, and not identifiers for arbitrary data.
-So, while the Ethereum discv5 network is very efficient in finding other discv5 nodes, it is not so efficient for finding discv5 nodes that have a specific property or offer specific services, e.g. Waku.
-The rarer the requested property, the longer a random walk will take until finding an appropriate node, which leads to a needle-in-the-haystack problem.
 
+Another simple solution would be taking part in the Ethereum Discovery network, and filtering Waku nodes based on whether they support [31/WAKU2-ENR](/specs/31).
+This solution is more resilient towards eclipse attacks.
+However, this discovery method is very inefficient for small percentages of Waku nodes (see [estimation](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121/8)).
+It boils down to random walk discovery and does not offer a O(log(n)) hop bound.
+The rarer the requested property (in this case Waku), the longer a random walk will take until finding an appropriate node, which leads to a needle-in-the-haystack problem.
 Using a dedicated Waku2 discovery network, nodes can query this discovery network for a random set of nodes
 and all (well-behaving) returned nodes can serve as bootstrap nodes for other Waku2 protocols.
+
+A more sophisticated solution would be using [Discv5 topic discovery](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement).
+However, in its current state it also has efficiency problems for small percentages of Waku nodes and is still in the design phase ([see here](https://github.com/ethereum/devp2p/issues/199)).
+
+Currently, the Ethereum discv5 network is very efficient in finding other discv5 nodes,
+but it is not so efficient for finding discv5 nodes that have a specific property or offer specific services, e.g. Waku.
+
+As part of our [discv5 roadmap](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121), we consider two ideas for future versions of `33/WAKU2-DISCV5`
+
+* [Discv5 topic discovery](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement) with adjustments (ideally upstream)
+* a hybrid solution that uses both a separate discv5 network and a Waku-ENR-filtered Ethereum discv5 network
 
 # Semantics
 
@@ -93,27 +115,37 @@ nonce         = uint96    -- nonce of message
 
 Existing discv5 implementations
 
-* can be augmented to make the `protocol-id` selectable using a compile-time flag as in [link to nim-eth/discv5 once merged].
-* can be forked followed by changing the `protocol-id` string [link to go-discv5 once upstream]
+* can be augmented to make the `protocol-id` selectable using a compile-time flag as in [this feature branch](https://github.com/kaiserd/nim-eth/blob/add-selectable-protocol-id-static/eth/p2p/discoveryv5/encoding.nim#L34) of nim-eth/discv5.
+* can be forked followed by changing the `protocol-id` string as in [go-waku](https://github.com/status-im/go-waku/blob/master/waku/v2/discv5/discover.go#L135-L137).
 
 
 # Security Considerations
 
+## Sybil attack
+
+Implementations should limit the number of bucket entries with the same network parameters (IP address / port) to mitigate Sybil attacks.
 
 ## Eclipse attack
-TODO
 
-## Sybil attack
-TODO
+Eclipse attacks aim to eclipse certain regions in a DHT. Malicious nodes provide false routing information for certain target regions.
+The larger the desired eclipsed region, the more resources (i.e. controlled nodes) the attacker needs.
+This introduces an efficiency versus resilience tradeoff.
+Discovery is more efficient if information about target objects (e.g. network parameters of nodes supporting Waku) are closer to a specific DHT address.
+If nodes providing specific information are closer to each other, they cover a smaller range in the DHT and are easier to eclipse.
+
+Sybil attacks greatly increase the power of eclipse attacks, because they significantly reduce resources necessary to mount a successful eclipse attack.
 
 ## Security Implications of a Separate Discovery Network
 
-A dedicated Waku discovery network can be subject to eclipse attacks if not properly secured.
-Properly protecting against eclipse attacks is challenging and raises research questions that we will address in future stages of our discv5 roadmap.
+A dedicated Waku discovery network is more likely to be subject to successful eclipse attacks (and to DoS attacks in general).
+This is because eclipsing in a smaller network requires less resources for the attacker.
+DoS attacks render the whole network unusable, if the percentage of attacker nodes is sufficient.
 
-Using the Ethereum discv5 network would mitigate eclipse attacks targeted at specific capabilities, e.g. Waku.
-However, this is because eclipse attacks aim at the DHT overlay structure, which an Ethereum network based capability discovery approach would not use.
-So, this mitigation would come at the cost of giving up overlay routing efficiency.
+Using random walk discovery would mitigate eclipse attacks targeted at specific capabilities, e.g. Waku.
+However, this is because eclipse attacks aim at the DHT overlay structure, which is not used by random walks.
+So, this mitigation would come at the cost of giving up overlay routing efficiency. The efficiency loss is especially severe with a relatively small number of Waku nodes.
+
+Properly protecting against eclipse attacks is challenging and raises research questions that we will address in future stages of our discv5 roadmap.
 
 # References
 
