@@ -123,7 +123,7 @@ Existing discv5 implementations
 
 ## Sybil attack
 
-Implementations should limit the number of bucket entries with the same network parameters (IP address / port) to mitigate Sybil attacks.
+Implementations should limit the number of bucket entries that have the same network parameters (IP address / port) to mitigate Sybil attacks.
 
 ## Eclipse attack
 
@@ -139,7 +139,7 @@ Sybil attacks greatly increase the power of eclipse attacks, because they signif
 
 A dedicated Waku discovery network is more likely to be subject to successful eclipse attacks (and to DoS attacks in general).
 This is because eclipsing in a smaller network requires less resources for the attacker.
-DoS attacks render the whole network unusable, if the percentage of attacker nodes is sufficient.
+DoS attacks render the whole network unusable if the percentage of attacker nodes is sufficient.
 
 Using random walk discovery would mitigate eclipse attacks targeted at specific capabilities, e.g. Waku.
 However, this is because eclipse attacks aim at the DHT overlay structure, which is not used by random walks.
