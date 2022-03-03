@@ -127,7 +127,8 @@ Implementations should limit the number of bucket entries that have the same net
 
 ## Eclipse attack
 
-Eclipse attacks aim to eclipse certain regions in a DHT. Malicious nodes provide false routing information for certain target regions.
+Eclipse attacks aim to eclipse certain regions in a DHT.
+Malicious nodes provide false routing information for certain target regions.
 The larger the desired eclipsed region, the more resources (i.e. controlled nodes) the attacker needs.
 This introduces an efficiency versus resilience tradeoff.
 Discovery is more efficient if information about target objects (e.g. network parameters of nodes supporting Waku) are closer to a specific DHT address.
