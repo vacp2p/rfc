@@ -144,7 +144,8 @@ DoS attacks render the whole network unusable if the percentage of attacker node
 
 Using random walk discovery would mitigate eclipse attacks targeted at specific capabilities, e.g. Waku.
 However, this is because eclipse attacks aim at the DHT overlay structure, which is not used by random walks.
-So, this mitigation would come at the cost of giving up overlay routing efficiency. The efficiency loss is especially severe with a relatively small number of Waku nodes.
+So, this mitigation would come at the cost of giving up overlay routing efficiency.
+The efficiency loss is especially severe with a relatively small number of Waku nodes.
 
 Properly protecting against eclipse attacks is challenging and raises research questions that we will address in future stages of our discv5 roadmap.
 
