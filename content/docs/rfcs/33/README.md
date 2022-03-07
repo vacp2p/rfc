@@ -1,7 +1,7 @@
 ---
 slug: 33
 title: 33/WAKU2-DISCV5
-name: WAKU v2 Discv5 Ambient Peer Discovery
+name: Waku v2 Discv5 Ambient Peer Discovery
 status: raw
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
