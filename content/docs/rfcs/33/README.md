@@ -2,7 +2,7 @@
 slug: 33
 title: 33/WAKU2-DISCV5
 name: Waku v2 Discv5 Ambient Peer Discovery
-status: raw
+status: draft
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
@@ -150,6 +150,21 @@ The efficiency loss is especially severe with a relatively small number of Waku 
 Properly protecting against eclipse attacks is challenging and raises research questions that we will address in future stages of our discv5 roadmap.
 
 # References
+
+1. [`10/WAKU2`](/specs/10)
+1. [`11/WAKU2-RELAY`](/specs/11)
+1. [`31/WAKU2-ENR`](/specs/31)
+1. [Node Discovery Protocol v5 (`discv5`)](https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md) 
+1. [`discv5` semantics](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md).
+1. [`discv5` wire protocol](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-wire.md) 
+1. [`discv5` topic discovery](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement)
+1. [Waku DNS discovery](https://rfc.vac.dev/spec/10/#discovery-domain)
+1. [`EIP-1459`](https://eips.ethereum.org/EIPS/eip-1459)
+1. [`GossipSub`](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
+1. [Waku discv5 roadmap discussion](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121)
+1. [discovery efficiency estimation](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121/8)
+1. [implementation: Nim](https://github.com/kaiserd/nim-eth/blob/add-selectable-protocol-id-static/eth/p2p/discoveryv5/encoding.nim)
+1. [implementation: Go](https://github.com/status-im/go-waku/blob/master/waku/v2/discv5/discover.go)
 
 # Copyright
 
