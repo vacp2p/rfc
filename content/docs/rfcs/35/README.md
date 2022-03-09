@@ -49,10 +49,10 @@ The fields that are concatenated as part of the `payload` Waku2 field are:
  - `protocol-id`: identifies the protocol in use (1 byte). 
  Supported values are:
      - `0`: none or omitted;
-     - `10`: Noise `K1K1` handshake;
-     - `11`: Noise `XK1` handshake;
-     - `12`: Noise `XX` handshake;
-     - `13`: Noise `XXpsk0` handshake;
+     - `10`: Noise protocol `Noise_K1K1_25519_ChaChaPoly_SHA256`;
+     - `11`: Noise protocol `Noise_XK1_25519_ChaChaPoly_SHA256`;
+     - `12`: Noise protocol `Noise_XX_25519_ChaChaPoly_SHA256`;
+     - `13`: Noise protocol `Noise_XXpsk0_25519_ChaChaPoly_SHA256`;
  - `handshake-length`: the length in bytes of the Noise handshake message (1 byte);
  - `handshake-message`: the Noise handshake message. It contains the concatenation of one or more Diffie-Hellman public keys `pk` (ephemeral or static).
 A public key `pk` is encoded as `(flag || pk_serialized || pk_ad)`, where:
