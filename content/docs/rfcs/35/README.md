@@ -7,7 +7,7 @@ editor: Giuseppe <giuseppe@status.im>
 contributors: 
 ---
 
-This specification describes how Waku2 messages can encrypted in order to achieve confidentiality, authenticity, and integrity on exchanged messages as well as some form of identity-hiding on communicating parties.
+This specification describes how Waku2 messages can be encrypted in order to achieve confidentiality, authenticity, and integrity as well as some form of identity-hiding on communicating parties.
 
 Specifically, it describes how encryption keys can be exchanged using [Noise protocol](http://www.noiseprotocol.org/noise.html) to allow authenticated encryption/decryption in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 2](/spec/14/#version2). This ultimately allows Waku2 users to instantiate end-to-end encrypted communication channels.
 
@@ -24,13 +24,13 @@ This specification effectively replaces [26/WAKU-PAYLOAD](/spec/26).
 
 ## Supported Noise Protocols
 
-During a Noise handshake, two parties exchange multiple **handshake messages**. An handshake message contains *ephemeral keys* and/or *static keys* from one of the parties. These public keys are used to perform an handshake-dependent sequence of Diffie-Hellman operations, whose results are hashed into a shared secret key. After an handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted **transport messages**. We refer to [Noise specifications](http://www.noiseprotocol.org/noise.html#processing-rules) for the full details on how parties shared secret key is derived from each exchanged message.
+A Noise protocol consists of one or more Noise handshakes. During a Noise handshake, two parties exchange multiple **handshake messages**. An handshake message contains *ephemeral keys* and/or *static keys* from one of the parties. These public keys are used to perform a protocol-dependent sequence of Diffie-Hellman operations, whose results are all hashed into a shared secret key. After an handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted **transport messages**. We refer to [Noise protocol framework specifications](http://www.noiseprotocol.org/noise.html#processing-rules) for the full details on how parties shared secret key is derived from each exchanged message.
 
-Four Noise handshake patterns are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`. Their descriptions can be found [here](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130). 
+Four Noise handshakes are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`. Their descriptions can be found [here](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130). 
 
-We note that all design requirements on exchanged messages would be satisfied only *after* a supported handshake is completed, all corresponding to 1 Round Trip Time communication *(1-RTT)*.
+We note that all design requirements on exchanged messages would be satisfied only *after* a supported Noise handshake is completed, all corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.
 
-In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](https://rfc.vac.dev/spec/14/#wakumessage) where they can send/receive first handshake messages. 
+In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](https://rfc.vac.dev/spec/14/#wakumessage) where they can send/receive their first handshake messages. 
 
 ## Cryptographic primitives
 
@@ -103,13 +103,13 @@ It is therefore recommended to pad transport messages to a multiple of 256 bytes
 
 ## After-handshake
 
-We note that during the initial 1-RTT, handshake messages can be linked to the respective parties through the employed `contentTopic`. 
+We note that during the initial 1-RTT communication, handshake messages can be linked to the respective parties through the `contentTopic` employed to communicate. 
 
-After an handshake is completed, parties SHOULD derive from their shared secret key a new random `contentTopic` and continue their communication there.
+After an handshake is completed, parties SHOULD derive from their shared secret key (preferably using `HKDF`) a new random `contentTopic` and continue their communication there.
 
 When communicating on the new `contentTopic`, parties SHOULD set `protocol-id` to `0` to reduce metadata leakages.
 
-It is recommended that each party attaches an unencrypted new ephemeral key in `handshake-message` in every sent message.  According to [Noise processing rules](http://www.noiseprotocol.org/noise.html#processing-rules), this allows every 1 round trip time random updates to the shared secret key by hashing the result of an ephemeral-ephemeral Diffie-Hellman exchange.
+It is recommended that each party attaches an (unencrypted) ephemeral key in `handshake-message` to every message sent.  According to [Noise processing rules](http://www.noiseprotocol.org/noise.html#processing-rules), this allows updates to the shared secret key by hashing the result of an ephemeral-ephemeral Diffie-Hellman exchange every 1-RTT communication.
 
 
 ## Backward Support for Symmetric/Asymmetric Encryption
@@ -125,7 +125,7 @@ and encode/decode the Waku2 payload accordingly, whenever these values are set.
 Namely, if `protocol-id = 254, 255` then:
 - `handshake-length`: is set to `0`;
 - `handshake-message`: is left empty;
-- `transport-message`: contains [26/WAKU-PAYLOAD](/spec/26) `data` field;
+- `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field;
 - `message-ad`: is set to `0`.
 
 ## References
