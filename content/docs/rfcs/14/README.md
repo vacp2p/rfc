@@ -69,6 +69,13 @@ This provides for asymmetric and symmetric encryption.
 Key agreement is out of band.
 It also provides an encrypted signature and padding for some form of unlinkability.
 
+### Version 2
+
+This indicates that payloads MUST be encoded using [35/WAKU-NOISE envelope data format spec](/spec/35).
+
+This provides key-exchanges and encryption based on [Noise Protocol](http://www.noiseprotocol.org/noise.html). 
+It also provides `ChaChaPoly` symmetric encryption.
+
 # Differences from Whisper / Waku v1 envelopes
 
 In Whisper and Waku v1, an envelope contains the following fields: `expiry, ttl, topic, data, nonce`.
