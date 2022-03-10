@@ -11,7 +11,7 @@ This specification describes how Waku2 messages can be encrypted
 in order to achieve confidentiality, authenticity, and integrity 
 as well as some form of identity-hiding on communicating parties.
 
-Specifically, it describes how encryption keys can be exchanged using [Noise protocol](http://www.noiseprotocol.org/noise.html) 
+Specifically, it describes how encryption keys can be exchanged using the [Noise protocol Framework](http://www.noiseprotocol.org/noise.html) 
 to allow authenticated encryption/decryption in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 2](/spec/14/#version2). 
 This ultimately allows Waku2 users to instantiate end-to-end encrypted communication channels.
 
@@ -32,40 +32,41 @@ In particular, forward secrecy should be provided on exchanged data.
 
 ### Noise Protocols
 
+Two parties executing a Noise protocol exchange one or more *handshake messages* and/or *transport messages*.
 A Noise protocol consists of one or more Noise handshakes. 
-During a Noise handshake, two parties exchange multiple **handshake messages**. 
+During a Noise handshake, two parties exchange multiple handshake messages. 
 A handshake message contains *ephemeral keys* and/or *static keys* from one of the parties. 
 These public keys are used to perform a protocol-dependent sequence of Diffie-Hellman operations, 
 whose results are all hashed into a shared secret key. 
-After a handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted **transport messages**. 
+After a handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted transport messages. 
 We refer to [Noise protocol framework specifications](http://www.noiseprotocol.org/noise.html#processing-rules) for the full details on how parties shared secret key is derived from each exchanged message.
 
 Four Noise handshakes are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`
 (their description can be found [here](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)). 
 These are instantiated combining the following cryptographic primitives:
-- [`Curve25519`](http://www.noiseprotocol.org/noise.html#the-25519-dh-functions) for Diffie-Hellman key-exchanges (32 bytes coordinates);
+- [`Curve25519`](http://www.noiseprotocol.org/noise.html#the-25519-dh-functions) for Diffie-Hellman key-exchanges (32 bytes curve coordinates);
 - [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes block size);
-- [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
+- [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) hash function used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
 
 We note that all [design requirements](#Design-requirements) on exchanged messages would be satisfied only *after* a supported Noise handshake is completed, 
 corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.
 
-In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](https://rfc.vac.dev/spec/14/#wakumessage) 
+In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](/spec/14/#wakumessage) 
 where they can send/receive their first handshake messages. 
 
 ### Encryption Primitives
 
-Symmetric primitives supported are:
+The symmetric primitives supported are:
 - [`ChaChaPoly`](https://www.ietf.org/rfc/rfc7539.txt) for authenticated encryption (16 bytes block size).
 
 ## Specification
 
-When [14/WAKU-MESSAGE](https://rfc.vac.dev/spec/14/#payload-encryption) version is set to 2, 
-the corresponding (https://rfc.vac.dev/spec/10) `payload` field used in a `WakuMessage` contains either:
+When [14/WAKU-MESSAGE version](/spec/14/#payload-encryption) is set to 2, 
+the corresponding `WakuMessage`'s `payload` field either contains:
 - a Noise handhshake message and/or a Noise transport message;
 - a `ChaChaPoly` ciphertext.
 
-The fields that are concatenated to form the `payload` field are:
+The following fields are concatenated to form the `payload` field:
 
  - `protocol-id`: identifies the protocol or primitive in use (1 byte). 
  Supported values are:
@@ -120,7 +121,7 @@ payload  = protocol-id handshake-message-len handshake-message transport-message
 ### Protocol Payload Format
 
 Based on the specified `protocol-id`, 
-the Waku2 message payload will encode different types of protocol-dependent messages. 
+the Waku2 message `payload` field will encode different types of protocol-dependent messages. 
 
 In particular, if `protocol-id` is
 - `0`:  payload encodes an [after-handshake](#After-handshake) message.  
@@ -130,7 +131,7 @@ In particular, if `protocol-id` is
     -  `transport-message` contains the Noise transport message;
 - `30`: payload encapsulate a `ChaChaPoly` ciphertext `ct`.  
     - `handshake-message-len` is set to `0`;
-    - `transport-message` contains the concatenation of the encryption 12 bytes nonce `n` followed by the ciphertext `ct`;
+    - `transport-message` contains the concatenation of the encryption nonce (12 bytes) followed by the ciphertext `ct`;
     - `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
     - `transport-message-ad` contains the authentication data for `ct`.
 
@@ -139,28 +140,27 @@ In particular, if `protocol-id` is
 
 Diffie-Hellman public keys can be trasmitted in clear 
 or in encrypted form with authentication data attached. 
-To distinguish between these two cases, 
-public keys are serialized as the concatenation of the following three fields:
+To distinguish between these two cases, public keys are serialized as the concatenation of the following three fields:
 
 - `flag`: 
 is equal to `1` if the public key is encrypted; 
 `0` otherwise (1 byte);
 - `pk`: 
-if `flag = 0`, it contains an encoding of the coordinates of the public key. 
-If `flag = 1`, it contains a symmetric encryption of an encoding of the coordinates of the public key;
+if `flag = 0`, it contains an encoding of the X coordinate of the public key. 
+If `flag = 1`, it contains a symmetric encryption of an encoding of the X coordinate of the public key;
 - `pk_ad`: 
 if `flag = 0`, it is empty; 
 if `flag = 1`, it contains the authentication data for `pk`;
 
 
 As regards the underlying supported [cryptographic primitives](#Cryptographic-primitives):
-- `Curve25519` public keys coordinates are encoded in little-endian as 32 bytes arrays;
+- `Curve25519` public keys X coordinates are encoded in little-endian as 32 bytes arrays;
 - `ChaChaPoly` authentication data consists of 16 bytes 
 (nonces are implicitely defined by Noise [processing rules](http://www.noiseprotocol.org/noise.html#processing-rules)).
 
-In supported Noise protocols, 
-parties' static keys are always transmitted encrypted, 
-while ephemeral keys MAY be encrypted after an handshake is complete.
+In all supported Noise protocols, 
+parties' static keys are transmitted encrypted, 
+while ephemeral keys MAY be encrypted after a handshake is complete.
 
 
 ### Padding
@@ -171,7 +171,6 @@ to a multiple of the underlying symmetric cipher block size
 (16 bytes for `ChaChaPoly`).
 
 It is therefore recommended to pad transport messages to a multiple of 256 bytes.
-
 
 
 ## After-handshake
@@ -187,7 +186,7 @@ and continue their communication there.
 
 When communicating on the new `contentTopic`, 
 parties SHOULD set `protocol-id` to `0` 
-to reduce metadata leakages.
+to reduce metadata leakages and indicate that the message is an *after-handshake* message.
 
 It is recommended that each party attaches an (unencrypted) ephemeral key in `handshake-message` to every message sent.
 According to [Noise processing rules](http://www.noiseprotocol.org/noise.html#processing-rules), 
@@ -198,19 +197,23 @@ by hashing the result of an ephemeral-ephemeral Diffie-Hellman exchange every 1-
 ## Backward Support for Symmetric/Asymmetric Encryption
 
 It is possible to have backward compatibility to symmetric/asymmetric encryption primitives from [26/WAKU-PAYLOAD](/spec/26), 
-effectively encapsulating  payload encryption [14/WAKU-MESSAGE version 1](/spec/14/#version1) in current version 2.
+effectively encapsulating  payload encryption [14/WAKU-MESSAGE version 1](/spec/14/#version1) in [version 2](/spec/14/#version2).
 
 It suffices to extend the list of supported `protocol-id` to:
 - `254`: AES-256-GCM symmetric encryption;
 - `255`: ECIES asymmetric encryption.
 
-and encode/decode the Waku2 message `payload` field accordingly, whenever these values are set. 
+and set the `transport-message` field to the [26/WAKU-PAYLOAD](/spec/26) `data` field, whenever these `protocol-id` values are set. 
 
 Namely, if `protocol-id = 254, 255` then:
 - `handshake-message-len`: is set to `0`;
-- `handshake-message`: is left empty;
-- `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field;
+- `handshake-message`: is empty;
+- `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field (AES-256-GCM or ECIES, depending on `protocol-id`);
+- `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
 - `transport-message-ad`: is set to `0`.
+
+When a `transport-message` corresponding to `protocol-id = 254, 255` is retrieved, 
+it SHOULD be decoded as the `data` field in [26/WAKU-PAYLOAD](/spec/26) specification.
 
 ## References
 
