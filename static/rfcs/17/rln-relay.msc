@@ -11,7 +11,7 @@ msc {
   d abox d [ label=" \n Listening to the membership contract \n "] ;
 
   a box a [ label=" \n Generate sk,pk \n "] ;
-  a=>b [ label = " \n Register(pk, x ETH) \n " ] ;
+  a=>b [ label = "Register(pk, x ETH)" ] ;
   a abox a [ label=" \n Listening to the membership contract \n "] ;
 
   b box b [label=" \n Insert pk  to the list. \n Emit an event announcing the insertion of pk and its index in the list. \n  "];
