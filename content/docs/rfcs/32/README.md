@@ -4,7 +4,7 @@ title: 32/RLN
 name: Rate Limit Nullifier
 status: raw
 editor: Blagoj Dimovski <blagoj.dimovski@yandex.com>
-contributors: 
+contributors: Barry Whitehat, Sanaz Taheri <sanaz@status.im>, Oskar Thorén <oskar@status.im>
 ---
 
 # Abstract
@@ -113,6 +113,10 @@ The proof (`merkle_proof`) is composed of the following fields:
   path_elements: bigint[][]
 }
 ```
+
+1. **root** - The root of membership group Merkle tree at the time of publishing the message
+2. **indices** - The index fields of the leafs in the merkle tree - used by the merkle tree algorithm for verification
+3. **path_elements** - Auxiliary data structure used for storing the path to the leaf - used by the merkle proof algorithm for verificaton
 
 
 #### Generating proof
@@ -456,7 +460,61 @@ The standard for this is to use trusted [Multi-Party Computation (MPC)](https://
 which requires two phases. 
 Trusted MPC ceremony has not yet been performed for the RLN circuits.
 
-# Apendix B: Auxiliary tooling
+# Appendix B: Identity scheme choice
+
+The hashing scheme used is based on the design decisions which also include the Semaphore circuits. 
+Our goal was to ensure compatibility of the secrets for apps that use Semaphore and 
+RLN circuits while also not compromising on security because of using the same secrets.
+
+For example let's say there is a voting app that uses Semaphore, 
+and also a chat app that uses RLN. 
+The UX would be better if the users would not need to care about complicated identity management (secrets and commitments) t
+hey use for each app, and it would be much better if they could use a single id commitment for this. 
+Also in some cases these kind of dependency is required - 
+RLN chat app using Interep as a registry (instead of using financial stake).
+One potential concern about this interoperability is a slashed user on the RLN app side
+having their security compromised on the semaphore side apps as well. 
+I.e obtaining the user's secret, anyone would be able to generate valid semaphore proofs as the slashed user. 
+We don't want that, and we should keep user's app specific security threats in the domain of that app alone.
+
+To achieve the above interoperability UX while preventing the shared app security model 
+(i.e slashing user on an RLN app having impact on Semaphore apps), 
+we had to do the follow in regard the identity secret and identity commitment:
+
+```
+    identity_secret = [identity_nullifier, identity_trapdoor]
+    identity_secret_hash = poseidonHash(identity_secret)
+    identity_commitment = poseidonHash([identity_secret_hash])
+```
+
+Secret components for generating Semaphore proof:
+
+```
+identity_nullifier
+identity_trapdoor
+```
+
+Secret components for generting RLN proof:
+
+```
+identity_secret_hash
+```
+
+When a user is slashed on the RLN app side, their identity secret hash is revealed. 
+However a semaphore proof can't be generated because we do not know the user's nullifier and trapdoor.
+
+With this design we achieve:
+
+identity commitment (Semaphore) == identity commitment (RLN)
+secret (semaphore) != secret (RLN).
+
+This is the only option we had for the scheme in order to satisfy the properties described above.
+
+Also for RLN we do a single secret component input for the circuit. 
+Thus we need to hash the secret array (two components) to a secret hash, 
+and we use that as a secret component input.
+
+# Apendix C: Auxiliary tooling
 
 There are few additional tools implemented for easier integrations and usage of the RLN protocol.
 
@@ -468,7 +526,7 @@ It supports various protocols (`Semaphore`, `RLN`),.
 You can think of MetaMask for ZK-Proofs. 
 It uses `zk-kit` under the hood.
 
-# Apendix C: Example usage
+# Apendix D: Example usage
 
 The following examples are code snippets using the `zk-kit` library. 
 The examples are written in [typescript](https://www.typescriptlang.org/).
