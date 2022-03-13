@@ -1,31 +1,40 @@
 ---
 slug: 35
 title: 35/WAKU2-NOISE
-name: Noise Protocols for Waku2 Payload Encryption
+name: Noise Protocols for Waku Payload Encryption
 status: raw
 editor: Giuseppe <giuseppe@status.im>
 contributors: 
 ---
 
-This specification describes how Waku2 messages can be encrypted
+This specification describes how payloads of [Waku messages](spec/14/) with [version 2](/spec/14/#version2) can be encrypted
 in order to achieve confidentiality, authenticity, and integrity 
 as well as some form of identity-hiding on communicating parties.
 
-Specifically, it describes how encryption keys can be exchanged using the [Noise protocol Framework](http://www.noiseprotocol.org/noise.html) 
-to allow authenticated encryption/decryption in [10/WAKU2](/spec/10) with [14/WAKU-MESSAGE version 2](/spec/14/#version2). 
-This ultimately allows Waku2 users to instantiate end-to-end encrypted communication channels.
+
+This specification extends the functionalities provided by [26/WAKU-PAYLOAD](/spec/26), 
+adding support to modern symmetric encryption primitives 
+and asymmetric key-exchange protocols.
 
 
-This specification is an addition to [26/WAKU-PAYLOAD](/spec/26).
+Specifically, it adds support to the [`ChaChaPoly`](https://www.ietf.org/rfc/rfc7539.txt) cipher for symmetric authenticated encryption. 
+It further describes how the [Noise Protocol Framework](http://www.noiseprotocol.org/noise.html) can be used to exchange cryptographic keys and encrypt/decrypt messages 
+in a way that that the latter are authenticated and protected by *strong forward secrecy*.
+
+
+This ultimately allows Waku applications to instantiate end-to-end encrypted communication channels with strong conversational security guarantees,
+similarly as done by [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) but in a more modular way, 
+adapting key-exchange protocols to the knowledge communicating parties have of each other.
+
 
 ## Design requirements
 
-- *Confidentiality*: 
-The adversary should not be able to learn what data is being sent from one Waku2 endpoint to one or several other Waku2 endpoints. 
-In particular, forward secrecy should be provided on exchanged data. 
-- *Authenticity*: The adversary should not be able to cause a Waku2 endpoint to accept messages coming from an endpoint different than their original senders.
-- *Integrity*: The adversary should not be able to cause a Waku2 endpoint to accept data that has been tampered with.
-- *Identity-hiding*: A passive adversary should not be able to link encrypted messages to their corresponding senders and recipients.
+- *Confidentiality*: the adversary should not be able to learn what data is being sent from one Waku endpoint to one or several other Waku endpoints. 
+    - *Strong forward secrecy*: an active adversary cannot decrypt messages nor infer any information on the employed encryption key, 
+even in the case he has access to communicating parties' long-term private keys (during or after their communication).
+- *Authenticity*: the adversary should not be able to cause a Waku endpoint to accept messages coming from an endpoint different than their original senders.
+- *Integrity*: the adversary should not be able to cause a Waku endpoint to accept data that has been tampered with.
+- *Identity-hiding*: a passive adversary should not be able to link encrypted messages to their corresponding senders and recipients.
 
 
 ## Supported Cryptographic Protocols
@@ -41,8 +50,7 @@ whose results are all hashed into a shared secret key.
 After a handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted transport messages. 
 We refer to [Noise protocol framework specifications](http://www.noiseprotocol.org/noise.html#processing-rules) for the full details on how parties shared secret key is derived from each exchanged message.
 
-Four Noise handshakes are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`
-(their description can be found [here](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)). 
+Four Noise handshakes are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`. Their description can be found in [Appendix: Supported Handshakes Description](#Appendix-Supported-Handshake-Description). 
 These are instantiated combining the following cryptographic primitives:
 - [`Curve25519`](http://www.noiseprotocol.org/noise.html#the-25519-dh-functions) for Diffie-Hellman key-exchanges (32 bytes curve coordinates);
 - [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes block size);
@@ -114,14 +122,14 @@ transport-message           = *OCTET
 ; contains authentication data for transport-message, if encrypted
 transport-message-ad        = 16OCTET
 
-; the Waku2 WakuMessage payload field
+; the Waku WakuMessage payload field
 payload  = protocol-id handshake-message-len handshake-message transport-message-len-len transport-message-len transport-message transport-message-ad 
 ```
 
 ### Protocol Payload Format
 
 Based on the specified `protocol-id`, 
-the Waku2 message `payload` field will encode different types of protocol-dependent messages. 
+the Waku message `payload` field will encode different types of protocol-dependent messages. 
 
 In particular, if `protocol-id` is
 - `0`:  payload encodes an [after-handshake](#After-handshake) message.  
@@ -215,14 +223,96 @@ Namely, if `protocol-id = 254, 255` then:
 When a `transport-message` corresponding to `protocol-id = 254, 255` is retrieved, 
 it SHOULD be decoded as the `data` field in [26/WAKU-PAYLOAD](/spec/26) specification.
 
+## Appendix: Supported Handshakes Description
+
+
+Supported Noise handshakes address four typical scenarios occurring when an encrypted communication channel between Alice and Bob is going to be created: 
+
+- Alice and Bob know each others' static key.
+- Alice knows Bob's static key;
+- Alice and Bob share no key material and they don't know each others' static key.
+- Alice and Bob share some key material, but they don't know each others' static key.
+
+
+**Adversarial Model**: an active attacker who compromised one party's static key may lower the identity-hiding security guarantees provided by some handshakes. In our security model we exclude such adversary, but for completeness we report a summary of possible de-anonymization attacks that can be performed by an active attacker.
+
+### The `K1K1` Handshake
+
+If Alice and Bob know each others' static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a `K1K1` handshake.  Using [Noise notation](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) *(Alice is on the left)* this can be sketched as:
+
+```
+ K1K1:
+    ->  s
+    <-  s
+       ...
+    ->  e
+    <-  e, ee, es
+    ->  se
+```
+
+We note that here only ephemeral keys are exchanged. This handshake is useful in case Alice needs to instantiate a new separate encrypted communication channel with Bob, e.g. opening multiple parallel connections, file transfers, etc.
+
+**Security considerations on identity-hiding (active attacker)**: no static key is transmitted, but an active attacker impersonating Alice can check candidates for Bob's static key.
+
+### The `XK1` Handshake
+
+Here, Alice knows how to initiate a communication with Bob and she knows his public static key: such discovery can be achieved, for example, through a publicly accessible register of users' static keys, smart contracts, or through a previous public/private advertisement of Bob's static key.
+
+A Noise handshake pattern that suits this scenario is `XK1`:
+
+```
+ XK1:
+    <-  s
+       ...
+    ->  e
+    <-  e, ee, es
+    ->  s, se
+```
+
+Within this handshake, Alice and Bob reciprocally authenticate their static keys `s` using ephemeral keys `e`. We note that while Bob's static key is assumed to be known to Alice (and hence is not transmitted), Alice's static key is sent to Bob encrypted with a key derived from both parties ephemeral keys and Bob's static key.
+
+**Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party. An active attacker who impersonates Alice can check candidates for Bob's static key against recorded/accepted exchanged handshake messages.
+
+
+### The `XX` and `XXpsk0` Handshakes
+
+If Alice is not aware of any static key belonging to Bob (and neither Bob knows anything about Alice), she can execute an `XX` handshake, where each party tran**X**mits to the other its own static key. 
+
+The handshake goes as follows:
+
+```
+ XX:
+    ->  e
+    <-  e, ee, s, es
+    ->  s, se
+```
+
+We note that the main difference with `XK1` is that in second step Bob sends to Alice his own static key encrypted with a key obtained from an ephemeral-ephemeral Diffie-Hellman exchange.
+
+
+This handshake can be slightly changed in case both Alice and Bob pre-shares some secret `psk` which can be used to strengthen their mutual authentication during the handshake execution. One of the resulting protocol, called `XXpsk0`, goes as follow:
+
+```
+ XXpsk0:
+    ->  psk, e
+    <-  e, ee, s, es
+    ->  s, se
+```
+The main difference with `XX` is that Alice's and Bob's static keys, when transmitted, would be encrypted with a key derived from `psk` as well.
+
+
+**Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party for both `XX` and `XXpsk0` handshakes. In `XX`, Bob's static key is encrypted with forward secrecy but is transmitted to a non-authenticated user which can then be an active attacker. In `XXpsk0`, instead, Bob's secret key is protected by forward secrecy to a partially authenticated party (through the pre-shared secret `psk` but not through any static key), provided that `psk` was not previously compromised (in such case identity-hiding properties provided by the `XX` handshake applies).
+
+
 ## References
 
-1. [10/WAKU2](/spec/10)
-2. [26/WAKU-PAYLOAD](/spec/26)
-3. [14/WAKU-MESSAGE](/spec/14/#version1)
-4. [Noise protocol](http://www.noiseprotocol.org/noise.html)
-5. [Noise handshakes as key-exchange mechanism for Waku2](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)
-6. [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234)
+1. [5/SECURE-TRANSPORT](https://specs.status.im/spec/5)
+2. [10/WAKU2](/spec/10)
+3. [26/WAKU-PAYLOAD](/spec/26)
+4. [14/WAKU-MESSAGE](/spec/14/#version1)
+5. [Noise protocol](http://www.noiseprotocol.org/noise.html)
+6. [Noise handshakes as key-exchange mechanism for Waku2](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)
+7. [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234)
 
 
 ## Copyright

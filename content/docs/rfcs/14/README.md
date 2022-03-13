@@ -71,7 +71,7 @@ It also provides an encrypted signature and padding for some form of unlinkabili
 
 ### Version 2
 
-This indicates that payloads MUST be encoded using [35/WAKU-NOISE envelope data format spec](/spec/35).
+This indicates that payloads MUST be encoded using [35/WAKU-NOISE](/spec/35).
 
 This provides key-exchanges and encryption based on [Noise Protocol](http://www.noiseprotocol.org/noise.html). 
 It also provides `ChaChaPoly` symmetric encryption.
