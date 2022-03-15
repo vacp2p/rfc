@@ -58,22 +58,24 @@ These are instantiated combining the following cryptographic primitives:
 - [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes block size);
 - [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) hash function used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
 
+#### Content Topics of Noise Handshake Messages
+
 We note that all [design requirements](#Design-requirements) on exchanged messages would be satisfied only *after* a supported Noise handshake is completed, 
 corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.  
 In particular, identity-hiding properties can be guaranteed only if the recommendation described in [After-handshake](#After-handshake) are implemented.
 
-
 In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](/spec/14/#wakumessage) 
 where they can send/receive the first handshake message.
 We further assume that multiple initiators can start an handshake with the same recipient on an initial `contentTopic`,
-which can be then directly associated to the recipient's identity.
+which can be then directly linked to recipient's identity (no identity-hiding guarantee for the recipient).
 
 The second handshake message SHOULD be sent/received on a `contentTopic` deterministically derived from the first handshake message (using, for example, `HKDF`).
 This allows
 - the recipient to efficiently continue the handshakes started by each initiator;
-- the initiators to efficiently associate the initiator's second handshake message to their first handshake message.
+- the initiators to efficiently associate the recipient's second handshake message to their first handshake message,
+However, this does not provide any identity-hiding guarantee to the recipient.
 
-After the second handshake message is correctly received by initiators, the recommendation described in [After-handshake](#After-handshake) SHOULD be implemented.
+After the second handshake message is correctly received by initiators, the recommendation described in [After-handshake](#After-handshake) SHOULD be implemented to provide full identity-hiding guarantees for both initiator and recipient against passive attackers.
 
 ### Encryption Primitives
 
@@ -83,9 +85,16 @@ The symmetric primitives supported are:
 ## Specification
 
 When [14/WAKU-MESSAGE version](/spec/14/#payload-encryption) is set to 2, 
-the corresponding `WakuMessage`'s `payload` field either contains:
-- a Noise handhshake message and/or a Noise transport message;
+the corresponding `WakuMessage`'s `payload` will encapsulate the two fields `handshake-message` and `transport-message`.
+
+The `handshake-message` field MAY contain 
+- a Noise handhshake message.
+
+The `transport-message` field MAY contain
+- a Noise transport message;
 - a `ChaChaPoly` ciphertext.
+
+When a `transport-message` encodes a `ChaChaPoly` ciphertext, the corresponding `handshake-message` field MUST be empty.
 
 The following fields are concatenated to form the `payload` field:
 
@@ -160,7 +169,7 @@ In particular, if `protocol-id` is
 ### Public Keys Serialization
 
 Diffie-Hellman public keys can be trasmitted in clear 
-or in encrypted form with authentication data attached. 
+or in encrypted form (cf. [`WriteMessage`](http://www.noiseprotocol.org/noise.html#the-handshakestate-object)) with authentication data attached. 
 To distinguish between these two cases, public keys are serialized as the concatenation of the following three fields:
 
 - `flag`: 
@@ -181,7 +190,7 @@ As regards the underlying supported [cryptographic primitives](#Cryptographic-pr
 (nonces are implicitely defined by Noise [processing rules](http://www.noiseprotocol.org/noise.html#processing-rules)).
 
 In all supported Noise protocols, 
-parties' static keys are transmitted encrypted, 
+parties' static public keys are transmitted encrypted (cf. [`EncryptAndHash`](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object)), 
 while ephemeral keys MAY be encrypted after a handshake is complete.
 
 
@@ -198,11 +207,8 @@ It is therefore recommended to right pad transport messages to a multiple of 256
 ## After-handshake
 
 During the initial 1-RTT communication, 
-handshake messages can be linked to the respective parties 
+handshake messages [can be linked](#Content-Topics-of-Noise-Handshake-Messages) to the respective parties 
 through the `contentTopic` employed for such communication
-(the `contentTopic` where the first handshake message is exchanged is public
-and associated to the recipient identity,
-while 
 
 After a handshake is completed, 
 parties SHOULD derive from their shared secret key (preferably using `HKDF`) a new random `contentTopic` 
