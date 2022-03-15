@@ -4,7 +4,10 @@ title: 32/RLN
 name: Rate Limit Nullifier
 status: raw
 editor: Blagoj Dimovski <blagoj.dimovski@yandex.com>
-contributors: Barry Whitehat <barrywhitehat@protonmail.com>, Sanaz Taheri <sanaz@status.im>, Oskar Thorén <oskar@status.im>
+contributors: 
+- Barry Whitehat <barrywhitehat@protonmail.com>
+- Sanaz Taheri <sanaz@status.im>
+- Oskar Thorén <oskar@status.im>
 ---
 
 # Abstract
