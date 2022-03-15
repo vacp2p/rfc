@@ -3,6 +3,7 @@ slug: 35
 title: 35/WAKU2-NOISE
 name: Noise Protocols for Waku Payload Encryption
 status: raw
+tags: waku-core-protocol
 editor: Giuseppe <giuseppe@status.im>
 contributors: 
 ---
@@ -19,11 +20,11 @@ and asymmetric key-exchange protocols.
 
 Specifically, it adds support to the [`ChaChaPoly`](https://www.ietf.org/rfc/rfc7539.txt) cipher for symmetric authenticated encryption. 
 It further describes how the [Noise Protocol Framework](http://www.noiseprotocol.org/noise.html) can be used to exchange cryptographic keys and encrypt/decrypt messages 
-in a way that that the latter are authenticated and protected by *strong forward secrecy*.
+in a way that the latter are authenticated and protected by *strong forward secrecy*.
 
 
 This ultimately allows Waku applications to instantiate end-to-end encrypted communication channels with strong conversational security guarantees,
-similarly as done by [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) but in a more modular way, 
+as similarly done by [5/SECURE-TRANSPORT](https://specs.status.im/spec/5) but in a more modular way, 
 adapting key-exchange protocols to the knowledge communicating parties have of each other.
 
 
@@ -34,7 +35,8 @@ adapting key-exchange protocols to the knowledge communicating parties have of e
 even in the case he has access to communicating parties' long-term private keys (during or after their communication).
 - *Authenticity*: the adversary should not be able to cause a Waku endpoint to accept messages coming from an endpoint different than their original senders.
 - *Integrity*: the adversary should not be able to cause a Waku endpoint to accept data that has been tampered with.
-- *Identity-hiding*: a passive adversary should not be able to link encrypted messages to their corresponding senders and recipients.
+- *Identity-hiding*: once a secure communication channel is established, 
+a passive adversary should not be able to link exchanged encrypted messages to their corresponding sender and recipient.
 
 
 ## Supported Cryptographic Protocols
@@ -57,10 +59,21 @@ These are instantiated combining the following cryptographic primitives:
 - [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) hash function used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
 
 We note that all [design requirements](#Design-requirements) on exchanged messages would be satisfied only *after* a supported Noise handshake is completed, 
-corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.
+corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.  
+In particular, identity-hiding properties can be guaranteed only if the recommendation described in [After-handshake](#After-handshake) are implemented.
+
 
 In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](/spec/14/#wakumessage) 
-where they can send/receive their first handshake messages. 
+where they can send/receive the first handshake message.
+We further assume that multiple initiators can start an handshake with the same recipient on an initial `contentTopic`,
+which can be then directly associated to the recipient's identity.
+
+The second handshake message SHOULD be sent/received on a `contentTopic` deterministically derived from the first handshake message (using, for example, `HKDF`).
+This allows
+- the recipient to efficiently continue the handshakes started by each initiator;
+- the initiators to efficiently associate the initiator's second handshake message to their first handshake message.
+
+After the second handshake message is correctly received by initiators, the recommendation described in [After-handshake](#After-handshake) SHOULD be implemented.
 
 ### Encryption Primitives
 
@@ -93,7 +106,7 @@ encoded as in [Public Keys Encoding](#Public-Keys-Encoding);
  - `transport-message-len-len`: the length in bytes of `transport-message-len` (1 byte);
  - `transport-message-len`: the length in bytes of `transport-message` (`transport-message-len-len` bytes);
  - `transport-message`: the transport message (`transport-message-len` bytes);
- - `transport-message-ad`: the symmetric encryption authentication data for `transport-message` (16 bytes).
+ - `transport-message-auth`: the symmetric encryption authentication data for `transport-message` (16 bytes).
 
 
 ### ABNF
@@ -107,7 +120,7 @@ protocol-id                 = 1OCTET
 ; contains the size of handshake-message
 handshake-message-len       = 1OCTET
 
-; containes one or more Diffie-Hellman public keys
+; contains one or more Diffie-Hellman public keys
 handshake-message           = *OCTET
 
 ; contains the size of message-len
@@ -120,10 +133,10 @@ transport-message-len       = *OCTET
 transport-message           = *OCTET
 
 ; contains authentication data for transport-message, if encrypted
-transport-message-ad        = 16OCTET
+transport-message-auth        = 16OCTET
 
 ; the Waku WakuMessage payload field
-payload  = protocol-id handshake-message-len handshake-message transport-message-len-len transport-message-len transport-message transport-message-ad 
+payload  = protocol-id handshake-message-len handshake-message transport-message-len-len transport-message-len transport-message transport-message-auth 
 ```
 
 ### Protocol Payload Format
@@ -141,7 +154,7 @@ In particular, if `protocol-id` is
     - `handshake-message-len` is set to `0`;
     - `transport-message` contains the concatenation of the encryption nonce (12 bytes) followed by the ciphertext `ct`;
     - `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
-    - `transport-message-ad` contains the authentication data for `ct`.
+    - `transport-message-auth` contains the authentication data for `ct`.
 
 
 ### Public Keys Serialization
@@ -156,10 +169,11 @@ is equal to `1` if the public key is encrypted;
 - `pk`: 
 if `flag = 0`, it contains an encoding of the X coordinate of the public key. 
 If `flag = 1`, it contains a symmetric encryption of an encoding of the X coordinate of the public key;
-- `pk_ad`: 
+- `pk-auth`: 
 if `flag = 0`, it is empty; 
 if `flag = 1`, it contains the authentication data for `pk`;
 
+The corresponding serialization is obtained as `flag pk pk-auth`.
 
 As regards the underlying supported [cryptographic primitives](#Cryptographic-primitives):
 - `Curve25519` public keys X coordinates are encoded in little-endian as 32 bytes arrays;
@@ -178,15 +192,17 @@ encrypted transport messages SHOULD be padded before encryption
 to a multiple of the underlying symmetric cipher block size 
 (16 bytes for `ChaChaPoly`).
 
-It is therefore recommended to pad transport messages to a multiple of 256 bytes.
+It is therefore recommended to right pad transport messages to a multiple of 256 bytes.
 
 
 ## After-handshake
 
-We note that 
-during the initial 1-RTT communication, 
+During the initial 1-RTT communication, 
 handshake messages can be linked to the respective parties 
-through the `contentTopic` employed for such communication. 
+through the `contentTopic` employed for such communication
+(the `contentTopic` where the first handshake message is exchanged is public
+and associated to the recipient identity,
+while 
 
 After a handshake is completed, 
 parties SHOULD derive from their shared secret key (preferably using `HKDF`) a new random `contentTopic` 
@@ -196,7 +212,7 @@ When communicating on the new `contentTopic`,
 parties SHOULD set `protocol-id` to `0` 
 to reduce metadata leakages and indicate that the message is an *after-handshake* message.
 
-It is recommended that each party attaches an (unencrypted) ephemeral key in `handshake-message` to every message sent.
+Each party SHOULD attach an (unencrypted) ephemeral key in `handshake-message` to every message sent.
 According to [Noise processing rules](http://www.noiseprotocol.org/noise.html#processing-rules), 
 this allows updates to the shared secret key 
 by hashing the result of an ephemeral-ephemeral Diffie-Hellman exchange every 1-RTT communication.
@@ -218,7 +234,7 @@ Namely, if `protocol-id = 254, 255` then:
 - `handshake-message`: is empty;
 - `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field (AES-256-GCM or ECIES, depending on `protocol-id`);
 - `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
-- `transport-message-ad`: is set to `0`.
+- `transport-message-auth`: is set to `0`.
 
 When a `transport-message` corresponding to `protocol-id = 254, 255` is retrieved, 
 it SHOULD be decoded as the `data` field in [26/WAKU-PAYLOAD](/spec/26) specification.
