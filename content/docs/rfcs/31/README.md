@@ -3,6 +3,7 @@ slug: 31
 title: 31/WAKU2-ENR
 name: Waku v2 usage of ENR
 status: raw
+tags: waku-core-protocol
 editor: Franck Royer <franck@status.im>
 contributors:
 ---
@@ -150,6 +151,9 @@ MUST filter out participant records that do not implement this field or do not h
 - In addition, such nodes MAY choose to filter participants on specific flags (such as supported protocols),
 or further interpret the `waku2` field as required by the application.
 
+# Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
 
