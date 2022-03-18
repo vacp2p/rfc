@@ -73,8 +73,8 @@ It also provides an encrypted signature and padding for some form of unlinkabili
 
 This indicates that payloads MUST be encoded using [35/WAKU-NOISE](/spec/35).
 
-This provides key-exchanges and encryption based on [Noise Protocol](http://www.noiseprotocol.org/noise.html). 
-It also provides `ChaChaPoly` symmetric encryption.
+This provides for symmetric encryption and
+asymmetric key-exchange protocols.
 
 # Differences from Whisper / Waku v1 envelopes
 

@@ -43,10 +43,11 @@ a passive adversary should not be able to link exchanged encrypted messages to t
 
 ### Noise Protocols
 
-Two parties executing a Noise protocol exchange one or more *handshake messages* and/or *transport messages*.
+Two parties executing a Noise protocol exchange one or more [*handshake messages*](http://www.noiseprotocol.org/noise.html#message-format) and/or [*transport messages*](http://www.noiseprotocol.org/noise.html#message-format).
 A Noise protocol consists of one or more Noise handshakes. 
 During a Noise handshake, two parties exchange multiple handshake messages. 
-A handshake message contains *ephemeral keys* and/or *static keys* from one of the parties. 
+A handshake message contains *ephemeral keys* and/or *static keys* from one of the parties
+and an encrypted or unencrypted payload that can be used to transmit optional data. 
 These public keys are used to perform a protocol-dependent sequence of Diffie-Hellman operations, 
 whose results are all hashed into a shared secret key. 
 After a handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted transport messages. 
@@ -88,9 +89,10 @@ When [14/WAKU-MESSAGE version](/spec/14/#payload-encryption) is set to 2,
 the corresponding `WakuMessage`'s `payload` will encapsulate the two fields `handshake-message` and `transport-message`.
 
 The `handshake-message` field MAY contain 
-- a Noise handhshake message.
+- a Noise handhshake message (only encrypted/unencrypted public keys).
 
 The `transport-message` field MAY contain
+- a Noise handshake message payload (encrypted/unencrypted);
 - a Noise transport message;
 - a `ChaChaPoly` ciphertext.
 
@@ -115,6 +117,7 @@ encoded as in [Public Keys Encoding](#Public-Keys-Encoding);
  - `transport-message-len-len`: the length in bytes of `transport-message-len` (1 byte);
  - `transport-message-len`: the length in bytes of `transport-message` (`transport-message-len-len` bytes);
  - `transport-message`: the transport message (`transport-message-len` bytes);
+ Only during a Noise handshake, this field would contain the Noise handshake message payload.
  - `transport-message-auth`: the symmetric encryption authentication data for `transport-message` (16 bytes).
 
 
@@ -293,7 +296,7 @@ A Noise handshake pattern that suits this scenario is `XK1`:
 
 Within this handshake, Alice and Bob reciprocally authenticate their static keys `s` using ephemeral keys `e`. We note that while Bob's static key is assumed to be known to Alice (and hence is not transmitted), Alice's static key is sent to Bob encrypted with a key derived from both parties ephemeral keys and Bob's static key.
 
-**Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party. An active attacker who impersonates Alice can check candidates for Bob's static key against recorded/accepted exchanged handshake messages.
+**Security considerations on identity-hiding (active attacker)**: Alice's static key is encrypted with forward secrecy to an authenticated party. An active attacker initiating the handshake can check candidates for Bob's static key against recorded/accepted exchanged handshake messages.
 
 
 ### The `XX` and `XXpsk0` Handshakes
