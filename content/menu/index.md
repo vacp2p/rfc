@@ -9,6 +9,7 @@ bookMenuLevels: 1
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
   - [31/WAKU2-ENR]({{< relref "/docs/rfcs/31/README.md" >}})
   - [32/RLN-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
+  - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
