@@ -91,10 +91,27 @@ When an event is emitted, this callback will be triggered receiving a json strin
 }
 ```
 
-| `type` | `event` Type  |
-|:------|---------------|
-| `message` | TODO      | 
+| `type`    | `event` Type       |
+|:----------|--------------------|
+| `message` | `JsonMessageEvent` | 
 
+### JsonMessageEvent
+
+Type of `event` field for a `message` event:
+
+```ts
+{
+    subscriptionId: number;
+    pubsubTopic: string;
+    messageId: string;
+    wakuMessage: JsonMessage;
+  }
+```
+
+- `subscriptionId`: The id of the subscription from which the message was received, returned by [`waku_relay_subscribe`](#extern-char-waku_relay_subscribeint-nodeid-char-pubsubtopic).
+- `pubsubTopic`: The pubsub topic on which the message was received.
+- `messageId`: The message id.
+- `wakuMessage`: The message in [`JsonMessage`](#jsonmessage) format.
 
 ### `extern void waku_set_event_callback(void* cb)`
 
@@ -474,7 +491,7 @@ Returns the default pubsub topic used for exchanging waku messages defined in [R
 /waku/2/default-waku/proto
 ```
 
-### `extern char* waku_relay_publish(int nodeId, char* messageJson, char* topic, int timeoutMs)`
+### `extern char* waku_relay_publish(int nodeId, char* messageJson, char* pubsubTopic, int timeoutMs)`
 
 Publish a message using waku relay.
 
@@ -482,7 +499,7 @@ Publish a message using waku relay.
 
 1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
 2. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#JsonMessage).
-3. `char* topic`: pubsub topic on which to publish the message.
+3. `char* pubsubTopic`: pubsub topic on which to publish the message.
    If `NULL`, it uses the default pubsub topic.
 4. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
@@ -494,174 +511,225 @@ Publish a message using waku relay.
 A [`JsonResponse`](#jsonresponse).
 If the execution is successful, the `result` field contains the message ID.
 
-### `extern char* gowaku_enough_peers(int nodeID, char* topic)`
+### `extern char* waku_relay_enough_peers(int nodeId, char* pubsubTopic)`
 
-Determine if there are enough peers to publish a message on a topic.
-
-**Parameters**
-
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* topic`: pubsub topic to verify. Use `NULL` to verify the number of peers in the default pubsub topic
-
-**Returns**
-`JSONResponse` with a boolean indicating if there are enough peers or not. An `error` message otherwise
-
----
-
-### `extern char* gowaku_relay_subscribe(int nodeID, char* topic)`
-
-Subscribe to a WakuRelay topic to receive messages.
+Determine if there are enough peers to publish a message on a given pubsub topic.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* topic`: pubsub topic to subscribe to. Use `NULL` for subscribing to the default pubsub topic
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* pubsubTopic`: Pubsub topic to verify.
+   If `NULL`, it verifies the number of peers in the default pubsub topic.
 
 **Returns**
-`JSONResponse` with a subscription ID. An `error` message otherwise
+
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains a `boolean` indicating whether there are enough peers.
+
+For example:
+
+```json
+{
+  "result": true
+}
+```
+
+### `extern char* waku_relay_subscribe(int nodeId, char* pubsubTopic)`
+
+Subscribe to a Waku Relay pubsub topic to receive messages.
+
+**Parameters**
+
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* pubsubTopic`: Pubsub topic to subscribe to. 
+   If `NULL`, it subscribes to the default pubsub topic.
+
+**Returns**
+
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains an `integer` that is the subscription id.
+
+For example:
+
+```json
+{
+  "result": 0
+}
+```
 
 **Events**
-When a message is received, a ``"message"` event` is emitted containing the message, pubsub topic, and nodeID in which
-the message was received. Here's an example event that could be received:
+
+When a message is received, a ``"message"` event` is emitted containing the message, pubsub topic, and node ID in which
+the message was received.
+
+The `event` type is [`JsonMessageEvent`](#jsonmessageevent).
+
+For Example:
 
 ```json
 {
   "nodeId": 1,
   "type": "message",
   "event": {
-    "subscriptionID": "...",
+    "subscriptionID": 1,
     "pubsubTopic": "/waku/2/default-waku/proto",
     "messageID": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
     "wakuMessage": {
-      "payload": "...",
-      // base64 encoded message. Use gowaku_decode_data to decode
-      "contentTopic": "ABC",
+      "payload": "TODO",
+      "contentTopic": "/my-app/1/notification/proto",
       "version": 1,
       "timestamp": 1647826358000000000
-      // in nanoseconds
     }
   }
 }
 ```
 
-### `extern char* gowaku_relay_close_subscription(int nodeID, char* subsID)`
+### `extern char* waku_relay_close_subscription(int nodeId, char* subscriptionId)`
 
-Closes a waku relay subscription. No more messages will be received from this subscription
+Closes a Waku Relay subscription.
+No more messages will be received from this subscription.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* subsID`: subscription ID to close
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* subscriptionId`: Subscription ID to close.
 
 **Returns**
-`JSONResponse` with null `response` if successful. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
 
-### `extern char* gowaku_relay_unsubscribe_from_topic(int nodeID, char* topic)`
+For example:
 
-Closes the pubsub subscription to a pubsub topic. Existing subscriptions will not be closed, but they will stop
-receiving messages
+```json
+{
+   "result": null
+}
+```
+
+### `extern char* waku_relay_unsubscribe_from_topic(int nodeId, char* topic)`
+
+Closes the pubsub subscription to a pubsub topic.
+Existing subscriptions will not be closed, but they will stop receiving messages.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* topic`: pubsub topic to unsubscribe. Use `NULL` for unsubscribe from the default pubsub topic
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* pusubTopic`: Pubsub topic to unsubscribe from.
+  If `NULL`, unsubscribes from the default pubsub topic.
 
 **Returns**
-`JSONResponse` with null `response` if successful. An `error` message otherwise
 
-## Waku Message Utils
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
 
-### `extern char* gowaku_encode_data(char* data, char* keyType, char* key, char* signingKey, int version)`
+For example:
 
-Encode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/). This function can be used to encrypt the
-payload of a waku message
+```json
+{
+   "result": null
+}
+```
+
+## Utils
+
+### `extern char* waku_encode_payload(char* data, char* keyType, char* key, char* signingKey, int version)`
+
+Encode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/).
+This function can be used to encrypt the payload of a Waku Message.
 
 **Parameters**
 
-1. `char* data`: byte array to encode in base64 format. (gowaku_utils_base64_encode can be used to encode the message)
+1. `char* data`: Byte array to encode in base64 format.
+   ([`waku_utils_base64_encode`](#extern-char-waku_utils_base64_encodechar-data) can be used to encode the data).
 2. `char* keyType`: defines the type of key to use:
-    - `NONE`: no encryption will be applied
-    - `ASYMMETRIC`: encrypt the payload using a secp256k1 public key
-    - `SYMMETRIC`: encrypt the payload using a 32 bit key.
-3. `char* key`: hex key (`0x123...abc`) used for encrypting the `data`.
-    - When `version` is 0: No encryption is used
+    - `NONE`: No encryption will be applied,
+    - `ASYMMETRIC`: Encrypt the payload using a secp256k1 public key,
+    - `SYMMETRIC`: Encrypt the payload using a 32-bit secret key.
+3. `char* key`: Key to be used for encrypting the `data`, in hex format (`0x123...abc`).
+    - When `version` is 0: No encryption is used,
     - When `version` is 1
-        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 public key to encrypt the data with
+        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 public key to encrypt the data with,
         - If using `SYMMETRIC` encoding, `key` must contain a 32 bytes symmetric key.
-4. `char* signingKey`: Hex string containing a secp256k1 private key to sign the encoded message, It's optional. To not
-   sign the message use `NULL` instead.
-5. `int version`: is used to define the type of payload encryption
+4. `char* signingKey`: Hex string containing a secp256k1 private key to sign the encoded message.
+   If `NULL`, the message is not signed.
+   Only available if the message is encrypted.
+5. `int version`: Is used to define the type of payload encryption.
 
 **Returns**
-`JSONResponse` with the base64 encoded payload. An `error` message otherwise.
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains payload as a base 64 encoded `string`.
 
-### `extern char* gowaku_decode_data(char* data, char* keyType, char* key, int version)`
+For example:
 
-Decode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/). This function can be used to decrypt the
-payload of a waku message
+```json
+{
+   "result": "TODO"
+}
+```
+
+
+### `extern char* waku_decode_payload(char* payload, char* keyType, char* key, int version)`
+
+Decode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/).
+This function can be used to decrypt the payload of a Waku Message.
 
 **Parameters**
 
-1. `char* data`: byte array to decode, in base64.
+1. `char* data`: Byte array to decode, in base64.
 2. `char* keyType`: defines the type of key to use:
-    - `NONE`: no encryption was used in the payload
-    - `ASYMMETRIC`: decrypt the payload using a secp256k1 public key
+    - `NONE`: no encryption was used in the payload,
+    - `ASYMMETRIC`: decrypt the payload using a secp256k1 public key,
     - `SYMMETRIC`: decrypt the payload using a 32 bit key.
-3. `char* key`: hex key (`0x123...abc`) used for decrypting the `data`.
-    - When `version` is 0: No encryption is used
+3. `char* key`: Key to be used for decrypting the `data`, in hex format (`0x123...abc`).
+    - When `version` is 0: No encryption is used,
     - When `version` is 1
-        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 private key to decrypt the data
+        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 private key to decrypt the data,
         - If using `SYMMETRIC` encoding, `key` must contain a 32 bytes symmetric key.
 4. `int version`: is used to define the type of payload encryption
 
 **Returns**
-`JSONResponse` with the decoded payload. An `error` message otherwise. The decoded payload has this format:
+
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains the decoded payload in the following format:
 
 ```json
 {
   "result": {
-    "pubkey": "0x04123...abc",
-    // secp256k1 public key
-    "signature": "0x123...abc",
-    // secp256k1 signature
-    "data": "...",
-    // base64 encoded
-    "padding": "..."
-    // base64 encoded
+    "pubkey": "0x04123...abc", // secp256k1 public key
+    "signature": "0x123...abc",// secp256k1 signature
+    "data": "...", // base64 encoded
+    "padding": "..." // base64 encoded
   }
 }
 ```
 
----
-
 ### `extern char* waku_utils_base64_encode(char* data)`
 
-Encode a byte array to base64 useful for creating the payload of a waku message in the format understood
-by `gowaku_relay_publish`
+Encode a byte array to base64.
+Useful for creating the payload of a Waku Message in the format understood by [`waku_relay_publish`](#extern-char-waku_relay_publishint-nodeid-char-messagejson-char-pubsubtopic-int-timeoutms)
 
 **Parameters**
 
-1. `char* data`: byte array to encode
+1. `char* data`: Byte array to encode
 
 **Returns**
-A `char *` containing the base64 encoded byte array
 
----
+A `char *` containing the base64 encoded byte array.
 
-### `extern char* gowaku_utils_base64_decode(char* data)`
+### `extern char* waku_utils_base64_decode(char* data)`
 
-Decode a base64 string (useful for reading the payload from waku messages)
+Decode a base64 string (useful for reading the payload from Waku Messages).
 
 **Parameters**
 
-1. `char* data`: base64 encoded byte array to decode
+1. `char* data`: base64 encoded byte array to decode.
 
 **Returns**
-`JSONResponse` with the decoded payload. An `error` message otherwise.
+
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains the decoded payload.
 
 # Copyright
 
