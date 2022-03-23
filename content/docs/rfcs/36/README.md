@@ -74,7 +74,7 @@ Fields:
 
 - `payload`: base64 encoded payload, [`waku_utils_base64_encode`](#extern-char-waku_utils_base64_encodechar-data) can be used for this.
 - `contentTopic`: The content topic to be set on the message.
-- `version`. The Waku Message version number.
+- `version`: The Waku Message version number.
 - `timestamp`: Unix timestamp in nanoseconds.
 
 ## Events
