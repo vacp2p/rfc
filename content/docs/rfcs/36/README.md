@@ -253,52 +253,82 @@ For example:
 }
 ```
 
-### `extern char* waku_dial_peer(int nodeId, char* address, int ms)`
+### `extern char* waku_dial_peer(int nodeId, char* address, int timeoutMs)`
 
-Dial peer at multiaddress.
-
-**Parameters**
-
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* address`: multiaddress of the peer being dialed
-3. `int ms`: max duration in milliseconds this function might take to execute. If the function execution takes longer
-   than this value, the execution will be canceled and an error returned. Use `0` for unlimited duration
-
-**Returns**
-`JSONResponse` with a null `result` if the function executes successfully. An `error` message otherwise
-
----
-
-### `extern char* gowaku_dial_peerid(int nodeID, char* id, int ms)`
-
-Dial peer using peerID.
+Dial peer using a multiaddress.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* peerID`: peerID to dial. The peer must be already known. It must have been added before with `gowaku_add_peer`
-   or previously dialed with `gowaku_dial_peer`
-3. `int ms`: max duration in milliseconds this function might take to execute. If the function execution takes longer
-   than this value, the execution will be canceled and an error returned. Use `0` for unlimited duration
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* address`: A multiaddress to reach the peer being dialed.
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
 
 **Returns**
-`JSONResponse` with a null `result` if the function executes successfully. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
 
-### `extern char* gowaku_close_peer(int nodeID, char* address)`
+For example:
 
-Disconnect a peer using its multiaddress
+```json
+{
+   "result": null
+}
+```
+
+### `extern char* waku_dial_peerid(int nodeId, char* peerId, int timeoutMs)`
+
+Dial peer using its peer ID.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* address`: multiaddress of the peer being disconnected.
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* peerID`: Peer ID to dial.
+   The peer must be already known.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerint-nodeid-char-address-char-protocolid)
+   or previously dialed with [`waku_dial_peer`](#extern-char-waku_dial_peerint-nodeid-char-address-int-timeoutms).
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
 
 **Returns**
-`JSONResponse` with a null `result` if the function executes successfully. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
+
+For example:
+
+```json
+{
+   "result": null
+}
+```
+
+### `extern char* waku_close_peer(int nodeId, char* address)`
+
+Disconnect a peer using its multiaddress.
+
+**Parameters**
+
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* address`: A multiaddress of the peer being disconnected.
+
+**Returns**
+
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
+
+For example:
+
+```json
+{
+   "result": null
+}
+```
 
 ### `extern char* gowaku_close_peerid(int nodeID, char* id)`
 
