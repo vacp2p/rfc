@@ -57,6 +57,26 @@ On success:
 
 The format of the `result` object depends on the function it was returned by. 
 
+### JsonMessage
+
+A Waku Message in JSON Format:
+
+```ts
+{
+    payload: string;
+    contentTopic: string;
+    version: number;
+    timestamp: number
+}
+```
+
+Fields:
+
+- `payload`: base64 encoded payload, [`waku_utils_base64_encode`](#extern-char-waku_utils_base64_encodechar-data) can be used for this.
+- `contentTopic`: The content topic to be set on the message.
+- `version`. The Waku Message version number.
+- `timestamp`: Unix timestamp in nanoseconds.
+
 ## Events
 
 Asynchronous events require a callback to be registered.
@@ -95,7 +115,7 @@ Instantiates a Waku node.
 **Parameters**
 
 1. `char* configJson`: JSON string containing the options used to initialize a go-waku node.
-   It can be `null` to use defaults.
+   It can be `NULL` to use defaults.
    All keys are optional.
    If a key is `undefined`, or `null`, a default value will be set. Example:
    ```json
@@ -330,58 +350,73 @@ For example:
 }
 ```
 
-### `extern char* gowaku_close_peerid(int nodeID, char* id)`
+### `extern char* waku_close_peerid(int nodeId, char* peerId)`
 
 Disconnect a peer using its peerID
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* peerID`: peerID to disconnect.
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* peerID`: Peer ID to disconnect.
 
 **Returns**
-`JSONResponse` with a null `result` if the function executes successfully. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field is set to `null`.
 
-### `extern char* gowaku_peer_cnt(int nodeID)`
+For example:
 
-Obtain number of connected peers
+```json
+{
+   "result": null
+}
+```
+
+### `extern char* waku_peer_count(int nodeID)`
+
+Get number of connected peers.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
 
 **Returns**
-`JSONResponse` containing an `int` with the number of connected peers. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains an `integer` which represents the number of connected peers.
 
-### `extern char* gowaku_peers(int nodeID)`
+For example:
 
-Retrieve the list of peers known by the go-waku node
+```json
+{
+  "result": 0
+}
+```
+
+### `extern char* waku_peers(int nodeId)`
+
+Retrieve the list of peers known by the Waku node.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
 
 **Returns**
-`JSONResponse` containing a list of peers. An `error` message otherwise. The list of peers has this format:
+
+A [`JsonResponse`](#jsonresponse) containing a list of peers.
+The list of peers has this format:
 
 ```json
 {
   "result": [
-    ...
     {
       "peerID": "16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47RedcBafeDCBA",
       "protocols": [
         "/ipfs/id/1.0.0",
         "/vac/waku/relay/2.0.0",
-        "/ipfs/ping/1.0.0",
-        ...
+        "/ipfs/ping/1.0.0"
       ],
       "addrs": [
-        "/ip4/1.2.3.4/tcp/30303",
-        ...
+        "/ip4/1.2.3.4/tcp/30303"
       ],
       "connected": true
     }
@@ -391,9 +426,9 @@ Retrieve the list of peers known by the go-waku node
 
 ## Waku Relay
 
-### `extern char* gowaku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)`
+### `extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)`
 
-Create a content topic string according to [RFC 23](https://rfc.vac.dev/spec/23/)
+Create a content topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
@@ -403,17 +438,16 @@ Create a content topic string according to [RFC 23](https://rfc.vac.dev/spec/23/
 4. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
 
 **Returns**
-`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/)
+
+`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 ```
 /{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
 ```
 
---
+### `extern char* waku_pubsub_topic(char* name, char* encoding)`
 
-### `extern char* gowaku_pubsub_topic(char* name, char* encoding)`
-
-Create a pubsub topic string according to [RFC 23](https://rfc.vac.dev/spec/23/)
+Create a pubsub topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
@@ -421,51 +455,44 @@ Create a pubsub topic string according to [RFC 23](https://rfc.vac.dev/spec/23/)
 2. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
 
 **Returns**
-`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/)
+
+`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 ```
 /waku/2/{topic-name}/{encoding}
 ```
 
----
+### `extern char* waku_default_pubsub_topic()`
 
-### `extern char* gowaku_default_pubsub_topic()`
-
-Returns the default pubsub topic used for exchanging waku messages defined in [RFC 10](https://rfc.vac.dev/spec/10/)
+Returns the default pubsub topic used for exchanging waku messages defined in [RFC 10](https://rfc.vac.dev/spec/10/).
 
 **Returns**
+
 `char *` containing the default pubsub topic:
 
 ```
 /waku/2/default-waku/proto
 ```
 
----
-
-### `extern char* gowaku_relay_publish(int nodeID, char* messageJSON, char* topic, int ms)`
+### `extern char* waku_relay_publish(int nodeId, char* messageJson, char* topic, int timeoutMs)`
 
 Publish a message using waku relay.
 
 **Parameters**
 
-1. `int nodeID`: the node identifier obtained from a succesful execution of `gowaku_new`
-2. `char* messageJSON`: json string containing the [Waku Message](https://rfc.vac.dev/spec/14/)
-    ```json
-    {
-        "payload":"", // base64 encoded payload. gowaku_utils_base64_encode can be used for this
-        "contentTopic: "...",
-        "version": 1,
-        "timestamp": 1647963508000000000 // Unix timestamp in nanoseconds
-    }
-    ```
-3. `char* topic`: pubsub topic. Set to `NULL` to use the default pubsub topic
-4. `int ms`: max duration in milliseconds this function might take to execute. If the function execution takes longer
-   than this value, the execution will be canceled and an error returned. Use `0` for unlimited duration
+1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-configjson).
+2. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#JsonMessage).
+3. `char* topic`: pubsub topic on which to publish the message.
+   If `NULL`, it uses the default pubsub topic.
+4. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
 
 **Returns**
-`JSONResponse` containing the message ID. An `error` message otherwise
 
----
+A [`JsonResponse`](#jsonresponse).
+If the execution is successful, the `result` field contains the message ID.
 
 ### `extern char* gowaku_enough_peers(int nodeID, char* topic)`
 
@@ -611,7 +638,7 @@ payload of a waku message
 
 ---
 
-### `extern char* gowaku_utils_base64_encode(char* data)`
+### `extern char* waku_utils_base64_encode(char* data)`
 
 Encode a byte array to base64 useful for creating the payload of a waku message in the format understood
 by `gowaku_relay_publish`
