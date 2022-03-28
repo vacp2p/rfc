@@ -79,6 +79,7 @@ The following structured types are defined for use on the Debug API:
 | Field | Type | Inclusion | Description |
 | ----: | :---: | :---: |----------- |
 | `listenAddresses` | `Array`[`String`] | mandatory | Listening addresses of the node |
+| `enrUri` | `String` | optional | ENR URI of the node |
 
 ### `get_waku_v2_debug_v1_info`
 
