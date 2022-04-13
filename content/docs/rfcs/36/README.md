@@ -406,29 +406,7 @@ For example:
 }
 ```
 
-### `extern char* waku_close_peer(int nodeId, char* address)`
-
-Disconnect a peer using its multiaddress.
-
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* address`: A multiaddress of the peer being disconnected.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
-
-For example:
-
-```json
-{
-   "result": null
-}
-```
-
-### `extern char* waku_close_peerid(int nodeId, char* peerId)`
+### `extern char* waku_close_peer(int nodeId, char* peerId)`
 
 Disconnect a peer using its peerID
 **Parameters**
