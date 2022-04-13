@@ -1,6 +1,6 @@
 ---
-slug: 35
-title: 35/WAKU2-BINDINGS-API
+slug: 36
+title: 36/WAKU2-BINDINGS-API
 name: Waku v2 C Bindings API
 status: draft
 tags: waku-core
