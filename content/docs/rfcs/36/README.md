@@ -96,7 +96,6 @@ When an event is emitted, this callback will be triggered receiving a JSON strin
 
 ```ts
 {
-    nodeId: number;
     type: string;
     event: any;
 }
@@ -104,7 +103,6 @@ When an event is emitted, this callback will be triggered receiving a JSON strin
 
 Fields:
 
-- `nodeId`: Integer, go-waku node that emitted the signal.
 - `type`: Type of signal being emitted. Currently, only `message` is available.
 - `event`: Format depends on the type of signal.
 
@@ -112,7 +110,6 @@ For example:
 
 ```json
 {
-  "nodeId": 0,
   "type": "message",
   "event": {
     "subscriptionId": 1,
@@ -145,7 +142,7 @@ Type of `event` field for a `message` event:
 }
 ```
 
-- `subscriptionId`: The id of the subscription from which the message was received, returned by [`waku_relay_subscribe`](#extern-char-waku_relay_subscribeint-nodeid-char-pubsubtopic).
+- `subscriptionId`: The id of the subscription from which the message was received, returned by [`waku_relay_subscribe`](#extern-char-waku_relay_subscribechar-pubsubtopic).
 - `pubsubTopic`: The pubsub topic on which the message was received.
 - `messageId`: The message id.
 - `wakuMessage`: The message in [`JsonMessage`](#jsonmessage-type) format.
@@ -226,25 +223,20 @@ Instantiates a Waku node.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains an `integer` which represents the `nodeId`.
-This node id MUST be used in following API calls to interact with the instantiated node.
+If the execution is successful, the `result` field is set to `null`.
 
 For example:
 
 ```json
 {
-  "result": 0
+  "result": null
 }
 ```
 
-### `extern char* waku_start(int nodeId)`
+### `extern char* waku_start()`
 
 Start a Waku node mounting all the protocols that were enabled during the Waku node instantiation.
 
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
@@ -258,14 +250,10 @@ For example:
 }
 ```
 
-### `extern char* waku_stop(int nodeID)`
+### `extern char* waku_stop()`
 
 Stops a Waku node.
 
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
@@ -279,13 +267,9 @@ For example:
 }
 ```
 
-### `extern char* waku_peerid(int nodeId)`
+### `extern char* waku_peerid()`
 
 Get the peer ID of the waku node.
-
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
 
 **Returns**
 
@@ -300,13 +284,9 @@ For example:
 }
 ```
 
-### `extern char* waku_listen_addresses(int nodeId)`
+### `extern char* waku_listen_addresses()`
 
 Get the multiaddresses the Waku node is listening to.
-
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
 
 **Returns**
 
@@ -328,15 +308,14 @@ For example:
 
 ## Connecting to peers
 
-### `extern char* waku_add_peer(int nodeId, char* address, char* protocolId)`
+### `extern char* waku_add_peer(char* address, char* protocolId)`
 
 Add a node multiaddress and protocol to the waku node's peerstore.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* address`: A multiaddress (with peer id) to reach the peer being added.
-3. `char* protocolId`: A protocol we expect the peer to support.
+1. `char* address`: A multiaddress (with peer id) to reach the peer being added.
+2. `char* protocolId`: A protocol we expect the peer to support.
 
 **Returns**
 
@@ -351,15 +330,14 @@ For example:
 }
 ```
 
-### `extern char* waku_connect_peer(int nodeId, char* address, int timeoutMs)`
+### `extern char* waku_connect_peer(char* address, int timeoutMs)`
 
 Dial peer using a multiaddress.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* address`: A multiaddress to reach the peer being dialed.
-3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+1. `char* address`: A multiaddress to reach the peer being dialed.
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
@@ -377,18 +355,17 @@ For example:
 }
 ```
 
-### `extern char* waku_connect_peerid(int nodeId, char* peerId, int timeoutMs)`
+### `extern char* waku_connect_peerid(char* peerId, int timeoutMs)`
 
 Dial peer using its peer ID.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* peerID`: Peer ID to dial.
+1`char* peerID`: Peer ID to dial.
    The peer must be already known.
-   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerint-nodeid-char-address-char-protocolid)
-   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerint-nodeid-char-address-int-timeoutms).
-3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
@@ -406,13 +383,13 @@ For example:
 }
 ```
 
-### `extern char* waku_disconnect_peer(int nodeId, char* peerId)`
+### `extern char* waku_disconnect_peer(char* peerId)`
 
 Disconnect a peer using its peerID
+
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* peerID`: Peer ID to disconnect.
+1. `char* peerID`: Peer ID to disconnect.
 
 **Returns**
 
@@ -427,13 +404,9 @@ For example:
 }
 ```
 
-### `extern char* waku_peer_count(int nodeID)`
+### `extern char* waku_peer_count()`
 
 Get number of connected peers.
-
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
 
 **Returns**
 
@@ -448,13 +421,9 @@ For example:
 }
 ```
 
-### `extern char* waku_peers(int nodeId)`
+### `extern char* waku_peers()`
 
 Retrieve the list of peers known by the Waku node.
-
-**Parameters**
-
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
 
 **Returns**
 
@@ -530,17 +499,16 @@ Returns the default pubsub topic used for exchanging waku messages defined in [R
 /waku/2/default-waku/proto
 ```
 
-### `extern char* waku_relay_publish(int nodeId, char* messageJson, char* pubsubTopic, int timeoutMs)`
+### `extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)`
 
 Publish a message using waku relay.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-3. `char* pubsubTopic`: pubsub topic on which to publish the message.
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* pubsubTopic`: pubsub topic on which to publish the message.
    If `NULL`, it uses the default pubsub topic.
-4. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
@@ -550,14 +518,13 @@ Publish a message using waku relay.
 A [`JsonResponse`](#jsonresponse-type).
 If the execution is successful, the `result` field contains the message ID.
 
-### `extern char* waku_relay_enough_peers(int nodeId, char* pubsubTopic)`
+### `extern char* waku_relay_enough_peers(char* pubsubTopic)`
 
 Determine if there are enough peers to publish a message on a given pubsub topic.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* pubsubTopic`: Pubsub topic to verify.
+1. `char* pubsubTopic`: Pubsub topic to verify.
    If `NULL`, it verifies the number of peers in the default pubsub topic.
 
 **Returns**
@@ -573,14 +540,13 @@ For example:
 }
 ```
 
-### `extern char* waku_relay_subscribe(int nodeId, char* pubsubTopic)`
+### `extern char* waku_relay_subscribe(char* pubsubTopic)`
 
 Subscribe to a Waku Relay pubsub topic to receive messages.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* pubsubTopic`: Pubsub topic to subscribe to. 
+1. `char* pubsubTopic`: Pubsub topic to subscribe to. 
    If `NULL`, it subscribes to the default pubsub topic.
 
 **Returns**
@@ -607,7 +573,6 @@ For Example:
 
 ```json
 {
-  "nodeId": 1,
   "type": "message",
   "event": {
     "subscriptionID": 1,
@@ -623,15 +588,14 @@ For Example:
 }
 ```
 
-### `extern char* waku_relay_close_subscription(int nodeId, char* subscriptionId)`
+### `extern char* waku_relay_close_subscription(char* subscriptionId)`
 
 Closes a Waku Relay subscription.
 No more messages will be received from this subscription.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* subscriptionId`: Subscription ID to close.
+1. `char* subscriptionId`: Subscription ID to close.
 
 **Returns**
 
@@ -646,15 +610,14 @@ For example:
 }
 ```
 
-### `extern char* waku_relay_unsubscribe_from_topic(int nodeId, char* topic)`
+### `extern char* waku_relay_unsubscribe_from_topic(char* topic)`
 
 Closes the pubsub subscription to a pubsub topic.
 Existing subscriptions will not be closed, but they will stop receiving messages.
 
 **Parameters**
 
-1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* pusubTopic`: Pubsub topic to unsubscribe from.
+1. `char* pusubTopic`: Pubsub topic to unsubscribe from.
   If `NULL`, unsubscribes from the default pubsub topic.
 
 **Returns**
@@ -758,7 +721,7 @@ For example:
 ### `extern char* waku_utils_base64_encode(char* data)`
 
 Encode a byte array to base64.
-Useful for creating the payload of a Waku Message in the format understood by [`waku_relay_publish`](#extern-char-waku_relay_publishint-nodeid-char-messagejson-char-pubsubtopic-int-timeoutms)
+Useful for creating the payload of a Waku Message in the format understood by [`waku_relay_publish`](#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms)
 
 **Parameters**
 
