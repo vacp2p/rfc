@@ -335,7 +335,7 @@ Add a node multiaddress and protocol to the waku node's peerstore.
 **Parameters**
 
 1. `int nodeId`: The node identifier obtained from a successful execution of [`waku_new`](#extern-char-waku_newchar-jsonconfig).
-2. `char* address`: A multiaddress to reach the peer being added.
+2. `char* address`: A multiaddress (with peer id) to reach the peer being added.
 3. `char* protocolId`: A protocol we expect the peer to support.
 
 **Returns**
