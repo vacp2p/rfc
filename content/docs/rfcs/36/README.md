@@ -351,7 +351,7 @@ For example:
 }
 ```
 
-### `extern char* waku_dial_peer(int nodeId, char* address, int timeoutMs)`
+### `extern char* waku_connect_peer(int nodeId, char* address, int timeoutMs)`
 
 Dial peer using a multiaddress.
 
@@ -377,7 +377,7 @@ For example:
 }
 ```
 
-### `extern char* waku_dial_peerid(int nodeId, char* peerId, int timeoutMs)`
+### `extern char* waku_connect_peerid(int nodeId, char* peerId, int timeoutMs)`
 
 Dial peer using its peer ID.
 
@@ -387,7 +387,7 @@ Dial peer using its peer ID.
 2. `char* peerID`: Peer ID to dial.
    The peer must be already known.
    It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerint-nodeid-char-address-char-protocolid)
-   or previously dialed with [`waku_dial_peer`](#extern-char-waku_dial_peerint-nodeid-char-address-int-timeoutms).
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerint-nodeid-char-address-int-timeoutms).
 3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
@@ -406,7 +406,7 @@ For example:
 }
 ```
 
-### `extern char* waku_close_peer(int nodeId, char* peerId)`
+### `extern char* waku_disconnect_peer(int nodeId, char* peerId)`
 
 Disconnect a peer using its peerID
 **Parameters**
