@@ -135,14 +135,12 @@ Type of `event` field for a `message` event:
 
 ```ts
 {
-    subscriptionId: number;
     pubsubTopic: string;
     messageId: string;
     wakuMessage: JsonMessage;
 }
 ```
 
-- `subscriptionId`: The id of the subscription from which the message was received, returned by [`waku_relay_subscribe`](#extern-char-waku_relay_subscribechar-pubsubtopic).
 - `pubsubTopic`: The pubsub topic on which the message was received.
 - `messageId`: The message id.
 - `wakuMessage`: The message in [`JsonMessage`](#jsonmessage-type) format.
@@ -540,25 +538,25 @@ For example:
 }
 ```
 
-### `extern char* waku_relay_subscribe(char* pubsubTopic)`
+### `extern char* waku_relay_subscribe(char* topic)`
 
 Subscribe to a Waku Relay pubsub topic to receive messages.
 
 **Parameters**
 
-1. `char* pubsubTopic`: Pubsub topic to subscribe to. 
+1. `char* topic`: Pubsub topic to subscribe to. 
    If `NULL`, it subscribes to the default pubsub topic.
 
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains an `integer` that is the subscription id.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-  "result": 0
+  "result": true
 }
 ```
 
@@ -588,32 +586,10 @@ For Example:
 }
 ```
 
-### `extern char* waku_relay_close_subscription(char* subscriptionId)`
+### `extern char* waku_relay_unsubscribe(char* topic)`
 
-Closes a Waku Relay subscription.
-No more messages will be received from this subscription.
-
-**Parameters**
-
-1. `char* subscriptionId`: Subscription ID to close.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-For example:
-
-```json
-{
-   "result": true
-}
-```
-
-### `extern char* waku_relay_unsubscribe_from_topic(char* topic)`
-
-Closes the pubsub subscription to a pubsub topic.
-Existing subscriptions will not be closed, but they will stop receiving messages.
+Closes the pubsub subscription to a pubsub topic. No more messages will be received
+from this pubsub topic.
 
 **Parameters**
 
@@ -630,6 +606,66 @@ For example:
 ```json
 {
    "result": true
+}
+```
+
+
+## Decrypting messages
+
+### `extern char* waku_decode_symmetric(char* messageJSON, char* symmetricKey)`
+Decrypt a message using a symmetric key
+
+**Parameters**
+1. `char* messageJSON`: json string containing the [Waku Message](https://rfc.vac.dev/spec/14/)
+    ```js
+    {
+        "payload":"...", // encrypted payload encoded in base64.
+        "contentTopic: "...",
+        "version": 1,
+        "timestamp": 1647963508000000000 // Unix timestamp in nanoseconds
+    }
+    ```
+2. `char* symmetricKey`: 32 byte symmetric key
+
+**Returns**
+`JSONResponse` containing a `DecodedPayload`. An `error` message otherwise
+```js
+{
+  "result": {
+    "pubkey": "0x......", // pubkey that signed the message (optional)
+    "signature": "0x....", // message signature (optional)
+    "data": "...", // decrypted message payload encoded in base64
+    "padding": "...", // base64 encoded padding
+  }
+}
+
+```
+
+### `extern char* waku_decode_asymmetric(char* messageJSON, char* privateKey)`
+Decrypt a message using a secp256k1 private key 
+
+**Parameters**
+1. `char* messageJSON`: json string containing the [Waku Message](https://rfc.vac.dev/spec/14/)
+    ```js
+    {
+        "payload":"...", // encrypted payload encoded in base64.
+        "contentTopic: "...",
+        "version": 1,
+        "timestamp": 1647963508000000000 // Unix timestamp in nanoseconds
+    }
+    ```
+2. `char* privateKey`: secp256k1 private key 
+
+**Returns**
+`JSONResponse` containing a `DecodedPayload`. An `error` message otherwise
+```js
+{
+  "result": {
+    "pubkey": "0x......", // pubkey that signed the message (optional)
+    "signature": "0x....", // message signature (optional)
+    "data": "...", // decrypted message payload encoded in base64
+    "padding": "...", // base64 encoded padding
+  }
 }
 ```
 
@@ -668,53 +704,6 @@ For example:
 ```json
 {
    "result": "TODO"
-}
-```
-
-
-### `extern char* waku_decode_payload(char* payload, char* keyType, char* key, int version)`
-
-Decode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/).
-This function can be used to decrypt the payload of a Waku Message.
-
-**Parameters**
-
-1. `char* data`: Byte array to decode, in base64.
-2. `char* keyType`: defines the type of key to use:
-    - `NONE`: no encryption was used in the payload,
-    - `ASYMMETRIC`: decrypt the payload using a secp256k1 public key,
-    - `SYMMETRIC`: decrypt the payload using a 32 bit key.
-3. `char* key`: Key to be used for decrypting the `data`, in hex format (`0x123...abc`).
-    - When `version` is 0: No encryption is used,
-    - When `version` is 1
-        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 private key to decrypt the data,
-        - If using `SYMMETRIC` encoding, `key` must contain a 32 bytes symmetric key.
-4. `int version`: is used to define the type of payload encryption
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the decoded payload in the following format:
-
-```ts
-{
-    pubkey: string; // secp256k1 public key
-    signature: string; // secp256k1 signature
-    data: string; // base64 encoded
-    padding: string;
-}
-```
-
-For example:
-
-```json
-{
-  "result": {
-    "pubkey": "0x04123...abc",
-    "signature": "0x123...abc",
-    "data": "...",
-    "padding": "..."
-  }
 }
 ```
 
