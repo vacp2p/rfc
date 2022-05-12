@@ -187,7 +187,7 @@ If a key is `undefined`, or `null`, a default value will be set.
   Use `0` for random.
 - `advertiseAddr`: External address to advertise to other nodes.
   Can be ip4, ip6 or dns4, dns6.
-  Default: ?
+  Default: `null`.
 - `nodeKey`: Secp256k1 private key in Hex format (`0x123...abc`).
   Default random.
 - `keepAliveInterval`: Interval in seconds for pinging peers to keep the connection alive.
@@ -223,13 +223,13 @@ Instantiates a Waku node.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-  "result": null
+  "result": true
 }
 ```
 
@@ -240,13 +240,13 @@ Start a Waku node mounting all the protocols that were enabled during the Waku n
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-  "result": null
+  "result": true
 }
 ```
 
@@ -257,13 +257,13 @@ Stops a Waku node.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-  "result": null
+  "result": true
 }
 ```
 
@@ -345,13 +345,13 @@ Dial peer using a multiaddress.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-   "result": null
+   "result": true
 }
 ```
 
@@ -373,13 +373,13 @@ Dial peer using its peer ID.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-   "result": null
+   "result": true
 }
 ```
 
@@ -394,13 +394,13 @@ Disconnect a peer using its peerID
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-   "result": null
+   "result": true
 }
 ```
 
@@ -600,13 +600,13 @@ No more messages will be received from this subscription.
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-   "result": null
+   "result": true
 }
 ```
 
@@ -623,13 +623,13 @@ Existing subscriptions will not be closed, but they will stop receiving messages
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `null`.
+If the execution is successful, the `result` field is set to `true`.
 
 For example:
 
 ```json
 {
-   "result": null
+   "result": true
 }
 ```
 
