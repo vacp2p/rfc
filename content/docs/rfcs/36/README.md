@@ -86,6 +86,26 @@ Fields:
 - `version`: The Waku Message version number.
 - `timestamp`: Unix timestamp in nanoseconds.
 
+### `DecodedPayload` type
+
+A payload once decoded, used when a received Waku Message is encrypted:
+
+```ts
+interface DecodedPayload {
+    pubkey?: string;
+    signature?: string;
+    data: string;
+    padding: string;
+  }
+```
+
+Fields:
+
+- `pubkey`: Public key that signed the message (optional), hex encoded with `0x` prefix,
+- `signature`: Message signature (optional), hex encoded with `0x` prefix,
+- `data`: Decrypted message payload base64 encoded,
+- `padding`: Padding base64 encoded.
+
 ## Events
 
 Asynchronous events require a callback to be registered.
@@ -612,59 +632,52 @@ For example:
 
 ## Decrypting messages
 
-### `extern char* waku_decode_symmetric(char* messageJSON, char* symmetricKey)`
+### `extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)`
 Decrypt a message using a symmetric key
 
 **Parameters**
-1. `char* messageJSON`: json string containing the [Waku Message](https://rfc.vac.dev/spec/14/)
-    ```js
-    {
-        "payload":"...", // encrypted payload encoded in base64.
-        "contentTopic: "...",
-        "version": 1,
-        "timestamp": 1647963508000000000 // Unix timestamp in nanoseconds
-    }
-    ```
-2. `char* symmetricKey`: 32 byte symmetric key
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* symmetricKey`: 32 byte symmetric key hex encoded.
 
 **Returns**
-`JSONResponse` containing a `DecodedPayload`. An `error` message otherwise
-```js
+
+A [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field contains the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
+An `error` message otherwise.
+
+```json
 {
   "result": {
-    "pubkey": "0x......", // pubkey that signed the message (optional)
-    "signature": "0x....", // message signature (optional)
-    "data": "...", // decrypted message payload encoded in base64
-    "padding": "...", // base64 encoded padding
+    "pubkey": "0x......",
+    "signature": "0x....",
+    "data": "...",
+    "padding": "..."
   }
 }
-
 ```
 
-### `extern char* waku_decode_asymmetric(char* messageJSON, char* privateKey)`
+### `extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)`
 Decrypt a message using a secp256k1 private key 
 
 **Parameters**
-1. `char* messageJSON`: json string containing the [Waku Message](https://rfc.vac.dev/spec/14/)
-    ```js
-    {
-        "payload":"...", // encrypted payload encoded in base64.
-        "contentTopic: "...",
-        "version": 1,
-        "timestamp": 1647963508000000000 // Unix timestamp in nanoseconds
-    }
-    ```
-2. `char* privateKey`: secp256k1 private key 
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* privateKey`: secp256k1 private key hex encoded.
 
 **Returns**
-`JSONResponse` containing a `DecodedPayload`. An `error` message otherwise
-```js
+
+A [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field contains the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
+An `error` message otherwise.
+
+```json
 {
   "result": {
-    "pubkey": "0x......", // pubkey that signed the message (optional)
-    "signature": "0x....", // message signature (optional)
-    "data": "...", // decrypted message payload encoded in base64
-    "padding": "...", // base64 encoded padding
+    "pubkey": "0x......",
+    "signature": "0x....",
+    "data": "...",
+    "padding": "..."
   }
 }
 ```
