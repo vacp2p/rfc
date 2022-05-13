@@ -519,7 +519,7 @@ Returns the default pubsub topic used for exchanging waku messages defined in [R
 
 ### `extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)`
 
-Publish a message using waku relay.
+Publish a message using Waku Relay.
 
 **Parameters**
 
@@ -532,6 +532,56 @@ Publish a message using waku relay.
    Use `0` for no timeout.
 
 Note: `messageJson.version` is overwritten to `0`.
+
+**Returns**
+
+A [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field contains the message ID.
+
+### `extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)`
+
+Optionally sign,
+encrypt using asymmetric encryption
+and publish a message using Waku Relay.
+
+**Parameters**
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* pubsubTopic`: pubsub topic on which to publish the message.
+   If `NULL`, it uses the default pubsub topic.
+3. `char* publicKey`: hex encoded public key to be used for encryption.
+4. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
+5. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+
+Note: `messageJson.version` is overwritten to `1`.
+
+**Returns**
+
+A [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field contains the message ID.
+
+### `extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)`
+
+Optionally sign,
+encrypt using symmetric encryption
+and publish a message using Waku Relay.
+
+**Parameters**
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* pubsubTopic`: pubsub topic on which to publish the message.
+   If `NULL`, it uses the default pubsub topic.
+3. `char* symmetricKey`: hex encoded secret key to be used for encryption.
+4. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
+5. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+
+Note: `messageJson.version` is overwritten to `1`.
 
 **Returns**
 
