@@ -671,42 +671,6 @@ Decrypt a message using a secp256k1 private key
 
 ## Utils
 
-### `extern char* waku_encode_payload(char* data, char* keyType, char* key, char* signingKey, int version)`
-
-Encode a byte array according to [RFC 26](https://rfc.vac.dev/spec/26/).
-This function can be used to encrypt the payload of a Waku Message.
-
-**Parameters**
-
-1. `char* data`: Byte array to encode in base64 format.
-   ([`waku_utils_base64_encode`](#extern-char-waku_utils_base64_encodechar-data) can be used to encode the data).
-2. `char* keyType`: defines the type of key to use:
-    - `NONE`: No encryption will be applied,
-    - `ASYMMETRIC`: Encrypt the payload using a secp256k1 public key,
-    - `SYMMETRIC`: Encrypt the payload using a 32-bit secret key.
-3. `char* key`: Key to be used for encrypting the `data`, in hex format (`0x123...abc`).
-    - When `version` is 0: No encryption is used,
-    - When `version` is 1
-        - If using `ASYMMETRIC` encoding, `key` must contain a secp256k1 public key to encrypt the data with,
-        - If using `SYMMETRIC` encoding, `key` must contain a 32 bytes symmetric key.
-4. `char* signingKey`: Hex string containing a secp256k1 private key to sign the encoded message.
-   If `NULL`, the message is not signed.
-   Only available if the message is encrypted.
-5. `int version`: Is used to define the type of payload encryption.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains payload as a base 64 encoded `string`.
-
-For example:
-
-```json
-{
-   "result": "TODO"
-}
-```
-
 ### `extern char* waku_utils_base64_encode(char* data)`
 
 Encode a byte array to base64.
