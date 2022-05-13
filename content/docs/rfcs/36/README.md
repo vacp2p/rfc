@@ -531,6 +531,8 @@ Publish a message using waku relay.
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
 
+Note: `messageJson.version` is overwritten to `0`.
+
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
@@ -640,6 +642,8 @@ Decrypt a message using a symmetric key
 1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
 2. `char* symmetricKey`: 32 byte symmetric key hex encoded.
 
+Note: `messageJson.version` is expected to be `1`.
+
 **Returns**
 
 A [`JsonResponse`](#jsonresponse-type).
@@ -664,6 +668,8 @@ Decrypt a message using a secp256k1 private key
 
 1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
 2. `char* privateKey`: secp256k1 private key hex encoded.
+
+Note: `messageJson.version` is expected to be `1`.
 
 **Returns**
 
