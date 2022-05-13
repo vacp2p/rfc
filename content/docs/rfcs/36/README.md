@@ -205,6 +205,7 @@ If a key is `undefined`, or `null`, a default value will be set.
   Use `0` for random.
 - `advertiseAddr`: External address to advertise to other nodes.
   Can be ip4, ip6 or dns4, dns6.
+  If `null`, the multiaddress(es) generated from the ip and port specified in the config (or default ones) will be used.
   Default: `null`.
 - `nodeKey`: Secp256k1 private key in Hex format (`0x123...abc`).
   Default random.
