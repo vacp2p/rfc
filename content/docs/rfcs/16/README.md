@@ -89,6 +89,18 @@ The `get_waku_v2_debug_v1_info` method retrieves information about a Waku v2 nod
 
 none
 
+### `get_waku_v2_debug_v1_version`
+
+The `get_waku_v2_debug_v1_version` method retrieves the version of a Waku v2 node as a string.
+The version SHOULD follow [semantic versioning](https://semver.org/).
+In case the node's current build is based on a git commit between semantic versions,
+the retrieved version string MAY contain the git commit hash alone or in combination with the latest semantic version.
+
+#### Parameters
+
+none
+
+
 #### Response
 - [**`WakuInfo`**](#wakuinfo) - information about a Waku v2 node
 
