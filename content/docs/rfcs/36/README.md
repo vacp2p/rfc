@@ -11,7 +11,7 @@ contributors:
 
 # Introduction
 
-Native applications that wish to integrate Waku may not be able to use nim-waku and its JSON RPC API due to constraints
+Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints
 on packaging, performance or executables.
 
 An alternative is to link existing Waku implementation as a static or dynamic library in their application.
@@ -23,7 +23,7 @@ consume them.
 
 The API should be generic enough, so:
 
-- it can be implemented by both nim-waku and go-waku C-Bindings,
+- it can be implemented by both nwaku and go-waku C-Bindings,
 - it can be consumed from a variety of languages such as C#, Kotlin, Swift, Rust, C++, etc.
 
 The selected format to pass data to and from the API is `JSON`.
