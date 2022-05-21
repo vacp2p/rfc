@@ -77,7 +77,7 @@ he SHALL publicly mark as stale all Noise sessions relative to messages exchange
 # Multi-Device support
 
 Alice and Bob might possess one or more devices (e.g. laptops, smartphones, etc.) they wish to use to communicate.
-In the following we assume Alice and Bob to possess $N$ and $M$ devices, respectively.
+In the following, we assume Alice and Bob to possess $N$ and $M$ devices, respectively.
 
 Since a Noise session contains cryptographic material required to encrypt and decrypt messages exchanged on a pre-defined content topic derived from a `session-id`, 
 messages should be encrypted and decrypted within the Noise session instantiated between the currently-in-use sender's and receiver's device.
