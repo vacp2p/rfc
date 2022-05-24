@@ -32,19 +32,19 @@ More specifically, when Alice and Bob call [Split()](http://www.noiseprotocol.or
 they further compute `session-id  = HKDF(h)` using the supported key derivation function `HKDF`.
 
 Such `session-id` will uniquely identify the Noise cryptographic session instantiated on completion of a Noise handshake,
-which would then consists of the tuple `(session-id, CSOutbound, CSInbound)`. 
+which would then consist of the tuple `(session-id, CSOutbound, CSInbound)`. 
 
 Once a Noise session is instantiated, 
-any further encrypted message between Alice and Bob within this session is exchanged on a `contentTopic` with name `/wakunoise/1/<ct-id>/proto`, 
-where `ct-id = Hash(Hash(session-id))`.
-
+any further encrypted message between Alice and Bob within this session is exchanged on a `contentTopic` with name `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto`, 
+where `ct-id = Hash(Hash(session-id))` 
+and `/{application-name}/{application-version}/` identifies the application currently employing [35/WAKU2-NOISE](https://rfc.vac.dev/35/).
 
 # Session states
 
 A Noise session corresponding to a certain `session-id`:
 - is always **active** as long as it is not marked as **stale**. 
-For an active `session-id`, new messages are published on the content topic `/wakunoise/1/<ct-id>/proto`;  
-- is marked as **stale** if a [session termination message](https://rfc.vac.dev/spec/35/#session-termination-message) containing `Hash(session-id)` is published on the content topic `/wakunoise/1/<ct-id>/proto`. 
+For an active `session-id`, new messages are published on the content topic `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto`;  
+- is marked as **stale** if a [session termination message](https://rfc.vac.dev/spec/35/#session-termination-message) containing `Hash(session-id)` is published on the content topic `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto`. 
 Session information relative to stale sessions  MAY be deleted from users' device, unless required for later channel binding purposes.
 
 When a Noise session is marked as stale, it means that one party requested its termination while being online, 
@@ -55,10 +55,10 @@ However, since `session-id` is shared between Alice and Bob,
 one party MAY decide to mark a Noise session as stale if no message from the other end was received within a certain fixed time window. 
 
 The above mechanism allows a Noise session to be marked as stale either privately or publicly, 
-depending if `Hash(session-id)` is sent on `/wakunoise/1/<ct-id>/proto` to the other party in encrypted form or not, respectively. 
+depending if `Hash(session-id)` is sent on `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto` to the other party in encrypted form or not, respectively. 
 
 When a Noise session is publicly marked as stale, 
-network peers MAY discard all [stored](https://rfc.vac.dev/spec/13/) messages addressed to the content topic `/wakunoise/1/<ct-id>/proto`. 
+network peers MAY discard all [stored](https://rfc.vac.dev/spec/13/) messages addressed to the content topic `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto`. 
 In this the case and in order for parties to retrieve any eventually delayed message, 
 peers SHOULD wait a fixed amount of time before discarding stored messages corresponding to a stale Noise session. 
 
