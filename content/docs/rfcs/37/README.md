@@ -33,6 +33,8 @@ they further compute `session-id  = HKDF(h)` using the supported key derivation 
 
 Such `session-id` will uniquely identify the Noise cryptographic session instantiated on completion of a Noise handshake,
 which would then consist of the tuple `(session-id, CSOutbound, CSInbound)`. 
+For each instantiated Noise session we assume this tuple to be properly persisted, 
+since it is required to either retrieve and encrypt/decrypt any further exchanged message.
 
 Once a Noise session is instantiated, 
 any further encrypted message between Alice and Bob within this session is exchanged on a `contentTopic` with name `/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto`, 
@@ -93,9 +95,12 @@ In a $N11M$ setting, each party's device shares the same Noise session informati
 More precisely, once the first Noise session between any of Alice's and Bob's device is instantiated, 
 its session information is securely propagated to all other devices, 
 which then become able to send and receive new messages on the content topic associated to such session.
+We note, however, that two devices belonging to one party cannot simultaneously send different messages to the other, since only the first message received will be correctly decrypted using the next nonce.
+
 
 The most updated session information between Alice and Bob is propagated in encrypted form to other devices, 
 using previously instantiated Noise sessions. 
+In particular, all Alice's (resp., Bob's) devices that want to receive such updated session information, are required to have an already instantiated Noise session between them in order to receive it in encrypted form.
 The propagated session information corresponds to the latest session information stored on the device currently communicating with (any of the devices of) the other party.
 
 We note that sessions information is propagated only among devices belonging to the same party and not with other party's devices. 
