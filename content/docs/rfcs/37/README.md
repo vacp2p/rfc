@@ -67,7 +67,7 @@ peers SHOULD wait a fixed amount of time before discarding stored messages corre
 A stale Noise session cannot be directly marked as active
 and parties are required to instantiate a new Noise session if they wish to communicate again. 
 
-However, parties can optionally include the `session-id` corresponding to a stale Noise session in the [prologue information](https://noiseprotocol.org/noise.html#prologue) employed in the Noise handshake they execute to instantiate their new Noise session. 
+However, parties can optionally persist and include the `session-id` corresponding to a stale Noise session in the [prologue information](https://noiseprotocol.org/noise.html#prologue) employed in the Noise handshake they execute to instantiate their new Noise session. 
 This effectively emulates a mechanism to _"re-activate"_ a stale Noise session by binding it to a newly created active Noise session.
 
 In order to reduce users' metadata leakage, it is desirable (as suggested in [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/#after-handshake)) that content topics used for communications change every time a new message is exchanged.
@@ -107,7 +107,8 @@ We note that sessions information is propagated only among devices belonging to 
 Hence, Alice has no knowledge on the number of devices Bob is using and vice versa. 
 
 When any device marks a Noise session between Alice and Bob as stale, 
-all (updated) devices will implicitly mark such session as stale.
+all other (updated) devices will consider such session as stale
+without publishing the `Hash(session-id)` on the corresponding session content topic.
 
 In case a Noise session between two devices belonging to the same party is marked as stale, 
 such two devices stop to reciprocally propagate any information regarding Noise sessions instantiated with other parties.
