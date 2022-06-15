@@ -114,11 +114,10 @@ The following fields are concatenated to form the `payload` field:
 If `handshake-message-len` is not `0`, 
 it contains the concatenation of one or more Noise Diffie-Hellman ephemeral or static keys 
 encoded as in [Public Keys Encoding](#Public-Keys-Encoding);
- - `transport-message-len-len`: the length in bytes of `transport-message-len` (1 byte);
- - `transport-message-len`: the length in bytes of `transport-message` (`transport-message-len-len` bytes);
+ - `transport-message-len`: the length in bytes of `transport-message` (8 bytes, stored in Little-Endian);
  - `transport-message`: the transport message (`transport-message-len` bytes);
  Only during a Noise handshake, this field would contain the Noise handshake message payload.
- - `transport-message-auth`: the symmetric encryption authentication data for `transport-message` (16 bytes).
+ The symmetric encryption authentication data for `transport-message`, when present, is appended at the end of `transport-message` (16 bytes).
 
 
 ### ABNF
@@ -135,20 +134,15 @@ handshake-message-len       = 1OCTET
 ; contains one or more Diffie-Hellman public keys
 handshake-message           = *OCTET
 
-; contains the size of message-len
-transport-message-len-len   = 1OCTET
-
 ; contains the size of transport-message
 transport-message-len       = *OCTET
 
-; contains the transport message, eventually encrypted
+; contains the transport message, eventually encrypted. 
+; If encrypted, authentication data is appended
 transport-message           = *OCTET
 
-; contains authentication data for transport-message, if encrypted
-transport-message-auth        = 16OCTET
-
 ; the Waku WakuMessage payload field
-payload  = protocol-id handshake-message-len handshake-message transport-message-len-len transport-message-len transport-message transport-message-auth 
+payload  = protocol-id handshake-message-len handshake-message transport-message-len transport-message
 ```
 
 ### Protocol Payload Format
@@ -164,9 +158,8 @@ In particular, if `protocol-id` is
     -  `transport-message` contains the Noise transport message;
 - `30`: payload encapsulate a `ChaChaPoly` ciphertext `ct`.  
     - `handshake-message-len` is set to `0`;
-    - `transport-message` contains the concatenation of the encryption nonce (12 bytes) followed by the ciphertext `ct`;
-    - `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
-    - `transport-message-auth` contains the authentication data for `ct`.
+    - `transport-message` contains the concatenation of the encryption nonce (12 bytes) followed by the ciphertext `ct` and the authentication data for `ct` (16 bytes);
+    - `transport-message-len` is set accordingly to `transport-message` length;
 
 
 ### Public Keys Serialization
@@ -180,12 +173,9 @@ is equal to `1` if the public key is encrypted;
 `0` otherwise (1 byte);
 - `pk`: 
 if `flag = 0`, it contains an encoding of the X coordinate of the public key. 
-If `flag = 1`, it contains a symmetric encryption of an encoding of the X coordinate of the public key;
-- `pk-auth`: 
-if `flag = 0`, it is empty; 
-if `flag = 1`, it contains the authentication data for `pk`;
+If `flag = 1`, it contains a symmetric encryption of an encoding of the X coordinate of the public key, followed by encryption's authentication data;
 
-The corresponding serialization is obtained as `flag pk pk-auth`.
+The corresponding serialization is obtained as `flag pk`.
 
 As regards the underlying supported [cryptographic primitives](#Cryptographic-primitives):
 - `Curve25519` public keys X coordinates are encoded in little-endian as 32 bytes arrays;
@@ -242,8 +232,7 @@ Namely, if `protocol-id = 254, 255` then:
 - `handshake-message-len`: is set to `0`;
 - `handshake-message`: is empty;
 - `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field (AES-256-GCM or ECIES, depending on `protocol-id`);
-- `transport-message-len-len` and `transport-message-len` are set accordingly to `transport-message` length;
-- `transport-message-auth`: is set to `0`.
+- `transport-message-len` is set accordingly to `transport-message` length;
 
 When a `transport-message` corresponding to `protocol-id = 254, 255` is retrieved, 
 it SHOULD be decoded as the `data` field in [26/WAKU-PAYLOAD](/spec/26) specification.
