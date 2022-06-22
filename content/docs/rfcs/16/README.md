@@ -83,8 +83,6 @@ The following structured types are defined for use on the Debug API:
 
 #### WakuInfo
 
-`Version`
-
 ### `get_waku_v2_debug_v1_info`
 
 The `get_waku_v2_debug_v1_info` method retrieves information about a Waku v2 node
