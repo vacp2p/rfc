@@ -81,6 +81,8 @@ The following structured types are defined for use on the Debug API:
 | `listenAddresses` | `Array`[`String`] | mandatory | Listening addresses of the node |
 | `enrUri` | `String` | optional | ENR URI of the node |
 
+#### WakuInfo
+
 ### `get_waku_v2_debug_v1_info`
 
 The `get_waku_v2_debug_v1_info` method retrieves information about a Waku v2 node
@@ -90,7 +92,25 @@ The `get_waku_v2_debug_v1_info` method retrieves information about a Waku v2 nod
 none
 
 #### Response
+
 - [**`WakuInfo`**](#wakuinfo) - information about a Waku v2 node
+
+
+### `get_waku_v2_debug_v1_version`
+
+The `get_waku_v2_debug_v1_version` method retrieves the version of a Waku v2 node as a string.
+The version SHOULD follow [semantic versioning](https://semver.org/).
+In case the node's current build is based on a git commit between semantic versions,
+the retrieved version string MAY contain the git commit hash alone or in combination with the latest semantic version.
+
+#### Parameters
+
+none
+
+#### Response
+
+- **`string`** - represents the version of a Waku v2 node
+
 
 ## Relay API
 
