@@ -2,7 +2,7 @@
 slug: 38
 title: 38/LOGOS-CONSENSUS
 name: Initial Logos Consensus Description
-status: incomplete-pre-draft
+status: raw
 tags: logos
 editor: Mark Evenson <mark.evenson@status.im>
 contributors:
@@ -16,6 +16,12 @@ contributors:
 ### Attacks
 ## Glacier
 ### Attacks
+# Wire Formats Specification / Syntax
 # Next Steps
 # Colophon
+## Copyright
+
+Copyright and related rights waived via
+[CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
 # References
