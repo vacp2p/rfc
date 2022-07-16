@@ -1,9 +1,10 @@
 ---
-slug: 42
-title: 42/WAKU2-STANDARD-Template
-name: Waku v2 Stadard Template
-status: raw
-category: WAKU standard
+slug: XX
+title: XX/(WAKU2|LOGOS|CODEX|...)-TEMPLATE
+name: (Waku v2 | Logos | Codex) RFC Template
+status: (raw|draft|stable)
+category: (standard|informative|bcp)
+tags: an optional list of tags, not standard
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
@@ -17,12 +18,14 @@ This section serves as an introduction providing background information and a mo
 
 # Theory / Semantics
 
+A standard track RFC must feature this section.
 This section SHOULD explain in detail how the proposed protocol works.
 It may touch on the wire format where necessary for the explanation.
 This section MAY also specify endpoint behaviour when receiving specific messages, e.g. the behaviour of certain caches etc.
 
 # Wire Format Specification / Syntax
 
+A standard track RFC must feature this section.
 This section SHOULD not contain explanations of semantics and focus on concisely defining the wire format.
 Implementations MUST adhere to these exact formats to interoperate with other implementations.
 It is fine, if parts of the previous section that touch on the wire format are repeated.
@@ -33,16 +36,22 @@ An optional *implementation suggestions* section may provide suggestions on how 
 # Implementation Suggestions (optional)
 
 
-# Further Optional Sections
+# (Further Optional Sections)
 
 
 # Security/Privacy Considerations
+
+Each RFC MUST have a "Security/Privacy Considerations" section.
+If there are none, this section MUST explicitly state that fact.
+This section MAY contain additional relevant information, e.g. an explanation as to why there are no security consideration for the respective document.
 
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
+
+References MAY be subdivided into normative and informative.
 
 ## normative
 A list of references that MUST be read to fully understand and/or implement this protocol.
