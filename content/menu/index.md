@@ -4,11 +4,13 @@ bookMenuLevels: 1
 ---
 
 - Raw
-  - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
   - [20/TOY-ETH-PM]({{< relref "/docs/rfcs/20/README.md" >}})
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
   - [31/WAKU2-ENR]({{< relref "/docs/rfcs/31/README.md" >}})
+  - [32/RLN-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
+  - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
+  - [37/WAKU2-NOISE-SESSIONS]({{< relref "/docs/rfcs/37/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
@@ -19,6 +21,7 @@ bookMenuLevels: 1
   - [14/WAKU2-MESSAGE]({{< relref "/docs/rfcs/14/README.md" >}})
   - [15/WAKU2-BRIDGE]({{< relref "/docs/rfcs/15/README.md" >}})
   - [16/WAKU2-RPC]({{< relref "/docs/rfcs/16/README.md" >}})
+  - [17/WAKU2-RLNRELAY]({{< relref "/docs/rfcs/17/README.md" >}})
   - [18/WAKU2-SWAP]({{< relref "/docs/rfcs/18/README.md" >}})
   - [19/WAKU2-LIGHTPUSH]({{< relref "/docs/rfcs/19/README.md" >}})
   - [21/WAKU2-FTSTORE]({{< relref "/docs/rfcs/21/README.md" >}})
@@ -28,6 +31,8 @@ bookMenuLevels: 1
   - [27/WAKU2-PEERS]({{< relref "/docs/rfcs/27/README.md" >}})
   - [29/WAKU2-CONFIG]({{< relref "/docs/rfcs/29/README.md" >}})
   - [30/ADAPTIVE-NODES]({{< relref "/docs/rfcs/30/README.md" >}})
+  - [33/WAKU2-DISCV5]({{< relref "/docs/rfcs/33/README.md" >}})
+  - [36/WAKU2-BINDINGS-API]({{< relref "/docs/rfcs/36/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
