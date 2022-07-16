@@ -3,7 +3,7 @@ slug: XX
 title: XX/(WAKU2|LOGOS|CODEX|...)-TEMPLATE
 name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
-category: (standard|informative|bcp)
+category: (Standards Track|Informational|Best Current Practice)
 tags: an optional list of tags, not standard
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
