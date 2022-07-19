@@ -1,6 +1,6 @@
 ---
 slug: XX
-title: XX/(WAKU2|LOGOS|CODEX|...)-TEMPLATE
+title: XX/(WAKU2|LOGOS|CODEX|*)-TEMPLATE
 name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
 category: (Standards Track|Informational|Best Current Practice)
