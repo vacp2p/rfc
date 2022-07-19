@@ -9,6 +9,23 @@ editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
 
+# (Info, remove this section)
+
+This section contains meta info about writing RFCs.
+This section (including its subsections) MUST be removed.
+
+[COSS](https://rfc.vac.dev/spec/1/) explains the Vac RFC process.
+
+## Tags
+
+The `tags` metadata SHOULD contain a list of tags if applicable.
+
+Currently identified tags comprise
+
+* `waku/core-protocol` for Waku protocol definitions (e.g. store, relay, light push),
+* `waku/application` for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),
+
+
 # Abstract
 
 
