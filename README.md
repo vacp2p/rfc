@@ -22,6 +22,7 @@ Here's the project board used by core contributors and maintainers: https://gith
 
 ### Building locally
 
+Run `git submodule update --init` to install the Hugo "book" theme.
 Ensure you have the Hugo extended edition
 (https://gohugo.io/getting-started/installing/), then run `hugo server`.
 
