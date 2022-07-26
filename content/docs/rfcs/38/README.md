@@ -3,11 +3,54 @@ slug: 38
 title: 38/LOGOS-CONSENSUS
 name: Initial Logos Consensus Description
 status: raw
+category: informative
 tags: logos
 editor: Mark Evenson <mark.evenson@status.im>
 contributors:
 - Mark Evenson <mark.evenson@status.im>
 ---
+
+# Abstract
+
+The Logos organization seeks to research, develop, and promote the
+technological infrastructure necessary for the creation of "Network State":  
+
+We sketch the needs of Logos for the ability to provide a consensus
+mechanism for communities upon which consensual meaning can be arbitrated.
+
+# Background 
+
+## Commmon Interest Communities
+
+We posit our users as members of a Common Interest Community, akin to
+the affinity groups in network states.  
+
+Such a community has the following characteristics:
+
+We expect the number of participants in a given community to vary
+widely from the smallest of around 10 nodes to contemporary "blockchain
+limits" of around 10000 nodes.
+
+## Requirements 
+
+# Consensus
+
+We seek a layered approach to creating mechanisms for consensus: a
+low-level binary consensus protocol upon which we can create varying
+execution layers.
+
+## Probabilistic Binary Consensus
+
+The Snow* family of agorithims quickly finalize a binary consensus in
+a leaderless manner with O(n) message a
+
+## Execution Layer
+
+# Semantics
+
+
+
+
 # Problematic
 
       If the doors of perception were cleansed every thing would appear to
@@ -25,7 +68,7 @@ contributors:
 ## In Media Res
 
 We begin--as all worthwhile journeys begin--in the middle of things,
-desiring to communciate a whole without knowing the exact shape of the
+desiring to communicate a whole without knowing the exact shape of the
 future we have glimpsed in moments of revelation, which while
 untethered from currently existing reality, provides an intoxicating
 fever dream of a more desirable future.
@@ -34,6 +77,7 @@ And the dream is this: one can do blockchain without Nakamoto
 consensus.  One can have a leaderless consensus, upon which a
 totalizing view of transactions can be constructed.
 
+## 
 
 # Consensus
 # Interoperability 
