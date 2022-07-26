@@ -120,6 +120,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 * [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/)
-* [multiaddress](https://docs.libp2p.io/concepts/addressing/).
-* [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140).
-* [Waku relay anonymity](https://vac.dev/wakuv2-relay-anon).
+* [multiaddress](https://docs.libp2p.io/concepts/addressing/)
+* [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140)
+* [Waku relay anonymity](https://vac.dev/wakuv2-relay-anon)
