@@ -11,7 +11,7 @@ contributors:
 
 # Abstract
 
-This document specifies a simple request-responProtocol identifierse peer exchange protocol.
+This document specifies a simple request-response peer exchange protocol.
 Responders send information about a requested number of peers.
 The main purpose of this protocol is providing resource restricted devices with peers.
 
