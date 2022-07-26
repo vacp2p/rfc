@@ -11,9 +11,11 @@ contributors:
 
 # Abstract
 
-This document specifies a simple request-response peer exchange protocol.
+This document specifies a simple request-responProtocol identifierse peer exchange protocol.
 Responders send information about a requested number of peers.
 The main purpose of this protocol is providing resource restricted devices with peers.
+
+**Protocol identifier**: /vac/waku/peer-exchange/2.0.0-alpha1
 
 # Background and Motivation
 
