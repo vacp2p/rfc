@@ -39,15 +39,22 @@ The responder replies with a list of [multiaddresses](https://docs.libp2p.io/con
 
 In order to protect its anonymity, the responder MUST NOT provide peers from its actively used peer list as this opens pathways to *Neighbourhood Surveillance* attacks, as described in the
 [Security/Privacy Considerations Section](#securityprivacy-considerations).
-The responder SHOULD retrieve a new random set of peers via [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
+The responder SHOULD provide a set of peers that has been retrieved using ambient peer discovery methods supporting random sampling, e.g. [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
 This both protects the responder's anonymity as well as helps distributing load.
+
+To allow for fast responses, responders SHOULD retrieve peers unsolicited (before receiving a query)
+and maintain a queue of peers for the purpose of providing them in peer-exchange responses.
+To get the best anonymity properties with respect to response peer sets, responders SHOULD use each of these peers only once.
+
+To save bandwidth, and as a trade off to anonymity,
+responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
+The size of the cache SHOULD be 10 * avg(numPeers) ~= 60.
 
 Requesters, in the context of the specified peer exchange protocol, SHOULD be resource restricted devices.
 While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks
 
 * reducing [anonymity](#securityprivacy-considerations)
 * causing load on responder nodes
-
 
 # Wire Format Specification
 
@@ -107,7 +114,9 @@ As a weak mitigation the requester MAY ask several peers and select a subset of 
 Responders that answer with active mesh peers are more vulnerable to a *neighbourhood surveillance* attack.
 Responding with the set of active mesh peers allows a malicious requester to get into the required position more easily.
 It takes away the first hurdle of the *neighbourhood surveillance* attack: The attacker knows which peers to try to connect to.
-This increased vulnerability can be avoided by only responding with random sampled sets of peers, e.g. by requesting a random peer set via [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
+This increased vulnerability can be avoided by only responding with randomly sampled sets of peers, e.g. by requesting a random peer set via [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
+(As stated in the in the [Theory and Protocol Semantics Section](#theory-and-protocol-semantics),
+these peer sets SHOULD be retrieved unsolicitedly before receiving requests to achieve faster response times.)
 
 Responders are also susceptible to amplification DoS attacks.
 Requesters send a simple message request which causes responders to engage in ambient peer discovery to retrieve a new random peer set.
