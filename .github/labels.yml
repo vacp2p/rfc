@@ -96,8 +96,8 @@
 - name: track:waku-specs
   description: Waku specs track (RAD)
   color: 1d76db
-- name: track:logos-consensus-specs
-  description: Logos Consensus specs track (RAD)
+- name: track:logos-specs
+  description: Logos specs track (RAD)
   color: CA105D
 - name: track:codex-specs
   description: Codex specs track (RAD)
