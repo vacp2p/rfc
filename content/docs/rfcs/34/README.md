@@ -33,8 +33,8 @@ This protocol SHOULD only be used if [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/
 
 The peer exchange protocol specified in this document is a simple request-response protocol.
 As Figure 1 illustrates, the requesting node sends a request to a peer, which acts as the responder.
-The responder replies with a list of [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
-The respective [multiaddresses](https://docs.libp2p.io/concepts/addressing/) used to connect to the respective peers can be extracted from the ENRs.
+The responder replies with a list of ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
+The [multiaddresses](https://docs.libp2p.io/concepts/addressing/) used to connect to the respective peers can be extracted from the ENRs.
 
 ![Figure 1: The responder provides a list of ENRs to the requester. These ENRs contain the information necessary for connecting to the respective peers.](../../../../static/rfcs/34/protocol.svg)
 
@@ -51,7 +51,7 @@ To save bandwidth, and as a trade off to anonymity,
 responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
 The size of the cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
 The responder SHOULD periodically replace the oldest peers in the cache.
-This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implication-suggestions).
+This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implementation-suggestions).
 
 Requesters, in the context of the specified peer exchange protocol, SHOULD be resource restricted devices.
 While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks
@@ -65,7 +65,7 @@ While any node could technically act as a requester, using the peer exchange pro
 syntax = "proto3";
 
 message PeerInfo {
-  repeated bytes ENRs = 1;
+bytes ENR = 1;
 }
 
 message PeerExchangeQuery {
@@ -83,12 +83,11 @@ message PeerExchangeRPC {
 
 ```
 
-The `ENRs` contains a list of ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
+The `ENR` field contains a Waku ENR as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
 
-Requesters send `PeerExchangeQuery` to a peer.
+Requesters send a `PeerExchangeQuery` to a peer.
 Responders SHOULD include a maximum of `numPeers` `PeerInfo` instances into a response.
-Responders send a `PeerExchangeResponse` to requesters containing a list of `PeerInfo` instances, which in turn hold a list of multiaddresses of the provided peers.
-These multiaddresses allow the requester to connect to the respective peers.
+Responders send a `PeerExchangeResponse` to requesters containing a list of `PeerInfo` instances, which in turn hold an ENR.
 
 # Implementation Suggestions
 
