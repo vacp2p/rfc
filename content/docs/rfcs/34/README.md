@@ -48,7 +48,8 @@ To get the best anonymity properties with respect to response peer sets, respond
 
 To save bandwidth, and as a trade off to anonymity,
 responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
-The size of the cache SHOULD be 10 * avg(numPeers) ~= 60.
+The size of the cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
+This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implication-suggestions).
 
 Requesters, in the context of the specified peer exchange protocol, SHOULD be resource restricted devices.
 While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks
@@ -87,7 +88,26 @@ These multiaddresses allow the requester to connect to the respective peers.
 
 # Implementation Suggestions
 
+## Discovery Interface
+
 Implementations can implement the [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140).
+
+## Exchange Peer Cache Size
+
+The size of the exchange peer cache discussed in [Theory and Protocol Semantics](#theory-and-protocol-semantics)
+depends on the average number of requested peers, which is expected to be the outbound degree of the underlying
+[libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md) mesh network.
+The recommended value for this outbound degree is 6 (see parameter `D` in [29/WAKU2-CONFIG](https://rfc.vac.dev/spec/29/)).
+It is recommended for the cache to hold at least 10 times as many peers (60).
+The responder should also periodically replace the oldest peers in the cache.
+
+The recommended cache size also depends on the number of requesters a responder is expected to serve within a *refresh cycle*.
+A refresh cycle is a time interval in which all peers in the cache are expected to be replaced.
+If the number of requests expected per refresh cycle exceeds 600 (10 times the above recommended 60),
+the cache size should be increased to at least a tenth of that number.
+
+We will investigate peer exchange cache sizes and refresh strategies,
+and provide suggestions based on that in future versions (draft, stable) of this document.
 
 # Security/Privacy/Anonymity Considerations
 
@@ -131,4 +151,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/)
 * [multiaddress](https://docs.libp2p.io/concepts/addressing/)
 * [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140)
+* [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
+* [29/WAKU2-CONFIG](https://rfc.vac.dev/spec/29/)
 * [Waku relay anonymity](https://vac.dev/wakuv2-relay-anon)
