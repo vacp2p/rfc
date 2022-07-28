@@ -65,7 +65,7 @@ While any node could technically act as a requester, using the peer exchange pro
 syntax = "proto3";
 
 message PeerInfo {
-bytes ENR = 1;
+  bytes ENR = 1;
 }
 
 message PeerExchangeQuery {
