@@ -97,14 +97,14 @@ Implementations can implement the [libp2p discovery interface](https://github.co
 
 ## Exchange Peer Cache Size
 
-The size of the exchange peer cache discussed in [Theory and Protocol Semantics](#theory-and-protocol-semantics)
+The size of the (optional) exchange peer cache discussed in [Theory and Protocol Semantics](#theory-and-protocol-semantics)
 depends on the average number of requested peers, which is expected to be the outbound degree of the underlying
 [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md) mesh network.
 The recommended value for this outbound degree is 6 (see parameter `D` in [29/WAKU2-CONFIG](https://rfc.vac.dev/spec/29/)).
 It is recommended for the cache to hold at least 10 times as many peers (60).
 
 The recommended cache size also depends on the number of requesters a responder is expected to serve within a *refresh cycle*.
-A refresh cycle is a time interval in which all peers in the cache are expected to be replaced.
+A refresh cycle is the time interval in which all peers in the cache are expected to be replaced.
 If the number of requests expected per refresh cycle exceeds 600 (10 times the above recommended 60),
 it is recommended to increase the cache size to at least a tenth of that number.
 
@@ -137,21 +137,23 @@ Responders that answer with active mesh peers are more vulnerable to a *neighbou
 Responding with the set of active mesh peers allows a malicious requester to get into the required position more easily.
 It takes away the first hurdle of the *neighbourhood surveillance* attack: The attacker knows which peers to try to connect to.
 This increased vulnerability can be avoided by only responding with randomly sampled sets of peers, e.g. by requesting a random peer set via [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
-(As stated in the in the [Theory and Protocol Semantics Section](#theory-and-protocol-semantics),
+(As stated in the [Theory and Protocol Semantics Section](#theory-and-protocol-semantics),
 these peer sets SHOULD be retrieved unsolicitedly before receiving requests to achieve faster response times.)
 
 Responders are also susceptible to amplification DoS attacks.
 Requesters send a simple message request which causes responders to engage in ambient peer discovery to retrieve a new random peer set.
 As a mitigation, responders MAY feature a `seen cache` for requests and only answer once per time interval.
+The exchange-peer cache discussed in [Theory and Protocol Semantics Section](#theory-and-protocol-semantics) also provides mitigation.
+Still, fequent queries can tigger the refresh cycle more often. The `seen cache` MAY be used in conjunction to provide additional mitigation.
 
 ## Further Considerations
 
 The response field contains ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
-While ENRs contain a signatures, the do not violate the [Waku relay no-sign policy](https://rfc.vac.dev/spec/11/#signature-policy)),
+While ENRs contain a signatures, they do not violate the [Waku relay no-sign policy](https://rfc.vac.dev/spec/11/#signature-policy)),
 because these ENRs are
-neither linkable to Relay messages,
+neither linkable to relay messages,
 nor to senders of specific messages,
-not to topic subscriptions.
+nor to topic subscriptions.
 ENRs are limited to the discovery domain and do not leak into the relay domain.
 
 # Copyright
