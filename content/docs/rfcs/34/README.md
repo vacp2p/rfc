@@ -33,9 +33,10 @@ This protocol SHOULD only be used if [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/
 
 The peer exchange protocol specified in this document is a simple request-response protocol.
 As Figure 1 illustrates, the requesting node sends a request to a peer, which acts as the responder.
-The responder replies with a list of [multiaddresses](https://docs.libp2p.io/concepts/addressing/).
+The responder replies with a list of [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
+The respective [multiaddresses](https://docs.libp2p.io/concepts/addressing/) used to connect to the respective peers can be extracted from the ENRs.
 
-![Figure 1: The responder provides a list of multiaddresses of peers to the requester.](../../../../static/rfcs/34/protocol.svg)
+![Figure 1: The responder provides a list of ENRs to the requester. These ENRs contain the information necessary for connecting to the respective peers.](../../../../static/rfcs/34/protocol.svg)
 
 In order to protect its anonymity, the responder MUST NOT provide peers from its actively used peer list as this opens pathways to *Neighbourhood Surveillance* attacks, as described in the
 [Security/Privacy Considerations Section](#securityprivacy-considerations).
@@ -64,7 +65,7 @@ While any node could technically act as a requester, using the peer exchange pro
 syntax = "proto3";
 
 message PeerInfo {
-  repeated bytes multiaddrs = 1;
+  repeated bytes ENRs = 1;
 }
 
 message PeerExchangeQuery {
@@ -81,6 +82,8 @@ message PeerExchangeRPC {
 }
 
 ```
+
+The `ENRs` contains a list of ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
 
 Requesters send `PeerExchangeQuery` to a peer.
 Responders SHOULD include a maximum of `numPeers` `PeerInfo` instances into a response.
@@ -142,6 +145,16 @@ Responders are also susceptible to amplification DoS attacks.
 Requesters send a simple message request which causes responders to engage in ambient peer discovery to retrieve a new random peer set.
 As a mitigation, responders MAY feature a `seen cache` for requests and only answer once per time interval.
 
+## Further Considerations
+
+The response field contains ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
+While ENRs contain a signatures, the do not violate the [Waku relay no-sign policy](https://rfc.vac.dev/spec/11/#signature-policy)),
+because these ENRs are
+neither linkable to Relay messages,
+nor to senders of specific messages,
+not to topic subscriptions.
+ENRs are limited to the discovery domain and do not leak into the relay domain.
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
@@ -149,8 +162,10 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 * [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/)
+* [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/)
 * [multiaddress](https://docs.libp2p.io/concepts/addressing/)
 * [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140)
 * [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md)
 * [29/WAKU2-CONFIG](https://rfc.vac.dev/spec/29/)
 * [Waku relay anonymity](https://vac.dev/wakuv2-relay-anon)
+
