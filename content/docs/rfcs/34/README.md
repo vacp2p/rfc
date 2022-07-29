@@ -149,12 +149,11 @@ Still, frequent queries can tigger the refresh cycle more often. The `seen cache
 ## Further Considerations
 
 The response field contains ENRs as specified in [31/WAKU2-ENR](/spec/31/).
-While ENRs contain a signatures, they do not violate the [Waku relay no-sign policy](/spec/11/#signature-policy)),
-because these ENRs are
-neither linkable to relay messages,
-nor to senders of specific messages,
-nor to topic subscriptions.
-ENRs are limited to the discovery domain and do not leak into the relay domain.
+While ENRs contain signatures, they do not violate the [Waku relay no-sign policy](/spec/11/#signature-policy)),
+because they are part of the discovery domain and are not propagated in the relay domain.
+However, there might still be some form of leakage:
+ENRs could be used to track peers and facilitate linking attacks.
+We will investigate this further in our Waku anonymity analysis.
 
 # Copyright
 
