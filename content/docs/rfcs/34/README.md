@@ -22,7 +22,7 @@ The main purpose of this protocol is providing resource restricted devices with 
 It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
 The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.
 Network parameters necessary to connect to this service node COULD be learned from a static bootstrapping method or using [EIP-1459: Node Discovery via DNS](https://eips.ethereum.org/EIPS/eip-1459).
-The advantage of using Waku peer exchange to discover new peers over simply adding static bootstrap peers to the peer list is a more even load distribution.
+The advantage of using Waku peer exchange to discover new peers over using a static peer list or DNS discovery is a more even load distribution.
 If a lot of (resource restricted) nodes would use static bootstrap nodes as relay or store nodes, the load on these would be very high.
 Heavily used static nodes also add a centralized element. Downtime of such a node might significantly impact the network.
 
