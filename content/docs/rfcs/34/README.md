@@ -44,7 +44,7 @@ The responder SHOULD provide a set of peers that has been retrieved using ambien
 This both protects the responder's anonymity as well as helps distributing load.
 
 To allow for fast responses, responders SHOULD retrieve peers unsolicited (before receiving a query)
-and maintain a queue of peers for the purpose of providing them in peer-exchange responses.
+and maintain a queue of peers for the purpose of providing them in peer exchange responses.
 To get the best anonymity properties with respect to response peer sets, responders SHOULD use each of these peers only once.
 
 To save bandwidth, and as a trade off to anonymity,
