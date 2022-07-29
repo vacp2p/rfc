@@ -36,7 +36,7 @@ As Figure 1 illustrates, the requesting node sends a request to a peer, which ac
 The responder replies with a list of ENRs as specified in [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
 The [multiaddresses](https://docs.libp2p.io/concepts/addressing/) used to connect to the respective peers can be extracted from the ENRs.
 
-![Figure 1: The responder provides a list of ENRs to the requester. These ENRs contain the information necessary for connecting to the respective peers.](../../../../static/rfcs/34/protocol.svg)
+![Figure 1: The responder provides a list of ENRs to the requester. These ENRs contain the information necessary for connecting to the respective peers.](/rfcs/34/protocol.svg)
 
 In order to protect its anonymity, the responder MUST NOT provide peers from its actively used peer list as this opens pathways to *Neighbourhood Surveillance* attacks, as described in the
 [Security/Privacy Considerations Section](#securityprivacy-considerations).
