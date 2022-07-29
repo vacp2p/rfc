@@ -188,7 +188,7 @@ and may suspend or ban individuals for behaviour they consider inappropriate.
 
 ### Meta Information
 
-Specifications MUST contain following metadata.
+Specifications MUST contain the following metadata.
 It is RECOMMENDED that specification metadata is specified as a YAML header (where possible).
 This will enable programmatic access to specification metadata.
 
