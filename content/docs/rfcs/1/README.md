@@ -184,7 +184,6 @@ There is no editorial control process except that practised by the editor of a n
 The administrators of a domain (moderators) may choose to interfere in editorial conflicts,
 and may suspend or ban individuals for behaviour they consider inappropriate.
 
-
 ## Specification Structure
 
 ### Meta Information
