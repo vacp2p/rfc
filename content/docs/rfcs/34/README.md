@@ -19,7 +19,7 @@ The main purpose of this protocol is providing resource restricted devices with 
 
 # Background and Motivation
 
-Resource restricted devices may not feasibly be able to take part in distributed random sampling ambient peer discovery protocols such as [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
+It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/).
 The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a (stronger) peer.
 Network parameters necessary to connect to this stronger peer can, for instance, be learned from a static bootstrapping method.
 The advantage of using Waku peer exchange to discover new peers over simply adding static bootstrap peers to the peer list is a more even load distribution.
