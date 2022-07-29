@@ -144,7 +144,7 @@ Responders are also susceptible to amplification DoS attacks.
 Requesters send a simple message request which causes responders to engage in ambient peer discovery to retrieve a new random peer set.
 As a mitigation, responders MAY feature a `seen cache` for requests and only answer once per time interval.
 The exchange-peer cache discussed in [Theory and Protocol Semantics Section](#theory-and-protocol-semantics) also provides mitigation.
-Still, fequent queries can tigger the refresh cycle more often. The `seen cache` MAY be used in conjunction to provide additional mitigation.
+Still, frequent queries can tigger the refresh cycle more often. The `seen cache` MAY be used in conjunction to provide additional mitigation.
 
 ## Further Considerations
 
