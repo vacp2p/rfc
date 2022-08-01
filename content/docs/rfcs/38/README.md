@@ -14,6 +14,107 @@ contributors:
 
 # Abstract
 
+We sketch a two-layer model of distributed consensus, whereby a base
+layer provides a binary decision mechanism which is used to vote on
+the construction of a distributed, directed, acyclic graph
+corresponding to an unfolding, shared computation.  We outline a
+taxonomy of Byzantine adversaries that seek to thwart this
+computation's "correctness".  We then present and  define the Glacier
+algorithm which provides a Byzantine and fault tolerant implementation
+of the base binary decision mechanism.  
+
+# Consensus Model
+
+# Adversaries
+
+[[ Maybe do this after Consensus ]]
+
+# Glacier Consensus
+
+Given a set of $n$ distributed computational nodes, a gossip-based
+protocol is presumed to which which allows members to discover, join,
+and leave a possibly maximally connected graph.  Joining this graph
+allows each node to view a possibly incomplete node membership list of
+all other nodes.  This view may changes as the protocol advances.
+This view may optionally have a weighting assigned for each node
+consisting of a real number on the interval [0, 1].
+
+0.  A proposal is formulated to which consensus of truth or falsity is
+    desired.  Each node that participates starts the protocol with an
+    opinion on the proposal, represented in the sequel as **YES**, **NO**, and
+    **UNDECIDED**.  
+    
+The algorithim proceeds in rounds for each node.    
+
+1. Setup
+
+The node initializes the following variables 
+
+    k <- 20             ;; nodes to query 
+    total_votes <- 0 
+    look_ahead <- 20    ;; look ahead parameter
+    $alpha_1$ <- 0.8    ;; first order confidence smoothing parameter
+    $alpha_2$ <- 0.4    ;; second order confidence smoothing parameter
+    total_votes <- 0
+    total_positive <- 0
+
+2.  Query 
+    A node selects $k$ nodes randomly from the locally known
+    complete set of peers in the network.  This query can be weighted,
+    so the probability of selecting nodes is proportional to their
+    weight.  $$ P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j} $$ where $w_i$
+    is the weight of the {i}th peer.
+
+    The node then sends a query to each of this $k$ nodes containing
+    the nodes own current opinion on the proposal ("YES", "NO", or
+    "UNDECIDED").  Each node replies with their current opinion on the
+    proposal.
+
+The node now runs the following two inputs 
+
+    new_votes <- vote replies received in round
+    positive_votes <- YES votes received 
+    
+3. Computation    
+
+The node runs these parameters through the following algorithm:
+
+    total_votes += new_votes
+    total_positive += positive_votes
+    confidence <- total_votes / (total_votes + look_ahead) 
+    evidence_accumulated <- total_positive / total_votes
+    evidence_round <- positive_votes / new_votes
+    evidence <- evidence_round * ( 1 - confidence ) + evidence_accumulated ( confidence )
+    alpha <- alpha_1 * ( 1 - confidence ) + alpha_2 * confidence 
+    
+4. Opionion
+
+The node updates its local opinion on the consensus proposal:
+
+If $evidence$ is greater $alpha$ than the node adopts the opinion YES
+on the proposal.
+
+If $evidence$ is less than $1 - \alpha$ the node adopts the opinion NO
+on the proposal.
+
+4.  Decision 
+
+If $confidence$ exceeds a threshold derived from the network size and
+directly related to the total votes received, the node marks the
+decision as final, and always returns this opinion is response to
+further queries from other nodes on the network.
+    
+Otherwise, a new query is initiated by going to step 2.
+
+
+# Analysis
+
+
+
+
+
+# Abstract
+
 We sketch the needs of Logos for the ability to provide a consensus
 mechanism for virtualized speech-act communities upon which consensual
 meaning can be arbitrated.  We sketch a simplistic architecture by
