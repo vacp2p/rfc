@@ -63,7 +63,7 @@ This indicates that the payload SHOULD be either unencrypted or that encryption 
 
 ### Version 1
 
-This indicates that payloads MUST be encrypted using [7/WAKU-DATA envelope data format spec](/spec/7).
+This indicates that payloads MUST be encrypted using [WAKU2-PAYLOAD](/spec/26).
 
 This provides for asymmetric and symmetric encryption.
 Key agreement is out of band.
