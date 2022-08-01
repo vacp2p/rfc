@@ -93,7 +93,7 @@ Responders send a `PeerExchangeResponse` to requesters containing a list of `Pee
 
 ## Discovery Interface
 
-Implementations can implement the [libp2p discovery interface](https://github.com/status-im/nim-libp2p/issues/140).
+Implementations can implement the libp2p discovery interface (e.g. [nim](https://github.com/status-im/nim-libp2p/issues/140), [javascript](https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/interface-peer-discovery)).
 
 ## Exchange Peer Cache Size
 
