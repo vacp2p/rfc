@@ -54,7 +54,7 @@ The responder SHOULD periodically replace the oldest peers in the cache.
 This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implementation-suggestions).
 
 Requesters, in the context of the specified peer exchange protocol, SHOULD be resource restricted devices.
-While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks
+While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks:
 
 * reducing [anonymity](#securityprivacy-considerations)
 * causing load on responder nodes
