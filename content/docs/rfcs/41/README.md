@@ -41,20 +41,27 @@ As explained in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/), all peers who
 ### Methods
 
 * register: This function registers the `pubkey` to the list of members.
-For successful registration, ETH equal to the amount specified in `membershipDeposit` MUST be paid while calling this function. This function MUST fire the `MemberRegistered` event.
+For successful registration, ETH equal to the amount specified in `membershipDeposit` MUST be paid while calling this function.
+This function MUST fire the `MemberRegistered` event.
     * `function register(uint256 pubkey) external payable`
 
 
 
-* registerBatch: This function registers multiple `pubkeys` to the list of members. For succesful registration, ETH equal to the amount specified in `membershipDeposit * pubkeys.length` MUST be paid while calling this function. This function MUST fire the `MemberRegistered` event for each registered member.
+* registerBatch: This function registers multiple `pubkeys` to the list of members.
+For succesful registration, ETH equal to the amount specified in `membershipDeposit * pubkeys.length` MUST be paid while calling this function.
+This function MUST fire the `MemberRegistered` event for each registered member.
     * `function registerBatch(uint256[] calldata pubkeys) external payable`
 
 
-* withdraw: This function accepts the `secret` of the public key at index`_pubkeyIndex` to withdraw the ETH equal to the`membershipDeposit` to the `receiver` address. This function MUST remove the associated member from the list of members. This function MUST fire the `MemberWithdrawn` event.
+* withdraw: This function accepts the `secret` of the public key at index`_pubkeyIndex` to withdraw the ETH equal to the`membershipDeposit` to the `receiver` address.
+This function MUST remove the associated member from the list of members.
+This function MUST fire the `MemberWithdrawn` event.
     * `function withdraw(uint256 secret, uint256 _pubkeyIndex, address payable receiver) external`
 
 
-* withdrawBatch: This function accepts multiple `secrets` of the public keys at the indices `pubkeyIndexes` to withdraw the ETH equal to the `membershipDeposit * secrets.length` to the `receiver` address. This function MUST remove the associated members from the list of members. This function MUST fire the `MemberWithdrawn` event for each member slashed from the group.
+* withdrawBatch: This function accepts multiple `secrets` of the public keys at the indices `pubkeyIndexes` to withdraw the ETH equal to the `membershipDeposit * secrets.length` to the `receiver` address.
+This function MUST remove the associated members from the list of members.
+This function MUST fire the `MemberWithdrawn` event for each member slashed from the group.
     * `function withdrawBatch(uint256[] calldata secrets, uint256[] calldata pubkeyIndexes, address payable[] calldata receivers) external`
 
 
