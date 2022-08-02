@@ -40,7 +40,8 @@ As explained in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/), all peers who
 
 ### Methods
 
-* register: This function registers the `pubkey` to the list of members. For succesful registration, ETH equal to the amount specified in `membershipDeposit` MUST be paid while calling this function. This function MUST fire the `MemberRegistered` event.
+* register: This function registers the `pubkey` to the list of members.
+For successful registration, ETH equal to the amount specified in `membershipDeposit` MUST be paid while calling this function. This function MUST fire the `MemberRegistered` event.
     * `function register(uint256 pubkey) external payable`
 
 
