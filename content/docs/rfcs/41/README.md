@@ -1,6 +1,6 @@
 ---
-slug: 38
-title: 38/WAKU2-RLN-CONTRACT
+slug: 41
+title: 41/WAKU2-RLN-CONTRACT
 name: Rate Limiting Nullifier Contract
 status: raw
 category: RLN
