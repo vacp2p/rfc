@@ -22,7 +22,8 @@ The following standard allows for the implementation of a standard API for Rate 
 
 # Background / Rationale / Motivation
 
-This contract serves as the basis for the implementation of RLN membership. New members can be registered by depositing a stake of valuable funds. They can also be slashed if they misbehave like spamming in a peer to peer pseudo-anonymous messaging network.
+This contract serves as the basis for the implementation of RLN membership. New members can be registered by depositing a stake of valuable funds.
+They can also be slashed if they misbehave like spamming in a peer to peer pseudo-anonymous messaging network.
 
 # Theory / Semantics
 
