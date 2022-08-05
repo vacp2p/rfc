@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-05 Fri 23:23Z>
+revised: <2022-08-05 Fri 23:49Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -170,7 +170,7 @@ number of uniform randomly queries nodes is adjusted to
        node == UNDECIDED
     THEN 
        k   ;; number of nodes to uniformly randomly query in next round
-         <-- $\sup{ k * k_multiplier, max_k_multiplier}$
+         <-- $k * \sup{ k_multiplier, max_k_multiplier}$
 
 ###  Decision 
 
