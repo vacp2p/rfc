@@ -4,7 +4,7 @@ title: 38/LOGOS-CONSENSUS
 name: Logos Glacier Consensus Protocol
 status: raw
 category: informative
-tags: logos
+tags: logos/consensus,rust-implementation
 editor: Mark Evenson <mark.evenson@status.im>
 contributors:
     - Álvaro Castro-Castilla 
@@ -13,33 +13,35 @@ contributors:
 
 # Abstract
 
-We sketch a two-layer model of distributed consensus, whereby a base
-layer provides a binary decision mechanism which is used to vote on
-the construction of a distributed, directed, acyclic graph.  This
-graph corresponds to an unfolding, shared computation, otherwise known
-as a state machine replication.  We present the Glacier algorithm
-which provides a Byzantine fault tolerant implementation of the base
-binary decision mechanism.  We outline a taxonomy of Byzantine
-adversaries that seek to thwart this computation's "correctness".
+We propose to replace Nakomoto consensus mechanisms with ones which
+afford secure leaderless, decentralized execution.  We sketch a
+two-layer model for the practical execution of such a distributed
+consensus, in which an underlying binary decision mechanism is
+utilized to used to vote on the construction of a distributed,
+directed, acyclic graph.  We present the Glacier algorithm which
+provides a Byzantine fault tolerant implementation of the base binary
+decision mechanism.  We outline a taxonomy of Byzantine adversaries
+that seek to thwart this computation's "correctness".
 
 # Consensus Model
 
-In an emerging vision of a leaderless, decentralized execution
-mechanism, a probabilistic replaces Nakomoto consensus.  This
-execution mechanism consists of transitions in a state machine
-representation, each one a potential transaction.  These transactions
-are gossiped to active (i.e. online) participants.  The participants
-vote on whether a given transaction should be counted as valid which
-reaches an eventual consistent state in which the transactions are
-said to have been finalied.
-
+Given an underlying binary consensus mechanism, one may quickly vote
+on the distributed, directed acyclic ledger graph of transactions.  If
+the underlying binary consensus mechanism is Byzantine fault tolerant,
+then one essentially gets the computation of the trust of the graph of
+transactions "for free".  The finalization of shared confidence in the
+values in a given sequence along this graph is isomorphic to the trace
+of a shared, trusted state machine evolution.  Such a state machine
+may perform an arbitrary computation from the class of "smart
+contract" artifacts by implementing a
+suitable model of transaction.  
 
 # Glacier 
 
 The Glacier consensus algorithm computes a yes/no decision via a set
 of distributed computational nodes.  Glacier is a leaderless
-probablistic binary consensus algorithm with fast finality that
-provides good reliablity for network and Byzantine fault tolerance.
+probabilistic binary consensus algorithm with fast finality that
+provides good reliability for network and Byzantine fault tolerance.
 
 ## Algorithm 
 
@@ -58,7 +60,7 @@ desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as **YES**, **NO**,
 and **UNDECIDED**.
     
-The algorithim proceeds in rounds for each node.
+The algorithm proceeds in rounds for each node.
 
 ### Setup
 
@@ -84,14 +86,14 @@ The node initializes the following constants variables
     ;; total number of votes
     total_votes <-- 0    
 
-    ;; total number of positive vodes
+    ;; total number of positive nodes
     total_positive <-- 0
     
-    ;; threshhold multiple 
+    ;; threshold multiple 
     k_multiplier <-- 2
 
-    ;; maximal threshhold multiplier
-    max_k_mulitiplier <-- 2
+    ;; maximal threshold multiplier
+    max_k_multiplier <-- 2
 
 ###  Query 
 
@@ -176,7 +178,7 @@ This weighted value would be used to reflect decisions mediating
 ### Problems 
 
 If the view of other nodes is incomplete, then the sum of the optional
-weighting won't be a probablity distribution normalized to 1.
+weighting won't be a probability distribution normalized to 1.
 
 The current algorithm doesn't describe how the initial opinions are formed.
 
@@ -305,18 +307,86 @@ $$
 
 Note: elaborate on $c_{target}$ selection.
 
+# Interoperability
+
+No current wire protocol.  Nodes are advised to use WAKU messages to
+include their own metadata in serializations as needed.  
+
+## TODO Semantics
+
+    { -1, +1, 0 }
+    YES, NO, UNDECIDED 
+
+# Implementation status
+
+logos.co is prepared to share a Rust implementation which contains an
+efficiently multi-threaded implementation utilitized by both a
+simulator and a multi-node constructions.  
+
+# Sovereignty Considerations
+
+## Privacy
+
+## Security
+
+Adversarial models exist for which the values for current parameters
+of Glacier have been tuned.  Exposition of the justification of this
+tuning need to be completed.
+
+### Local Strategies
+
+#### Random Adversary
+
+A random adversary optionally chooses to respond to all queries with a
+random decision.
+
+#### Naive Opposite Adversary
+
+An naive oppositional adversary responds with the opposite vote on an
+opinion.
+
+### Omniscient Coordinated Behavior Adversaries
+
+An omniscient adversary controls $f$ of $N$ nodes and may inspect,
+delay, and drop arbitrary messages in the gossip layer, and utilizes
+this to corrupt consensus.
+
+
+# Future Directions
+
+Although we have proposed a normative description of the
+implementation of the underlying binary consensus algorithm (Glacier),
+we believe we have analyzed its adversarial performance in a manner
+that is ammendable to replacement by another member of the [snow*][]
+family.  
+
+We have presumed the existence of a general family of algorithms that
+can be counted on to vote on nodes in the DAG in a fair manner.
+Avalanche provides an example of the construction of votes on UTXO
+transactions.  One can express all state machine, i.e. account-based
+models as checkpoints anchored in UTXO trust, so we believe that this
+presupposition has some justification.
+
+# Informative References
+
+#. [On BFT Consensus Evolution: From Monolithic to DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
+#. [snow-ipfs](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV) 
+#. [snow*](https://https://doi.org/10.48550/arXiv.1906.08936) Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.
+
+# Dumpster
+ 
+ , a .  This execution mechanism
+ consists of transitions in a state machine representation, each one a
+ potential transaction.  These transactions are gossiped to active
+ (i.e. online) participants.  The participants vote on whether a given
+ transaction should be counted as valid which reaches an eventual
+ consistent state in which the transactions are said to have been
+ finalized.
+
+
 
 
 # Colophon
-## In Media Res
-
-Although we have provided the interoperable semantics of an
-implementation,  the actual agorithim utilized by Logos may be
-different as we haven't fully worked out what is possible given a set
-of requirements.  As such this RFC is expected to be superseded by a more rigorous
-structure.  It serves to document our current progress.
-
-
 ## Copyright
 
 Copyright and related rights waived via
@@ -325,9 +395,3 @@ Copyright and related rights waived via
 ## Format
 
 This document is currently utilizing Pandoc 2.18's notion of Markdown.
-
-## References
-
-#. [On BFT Consensus Evolution: From Monolithic to DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
-
-
