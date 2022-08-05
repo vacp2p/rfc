@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-05 Fri 23:11Z>
+revised: <2022-08-05 Fri 23:23Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -75,39 +75,44 @@ The node initializes the following constants variables
     ;;; The following values are constants chosen with justification from experiments
     ;;; performed with the adversarial models
     
+    ;; FIXME: give an empiral confidence threshold 
+    confidence_threshold
+     <-- T  ;; BOGUS:  this should be a function of the network size
+            ;; and the current confidence in the observer majority
+    
     ;; constant look ahead parameter, 
     look_ahead 
       <-- 20
     
     ;; first order confidence smoothing parameter
     $alpha_1$ 
-      <-- 0.8
+      <-- 0.8  ;; empirically derived from consensus simulation
     
     ;; second order confidence smoothing parameter
-    $alpha_2$
-      <-- 0.4
+    $alpha_2$ 
+      <-- 0.4  ;; empirically derived from consensus simulation
     
     ;;; The following variables are initialized
     
     ;; number of nodes to uniformly randomly query  
     k 
-      <-- 20    
+      <-- 7
 
-    ;; total number of votes
-    total_votes 
-      <-- 0    
-
-    ;; total number of positive nodes
-    total_positive 
-       <-- 0
-    
     ;; neighbor threshold multiplier
     k_multiplier 
       <-- 2
 
-    ;; maximal threshold multiplier
+    ;; maximal threshold multiplier, i.e. we will never exceed 
+    ;; questioning k_multiplier * max_k_multiplier peers
     max_k_multiplier 
-      <-- 3
+      <-- 4
+      
+    ;; total number of votes
+    total_votes 
+      <-- 0    
+    ;; total number of positive nodes
+    total_positive 
+       <-- 0
 
 ###  Query 
 
@@ -119,6 +124,7 @@ Each node replies with their current opinion on the proposal.
 When the query finishes, the node now initializes the following two
 values:
 
+ 
     new_votes 
       <-- |vote replies received in this round|
     positive_votes 
@@ -175,21 +181,24 @@ node marks the decision as final, and always returns this opinion is
 response to further queries from other nodes on the network.
  
     IF 
-      confience > confidence_threshold
+      confidence > confidence_threshold
     THEN
       finalized <-- T
+      QUERY LOOP TERMINATES
     ELSE 
-      GOTO QUERY
+      GOTO QUERY LOOP
 
-Otherwise, a new query is initiated by going back to the `QUERY`
-step. 
+Thus, after the decision phase, either a decision has been finalized
+and the local node becomes quiescent never initiating a new query, or
+it initiates a new query.
 
 ## Questions 
 
 In the query step, the node is envisioned as packing information into
-the query to cut down on the communication overhead  a query to each of this $k$
-nodes containing the node's own current opinion on the proposal
-("YES", "NO", or "UNDECIDED").
+the query to cut down on the communication overhead a query to each of
+this $k$ nodes containing the node's own current opinion on the
+proposal ("YES", "NO", or "UNDECIDED").  The relation of the metadata
+is not currently analyzedto these opinions should be constrained.
 
 ## Optional Features
 
