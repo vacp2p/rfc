@@ -4,17 +4,18 @@ title: 38/LOGOS-CONSENSUS
 name: Logos Glacier Consensus Protocol
 status: raw
 category: informative
-tags: logos/consensus,rust-implementation
+tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
+created: 01-JUL-2022
+revised: <2022-08-05 Fri 22:47Z>
 contributors:
     - Álvaro Castro-Castilla 
-
 ---
 
 # Abstract
 
 We propose to replace Nakomoto consensus mechanisms with ones which
-afford secure leaderless, decentralized execution.  We sketch a
+afford excution by secure leaderless, decentralization.  We sketch a
 two-layer model for the practical execution of such a distributed
 consensus, in which an underlying binary decision mechanism is
 utilized to used to vote on the construction of a distributed,
@@ -60,7 +61,9 @@ desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as **YES**, **NO**,
 and **UNDECIDED**.
     
-The algorithm proceeds in rounds for each node.
+The algorithm proceeds in rounds for each node.  The liveness of the
+algorithm is severerly constrainted in the absence of timeouts for a
+round to proceed.
 
 ### Setup
 
@@ -80,7 +83,7 @@ The node initializes the following constants variables
     
     ;;; The following variables are initialized
     
-    ;; number of nodes to query 
+    ;; number of nodes to uniformally randomly query  
     k <-- 20      
     
     ;; total number of votes
@@ -113,27 +116,38 @@ values:
 The node runs the `new_votes` and `positive_votes` parameters received
 in the query round through the following algorithm:
 
-    total_votes += new_votes
-    total_positive += positive_votes
-    confidence <- total_votes / (total_votes + look_ahead) 
-    evidence_accumulated <- total_positive / total_votes
-    evidence_round <- positive_votes / new_votes
-    evidence <- evidence_round * ( 1 - confidence ) + evidence_accumulated * ( confidence )
-    alpha <- alpha_1 * ( 1 - confidence ) + alpha_2 * confidence 
+    total_votes 
+      += new_votes
+    total_positive 
+      += positive_votes
+    confidence 
+      <-- total_votes / (total_votes + look_ahead) 
+    evidence_accumulated 
+      <-- total_positive / total_votes
+    evidence_round 
+      <-- positive_votes / new_votes
+    evidence 
+      <-- evidence_round * ( 1 - confidence ) + evidence_accumulated * confidence 
+    alpha 
+      <-- alpha_1 * ( 1 - confidence ) + alpha_2 * confidence 
     
 ### Opinion 
 
 The node updates its local opinion on the consensus proposal:
 
-    IF 
+    CONDITION
        $evidence$ > $alpha$ 
-    THEN 
-       The node adopts the opinion YES on the proposal
+         THEN 
+           The node adopts the opinion YES on the proposa
+       $evidence$ is less than $1 - \alpha$ 
+          THEN 
+            The node adopts the opinion NO on the proposal 
+       
+If the node is `UNDERCIDED` after evaluating the opinion phase, the
+number of uniform randomly queries nodes is adjusted to 
 
-    IF 
-        $evidence$ is less than $1 - \alpha$ 
-    THEN 
-       The node adopts the opinion NO on the proposal 
+    k   ;; number of nodes to uniformally randomly query  
+      <-- max( k * k <-- k * k_multiplier, max_k_multiplier)
 
 
 ###  Decision 
@@ -161,7 +175,7 @@ The view of network peers participants may optionally have a weighting
 assigned for each node consisting of a real number on the interval [0,
 1].  This weight is used in each query round when selecting the $k$
 peers so the probability of selecting nodes is proportional to their
-weight.  
+weight.
 
 $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
@@ -182,9 +196,88 @@ weighting won't be a probability distribution normalized to 1.
 
 The current algorithm doesn't describe how the initial opinions are formed.
 
+# Implementation status
 
-# Adversarial  Models 
+logos.co is prepared to share an implementations in Rust which
+contains an efficiently multi-threaded implementation utilitized by
+both a simulator and a multi-node constructions.  Expressions of
+Glacier in Python and Common Lisp are also in limited public review.
 
+
+# Interoperability
+
+There is no current wire protocol for the queries.  Nodes are advised
+to use Waku messages to include their own metadata in serializations
+as needed.
+
+
+## TODO Semantics
+
+    { -1, +1, 0 }
+    YES, NO, UNDECIDED 
+
+# Sovereignty Considerations
+
+## Privacy
+
+In practice, each honest node gossips its current opinion which
+reduces the number of messages that need to be gossipped for a given
+proposal.  The resulting impact on the privacy of the node's opinion
+is not currently analyzed.
+
+## Security with respect to various Adversarial  Models 
+
+Adversarial models have been tested for which the values for current
+parameters of Glacier have been tuned.  Exposition of the
+justification of this tuning need to be completed.
+
+### Local Strategies
+
+#### Random Adversary
+
+A random adversary optionally chooses to respond to all queries with a
+random decision.
+
+#### Naive Opposite Adversary
+
+An naive oppositional adversary responds with the opposite vote on an
+opinion.
+
+### Omniscient Coordinated Behavior Adversaries
+
+An omniscient adversary controls $f$ of $N$ nodes and may inspect,
+delay, and drop arbitrary messages in the gossip layer, and utilize
+this to corrupt consensus away from honest decisions to ones favorable
+to the adversary.
+
+# Future Directions
+
+Although we have proposed a normative description of the
+implementation of the underlying binary consensus algorithm (Glacier),
+we believe we have analyzed its adversarial performance in a manner
+that is ammendable to replacement by another member of the [snow*][]
+family.  
+
+We have presumed the existence of a general family of algorithms that
+can be counted on to vote on nodes in the DAG in a fair manner.
+Avalanche provides an example of the construction of votes on UTXO
+transactions.  One can express all state machine, i.e. account-based
+models as checkpoints anchored in UTXO trust, so we believe that this
+presupposition has some justification.
+
+# Informative References
+
+1. [On BFT Consensus Evolution: From Monolithic to
+   DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
+2. [snow-ipfs](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV)
+3. [snow*](https://https://doi.org/10.48550/arXiv.1906.08936) Rocket,
+   Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün
+   Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through
+   Metastability.” arXiv, August 24, 2020.
+
+
+
+# Apendix A: Alvaro's Exposition of Glacier
 
 ## Phase One: Querying
 
@@ -307,83 +400,15 @@ $$
 
 Note: elaborate on $c_{target}$ selection.
 
-# Interoperability
 
-No current wire protocol.  Nodes are advised to use WAKU messages to
-include their own metadata in serializations as needed.  
-
-## TODO Semantics
-
-    { -1, +1, 0 }
-    YES, NO, UNDECIDED 
-
-# Implementation status
-
-logos.co is prepared to share a Rust implementation which contains an
-efficiently multi-threaded implementation utilitized by both a
-simulator and a multi-node constructions.  
-
-# Sovereignty Considerations
-
-## Privacy
-
-## Security
-
-Adversarial models exist for which the values for current parameters
-of Glacier have been tuned.  Exposition of the justification of this
-tuning need to be completed.
-
-### Local Strategies
-
-#### Random Adversary
-
-A random adversary optionally chooses to respond to all queries with a
-random decision.
-
-#### Naive Opposite Adversary
-
-An naive oppositional adversary responds with the opposite vote on an
-opinion.
-
-### Omniscient Coordinated Behavior Adversaries
-
-An omniscient adversary controls $f$ of $N$ nodes and may inspect,
-delay, and drop arbitrary messages in the gossip layer, and utilizes
-this to corrupt consensus.
-
-
-# Future Directions
-
-Although we have proposed a normative description of the
-implementation of the underlying binary consensus algorithm (Glacier),
-we believe we have analyzed its adversarial performance in a manner
-that is ammendable to replacement by another member of the [snow*][]
-family.  
-
-We have presumed the existence of a general family of algorithms that
-can be counted on to vote on nodes in the DAG in a fair manner.
-Avalanche provides an example of the construction of votes on UTXO
-transactions.  One can express all state machine, i.e. account-based
-models as checkpoints anchored in UTXO trust, so we believe that this
-presupposition has some justification.
-
-# Informative References
-
-#. [On BFT Consensus Evolution: From Monolithic to DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
-#. [snow-ipfs](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV) 
-#. [snow*](https://https://doi.org/10.48550/arXiv.1906.08936) Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.
-
-# Dumpster
+# Apendix D: Dumpster
  
- , a .  This execution mechanism
- consists of transitions in a state machine representation, each one a
- potential transaction.  These transactions are gossiped to active
- (i.e. online) participants.  The participants vote on whether a given
- transaction should be counted as valid which reaches an eventual
- consistent state in which the transactions are said to have been
- finalized.
-
-
+This execution mechanism consists of transitions in a state machine
+representation, each one a potential transaction.  These transactions
+are gossiped to active (i.e. online) participants.  The participants
+vote on whether a given transaction should be counted as valid which
+reaches an eventual consistent state in which the transactions are
+said to have been finalized.
 
 
 # Colophon
