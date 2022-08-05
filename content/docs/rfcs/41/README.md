@@ -7,14 +7,14 @@ category: Informational
 tags: logos/reputation
 editor: Mark Evenson <mark.evenson@status.im>
 contributors:
-    - Alvaro
+    - Álvaro Castro-Castilla
 ---
 
 # Abstract
 
-We present Ininkgut, a deceptively simple algorithm for computing the
-reputation of other nodes in their performance of a shared alogrithm.
-
+We present Ikingut: an algorithm for purely local computation of peer
+node reputation based on their observed performance of a shared
+computation.  
 
 # Background
 
@@ -33,9 +33,12 @@ node reputation is to
    - Providing a mechanism for bootstrapping networks, with a low
      number of nodes.
 
-# Theory / Semantics
+# Theory 
 
 ## Ikingut Algorithm
+
+A deceptively simple algorithm for computing reputation of a other
+network nodes based on observed past performance.  
 
 ### Concept
 
@@ -56,9 +59,9 @@ Other relevant characteristics of the algorithm are:
   functions.
 - Lightweight. It doesn’t perform long computations nor use a lot of
   memory.
-- Pluggable into Glacier and Snowball. It’s designed to fit well with
-  swarm-like consensus algorithms. Moreover, it augments the consensus
-  algorithm without altering it.
+- Pluggable into Glacier and Snowball [38/LOGOS-CONSENSUS][]. It’s
+  designed to fit well with swarm-like consensus algorithms. Moreover,
+  it augments the consensus algorithm without altering it.
 - Adaptive. It processes network and behavior changes fast.
 - Dynamic. It introduces new nodes consistently and fairly.
 - It is robust against strategic adversaries. We will see these in more detail below.
@@ -84,14 +87,13 @@ of the consensus algorithm.
        operation.
     3. If the resulting reputation is negative, add it to the trust
        score, using the following equation:
-    
-    $$
-    t_i := min(at_i, t_i + br_i)\\
-    \text{where}\ 0 < a < 1 \ \text{and} \ b > 1
-    $$
-    
-    Where $a$ and $b$ are constants used to manipulate how much
-    momentum is applied.
+       $$
+       t_i := min(at_i, t_i + br_i) \\
+       \text{where}\ 0 < a < 1 \ \text{and} \ b > 1 \\
+       $$
+       where $a$ and $b$ are constants used to manipulate how much
+       momentum is applied.
+
 
 **Pseudocode:**
 
@@ -144,9 +146,20 @@ from these two operations:
     - Allow for new nodes to have a neutral score of zero.
     - Bring the opportunity of building reputation faster.
     - Ensure accumulation of negative scores for misbehaving nodes.
+    
+# Implementation status
 
-# Security/Privacy Considerations
+Incomplete.  No publically known implementations.  
 
+# Sovereignty Considerations
+
+## Privacy
+
+Computation of reputation is purely local from observed behavior. 
+
+## Security
+
+No model constructed.  No current tests.
 
 # Copyright
 
@@ -157,5 +170,7 @@ Copyright and related rights waived via
 
 ## informative
 
-#. 38/LOGOS-CONSENSUS
-#. Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020. https://doi.org/10.48550/arXiv.1906.08936.
+#. [38/LOGOS-CONSENSUS](https://github.com/vacp2p/rfc/pull/512)
+#. [Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.](https://https://doi.org/10.48550/arXiv.1906.08936) TODO:  add IPFS
+
+
