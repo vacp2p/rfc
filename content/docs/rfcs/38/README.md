@@ -15,7 +15,7 @@ contributors:
 # Abstract
 
 We propose to replace Nakomoto consensus mechanisms with ones which
-afford excution by secure leaderless, decentralization.  We sketch a
+afford execution by secure leaderless, decentralization.  We sketch a
 two-layer model for the practical execution of such a distributed
 consensus, in which an underlying binary decision mechanism is
 utilized to used to vote on the construction of a distributed,
@@ -62,7 +62,7 @@ opinion on the proposal, represented in the sequel as **YES**, **NO**,
 and **UNDECIDED**.
     
 The algorithm proceeds in rounds for each node.  The liveness of the
-algorithm is severerly constrainted in the absence of timeouts for a
+algorithm is severely constrained in the absence of timeouts for a
 round to proceed.
 
 ### Setup
@@ -73,30 +73,38 @@ The node initializes the following constants variables
     ;;; performed with the adversarial models
     
     ;; constant look ahead parameter, 
-    look_ahead <-- 20
+    look_ahead 
+      <-- 20
     
     ;; first order confidence smoothing parameter
-    $alpha_1$ <-- 0.8
+    $alpha_1$ 
+      <-- 0.8
     
     ;; second order confidence smoothing parameter
-    $alpha_2$ <-- 0.4
+    $alpha_2$
+      <-- 0.4
     
     ;;; The following variables are initialized
     
-    ;; number of nodes to uniformally randomly query  
-    k <-- 20      
-    
+    ;; number of nodes to uniformly randomly query  
+    k 
+      <-- 20    
+
     ;; total number of votes
-    total_votes <-- 0    
+    total_votes 
+      <-- 0    
 
     ;; total number of positive nodes
-    total_positive <-- 0
+    total_positive 
+       <-- 0
     
-    ;; threshold multiple 
-    k_multiplier <-- 2
+    ;; neighbor threshold multiplier
+    k_multiplier 
+      <-- 2
 
     ;; maximal threshold multiplier
-    max_k_multiplier <-- 2
+    max_k_multiplier 
+      <-- 3
 
 ###  Query 
 
@@ -108,8 +116,10 @@ Each node replies with their current opinion on the proposal.
 When the query finishes, the node now initializes the following two
 values:
 
-    new_votes <-- vote replies received in this round
-    positive_votes <-- YES votes received 
+    new_votes 
+      <-- |vote replies received in this round|
+    positive_votes 
+      <-- |YES votes received| 
     
 ### Computation    
 
@@ -138,15 +148,15 @@ The node updates its local opinion on the consensus proposal:
     CONDITION
        $evidence$ > $alpha$ 
          THEN 
-           The node adopts the opinion YES on the proposa
+           The node adopts the opinion YES on the proposal
        $evidence$ is less than $1 - \alpha$ 
           THEN 
             The node adopts the opinion NO on the proposal 
        
-If the node is `UNDERCIDED` after evaluating the opinion phase, the
+If the node is `UNDECIDED` after evaluating the opinion phase, the
 number of uniform randomly queries nodes is adjusted to 
 
-    k   ;; number of nodes to uniformally randomly query  
+    k   ;; number of nodes to uniformly randomly query  
       <-- max( k * k <-- k * k_multiplier, max_k_multiplier)
 
 
@@ -199,9 +209,9 @@ The current algorithm doesn't describe how the initial opinions are formed.
 # Implementation status
 
 logos.co is prepared to share an implementations in Rust which
-contains an efficiently multi-threaded implementation utilitized by
-both a simulator and a multi-node constructions.  Expressions of
-Glacier in Python and Common Lisp are also in limited public review.
+contains an efficiently multi-threaded implementation utilized by both
+a simulator and a multi-node constructions.  Expressions of Glacier in
+Python and Common Lisp are also in limited public review.
 
 
 # Interoperability
@@ -213,8 +223,17 @@ as needed.
 
 ## TODO Semantics
 
-    { -1, +1, 0 }
-    YES, NO, UNDECIDED 
+The message exchanged are a simple enumeration of three values is not
+currently analyzedreflecting the opinion on the given proposal:
+
+    { YES, NO, UNDECIDED }
+
+when represented via integers, such as choosing 
+ 
+     { -1, +1, 0 }
+
+parity summations across network invariants ofter become easier to
+represent.
 
 # Sovereignty Considerations
 
@@ -269,13 +288,13 @@ presupposition has some justification.
 
 1. [On BFT Consensus Evolution: From Monolithic to
    DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
+
 2. [snow-ipfs](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV)
+
 3. [snow*](https://https://doi.org/10.48550/arXiv.1906.08936) Rocket,
    Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün
    Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through
    Metastability.” arXiv, August 24, 2020.
-
-
 
 # Apendix A: Alvaro's Exposition of Glacier
 
@@ -326,12 +345,21 @@ votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
 $$
-l = 20 \text{look-ahead parameter} \\
-\alpha_1 = 0.8 \text{first evidence parameter} \\
-\alpha_2 = 0.5 \text{second evidence parameter} \\
-\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l} \\
-\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
-   \text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}
+l = 20 \text{look-ahead parameter} 
+$$
+$$
+\alpha_1 = 0.8 \text{first evidence parameter} 
+$$
+$$
+\alpha_2 = 0.5 \text{second evidence parameter} 
+$$
+$$
+\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l} 
+$$
+\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} 
+$$
+$$
+\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}
 $$
 
 
@@ -352,7 +380,10 @@ other. Our interest in removing the step function is twofold:
    function proposed is linear with respect to the confidence.
     
 $$
-e = e_{round} (1-c_{accum}) + e_{accum} c_{accum} \\ \alpha = \alpha_1 (1-c_{accum}) + \alpha_2 c_{accum}
+e = e_{round} (1-c_{accum}) + e_{accum} c_{accum}
+$$
+$$
+\alpha = \alpha_1 (1-c_{accum}) + \alpha_2 c_{accum}
 $$
     
 Since the confidence is modeled as a ratio that depends on the
@@ -393,8 +424,12 @@ employed. This threshold is derived from the network size, and is
 directly related to the number of total votes received.
     
 $$
-e > \alpha \implies \text{opinion YES} \\
-e < 1-\alpha \implies \text{opinion NO} \\
+e > \alpha \implies \text{opinion YES} 
+$$ 
+$$
+e < 1-\alpha \implies \text{opinion NO} 
+$$
+$$
 if\ \text{confidence} > c_{target} \implies  \text{decide}
 $$
 
