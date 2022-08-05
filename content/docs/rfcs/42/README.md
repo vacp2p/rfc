@@ -1,6 +1,6 @@
 ---
-slug: 41
-title: 41/LOGOS-REPUTATION 
+slug: 42
+title: 42/LOGOS-REPUTATION 
 name: Logos Node Reputation 
 status: raw
 category: Informational
@@ -172,5 +172,3 @@ Copyright and related rights waived via
 
 #. [38/LOGOS-CONSENSUS](https://github.com/vacp2p/rfc/pull/512)
 #. [Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.](https://https://doi.org/10.48550/arXiv.1906.08936) TODO:  add IPFS
-
-
