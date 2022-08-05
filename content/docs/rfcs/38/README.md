@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-05 Fri 22:47Z>
+revised: <2022-08-05 Fri 23:11Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -60,6 +60,9 @@ A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as **YES**, **NO**,
 and **UNDECIDED**.
+
+     opinon
+        <-- choose local truth computation of  { YES, NO, UNDECIDED}
     
 The algorithm proceeds in rounds for each node.  The liveness of the
 algorithm is severely constrained in the absence of timeouts for a
@@ -145,28 +148,39 @@ in the query round through the following algorithm:
 
 The node updates its local opinion on the consensus proposal:
 
-    CONDITION
-       $evidence$ > $alpha$ 
-         THEN 
-           The node adopts the opinion YES on the proposal
-       $evidence$ is less than $1 - \alpha$ 
-          THEN 
-            The node adopts the opinion NO on the proposal 
+    IF
+      $evidence$ > $alpha$ 
+    THEN ;; The node adopts the opinion YES on the proposal
+      opinion <-- YES
+    ELSE IF       
+      $evidence$ < $1 - \alpha$ 
+    THEN;; The node adopts the opinion NO on the proposal 
+      opinion <-- NO
        
 If the node is `UNDECIDED` after evaluating the opinion phase, the
 number of uniform randomly queries nodes is adjusted to 
-
-    k   ;; number of nodes to uniformly randomly query  
-      <-- max( k * k <-- k * k_multiplier, max_k_multiplier)
-
+    
+    IF
+       node == UNDECIDED
+    THEN 
+       k   ;; number of nodes to uniformly randomly query in next round
+         <-- $\sup{ k * k_multiplier, max_k_multiplier}$
 
 ###  Decision 
 
-If `confidence` exceeds a threshold derived from the network size and
-directly related to the total votes received, the node marks the
-decision as final, and always returns this opinion is response to
-further queries from other nodes on the network.
-    
+After the OPINION phase is excuted, the current value of `confidence`
+is considered: if `confidence` exceeds a threshold derived from the
+network size and directly related to the total votes received, the
+node marks the decision as final, and always returns this opinion is
+response to further queries from other nodes on the network.
+ 
+    IF 
+      confience > confidence_threshold
+    THEN
+      finalized <-- T
+    ELSE 
+      GOTO QUERY
+
 Otherwise, a new query is initiated by going back to the `QUERY`
 step. 
 
