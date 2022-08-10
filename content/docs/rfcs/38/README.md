@@ -7,22 +7,23 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-05 Fri 23:49Z>
+revised: <2022-08-10 Wed 08:04Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
 
 # Abstract
 
-We propose to replace Nakomoto consensus mechanisms with ones which
-afford execution by secure leaderless, decentralization.  We sketch a
-two-layer model for the practical execution of such a distributed
-consensus, in which an underlying binary decision mechanism is
-utilized to used to vote on the construction of a distributed,
-directed, acyclic graph.  We present the Glacier algorithm which
-provides a Byzantine fault tolerant implementation of the base binary
-decision mechanism.  We outline a taxonomy of Byzantine adversaries
-that seek to thwart this computation's "correctness".
+We propose to transition our use of resource intensive Nakomoto
+consensus mechanisms to more efficient, secure, leaderless ones rooted
+in decentralization.  We sketch a two-layer model for the practical
+execution of one such a distributed consensus, in which an underlying
+leaderless binary decision mechanism is utilized to used to vote on
+the construction of a distributed, directed, acyclic graph.  We
+present the Glacier algorithm which provides a Byzantine fault
+tolerant implementation of the base binary decision mechanism.  We
+outline a taxonomy of Byzantine adversaries that seek to thwart this
+computation's "correctness".
 
 # Consensus Model
 
@@ -35,100 +36,118 @@ values in a given sequence along this graph is isomorphic to the trace
 of a shared, trusted state machine evolution.  Such a state machine
 may perform an arbitrary computation from the class of "smart
 contract" artifacts by implementing a
-suitable model of transaction.  
+suitable model of transaction.
 
 # Glacier 
 
-The Glacier consensus algorithm computes a yes/no decision via a set
-of distributed computational nodes.  Glacier is a leaderless
-probabilistic binary consensus algorithm with fast finality that
-provides good reliability for network and Byzantine fault tolerance.
+The Glacier consensus algorithm computes a yes/no decision on a
+proposition via a set of distributed computational nodes.  Glacier is
+a leaderless probabilistic binary consensus algorithm with fast
+finality that provides good reliability for network and Byzantine
+fault tolerance.
 
 ## Algorithm 
 
-Given a set of $n$ distributed computational nodes, a gossip-based
-protocol is presumed to exist which which allows members to discover,
-join, and leave a possibly maximally connected graph.  Joining this
-graph allows each node to view a possibly incomplete node membership
-list of all other nodes.  This view may change as the protocol
-advances, as nodes join and leave.  
-
-
-### Pre-requisites
+The algorithm begins with considering the truth status of a given
+proposition.  
 
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as **YES**, **NO**,
 and **UNDECIDED**.
 
-     opinon
-        <-- choose local truth computation of  { YES, NO, UNDECIDED}
+A new proposition is discovered either by local creation or in
+response to a query, a node checks its local opinion.  If the node can
+compute a justification of the proposal, it sets its opinion to one of
+`yes` or `no`.  If it cannot form an opinion, it leaves its opinion as
+`undecided`.`
+
+The node then participates in a number of query rounds in which it
+solicits other node's opinion in query rounds.  Given a set of $n$
+leaderless computational nodes, a gossip-based protocol is presumed to
+exist which which allows members to discover, join, and leave a weakly
+transitory maximally connected graph.  Joining this graph allows each
+node to view a possibly incomplete node membership list of all other
+nodes.  This view may change as the protocol advances, as nodes join
+and leave.
+
+
+### Proposal
+
+The node has a semantics and serialization of the proposal, of which
+it has an initial opinion:
+
+     opinion
+        <-- choose local truth computation of {YES, NO, UNDECIDED}
     
 The algorithm proceeds in rounds for each node.  The liveness of the
 algorithm is severely constrained in the absence of timeouts for a
 round to proceed.
 
-### Setup
+### Setup Parameters
 
-The node initializes the following constants variables 
+The node initializes the following parameters consisting of floats and integers.
+
+First the constants:
 
     ;;; The following values are constants chosen with justification from experiments
     ;;; performed with the adversarial models
-    
-    ;; FIXME: give an empiral confidence threshold 
+
+    ;; FIXME: find and justify an empirical confidence threshold 
     confidence_threshold
      <-- T  ;; BOGUS:  this should be a function of the network size
             ;; and the current confidence in the observer majority
     
-    ;; constant look ahead parameter, 
+    ;; constant look ahead parameter
     look_ahead 
       <-- 20
     
-    ;; first order confidence smoothing parameter
-    $alpha_1$ 
-      <-- 0.8  ;; empirically derived from consensus simulation
+    ;; first order confidence smoothing parameter (aka $alpha_1$)
+    certainty
+      <-- 0.8  ;; empirically justified from consensus simulation
     
-    ;; second order confidence smoothing parameter
-    $alpha_2$ 
-      <-- 0.4  ;; empirically derived from consensus simulation
-    
-    ;;; The following variables are initialized
-    
-    ;; number of nodes to uniformly randomly query  
-    k 
-      <-- 7
+    ;; second order confidence smoothing parameter (aka $alpha_2$)
+    doubt
+      <-- 0.4  ;; empirically justified from consensus simulation
 
     ;; neighbor threshold multiplier
     k_multiplier 
       <-- 2
-
     ;; maximal threshold multiplier, i.e. we will never exceed 
     ;; questioning k_multiplier * max_k_multiplier peers
     max_k_multiplier 
       <-- 4
       
-    ;; total number of votes
+The following variables will keep the state of Glacier:
+      
+    ;; total number of votes examined over all rounds
     total_votes 
-      <-- 0    
-    ;; total number of positive nodes
+      <-- 0 
+    ;; total number of YES (i.e. positive) votes for the truth of the proposal
     total_positive 
-       <-- 0
+      <-- 0
+    ;; current number of nodes to attempt to query in a round
+    k 
+      <-- 7
+
 
 ###  Query 
 
-A node selects $k$ nodes randomly from the locally known complete set
-of peers in the network.
+A node selects $k$ nodes randomly from the current locally known
+complete set of peers in the network.  
+
+A query is sent to each neighbor with the node's current `opinion` of
+the proposal.
 
 Each node replies with their current opinion on the proposal.
 
 When the query finishes, the node now initializes the following two
 values:
 
- 
     new_votes 
-      <-- |vote replies received in this round|
+      <-- |total vote replies received in this round to the current query|
     positive_votes 
-      <-- |YES votes received| 
+      <-- |YES votes received from the query| 
     
 ### Computation    
 
@@ -141,14 +160,14 @@ in the query round through the following algorithm:
       += positive_votes
     confidence 
       <-- total_votes / (total_votes + look_ahead) 
-    evidence_accumulated 
+    total_evidence 
       <-- total_positive / total_votes
-    evidence_round 
+    new_evidence 
       <-- positive_votes / new_votes
     evidence 
-      <-- evidence_round * ( 1 - confidence ) + evidence_accumulated * confidence 
+      <-- new_evidence * ( 1 - confidence ) + total_evidence * confidence 
     alpha 
-      <-- alpha_1 * ( 1 - confidence ) + alpha_2 * confidence 
+      <-- doubt * ( 1 - confidence ) + certainty * confidence 
     
 ### Opinion 
 
@@ -163,22 +182,25 @@ The node updates its local opinion on the consensus proposal:
     THEN;; The node adopts the opinion NO on the proposal 
       opinion <-- NO
        
-If the node is `UNDECIDED` after evaluating the opinion phase, the
-number of uniform randomly queries nodes is adjusted to 
+If the opinion of the node is `UNDECIDED` after evaluating the opinion
+phase, the number of uniform randomly queries nodes is adjusted by
+multiplying the neighbors `k` by the `k_multiplier` up to the limit
+of `k_max_multiplier` query size increases.
     
     IF
-       node == UNDECIDED
-    THEN 
+       opinion == UNDECIDED
+    THEN ;; k <-- $sup{k * k_multiplier, k_multiplier * max_k_multiplier} 
        k   ;; number of nodes to uniformly randomly query in next round
-         <-- $k * \sup{ k_multiplier, max_k_multiplier}$
+         *-- max(k * k_multiplier, k_multiplier * max_k_multiplier) 
 
 ###  Decision 
 
-After the OPINION phase is excuted, the current value of `confidence`
+After the OPINION phase is executed, the current value of `confidence`
 is considered: if `confidence` exceeds a threshold derived from the
-network size and directly related to the total votes received, the
-node marks the decision as final, and always returns this opinion is
-response to further queries from other nodes on the network.
+network size and directly related to the total votes received, an
+honest node marks the decision as final, and always returns this
+opinion is response to further queries from other nodes on the
+network.
  
     IF 
       confidence > confidence_threshold
@@ -192,21 +214,21 @@ Thus, after the decision phase, either a decision has been finalized
 and the local node becomes quiescent never initiating a new query, or
 it initiates a new query.
 
-## Questions 
+## Further points
+
+### Node receives information when answering queries
 
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
 this $k$ nodes containing the node's own current opinion on the
 proposal ("YES", "NO", or "UNDECIDED").  The relation of the metadata
-is not currently analyzedto these opinions should be constrained.
-
-## Optional Features
+is not currently analyzed to these opinions should be constrained.
 
 ### Weighted Node values
 
 The view of network peers participants may optionally have a weighting
-assigned for each node consisting of a real number on the interval [0,
-1].  This weight is used in each query round when selecting the $k$
+assigned for each node consisting of a real number on the interval $[0, 1]$.
+This weight is used in each query round when selecting the $k$
 peers so the probability of selecting nodes is proportional to their
 weight.
 
@@ -233,21 +255,25 @@ The current algorithm doesn't describe how the initial opinions are formed.
 
 logos.co is prepared to share an implementations in Rust which
 contains an efficiently multi-threaded implementation utilized by both
-a simulator and a multi-node constructions.  Expressions of Glacier in
-Python and Common Lisp are also in limited public review.
+a local simulator and actual network construction.  Expressions of
+Glacier in Python and Common Lisp are also in limited public review.
 
 
 # Interoperability
 
 There is no current wire protocol for the queries.  Nodes are advised
 to use Waku messages to include their own metadata in serializations
-as needed.
+as needed.  Such a message contains minimally
+
+    round ;; the local number of rounds participating 
+    id    ;; a unique id for the proposal with defined semantics/syntax
+    opinion ;; the opinion being gossiped
 
 
 ## TODO Semantics
 
 The message exchanged are a simple enumeration of three values is not
-currently analyzedreflecting the opinion on the given proposal:
+currently analyzed reflecting the opinion on the given proposal:
 
     { YES, NO, UNDECIDED }
 
@@ -255,7 +281,7 @@ when represented via integers, such as choosing
  
      { -1, +1, 0 }
 
-parity summations across network invariants ofter become easier to
+parity summations across network invariants often become easier to
 represent.
 
 # Sovereignty Considerations
@@ -263,11 +289,11 @@ represent.
 ## Privacy
 
 In practice, each honest node gossips its current opinion which
-reduces the number of messages that need to be gossipped for a given
+reduces the number of messages that need to be gossiped for a given
 proposal.  The resulting impact on the privacy of the node's opinion
 is not currently analyzed.
 
-## Security with respect to various Adversarial  Models 
+## Security with respect to various Adversarial Models 
 
 Adversarial models have been tested for which the values for current
 parameters of Glacier have been tuned.  Exposition of the
@@ -278,19 +304,23 @@ justification of this tuning need to be completed.
 #### Random Adversary
 
 A random adversary optionally chooses to respond to all queries with a
-random decision.
+random decision.  Note that this adversary may be in some sense
+Byzantine but not malicious.  The random adversary also models some
+software defects involved in not "understanding" how to derive a truth
+value for a given proposition.
 
 #### Naive Opposite Adversary
 
-An naive oppositional adversary responds with the opposite vote on an
-opinion.
+An naive oppositional adversary responds with the opposite vote of the
+honest majority on an opinion.
 
 ### Omniscient Coordinated Behavior Adversaries
 
 An omniscient adversary controls $f$ of $N$ nodes and may inspect,
 delay, and drop arbitrary messages in the gossip layer, and utilize
 this to corrupt consensus away from honest decisions to ones favorable
-to the adversary.
+to itself.  It may, of course, choose to participate in an honest
+manner until defecting is most advantageous.
 
 # Future Directions
 
@@ -305,7 +335,11 @@ can be counted on to vote on nodes in the DAG in a fair manner.
 Avalanche provides an example of the construction of votes on UTXO
 transactions.  One can express all state machine, i.e. account-based
 models as checkpoints anchored in UTXO trust, so we believe that this
-presupposition has some justification.
+presupposition has some justification.  We can envision a need for
+tooling abstraction that allow one to just program the DAG itself, as
+they should be of stable interest no matter if Glacier isn't. 
+
+
 
 # Informative References
 
@@ -318,8 +352,10 @@ presupposition has some justification.
    Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün
    Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through
    Metastability.” arXiv, August 24, 2020.
+   
+4. [Move] A language for writing DAG abstractions 
 
-# Apendix A: Alvaro's Exposition of Glacier
+# Appendix A: Alvaro's Exposition of Glacier
 
 ## Phase One: Querying
 
@@ -459,7 +495,7 @@ $$
 Note: elaborate on $c_{target}$ selection.
 
 
-# Apendix D: Dumpster
+# Appendix D: Dumpster
  
 This execution mechanism consists of transitions in a state machine
 representation, each one a potential transaction.  These transactions
