@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-10 Wed 08:04Z>
+revised: <2022-08-10 Wed 10:15Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -15,15 +15,16 @@ contributors:
 # Abstract
 
 We propose to transition our use of resource intensive Nakomoto
-consensus mechanisms to more efficient, secure, leaderless ones rooted
-in decentralization.  We sketch a two-layer model for the practical
-execution of one such a distributed consensus, in which an underlying
-leaderless binary decision mechanism is utilized to used to vote on
-the construction of a distributed, directed, acyclic graph.  We
-present the Glacier algorithm which provides a Byzantine fault
-tolerant implementation of the base binary decision mechanism.  We
-outline a taxonomy of Byzantine adversaries that seek to thwart this
-computation's "correctness".
+consensus mechanisms to the class of more efficient, secure,
+leaderless ones rooted in decentralization.  We sketch a simple
+two-level model for the practical execution of such a fairly
+distributed consensus mechanism, in which an underlying leaderless
+binary decision mechanism is utilized to used to vote on the
+construction of a distributed, directed, acyclic graph.  We present
+the Glacier algorithm which provides a Byzantine fault tolerant
+implementation of the base binary decision mechanism.  We outline a
+taxonomy of Byzantine adversaries that seek to thwart this
+computation's correct honesty.
 
 # Consensus Model
 
@@ -35,8 +36,7 @@ transactions "for free".  The finalization of shared confidence in the
 values in a given sequence along this graph is isomorphic to the trace
 of a shared, trusted state machine evolution.  Such a state machine
 may perform an arbitrary computation from the class of "smart
-contract" artifacts by implementing a
-suitable model of transaction.
+contract" artifacts by implementing a given model of transaction.
 
 # Glacier 
 
@@ -53,14 +53,14 @@ proposition.
 
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
-opinion on the proposal, represented in the sequel as **YES**, **NO**,
-and **UNDECIDED**.
+opinion on the proposal, represented in the sequel as `yes`, `no`,
+and `undecided`.
 
 A new proposition is discovered either by local creation or in
 response to a query, a node checks its local opinion.  If the node can
 compute a justification of the proposal, it sets its opinion to one of
 `yes` or `no`.  If it cannot form an opinion, it leaves its opinion as
-`undecided`.`
+`undecided`.
 
 The node then participates in a number of query rounds in which it
 solicits other node's opinion in query rounds.  Given a set of $n$
@@ -72,7 +72,7 @@ nodes.  This view may change as the protocol advances, as nodes join
 and leave.
 
 
-### Proposal
+### Proposal Identification
 
 The node has a semantics and serialization of the proposal, of which
 it has an initial opinion:
@@ -86,7 +86,7 @@ round to proceed.
 
 ### Setup Parameters
 
-The node initializes the following parameters consisting of floats and integers.
+The node initializes the following integer constants:
 
 First the constants:
 
@@ -100,15 +100,15 @@ First the constants:
     
     ;; constant look ahead parameter
     look_ahead 
-      <-- 20
+      <-- 19
     
     ;; first order confidence smoothing parameter (aka $alpha_1$)
     certainty
-      <-- 0.8  ;; empirically justified from consensus simulation
+      <-- 4/5  ;; empirically justified from consensus simulation
     
     ;; second order confidence smoothing parameter (aka $alpha_2$)
     doubt
-      <-- 0.4  ;; empirically justified from consensus simulation
+      <-- 2/5  ;; empirically justified from consensus simulation
 
     ;; neighbor threshold multiplier
     k_multiplier 
@@ -404,21 +404,14 @@ votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
 $$
-l = 20 \text{look-ahead parameter} 
-$$
-$$
-\alpha_1 = 0.8 \text{first evidence parameter} 
-$$
-$$
-\alpha_2 = 0.5 \text{second evidence parameter} 
-$$
-$$
-\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l} 
-$$
-\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} 
-$$
-$$
-\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}
+\begin{itemize}
+\item l = 20 \text{look-ahead parameter} 
+\item \alpha_1 = 0.8 \text{first evidence parameter} 
+\item \alpha_2 = 0.5 \text{second evidence parameter} 
+\item \text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l}
+\item \text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} 
+\item \text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}
+\end{itemize}
 $$
 
 
@@ -439,10 +432,10 @@ other. Our interest in removing the step function is twofold:
    function proposed is linear with respect to the confidence.
     
 $$
-e = e_{round} (1-c_{accum}) + e_{accum} c_{accum}
-$$
-$$
-\alpha = \alpha_1 (1-c_{accum}) + \alpha_2 c_{accum}
+\begin{itemize}
+\item e = e_{round} (1-c_{accum}) + e_{accum} c_{accum}
+\item \alpha = \alpha_1 (1-c_{accum}) + \alpha_2 c_{accum}
+\end{itemize}
 $$
     
 Since the confidence is modeled as a ratio that depends on the
@@ -483,13 +476,11 @@ employed. This threshold is derived from the network size, and is
 directly related to the number of total votes received.
     
 $$
-e > \alpha \implies \text{opinion YES} 
-$$ 
-$$
-e < 1-\alpha \implies \text{opinion NO} 
-$$
-$$
-if\ \text{confidence} > c_{target} \implies  \text{decide}
+\begin{itemize}
+\item e > \alpha \implies \text{opinion YES} 
+\item e < 1-\alpha \implies \text{opinion NO} 
+\item if\ \text{confidence} > c_{target} \implies  \text{decide}
+\end{itemize}
 $$
 
 Note: elaborate on $c_{target}$ selection.
