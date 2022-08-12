@@ -114,9 +114,12 @@ First the constants:
     k_multiplier 
       <-- 2
     ;; maximal threshold multiplier, i.e. we will never exceed 
-    ;; questioning k_multiplier * max_k_multiplier peers
+    ;; questioning k_original * k_multiplier ^ max_k_multiplier peers
     max_k_multiplier 
       <-- 4
+    ;; Initial numbers of nodes queried in a round
+    k_original 
+      <-- 7
       
 The following variables will keep the state of Glacier:
       
@@ -128,7 +131,7 @@ The following variables will keep the state of Glacier:
       <-- 0
     ;; current number of nodes to attempt to query in a round
     k 
-      <-- 7
+      <-- k_original
 
 
 ###  Query 
@@ -171,14 +174,16 @@ in the query round through the following algorithm:
     
 ### Opinion 
 
-The node updates its local opinion on the consensus proposal:
+The node updates its local opinion on the consensus proposal by
+examining the relationship between the evidence accumulated for a
+proposal with the confidence encoded in the `alpha` parameter:
 
     IF
-      $evidence$ > $alpha$ 
+      evidence$ > alpha
     THEN ;; The node adopts the opinion YES on the proposal
       opinion <-- YES
     ELSE IF       
-      $evidence$ < $1 - \alpha$ 
+      evidence$ < 1 - alpha
     THEN;; The node adopts the opinion NO on the proposal 
       opinion <-- NO
        
@@ -189,9 +194,13 @@ of `k_max_multiplier` query size increases.
     
     IF
        opinion == UNDECIDED
-    THEN ;; k <-- $sup{k * k_multiplier, k_multiplier * max_k_multiplier} 
-       k   ;; number of nodes to uniformly randomly query in next round
-         *-- max(k * k_multiplier, k_multiplier * max_k_multiplier) 
+    THEN ;; possibly increase number nodes to uniformly randomly query in next round
+       k
+         <-- WHEN 
+                 k < k_original * k_multiplier ^ max_k_multiplier
+             THEN
+                 k * k_multiplier
+             
 
 ###  Decision 
 
@@ -265,9 +274,27 @@ There is no current wire protocol for the queries.  Nodes are advised
 to use Waku messages to include their own metadata in serializations
 as needed.  Such a message contains minimally
 
-    round ;; the local number of rounds participating 
-    id    ;; a unique id for the proposal with defined semantics/syntax
-    opinion ;; the opinion being gossiped
+```n3
+@prefix rdf:         <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:        <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:         <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix glacier      <https://rdf.logos.co/protocol/glacier#> .
+
+glacier:query
+  :holds (
+    :_0 [ rdfs:label "round";
+          rdfs:comment "The local number of rounds participating"
+          a xsd:postitiveInteger; ],
+    :_1 [ rdfs:label "id";
+          rdfs:comment "A unique content-addressable URI for the proposal"; # Use DID??
+          a xsd:anyURI ],
+    :_2 [ rdfs:label "opinion";
+          rdfs:comment "The opinion on the proposal",
+          # TODO constrain as an enumeration on three values
+          a xsd:string ] 
+    ) .
+```    
 
 
 ## TODO Semantics
