@@ -17,7 +17,14 @@ Currently identified tags comprise
 
 
 # Abstract
-The following standard allows for the implementation of a standard API for Rate Limiting Nullifier Contract that manages membership of the participants in a group.
+The following standard allows for the implementation of a standard API for Rate Limiting Nullifier Contract that manages membership of the participants in a peer-to-peer messaging group.
+This API is intended to be used in conjunction with [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/).
+Peers that violate the messaging rate in a relay network,
+like explained in [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/),
+are considered spammers and their message is considered spam.
+Spammers are financially punished and removed from the system.
+Rate limiting nullifier (RLN), like explained in [32/RLN](https://rfc.vac.dev/spec/32/),
+a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments.
 
 
 # Background / Rationale / Motivation
@@ -29,10 +36,10 @@ They can also be slashed if they misbehave like spamming in a peer-to-peer pseud
 # Theory / Semantics
 
 As explained in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/),
- all peers who want to publish the message in the spam protected peer-to-peer network MUST register for membership to the RLN group.
-  This is done via the `register` function of the RLN membership contract.
-   If a registered member of the RLN group spams messages in the network then its secret key get exposed which can be used to slash its membership from the group.
-    This is done by calling the `withdraw` function of the RLN membership contract, which removes the member from the Merkle tree thereby revoking its rights to send any messages.
+all peers who want to publish the message in the spam protected peer-to-peer network MUST register for membership to the RLN group.
+This is done via the `register` function of the RLN membership contract.
+If a registered member of the RLN group spams messages in the network then its secret key get exposed which can be used to slash its membership from the group.
+This is done by calling the `withdraw` function of the RLN membership contract, which removes the member from the Merkle tree thereby revoking its rights to send any messages.
 
 # Wire Format Specification / Syntax
 
