@@ -84,6 +84,8 @@ This function MUST fire the `MemberWithdrawn` event for each member slashed from
 
 Complete implementation of this contract can be found at https://github.com/vacp2p/rln-contract
 
+The contract for Poseidon Hasher can be found at https://github.com/vacp2p/rln-contract/blob/main/contracts/PoseidonHasher.sol
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
