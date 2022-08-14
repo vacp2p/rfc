@@ -30,8 +30,15 @@ a construct based on zero-knowledge proofs that provides an anonymous rate-limit
 # Background / Rationale / Motivation
 
 This contract serves as the basis for the implementation of RLN membership.
- New members can be registered by depositing a stake of valuable funds.
+New members can be registered by depositing a stake of valuable funds.
 They can also be slashed if they misbehave like spamming in a peer-to-peer pseudo-anonymous messaging network.
+Peers MUST be registered to the RLN group to be able to publish messages.
+Each peer has an RLN key pair denoted by `secret` and `pubkey`.
+The state of the membership contract contains the list of registered members' public identity keys i.e., `pubkeys`.
+For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its `pubkey` in the group.
+The peer who has the secret key `secret` associated with a registered `pubkey` would be able to withdraw a portion the staked fund by providing valid proof.
+
+
 
 # Theory / Semantics
 
