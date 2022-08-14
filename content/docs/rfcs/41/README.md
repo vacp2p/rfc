@@ -22,12 +22,17 @@ The following standard allows for the implementation of a standard API for Rate 
 
 # Background / Rationale / Motivation
 
-This contract serves as the basis for the implementation of RLN membership. New members can be registered by depositing a stake of valuable funds.
+This contract serves as the basis for the implementation of RLN membership.
+ New members can be registered by depositing a stake of valuable funds.
 They can also be slashed if they misbehave like spamming in a peer to peer pseudo-anonymous messaging network.
 
 # Theory / Semantics
 
-As explained in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/), all peers who want to publish the message in the spam protected peer to peer network MUST register for membership to the RLN group. This is done via the `register` function of the RLN membership contract. If a registered member of the RLN group spams messages in the network then its secret key get exposed which can be used to slash its membership from the group. This is done by calling the `withdraw` function of the RLN membership contract, which removes the member from the merkle tree thereby revoking its rights to send any messages.
+As explained in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/),
+ all peers who want to publish the message in the spam protected peer to peer network MUST register for membership to the RLN group.
+  This is done via the `register` function of the RLN membership contract.
+   If a registered member of the RLN group spams messages in the network then its secret key get exposed which can be used to slash its membership from the group.
+    This is done by calling the `withdraw` function of the RLN membership contract, which removes the member from the merkle tree thereby revoking its rights to send any messages.
 
 # Wire Format Specification / Syntax
 
