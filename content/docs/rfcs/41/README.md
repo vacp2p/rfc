@@ -77,7 +77,7 @@ This function MUST fire the `MemberWithdrawn` event for each member slashed from
 
 # Implementation Suggestions
 
-Complete implementation of this contract can be found at https://github.com/kilic/rlnapp/blob/master/packages/contracts/contracts/RLN.sol
+Complete implementation of this contract can be found at https://github.com/vacp2p/rln-contract
 
 # Copyright
 
