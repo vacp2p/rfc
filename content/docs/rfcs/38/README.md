@@ -15,16 +15,16 @@ contributors:
 # Abstract
 
 We propose to transition our use of resource intensive Nakomoto
-consensus mechanisms to the class of more efficient, secure,
-leaderless ones rooted in decentralization.  We sketch a simple
-two-level model for the practical execution of such a fairly
-distributed consensus mechanism, in which an underlying leaderless
-binary decision mechanism is utilized to used to vote on the
-construction of a distributed, directed, acyclic graph.  We present
-the Glacier algorithm which provides a Byzantine fault tolerant
-implementation of the base binary decision mechanism.  We outline a
-taxonomy of Byzantine adversaries that seek to thwart this
-computation's correct honesty.
+consensus mechanisms to the class of more efficient and leaderless
+ones rooted in decentralization which provide an exact probabilistic
+measure of safety.  We sketch a simple two-level model for the
+practical execution of such a fairly distributed consensus mechanism,
+in which an underlying leaderless binary decision mechanism is
+utilized to used to vote on the construction of a distributed,
+directed, acyclic graph.  We present the Glacier algorithm which
+provides a Byzantine fault tolerant implementation of the base binary
+decision mechanism.  We outline a taxonomy of Byzantine adversaries
+that seek to thwart this computation's correct honesty.
 
 # Consensus Model
 
@@ -49,7 +49,7 @@ fault tolerance.
 ## Algorithm 
 
 The algorithm begins with considering the truth status of a given
-proposition.  
+proposition.
 
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
@@ -80,9 +80,15 @@ it has an initial opinion:
      opinion
         <-- choose local truth computation of {YES, NO, UNDECIDED}
     
-The algorithm proceeds in rounds for each node.  The liveness of the
-algorithm is severely constrained in the absence of timeouts for a
-round to proceed.
+The proposal proceeds in asynchronous rounds, in which each node
+queries `k` randomly sampled nodes for their opinions until a decision
+about local finality is achieved.  The liveness of the algorithm is
+severely constrained in the absence of timeouts for a round to
+proceed.  When a given node has finalized its decision on the
+proposal, it enters a quiescent state in which it optionally discards
+all information gathered during the query process retaining only the
+state of the original proposal.
+
 
 ### Setup Parameters
 
@@ -95,8 +101,10 @@ First the constants:
 
     ;; FIXME: find and justify an empirical confidence threshold 
     confidence_threshold
-     <-- T  ;; BOGUS:  this should be a function of the network size
-            ;; and the current confidence in the observer majority
+     <-- 1  ;; BOGUS:  this should be a function of the network size
+            ;; and the current confidence in the observer majority as 
+            ;; a function of the current round.  With a value of `1`
+            ;; the algorithim will never terminate
     
     ;; constant look ahead parameter
     look_ahead 
@@ -120,6 +128,9 @@ First the constants:
     ;; Initial numbers of nodes queried in a round
     k_original 
       <-- 7
+    ;; maximum query rounds
+    max_rounds
+      <-- 1000  ;; TODO justify
       
 The following variables will keep the state of Glacier:
       
@@ -132,6 +143,9 @@ The following variables will keep the state of Glacier:
     ;; current number of nodes to attempt to query in a round
     k 
       <-- k_original
+    ;; the current query round     
+    round
+      <-- 0
 
 
 ###  Query 
@@ -143,6 +157,10 @@ A query is sent to each neighbor with the node's current `opinion` of
 the proposal.
 
 Each node replies with their current opinion on the proposal.
+
+See [Interoperability section](#interoperability) for details on the
+(evolving) semantics and syntax of the "on the wire" representation of
+this query.
 
 When the query finishes, the node now initializes the following two
 values:
@@ -179,11 +197,11 @@ examining the relationship between the evidence accumulated for a
 proposal with the confidence encoded in the `alpha` parameter:
 
     IF
-      evidence$ > alpha
+      evidence > alpha
     THEN ;; The node adopts the opinion YES on the proposal
       opinion <-- YES
     ELSE IF       
-      evidence$ < 1 - alpha
+      evidence < 1 - alpha
     THEN;; The node adopts the opinion NO on the proposal 
       opinion <-- NO
        
@@ -192,15 +210,13 @@ phase, the number of uniform randomly queries nodes is adjusted by
 multiplying the neighbors `k` by the `k_multiplier` up to the limit
 of `k_max_multiplier` query size increases.
     
-    IF
+    ;; possibly increase number nodes to uniformly randomly query in next round
+    WHEN
        opinion == UNDECIDED
-    THEN ;; possibly increase number nodes to uniformly randomly query in next round
-       k
-         <-- WHEN 
-                 k < k_original * k_multiplier ^ max_k_multiplier
-             THEN
-                 k * k_multiplier
-             
+    AND 
+       k < k_original * k_multiplier ^ max_k_multiplier
+    THEN 
+       k <-- k * k_multiplier
 
 ###  Decision 
 
@@ -213,15 +229,22 @@ network.
  
     IF 
       confidence > confidence_threshold
+    OR 
+      round > max_rounds
     THEN
       finalized <-- T
       QUERY LOOP TERMINATES
     ELSE 
-      GOTO QUERY LOOP
+      round += 1
+      GOTO QUERY 
 
 Thus, after the decision phase, either a decision has been finalized
 and the local node becomes quiescent never initiating a new query, or
 it initiates a new query.
+
+## Termination Conditions
+
+The alogrithim
 
 ## Further points
 
@@ -294,10 +317,9 @@ glacier:query
           # TODO constrain as an enumeration on three values
           a xsd:string ] 
     ) .
-```    
+```
 
-
-## TODO Semantics
+## Syntax
 
 The message exchanged are a simple enumeration of three values is not
 currently analyzed reflecting the opinion on the given proposal:
