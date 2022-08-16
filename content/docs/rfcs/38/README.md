@@ -1,13 +1,13 @@
 ---
 slug: 38
-title: 38/LOGOS-CONSENSUS
+title: 38/LOGOS-CONSENSUS-GLACIER
 name: Logos Glacier Consensus Protocol
 status: raw
 category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-10 Wed 10:15Z>
+revised: <2022-08-16 Tue 07:13>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -358,10 +358,10 @@ Byzantine but not malicious.  The random adversary also models some
 software defects involved in not "understanding" how to derive a truth
 value for a given proposition.
 
-#### Naive Opposite Adversary
+#### Infantile Adversary
 
-An naive oppositional adversary responds with the opposite vote of the
-honest majority on an opinion.
+Like a petulant child, an infantile adversary responds with the
+opposite vote of the honest majority on an opinion.
 
 ### Omniscient Coordinated Behavior Adversaries
 
@@ -377,7 +377,7 @@ Although we have proposed a normative description of the
 implementation of the underlying binary consensus algorithm (Glacier),
 we believe we have analyzed its adversarial performance in a manner
 that is ammendable to replacement by another member of the [snow*][]
-family.  
+family.
 
 We have presumed the existence of a general family of algorithms that
 can be counted on to vote on nodes in the DAG in a fair manner.
