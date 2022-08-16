@@ -56,7 +56,7 @@ We refer to [Noise protocol framework specifications](http://www.noiseprotocol.o
 Four Noise handshakes are currently supported: `K1K1`, `XK1`, `XX`, `XXpsk0`. Their description can be found in [Appendix: Supported Handshakes Description](#Appendix-Supported-Handshake-Description). 
 These are instantiated combining the following cryptographic primitives:
 - [`Curve25519`](http://www.noiseprotocol.org/noise.html#the-25519-dh-functions) for Diffie-Hellman key-exchanges (32 bytes curve coordinates);
-- [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes block size);
+- [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes authentication tag);
 - [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) hash function used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
 
 #### Content Topics of Noise Handshake Messages
@@ -81,7 +81,7 @@ After the second handshake message is correctly received by initiators, the reco
 ### Encryption Primitives
 
 The symmetric primitives supported are:
-- [`ChaChaPoly`](https://www.ietf.org/rfc/rfc7539.txt) for authenticated encryption (16 bytes block size).
+- [`ChaChaPoly`](https://www.ietf.org/rfc/rfc7539.txt) for authenticated encryption (16 bytes authentication tag).
 
 ## Specification
 
@@ -190,11 +190,9 @@ while ephemeral keys MAY be encrypted after a handshake is complete.
 ### Padding
 
 To prevent some metadata leakage, 
-encrypted transport messages SHOULD be padded before encryption 
-to a multiple of the underlying symmetric cipher block size 
-(16 bytes for `ChaChaPoly`).
+encrypted transport messages SHOULD be padded before encryption.
 
-It is therefore recommended to right pad transport messages to a multiple of 256 bytes.
+It is therefore recommended to right pad transport messages using [RFC2630](https://datatracker.ietf.org/doc/html/rfc2630#section-6.3) so that their final length is a multiple of 248 bytes.
 
 
 ## After-handshake
@@ -327,6 +325,7 @@ The main difference with `XX` is that Alice's and Bob's static keys, when transm
 5. [Noise protocol](http://www.noiseprotocol.org/noise.html)
 6. [Noise handshakes as key-exchange mechanism for Waku2](https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130)
 7. [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234)
+8. [RFC2630 - Content-encryption Process and padding](https://datatracker.ietf.org/doc/html/rfc2630#section-6.3)
 
 
 ## Copyright
