@@ -1,11 +1,13 @@
 ---
 slug: 42
-title: 42/LOGOS-REPUTATION 
+title: 42/LOGOS-REPUTATION-INKINGUT
 name: Logos Node Reputation 
 status: raw
 category: Informational
 tags: logos/reputation
 editor: Mark Evenson <mark.evenson@status.im>
+created: 04-AUG-2022
+revised: <2022-08-16 Tue 07:13>
 contributors:
     - Álvaro Castro-Castilla
 ---
@@ -14,7 +16,7 @@ contributors:
 
 We present Ikingut: an algorithm for purely local computation of peer
 node reputation based on their observed performance of a shared
-computation.  
+computation.
 
 # Background
 
@@ -59,9 +61,10 @@ Other relevant characteristics of the algorithm are:
   functions.
 - Lightweight. It doesn’t perform long computations nor use a lot of
   memory.
-- Pluggable into Glacier and Snowball [38/LOGOS-CONSENSUS][]. It’s
-  designed to fit well with swarm-like consensus algorithms. Moreover,
-  it augments the consensus algorithm without altering it.
+- Pluggable into Glacier [38/LOGOS-CONSENSUS-GLACIER][] and
+  Snowball. Inkingut is designed to fit well with swarm-like consensus
+  algorithms. Moreover, it augments the consensus algorithm without
+  altering it.
 - Adaptive. It processes network and behavior changes fast.
 - Dynamic. It introduces new nodes consistently and fairly.
 - It is robust against strategic adversaries. We will see these in more detail below.
@@ -166,9 +169,9 @@ No model constructed.  No current tests.
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-# References
+# Informative References
 
-## informative
+1. [38/LOGOS-CONSENSUS-GLACIER](https://github.com/vacp2p/rfc/pull/512)
 
-#. [38/LOGOS-CONSENSUS](https://github.com/vacp2p/rfc/pull/512)
-#. [Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.](https://https://doi.org/10.48550/arXiv.1906.08936) TODO:  add IPFS
+2. [Rocket, Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through Metastability.” arXiv, August 24, 2020.](https://https://doi.org/10.48550/arXiv.1906.08936) 
+
