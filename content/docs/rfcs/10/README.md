@@ -8,6 +8,7 @@ contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Hanno Cornelius <hanno@status.im>
   - Reeshav Khan <reeshav@status.im>
+  - Daniel Kaiser <danielkaiser@status.im>
 ---
 
 ## Abstract
@@ -107,13 +108,6 @@ There are also more experimental libp2p protocols such as:
 
 These protocols and their semantics are elaborated on in their own specs.
 
-In addition, Waku v2 MAY make use of [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping) with protocol id
-
-```
-/ipfs/ping/1.0.0
-```
-
-for liveness checks between peers, or to keep peer-to-peer connections alive.
 
 ### Use of libp2p and protobuf
 
@@ -133,6 +127,35 @@ See [11/WAKU2-RELAY](/spec/11) spec for more details.
 For an experimental privacy-preserving economic spam protection mechanism, see [17/WAKU2-RLNRELAY](/spec/17).
 
 See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usage.
+
+### Direct use of libp2p protocols
+
+In addition to `/vac/waku/*` protocols, Waku v2 MAY directly use the following libp2p protocols:
+
+* [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping) with protocol id
+
+```
+/ipfs/ping/1.0.0
+```
+
+for liveness checks between peers, or to keep peer-to-peer connections alive.
+
+* [libp2p identity and identity/push](https://docs.libp2p.io/concepts/protocols/#identify) with protocol IDs
+
+```
+/ipfs/id/1.0.0
+
+```
+
+and
+
+```
+/ipfs/id/push/1.0.0
+```
+
+respectively, as basic means for capability discovery.
+These protocols are anyway used by the libp2p connection establishment layer Waku v2 is built on.
+We plan to introduce a new Vac capability discovery protocol with better anonymity properties and more functionality.
 
 # Transports
 
