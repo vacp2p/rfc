@@ -8,6 +8,7 @@ contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Hanno Cornelius <hanno@status.im>
   - Reeshav Khan <reeshav@status.im>
+  - Daniel Kaiser <danielkaiser@status.im>
 ---
 
 ## Abstract
