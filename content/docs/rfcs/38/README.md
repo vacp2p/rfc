@@ -359,13 +359,14 @@ This starts with zero.
 A unique URI for the proposal.
 
 It should be possible to examine the proposal by resolving this resource.
-""" 
+""" ;
           a xsd:anyURI ],
     :_2 [ rdfs:label "opinion";
           rdfs:comment """
 The opinion on the proposal
 
 One of the strings "YES" "NO" or "NONE".
+""" ;
 
           # TODO constrain as an enumeration on three values
           a xsd:string ] 
@@ -490,6 +491,8 @@ they should be of stable interest no matter if Glacier isn't.
 ## Normative Refenences
 
 0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
+
+1. [n3](https://www.w3.org/TeamSubmission/n3/)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
