@@ -130,60 +130,62 @@ state of the initial proposal.
 
 ### Setup Parameters
 
-The node initializes the following integer constants:
+The node initializes the following integer ratios as constants:
+```
+;;; The following values are constants chosen with justification from experiments
+;;; performed with the adversarial models
 
-First the constants:
+;; FIXME: find and justify an empirical confidence threshold 
+confidence_threshold
+  <-- 1  ;; BOGUS:  this should be a function of the network size
+         ;; and the current confidence in the observer majority as 
+         ;; a function of the current round.  With a value of `1`
+         ;; the algorithim will never terminate
 
-    ;;; The following values are constants chosen with justification from experiments
-    ;;; performed with the adversarial models
+;;; constant look ahead for number of rounds we expect to finalize a
+;;; decision.  Could be set dependent on number of nodes 
+;;; visible in the current gossip graph.
+look_ahead 
+  <-- 19
+;;; These need to be justified empirically via modeling and simulation.
+certainty ;; the confidence weighting parameter (aka $alpha_1$)
+  <-- 4 / 5  
+doubt ;; the lack of confidence weighting parameter (aka $alpha_2$)
+  <-- 2 / 5 
 
-    ;; FIXME: find and justify an empirical confidence threshold 
-    confidence_threshold
-     <-- 1  ;; BOGUS:  this should be a function of the network size
-            ;; and the current confidence in the observer majority as 
-            ;; a function of the current round.  With a value of `1`
-            ;; the algorithim will never terminate
+k_multiplier     ;; neighbor threshold multiplier
+  <-- 2
+
+;;; maximal threshold multiplier, i.e. we will never exceed 
+;;; questioning k_initial * k_multiplier ^ max_k_multiplier peers
+max_k_multiplier 
+  <-- 4
     
-    ;; constant look ahead parameter
-    look_ahead 
-      <-- 19
-    
-    ;; first order confidence smoothing parameter (aka $alpha_1$)
-    certainty
-      <-- 4/5  ;; empirically justified from consensus simulation
-    
-    ;; second order confidence smoothing parameter (aka $alpha_2$)
-    doubt
-      <-- 2/5  ;; empirically justified from consensus simulation
+;;; Initial numbers of nodes queried in a round
+k_initial 
+  <-- 7
 
-    ;; neighbor threshold multiplier
-    k_multiplier 
-      <-- 2
-    ;; maximal threshold multiplier, i.e. we will never exceed 
-    ;; questioning k_initial * k_multiplier ^ max_k_multiplier peers
-    max_k_multiplier 
-      <-- 4
-    ;; Initial numbers of nodes queried in a round
-    k_initial 
-      <-- 7
-    ;; maximum query rounds
-    max_rounds
-      <-- 997  ;; TODO justify
+;;; maximum query rounds before termination
+max_rounds
+   <-- 997 ;; TODO justify
+```
       
-The following variables will keep the state of Glacier:
-      
-    ;; total number of votes examined over all rounds
-    total_votes 
-      <-- 0 
-    ;; total number of YES (i.e. positive) votes for the truth of the proposal
-    total_positive 
-      <-- 0
-    ;; current number of nodes to attempt to query in a round
-    k 
-      <-- k_original
-    ;; the current query round     
-    round
-      <-- 0
+The following variables are needed to keep the state of Glacier:
+
+```
+;; total number of votes examined over all rounds
+total_votes 
+   <-- 0 
+;; total number of YES (i.e. positive) votes for the truth of the proposal
+total_positive 
+   <-- 0
+;; current number of nodes to attempt to query in a round
+k 
+  <-- k_original
+    
+;; the current query round, an integer starting from zero
+round
+  <-- 0
 
 
 ###  Query 
@@ -297,8 +299,8 @@ is not currently analyzed to these opinions should be constrained.
 ### Weighted Node values
 
 The view of network peers participants may optionally have a weighting
-assigned for each node consisting of a real number on the interval $[0, 1]$.
-This weight is used in each query round when selecting the $k$
+assigned for each node consisting of a real number on the interval `[0 1)`.
+This weight is used in each query round when selecting the `k`
 peers so the probability of selecting nodes is proportional to their
 weight.
 
@@ -306,7 +308,7 @@ $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
 $$ 
 
-where $w_i$ is the weight of the {i}th peer.
+where `w_i` is the weight of the `i`th peer.
 
 This weighted value would be used to reflect decisions mediating
 
@@ -331,9 +333,9 @@ Python and Common Lisp are also in limited public review.
 
 # Interoperability
 
-There is no current wire protocol for the queries.  Nodes are advised
-to use Waku messages to include their own metadata in serializations
-as needed.  Such a message contains minimally
+The wire protocol semantics are described in N3 by the following
+statements expressed in Notation3 (aka `n3`).  
+
 
 ```n3
 @prefix rdf:         <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -369,10 +371,14 @@ One of the strings "YES" "NO" or "NONE".
     ) .
 ```
 
+Nodes are advised to use Waku messages to include their own
+metadata in serializations as needed.  
+
 ## Syntax
 
-The semantic description presented above can be reliably 
-round-tripped through a suitable serialization mechanism.  
+The semantic description presented above can be reliably round-tripped
+through a suitable serialization mechanism.  JSON-LD provides a
+canonical mapping to UTF-8 JSON.
 
 The message exchanged are a simple enumeration of three values is not
 currently analyzed reflecting the opinion on the given proposal:
@@ -480,7 +486,9 @@ they should be of stable interest no matter if Glacier isn't.
 
 7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
 
-8. [glacier](<https://rdf.logos.co/protocol/glacier#>)
+## Normative Refenences
+
+0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
@@ -490,7 +498,7 @@ that attempt to preserve the original flavor of the exposition.
 
 ## Phase One: Querying
 
-A node selects $k$ nodes randomly from the complete pool of peers in the
+A node selects `k` nodes randomly from the complete pool of peers in the
 network. This query is can optionally be weighted, so the probability
 of selecting nodes is proportional to their weight.  [[Explain
 weighting needs]].
