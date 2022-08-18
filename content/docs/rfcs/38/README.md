@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-18 Thu 12:00>
+revised: <2022-08-18 Thu 13:55Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -467,9 +467,9 @@ We compute the following values
 
 $$
 \begin{array}{lc}
-\text{Confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \newline
-\text{Total accumulated evidence}& e_{accum} = \frac{total\ positive\ votes}{total\ votes} \newline
-\text{Evidence per round}        & e_{round} = \frac{round\ positive\ votes}{round\ votes} \newline
+\text{Confidence}                & c_{accum} \impliedby \frac{total\ votes}{total\ votes + l} \newline
+\text{Total accumulated evidence}& e_{accum} \impliedby \frac{total\ positive\ votes}{total\ votes} \newline
+\text{Evidence per round}        & e_{round} \impliedby \frac{round\ positive\ votes}{round\ votes} \newline
 \end{array}
 $$
 
@@ -493,8 +493,10 @@ other. Our interest in removing the step function is twofold:
 The transition function computes
 
 $$
-evidence = e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
-\alpha = \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
+\begin{array}{cl}
+evidence & \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
+\alpha_1 &  \impliedby (1 - c_{accum}) + \alpha_2 c_{accum} \newline
+\end{array} 
 $$
     
 Since the confidence is modeled as a ratio that depends on the
@@ -533,12 +535,14 @@ employed. This threshold is derived from the network size, and is
 directly related to the number of total votes received.
     
 $$
-evidence > \alpha \implies \text{opinion YES} \newline
-evidence < 1 - \alpha \implies \text{opinion NO} \newline
-if\ \text{confidence} > c_{target} \implies  \text{decide} \newline
+\begin{array}{cl}
+evidence > \alpha & \implies \text{opinion YES} \newline
+evidence < 1 - \alpha & \implies \text{opinion NO} \newline
+if\ \text{confidence} > c_{target} & THEN \ \text{finalize decision} \newline
+\end{array}
 $$
 
-Note: elaborate on $c_{target}$ selection.
+Note: elaborate on $$c_{target}$$ selection.
 
 
 # Appendix D: Dumpster
