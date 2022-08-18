@@ -303,10 +303,10 @@ The current algorithm doesn't describe how the initial opinions are formed.
 
 # Implementation status
 
-logos.co is prepared to share an implementations in Rust which
-contains an efficiently multi-threaded implementation utilized by both
-a local simulator and actual network construction.  Expressions of
-Glacier in Python and Common Lisp are also in limited public review.
+logos.co prepares to share an implementations in Rust which contains
+an efficiently multi-threaded implementation utilized by both a local
+simulator and actual network construction.  Expressions of Glacier in
+Python and Common Lisp are also in limited public review.
 
 
 # Interoperability
