@@ -7,8 +7,8 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-18 Thu 12:00Z>
-uri: <https://rdf.logos.co/protocol/glacier#1.0.0>
+revised: <2022-08-18 Thu 21:37Z>
+uri: <https://rdf.logos.co/protocol/glacier/1/0/0#2022-08-18%20Thu%2021:37Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -100,7 +100,8 @@ The node has a semantics and serialization of the proposal, of which
 it sets an initial opinion:
 
      opinion
-        <-- initial opinion on the truth of the proposal as one of {YES, NO, NONE}
+        <-- initial opinion on truth of the proposal
+            as one of: {NO, NONE, YES}
     
 The proposal proceeds in asynchronous rounds, in which each node
 queries `k` randomly sampled nodes for their opinions until a decision
@@ -152,7 +153,7 @@ First the constants:
       <-- 7
     ;; maximum query rounds
     max_rounds
-      <-- 1000  ;; TODO justify
+      <-- 997  ;; TODO justify
       
 The following variables will keep the state of Glacier:
       
@@ -266,6 +267,10 @@ it initiates a new query.
 
 ## Further points
 
+### Execution Model Termination Conditions
+
+TODO
+
 ### Node receives information during round
 
 In the query step, the node is envisioned as packing information into
@@ -294,7 +299,7 @@ This weighted value would be used to reflect decisions mediating
 - Heuristic reputation
 - Manual reputation
 
-### Problems 
+#### Problems with Weighting Node Value of Opinions
 
 If the view of other nodes is incomplete, then the sum of the optional
 weighting won't be a probability distribution normalized to 1.
@@ -357,14 +362,14 @@ round-tripped through a suitable serialization mechanism.
 The message exchanged are a simple enumeration of three values is not
 currently analyzed reflecting the opinion on the given proposal:
 
-    { YES, NO, NONE }
+    { NO, NONE, YES }
 
-when represented via integers, such as choosing 
+When represented via integers, such as choosing 
  
-     { -1, +1, 0 }
+     { -1, 0, +1 }
 
-parity summations across network invariants often become easier to
-represent.
+the parity summations across network invariants often become easier to
+manipulate.
 
 # Sovereignty Considerations
 
@@ -383,7 +388,7 @@ justification of this tuning need to be completed.
 
 ### Local Strategies
 
-#### Random Adversary
+#### Random Adversaries
 
 A random adversary optionally chooses to respond to all queries with a
 random decision.  Note that this adversary may be in some sense
@@ -396,12 +401,28 @@ value for a given proposition.
 Like a petulant child, an infantile adversary responds with the
 opposite vote of the honest majority on an opinion.
 
-### Omniscient Coordinated Behavior Adversaries
+### Omniscient Adversaries
 
-An omniscient adversary controls $f$ of $N$ nodes and may inspect,
-delay, and drop arbitrary messages in the gossip layer, and utilize
+Omniscient adversaries have somhow gained an "unfair" participation in
+consensus by being able to controlling $f$ of $N$ nodes with an
+out-of-band "supra-liminal" communication mechansim.  Such adversaries
+may use this coordinated behavior to delay or sway honest majority
+consensus.
+
+#### Passive Gossip Adversary
+
+The passive network omniscient adversary is fully aware at all times
+of the network state. Such an adversary can always chose to vote in
+the most efficient way to block the distributed consenus from
+finalizing.
+
+#### Active Gossip Adversary
+
+An omniscient gossip adversary somehow not only controls $f$ of $N$
+nodes, but has also has corrupted communications between nodes such
+that she may inspect, delay, and drop arbitrary messages.  She uses
 this to corrupt consensus away from honest decisions to ones favorable
-to itself.  It may, of course, choose to participate in an honest
+to itself.  She may, of course, choose to participate in an honest
 manner until defecting is most advantageous.
 
 # Future Directions
@@ -422,7 +443,6 @@ tooling abstraction that allow one to just program the DAG itself, as
 they should be of stable interest no matter if Glacier isn't. 
 
 
-
 # Informative References
 
 1. [On BFT Consensus Evolution: From Monolithic to
@@ -437,16 +457,19 @@ they should be of stable interest no matter if Glacier isn't.
    
 4. [Move] A language for writing DAG abstractions 
 
-5. [rdf]         <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+5. [rdf](<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
 
-6. [rdfs]        <http://www.w3.org/2000/01/rdf-schema#> 
+6. [rdfs](<http://www.w3.org/2000/01/rdf-schema#>)
 
-7. [xsd]         <http://www.w3.org/2001/XMLSchema#> 
+7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
 
-@prefix glacier      <https://rdf.logos.co/protocol/glacier#> .
+8. [glacier](<https://rdf.logos.co/protocol/glacier#>)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
+
+We present Alvaro's notion of Glacier, adorned with suitable edits
+that attempt to preserve the original flavor of the exposition.
 
 ## Phase One: Querying
 
