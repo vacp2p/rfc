@@ -304,6 +304,7 @@ of `0` but exclusive of `1`.  This weight is used in each query round
 when selecting the `k` peers so the probability of selecting nodes is
 proportional to their weight.
 
+Node weighting probablity
 $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
 $$ 
@@ -503,6 +504,7 @@ network. This query is can optionally be weighted, so the probability
 of selecting nodes is proportional to their weight.  [[Explain
 weighting needs]].
 
+Node Weighting
 $$ 
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j} 
 $$
@@ -542,8 +544,7 @@ parameter $l$.) Evidence accumulated keeps the ratio of total positive
 votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
-### Parameters
-
+Parameters
 $$
 \begin{array}{lc}
 \text{Look-ahead parameter}      & l = 20 \newline
@@ -552,8 +553,7 @@ $$
 \end{array}
 $$
 
-### Compuatation
-
+Computation
 $$
 \begin{array}{lc}
 \text{Confidence}                & c_{accum} \impliedby \frac{total\ votes}{total\ votes + l} \newline
@@ -579,12 +579,11 @@ other. Our interest in removing the step function is twofold:
    understood, opening the door to elaborated attacks. The transition
    function proposed is linear with respect to the confidence.
 
-### Transition function computation 
-
+Transition Function
 $$
 \begin{array}{cl}
 evidence & \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
-\alpha_1 &  \impliedby (1 - c_{accum}) + \alpha_2 c_{accum} \newline
+\alpha &  \impliedby \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
 \end{array} 
 $$
     
@@ -622,7 +621,8 @@ decision, checking both boundaries. The last step is then to *decide*
 on the current opinion. For that, a confidence threshold is
 employed. This threshold is derived from the network size, and is
 directly related to the number of total votes received.
-    
+  
+Decision
 $$
 \begin{array}{cl}
 evidence > \alpha & \implies \text{opinion YES} \newline
