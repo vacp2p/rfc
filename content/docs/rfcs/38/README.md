@@ -65,7 +65,7 @@ compute a justification of the proposal, it sets its opinion to one of
 The node then participates in a number of query rounds in which it
 solicits other node's opinion in query rounds.  Given a set of $n$
 leaderless computational nodes, a gossip-based protocol is presumed to
-exist which which allows members to discover, join, and leave a weakly
+exist which allows members to discover, join, and leave a weakly
 transitory maximally connected graph.  Joining this graph allows each
 node to view a possibly incomplete node membership list of all other
 nodes.  This view may change as the protocol advances, as nodes join
