@@ -7,26 +7,41 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-18 Thu 13:55Z>
+revised: <2022-08-18 Thu 12:00Z>
+uri: <https://rdf.logos.co/protocol/glacier#1.0.0>
 contributors:
     - Álvaro Castro-Castilla 
 ---
 
 # Abstract
 
-We propose to transition our use of resource intensive Nakomoto
-consensus mechanisms to the class of more efficient and leaderless
-ones rooted in decentralization which provide an exact probabilistic
-measure of safety.  We sketch a simple two-level model for the
-practical execution of such a fairly distributed consensus mechanism,
-in which an underlying leaderless binary decision mechanism is
-utilized to used to vote on the construction of a distributed,
-directed, acyclic graph.  We present the Glacier algorithm which
-provides a Byzantine fault tolerant implementation of the base binary
-decision mechanism.  We outline a taxonomy of Byzantine adversaries
-that seek to thwart this computation's correct honesty.
+This document specifies the Glacier Binary Byzantine Agreement
+algorithm of applications, a new member of the Snow family that uses
+bounded memory.  We present an incomplete context of the use of
+Glacier for more efficient, peer probabilitisic consensus mechanism.
 
-# Consensus Model
+# One Possible Logos Manifesto
+
+Logos considers how to transition our use of resource intensive
+Nakomoto consensus mechanisms to the class of more efficient and
+leaderless ones rooted in decentralization.  We seek to connect such
+mechanisms to explicit security modelsfor their execution.  As a
+member of the Snow family, Glacier provides an exact probabilistic
+measure of safety of the finalization of states on a shared data structure.  
+
+We sketch a simple two-level model for the practical execution of such
+a fairly distributed consensus mechanism, in which an underlying
+leaderless binary decision mechanism is utilized to used to vote on
+the construction of a distributed, directed, acyclic graph.  We
+present the Glacier algorithm which provides a Byzantine fault
+tolerant implementation of the base binary decision mechanism.  We
+outline a taxonomy of Byzantine adversaries that seek to thwart this
+computation's correct honesty.
+
+The algorithim we specify here, Glacier, may be extended to a DAG
+structure in order to achieve a leaderless byzantine fault tolerancr.
+
+## Logos Consensus Model
 
 Given an underlying binary consensus mechanism, one may quickly vote
 on the distributed, directed acyclic ledger graph of transactions.  If
@@ -38,9 +53,16 @@ of a shared, trusted state machine evolution.  Such a state machine
 may perform an arbitrary computation from the class of "smart
 contract" artifacts by implementing a given model of transaction.
 
-# Glacier 
+This execution mechanism consists of transitions in a state machine
+representation, each one a potential transaction.  These transactions
+are gossiped to active (i.e. online) participants.  The participants
+vote on whether a given transaction should be counted as valid which
+reaches an eventual consistent state in which the transactions are
+said to have been finalized.
 
-The Glacier consensus algorithm computes a yes/no decision on a
+# Glacier Algorithm Specification
+
+The Glacier consensus algorithm computes a boolean decision on a
 proposition via a set of distributed computational nodes.  Glacier is
 a leaderless probabilistic binary consensus algorithm with fast
 finality that provides good reliability for network and Byzantine
@@ -87,7 +109,7 @@ severely constrained in the absence of timeouts for a round to
 proceed.  When a given node has finalized its decision on the
 proposal, it enters a quiescent state in which it optionally discards
 all information gathered during the query process retaining only the
-state of the original proposal.
+state of the initial proposal.
 
 
 ### Setup Parameters
@@ -122,11 +144,11 @@ First the constants:
     k_multiplier 
       <-- 2
     ;; maximal threshold multiplier, i.e. we will never exceed 
-    ;; questioning k_original * k_multiplier ^ max_k_multiplier peers
+    ;; questioning k_initial * k_multiplier ^ max_k_multiplier peers
     max_k_multiplier 
       <-- 4
     ;; Initial numbers of nodes queried in a round
-    k_original 
+    k_initial 
       <-- 7
     ;; maximum query rounds
     max_rounds
@@ -205,11 +227,10 @@ proposal with the confidence encoded in the `alpha` parameter:
     THEN ;; The node adopts the opinion NO on the proposal 
       opinion <-- NO
        
-If the opinion of the node is `NONE` after evaluating the
-relation between `evidence` and `alpha`, the number of uniform randomly
-queries nodes is adjusted by multiplying the neighbors `k` by the
-`k_multiplier` up to the limit of `k_max_multiplier` query size
-increases.
+If the opinion of the node is `NONE` after evaluating the relation
+between `evidence` and `alpha`, adjust the number of uniform randomly
+queried nodes by multiplying the neighbors `k` by the `k_multiplier`
+up to the limit of `k_max_multiplier` query size increases.
     
     ;; possibly increase number nodes to uniformly randomly query in next round
     WHEN
@@ -245,7 +266,7 @@ it initiates a new query.
 
 ## Further points
 
-### Node receives information when answering queries
+### Node receives information during round
 
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
@@ -304,19 +325,34 @@ as needed.  Such a message contains minimally
 glacier:query
   :holds (
     :_0 [ rdfs:label "round";
-          rdfs:comment "The local number of rounds participating"
+          rdfs:comment """
+The current round of this query 
+
+This starts with zero.
+""" ;
           a xsd:postitiveInteger; ],
-    :_1 [ rdfs:label "id";
-          rdfs:comment "A unique content-addressable URI for the proposal"; # Use DID??
+    :_1 [ rdfs:label "uri";
+          rdfs:comment """
+A unique URI for the proposal.
+
+It should be possible to examine the proposal by resolving this resource.
+""" 
           a xsd:anyURI ],
     :_2 [ rdfs:label "opinion";
-          rdfs:comment "The opinion on the proposal",
+          rdfs:comment """
+The opinion on the proposal
+
+One of the strings "YES" "NO" or "NONE".
+
           # TODO constrain as an enumeration on three values
           a xsd:string ] 
     ) .
 ```
 
 ## Syntax
+
+The semantic description presented above can be reliably 
+round-tripped through a suitable serialization mechanism.  
 
 The message exchanged are a simple enumeration of three values is not
 currently analyzed reflecting the opinion on the given proposal:
@@ -400,6 +436,15 @@ they should be of stable interest no matter if Glacier isn't.
    Metastability.” arXiv, August 24, 2020.
    
 4. [Move] A language for writing DAG abstractions 
+
+5. [rdf]         <http://www.w3.org/1999/02/22-rdf-syntax-ns#> 
+
+6. [rdfs]        <http://www.w3.org/2000/01/rdf-schema#> 
+
+7. [xsd]         <http://www.w3.org/2001/XMLSchema#> 
+
+@prefix glacier      <https://rdf.logos.co/protocol/glacier#> .
+
 
 # Appendix A: Alvaro's Exposition of Glacier
 
@@ -540,16 +585,6 @@ if\ \text{confidence} > c_{target} & THEN \ \text{finalize decision} \newline
 $$
 
 Note: elaborate on $$c_{target}$$ selection.
-
-
-# Appendix D: Dumpster
- 
-This execution mechanism consists of transitions in a state machine
-representation, each one a potential transaction.  These transactions
-are gossiped to active (i.e. online) participants.  The participants
-vote on whether a given transaction should be counted as valid which
-reaches an eventual consistent state in which the transactions are
-said to have been finalized.
 
 
 # Colophon
