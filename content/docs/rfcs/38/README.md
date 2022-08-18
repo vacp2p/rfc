@@ -125,8 +125,7 @@ severely constrained in the absence of timeouts for a round to
 proceed.  When a given node has finalized its decision on the
 proposal, it enters a quiescent state in which it optionally discards
 all information gathered during the query process retaining only the
-state of the initial proposal.
-
+final opinion on the truth of the proposal.
 
 ### Setup Parameters
 
@@ -148,9 +147,9 @@ confidence_threshold
 look_ahead 
   <-- 19
 ;;; These need to be justified empirically via modeling and simulation.
-certainty ;; the confidence weighting parameter (aka $alpha_1$)
+certainty ;; the confidence weighting parameter (aka alpha_1)
   <-- 4 / 5  
-doubt ;; the lack of confidence weighting parameter (aka $alpha_2$)
+doubt ;; the lack of confidence weighting parameter (aka alpha_2)
   <-- 2 / 5 
 
 k_multiplier     ;; neighbor threshold multiplier
