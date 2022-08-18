@@ -452,40 +452,24 @@ parameter $l$.) Evidence accumulated keeps the ratio of total positive
 votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
+
+For parameters with the following values:
 $$
-\begin{array}{rr}
-\text{look-ahead parameter}      & l = 20 \\
-\text{first evidence parameter}  & \alpha_1 = 0.8 \\
-\text{second evidence parameter} & \alpha_2 = 0.5 \\
-\text{confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \\
-\text{evidence accumulated}      & e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
-\text{evidence per round}        & e_{round} = \frac{round\ positive\ votes}{round\ votes} \\
+\begin{array}{lc}
+\text{Look-ahead parameter}      & l = 20 \newline
+\text{First evidence parameter}  & \alpha_1 = 0.8 \newline
+\text{Second evidence parameter} & \alpha_2 = 0.5 \newline
 \end{array}
 $$
 
-
+We compute the following values
 $$
-\begin{matrix}
-\text{look-ahead parameter}      & l = 20 \\
-\text{first evidence parameter}  & \alpha_1 = 0.8 \\
-\text{second evidence parameter} & \alpha_2 = 0.5 \\
-\text{confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \\
-\text{evidence accumulated}      & e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
-\text{evidence per round}        & e_{round} = \frac{round\ positive\ votes}{round\ votes} \\
-\end{matrix}
+\begin{array}{lc}
+\text{Confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \newline
+\text{Total accumulated evidence}& e_{accum} = \frac{total\ positive\ votes}{total\ votes} \newline
+\text{Evidence per round}        & e_{round} = \frac{round\ positive\ votes}{round\ votes} \newline
+\end{array}
 $$
-
-
-
-```math
-$$\text{look-ahead parameter} l = 20 $$
-$$\alpha_1 = 0.8 \text{first evidence parameter}$$
-\alpha_2 = 0.5 \text{second evidence parameter}\\
-\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l}\\
-\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes}\\
-\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}\\
-```
-
 
 
 ## Phase Three: Transition function 
