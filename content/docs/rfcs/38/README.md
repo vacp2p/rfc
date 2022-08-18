@@ -457,6 +457,10 @@ $$
 \begin{matrix}
 \text{look-ahead parameter}      & l = 20 \\
 \text{first evidence parameter}  & \alpha_1 = 0.8 \\
+\text{second evidence parameter} & \alpha_2 = 0.5 \\
+\text{confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \\
+\text{evidence accumulated}      & e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
+\text{evidence per round}        & e_{round} = \frac{round\ positive\ votes}{round\ votes} \\
 \end{matrix}
 $$
 
