@@ -18,7 +18,10 @@ contributors:
 This document specifies the Glacier Binary Byzantine Agreement
 algorithm of applications, a new member of the Snow family that uses
 bounded memory.  We present an incomplete context of the use of
-Glacier for more efficient, peer probabilitisic consensus mechanism.
+Glacier in a more efficient, leaderless, probabilitisic
+permission-less consensus mechanism.  We outline a simple taxonomy of
+Byzantine adversaries, leaving explicit explorations of to subsequent
+publication.
 
 # One Possible Logos Manifesto
 
@@ -41,7 +44,7 @@ computation's correct honesty.
 The algorithim we specify here, Glacier, may be extended to a DAG
 structure in order to achieve a leaderless byzantine fault tolerancr.
 
-## Logos Consensus Model
+## Leaderless Consensus Model Application to Shared State 
 
 Given an underlying binary consensus mechanism, one may quickly vote
 on the distributed, directed acyclic ledger graph of transactions.  If
@@ -59,6 +62,18 @@ are gossiped to active (i.e. online) participants.  The participants
 vote on whether a given transaction should be counted as valid which
 reaches an eventual consistent state in which the transactions are
 said to have been finalized.
+
+Like the Prisoner Dilemma, the execution of Glacier on a single
+proposal doesn't have very complicated game theoretics.  Simply
+conceived, multiple runs of Glacier could track a linear chain of
+consensus like any other contemporary implementation. But in practice,
+leaderless consensus may be used contribute finalization of multiple
+proposals arranged in a directed acyclic graph.  Nodes would naturally
+choose to compute the consensus of directed graph of the proposals
+that they are interested in.  This autosharding property superceeds
+any possible Nakomota consensus mechanism, as any proof of work
+mechanism would by defition need to increase its the work necessary
+for its continued constant security of all chains of interest.
 
 # Glacier Algorithm Specification
 
@@ -173,8 +188,8 @@ The following variables will keep the state of Glacier:
 
 ###  Query 
 
-A node selects $k$ nodes randomly from the current locally known
-complete set of peers in the network.  
+A node selects `k` nodes randomly from the current locally known
+complete set of peers in the network.
 
 A query is sent to each neighbor with the node's current `opinion` of
 the proposal.
