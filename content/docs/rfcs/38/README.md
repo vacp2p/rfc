@@ -480,21 +480,21 @@ In order to eliminate the need for a step function (a conditional in
 the code), we introduce a transition function from one regime to the
 other. Our interest in removing the step function is twofold:
 
-   #. Simplify the algorithm. With this change the number of branches is
+1. Simplify the algorithm. With this change the number of branches is
    reduced, and everything is expressed as a set of equations.
 
-   #. The transition function makes the regime switch smooth,
+2. The transition function makes the regime switch smooth,
    making it harder to potentially exploit the sudden regime change in
    some unforeseen manner. Such a swift change in operation mode could
    potentially result in a more complex behavior than initially
    understood, opening the door to elaborated attacks. The transition
    function proposed is linear with respect to the confidence.
-    
+
+The transition function computes
+
 $$
-\begin{itemize}
-\item e = e_{round} (1-c_{accum}) + e_{accum} c_{accum}
-\item \alpha = \alpha_1 (1-c_{accum}) + \alpha_2 c_{accum}
-\end{itemize}
+evidence = e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
+\alpha = \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
 $$
     
 Since the confidence is modeled as a ratio that depends on the
@@ -515,15 +515,13 @@ we need establish two requirements:
 - Second, the convergence to 1.0 (fully operating in the second
   regime) should happen within a reasonable time-frame. We’ve set
   this time-frame experimentally at 1000 votes, which is in the
-  order of ~100 queries given a k=9.
+  order of ~100 queries given a $k$  of 9.
 
 [[ Note: elaborate on the selection of k, diameter of graph, etc. ]]
 
 [[ Note: Avalanche uses k = 20, as an experimental result from their
 deployment. Due to the fundamental similarities between the
 algorithms, it’s a good start for us. ]]
-    
-    
   
 ## Phase Four: Opinion and Decision  
 
@@ -535,11 +533,9 @@ employed. This threshold is derived from the network size, and is
 directly related to the number of total votes received.
     
 $$
-\begin{itemize}
-\item e > \alpha \implies \text{opinion YES} 
-\item e < 1-\alpha \implies \text{opinion NO} 
-\item if\ \text{confidence} > c_{target} \implies  \text{decide}
-\end{itemize}
+evidence > \alpha \implies \text{opinion YES} \newline
+evidence < 1 - \alpha \implies \text{opinion NO} \newline
+if\ \text{confidence} > c_{target} \implies  \text{decide} \newline
 $$
 
 Note: elaborate on $c_{target}$ selection.
