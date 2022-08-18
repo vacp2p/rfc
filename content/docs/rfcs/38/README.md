@@ -304,6 +304,7 @@ This weight is used in each query round when selecting the `k`
 peers so the probability of selecting nodes is proportional to their
 weight.
 
+[THIS USED TO WORK!  -ed]
 $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
 $$ 
