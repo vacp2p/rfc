@@ -54,13 +54,13 @@ proposition.
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as `yes`, `no`,
-and `undecided`.
+and `none`.
 
 A new proposition is discovered either by local creation or in
 response to a query, a node checks its local opinion.  If the node can
 compute a justification of the proposal, it sets its opinion to one of
 `yes` or `no`.  If it cannot form an opinion, it leaves its opinion as
-`undecided`.
+`none`.
 
 The node then participates in a number of query rounds in which it
 solicits other node's opinion in query rounds.  Given a set of $n$
@@ -75,10 +75,10 @@ and leave.
 ### Proposal Identification
 
 The node has a semantics and serialization of the proposal, of which
-it has an initial opinion:
+it sets an initial opinion:
 
      opinion
-        <-- choose local truth computation of {YES, NO, UNDECIDED}
+        <-- initial opinion on the truth of the proposal as one of {YES, NO, NONE}
     
 The proposal proceeds in asynchronous rounds, in which each node
 queries `k` randomly sampled nodes for their opinions until a decision
@@ -170,15 +170,15 @@ values:
     positive_votes 
       <-- |YES votes received from the query| 
     
-### Computation    
+### Computation
 
 The node runs the `new_votes` and `positive_votes` parameters received
 in the query round through the following algorithm:
 
     total_votes 
-      += new_votes
+      +== new_votes
     total_positive 
-      += positive_votes
+      +== positive_votes
     confidence 
       <-- total_votes / (total_votes + look_ahead) 
     total_evidence 
@@ -202,19 +202,20 @@ proposal with the confidence encoded in the `alpha` parameter:
       opinion <-- YES
     ELSE IF       
       evidence < 1 - alpha
-    THEN;; The node adopts the opinion NO on the proposal 
+    THEN ;; The node adopts the opinion NO on the proposal 
       opinion <-- NO
        
-If the opinion of the node is `UNDECIDED` after evaluating the opinion
-phase, the number of uniform randomly queries nodes is adjusted by
-multiplying the neighbors `k` by the `k_multiplier` up to the limit
-of `k_max_multiplier` query size increases.
+If the opinion of the node is `NONE` after evaluating the
+relation between `evidence` and `alpha`, the number of uniform randomly
+queries nodes is adjusted by multiplying the neighbors `k` by the
+`k_multiplier` up to the limit of `k_max_multiplier` query size
+increases.
     
     ;; possibly increase number nodes to uniformly randomly query in next round
     WHEN
-       opinion == UNDECIDED
-    AND 
-       k < k_original * k_multiplier ^ max_k_multiplier
+         opinion is NONE
+      AND 
+         k < k_original * k_multiplier ^ max_k_multiplier
     THEN 
        k <-- k * k_multiplier
 
@@ -235,16 +236,12 @@ network.
       finalized <-- T
       QUERY LOOP TERMINATES
     ELSE 
-      round += 1
+      round +== 1
       GOTO QUERY 
 
 Thus, after the decision phase, either a decision has been finalized
 and the local node becomes quiescent never initiating a new query, or
 it initiates a new query.
-
-## Termination Conditions
-
-The alogrithim
 
 ## Further points
 
@@ -253,7 +250,7 @@ The alogrithim
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
 this $k$ nodes containing the node's own current opinion on the
-proposal ("YES", "NO", or "UNDECIDED").  The relation of the metadata
+proposal ("YES", "NO", or "NONE").  The relation of the metadata
 is not currently analyzed to these opinions should be constrained.
 
 ### Weighted Node values
@@ -324,7 +321,7 @@ glacier:query
 The message exchanged are a simple enumeration of three values is not
 currently analyzed reflecting the opinion on the given proposal:
 
-    { YES, NO, UNDECIDED }
+    { YES, NO, NONE }
 
 when represented via integers, such as choosing 
  
