@@ -15,13 +15,13 @@ contributors:
 
 # Abstract
 
-This document specifies the Glacier Binary Byzantine Agreement
-algorithm of applications, a new member of the Snow family that uses
-bounded memory.  We present an incomplete context of the use of
-Glacier in a more efficient, leaderless, probabilitisic
-permission-less consensus mechanism.  We outline a simple taxonomy of
-Byzantine adversaries, leaving explicit explorations of to subsequent
-publication.
+This document specifies Glacier: a Byzantine tolerant binary decision
+agreement algorithm.  Glacier is a novel member of the Snow family
+that utilizes bounded memory for its execution.  We present an
+incomplete context of the use of Glacier in a more efficient,
+leaderless, probabilitisic permission-less consensus mechanism.  We
+outline a simple taxonomy of Byzantine adversaries, leaving explicit
+explorations of to subsequent publication.
 
 # One Possible Logos Manifesto
 
@@ -459,6 +459,8 @@ they should be of stable interest no matter if Glacier isn't.
 
 
 # Informative References
+
+0. [Logos](https://logos.co/)
 
 1. [On BFT Consensus Evolution: From Monolithic to
    DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
