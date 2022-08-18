@@ -488,11 +488,13 @@ they should be of stable interest no matter if Glacier isn't.
 
 7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
 
+8. [n3](<https://www.w3.org/TeamSubmission/n3/>)
+
 ## Normative Refenences
 
 0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
 
-1. [n3](https://www.w3.org/TeamSubmission/n3/)
+1. [json-ld](<https://json-ld.org/>)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
@@ -522,10 +524,10 @@ consists of adaptively growing the *k* constant in the event of
 *high confusion*. We define high confusion as the situation in
 which neither opinion is strongly held in a query (*i.e.* a
 threshold is not reached for either yes or no). For this, we will
-use the $\alpha$ threshold defined below. This adaptive growth of
+use the *alpha* threshold defined below. This adaptive growth of
 the query size is done as follows:
 
-Every time the threshold is not reached, we multiply $k$ by a
+Every time the threshold is not reached, we multiply *k* by a
 constant. In our experiments, we found that a constant of 2 works
 well, but what really matter is that it stays within that order of
 magnitude.
@@ -543,7 +545,7 @@ When the query returns, three ratios are used later on to compute the
 transition function and the opinion forming. Confidence encapsulates
 the notion of how much we know (as a node) in relation to how much we
 will know in the near future (this being encoded in the look-ahead
-parameter $l$.) Evidence accumulated keeps the ratio of total positive
+parameter *l*.) Evidence accumulated keeps the ratio of total positive
 votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
@@ -591,24 +593,23 @@ evidence & \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
 $$
     
 Since the confidence is modeled as a ratio that depends on the
-constant $l$, we can visualize the transition function at
-different values of $l$. Recall that this constant encapsulates
+constant `l`, we can visualize the transition function at
+different values of `l`. Recall that this constant encapsulates
 the idea of “near future” in the frequentist certainty model: the
 higher it is, the more distant in time we consider the next
 valuable input of evidence to happen.
 
-In the following graph four different values of $l$ have been
-plotted. We observe that for a transition function to be useful,
-we need establish two requirements:
+We have observed via expeiment that for a transition function to be
+useful, we need establish two requirements:
 
-- First, the change has to be balanced and smooth, giving an
-  opportunity to the first regime to operate and not jump directly
-  to the second regime.
+1.  The change has to be balanced and smooth, giving an
+    opportunity to the first regime to operate and not jump directly
+    to the second regime.
 
-- Second, the convergence to 1.0 (fully operating in the second
-  regime) should happen within a reasonable time-frame. We’ve set
-  this time-frame experimentally at 1000 votes, which is in the
-  order of ~100 queries given a $k$  of 9.
+2.  The convergence to 1.0 (fully operating in the second regime)
+    should happen within a reasonable time-frame. We’ve set this
+    time-frame experimentally at 1000 votes, which is in the order of
+    ~100 queries given a *k* of 9.
 
 [[ Note: elaborate on the selection of k, diameter of graph, etc. ]]
 
@@ -619,7 +620,7 @@ algorithms, it’s a good start for us. ]]
 ## Phase Four: Opinion and Decision  
 
 The next step is a simple one: change our opinion if the threshold
-$\alpha$ is reached. This needs to be done separately for the yes/no
+*alpha* is reached. This needs to be done separately for the yes/no
 decision, checking both boundaries. The last step is then to *decide*
 on the current opinion. For that, a confidence threshold is
 employed. This threshold is derived from the network size, and is
@@ -634,7 +635,7 @@ if\ \text{confidence} > c_{target} & THEN \ \text{finalize decision} \newline
 \end{array}
 $$
 
-Note: elaborate on $$c_{target}$$ selection.
+Note: elaborate on `c_{target}` selection.
 
 
 # Colophon
