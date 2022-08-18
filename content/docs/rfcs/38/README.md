@@ -454,6 +454,7 @@ evidence per round stores the ratio of the current round only.
 
 
 For parameters with the following values:
+
 $$
 \begin{array}{lc}
 \text{Look-ahead parameter}      & l = 20 \newline
@@ -463,6 +464,7 @@ $$
 $$
 
 We compute the following values
+
 $$
 \begin{array}{lc}
 \text{Confidence}                & c_{accum} = \frac{total\ votes}{total\ votes + l} \newline
