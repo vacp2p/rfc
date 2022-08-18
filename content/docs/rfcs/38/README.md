@@ -7,7 +7,7 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-16 Tue 07:13>
+revised: <2022-08-18 Thu 12:00>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -453,14 +453,12 @@ votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
 $$
-\begin{itemize}
-\item l = 20 \text{look-ahead parameter} 
-\item \alpha_1 = 0.8 \text{first evidence parameter} 
-\item \alpha_2 = 0.5 \text{second evidence parameter} 
-\item \text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l}
-\item \text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} 
-\item \text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}
-\end{itemize}
+l = 20 \text{look-ahead parameter}  \\
+\alpha_1 = 0.8 \text{first evidence parameter}  \\
+\alpha_2 = 0.5 \text{second evidence parameter}  \\
+\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l} \\
+\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
+\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes} \\
 $$
 
 
