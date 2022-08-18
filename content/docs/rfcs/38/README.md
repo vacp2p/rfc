@@ -299,12 +299,11 @@ is not currently analyzed to these opinions should be constrained.
 ### Weighted Node values
 
 The view of network peers participants may optionally have a weighting
-assigned for each node consisting of a real number on the interval `[0 1)`.
-This weight is used in each query round when selecting the `k`
-peers so the probability of selecting nodes is proportional to their
-weight.
+assigned for each node consisting of a real on the interval inclusive
+of `0` but exclusive of `1`.  This weight is used in each query round
+when selecting the `k` peers so the probability of selecting nodes is
+proportional to their weight.
 
-[THIS USED TO WORK!  -ed]
 $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
 $$ 
@@ -543,8 +542,7 @@ parameter $l$.) Evidence accumulated keeps the ratio of total positive
 votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
-
-For parameters with the following values:
+### Parameters
 
 $$
 \begin{array}{lc}
@@ -554,7 +552,7 @@ $$
 \end{array}
 $$
 
-We compute the following values
+### Compuatation
 
 $$
 \begin{array}{lc}
@@ -581,7 +579,7 @@ other. Our interest in removing the step function is twofold:
    understood, opening the door to elaborated attacks. The transition
    function proposed is linear with respect to the confidence.
 
-The transition function computes
+### Transition function computation 
 
 $$
 \begin{array}{cl}
@@ -644,4 +642,5 @@ Copyright and related rights waived via
 
 ## Format
 
-This document is currently utilizing Pandoc 2.18's notion of Markdown.
+This document was utilizing Pandoc 2.18's notion of Markdown, but is
+now trying to co-exist with SVG via MathJax 3.2 or Github.
