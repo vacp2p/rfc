@@ -6,7 +6,10 @@ MathJax = {
   tex: {
       macros: {
           "\\_": '_';
-    }
+      }
+      processEscapes: true,
+      processEnvironments: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
   },
   svg: {
     fontCache: 'global'
