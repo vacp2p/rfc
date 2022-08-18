@@ -439,7 +439,7 @@ finalizing.
 
 #### Active Gossip Adversary
 
-An omniscient gossip adversary somehow not only controls $f$ of $N$
+An omniscient gossip adversary somehow not only controls `f` of `N`
 nodes, but has also has corrupted communications between nodes such
 that she may inspect, delay, and drop arbitrary messages.  She uses
 this to corrupt consensus away from honest decisions to ones favorable
