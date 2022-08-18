@@ -292,7 +292,7 @@ TODO
 
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
-this $k$ nodes containing the node's own current opinion on the
+this `k` nodes containing the node's own current opinion on the
 proposal ("YES", "NO", or "NONE").  The relation of the metadata
 is not currently analyzed to these opinions should be constrained.
 
@@ -425,7 +425,7 @@ opposite vote of the honest majority on an opinion.
 ### Omniscient Adversaries
 
 Omniscient adversaries have somhow gained an "unfair" participation in
-consensus by being able to controlling $f$ of $N$ nodes with an
+consensus by being able to controlling `f` of `N` nodes with an
 out-of-band "supra-liminal" communication mechansim.  Such adversaries
 may use this coordinated behavior to delay or sway honest majority
 consensus.
