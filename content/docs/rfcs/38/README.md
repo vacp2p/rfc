@@ -452,14 +452,16 @@ parameter $l$.) Evidence accumulated keeps the ratio of total positive
 votes vs the total votes received (positive and negative), whereas the
 evidence per round stores the ratio of the current round only.
 
-$$l = 20 \text{look-ahead parameter}$$
+$$\text{look-ahead parameter} l = 20 $$
+
 $$\alpha_1 = 0.8 \text{first evidence parameter}$$
-$$ 
-\alpha_2 = 0.5 \text{second evidence parameter}  \\
-\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l} \\
-\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes} \\
-\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes} \\
-$$
+
+```math
+\alpha_2 = 0.5 \text{second evidence parameter}\\
+\text{confidence}: c_{accum} = \frac{total\ votes}{total\ votes + l}\\
+\text{evidence accumulated}: e_{accum} = \frac{total\ positive\ votes}{total\ votes}\\
+\text{evidence per round}: e_{round} = \frac{round\ positive\ votes}{round\ votes}\\
+```
 
 
 ## Phase Three: Transition function 
