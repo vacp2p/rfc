@@ -25,23 +25,29 @@ explorations of to subsequent publication.
 
 # One Possible Logos Manifesto
 
-Logos seeks to develop composable infrastructure for any Network
-State.  One consideration involves the transition of the use of
-resource intensive Nakomoto consensus mechanisms to the class of more
-efficient and leaderless ones rooted in decentralization.  We seek to
-connect such mechanisms to explicit security models in their
-execution.  As a member of the Snow family, Glacier provides an
-tractably computable probabilistic measure of safety of the
-finalization of states of shared data structures.  
+Logos seeks to develop components for a composable infrastructure for
+any Network State.  One of these components is the ability to come to
+consensus on a given proposal.  We need to replace resource intensive
+Nakomoto consensus mechanisms with those which belong to the class of
+more efficient ones rooted in leaderless decentralization.  By
+documenting Glacier, a component for shared consenus composable with
+models of the finalization of shared data structure, Logos starts the
+construction of a "value-free" Network State infrastucture.
+Subsequently, we will connect the implementation of Glacier to an the
+appopiately secure execution of a explicitly desired security model.
+As a member of the Snow family, Glacier provides an tractably
+computable probabilistic measure of safety of the
+finalization of states of shared data structures.
 
-We sketch a simple two-level model for the practical execution of such
-a fairly distributed consensus mechanism, in which an underlying
-leaderless binary decision mechanism is utilized to used to vote on
-the construction of a distributed, directed, acyclic graph.  We
-present the Glacier algorithm which provides a Byzantine fault
-tolerant implementation of the base binary decision mechanism.  We
-outline a taxonomy of Byzantine adversaries that seek to thwart this
-computation's correct honesty.
+We start with simple two-level composition model for the practical
+execution of such a fairly distributed consensus mechanism, in which
+an underlying leaderless binary decision mechanism votes on the
+finalization of nodes distributed, directed, acyclic graph.  Here, we
+present a pseudo-code specification the Glacier algorithm which
+provides a Byzantine fault tolerant implementation of the base binary
+decision mechanism.  We start to outline a taxonomy of Byzantine adversaries
+that seek to thwart this computation's correct honesty, to which
+subsequent results need to be annotated.
 
 The algorithim we specify here, Glacier, may be extended to a DAG
 structure in order to achieve a leaderless byzantine fault tolerancr.
@@ -534,15 +540,15 @@ they should be of stable interest no matter if Glacier isn't.
 
 # Appendix A: Alvaro's Exposition of Glacier
 
-We present Alvaro's notion of Glacier, adorned with suitable edits
-that attempt to preserve the original flavor of the exposition.
+In this appendix, we present Alvaro's original notion of Glacier,
+adorned with suitable edits that attempt to preserve the original
+flavor of the exposition.
 
 ## Phase One: Querying
 
 A node selects `k` nodes randomly from the complete pool of peers in the
 network. This query is can optionally be weighted, so the probability
-of selecting nodes is proportional to their weight.  [[Explain
-weighting needs]].
+of selecting nodes is proportional to their 
 
 Node Weighting
 $$ 
