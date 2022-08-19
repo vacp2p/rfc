@@ -7,8 +7,8 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-19 Fri 09:40Z>
-uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-18%20Thu%2021:37Z>
+revised: <2022-08-19 Fri 10:35>
+uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-19%20Fri$2009:40Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -371,8 +371,9 @@ Python and Common Lisp are also in limited public review.
 
 # Interoperability
 
-The wire protocol semantics are described in N3 by the following
-statements expressed in Notation3 (aka `n3`).  
+We present a wire protocol semantics by requiring the validity of the
+following statements expressed in Notation3 (aka `n3`) about any query
+performed by a query node.
 
 
 ```n3
@@ -404,8 +405,7 @@ The opinion on the proposal
 
 One of the strings "YES" "NO" or "NONE".
 """ ;
-
-          # TODO constrain as an enumeration on three values
+          # TODO constrain as an enumeration on three values efficiently
           a xsd:string ] 
     ) .
 ```
@@ -464,10 +464,9 @@ opposite vote of the honest majority on an opinion.
 ### Omniscient Adversaries
 
 Omniscient adversaries have somhow gained an "unfair" participation in
-consensus by being able to controlling `f` of `N` nodes with an
-out-of-band "supra-liminal" communication mechansim.  Such adversaries
-may use this coordinated behavior to delay or sway honest majority
-consensus.
+consensus by being able to control `f` of `N` nodes with a out-of-band
+"supra-liminal" coordination mechansim.  Such adversaries use this
+coordinated behavior to delay or sway honest majority consensus.
 
 #### Passive Gossip Adversary
 
@@ -480,17 +479,18 @@ finalizing.
 
 An omniscient gossip adversary somehow not only controls `f` of `N`
 nodes, but has also has corrupted communications between nodes such
-that she may inspect, delay, and drop arbitrary messages.  She uses
-this to corrupt consensus away from honest decisions to ones favorable
-to itself.  She may, of course, choose to participate in an honest
-manner until defecting is most advantageous.
+that she may inspect, delay, and drop arbitrary messages.  Such an
+adversary uses capability to corrupt consensus away from honest
+decisions to ones favorable to itself.  This adversary will, of
+course, choose to participate in an honest manner until defecting is
+most advantageous.
 
 # Future Directions
 
 Although we have proposed a normative description of the
 implementation of the underlying binary consensus algorithm (Glacier),
 we believe we have analyzed its adversarial performance in a manner
-that is ammendable to replacement by another member of the [snow*][]
+that is ammendable to replacement by another member of the [snow*](#snow*)
 family.
 
 We have presumed the existence of a general family of algorithms that
@@ -505,19 +505,20 @@ they should be of stable interest no matter if Glacier isn't.
 
 # Informative References
 
-0. [Logos](https://logos.co/)
+0. [Logos](<https://logos.co/>)
 
 1. [On BFT Consensus Evolution: From Monolithic to
-   DAG](https://dahliamalkhi.github.io/posts/2022/06/dag-bft/)
+   DAG](<https://dahliamalkhi.github.io/posts/2022/06/dag-bft/>)
 
-2. [snow-ipfs](https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV)
+2. [snow-ipfs](<https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV>)
 
-3. [snow*](https://https://doi.org/10.48550/arXiv.1906.08936) Rocket,
-   Team, Maofan Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün
-   Sirer. “Scalable and Probabilistic Leaderless BFT Consensus through
+3. [snow*](<https://arxiv.org/abs/1906.08936v2>) Rocket Team, Maofan
+   Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. 
+   “Scalable and Probabilistic Leaderless BFT Consensus through
    Metastability.” arXiv, August 24, 2020.
    
-4. [Move] A language for writing DAG abstractions 
+4. [Move](<https://cloud.google.com/composer/docs/how-to/using/writing-dags>)
+    Move: a Language for Writing DAG Abstractions 
 
 5. [rdf](<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
 
