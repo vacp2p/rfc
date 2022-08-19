@@ -7,8 +7,8 @@ category: informative
 tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-18 Thu 21:37Z>
-uri: <https://rdf.logos.co/protocol/glacier/1/0/0#2022-08-18%20Thu%2021:37Z>
+revised: <2022-08-19 Fri 09:40Z>
+uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-18%20Thu%2021:37Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -18,19 +18,21 @@ contributors:
 This document specifies Glacier: a Byzantine tolerant binary decision
 agreement algorithm.  Glacier is a novel member of the Snow family
 that utilizes bounded memory for its execution.  We present an
-incomplete context of the use of Glacier in a more efficient,
+application context of the use of Glacier in a more efficient,
 leaderless, probabilitisic permission-less consensus mechanism.  We
 outline a simple taxonomy of Byzantine adversaries, leaving explicit
 explorations of to subsequent publication.
 
 # One Possible Logos Manifesto
 
-Logos considers how to transition our use of resource intensive
-Nakomoto consensus mechanisms to the class of more efficient and
-leaderless ones rooted in decentralization.  We seek to connect such
-mechanisms to explicit security modelsfor their execution.  As a
-member of the Snow family, Glacier provides an exact probabilistic
-measure of safety of the finalization of states on a shared data structure.  
+Logos seeks to develop composable infrastructure for any Network
+State.  One consideration involves the transition of the use of
+resource intensive Nakomoto consensus mechanisms to the class of more
+efficient and leaderless ones rooted in decentralization.  We seek to
+connect such mechanisms to explicit security models in their
+execution.  As a member of the Snow family, Glacier provides an
+tractably computable probabilistic measure of safety of the
+finalization of states of shared data structures.  
 
 We sketch a simple two-level model for the practical execution of such
 a fairly distributed consensus mechanism, in which an underlying
@@ -172,16 +174,16 @@ max_rounds
 The following variables are needed to keep the state of Glacier:
 
 ```
+;; current number of nodes to attempt to query in a round
+k 
+  <-- k_original
+  
 ;; total number of votes examined over all rounds
 total_votes 
    <-- 0 
 ;; total number of YES (i.e. positive) votes for the truth of the proposal
 total_positive 
    <-- 0
-;; current number of nodes to attempt to query in a round
-k 
-  <-- k_original
-    
 ;; the current query round, an integer starting from zero
 round
   <-- 0
@@ -280,13 +282,42 @@ network.
 
 Thus, after the decision phase, either a decision has been finalized
 and the local node becomes quiescent never initiating a new query, or
-it initiates a new query.
+it initiates a [new query](#query).
+
+### Termination
+
+The algorithm terminates under the following execution model considerations:
+
+A local round of Glacier terminates in one of three conditions:
+
+
+1.  No queries are received for any newly initiated round for temporal
+    periods observed via a locally computed passage of time.
+
+2.  The confidence on the proposal exceeds our threshold for
+    finalization.
+    
+3.  The number of `rounds` executed would be greater than
+    `max_rounds`. 
+    
+#### Quiescence
+
+After a local node has finalized an opinion, it enters a quiescent
+state whereby it never solicits new votes on the proposal.  The local
+node MUST reply with the currently finalized majority opinion.
+
+#### Clock
+
+The algorithim only requires that nodes have computed the drift of
+observation of the passage of local time, not that that they have
+coordinated an absolute time with their peers.  For an implementation
+of a phase locked-loop feedback to measure local clock drift see [ntp][].
 
 ## Further points
+    
+#### Modeling 
 
-### Execution Model Termination Conditions
-
-TODO
+[[ TODO map to sync/async arguments ]]
 
 ### Node receives information during round
 
@@ -488,13 +519,17 @@ they should be of stable interest no matter if Glacier isn't.
 
 7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
 
-8. [n3](<https://www.w3.org/TeamSubmission/n3/>)
+8. [n3-w3c-notes](<https://www.w3.org/TeamSubmission/n3/>)
+
+9. [ntp](<https://www.ntp.org/downloads.html>)
 
 ## Normative Refenences
 
 0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
 
-1. [json-ld](<https://json-ld.org/>)
+1. [n3](<https://www.w3.org/DesignIssues/Notation3.html>)
+
+2. [json-ld](<https://json-ld.org/>)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
@@ -639,12 +674,15 @@ Note: elaborate on `c_{target}` selection.
 
 
 # Colophon
+
 ## Copyright
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 ## Format
+
+This document attempts to be formatted in polyglot Markdown.
 
 This document was utilizing Pandoc 2.18's notion of Markdown, but is
 now trying to co-exist with SVG via MathJax 3.2 or Github.
