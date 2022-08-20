@@ -34,7 +34,7 @@ documenting Glacier, a component for shared consenus composable with
 models of the finalization of shared data structure, Logos starts the
 construction of a "value-free" Network State infrastucture.
 Subsequently, we will connect the implementation of Glacier to an the
-appopiately secure execution of a explicitly desired security model.
+appropriately secure execution of a explicitly desired security model.
 As a member of the Snow family, Glacier provides an tractably
 computable probabilistic measure of safety of the
 finalization of states of shared data structures.
