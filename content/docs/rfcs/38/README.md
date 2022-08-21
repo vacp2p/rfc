@@ -4,7 +4,7 @@ title: 38/LOGOS-CONSENSUS-GLACIER
 name: Logos Glacier Consensus Protocol
 status: raw
 category: informative
-tags: logos/consensus,implementation/rust, implementation/python, implementation/common-lisp
+tags: logos/consensus
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
 revised: <2022-08-19 Fri 10:35>
