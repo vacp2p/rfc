@@ -33,7 +33,7 @@ more efficient ones rooted in leaderless decentralization.  By
 documenting Glacier, a component for shared consenus composable with
 models of the finalization of shared data structure, Logos starts the
 construction of a "value-free" Network State infrastucture.
-Subsequently, we will connect the implementation of Glacier to an the
+Subsequently, we will connect the implementation of Glacier to an
 appropriately secure execution of a explicitly desired security model.
 As a member of the Snow family, Glacier provides an tractably
 computable probabilistic measure of safety of the
