@@ -1,109 +1,98 @@
 ---
 slug: 38
-title: 38/LOGOS-CONSENSUS-GLACIER
-name: Logos Glacier Consensus Protocol
+title: 38/CONSENSUS-CLARO
+name: Claro Consensus Protocol
 status: raw
 category: Standards Track
 tags: logos/consensus
-editor: Mark Evenson <mark.evenson@status.im>
+editor: Corey Petty <corey@status.im>
 created: 01-JUL-2022
 revised: <2022-08-26 Fri 13:11Z>
-uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-26%20Fri$2013:11Z>
+uri: <https://rdf.logos.co/protocol/Claro/1/0/0#<2022-08-26%20Fri$2013:11Z>
 contributors:
     - Álvaro Castro-Castilla 
+    - Mark Evenson
+    - Corey Petty
 ---
 
 # Abstract
 
-This document specifies Glacier: a Byzantine tolerant binary decision
+This document specifies Claro: a Byzantine, fault-tolerant, binary decision
 agreement algorithm that utilizes bounded memory for its execution.
-Glacier is a novel member of the Snow family providing a probabilistic
+Claro is a novel variant of the Snow family providing a probabilistic
 leaderless BFT consensus algorithm that achieves metastablity via
 network sub-sampling.  We present an application context of the use of
-Glacier in an efficient, leaderless, probabilistic permission-less
+Claro in an efficient, leaderless, probabilistic permission-less
 consensus mechanism.  We outline a simple taxonomy of Byzantine
 adversaries, leaving explicit explorations of to subsequent
 publication.
 
-# One Possible Logos Manifesto
+NOTE: We have renamed this variant to `Claro` from `Glacier` in order to disambiguate from a previously released research endeavor by [Amores-Sesar, Cachin, and Tedeschi](https://arxiv.org/pdf/2210.03423.pdf). Their naming was coincidentally named the same as our work but is sufficiently differentiated from how ours works. 
 
-Logos seeks to develop components for a composable infrastructure for
-any Network State.  One of these components is the ability to come to
-consensus on a given proposal.  We seek to replace resource intensive
-Nakomoto consensus mechanisms with those which belong to the class of
-more efficient ones rooted in leaderless decentralization.  Being less
-constrained by the demands of Proof-of-Work (PoW) in which all nodes
-must reproduce all computations, such consensus mechanisms can be
-considerably more adaptive to a given network's requirements.
+# Motivation 
+This work is a part of a larger research endeavor to explore highly scalable Byzantine Fault Tolerant (BFT) consensus protocols. Consensus lies at the heart of many decentralized protocols, and thus its characteristics and properties are inherited by applications built on top. Thus, we seek to improve upon the current state of the art in two main directions: base-layer scalability and censorship resistance. 
 
-By documenting Glacier--a component for shared consensus composable
-with models of the finalization of shared data structure--Logos starts
-the construction of a "value-free" Network State infrastructure.
-Subsequently, we will connect the implementation of Glacier to an
-appropriately secure execution of a explicitly desired security model.
-As a member of the Snow family, Glacier provides a tractably
-computable probabilistic measure of safety of the finalization of
-states of shared data structures.
+Avalanche has shown to exibit the former in a production environment in a way that is differentiated from Nakamoto consensus and other Proof of Stake (PoS) protocols based in practical Byzantine Fault Tolerant (pBFT) methodologies. We aim to understand its limitations and improve upon them.
 
-We start with simple two-level composition model for the practical
-execution of such a fairly distributed consensus mechanism, in which
-an underlying leaderless binary decision mechanism votes on the
-finalization of nodes distributed in a directed, acyclic graph.  In
-the sequel, we present a pseudo-code specification the Glacier
-algorithm which provides a Byzantine fault tolerant implementation of
-the base binary decision mechanism.  We start to outline a taxonomy of
-Byzantine adversaries that seek to thwart this computation's correct
-honesty, to which subsequent results need to be annotated.
+## Background
+Our starting point is Avalanche’s Binary Byzantine Agreement algorithm, called Snowball. As long as modifications allow a DAG to be constructed later on, this simplifies the design significantly. The DAG stays the same in principle: it supports confidence, but the core algorithm can be modeled without.
 
-The algorithm we specify here, Glacier, may be extended to a DAG
-structure in order to achieve a leaderless Byzantine fault tolerance.
+The concept of the Snowball algorithm is relatively simple. Following is a simplified description (lacking some details, but giving an overview). For further details, please refer to the [Avalanche paper](https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf).
 
-## Leaderless Consensus Model Application to Shared State 
+1. The objective is to vote yes/no on a decision (this decision could be a single bit, or, in our DAG use case, whether a vertex should be included or not).
+2. Every node has an eventually-consistent complete view of the network. It will select at random k nodes, and will ask their opinion on the decision (yes/no).
+3. After this sampling is finished, if there is a vote that has more than an `alpha` threshold, it accumulates one count for this opinion, as well as changes its opinion to this one. But, if a different opinion is received, the counter is reset to 1. If no threshold `alpha` is reached, the counter is reset to 0 instead.
+4. After several iterations of this algorithm, we will reach a threshold `beta`, and decide on that as final.
 
-The consensus model specified in this document is based on the
-observation that given an underlying underlying binary consensus
-mechanism, one may quickly vote on the distributed, directed acyclic
-ledger graph of transactions.  If the underlying binary consensus
-mechanism is Byzantine fault tolerant, then one essentially gets the
-computation of the trust of the graph of transactions "for free".  The
-finalization of shared confidence in the values in a given sequence
-along this graph is isomorphic to the trace of a shared, trusted state
-machine evolution.  Such a state machine may perform an arbitrary
-computation from the class of "smart contract" artifacts by
-implementing a given model of transaction.
+Next, we will proceed to describe our new algorithm, based on Snowball. There are 3 main paths to achieving the initial target of improving the current state of the art:
 
-This execution mechanism consists of transitions in a state machine
-representation, each one a potential transaction.  These transactions
-are gossiped to active (i.e. online) participants.  The participants
-vote on whether a given transaction should be counted as valid which
-reaches an eventual consistent state in which the transactions are
-said to have been finalized.
+- Find ways to extend the Snowball algorithm.
+- Find ways to modify the Snowball algorithm.
+- Find ways to strengthen the Snowball algorithm in particular scenarios, or as generic as possible.
 
-Like the Prisoner Dilemma, the execution of Glacier on a single
-proposal doesn't have very complicated game theoretics.  Simply
-conceived, multiple runs of Glacier could track a linear chain of
-consensus like any other contemporary implementation. But in practice,
-leaderless consensus may be used contribute finalization of multiple
-proposals arranged in a directed acyclic graph.  Nodes would naturally
-choose to compute the consensus of directed graph of the proposals
-that they are interested in.  This autosharding property supersedes
-any possible Nakomoto consensus mechanism, as any proof of work
-mechanism would by definition need to increase its the work necessary
-for its continued constant security of all chains of interest.
+In our design, all 3 are attempted.
 
-# Glacier Algorithm Specification
+We have identified a shortcoming of the Snowball algorithm that was a perfect starting point for devising improvements. The scenario is as follows:
 
-The Glacier consensus algorithm computes a boolean decision on a
-proposition via a set of distributed computational nodes.  Glacier is
-a leaderless probabilistic binary consensus algorithm with fast
+- There is a powerful adversary in the network, that controls a large percentage of the node population: 10% to ~50%.
+- This adversary follows a strategy that allows them to rapidly change the decision bit (possibly even in a coordinated way) so as to maximally confuse the honest nodes.
+- Under normal conditions, honest nodes will accumulate supermajorities soon enough, and reach the `beta` threshold. However, when an honest node performs a query and does not reach the threshold `alpha` of responses, the counter will be set to 0.
+- The highest threat to Snowball is an adversary that keeps it from reaching the `beta` threshold, managing to continuously reset the counter, and steering Snowball away from making a decision.
+
+This document only outlines the specification to Claro. Subsequent analysis work on Claro (both on its performance and how it differentiates with Snowball) will be published shortly and this document will be updated. 
+
+# Claro Algorithm Specification
+
+The Claro consensus algorithm computes a boolean decision on a
+proposition via a set of distributed computational nodes.  Claro is
+a leaderless, probabilistic, binary consensus algorithm with fast
 finality that provides good reliability for network and Byzantine
 fault tolerance.
 
-## Algorithm 
+## Algorithmic concept
+Claro is an evolution of the Snowball BBA algorithm, in which we tackle specifically the perceived weakness described above. The main focus is going to be the counter and the triggering of the reset. Following, we elaborate the different modifications and features that have been added to the reference algorithm:
 
-The algorithm begins with considering the truth status of a given
-proposition.
+1. Instead of allowing the latest evidence to change the opinion completely, we take into account all accumulated evidence, to reduce the impact of high variability when there is already a large amount of evidence collected.
+2. Eliminate the counter and threshold scheme, and introduce instead two regimes of operation:
+    - One focused on grabbing opinions and reacting as soon as possible. This part is somewhat closer conceptually to the reference algorithm.
+    - Another one focused on interpreting the accumulated data instead of reacting to the latest information gathered.
+3. Finally, combine those two phases via a transition function. This avoids the creation of a step function, or a sudden change in behavior that could complicate analysis and understanding of the dynamics. Instead, we can have a single algorithm that transfers weight from one operation to the other as more evidence is gathered.
+4. Additionally, we introduce a function for weighted sampling. This will allow the combination of different forms of weighting:
+    - Staking
+    - Heuristic reputation
+    - Manual reputation.
 
+It’s worth delving a bit into the way the data is interpreted in order to reach a decision. Our approach is based conceptually on the paper [Confidence as Higher-Order Uncertainty](https://cis.temple.edu/~pwang/Publication/confidence.pdf), which describes a frequentist approach to decision certainty. The first-order certainty, measured by frequency, is caused by known positive evidence, and the higher-order certainty is caused by potential positive evidence. Because confidence is a relative measurement defined on evidence, it naturally follows comparing the amount of evidence the system knows with the amount that it will know in the near future (defining “near” as a constant). 
+
+Intuitively, we are looking for a function of **`w`**, call it **`c`** for confidence, that satisfies the following conditions:
+
+1. Confidence `c` is a continuous and monotonically increasing function of `w`. (More evidence, higher confidence.)
+2. When `w = 0`, `c = 0`. (Without any evidence, confidence is minimum.)
+3. When `w` goes to infinity, `c` converges to 1. (With infinite evidence, confidence is maximum.)
+
+The paper describes also a set of operations for the evidence/confidence pairs, so that different sources of knowledge could be combined. However, we leave here the suggestion of a possible research line in the future combining an algebra of evidence/confidence pairs with swarm-propagation algorithm like the one described in [this paper](http://replicated.cc/files/schmebulock.pdf).
+
+### Initial opinion
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
 opinion on the proposal, represented in the sequel as `NO`, `NONE`,
@@ -115,8 +104,11 @@ compute a justification of the proposal, it sets its opinion to one of
 `YES` or `NO`.  If it cannot form an opinion, it leaves its opinion as
 `NONE`.
 
+For now, we will ignore the proposal dessimination process and assume all nodes participating have an initial opinion to repond to within a given request. Further research will relax this assumption and analyze timing attacks on proposal propagation through the network. 
+
+
 The node then participates in a number of query rounds in which it
-solicits other node's opinion in query rounds.  Given a set of `n`
+solicits other node's opinion in query rounds.  Given a set of `N`
 leaderless computational nodes, a gossip-based protocol is presumed to
 exist which allows members to discover, join, and leave a weakly
 transitory maximally connected graph.  Joining this graph allows each
@@ -128,8 +120,14 @@ time-scales, as the protocol rounds progress.  As such, a given node
 may not have a view on the complete members participating in the
 consensus on a proposal in a given round.
 
+The algorithm is divided into 4 phases:
+1. Querying
+2. Computing `confidence`, `evidence`, and `accumulated evidence`
+3. Transition function
+4. Opinion and Decision
 
-### Proposal Identification
+<!-- NOTE from CP: not sure this fits, commenting for now -->
+<!-- ### Proposal Identification
 
 The node has a semantics and serialization of the proposal, of which
 it sets an initial opinion:
@@ -145,29 +143,27 @@ severely constrained in the absence of timeouts for a round to
 proceed.  When a given node has finalized its decision on the
 proposal, it enters a quiescent state in which it optionally discards
 all information gathered during the query process retaining only the
-final opinion on the truth of the proposal.
+final opinion on the truth of the proposal. -->
 
 ### Setup Parameters
 
 The node initializes the following integer ratios as constants:
 ```
-;;; The following values are constants chosen with justification from experiments
-;;; performed with the adversarial models
+# The following values are constants chosen with justification from experiments
+# performed with the adversarial models
 
-;; FIXME: find and justify an empirical confidence threshold 
+# 
 confidence_threshold
-  <-- 1  ;; BOGUS:  this should be a function of the network size
-         ;; and the current confidence in the observer majority as 
-         ;; a function of the current round.  With a value of `1`
-         ;; the algorithm will never terminate
-
-;;; constant look ahead for number of rounds we expect to finalize a
-;;; decision.  Could be set dependent on number of nodes 
-;;; visible in the current gossip graph.
+  <-- 1   
+         
+# constant look ahead for number of rounds we expect to finalize a
+# decision.  Could be set dependent on number of nodes 
+# visible in the current gossip graph.
 look_ahead 
   <-- 19
-;;; These need to be justified empirically via modeling and simulation.
-certainty ;; the confidence weighting parameter (aka alpha_1)
+
+# the confidence weighting parameter (aka alpha_1)
+certainty 
   <-- 4 / 5  
 doubt ;; the lack of confidence weighting parameter (aka alpha_2)
   <-- 2 / 5 
@@ -189,7 +185,7 @@ max_rounds
    <-- 997 ;; TODO justify
 ```
       
-The following variables are needed to keep the state of Glacier:
+The following variables are needed to keep the state of Claro:
 
 ```
 ;; current number of nodes to attempt to query in a round
@@ -208,10 +204,21 @@ round
 ```
 
 
-###  Query 
+###  Phase One: Query 
 
-A node selects `k` nodes randomly from the current locally known
-complete set of peers in the network.
+A node selects `k` nodes randomly from the complete pool of peers in the
+network. This query is can optionally be weighted, so the probability
+of selecting nodes is proportional to their 
+
+Node Weighting
+$$ 
+P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j} 
+$$
+
+The list of nodes is maintained by a separate protocol (the network
+layer), and eventual consistency of this knowledge in the network
+suffices. Even if there are slight divergences in the network view
+from different nodes, the algorithm is resilient to those.
 
 A query is sent to each neighbor with the node's current `opinion` of
 the proposal.
@@ -222,6 +229,25 @@ See [the wire protocol Interoperability section](#wire-protocol) for
 details on the semantics and syntax of the "on the wire"
 representation of this query.
 
+**Adaptive querying**. An additional optimization in the query
+consists of adaptively growing the *`k`* constant in the event of
+**high confusion**. We define high confusion as the situation in
+which neither opinion is strongly held in a query (*i.e.* a
+threshold is not reached for either yes or no). For this, we will
+use the *`alpha`* threshold defined below. This adaptive growth of
+the query size is done as follows:
+
+Every time the threshold is not reached, we multiply *`k`* by a
+constant. In our experiments, we found that a constant of 2 works
+well, but what really matter is that it stays within that order of
+magnitude.
+
+The growth is capped at 4 times the initial *`k`* value. Again, this
+is an experimental value, and could potentially be increased. This
+depends mainly on complex factors such as the size of the query
+messages, which could saturate the node bandwidth if the number of
+nodes queried is too high.
+
 When the query finishes, the node now initializes the following two
 values:
 
@@ -230,7 +256,32 @@ values:
     positive_votes 
       <-- |YES votes received from the query| 
     
-### Computation
+### Phase Two: Computation
+When the query returns, three ratios are used later on to compute the
+transition function and the opinion forming. Confidence encapsulates
+the notion of how much we know (as a node) in relation to how much we
+will know in the near future (this being encoded in the look-ahead
+parameter *`l`*.) Evidence accumulated keeps the ratio of total positive
+votes vs the total votes received (positive and negative), whereas the
+evidence per round stores the ratio of the current round only.
+
+Parameters
+$$
+\begin{array}{lc}
+\text{Look-ahead parameter}      & l = 20 \newline
+\text{First evidence parameter}  & \alpha_1 = 0.8 \newline
+\text{Second evidence parameter} & \alpha_2 = 0.5 \newline
+\end{array}
+$$
+
+Computation
+$$
+\begin{array}{lc}
+\text{Confidence}                & c_{accum} \impliedby \frac{total\ votes}{total\ votes + l} \newline
+\text{Total accumulated evidence}& e_{accum} \impliedby \frac{total\ positive\ votes}{total\ votes} \newline
+\text{Evidence per round}        & e_{round} \impliedby \frac{round\ positive\ votes}{round\ votes} \newline
+\end{array}
+$$
 
 The node runs the `new_votes` and `positive_votes` parameters received
 in the query round through the following algorithm:
@@ -250,7 +301,51 @@ in the query round through the following algorithm:
     alpha 
       <-- doubt * ( 1 - confidence ) + certainty * confidence 
     
-### Opinion 
+### Phase Three: Computation
+In order to eliminate the need for a step function (a conditional in
+the code), we introduce a transition function from one regime to the
+other. Our interest in removing the step function is twofold:
+
+1. Simplify the algorithm. With this change the number of branches is
+   reduced, and everything is expressed as a set of equations.
+
+2. The transition function makes the regime switch smooth,
+   making it harder to potentially exploit the sudden regime change in
+   some unforeseen manner. Such a swift change in operation mode could
+   potentially result in a more complex behavior than initially
+   understood, opening the door to elaborated attacks. The transition
+   function proposed is linear with respect to the confidence.
+
+Transition Function
+$$
+\begin{array}{cl}
+evidence & \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
+\alpha &  \impliedby \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
+\end{array} 
+$$
+    
+Since the confidence is modeled as a ratio that depends on the
+constant *`l`*, we can visualize the transition function at
+different values of *`l`*. Recall that this constant encapsulates
+the idea of “near future” in the frequentist certainty model: the
+higher it is, the more distant in time we consider the next
+valuable input of evidence to happen.
+
+We have observed via experiment that for a transition function to be
+useful, we need establish two requirements:
+
+1.  The change has to be balanced and smooth, giving an
+    opportunity to the first regime to operate and not jump directly
+    to the second regime.
+
+2.  The convergence to 1.0 (fully operating in the second regime)
+    should happen within a reasonable time-frame. We’ve set this
+    time-frame experimentally at 1000 votes, which is in the order of
+    ~100 queries given a *`k`* of 9.
+
+[[ Note: Avalanche uses k = 20, as an experimental result from their
+deployment. Due to the fundamental similarities between the
+algorithms, it’s a good start for us. ]]
 
 The node updates its local opinion on the consensus proposal by
 examining the relationship between the evidence accumulated for a
@@ -279,8 +374,23 @@ up to the limit of `k_max_multiplier_power` query size increases.
        k <-- k * k_multiplier
 
 ###  Decision 
+The next step is a simple one: change our opinion if the threshold
+*`alpha`* is reached. This needs to be done separately for the `YES/NO`
+decision, checking both boundaries. The last step is then to *`decide`*
+on the current opinion. For that, a confidence threshold is
+employed. This threshold is derived from the network size, and is
+directly related to the number of total votes received.
+  
+Decision
+$$
+\begin{array}{cl}
+evidence > \alpha & \implies \text{opinion YES} \newline
+evidence < 1 - \alpha & \implies \text{opinion NO} \newline
+if\ \text{confidence} > c_{target} & THEN \ \text{finalize decision} \newline
+\end{array}
+$$
 
-After the OPINION phase is executed, the current value of `confidence`
+After the `OPINION` phase is executed, the current value of `confidence`
 is considered: if `confidence` exceeds a threshold derived from the
 network size and directly related to the total votes received, an
 honest node marks the decision as final, and always returns this
@@ -304,7 +414,7 @@ it initiates a [new query](#query).
 
 ### Termination
 
-A local round of Glacier terminates in one of the following following
+A local round of Claro terminates in one of the following following
 execution model considerations:
 
 
@@ -312,7 +422,7 @@ execution model considerations:
     periods observed via a locally computed passage of time.  See [the
     following point on local time](#clock).
 
-2.  The confidence on the proposal exceeds our threshold for
+2.  The `confidence` on the proposal exceeds our threshold for
     finalization.
     
 3.  The number of `rounds` executed would be greater than
@@ -320,9 +430,9 @@ execution model considerations:
     
 #### Quiescence
 
-After a local node has finalized an opinion, it enters a quiescent
+After a local node has finalized an `opinion` into a `decision`, it enters a quiescent
 state whereby it never solicits new votes on the proposal.  The local
-node MUST reply with the currently finalized majority opinion.
+node MUST reply with the currently finalized `decision`.
 
 #### Clock
 
@@ -333,59 +443,28 @@ of a phase locked-loop feedback to measure local clock drift see
 [NTP](https://www.rfc-editor.org/rfc/rfc5905.html).
 
 ## Further points
-    
-#### Modeling 
-
-[[ TODO map to sync/async arguments ]]
 
 ### Node receives information during round
-
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
 this `k` nodes containing the node's own current opinion on the
-proposal ("YES", "NO", or "NONE").  The algorithm does not currently
+proposal (`YES`, `NO`, or `NONE`).  The algorithm does not currently
 specify how a given node utilizes this incoming information.  A
 possible use may be to count unsolicited votes towards a currently
 active round, and discard the information if the node is in a
 quiescent state.
 
-### Weighted Node values
-
-The view of network peers participants may optionally have a weighting
-assigned for each node consisting of a real on the interval inclusive
-of `0` but exclusive of `1`.  This weight is used in each query round
-when selecting the `k` peers so the probability of selecting nodes is
-proportional to their weight.
-
-Node weighting probability
-$$
-P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
-$$ 
-
-where `w_i` is the weight of the `i`th peer.
-
-A given nodes weight can be calculated in a multitude of ways and is
-left as an implementation detail or further modification. Such a
-weight could be derived from a multitude of values including:
-
-- Staking
-- Heuristic reputation
-- Manual reputation
-
 #### Problems with Weighting Node Value of Opinions
-
 If the view of other nodes is incomplete, then the sum of the optional
-weighting won't be a probability distribution normalized to 1.
+weighting will not be a probability distribution normalized to 1.
 
 The current algorithm doesn't describe how the initial opinions are formed.
 
 # Implementation status
-
-logos.co prepares to share an implementations in Rust which contains
-an efficiently multi-threaded implementation utilized by both a local
-simulator and actual network construction.  Expressions of Glacier in
-Python and Common Lisp are also in limited public review.
-
+The following implementations have been created for various testing and simulation purposes:
+- [Rust](https://github.com/logos-co/consensus-research)
+- [Python]() - FILL THIS IN WITH NEWLY CREATED REPO
+- [Common Lisp]() - FILL THIS IN WITH NEWLY CREATED REPO
 
 # Wire Protocol 
 
@@ -399,9 +478,9 @@ the validity of the following statements expressed in Notation3 (aka
 @prefix rdfs:        <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd:         <http://www.w3.org/2001/XMLSchema#> .
 
-@prefix glacier      <https://rdf.logos.co/protocol/glacier#> .
+@prefix Claro      <https://rdf.logos.co/protocol/Claro#> .
 
-glacier:query
+Claro:query
   :holds (
     :_0 [ rdfs:label "round";
           a xsd:postitiveInteger; ],
@@ -465,7 +544,7 @@ is not currently analyzed.
 ## Security with respect to various Adversarial Models 
 
 Adversarial models have been tested for which the values for current
-parameters of Glacier have been tuned.  Exposition of the
+parameters of Claro have been tuned.  Exposition of the
 justification of this tuning need to be completed.
 
 ### Local Strategies
@@ -510,7 +589,7 @@ most advantageous.
 # Future Directions
 
 Although we have proposed a normative description of the
-implementation of the underlying binary consensus algorithm (Glacier),
+implementation of the underlying binary consensus algorithm (Claro),
 we believe we have prepared for analysis its adversarial performance
 in a manner that is amenable to replacement by another member of the
 [snow*](#snow*) family.
@@ -522,149 +601,8 @@ transactions.  One can express all state machine, i.e. account-based
 models as checkpoints anchored in UTXO trust, so we believe that this
 presupposition has some justification.  We can envision a need for
 tooling abstraction that allow one to just program the DAG itself, as
-they should be of stable interest no matter if Glacier isn't. 
+they should be of stable interest no matter if Claro isn't. 
 
-
-
-# Appendix A: Alvaro's Exposition of Glacier
-
-In this appendix, we present Alvaro's original notion of Glacier,
-adorned with suitable edits that attempt to preserve the original
-flavor of the exposition.
-
-## Phase One: Querying
-
-A node selects `k` nodes randomly from the complete pool of peers in the
-network. This query is can optionally be weighted, so the probability
-of selecting nodes is proportional to their 
-
-Node Weighting
-$$ 
-P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j} 
-$$
-
-The list of nodes is maintained by a separate protocol (the network
-layer), and eventual consistency of this knowledge in the network
-suffices. Even if there are slight divergences in the network view
-from different nodes, the algorithm is resilient to those.
-
-*Adaptive querying*. An additional optimization in the query
-consists of adaptively growing the *k* constant in the event of
-*high confusion*. We define high confusion as the situation in
-which neither opinion is strongly held in a query (*i.e.* a
-threshold is not reached for either yes or no). For this, we will
-use the *alpha* threshold defined below. This adaptive growth of
-the query size is done as follows:
-
-Every time the threshold is not reached, we multiply *k* by a
-constant. In our experiments, we found that a constant of 2 works
-well, but what really matter is that it stays within that order of
-magnitude.
-
-The growth is capped at 4 times the initial *k* value. Again, this
-is an experimental value, and could potentially be increased. This
-depends mainly on complex factors such as the size of the query
-messages, which could saturate the node bandwidth if the number of
-nodes queried is too high.
-
-
-## Phase Two: Compute the confidence, evidence and accumulated evidence
-
-When the query returns, three ratios are used later on to compute the
-transition function and the opinion forming. Confidence encapsulates
-the notion of how much we know (as a node) in relation to how much we
-will know in the near future (this being encoded in the look-ahead
-parameter *l*.) Evidence accumulated keeps the ratio of total positive
-votes vs the total votes received (positive and negative), whereas the
-evidence per round stores the ratio of the current round only.
-
-Parameters
-$$
-\begin{array}{lc}
-\text{Look-ahead parameter}      & l = 20 \newline
-\text{First evidence parameter}  & \alpha_1 = 0.8 \newline
-\text{Second evidence parameter} & \alpha_2 = 0.5 \newline
-\end{array}
-$$
-
-Computation
-$$
-\begin{array}{lc}
-\text{Confidence}                & c_{accum} \impliedby \frac{total\ votes}{total\ votes + l} \newline
-\text{Total accumulated evidence}& e_{accum} \impliedby \frac{total\ positive\ votes}{total\ votes} \newline
-\text{Evidence per round}        & e_{round} \impliedby \frac{round\ positive\ votes}{round\ votes} \newline
-\end{array}
-$$
-
-
-## Phase Three: Transition function 
-
-In order to eliminate the need for a step function (a conditional in
-the code), we introduce a transition function from one regime to the
-other. Our interest in removing the step function is twofold:
-
-1. Simplify the algorithm. With this change the number of branches is
-   reduced, and everything is expressed as a set of equations.
-
-2. The transition function makes the regime switch smooth,
-   making it harder to potentially exploit the sudden regime change in
-   some unforeseen manner. Such a swift change in operation mode could
-   potentially result in a more complex behavior than initially
-   understood, opening the door to elaborated attacks. The transition
-   function proposed is linear with respect to the confidence.
-
-Transition Function
-$$
-\begin{array}{cl}
-evidence & \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
-\alpha &  \impliedby \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
-\end{array} 
-$$
-    
-Since the confidence is modeled as a ratio that depends on the
-constant `l`, we can visualize the transition function at
-different values of `l`. Recall that this constant encapsulates
-the idea of “near future” in the frequentist certainty model: the
-higher it is, the more distant in time we consider the next
-valuable input of evidence to happen.
-
-We have observed via expeiment that for a transition function to be
-useful, we need establish two requirements:
-
-1.  The change has to be balanced and smooth, giving an
-    opportunity to the first regime to operate and not jump directly
-    to the second regime.
-
-2.  The convergence to 1.0 (fully operating in the second regime)
-    should happen within a reasonable time-frame. We’ve set this
-    time-frame experimentally at 1000 votes, which is in the order of
-    ~100 queries given a *k* of 9.
-
-[[ Note: elaborate on the selection of k, diameter of graph, etc. ]]
-
-[[ Note: Avalanche uses k = 20, as an experimental result from their
-deployment. Due to the fundamental similarities between the
-algorithms, it’s a good start for us. ]]
-  
-## Phase Four: Opinion and Decision  
-
-The next step is a simple one: change our opinion if the threshold
-*alpha* is reached. This needs to be done separately for the yes/no
-decision, checking both boundaries. The last step is then to *decide*
-on the current opinion. For that, a confidence threshold is
-employed. This threshold is derived from the network size, and is
-directly related to the number of total votes received.
-  
-Decision
-$$
-\begin{array}{cl}
-evidence > \alpha & \implies \text{opinion YES} \newline
-evidence < 1 - \alpha & \implies \text{opinion NO} \newline
-if\ \text{confidence} > c_{target} & THEN \ \text{finalize decision} \newline
-\end{array}
-$$
-
-Note: elaborate on `c_{target}` selection.
 
 # Colophon
 
@@ -695,7 +633,7 @@ Note: elaborate on `c_{target}` selection.
 
 ## Normative References
 
-0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
+0. [Claro](<https://rdf.logos.co/protocol/Claro/1/0/0/raw>)
 
 1. [n3](<https://www.w3.org/DesignIssues/Notation3.html>)
 
