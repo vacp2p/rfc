@@ -3,11 +3,11 @@ slug: 38
 title: 38/LOGOS-CONSENSUS-GLACIER
 name: Logos Glacier Consensus Protocol
 status: raw
-category: informative
+category: Standards Track
 tags: logos/consensus
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-19 Fri 10:35>
+revised: <2022-08-26 Fri 11:17>
 uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-19%20Fri$2009:40Z>
 contributors:
     - Álvaro Castro-Castilla 
@@ -16,53 +16,61 @@ contributors:
 # Abstract
 
 This document specifies Glacier: a Byzantine tolerant binary decision
-agreement algorithm.  Glacier is a novel member of the Snow family
-that utilizes bounded memory for its execution.  We present an
-application context of the use of Glacier in a more efficient,
-leaderless, probabilitisic permission-less consensus mechanism.  We
-outline a simple taxonomy of Byzantine adversaries, leaving explicit
-explorations of to subsequent publication.
+agreement algorithm that utilizes bounded memory for its execution.
+Glacier is a novel member of the Snow family providing a probabilistic
+leaderless BFT consensus algorithm that achieves metastablity via
+network sub-sampling.  We present an application context of the use of
+Glacier in an efficient, leaderless, probabilistic permission-less
+consensus mechanism.  We outline a simple taxonomy of Byzantine
+adversaries, leaving explicit explorations of to subsequent
+publication.
 
 # One Possible Logos Manifesto
 
 Logos seeks to develop components for a composable infrastructure for
 any Network State.  One of these components is the ability to come to
-consensus on a given proposal.  We need to replace resource intensive
+consensus on a given proposal.  We seek to replace resource intensive
 Nakomoto consensus mechanisms with those which belong to the class of
-more efficient ones rooted in leaderless decentralization.  By
-documenting Glacier, a component for shared consenus composable with
-models of the finalization of shared data structure, Logos starts the
-construction of a "value-free" Network State infrastucture.
+more efficient ones rooted in leaderless decentralization.  Being less
+constrained by the demands of Proof-of-Work (PoW) in which all nodes
+must reproduce all computations, such consensus mechanisms can be
+considerably more adaptive to a given network's requirements.
+
+By documenting Glacier--a component for shared consensus composable
+with models of the finalization of shared data structure--Logos starts
+the construction of a "value-free" Network State infrastructure.
 Subsequently, we will connect the implementation of Glacier to an
 appropriately secure execution of a explicitly desired security model.
-As a member of the Snow family, Glacier provides an tractably
-computable probabilistic measure of safety of the
-finalization of states of shared data structures.
+As a member of the Snow family, Glacier provides a tractably
+computable probabilistic measure of safety of the finalization of
+states of shared data structures.
 
 We start with simple two-level composition model for the practical
 execution of such a fairly distributed consensus mechanism, in which
 an underlying leaderless binary decision mechanism votes on the
-finalization of nodes distributed, directed, acyclic graph.  Here, we
-present a pseudo-code specification the Glacier algorithm which
-provides a Byzantine fault tolerant implementation of the base binary
-decision mechanism.  We start to outline a taxonomy of Byzantine adversaries
-that seek to thwart this computation's correct honesty, to which
-subsequent results need to be annotated.
+finalization of nodes distributed in a directed, acyclic graph.  In
+the sequel, we present a pseudo-code specification the Glacier
+algorithm which provides a Byzantine fault tolerant implementation of
+the base binary decision mechanism.  We start to outline a taxonomy of
+Byzantine adversaries that seek to thwart this computation's correct
+honesty, to which subsequent results need to be annotated.
 
-The algorithim we specify here, Glacier, may be extended to a DAG
-structure in order to achieve a leaderless byzantine fault tolerancr.
+The algorithm we specify here, Glacier, may be extended to a DAG
+structure in order to achieve a leaderless Byzantine fault tolerance.
 
 ## Leaderless Consensus Model Application to Shared State 
 
-Given an underlying binary consensus mechanism, one may quickly vote
-on the distributed, directed acyclic ledger graph of transactions.  If
-the underlying binary consensus mechanism is Byzantine fault tolerant,
-then one essentially gets the computation of the trust of the graph of
-transactions "for free".  The finalization of shared confidence in the
-values in a given sequence along this graph is isomorphic to the trace
-of a shared, trusted state machine evolution.  Such a state machine
-may perform an arbitrary computation from the class of "smart
-contract" artifacts by implementing a given model of transaction.
+The consensus model specified in this document is based on the
+observation that given an underlying underlying binary consensus
+mechanism, one may quickly vote on the distributed, directed acyclic
+ledger graph of transactions.  If the underlying binary consensus
+mechanism is Byzantine fault tolerant, then one essentially gets the
+computation of the trust of the graph of transactions "for free".  The
+finalization of shared confidence in the values in a given sequence
+along this graph is isomorphic to the trace of a shared, trusted state
+machine evolution.  Such a state machine may perform an arbitrary
+computation from the class of "smart contract" artifacts by
+implementing a given model of transaction.
 
 This execution mechanism consists of transitions in a state machine
 representation, each one a potential transaction.  These transactions
@@ -78,9 +86,9 @@ consensus like any other contemporary implementation. But in practice,
 leaderless consensus may be used contribute finalization of multiple
 proposals arranged in a directed acyclic graph.  Nodes would naturally
 choose to compute the consensus of directed graph of the proposals
-that they are interested in.  This autosharding property superceeds
-any possible Nakomota consensus mechanism, as any proof of work
-mechanism would by defition need to increase its the work necessary
+that they are interested in.  This autosharding property supersedes
+any possible Nakomoto consensus mechanism, as any proof of work
+mechanism would by definition need to increase its the work necessary
 for its continued constant security of all chains of interest.
 
 # Glacier Algorithm Specification
@@ -114,7 +122,11 @@ exist which allows members to discover, join, and leave a weakly
 transitory maximally connected graph.  Joining this graph allows each
 node to view a possibly incomplete node membership list of all other
 nodes.  This view may change as the protocol advances, as nodes join
-and leave.
+and leave.  Under generalized Internet conditions, the membership of
+the graph would experience a churn rate varying across different
+time-scales, as the protocol rounds progress.  As such, a given node
+may not have a view on the complete members participating in the
+consensus on a proposal in a given round.
 
 
 ### Proposal Identification
@@ -147,7 +159,7 @@ confidence_threshold
   <-- 1  ;; BOGUS:  this should be a function of the network size
          ;; and the current confidence in the observer majority as 
          ;; a function of the current round.  With a value of `1`
-         ;; the algorithim will never terminate
+         ;; the algorithm will never terminate
 
 ;;; constant look ahead for number of rounds we expect to finalize a
 ;;; decision.  Could be set dependent on number of nodes 
@@ -164,8 +176,8 @@ k_multiplier     ;; neighbor threshold multiplier
   <-- 2
 
 ;;; maximal threshold multiplier, i.e. we will never exceed 
-;;; questioning k_initial * k_multiplier ^ max_k_multiplier peers
-max_k_multiplier 
+;;; questioning k_initial * k_multiplier ^ max_k_multiplier_power peers
+max_k_multiplier_power 
   <-- 4
     
 ;;; Initial numbers of nodes queried in a round
@@ -206,9 +218,9 @@ the proposal.
 
 Each node replies with their current opinion on the proposal.
 
-See [Interoperability section](#interoperability) for details on the
-(evolving) semantics and syntax of the "on the wire" representation of
-this query.
+See [the wire protocol Interoperability section](#wire-protocol) for
+details on the semantics and syntax of the "on the wire"
+representation of this query.
 
 When the query finishes, the node now initializes the following two
 values:
@@ -246,23 +258,23 @@ proposal with the confidence encoded in the `alpha` parameter:
 
     IF
       evidence > alpha
-    THEN ;; The node adopts the opinion YES on the proposal
+    THEN 
       opinion <-- YES
     ELSE IF       
       evidence < 1 - alpha
-    THEN ;; The node adopts the opinion NO on the proposal 
+    THEN 
       opinion <-- NO
        
 If the opinion of the node is `NONE` after evaluating the relation
 between `evidence` and `alpha`, adjust the number of uniform randomly
 queried nodes by multiplying the neighbors `k` by the `k_multiplier`
-up to the limit of `k_max_multiplier` query size increases.
+up to the limit of `k_max_multiplier_power` query size increases.
     
     ;; possibly increase number nodes to uniformly randomly query in next round
     WHEN
          opinion is NONE
       AND 
-         k < k_original * k_multiplier ^ max_k_multiplier
+         k < k_original * k_multiplier ^ max_k_multiplier_power
     THEN 
        k <-- k * k_multiplier
 
@@ -284,7 +296,7 @@ network.
       QUERY LOOP TERMINATES
     ELSE 
       round +== 1
-      GOTO QUERY 
+      QUERY LOOP CONTINUES
 
 Thus, after the decision phase, either a decision has been finalized
 and the local node becomes quiescent never initiating a new query, or
@@ -292,13 +304,13 @@ it initiates a [new query](#query).
 
 ### Termination
 
-The algorithm terminates under the following execution model considerations:
-
-A local round of Glacier terminates in one of three conditions:
+A local round of Glacier terminates in one of the following following
+execution model considerations:
 
 
 1.  No queries are received for any newly initiated round for temporal
-    periods observed via a locally computed passage of time.
+    periods observed via a locally computed passage of time.  See [the
+    following point on local time](#clock).
 
 2.  The confidence on the proposal exceeds our threshold for
     finalization.
@@ -314,10 +326,11 @@ node MUST reply with the currently finalized majority opinion.
 
 #### Clock
 
-The algorithim only requires that nodes have computed the drift of
+The algorithm only requires that nodes have computed the drift of
 observation of the passage of local time, not that that they have
 coordinated an absolute time with their peers.  For an implementation
-of a phase locked-loop feedback to measure local clock drift see [ntp][].
+of a phase locked-loop feedback to measure local clock drift see
+[NTP](https://www.rfc-editor.org/rfc/rfc5905.html).
 
 ## Further points
     
@@ -330,8 +343,11 @@ of a phase locked-loop feedback to measure local clock drift see [ntp][].
 In the query step, the node is envisioned as packing information into
 the query to cut down on the communication overhead a query to each of
 this `k` nodes containing the node's own current opinion on the
-proposal ("YES", "NO", or "NONE").  The relation of the metadata
-is not currently analyzed to these opinions should be constrained.
+proposal ("YES", "NO", or "NONE").  The algorithm does not currently
+specify how a given node utilizes this incoming information.  A
+possible use may be to count unsolicited votes towards a currently
+active round, and discard the information if the node is in a
+quiescent state.
 
 ### Weighted Node values
 
@@ -341,14 +357,16 @@ of `0` but exclusive of `1`.  This weight is used in each query round
 when selecting the `k` peers so the probability of selecting nodes is
 proportional to their weight.
 
-Node weighting probablity
+Node weighting probability
 $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
 $$ 
 
 where `w_i` is the weight of the `i`th peer.
 
-This weighted value would be used to reflect decisions mediating
+A given nodes weight can be calculated in a multitude of ways and is
+left as an implementation detail or further modification. Such a
+weight could be derived from a multitude of values including:
 
 - Staking
 - Heuristic reputation
@@ -369,11 +387,11 @@ simulator and actual network construction.  Expressions of Glacier in
 Python and Common Lisp are also in limited public review.
 
 
-# Interoperability
+# Wire Protocol 
 
-We present a wire protocol semantics by requiring the validity of the
-following statements expressed in Notation3 (aka `n3`) about any query
-performed by a query node.
+For interoperability we present a wire protocol semantics by requiring
+the validity of the following statements expressed in Notation3 (aka
+`n3`) about any query performed by a query node:
 
 
 ```n3
@@ -431,7 +449,8 @@ When represented via integers, such as choosing
 the parity summations across network invariants often become easier to
 manipulate.
 
-# Sovereignty Considerations
+# Security Considerations
+
 
 ## Privacy
 
@@ -463,16 +482,16 @@ opposite vote of the honest majority on an opinion.
 
 ### Omniscient Adversaries
 
-Omniscient adversaries have somhow gained an "unfair" participation in
+Omniscient adversaries have somehow gained an "unfair" participation in
 consensus by being able to control `f` of `N` nodes with a out-of-band
-"supra-liminal" coordination mechansim.  Such adversaries use this
+"supra-liminal" coordination mechanism.  Such adversaries use this
 coordinated behavior to delay or sway honest majority consensus.
 
 #### Passive Gossip Adversary
 
 The passive network omniscient adversary is fully aware at all times
 of the network state. Such an adversary can always chose to vote in
-the most efficient way to block the distributed consenus from
+the most efficient way to block the distributed consensus from
 finalizing.
 
 #### Active Gossip Adversary
@@ -489,9 +508,9 @@ most advantageous.
 
 Although we have proposed a normative description of the
 implementation of the underlying binary consensus algorithm (Glacier),
-we believe we have analyzed its adversarial performance in a manner
-that is ammendable to replacement by another member of the [snow*](#snow*)
-family.
+we believe we have prepared for analysis its adversarial performance
+in a manner that is amenable to replacement by another member of the
+[snow*](#snow*) family.
 
 We have presumed the existence of a general family of algorithms that
 can be counted on to vote on nodes in the DAG in a fair manner.
@@ -502,41 +521,6 @@ presupposition has some justification.  We can envision a need for
 tooling abstraction that allow one to just program the DAG itself, as
 they should be of stable interest no matter if Glacier isn't. 
 
-
-# Informative References
-
-0. [Logos](<https://logos.co/>)
-
-1. [On BFT Consensus Evolution: From Monolithic to
-   DAG](<https://dahliamalkhi.github.io/posts/2022/06/dag-bft/>)
-
-2. [snow-ipfs](<https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV>)
-
-3. [snow*](<https://arxiv.org/abs/1906.08936v2>) Rocket Team, Maofan
-   Yin, Kevin Sekniqi, Robbert van Renesse, and Emin Gün Sirer. 
-   “Scalable and Probabilistic Leaderless BFT Consensus through
-   Metastability.” arXiv, August 24, 2020.
-   
-4. [Move](<https://cloud.google.com/composer/docs/how-to/using/writing-dags>)
-    Move: a Language for Writing DAG Abstractions 
-
-5. [rdf](<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
-
-6. [rdfs](<http://www.w3.org/2000/01/rdf-schema#>)
-
-7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
-
-8. [n3-w3c-notes](<https://www.w3.org/TeamSubmission/n3/>)
-
-9. [ntp](<https://www.ntp.org/downloads.html>)
-
-## Normative Refenences
-
-0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
-
-1. [n3](<https://www.w3.org/DesignIssues/Notation3.html>)
-
-2. [json-ld](<https://json-ld.org/>)
 
 
 # Appendix A: Alvaro's Exposition of Glacier
@@ -679,8 +663,40 @@ $$
 
 Note: elaborate on `c_{target}` selection.
 
-
 # Colophon
+
+# Informative References
+
+0. [Logos](<https://logos.co/>)
+
+1. [On BFT Consensus Evolution: From Monolithic to
+   DAG](<https://dahliamalkhi.github.io/posts/2022/06/dag-bft/>)
+
+2. [snow-ipfs](<https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV>)
+
+3. [snow*](<https://www.avalabs.org/whitepapers>) The Snow family of
+   algorithms
+   
+4. [Move](<https://cloud.google.com/composer/docs/how-to/using/writing-dags>)
+    Move: a Language for Writing DAG Abstractions 
+
+5. [rdf](<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+
+6. [rdfs](<http://www.w3.org/2000/01/rdf-schema#>)
+
+7. [xsd](<http://www.w3.org/2001/XMLSchema#>) 
+
+8. [n3-w3c-notes](<https://www.w3.org/TeamSubmission/n3/>)
+
+9. [ntp](<https://www.ntp.org/downloads.html>)
+
+## Normative References
+
+0. [glacier](<https://rdf.logos.co/protocol/glacier/1/0/0/raw>)
+
+1. [n3](<https://www.w3.org/DesignIssues/Notation3.html>)
+
+2. [json-ld](<https://json-ld.org/>)
 
 ## Copyright
 
