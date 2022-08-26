@@ -7,8 +7,8 @@ category: Standards Track
 tags: logos/consensus
 editor: Mark Evenson <mark.evenson@status.im>
 created: 01-JUL-2022
-revised: <2022-08-26 Fri 11:17>
-uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-19%20Fri$2009:40Z>
+revised: <2022-08-26 Fri 13:11Z>
+uri: <https://rdf.logos.co/protocol/glacier/1/0/0#<2022-08-26%20Fri$2013:11Z>
 contributors:
     - Álvaro Castro-Castilla 
 ---
@@ -106,14 +106,14 @@ proposition.
 
 A proposal is formulated to which consensus of truth or falsity is
 desired.  Each node that participates starts the protocol with an
-opinion on the proposal, represented in the sequel as `no`, `none`,
-and `yes`.
+opinion on the proposal, represented in the sequel as `NO`, `NONE`,
+and `YES`.
 
 A new proposition is discovered either by local creation or in
 response to a query, a node checks its local opinion.  If the node can
 compute a justification of the proposal, it sets its opinion to one of
-`yes` or `no`.  If it cannot form an opinion, it leaves its opinion as
-`none`.
+`YES` or `NO`.  If it cannot form an opinion, it leaves its opinion as
+`NONE`.
 
 The node then participates in a number of query rounds in which it
 solicits other node's opinion in query rounds.  Given a set of `n`
@@ -404,19 +404,22 @@ the validity of the following statements expressed in Notation3 (aka
 glacier:query
   :holds (
     :_0 [ rdfs:label "round";
+          a xsd:postitiveInteger; ],
           rdfs:comment """
 The current round of this query 
 
-This starts with zero.
+A value of zero corresponds to the initial round.
 """ ;
-          a xsd:postitiveInteger; ],
+
     :_1 [ rdfs:label "uri";
           rdfs:comment """
 A unique URI for the proposal.
 
-It should be possible to examine the proposal by resolving this resource.
+It MAY be possible to examine the proposal by resolving this resource, 
+and its associated URIs.
 """ ;
           a xsd:anyURI ],
+          
     :_2 [ rdfs:label "opinion";
           rdfs:comment """
 The opinion on the proposal
@@ -429,7 +432,7 @@ One of the strings "YES" "NO" or "NONE".
 ```
 
 Nodes are advised to use Waku messages to include their own
-metadata in serializations as needed.  
+metadata in serializations as needed.
 
 ## Syntax
 
