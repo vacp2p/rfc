@@ -440,8 +440,8 @@ The semantic description presented above can be reliably round-tripped
 through a suitable serialization mechanism.  JSON-LD provides a
 canonical mapping to UTF-8 JSON.
 
-The message exchanged are a simple enumeration of three values is not
-currently analyzed reflecting the opinion on the given proposal:
+At their core, the query messages are a simple enumeration of the
+three possible values of the opinion:
 
     { NO, NONE, YES }
 
