@@ -57,6 +57,16 @@ This is done by calling the `withdraw` function of the RLN membership contract, 
     * `depth` is the depth of the Merkle tree that determines the maximum number of members to the RLN group.
     * `_poseidonHasher` is the address of the poseidon hasher contract used in the `hash` function.
 
+### Protocol Fees
+
+* `PROTOCOL_FEES_PERCENTAGE` is a portion of users' staked funds can be taken as the fee to use a private spam-protected gossips-sub network.
+This can also be seen as an incentive mechanism for node operators
+(where the collected funds are distributed among the operators like in DAOs)
+Providing better incentivization means attracting more platforms/operators/users, 
+therefore getting wider adoption of waku-rln-relay, 
+hence achieving better network robustness, 
+censorship-resistance, and anonymity as well as protocol sustainability. This parameter COULD be hard coded in the contract or set via the constructor.
+
 ### Methods
 
 * register: This function registers the `pubkey` to the list of members.
@@ -72,13 +82,15 @@ This function MUST fire the `MemberRegistered` event for each registered member.
     * `function registerBatch(uint256[] calldata pubkeys) external payable`
 
 
-* withdraw: This function accepts the `secret` of the public key at index`_pubkeyIndex` to withdraw the ETH equal to the`membershipDeposit` to the `receiver` address.
+* withdraw: This function accepts the `secret` of the public key at index`_pubkeyIndex` to withdraw the ETH equal to the`membershipDeposit` to the `receiver` address. 
+If the `PROTOCOL_FEES_PERCENTAGE` is used in the contract then it MUST be subtracted from the`membershipDeposit`. 
 This function MUST remove the associated member from the list of members.
 This function MUST fire the `MemberWithdrawn` event.
     * `function withdraw(uint256 secret, uint256 _pubkeyIndex, address payable receiver) external`
 
 
 * withdrawBatch: This function accepts multiple `secrets` of the public keys at the indices `pubkeyIndexes` to withdraw the ETH equal to the `membershipDeposit * secrets.length` to the `receiver` address.
+If the `PROTOCOL_FEES_PERCENTAGE` is used in the contract then it MUST be subtracted from the`membershipDeposit`.
 This function MUST remove the associated members from the list of members.
 This function MUST fire the `MemberWithdrawn` event for each member slashed from the group.
     * `function withdrawBatch(uint256[] calldata secrets, uint256[] calldata pubkeyIndexes, address payable[] calldata receivers) external`
