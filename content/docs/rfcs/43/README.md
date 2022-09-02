@@ -12,18 +12,17 @@ contributors:
 # Abstract
 
 In this document we describe a compound protocol 
-for enabling two devices belonging to the same user 
-to mutually authenticate and securely exchange (arbitrary) information over Waku. 
+for enabling two devices to mutually authenticate 
+and securely exchange (arbitrary) information over Waku. 
 
 # Background / Rationale / Motivation
 
 In order to implement multi-devices communications using one of the Noise session management mechanisms proposed in [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/), 
 we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
 
-Since, in this scenario, the devices would be close to each other 
-and under direct control of the user, 
-authentication can be initialized by exchanging out-of-band a QR code 
-and securely completed over the network.
+Since, in this scenario, the devices would be close to each other, 
+authentication can be initialized by exchanging a QR code out-of-band 
+and then securely completed over the network.
 
 The protocol we propose consists of two main subprotocols or *phases*:
 
@@ -45,15 +44,15 @@ where `A` is exposing a QR code instead.
 
 ### Employed Cryptographic Primitives
 
-- `H`: the underlying hash function, i.e. SHA-256;
-- `HKDF`: a key derivation function (based on SHA-256);
+- `H`: the underlying cryptographically-secure hash function, e.g. SHA-256;
+- `HKDF`: the key derivation function (based on `H`);
 - `Curve25519`: the underlying elliptic curve for Diffie-Hellman (DH) operations.
 
 ### The `WakuPairing` Noise Handshake
 
-The devices execute a custom handshake derived from `X1X1`, 
+The devices execute a custom handshake derived from `XN`, 
 where they mutually exchange and authenticate their device static keys 
-by exchanging messages over the content topic
+by exchanging messages over the content topic with the following [format](https://rfc.vac.dev/spec/23/#content-topic-format)
 
 ```
 contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto
@@ -63,11 +62,11 @@ The handshake, detailed in next section, can be summarized as:
 
 ```
 WakuPairing:
-0.   <- eB              {H(sB||r), contentTopicParams, messageNametag}
+a.   <- eB              {H(sB||r), contentTopicParams, messageNametag}
      ...
-1.   -> eA, eAeB        {H(sA||s)}   [authcode]
-2.   <- sB, eAsB        {r}
-3.   -> sA, sAeB, sAsB  {s}
+b.   -> eA, eAeB        {H(sA||s)}   [authcode]
+c.   <- sB, eAsB        {r}
+d.   -> sA, sAeB, sAsB  {s}
 
 {}: payload,    []: user interaction
 ```
@@ -82,25 +81,25 @@ WakuPairing:
 
 2. The device `A`:
     - scans the QR code;
-    - obtains `eB`, `contentTopicParams`, `messageNametag`, `Hash(sB|r)`;
+    - obtains `eB`, `contentTopicParams`, `messageNametag`, `Hash(sB||r)`;
     - checks if `{application-name}` and `{application-version}` from `contentTopicParams` match the local application name and version: if not, aborts the pairing. 
     - initializes the Noise handshake by passing `contentTopicParams`, `messageNametag` and `Hash(sB||r)` to the handshake prologue;
     - executes the pre-handshake message, i.e. processes the key `eB`;
     - executes the first handshake message over `contentTopic`, i.e. 
         - processes and sends a Waku message containing an ephemeral key `eA`; 
         - performs `DH(eA,eB)` (which computes a symmetric encryption key);
-        - attach as payload to the handshake message a commitment `H(sA|s)` for `A`'s static key `sA`, where `s` is a random fixed-lenght value;
-    - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the handshake value obtained once the first handshake message is processed.
+        - attaches as payload to the handshake message the (encrypted) commitment `H(sA||s)` for `A`'s static key `sA`, where `s` is a random fixed-length value;
+    - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
 
 3. The device `B`:
     - listens to messages sent to `/{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto` and locally filters only those with [Waku payload](https://rfc.vac.dev/spec/35/#abnf) starting with `messageNametag`. If any, continues.
     - initializes the Noise handshake by passing `contentTopicParams`, `messageNametag` and `Hash(sB||r)` to the handshake prologue;
-    - executes the pre-handshake message, i.e. processes its static key `eB`;
+    - executes the pre-handshake message, i.e. processes its ephemeral key `eB`;
     - executes the first handshake message, i.e.
         - obtains from the received message a public key `eA`. If `eA` is not a valid public key, the protocol is aborted.
         - performs `DH(eA,eB)` (which computes a symmetric encryption key);
         - decrypts the commitment `H(sA||s)` for `A`'s static key `sA`.
-    - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the handshake value obtained once the first handshake message is processed.
+    - an 8 decimal digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
 
 4. Device `A` and `B` wait the user to confirm with an interaction (button press) 
 that the authorization code displayed on both devices are the same. 
@@ -113,8 +112,8 @@ If not, the protocol is aborted.
         - attaches as payload the (encrypted) commitment randomness `r` used to compute `H(sB||r)`.
 
 6. The device `A`:
-    - listens to messages sent to `/{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto` and locally filters only those with Waku payload starting with `messageNametag`. If any, continues.
-    - obtains from decrypting the received message a public key `sB`. If `sB` is not a valid public key, the protocol is aborted.
+    - listens to messages sent to `contentTopic` and locally filters only those with Waku payload starting with `messageNametag`. If any, continues.
+    - decrypts the received message and obtains the public key `sB`. If `sB` is not a valid public key, the protocol is aborted.
     - performs `DH(eA,sB)` (which updates a symmetric encryption key);
     - decrypts the payload to obtain the randomness `r`. 
     - Computes `H(sB||r)` and checks if this value corresponds to the commitment obtained in step 2. If not, the protocol is aborted.
@@ -132,29 +131,32 @@ If not, the protocol is aborted.
     - performs `DH(sA,eB)` (which updates a symmetric encryption key);
     - performs `DH(sA,sB)` (which updates a symmetric encryption key);
     - decrypts the payload to obtain the randomness `s`. 
-    - Computes `H(sA||s)` and checks if this value corresponds to the commitment obtained in step 6. If not, the protocol is aborted.
+    - Computes `H(sA||s)` and checks if this value corresponds to the commitment obtained in step 3. If not, the protocol is aborted.
     - Calls Split() and obtains two cipher states to encrypt inbound and outbound messages.
 
 ### The `WakuPairing` for Devices without a Camera
 
-In the above pairing handshake, the QR is by default exposed by device `B` and not by `A` because device `B` locally stores no relevant cryptographic material, 
-so an active local attacker that scans the QR code first 
-would only be able to transfer *his own* session information 
-and get nothing from `A`. 
+In the above pairing handshake, the QR is by default exposed by device `B` and not by `A` 
+because in most use-cases we foreseee, the secure transfer phase would consist in 
+exchanging a single message (e.g., Noise sessions, cryptographic keys, signatures, etc.) from device `A` to `B`.
 
-However, since the user confirms at the end of message `1` that the authorization code is the same on both devices, 
-the role of handhsake initiator and responder can be safely swapped in message `0` and `1`. 
+However, since the user(s) confirm(s) at the end of message `b.` that the authorization code is the same on both devices, 
+the role of the handhsake initiator and responder can be safely swapped in message `a.` and `b.`.
+
+Indeed, if the pairing phase successfully completes on both devices, 
+the authentication code, the committed static keys and the Noise processing rules will ensure that no Man-in-the-Middle attack took place
+and that messages can be securely exchanged bi-directionally in the transfer phase.
 
 This allows pairing in case device `A` does not have a camera to scan a QR (e.g. a desktop client) while device `B` has.
 
 The resulting handshake would then be:
 ```
 WakuPairing2:
-0.   -> eA              {H(sB||r), contentTopicParams, messageNametag}
+a.   -> eA              {H(sB||r), contentTopicParams, messageNametag}
      ...
-1.   <- eB, eAeB        {H(sB||r)}   [authcode]
-2.   <- sB, eAsB        {r}
-3.   -> sA, sAeB, sAsB  {s}
+b.   <- eB, eAeB        {H(sB||r)}   [authcode]
+c.   <- sB, eAsB        {r}
+d.   -> sA, sAeB, sAsB  {s}
 
 {}: payload,    []: user interaction
 ```
@@ -167,11 +169,44 @@ and allow exchange of cryptographic key material
 between two devices over a distributed network of Waku2 nodes.
 
 Once the handshake is concluded, 
-sensitive information can be exchanged using the encryption keys agreed during the pairing phase. 
+(sensitive) information can be exchanged using the encryption keys agreed during the pairing phase. 
 If stronger security guarantees are required, 
 some [additional tweaks](#Implementation-Suggestions) are possible.
 
 # Implementation Suggestions
+
+## Timebox QR exposure
+
+We suggest to timebox the exposure of each pairing QR code to few seconds, e.g. 30.
+After this time limit, a QR code containing a new ephemeral key, random static key commitment and message nametag (content topic parameters could remain the same) 
+should replace the previously exposed QR, which can then be discarded.
+
+The reason for such suggestion is due to the fact that if an attacker is able to compromise one of the ephemeral keys, 
+he might successfully realize an undetected MitM attack up to the `authcode` confirmation 
+(we note that compromising ephemeral keys is outside our and Noise security assumptions).
+
+The attacker could indeed proceed as follows:
+- intercepts the QR;
+- blocks/delays the delivery of the pairing message `b.`;
+- compromises `A` or `B` ephemeral key;
+- recovers the genuine `authcode` that would have been generated by `A` and `B`;
+- generates ~`10^8` random `t` values until the Noise processing of the message `b'. -> eC, eCeB  {H(sC||t)} `, where `eC` and `sC` are the attacker ephemeral and static key, respectively, results in computing the same `authcode` as the one between `A` and `B`; 
+- delivers the message `b'. -> eC, eCeB  {H(sC||t)}` to `B` (before `A` is able to deliver its message `b.`).
+
+At this point `A` and `B` will observe the same `authcode` (and would then confirm it),
+but `B` will process the attacker's ephemeral key `eC` instead of `eA`. 
+
+However, the attacker would not be able to open to device `A` the static key commitment `H(sB||s)` sent by device `B` out-of-band, 
+and the pairing will abort on `A` side before it reveals its static key. 
+Device `B`, instead, will successfully complete the pairing with the attacker.
+
+Hence, timeboxing the QR exposure,
+also in combination with increasing the number of decimal digits of the `authcode`,
+will strongly limit the probability that an attacker can successfully impersonate device `A` to `B`.
+
+We stress once more, that such attack requires the compromise of an ephemeral key (outside our security model)
+and that device `A` will in any case detect a mismatch and abort the pairing, 
+regardless of the fact that the QR timeboxing mitigation is implemented or not.
 
 ## Randomized Rekey
 
@@ -201,7 +236,7 @@ TransferPhase:
 
 To reduce metadata leakages and increase devices's anonymity over the p2p network, 
 [35/WAKU2-NOISE](https://rfc.vac.dev/spec/37/#session-states) suggests to use some common secrets `ctsInbound, ctsOutbound` (e.g. `ctsInbound, ctsOutbound = HKDF(h)` 
-where `h` is the handshake hash value of the Handshake State at some point of the pairing phase) 
+where `h` is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) of the Handshake State at some point of the pairing phase) 
 in order to frequently and deterministically change the `messageNametag` of messages exchanged during the pairing and transfer phase - 
 ideally, at each message exchanged. 
 
@@ -244,15 +279,15 @@ unless `ctsInbound`, `ctsOutbound` or the `messageNametag` buffer lists were com
 ### Rationale
 
 - The device `B` exposes a commitment to its static key `sB` because:
-    - if the private key of `eB` is weak or gets compromised, an attacker can impersonate `B` by sending in message `2` to device `A` his own static key and successfully complete the pairing phase. Note that being able to compromise `eB` is not contemplated by our security assumptions.
-    - `B` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `1`, i.e. after the authentication code is confirmed. Note that device `B` is trusted in our security assumptions.
-    - Confirming the authentication code after processing message `1` will ensure that no Man-in-the-Middle (MitM) can send a static key different than `sB`.
+    - if the private key of `eB` is weak or gets compromised, an attacker can impersonate `B` by sending in message `c.` to device `A` his own static key and successfully complete the pairing phase. Note that being able to compromise `eB` is not contemplated by our security assumptions.
+    - `B` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `b.`, i.e. after the authentication code is confirmed. Note that device `B` is trusted in our security assumptions.
+    - Confirming the authentication code after processing message `b.` will ensure that no Man-in-the-Middle (MitM) can send a static key different than `sB`.
 
 - The device `A` sends a commitment to its static key `sA` because:
-    - `A` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `1`, i.e. after the authentication code is confirmed. Note that device `A` is trusted in our security assumptions.
-    - Confirming the authentication code after processing message `1` will ensure that no MitM can send a static key different than `sA`.
+    - `A` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `b.`, i.e. after the authentication code is confirmed. Note that device `A` is trusted in our security assumptions.
+    - Confirming the authentication code after processing message `b.` will ensure that no MitM can send a static key different than `sA`.
 
-- The authorization code is shown and has to be confirmed at the end of message `1` because:
+- The authorization code is shown and has to be confirmed at the end of message `b.` because:
     - an attacker that frontruns device `A` by sending faster his own ephemeral key would be detected before  he's able to know device `B` static key `sB`;
     - it ensures that no MitM attacks will happen during *the whole* pairing handshake, since commitments to the (later exchanged) device static keys will be implicitly acknowledged by the authorization code confirmation;
     - it enables to safely swap the role of handshake initiator and responder (see above);
@@ -260,10 +295,10 @@ unless `ctsInbound`, `ctsOutbound` or the `messageNametag` buffer lists were com
 - Device `B` sends his static key first because:
     - by being the pairing requester, it cannot probe device `A` identity without revealing its own (static key) first. Note that device `B` static key and its commitment can be binded to other cryptographic material (e.g., seed phrase).
 
-- Device `B` opens a commitment to its static key at message `2.` because:
+- Device `B` opens a commitment to its static key at message `c.` because:
     - if device `A` replies concluding the handshake according to the protocol, device `B` acknowledges that device `A` correctly received his static key `sB`, since `r` was encrypted under an encryption key derived from the static key `sB` and the genuine (due to the previous `authcode` verification) ephemeral keys `eA` and `eB`.
 
-- Device `A` opens a commitment to its static key at message `3.` because:
+- Device `A` opens a commitment to its static key at message `d.` because:
     - if device `B` doesn't abort the pairing, device `A` acknowledges that device `B` correctly received his static key `sA`, since `s` was encrypted under an encryption key derived from the static keys `sA` and `sB` and the genuine (due to the previous `authcode` verification) ephemeral keys `eA` and `eB`.
 
 # Application to Noise Sessions
