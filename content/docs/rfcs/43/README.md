@@ -55,7 +55,7 @@ where they mutually exchange and authenticate their device static keys
 by exchanging messages over the content topic with the following [format](https://rfc.vac.dev/spec/23/#content-topic-format)
 
 ```
-contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto
+contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto
 ```
 
 The handshake, detailed in next section, can be summarized as:
@@ -82,7 +82,7 @@ d.   -> sA, sAeB, sAsB  {s}
 2. The device `A`:
     - scans the QR code;
     - obtains `eB`, `contentTopicParams`, `messageNametag`, `Hash(sB||r)`;
-    - checks if `{application-name}` and `{application-version}` from `contentTopicParams` match the local application name and version: if not, aborts the pairing. 
+    - checks if `{application-name}` and `{application-version}` from `contentTopicParams` match the local application name and version: if not, aborts the pairing. Sets `contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto`;
     - initializes the Noise handshake by passing `contentTopicParams`, `messageNametag` and `Hash(sB||r)` to the handshake prologue;
     - executes the pre-handshake message, i.e. processes the key `eB`;
     - executes the first handshake message over `contentTopic`, i.e. 
@@ -92,7 +92,8 @@ d.   -> sA, sAeB, sAsB  {s}
     - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
 
 3. The device `B`:
-    - listens to messages sent to `/{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto` and locally filters only those with [Waku payload](https://rfc.vac.dev/spec/35/#abnf) starting with `messageNametag`. If any, continues.
+    - sets `contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto`;
+    - listens to messages sent to `contentTopic` and locally filters only those with [Waku payload](https://rfc.vac.dev/spec/35/#abnf) starting with `messageNametag`. If any, continues.
     - initializes the Noise handshake by passing `contentTopicParams`, `messageNametag` and `Hash(sB||r)` to the handshake prologue;
     - executes the pre-handshake message, i.e. processes its ephemeral key `eB`;
     - executes the first handshake message, i.e.
@@ -126,7 +127,7 @@ If not, the protocol is aborted.
     
 7. The device `B`:
 
-    - listens to messages sent to `/{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/proto` and locally filters only those with Waku payload starting with `messageNametag`. If any, continues.
+    - listens to messages sent to `contentTopic` and locally filters only those with Waku payload starting with `messageNametag`. If any, continues.
     - obtains from decrypting the received message a public key `sA`. If `sA` is not a valid public key, the protocol is aborted.
     - performs `DH(sA,eB)` (which updates a symmetric encryption key);
     - performs `DH(sA,sB)` (which updates a symmetric encryption key);
