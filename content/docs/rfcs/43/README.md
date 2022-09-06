@@ -102,7 +102,7 @@ d.   -> sA, sAeB, sAsB  {s}
         - decrypts the commitment `H(sA||s)` for `A`'s static key `sA`.
     - an 8 decimal digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
 
-4. Device `A` and `B` wait the user to confirm with an interaction (button press) 
+4. Device `A` and `B` wait for the user to confirm with an interaction (button press) 
 that the authorization code displayed on both devices are the same. 
 If not, the protocol is aborted.
     
@@ -117,13 +117,13 @@ If not, the protocol is aborted.
     - decrypts the received message and obtains the public key `sB`. If `sB` is not a valid public key, the protocol is aborted.
     - performs `DH(eA,sB)` (which updates a symmetric encryption key);
     - decrypts the payload to obtain the randomness `r`. 
-    - Computes `H(sB||r)` and checks if this value corresponds to the commitment obtained in step 2. If not, the protocol is aborted.
+    - computes `H(sB||r)` and checks if this value corresponds to the commitment obtained in step 2. If not, the protocol is aborted.
     - executes the third handshake message, i.e.
         - processes and sends his (encrypted) device static key `sA` over `contentTopic`;
         - performs `DH(sA,eB)` (which updates the symmetric encryption key);
         - performs `DH(sA,sB)` (which updates the symmetric encryption key);
         - attaches as payload the (encrypted) commitment randomness `s` used to compute `H(sA||s)`.
-    - Calls Split() and obtains two cipher states to encrypt inbound and outbound messages.
+    - calls Split() and obtains two cipher states to encrypt inbound and outbound messages.
     
 7. The device `B`:
 
