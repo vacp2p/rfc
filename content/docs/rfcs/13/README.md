@@ -21,6 +21,8 @@ As such, they are required to be *highly available* and in specific have a *high
 The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes.
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
+The concept of "ephemeral" messages exists while using `13/WAKU2-STORE` as well. Any `WakuMessage` that has the ephemeral flag set to true will not be added to the store, thereby reducing the amount of one-time use messages on disk. While the node SHOULD not store messages with the ephemeral flag set to true, they MAY do so for archival.
+
 # Security Consideration
 
 The main security consideration to take into account while using `13/WAKU2-STORE` is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.

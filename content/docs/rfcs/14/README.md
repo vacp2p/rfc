@@ -38,6 +38,10 @@ The `timestamp` field MAY be filled out to signify the time at which the message
 This field holds the Unix epoch time in nanoseconds. 
 Omitting it means the timestamp is unspecified.
 
+The `ephemeral` field MAY be filled out to signify the transient nature of the message.
+Omitting it means the message is permananent, and must be added to the store.
+See [13/WAKU2-STORE](/spec/13) for more details.
+
 ## Payloads
 
 Payloads are implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
@@ -50,6 +54,7 @@ message WakuMessage {
   string contentTopic = 2;
   uint32 version = 3;
   sint64 timestamp = 10;
+  bool ephemeral = 31;
 }
 ```
 
