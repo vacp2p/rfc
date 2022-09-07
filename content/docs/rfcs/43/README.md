@@ -13,27 +13,27 @@ contributors:
 
 In this document we describe a compound protocol 
 for enabling two devices to mutually authenticate 
-and securely exchange (arbitrary) information over Waku. 
+and securely exchange (arbitrary) information over the Waku network. 
 
 # Background / Rationale / Motivation
 
-In order to implement multi-devices communications using one of the Noise session management mechanisms proposed in [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/), 
+In order to implement multi-device communications using one of the Noise session management mechanisms proposed in [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/), 
 we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
 
 Since, in this scenario, the devices would be close to each other, 
 authentication can be initialized by exchanging a QR code out-of-band 
-and then securely completed over the network.
+and then securely completed over the Waku network.
 
 The protocol we propose consists of two main subprotocols or *phases*:
 
-- [Device Pairing](#Device-Pairing): the devices exchange and authenticate their long term device ID static keys;
-- [Secure Transfer](#Secure-Transfer): the devices securely exchange in encrypted form information using key material obtained during a successful pairing phase.
+- [Device Pairing](#Device-Pairing): two phisically close devices initialize the *pairing* by exchanging a QR code out-of-band. The devices then exchange and authenticate their respective long-term device ID static key by exchanging handshake messages over the Waku network;
+- [Secure Transfer](#Secure-Transfer): the devices securely exchange information in encrypted form using key material obtained during a successful pairing phase. The communication will happen over the Waku network, hence the devices do not need to be phisically close in this phase.
  
 # Theory / Semantics
 
 ## Device Pairing
 
-In the pairing phase, a device `B` requests to be paired to a device `A`. 
+In the pairing phase, device `B` requests to be paired to a device `A`. 
 Once the two devices are paired, the devices will be mutually authenticated 
 and will share a Noise session within which they can securely exchange information.
 
@@ -50,8 +50,8 @@ where `A` is exposing a QR code instead.
 
 ### The `WakuPairing` Noise Handshake
 
-The devices execute a custom handshake derived from `XN`, 
-where they mutually exchange and authenticate their device static keys 
+The devices execute a custom handshake derived from `XX`, 
+where they mutually exchange and authenticate their respective device static key 
 by exchanging messages over the content topic with the following [format](https://rfc.vac.dev/spec/23/#content-topic-format)
 
 ```
@@ -89,7 +89,7 @@ d.   -> sA, sAeB, sAsB  {s}
         - processes and sends a Waku message containing an ephemeral key `eA`; 
         - performs `DH(eA,eB)` (which computes a symmetric encryption key);
         - attaches as payload to the handshake message the (encrypted) commitment `H(sA||s)` for `A`'s static key `sA`, where `s` is a random fixed-length value;
-    - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h`is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
+    - an 8-digits authorization code `authcode` obtained as `HKDF(h) mod 10^8` is displayed on the device, where `h` is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) obtained once the first handshake message is processed.
 
 3. The device `B`:
     - sets `contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto`;
