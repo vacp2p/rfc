@@ -66,11 +66,13 @@ corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.
 In particular, identity-hiding properties can be guaranteed only if the recommendation described in [After-handshake](#After-handshake) are implemented.
 
 In the following, we assume that communicating parties reciprocally know an initial [`contentTopic`](/spec/14/#wakumessage) 
-where they can send/receive the first handshake message.
-We further assume that multiple initiators can start an handshake with the same recipient on an initial `contentTopic`,
-which can be then directly linked to recipient's identity (no identity-hiding guarantee for the recipient).
+where they can send/receive the first handshake message(s).
+We further assume that messages sent over a certain `contentTopic` can be efficiently identified by their intended recipients
+thanks to an arbitrary 16 bytes long `message-nametag` field embedded in the message payload
+which is known in advance before messages reception.
 
-The second handshake message SHOULD be sent/received on a `contentTopic` deterministically derived from the first handshake message (using, for example, `HKDF`).
+The second handshake message MAY be sent/received with a `message-nametag` deterministically derived from the handshake state obtained after processing the first handshake message 
+(using, for example, `HKDF` over the handshake hash value `h`).
 This allows
 - the recipient to efficiently continue the handshakes started by each initiator;
 - the initiators to efficiently associate the recipient's second handshake message to their first handshake message,
@@ -100,6 +102,8 @@ When a `transport-message` encodes a `ChaChaPoly` ciphertext, the corresponding 
 
 The following fields are concatenated to form the `payload` field:
 
+ - `message-nametag`: an arbitrary identifier for the Waku message (16 byte).
+ If the underlying encryption primitive supports it, the contents of this field SHOULD be passed as additional data to the encryption and decryption routines.
  - `protocol-id`: identifies the protocol or primitive in use (1 byte). 
  Supported values are:
      - `0`:  protocol specification omitted (set for [after-handshake](#After-handshake) messages);
@@ -125,6 +129,9 @@ encoded as in [Public Keys Encoding](#Public-Keys-Encoding);
 Using [Augmented Backus-Naur form (ABNF)](https://tools.ietf.org/html/rfc5234) we have the following format:
 
 ```abnf
+; message nametag
+message-nametag             = 16OCTET
+
 ; protocol ID
 protocol-id                 = 1OCTET
 
@@ -142,7 +149,7 @@ transport-message-len       = *OCTET
 transport-message           = *OCTET
 
 ; the Waku WakuMessage payload field
-payload  = protocol-id handshake-message-len handshake-message transport-message-len transport-message
+payload  = message-nametag protocol-id handshake-message-len handshake-message transport-message-len transport-message
 ```
 
 ### Protocol Payload Format
@@ -198,14 +205,20 @@ It is therefore recommended to right pad transport messages using [RFC2630](http
 ## After-handshake
 
 During the initial 1-RTT communication, 
-handshake messages [can be linked](#Content-Topics-of-Noise-Handshake-Messages) to the respective parties 
-through the `contentTopic` employed for such communication
+handshake messages [might be linked](#Content-Topics-of-Noise-Handshake-Messages),
+depending on the `message-nametag` derivation rule implemented,
+to the respective parties through the `contentTopic` and `message-nametag` fields employed for such communication.
 
 After a handshake is completed, 
-parties SHOULD derive from their shared secret key (preferably using `HKDF`) a new random `contentTopic` 
-and continue their communication there.
+parties MAY derive from their shared secret key (preferably using `HKDF`) 
+two random `nametag-secret-outbound` and `nametag-secret-inbound` values used to deterministically derive
+two arbitrary-long ordered lists of `message-nametag`
+used to indentify outbound and inbound messages, respectively 
+(e.g. the `n`-th inbound `message-nametag` MAY be computed as `HKDF(nametag-secret-inbound || n)`).
+This allows communicating parties to efficiently identify messages addressed to them sent over a certain `contentTopic` 
+and thus minimize the number of trial decryptions.
 
-When communicating on the new `contentTopic`, 
+When communicating, 
 parties SHOULD set `protocol-id` to `0` 
 to reduce metadata leakages and indicate that the message is an *after-handshake* message.
 
@@ -227,6 +240,7 @@ It suffices to extend the list of supported `protocol-id` to:
 and set the `transport-message` field to the [26/WAKU-PAYLOAD](/spec/26) `data` field, whenever these `protocol-id` values are set. 
 
 Namely, if `protocol-id = 254, 255` then:
+- `message-nametag`: is empty;
 - `handshake-message-len`: is set to `0`;
 - `handshake-message`: is empty;
 - `transport-message`: contains the [26/WAKU-PAYLOAD](/spec/26) `data` field (AES-256-GCM or ECIES, depending on `protocol-id`);
