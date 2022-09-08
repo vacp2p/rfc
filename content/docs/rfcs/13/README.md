@@ -22,13 +22,8 @@ The high uptime requirement makes sure that no message is missed out hence a com
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
 The concept of "ephemeral" messages exists while using `13/WAKU2-STORE` as well.
-
-Any `WakuMessage` that has the `ttl` field set to `0` MAY be ignored by the store service node, thereby reducing the amount of one-time use messages stored.
-Nodes SHOULD NOT not store messages with the `ttl` field set to `0`.
-
-Nodes SHOULD store messages which satisfy the following constraints -
-1. `ttl > currentTime + Thr`, where `Thr` describes the network latency as well as clock asynchrony.
-2. `ttl` is unset, for backwards compatibility.
+Any `WakuMessage` that has the `ephemeral` flag set to `true` MAY be ignored by the store service node, thereby reducing the amount of one-time use messages stored.
+Nodes SHOULD NOT not store messages with the `ephemeral` flag set to `true`.
 
 # Security Consideration
 
