@@ -28,7 +28,7 @@ The protocol we propose consists of two main subprotocols or *phases*:
 
 - [Device Pairing](#Device-Pairing): two phisically close devices initialize the *pairing* by exchanging a QR code out-of-band. The devices then exchange and authenticate their respective long-term device ID static key by exchanging handshake messages over the Waku network;
 - [Secure Transfer](#Secure-Transfer): the devices securely exchange information in encrypted form using key material obtained during a successful pairing phase. The communication will happen over the Waku network, hence the devices do not need to be phisically close in this phase.
- 
+
 # Theory / Semantics
 
 ## Device Pairing
@@ -41,6 +41,11 @@ The request is made by exposing a QR code that, by default, has to be scanned by
 If device `A` doesn't have a camera while device `B` does, 
 [it is possible](#Rationale) to execute a slightly different pairing (with same security guarantees), 
 where `A` is exposing a QR code instead.
+
+This protocol is designed in order to achieve two main security objectives:
+
+- resistance to Man-in-the-Middle attacks;
+- provide network anonymity on devices' static keys, i.e. only paired devices will learn each other static key.
 
 ### Employed Cryptographic Primitives
 
@@ -280,13 +285,15 @@ unless `ctsInbound`, `ctsOutbound` or the `messageNametag` buffer lists were com
 ### Rationale
 
 - The device `B` exposes a commitment to its static key `sB` because:
-    - if the private key of `eB` is weak or gets compromised, an attacker can impersonate `B` by sending in message `c.` to device `A` his own static key and successfully complete the pairing phase. Note that being able to compromise `eB` is not contemplated by our security assumptions.
+    - it can commit to its static key before the authentication code is confirmed without revealing it.
+    - If the private key of `eB` is weak or gets compromised, an attacker can impersonate `B` by sending in message `c.` to device `A` his own static key and successfully complete the pairing phase. Note that being able to compromise `eB` is not contemplated by our security assumptions.
     - `B` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `b.`, i.e. after the authentication code is confirmed. Note that device `B` is trusted in our security assumptions.
-    - Confirming the authentication code after processing message `b.` will ensure that no Man-in-the-Middle (MitM) can send a static key different than `sB`.
+    - Confirming the authentication code after processing message `b.` will ensure that no Man-in-the-Middle (MitM) can later send a static key different than `sB`.
 
 - The device `A` sends a commitment to its static key `sA` because:
+    - it can commit to its static key before the authentication code is confirmed without revealing it.
     - `A` cannot adaptively choose a static key based on the state of the Noise handshake at the end of message `b.`, i.e. after the authentication code is confirmed. Note that device `A` is trusted in our security assumptions.
-    - Confirming the authentication code after processing message `b.` will ensure that no MitM can send a static key different than `sA`.
+    - Confirming the authentication code after processing message `b.` will ensure that no MitM can later send a static key different than `sA`.
 
 - The authorization code is shown and has to be confirmed at the end of message `b.` because:
     - an attacker that frontruns device `A` by sending faster his own ephemeral key would be detected before  he's able to know device `B` static key `sB`;
