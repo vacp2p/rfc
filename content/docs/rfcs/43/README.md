@@ -123,7 +123,7 @@ If not, the protocol is aborted.
         - performs `DH(sA,eB)` (which updates the symmetric encryption key);
         - performs `DH(sA,sB)` (which updates the symmetric encryption key);
         - attaches as payload the (encrypted) commitment randomness `s` used to compute `H(sA||s)`.
-    - calls Split() and obtains two cipher states to encrypt inbound and outbound messages.
+    - calls [Split()](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object) and obtains two cipher states to encrypt inbound and outbound messages.
     
 7. The device `B`:
 
@@ -133,12 +133,12 @@ If not, the protocol is aborted.
     - performs `DH(sA,sB)` (which updates a symmetric encryption key);
     - decrypts the payload to obtain the randomness `s`. 
     - Computes `H(sA||s)` and checks if this value corresponds to the commitment obtained in step 3. If not, the protocol is aborted.
-    - Calls Split() and obtains two cipher states to encrypt inbound and outbound messages.
+    - Calls [Split()](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object) and obtains two cipher states to encrypt inbound and outbound messages.
 
 ### The `WakuPairing` for Devices without a Camera
 
 In the above pairing handshake, the QR is by default exposed by device `B` and not by `A` 
-because in most use-cases we foreseee, the secure transfer phase would consist in 
+because in most use-cases we foresee, the secure transfer phase would consist in 
 exchanging a single message (e.g., Noise sessions, cryptographic keys, signatures, etc.) from device `A` to `B`.
 
 However, since the user(s) confirm(s) at the end of message `b.` that the authorization code is the same on both devices, 
@@ -170,7 +170,7 @@ and allow exchange of cryptographic key material
 between two devices over a distributed network of Waku2 nodes.
 
 Once the handshake is concluded, 
-(sensitive) information can be exchanged using the encryption keys agreed during the pairing phase. 
+(privacy-sensitive) information can be exchanged using the encryption keys agreed upon the pairing phase. 
 If stronger security guarantees are required, 
 some [additional tweaks](#Implementation-Suggestions) are possible.
 
@@ -218,9 +218,9 @@ it will be possible for the attacker not only to decrypt messages encrypted unde
 but also all those messages encrypted under any successive new key obtained through a call to `Rekey()`.
 
 This can be mitigated by:
-- keeping the full Handhshake State even after the handshake is complete (*by Noise specification a call to `Split()` should delete the Handshake State*)
+- keeping the full Handhshake State even after the handshake is complete (*by Noise specification a call to [`Split()`](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object) should delete the Handshake State*)
 - continuing updating the Handshake State by processing every after-handshake exchanged message (i.e. the `payload`) according to the Noise [processing rules](http://www.noiseprotocol.org/noise.html#processing-rules) (i.e. by calling `EncryptAndHash(payload)` and `DecryptAndHash(payload)`);
-- adding to each (or every few) message exchanged in the transfer phase a random ephemeral key `e` and perform Diffie-Hellman operations with the other party's ephemeral/static keys in order to update the underlying CipherState and recover new random inbound/outbound encryption keys by calling `Split()`.
+- adding to each (or every few) message exchanged in the transfer phase a random ephemeral key `e` and perform Diffie-Hellman operations with the other party's ephemeral/static keys in order to update the underlying CipherState and recover new random inbound/outbound encryption keys by calling [`Split()`](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object).
 
 In short, the transfer phase would look like (but not necessarily the same as):
 
@@ -294,7 +294,7 @@ unless `ctsInbound`, `ctsOutbound` or the `messageNametag` buffer lists were com
     - it enables to safely swap the role of handshake initiator and responder (see above);
 
 - Device `B` sends his static key first because:
-    - by being the pairing requester, it cannot probe device `A` identity without revealing its own (static key) first. Note that device `B` static key and its commitment can be binded to other cryptographic material (e.g., seed phrase).
+    - by being the pairing requester, it cannot probe device `A` identity without revealing its own (static key) first. Note that device `B` static key and its commitment can be bound to other cryptographic material (e.g., seed phrase).
 
 - Device `B` opens a commitment to its static key at message `c.` because:
     - if device `A` replies concluding the handshake according to the protocol, device `B` acknowledges that device `A` correctly received his static key `sB`, since `r` was encrypted under an encryption key derived from the static key `sB` and the genuine (due to the previous `authcode` verification) ephemeral keys `eA` and `eB`.
