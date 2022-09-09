@@ -23,7 +23,7 @@ Nevertheless, in case that storage provider nodes cannot afford high availabilit
 
 The concept of "ephemeral" messages exists while using `13/WAKU2-STORE` as well.
 Nodes running [13/WAKU2-STORE](/spec/13) SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
-Nodes running [13/WAKU2-STORE](/spec/13) SHOULD NOT not store messages with the `ephemeral` flag set to `true`.
+Nodes running [13/WAKU2-STORE](/spec/13) SHOULD NOT store messages with the `ephemeral` flag set to `true`.
 
 
 # Security Consideration
