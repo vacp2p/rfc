@@ -108,6 +108,12 @@ For example, a malicious node can arbitrarily set the  `timestamp` of a `WakuMes
 Applications using the `WakuMessage`'s `timestamp` field are recommended to use additional methods for more robust message ordering.
 An example of how to deal with message ordering against adversarial message timestamps can be found in the Status protocol, see [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
 
+## Reliability of the ephemeral flag
+
+The `ephemeral` field in `WakuMessage` is set by the sender.
+Since there is currently no incentive mechanism for nodes that implement [13/WAKU2-STORE](/spec/13) and [11/WAKU2-RELAY](/spec/11) to behave correctly, this field is inherently unsecure.
+Malicious nodes that implement [11/WAKU2-RELAY](/spec/11) can flip the value of the ephemeral flag, and nodes that receive such messages would have no mechanism to verify the integrity of the message.
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
