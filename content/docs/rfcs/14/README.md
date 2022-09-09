@@ -40,7 +40,7 @@ Omitting it means the timestamp is unspecified.
 
 The `ephemeral` field MAY be set to signify the transient nature of the message.
 If the message should be stored by the [store protocol](/spec/13), then this field MUST be set to `false`, which is equivalent to omitting the field.
-If the message SHOULD NOT be stored by the [store protocol](/spec/13), then this field MUST be set to `true`.
+If the message should not be stored by the [store protocol](/spec/13), then this field MUST be set to `true`.
 
 See [13/WAKU2-STORE](/spec/13) for more details.
 
