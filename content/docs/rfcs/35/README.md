@@ -205,7 +205,7 @@ It is therefore recommended to right pad transport messages using [RFC2630](http
 ## After-handshake
 
 During the initial 1-RTT communication, 
-handshake messages [might be linked](#Content-Topics-of-Noise-Handshake-Messages),
+handshake messages [might be linked](#Content-Topics-and-Message-Nametags-of-Noise-Handshake-Messages),
 depending on the `message-nametag` derivation rule implemented,
 to the respective parties through the `contentTopic` and `message-nametag` fields employed for such communication.
 
