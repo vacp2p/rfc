@@ -59,7 +59,7 @@ These are instantiated combining the following cryptographic primitives:
 - [`ChaChaPoly`](http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions) for symmetric authenticated encryption (16 bytes authentication tag);
 - [`SHA256`](http://www.noiseprotocol.org/noise.html#the-sha256-hash-function) hash function used in [`HMAC`](http://www.noiseprotocol.org/noise.html#hash-functions) and [`HKDF`](http://www.noiseprotocol.org/noise.html#hash-functions) keys derivation chains (32 bytes output size);
 
-#### Content Topics of Noise Handshake Messages
+#### Content Topics and Message Nametags of Noise Handshake Messages
 
 We note that all [design requirements](#Design-requirements) on exchanged messages would be satisfied only *after* a supported Noise handshake is completed, 
 corresponding to a total of 1 Round Trip Time communication *(1-RTT)*.  

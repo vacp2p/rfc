@@ -81,7 +81,7 @@ d.   -> sA, sAeB, sAsB  {s}
 1. The device `B` exposes through a QR code a Base64 serialization of:
     - An ephemeral public key `eB`;
     - The content topic parameters `contentTopicParams = {application-name}, {application-version}, {shard-id}`.
-    - A randomly generated 8-bytes long `messageNametag`. 
+    - A (randomly generated) 16-bytes long `messageNametag`.
     - A commitment `H(sB||r)` for its static key `sB` where `r` is a random fixed-lenght value.
 
 2. The device `A`:
@@ -222,7 +222,11 @@ However, if a certain cipherstate key is compromised,
 it will be possible for the attacker not only to decrypt messages encrypted under that key, 
 but also all those messages encrypted under any successive new key obtained through a call to `Rekey()`.
 
-This can be mitigated by:
+This could be mitigated by attaching an ephemeral key to messages sent after a [Split()](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object)
+so that a new random symmetric key can be derived, 
+in a similar fashion to [Double-Ratchet](https://signal.org/docs/specifications/doubleratchet/).
+
+This can be practically achieved by:
 - keeping the full Handhshake State even after the handshake is complete (*by Noise specification a call to [`Split()`](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object) should delete the Handshake State*)
 - continuing updating the Handshake State by processing every after-handshake exchanged message (i.e. the `payload`) according to the Noise [processing rules](http://www.noiseprotocol.org/noise.html#processing-rules) (i.e. by calling `EncryptAndHash(payload)` and `DecryptAndHash(payload)`);
 - adding to each (or every few) message exchanged in the transfer phase a random ephemeral key `e` and perform Diffie-Hellman operations with the other party's ephemeral/static keys in order to update the underlying CipherState and recover new random inbound/outbound encryption keys by calling [`Split()`](http://www.noiseprotocol.org/noise.html#the-symmetricstate-object).
@@ -241,19 +245,19 @@ TransferPhase:
 ## Messages Nametag Derivation
 
 To reduce metadata leakages and increase devices's anonymity over the p2p network, 
-[35/WAKU2-NOISE](https://rfc.vac.dev/spec/37/#session-states) suggests to use some common secrets `ctsInbound, ctsOutbound` (e.g. `ctsInbound, ctsOutbound = HKDF(h)` 
+[35/WAKU2-NOISE](https://rfc.vac.dev/spec/37/#session-states) suggests to use some common secrets `mntsInbound, mntsOutbound` (e.g. `mntsInbound, mntsOutbound = HKDF(h)` 
 where `h` is the [handshake hash value](https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine) of the Handshake State at some point of the pairing phase) 
 in order to frequently and deterministically change the `messageNametag` of messages exchanged during the pairing and transfer phase - 
 ideally, at each message exchanged. 
 
 Given the proposed construction,
-the `ctsInbound` and `ctsOutbound` secrets can be used to iteratively generate the `messageNametag` field of Waku payloads 
+the `mntsInbound` and `mntsOutbound` secrets can be used to iteratively generate the `messageNametag` field of Waku payloads 
 for inbound and outbound messages, respectively. 
 
 The derivation of `messageNametag` should be deterministic only for communicating devices 
 and independent from message content, 
 otherwise lost messages will prevent computing the next message nametag. 
-A possible approach consists in computing the `n`-th `messageNametag` as `H( ctsInbound || n)`, 
+A possible approach consists in computing the `n`-th `messageNametag` as `H( mntsInbound || n)`, 
 where `n` is serialized as `uint64`.
 
 In this way, sender's and recipient's devices 
@@ -268,7 +272,7 @@ We note that since the `ChaChaPoly` cipher used to encrypt messages supports *ad
 an encrypted payload can be further authenticated by passing the `messageNametag` as additional data to the encryption/decryption routine. 
 In this way, an attacker would be unable to craft an authenticated Waku message 
 even in case the currently used symmetric encryption key is compromised, 
-unless `ctsInbound`, `ctsOutbound` or the `messageNametag` buffer lists were compromised too.
+unless `mntsInbound`, `mntsOutbound` or the `messageNametag` buffer lists were compromised too.
 
 # Security/Privacy Considerations
 
@@ -351,4 +355,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## Informative
 - [26/WAKU2-PAYLOAD](https://rfc.vac.dev/spec/35/#abnf)
+- [The Double-Ratchet Algorithm](https://signal.org/docs/specifications/doubleratchet/)
 - [The Noise Protocol Framework specifications](http://www.noiseprotocol.org/noise.html)
