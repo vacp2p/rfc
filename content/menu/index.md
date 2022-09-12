@@ -11,6 +11,7 @@ bookMenuLevels: 1
   - [32/RLN-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
   - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
   - [37/WAKU2-NOISE-SESSIONS]({{< relref "/docs/rfcs/37/README.md" >}})
+  - [43/WAKU2-NOISE-PAIRING]({{< relref "/docs/rfcs/43/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
