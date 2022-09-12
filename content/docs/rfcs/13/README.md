@@ -8,6 +8,7 @@ editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
   - Oskar Thorén <oskar@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 This specification explains the Waku `13/WAKU2-STORE` protocol which enables querying of messages received through relay protocol and stored by other nodes. 

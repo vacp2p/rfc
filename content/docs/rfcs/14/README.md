@@ -6,6 +6,7 @@ status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 This specification provides a way to encapsulate messages sent over Waku with specific information security goals.
