@@ -6,6 +6,7 @@ status: draft
 editor: Oskar Thorén <oskar@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 This specification provides a way to encapsulate messages sent over Waku with specific information security goals.
@@ -38,6 +39,12 @@ The `timestamp` field MAY be filled out to signify the time at which the message
 This field holds the Unix epoch time in nanoseconds. 
 Omitting it means the timestamp is unspecified.
 
+The `ephemeral` field MAY be set to signify the transient nature of the message.
+If the message should be stored by the [store protocol](/spec/13), then this field MUST be set to `false`, which is equivalent to omitting the field.
+If the message should not be stored by the [store protocol](/spec/13), then this field MUST be set to `true`.
+
+See [13/WAKU2-STORE](/spec/13) for more details.
+
 ## Payloads
 
 Payloads are implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
@@ -50,6 +57,7 @@ message WakuMessage {
   string contentTopic = 2;
   uint32 version = 3;
   sint64 timestamp = 10;
+  bool ephemeral = 31;
 }
 ```
 
@@ -100,6 +108,12 @@ It should not solely be relied upon for operations such as message ordering.
 For example, a malicious node can arbitrarily set the  `timestamp` of a `WakuMessage` to a high value so that it always shows up as the most recent message in a chat application.
 Applications using the `WakuMessage`'s `timestamp` field are recommended to use additional methods for more robust message ordering.
 An example of how to deal with message ordering against adversarial message timestamps can be found in the Status protocol, see [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering).
+
+## Reliability of the ephemeral flag
+
+The `ephemeral` field in `WakuMessage` is set by the sender.
+Since there is currently no incentive mechanism for nodes that implement [13/WAKU2-STORE](/spec/13) and [11/WAKU2-RELAY](/spec/11) to behave correctly, this field is inherently unsecure.
+Malicious nodes that implement [11/WAKU2-RELAY](/spec/11) can flip the value of the ephemeral flag, and nodes that receive such messages would have no mechanism to verify the integrity of the message.
 
 # Copyright
 

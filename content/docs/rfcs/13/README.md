@@ -8,6 +8,7 @@ editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
   - Oskar Thorén <oskar@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 This specification explains the Waku `13/WAKU2-STORE` protocol which enables querying of messages received through relay protocol and stored by other nodes. 
@@ -20,6 +21,11 @@ Nodes willing to provide storage service using `13/WAKU2-STORE` protocol SHOULD 
 As such, they are required to be *highly available* and in specific have a *high uptime* to consistently receive and store network messages. 
 The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes.
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
+
+The concept of "ephemeral" messages introduced in `[14/WAKU2-MESSAGE](/spec/14)` affects `13/WAKU2-STORE` as well.
+Nodes running [13/WAKU2-STORE](/spec/13) SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
+Nodes running [13/WAKU2-STORE](/spec/13) SHOULD NOT store messages with the `ephemeral` flag set to `true`.
+
 
 # Security Consideration
 
