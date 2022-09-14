@@ -40,6 +40,13 @@
 
 {{ define "toc" }}
   {{ partial "docs/toc" . }}
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { linebreaks: { automatic: true } },
+    CommonHTML: { linebreaks: { automatic: true } },
+    SVG: { linebreaks: { automatic: true } }
+  });
+</script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 {{ end }}
