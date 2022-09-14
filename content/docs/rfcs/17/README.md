@@ -31,7 +31,7 @@ We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [
 
 
 The messaging rate is defined by the `period` which indicates how many messages can be sent in a given period.
-We define an `epoch` as $\lceil$ `unix_time` / `period` $\rceil$. For example, if `unix_time` is `1644810116` and we set `period` to `30`, then `epoch` is  $\lceil$`(unix_time/period)`$\rceil$ `= 54827003`.
+We define an `epoch` as $$\lceil unix\\_time/period \rceil$$. For example, if `unix_time` is `1644810116` and we set `period` to `30`, then `epoch` is  $$\lceil(unix\\_time/period)\rceil = 54827003$$.
 Note that `epoch` refers to epoch in RLN and not Unix epoch. This means a message can only be sent every period, where period is up to the application.
 See see section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `period` value depending on the application.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
@@ -199,7 +199,7 @@ The value of  `max_epoch_gap`  can be measured based on the following factors.
 - Clock asynchrony `Clock_Asynchrony`: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.
   
 With a reasonable approximation of the preceding values, one can set  `max_epoch_gap`   as 
-`max_epoch_gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `period`  is the length of the `epoch` in seconds.
+$$max\\_epoch\\_gap = \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$$   where  `period`  is the length of the `epoch` in seconds.
 `Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `period` .
 By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
 
