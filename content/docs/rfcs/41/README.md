@@ -93,6 +93,12 @@ Complete implementation of this contract can be found at https://github.com/vacp
 
 The contract for Poseidon Hasher can be found at https://github.com/vacp2p/rln-contract/blob/main/contracts/PoseidonHasher.sol
 
+## References
+
+1. [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/)
+2. [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+3. [32/RLN](https://rfc.vac.dev/spec/32/)
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
