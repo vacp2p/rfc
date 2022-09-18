@@ -10,11 +10,11 @@ contributors:
 ---
 
 # Abstract
-The following standard allows for the implementation of a standard API for Rate Limiting Nullifier Contract that manages membership of the participants in a peer-to-peer messaging group.
+The following standard specifies a standard API for Rate Limiting Nullifier Contract that manages membership of the participants in a peer-to-peer messaging group.
 This API is intended to be used in conjunction with [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/).
 Peers that violate the messaging rate in a relay network,
 like explained in [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/),
-are considered spammers and their message is considered spam.
+are considered spammers and their messages are considered spam.
 Spammers are financially punished and removed from the system.
 Rate limiting nullifier (RLN), like explained in [32/RLN](https://rfc.vac.dev/spec/32/),
 a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments.
