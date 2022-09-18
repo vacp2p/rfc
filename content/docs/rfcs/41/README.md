@@ -4,7 +4,7 @@ title: 41/WAKU2-RLN-CONTRACT
 name: Rate Limiting Nullifier Membership Contract
 status: raw
 category: Standards Track
-tags: 17/WAKU-RLN-RELAY
+tags: RLN
 editor: Keshav Gupta <keshav@status.im>
 contributors:
 ---
