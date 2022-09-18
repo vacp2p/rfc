@@ -98,7 +98,7 @@ This function MUST fire the `MemberWithdrawn` event for each member slashed from
     * `event MemberWithdrawn(uint256 indexed pubkey, uint256 indexed index)`
 
 
-# Implementation Suggestions
+# Example Implementation
 
 Complete implementation of this contract can be found at https://github.com/vacp2p/rln-contract
 
