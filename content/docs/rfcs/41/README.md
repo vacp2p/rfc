@@ -8,14 +8,6 @@ tags: RLN
 editor: Keshav Gupta <keshav@status.im>
 contributors:
 ---
-
-## Tags
-
-Currently identified tags comprise
-
-* `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
-
-
 # Abstract
 The following standard allows for the implementation of a standard API for Rate Limiting Nullifier Contract that manages membership of the participants in a peer-to-peer messaging group.
 This API is intended to be used in conjunction with [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/).
