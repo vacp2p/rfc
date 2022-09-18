@@ -41,7 +41,7 @@ This is done via the `register` function of the RLN membership contract.
 If a registered member of the RLN group spams messages in the network then its secret key get exposed which can be used to slash its membership from the group.
 This is done by calling the `withdraw` function of the RLN membership contract, which removes the member from the Merkle tree thereby revoking its rights to send any messages.
 
-# Wire Format Specification / Syntax
+# Contract Specification
 
 ### Constructor
 
