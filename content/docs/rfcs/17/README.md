@@ -110,6 +110,12 @@ If the `epoch` attached to the message is more than `max_epoch_gap` apart from t
 This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs. 
 `max_epoch_gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
 
+**Merkle Root Validation**
+The routing peers MUST check whether the provided merkle root in the RateLimitProof is valid.
+It can do so by maintaining a local set of valid merkle roots, which consist of `AcceptableRootWindowSize` past roots.
+This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay.
+`AcceptableRootWindowSize` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters)
+
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
 It does so by running the zk verification algorithm as explained in [RLN](/spec/32). 
@@ -184,6 +190,7 @@ The system parameters are summarized in the following table, and the recommended
 | `staked_fund` | the amount of ether to be staked by peers at the registration |
 | `reward_portion` | the percentage of `staked_fund` to be rewarded to the slashers |
 | `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
+| `acceptable_root_window_size` | The maximum number of past merkle roots to store |
 
 ## Epoch Length
 A sensible value for the `period` depends on the application for which the spam protection is going to be used.
@@ -202,6 +209,13 @@ With a reasonable approximation of the preceding values, one can set  `max_epoch
 `max_epoch_gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `period`  is the length of the `epoch` in seconds.
 `Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `period` .
 By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
+
+`acceptable_root_window_size` depends upon the underlying chain's average blocktime, and `Network_Delay`
+
+`acceptable_root_window_size` can be set as $acceptable_root_window_size=block_time/Network_Delay$
+
+By this formulation, `acceptable_root_window_size` will provide an approximation of how many roots can be acceptable by a routing peer.
+However, the peer can be generous with this window size if they desire enhanced slashing opportunities.
 
 # Copyright
 
