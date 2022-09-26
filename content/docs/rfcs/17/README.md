@@ -1,6 +1,6 @@
 ---
 slug: 17
-title: 17/WAKU-RLN-RELAY
+title: 17/WAKU2-RLN-RELAY
 name: Waku v2 RLN Relay
 status: draft
 tags: waku-core
@@ -9,7 +9,7 @@ contributors:
   - Oskar Thorén <oskar@status.im>
 ---
 
-The `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
+The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
 
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
 Peers that violate the messaging rate are considered spammers and their message is considered spam.
@@ -35,7 +35,7 @@ We define an `epoch` as $\lceil$ `unix_time` / `period` $\rceil$. For example, i
 Note that `epoch` refers to epoch in RLN and not Unix epoch. This means a message can only be sent every period, where period is up to the application.
 See see section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `period` value depending on the application.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
-The higher-level layers adopting `17/WAKU-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
+The higher-level layers adopting `17/WAKU2-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
 
 
 
@@ -85,7 +85,7 @@ For more details about the proof generation check [RLN](/spec/32)
 The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
 The `authPath` is a subset of Merkle tree nodes by which a peer can prove the inclusion of its `pk` in the group. <!-- TODO refer to RLN RFC for authPath def -->
 The proof generation also requires a set of public inputs which are: the Merkle tree root `merkle_root`, the current `epoch`, and the message for which the proof is going to be generated. 
-In `17/WAKU-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
+In `17/WAKU2-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
 
 ## Group Synchronization
 
@@ -196,7 +196,7 @@ The system parameters are summarized in the following table, and the recommended
 A sensible value for the `period` depends on the application for which the spam protection is going to be used.
 For example, while the `period` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
 One should look at the desired throughput of the application to decide on a proper `period` value.
-In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
+In the proof of concept implementation of `17/WAKU2-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
 Nevertheless, this value is also subject to change depending on user experience.
 
 ## Maximum Epoch Gap
