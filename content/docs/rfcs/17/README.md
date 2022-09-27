@@ -9,7 +9,7 @@ contributors:
   - Oskar Thorén <oskar@status.im>
 ---
 
-The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
+The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU2-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
 
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
 Peers that violate the messaging rate are considered spammers and their message is considered spam.
