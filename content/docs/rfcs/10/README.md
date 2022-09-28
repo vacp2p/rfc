@@ -455,7 +455,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 14. [14/WAKU2-MESSAGE spec](/spec/14)
 
-15. [14/WAKU2-RLN-RELAY spec](/spec/17)
+15. [17/WAKU2-RLN-RELAY spec](/spec/17)
 
 16. [18/WAKU2-SWAP spec](/spec/18)
 
