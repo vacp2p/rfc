@@ -112,9 +112,9 @@ This is to prevent a newly registered peer from spamming the system by messaging
 
 **Merkle Root Validation**
 The routing peers MUST check whether the provided merkle root in the RateLimitProof is valid.
-It can do so by maintaining a local set of valid merkle roots, which consist of `AcceptableRootWindowSize` past roots.
-This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay.
-`AcceptableRootWindowSize` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters)
+It can do so by maintaining a local set of valid merkle roots, which consist of `acceptable_root_window_size` past roots.
+This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay. This propagation delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local merkle trees.
+`acceptable_root_window_size` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters)
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
