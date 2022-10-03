@@ -113,8 +113,9 @@ This is to prevent a newly registered peer from spamming the system by messaging
 **Merkle Root Validation**
 The routing peers MUST check whether the provided merkle root in the RateLimitProof is valid.
 It can do so by maintaining a local set of valid merkle roots, which consist of `acceptable_root_window_size` past roots.
-This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay. This propagation delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local merkle trees.
-`acceptable_root_window_size` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters)
+This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay.
+This propagation delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local merkle trees.
+See [Recommended System Parameters](#recommended-system-parameters) on choosing an appropriate `acceptable_root_window_size`. 
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
@@ -212,7 +213,7 @@ By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `ep
 
 `acceptable_root_window_size` depends upon the underlying chain's average blocktime, and `Network_Delay`
 
-`acceptable_root_window_size` can be set as $acceptable_root_window_size=block_time/Network_Delay$
+`acceptable_root_window_size` SHOULD be set as $acceptable_root_window_size=block_time/Network_Delay$
 
 By this formulation, `acceptable_root_window_size` will provide an approximation of how many roots can be acceptable by a routing peer.
 However, the peer can be generous with this window size if they desire enhanced slashing opportunities.
