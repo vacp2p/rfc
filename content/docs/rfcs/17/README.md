@@ -7,6 +7,7 @@ tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Oskar Thorén <oskar@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU2-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
