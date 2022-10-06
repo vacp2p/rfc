@@ -214,8 +214,10 @@ By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `ep
 
 `acceptable_root_window_size` depends upon the underlying chain's average blocktime, and `Network_Delay`
 
-`acceptable_root_window_size` SHOULD be set as $acceptable_root_window_size=block_time/Network_Delay$
+`acceptable_root_window_size` SHOULD be set as $acceptable_root_window_size=(Network_Delay+block_propagation_delay)/block_time$
 
+`block_propagation_delay` is the time taken for the peers to receive the proposed block.
+`Network_Delay` and `block_propagation_delay` MUST have the same resolution as `block_time`.
 By this formulation, `acceptable_root_window_size` will provide an approximation of how many roots can be acceptable by a routing peer.
 However, the peer can be generous with this window size if they desire enhanced slashing opportunities.
 
