@@ -111,10 +111,10 @@ This is to prevent a newly registered peer from spamming the system by messaging
 `max_epoch_gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
 
 **Merkle Root Validation**
-The routing peers MUST check whether the provided merkle root in the RateLimitProof is valid.
-It can do so by maintaining a local set of valid merkle roots, which consist of `acceptable_root_window_size` past roots.
-This allows peers which are not well connected to the network to be able to send messages, accounting for propagation delay.
-This propagation delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local merkle trees.
+The routing peers MUST check whether the provided Merkle root in the `RateLimitProof` is valid.
+It can do so by maintaining a local set of valid Merkle roots, which consist of `acceptable_root_window_size` past roots.
+This allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
+This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
 See [Recommended System Parameters](#recommended-system-parameters) on choosing an appropriate `acceptable_root_window_size`. 
 
 **Proof Verification**
@@ -191,7 +191,7 @@ The system parameters are summarized in the following table, and the recommended
 | `staked_fund` | the amount of ether to be staked by peers at the registration |
 | `reward_portion` | the percentage of `staked_fund` to be rewarded to the slashers |
 | `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
-| `acceptable_root_window_size` | The maximum number of past merkle roots to store |
+| `acceptable_root_window_size` | The maximum number of past Merkle roots to store |
 
 ## Epoch Length
 A sensible value for the `period` depends on the application for which the spam protection is going to be used.
