@@ -281,7 +281,7 @@ which are used to react to asynchronous events in Waku.
 Type holding a node configuration:
 
 ```ts
-interface JsonSignal {
+interface JsonConfig {
     host?: string;
     port?: number;
     advertiseAddr?: string;
@@ -451,7 +451,7 @@ For example:
 }
 ```
 
-### `extern char* waku_connect_peer(char* address, int timeoutMs)`
+### `extern char* waku_connect(char* address, int timeoutMs)`
 
 Dial peer using a multiaddress.
 
@@ -485,7 +485,7 @@ Dial peer using its peer ID.
 1`char* peerID`: Peer ID to dial.
    The peer must be already known.
    It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
-   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+   or previously dialed with [`waku_connect`](#extern-char-waku_connectchar-address-int-timeoutms).
 2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
@@ -504,7 +504,7 @@ For example:
 }
 ```
 
-### `extern char* waku_disconnect_peer(char* peerId)`
+### `extern char* waku_disconnect(char* peerId)`
 
 Disconnect a peer using its peerID
 
@@ -748,9 +748,8 @@ For Example:
 {
   "type": "message",
   "event": {
-    "subscriptionID": 1,
     "pubsubTopic": "/waku/2/default-waku/proto",
-    "messageID": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
+    "messageId": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
     "wakuMessage": {
       "payload": "TODO",
       "contentTopic": "/my-app/1/notification/proto",
@@ -830,9 +829,8 @@ For Example:
 {
   "type": "message",
   "event": {
-    "subscriptionID": 1,
     "pubsubTopic": "/waku/2/default-waku/proto",
-    "messageID": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
+    "messageId": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
     "wakuMessage": {
       "payload": "TODO",
       "contentTopic": "/my-app/1/notification/proto",
