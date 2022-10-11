@@ -9,9 +9,11 @@ bookMenuLevels: 1
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
   - [31/WAKU2-ENR]({{< relref "/docs/rfcs/31/README.md" >}})
   - [32/RLN-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
+  - [34/WAKU2-PEER-EXCHANGE]({{< relref "/docs/rfcs/34/README.md" >}})
   - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
   - [37/WAKU2-NOISE-SESSIONS]({{< relref "/docs/rfcs/37/README.md" >}})
   - [43/WAKU2-NOISE-PAIRING]({{< relref "/docs/rfcs/43/README.md" >}})
+  - [45/WAKU2-ADVERSARIAL-MODELS]({{< relref "/docs/rfcs/45/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
@@ -33,7 +35,6 @@ bookMenuLevels: 1
   - [29/WAKU2-CONFIG]({{< relref "/docs/rfcs/29/README.md" >}})
   - [30/ADAPTIVE-NODES]({{< relref "/docs/rfcs/30/README.md" >}})
   - [33/WAKU2-DISCV5]({{< relref "/docs/rfcs/33/README.md" >}})
-  - [34/WAKU2-PEER-EXCHANGE]({{< relref "/docs/rfcs/34/README.md" >}})
   - [36/WAKU2-BINDINGS-API]({{< relref "/docs/rfcs/36/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
