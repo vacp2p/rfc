@@ -115,7 +115,7 @@ the respective active attacker has more (or at least the same) deanonymization p
 
 We also distinguish between internal and external attackers.
 Since in permissionless protocols it is easy to obtain an internal position,
-in practice attackers are expected to mount combined attacks that leverage both internal an external attacks.
+in practice attackers are expected to mount combined attacks that leverage both internal and external attacks.
 
 ## Internal
 
