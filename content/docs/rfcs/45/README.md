@@ -59,7 +59,7 @@ Identities are protected by the [anonymity property](#anonymity).
 Often privacy is realized by the confidentiality property of security.
 This neither makes privacy and security the same, nor the one a sub category of the other.
 While security is abstract itself (its properties can be realized in various ways), privacy lives on a more abstract level using security properties.
-Privacy typically does not use integrity and confidentiality.
+Privacy typically does not use integrity and availability.
 An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.
 
 ## Anonymity
