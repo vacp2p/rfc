@@ -89,7 +89,7 @@ Because the data in the context of Waku is Waku messages, sender anonymity corre
 [The Anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) states that only two out of *strong anonymity*, *low bandwidth*, and *low latency* can be guaranteed in the *global attacker* model.
 Waku's goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.
 
-A forth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *frequency and patterns* of messages.
+A fourth factor that influences [the anonymity trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html) is *frequency and patterns* of messages.
 The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
 So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
 The frequency/patterns factor is also related to [k-anonymity](https://en.wikipedia.org/wiki/K-anonymity).
