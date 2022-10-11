@@ -25,7 +25,7 @@ Analyses and further information about Waku's properties within these models may
 
 Note: This document adds to the adversarial models and threat list discussed in our [research log post](https://vac.dev/wakuv2-relay-anon).
 It does not cover analysis of Waku, as the research log post does.
-Future versions of this document will extended the adversarial models and threat list.
+Future versions of this document will extend the adversarial models and threat list.
 
 # Informal Definitions: Security, Privacy, and Anonymity
 
