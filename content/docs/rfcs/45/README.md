@@ -184,7 +184,7 @@ We also list the weakest attacker model in which the attack can be successfully 
 An attack is considered more powerful if it can be successfully performed in a weaker attacker model.
 
 Note: This list is work in progress.
-We will either expanded this list adding more attacks in future versions of this document,
+We will either expand this list adding more attacks in future versions of this document,
 or remove it and point to the "Security Considerations" sections of respective RFCs.
 
 ## Prerequisite: Get a Specific Position in the Network
