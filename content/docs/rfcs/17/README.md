@@ -189,7 +189,7 @@ The system parameters are summarized in the following table, and the recommended
 | Parameter | Description |
 | ----: |----------- |
 |  `period`  | the length of `epoch` in seconds |
-| `staked_fund` | the amount of ether to be staked by peers at the registration |
+| `staked_fund` | the amount of wei to be staked by peers at the registration |
 | `reward_portion` | the percentage of `staked_fund` to be rewarded to the slashers |
 | `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
 | `acceptable_root_window_size` | The maximum number of past Merkle roots to store |
@@ -218,7 +218,12 @@ By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `ep
 
 `block_propagation_delay` is the time taken for the peers to receive the proposed block.
 `Network_Delay` and `block_propagation_delay` MUST have the same resolution as `block_time`.
+
 By this formulation, `acceptable_root_window_size` will provide an approximation of how many roots can be acceptable by a routing peer.
+
+The `acceptable_root_window_size` should indicate how many blocks may have been mined during the time it takes for a peer to receive a packet. 
+This formula represents a lower bound of the number of acceptable roots. 
+
 However, the peer can be generous with this window size if they desire enhanced slashing opportunities.
 
 # Copyright
