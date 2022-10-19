@@ -78,7 +78,7 @@ Further information on Waku anonymity may be found in our [Waku Privacy and Anon
 
 # Theory and Functioning
 
-44/WAKU2-DANDELION can be seen an anonymity enhancing add-on to [Waku Relay](https://rfc.vac.dev/spec/11/) message dissemination,
+44/WAKU2-DANDELION can be seen as an anonymity enhancing add-on to [Waku Relay](https://rfc.vac.dev/spec/11/) message dissemination,
 which is based on [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md).
 44/WAKU2-DANDELION subdivides message dissemination into a "stem" and a "fluff" phase.
 This specification is mainly concerned with specifying the stem phase.
