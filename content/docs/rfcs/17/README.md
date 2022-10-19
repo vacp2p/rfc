@@ -212,7 +212,7 @@ With a reasonable approximation of the preceding values, one can set  `max_epoch
 `Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `period` .
 By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
 
-`acceptable_root_window_size` depends upon the underlying chain's average blocktime, and `Network_Delay`
+`acceptable_root_window_size` depends upon the underlying chain's average blocktime, `block_time`
 
 The lower bound for the `acceptable_root_window_size` SHOULD be set as $acceptable_root_window_size=(Network_Delay)/block_time$
 
