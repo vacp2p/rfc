@@ -1,15 +1,16 @@
 ---
 slug: 17
-title: 17/WAKU-RLN-RELAY
+title: 17/WAKU2-RLN-RELAY
 name: Waku v2 RLN Relay
 status: draft
 tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Oskar Thorén <oskar@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
-The `17/WAKU-RLN-RELAY` protocol is an extension of `11/WAKU-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
+The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU2-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
 
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
 Peers that violate the messaging rate are considered spammers and their message is considered spam.
@@ -35,7 +36,7 @@ We define an `epoch` as $\lceil$ `unix_time` / `period` $\rceil$. For example, i
 Note that `epoch` refers to epoch in RLN and not Unix epoch. This means a message can only be sent every period, where period is up to the application.
 See see section [Recommended System Parameters](#recommended-system-parameters) for some recommended ways to set a sensible `period` value depending on the application.
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
-The higher-level layers adopting `17/WAKU-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
+The higher-level layers adopting `17/WAKU2-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
 
 
 
@@ -85,7 +86,7 @@ For more details about the proof generation check [RLN](/spec/32)
 The proof generation relies on the knowledge of two pieces of private information i.e., `sk` and `authPath`.
 The `authPath` is a subset of Merkle tree nodes by which a peer can prove the inclusion of its `pk` in the group. <!-- TODO refer to RLN RFC for authPath def -->
 The proof generation also requires a set of public inputs which are: the Merkle tree root `merkle_root`, the current `epoch`, and the message for which the proof is going to be generated. 
-In `17/WAKU-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
+In `17/WAKU2-RLN-RELAY`, the message is the concatenation of `WakuMessage`'s  `payload` filed and its `contentTopic` i.e., `payload||contentTopic`. 
 
 ## Group Synchronization
 
@@ -109,6 +110,13 @@ The peer then validates the `RateLimitProof`  as explained next.
 If the `epoch` attached to the message is more than `max_epoch_gap` apart from the routing peer's current `epoch` then the message is discarded and considered invalid.
 This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs. 
 `max_epoch_gap` is a system parameter for which we provide some recommendations in section [Recommended System Parameters](#recommended-system-parameters).
+
+**Merkle Root Validation**
+The routing peers MUST check whether the provided Merkle root in the `RateLimitProof` is valid.
+It can do so by maintaining a local set of valid Merkle roots, which consist of `acceptable_root_window_size` past roots.
+This allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
+This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
+See [Recommended System Parameters](#recommended-system-parameters) on choosing an appropriate `acceptable_root_window_size`. 
 
 **Proof Verification**
 The routing peers MUST check whether the zero-knowledge proof `proof` is valid.
@@ -181,15 +189,16 @@ The system parameters are summarized in the following table, and the recommended
 | Parameter | Description |
 | ----: |----------- |
 |  `period`  | the length of `epoch` in seconds |
-| `staked_fund` | the amount of ether to be staked by peers at the registration |
+| `staked_fund` | the amount of wei to be staked by peers at the registration |
 | `reward_portion` | the percentage of `staked_fund` to be rewarded to the slashers |
 | `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
+| `acceptable_root_window_size` | The maximum number of past Merkle roots to store |
 
 ## Epoch Length
 A sensible value for the `period` depends on the application for which the spam protection is going to be used.
 For example, while the `period` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
 One should look at the desired throughput of the application to decide on a proper `period` value.
-In the proof of concept implementation of `17/WAKU-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
+In the proof of concept implementation of `17/WAKU2-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
 Nevertheless, this value is also subject to change depending on user experience.
 
 ## Maximum Epoch Gap
@@ -202,6 +211,18 @@ With a reasonable approximation of the preceding values, one can set  `max_epoch
 `max_epoch_gap` $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  `period`  is the length of the `epoch` in seconds.
 `Network_Delay` and `Clock_Asynchrony` MUST have the same resolution as  `period` .
 By this formulation,  `max_epoch_gap`  indeed measures the maximum number of `epoch`s that can elapse since a message gets routed from its origin to all the other peers in the network.
+
+`acceptable_root_window_size` depends upon the underlying chain's average blocktime, `block_time`
+
+The lower bound for the `acceptable_root_window_size` SHOULD be set as $acceptable_root_window_size=(Network_Delay)/block_time$
+
+`Network_Delay` MUST have the same resolution as `block_time`.
+
+By this formulation, `acceptable_root_window_size` will provide a lower bound of how many roots can be acceptable by a routing peer.
+
+The `acceptable_root_window_size` should indicate how many blocks may have been mined during the time it takes for a peer to receive a message. 
+This formula represents a lower bound of the number of acceptable roots. 
+
 
 # Copyright
 

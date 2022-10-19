@@ -124,7 +124,7 @@ Waku is using gossiping to disseminate messages throughout the network.
 
 See [11/WAKU2-RELAY](/spec/11) spec for more details.
 
-For an experimental privacy-preserving economic spam protection mechanism, see [17/WAKU2-RLNRELAY](/spec/17).
+For an experimental privacy-preserving economic spam protection mechanism, see [17/WAKU2-RLN-RELAY](/spec/17).
 
 See [23/WAKU2-TOPICS](/spec/23) for more information about recommended topic usage.
 
@@ -373,7 +373,7 @@ This includes Waku v1 specs, as they are used for bridging between the two netwo
 |[14/WAKU2-MESSAGE](/spec/14)|✔|✔|✔|✔|
 |[15/WAKU2-BRIDGE](/spec/15)|✔|||
 |[16/WAKU2-RPC](/spec/16)|✔|||
-|[17/WAKU2-RLNRELAY](/spec/17)|🚧|||
+|[17/WAKU2-RLN-RELAY](/spec/17)|🚧|||
 |[18/WAKU2-SWAP](/spec/18)|🚧|||
 |[19/WAKU2-LIGHTPUSH](/spec/19)|✔|✔|✔\**|✔\**|
 |[21/WAKU2-FAULT-TOLERANT-STORE](/spec/21)|✔|✔||
@@ -407,7 +407,7 @@ The following features are currently experimental and under research and initial
 
 **Economic Spam resistance**:
 We aim to enable an incentivized spam protection technique to enhance `11/WAKU2-RELAY` by using rate limiting nullifiers.
-More details on this can be found in [17/WAKU2-RLNRELAY](/spec/17).
+More details on this can be found in [17/WAKU2-RLN-RELAY](/spec/17).
 In this advanced method, peers are limited to a certain rate of messaging per epoch and an immediate financial penalty is enforced for spammers who break this rate.
 
 **Prevention of Denial of Service (DoS) and Node Incentivization**:
@@ -455,7 +455,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 14. [14/WAKU2-MESSAGE spec](/spec/14)
 
-15. [14/WAKU2-RLNRELAY spec](/spec/17)
+15. [17/WAKU2-RLN-RELAY spec](/spec/17)
 
 16. [18/WAKU2-SWAP spec](/spec/18)
 
