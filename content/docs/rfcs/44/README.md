@@ -70,7 +70,7 @@ Note: This is an early raw version of the specification.
 It does not strictly follow the formally evaluated Dandelion++ paper,
 as we want to experiment with relaxing (and strengthening) certain model properties.
 In specific, we aim at a version that has tighter latency bounds.
-[Further reasearch](https://arxiv.org/pdf/2201.11860.pdf) suggests that Dandelion++'s design choices are not optimal,
+[Further research](https://arxiv.org/pdf/2201.11860.pdf) suggests that Dandelion++'s design choices are not optimal,
 which further assures that tweaking design choices makes sense.
 We will refine design decisions in future versions of this specification.
 
