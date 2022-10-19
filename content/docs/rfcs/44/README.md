@@ -96,7 +96,7 @@ Messages relayed by nodes supporting 44/WAKU2-DANDELION are either in stem phase
 We refer to the former as a stem message and to the latter as a fluff message.
 A message starts in stem phase, and at some point, transitions to fluff phase.
 Nodes, on the other hand, are in stem state or fluff state.
-Nodes in stem state relay stem messages to a single, per epoch and incoming stem connection randomly selected, relay node.
+Nodes in stem state relay stem messages to a single relay node, randomly selected per epoch for each incoming stem connection.
 Nodes in fluff state transition stem messages into fluff phase and relay them accordingly.
 Fluff messages are always disseminated via Waku Relay (with added random delay).
 
