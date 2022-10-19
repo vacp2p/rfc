@@ -138,6 +138,9 @@ Further, the node establishes a map that maps each incoming stem connection
 to one of its stem relays chosen at random (but fixed per epoch).
 Incoming stem connections are identified by the [Peer IDs](https://docs.libp2p.io/concepts/peers/#peer-id/)
 of peers the node receives [19/WAKU2-LIGHTPUSH](/spec/19/) messages from.
+Incoming [19/WAKU2-LIGHTPUSH](/spec/19/) connections from peers that do not support 44/WAKU2-DANDELION are treated in the same way.
+This makes the protocol simpler, increases the anonymity set, and offers Dandelion anonymity properties to such peers, too.
+
 The node itself is mapped in the same way, so that all messages originated by the node are relayed via a per-epoch-fixed Dandelion relay, too.
 
 While in stem state, nodes MUST relay stem messages to the respective stem relay.
@@ -146,6 +149,8 @@ Received fluff messages MUST be relayed as specified in the fluff state section.
 The stem protocol ([19/WAKU2-LIGHTPUSH](/spec/19/)) is independent of the fluff protocol ([Waku Relay](/spec/11/)).
 While in stem state, nodes MUST NOT gossip about stem messages,
 and MUST NOT send control messages related to stem messages.
+(An existing gossipsub implementation does *not* have to be adjusted to not send gossip about stem messages,
+ because these messages are only handed to gossipsub once they enter fluff phase.)
 
 ### Fail Safe
 
