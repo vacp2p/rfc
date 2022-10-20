@@ -100,7 +100,7 @@ because Dandelion nodes in *stem state* still normally relay Waku Relay (gossips
 
 # Specification
 
-Nodes supporting 44/WAKU2-DANDELION MUST either be in stem state or in fluff state.
+Nodes $v$ supporting 44/WAKU2-DANDELION MUST either be in stem state or in fluff state.
 This does not include relaying messages originated in $v$, for which $v$ SHOULD always be in stem state.
 
 ## Choosing the State
