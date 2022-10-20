@@ -51,7 +51,7 @@ or enters the fluff phase.
 On the stem, messages are relayed to single peers, respectively,
 while in fluff phase, messages are spread as per usual relay operation (augmented by random delays to further reduce symmetry).
 
-There are several design choices to be made in the stem phase:
+There are several design choices to be made for the stem phase of a Dandelion-based specification:
 
 1) the probability of continuing the stem phase,
 2) the out degree in the stem phase, which set to 1 in this document (also in the Dandelion papers),
