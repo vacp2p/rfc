@@ -13,9 +13,9 @@ contributors:
 # Abstract
 
 This document specifies a deanonymization mitigation technique,
-based on Dandelion and Dandelion++,
+based on [Dandelion](https://arxiv.org/abs/1701.04439) and [Dandelion++](https://arxiv.org/abs/1805.11060),
 for Waku Relay.
-It mitigates mass deanonymization in the multi-node (botnet) attacker model,
+It mitigates mass deanonymization in the [multi-node (botnet) attacker model](/spec/45/#multi-node),
 even when the number of malicious nodes is linear in the number of total nodes in the network.
 
 Based on the insight that symmetric message propagation makes deanonymization easier,
