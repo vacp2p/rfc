@@ -50,21 +50,8 @@ With a certain probability, this message is relayed further on the "stem",
 or enters the fluff phase.
 On the stem, messages are relayed to single peers, respectively,
 while in fluff phase, messages are spread as per usual relay operation (augmented by random delays to further reduce symmetry).
+The graph spanned by stem connections is referred to as the anonymity graph.
 
-There are several design choices to be made for the stem phase of a Dandelion-based specification:
-
-1) the probability of continuing the stem phase,
-2) the out degree in the stem phase, which set to 1 in this document (also in the Dandelion papers),
-3) the rate of re-selecting stem relays among all gossipsub mesh peers (for a given pubsub topic), and
-4) the mapping of incoming connections to outgoing connections.
-
-Dandelion++ and this document, for instance, fix two stem relays.
-The resulting 2-regular overlay graph is referred to as the anonymity graph.
-
-In the "fluff" phase the relay introduces a random delay before regularly forwarding the messages to all mesh peers.
-As Dandelion is designed as an update to the Bitcoin network using diffusion spreading,
-which already introduces random delays,
-the Dandelion paper describes the fluff phase as regular forwarding.
 
 Note: This is an early raw version of the specification.
 It does not strictly follow the formally evaluated Dandelion++ paper,
@@ -170,8 +157,12 @@ with the exception of adding a random delay between $0$ and $100\,ms$ before rel
 By adding this delay, the fluff phase modifies the behaviour of [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md),
 which Waku Relay builds upon.
 
-As mentioned in previous sections, we might move the fluff phase specification into a separate document.
+As mentioned in previous sections, we might move the fluff specification into a separate document.
 We will look more into (optimal) delay ranges and might introduce dynamic delay ranges based on traffic volume.
+
+Note: Because [Dandelion](https://arxiv.org/abs/1701.04439) is designed as an update to the Bitcoin network using diffusion spreading,
+which already introduces random delays,
+the Dandelion paper describes the fluff phase as regular forwarding.
 
 # Implementation Notes
 
@@ -222,6 +213,13 @@ showed that including those peers yields more anonymity compared to excluding th
 The following discusses potential relaxations in favour of reduced latency,
 as well as their impact on anonymity.
 This is still work in progress and will be elaborated on in future versions of this document.
+
+Generally, there are several design choices to be made for the stem phase of a Dandelion-based specification:
+
+1) the probability of continuing the stem phase, which determines the expected stem lengh,
+2) the out degree in the stem phase, which set to 1 in this document (also in the Dandelion papers),
+3) the rate of re-selecting stem relays among all gossipsub mesh peers (for a given pubsub topic), and
+4) the mapping of incoming connections to outgoing connections.
 
 ### Bound Stem Length
 
