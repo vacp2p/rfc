@@ -85,7 +85,8 @@ A message starts in stem phase, and at some point, transitions to fluff phase.
 Nodes, on the other hand, are in stem state or fluff state.
 Nodes in stem state relay stem messages to a single relay node, randomly selected per epoch for each incoming stem connection.
 Nodes in fluff state transition stem messages into fluff phase and relay them accordingly.
-Fluff messages are always disseminated via Waku Relay (with added random delay).
+Fluff messages are always disseminated via Waku Relay (with added random delay),
+by both nodes in stem state and nodes in fluff state.
 
 Messages originated in the node (i.e. messages coming from the application layer of our node),
 are always sent as stem messages.
