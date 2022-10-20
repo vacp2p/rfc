@@ -40,7 +40,7 @@ and [Dandelion++](https://arxiv.org/abs/1805.11060).
 
 Dandelion is a message spreading method, which, compared to other methods,
 increases the uncertainty of an attacker when trying to link messages to senders.
-Libp2p gossipsub aims at spanning a d-regular graph topology, with d=6 as the [default value](/spec/29/#gossipsub-v10-parameters).
+Libp2p gossipsub aims at spanning a [d-regular graph](https://en.wikipedia.org/wiki/Regular_graph) topology, with d=6 as the [default value](/spec/29/#gossipsub-v10-parameters).
 Messages are forwarded within this (expected) symmetric topology,
 which reduces uncertainty when trying to link messages to senders.
 Dandelion breaks this symmetry by subdividing message spreading into a "stem" and a "fluff" phase.
@@ -266,6 +266,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [Dandelion++](https://arxiv.org/abs/1805.11060)
 * [Waku Relay](https://rfc.vac.dev/spec/11/)
 * [Waku v2](https://rfc.vac.dev/spec/10/)
+* [d-regular graph](https://en.wikipedia.org/wiki/Regular_graph) 
 * [Anonymity Trilemma](https://freedom.cs.purdue.edu/projects/trilemma.html)
 * [Waku Privacy and Anonymity Analysis](https://vac.dev/wakuv2-relay-anon).
 * [On the Anonymity of Peer-To-Peer Network Anonymity Schemes Used by Cryptocurrencies](https://arxiv.org/pdf/2201.11860.pdf)
