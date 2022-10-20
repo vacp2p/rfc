@@ -161,6 +161,9 @@ which Waku Relay builds upon.
 As mentioned in previous sections, we might move the fluff specification into a separate document.
 We will look more into (optimal) delay ranges and might introduce dynamic delay ranges based on traffic volume.
 
+Note: Introducing random delays can have a negative effect on
+[peer scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#peer-scoring).
+
 Note: Because [Dandelion](https://arxiv.org/abs/1701.04439) is designed as an update to the Bitcoin network using diffusion spreading,
 which already introduces random delays,
 the Dandelion paper describes the fluff phase as regular forwarding.
