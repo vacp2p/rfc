@@ -126,7 +126,7 @@ Further, the node establishes a map that maps each incoming stem connection
 to one of its stem relays chosen at random (but fixed per epoch).
 Incoming stem connections are identified by the [Peer IDs](https://docs.libp2p.io/concepts/peers/#peer-id/)
 of peers the node receives [19/WAKU2-LIGHTPUSH](/spec/19/) messages from.
-Incoming [19/WAKU2-LIGHTPUSH](/spec/19/) connections from peers that do not support 44/WAKU2-DANDELION are treated in the same way.
+Incoming [19/WAKU2-LIGHTPUSH](/spec/19/) connections from peers that do not support 44/WAKU2-DANDELION are identified and mapped in the same way.
 This makes the protocol simpler, increases the anonymity set, and offers Dandelion anonymity properties to such peers, too.
 
 The node itself is mapped in the same way, so that all messages originated by the node are relayed via a per-epoch-fixed Dandelion relay, too.
