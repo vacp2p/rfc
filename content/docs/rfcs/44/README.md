@@ -197,7 +197,7 @@ in which the attacker controls a certain percentage of nodes in the network.
 44/WAKU2-DANDELION provides significant mitigation against mass deanonymization
 even if the attacker knows the network topology, i.e. the anonymity graph and the relay mesh graph.
 
-Mitigation in stronger models, including the active *scaling multi node* model, is weak.
+Mitigation in stronger models, including the *active scaling multi-node* model, is weak.
 We will elaborate on this in future versions of this document.
 
 44/WAKU2-DANDELION does not protect against targeted deanonymization attacks.
