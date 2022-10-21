@@ -71,6 +71,8 @@ which is based on [libp2p gossipsub](https://github.com/libp2p/specs/blob/master
 This specification is mainly concerned with specifying the stem phase.
 The fluff phase corresponds to [Waku Relay](/spec/11/),
 except that it adds a random delay before relaying a message.
+This added random delay further reduces symmetry in dissemination patterns and
+introduces more uncertainty for the attacker.
 
 *Note: In a future version of this specification,
 we might move the specification of the fluff phase into a separate document.
@@ -257,6 +259,11 @@ This will, however, lower the anonymity properties.
 We will quantify and analyse this in future versions of this specification.
 Optimal delay times depend on the message frequency and patterns.
 
+
+This document is oblivious to the actual message content, adding anonymity on the routing layer.
+Still, it is important to note that [Waku2 messages](https://rfc.vac.dev/spec/14/#payloads) (in their current version) carry an originator timestamp,
+which works against fluff phase random delays.
+An analysis of the benefits of this timestamp versus anonymity risks is on our roadmap.
 
 # Copyright
 
