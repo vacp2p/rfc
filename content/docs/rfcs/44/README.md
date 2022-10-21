@@ -49,9 +49,8 @@ In the "stem" phase, the message is sent to a single select relay node.
 With a certain probability, this message is relayed further on the "stem",
 or enters the fluff phase.
 On the stem, messages are relayed to single peers, respectively,
-while in fluff phase, messages are spread as per usual relay operation (augmented by random delays to further reduce symmetry).
+while in fluff phase, messages are spread as per usual relay operation (optionally augmented by random delays to further reduce symmetry).
 The graph spanned by stem connections is referred to as the anonymity graph.
-
 
 Note: This is an early raw version of the specification.
 It does not strictly follow the formally evaluated Dandelion++ paper,
@@ -70,15 +69,16 @@ which is based on [libp2p gossipsub](https://github.com/libp2p/specs/blob/master
 44/WAKU2-DANDELION subdivides message dissemination into a "stem" and a "fluff" phase.
 This specification is mainly concerned with specifying the stem phase.
 The fluff phase corresponds to [Waku Relay](/spec/11/),
-except that it adds a random delay before relaying a message.
-This added random delay further reduces symmetry in dissemination patterns and
+with optional fluff phase augmentations such as random delays.
+Adding random delay in the fluff phase further reduces symmetry in dissemination patterns and
 introduces more uncertainty for the attacker.
+Specifying fluff phase augmentations is out of scope for this document.
 
-*Note: In a future version of this specification,
-we might move the specification of the fluff phase into a separate document.
+*Note:
+We plan to add a separate specification for fluff phase augmentations.
 We envision stem and fluff phase as abstract concepts.
 The Dandelion stem and fluff phases instantiate these concepts.
-Future stem specifications might comprise: none (standard relay), Dandelion, Tor, and mix-net.
+Future stem specifications might comprise: none (standard relay), Dandelion stem, Tor, and mix-net.
 As for future fluff specifications: none (standard relay), diffusion (random delays), and mix-net.*
 
 Messages relayed by nodes supporting 44/WAKU2-DANDELION are either in stem phase or in fluff phase.
@@ -87,7 +87,7 @@ A message starts in stem phase, and at some point, transitions to fluff phase.
 Nodes, on the other hand, are in stem state or fluff state.
 Nodes in stem state relay stem messages to a single relay node, randomly selected per epoch for each incoming stem connection.
 Nodes in fluff state transition stem messages into fluff phase and relay them accordingly.
-Fluff messages are always disseminated via Waku Relay (with added random delay),
+Fluff messages are always disseminated via Waku Relay,
 by both nodes in stem state and nodes in fluff state.
 
 Messages originated in the node (i.e. messages coming from the application layer of our node),
@@ -140,7 +140,7 @@ The stem protocol ([19/WAKU2-LIGHTPUSH](/spec/19/)) is independent of the fluff 
 While in stem state, nodes MUST NOT gossip about stem messages,
 and MUST NOT send control messages related to stem messages.
 (An existing gossipsub implementation does *not* have to be adjusted to not send gossip about stem messages,
- because these messages are only handed to gossipsub once they enter fluff phase.)
+because these messages are only handed to gossipsub once they enter fluff phase.)
 
 ### Fail Safe
 
@@ -155,27 +155,19 @@ $v$ will disseminate the message via Waku Relay.
 
 ## Fluff State
 
-In fluff state, nodes operate as usual Waku Relay nodes,
-with the exception of adding a random delay between $0$ and $100\,ms$ before relaying a message.
-By adding this delay, the fluff phase modifies the behaviour of [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md),
-which Waku Relay builds upon.
+In fluff state, nodes operate as usual Waku Relay nodes.
+The Waku Relay functionality might be augmented by a future specification, e.g. adding random delays.
 
-As mentioned in previous sections, we might move the fluff specification into a separate document.
-We will look more into (optimal) delay ranges and might introduce dynamic delay ranges based on traffic volume.
-
-Note: Introducing random delays can have a negative effect on
-[peer scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#peer-scoring).
-
-Note: Because [Dandelion](https://arxiv.org/abs/1701.04439) is designed as an update to the Bitcoin network using diffusion spreading,
-which already introduces random delays,
-the Dandelion paper describes the fluff phase as regular forwarding.
+Note: The [Dandelion](https://arxiv.org/abs/1701.04439) paper describes the fluff phase as regular forwarding.
+Since Dandelion is designed as an update to the Bitcoin network using diffusion spreading,
+this regular forwarding already comprises random delays.
 
 # Implementation Notes
 
 Handling of the 44/WAKU2-DANDELION stem phase can be implemented as an extension to an existing [19/WAKU2-LIGHTPUSH](/spec/19/) implementation.
 
-Since the 44/WAKU2-DANDELION fluff phase alters gossipsub message dissemination,
-it is implemented on the libp2p gossipsub layer.
+Fluff phase augmentations might alter gossipsub message dissemination (e.g. adding random delays).
+If this is the case, they have to be implemented on the libp2p gossipsub layer.
 
 # Security/Privacy Considerations
 
@@ -209,7 +201,7 @@ We will elaborate on this in future versions of this document.
 Stem relays receiving messages can either be in stem state or in fluff state themselves.
 They might also not support 44/WAKU2-DANDELION,
 and interpret the message as classical [19/WAKU2-LIGHTPUSH](/spec/19/),
-which effectively makes them act as fluff state relays without introducing random delay.
+which effectively makes them act as fluff state relays.
 While such peers lower the overall anonymity properties,
 the [Dandelion++ paper](https://arxiv.org/abs/1805.11060)
 showed that including those peers yields more anonymity compared to excluding these peers.
@@ -254,16 +246,40 @@ we choose the trade-off in favour of protocol stability and sacrifice a bit of a
 
 ### Random Delay in Fluff Phase
 
-The random delay in the fluff phase MAY be set to 0 to achieve lower latency.
-This will, however, lower the anonymity properties.
+[Dandelion](https://arxiv.org/abs/1701.04439) and [Dandelion++](https://arxiv.org/abs/1805.11060)
+assume adding random delays in the fluff phase as they build on Bitcoin diffusion.
+44/WAKU2-DANDELION (in its current state) allows for zero delay in the fluff phase and outsources fluff augmentations to dedicated specifications.
+While this lowers anonymity properties, it allows making Dandelion an opt-in solution in a given network.
+Nodes that do not want to use Dandelion do not experience any latency increase.
 We will quantify and analyse this in future versions of this specification.
+
+We plan to add a separate fluff augmentation specification that will introduce random delays.
 Optimal delay times depend on the message frequency and patterns.
-
-
-This document is oblivious to the actual message content, adding anonymity on the routing layer.
+This delay fluff augmentation specification will be oblivious to the actual message content,
+because Waku Dandelion specifications add anonymity on the routing layer.
 Still, it is important to note that [Waku2 messages](https://rfc.vac.dev/spec/14/#payloads) (in their current version) carry an originator timestamp,
 which works against fluff phase random delays.
 An analysis of the benefits of this timestamp versus anonymity risks is on our roadmap.
+
+By adding a delay, the fluff phase modifies the behaviour of [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md),
+which Waku Relay builds upon.
+
+Note: Introducing random delays can have a negative effect on
+[peer scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#peer-scoring).
+
+### Stem Flag
+
+While 44/WAKU2-DANDELION without fluff augmentation does not effect Waku Relay nodes,
+messages sent by nodes that only support [19/WAKU2-LIGHTPUSH](/spec/19/) might be routed through a Dandelion stem without them knowing.
+While this improves anonymity, as discussed above, it also introduces additional latency and lightpush nodes cannot opt out of this.
+
+In future versions of this specification we might
+
+* add a flag to [14/WAKU2-MESSAGE](/spec/14/) indicating a message should be routed over a Dandelion stem (opt-in), or
+* add a flag to [14/WAKU2-MESSAGE](/spec/14/) indicating a message should *not* be routed over a Dandelion stem (opt-out), or
+* introducing a fork of [19/WAKU2-LIGHTPUSH](/spec/19/) exclusively used for Dandelion stem.
+
+In the current version, we decided against these options in favour of a simpler protocol and an increased anonymity set.
 
 # Copyright
 
@@ -280,3 +296,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [Waku Privacy and Anonymity Analysis](https://vac.dev/wakuv2-relay-anon).
 * [On the Anonymity of Peer-To-Peer Network Anonymity Schemes Used by Cryptocurrencies](https://arxiv.org/pdf/2201.11860.pdf)
 * [Adversarial Models](/spec/45/)
+* [14/WAKU2-MESSAGE](/spec/14/)
