@@ -11,10 +11,9 @@ contributors:
 
 # Motivation and goals
 
-Light nodes with short connection windows and limited bandwidth wish to publish
-messages into the Waku network. Additionally, there is sometimes a need for
-confirmation that a message has been received "by the network" (here, at least
-one node).
+Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network.
+Additionally, there is sometimes a need for confirmation that a message has been received "by the network"
+(here, at least one node).
 
 `19/WAKU2-LIGHTPUSH` is a request/response protocol for this.
 
@@ -48,7 +47,8 @@ If they are unable to do so for some reason, they SHOULD return an error code in
 
 ## Security considerations
 
-Since this can introduce amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to extra precaution. This can be done by various forms of rate limiting, or by using [18/WAKU2-SWAP](/spec/18) to account for the service provided.
+Since this can introduce amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to extra precaution.
+This can be done by various forms of rate limiting, or by using [18/WAKU2-SWAP](/spec/18) to account for the service provided.
 
 Note that the above is currently not fully implemented.
 
