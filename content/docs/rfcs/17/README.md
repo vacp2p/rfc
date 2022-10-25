@@ -8,6 +8,7 @@ editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Oskar Thorén <oskar@status.im>
   - Aaryamann Challani <aaryamann@status.im>
+  - Giuseppe <giuseppe@status.im>
 ---
 
 The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU2-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
@@ -182,6 +183,43 @@ Below is the description of the fields of `RateLimitProof` and their types.
 | `share_x` and `share_y`| array of 32 bytes each | Shamir secret shares of the user's secret identity key `sk` . `share_x` is the Poseidon hash of the `WakuMessage`'s `payload` concatenated with its `contentTopic` . `share_y` is calculated using [Shamir secret sharing scheme](/spec/32) | <!-- todo specify the poseidon hash setting -->
 | `nullifier`  | array of 32 bytes | internal nullifier derived from `epoch` and peer's `sk` as explained in [RLN construct](/spec/32)|
 
+## RLN Credentials format
+A RLN credential collects all the relevant fields that allow generation of valid RLN proofs with respect to an onchain membership contract.
+
+To make it compatible across different clients and platforms, RLN credentials will be encoded in JSON. 
+This further allows to validate credentials using [JSON schema](https://json-schema.org/).
+
+```
+{
+  "application": string,
+  "appIdentifier": string,
+  "credentials": [{
+    "key": string,
+    "commitment": string,
+    "membershipGroups" : [{
+      "chainId": number,
+      "contract": string,
+      "treeIndex": string
+    }]
+  }],
+  "version": number
+}
+```
+Fields are specified as follow:
+
+- `application` : the application name within which credential(s) refer to.
+- `appIdentifier` : a unique identifier for the application. In RLN-RELAY, this SHOULD corresond to the application-specific [RLN identifier](https://rfc.vac.dev/spec/32/#terminology).
+- `credentials`: the array containing the actual RLN credentials used to generate proofs. Each node consists of:
+  - `key`: the identity secret key as `uint256`. It is encoded as a 64-characters left 0-padded hex string with a leading `0x` prefix (66 chars in total).
+  - `commitment`: the Poseidon hash of the secret key as `uint256`. It is encoded as a 64-characters left 0-padded hex string with a leading `0x` prefix (66 chars in total).
+- `membershipGroups`: the array containing information for membership groups registrations for the pair (`key`, `commitment`). Each node consists of:
+  - `chainId`: the integer corresponding to the [unique chain-id](https://github.com/ethereum-lists/chains) identifying the chain where the membership contract is deployed.
+  - `contract`: the smart contract address of the membership contract. It is encoded as a 40-characters left 0-padded hex string with a leading "0x" prefix (42 chars in total).
+  - `treeIndex`: the Merkle tree index assigned when registering `commitment` to `contract`. It is encoded as a 64-characters left 0-padded hex string with a leading `0x` prefix (10 chars in total).
+- `version`: a unique and progressive integer that can be used to uniquely identify the RLN credential encoding format.
+
+JSON RLN credentials SHOULD be persisted in encrypted form. 
+We recommend to use the [Web3 Secret Storage](https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition) to password-protect credentials and to allow cross-client support for RLN credentials decryption and decoding.
 
 # Recommended System Parameters
 The system parameters are summarized in the following table, and the recommended values for a subset of them are presented next.
