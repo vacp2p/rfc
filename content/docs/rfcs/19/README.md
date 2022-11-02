@@ -50,8 +50,7 @@ If they are unable to do so for some reason, they SHOULD return an error code in
 ## Security Considerations
 
 Since this can introduce an amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to take extra precautions.
-This can be done by rate limiting via [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/),
-or by using [18/WAKU2-SWAP](/spec/18) to account for the service provided.
+This can be done by rate limiting via [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/).
 
 Note that the above is currently not fully implemented.
 
@@ -63,5 +62,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 * [11/WAKU2-RELAY](/spec/11)
 * [44/WAKU2-DANDELION](https://rfc.vac.dev/spec/44/)
-* [18/WAKU2-SWAP](/spec/18)
 
