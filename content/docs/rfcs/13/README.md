@@ -149,7 +149,6 @@ RPC call to query historical messages.
 #### Sorting Messages
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
 As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
-
 Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
 However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and consistent across all the nodes.
 This has the benefit of `cursor` reusability i.e., a `cursor` obtained from one node can be consistently used to query from another node.
