@@ -12,7 +12,6 @@ uri: <https://rdf.logos.co/protocol/Claro/1/0/0#<2022-08-26%20Fri$2013:11Z>
 contributors:
     - Álvaro Castro-Castilla 
     - Mark Evenson
-    - Corey Petty
 ---
 
 # Abstract
@@ -44,13 +43,7 @@ The concept of the Snowball algorithm is relatively simple. Following is a simpl
 3. After this sampling is finished, if there is a vote that has more than an `alpha` threshold, it accumulates one count for this opinion, as well as changes its opinion to this one. But, if a different opinion is received, the counter is reset to 1. If no threshold `alpha` is reached, the counter is reset to 0 instead.
 4. After several iterations of this algorithm, we will reach a threshold `beta`, and decide on that as final.
 
-Next, we will proceed to describe our new algorithm, based on Snowball. There are 3 main paths to achieving the initial target of improving the current state of the art:
-
-- Find ways to extend the Snowball algorithm.
-- Find ways to modify the Snowball algorithm.
-- Find ways to strengthen the Snowball algorithm in particular scenarios, or as generic as possible.
-
-In our design, all 3 are attempted.
+Next, we will proceed to describe our new algorithm, based on Snowball. 
 
 We have identified a shortcoming of the Snowball algorithm that was a perfect starting point for devising improvements. The scenario is as follows:
 
@@ -70,7 +63,7 @@ finality that provides good reliability for network and Byzantine
 fault tolerance.
 
 ## Algorithmic concept
-Claro is an evolution of the Snowball BBA algorithm, in which we tackle specifically the perceived weakness described above. The main focus is going to be the counter and the triggering of the reset. Following, we elaborate the different modifications and features that have been added to the reference algorithm:
+Claro is an evolution of the Snowball Byzantine Binary Agreement (BBA) algorithm, in which we tackle specifically the perceived weakness described above. The main focus is going to be the counter and the triggering of the reset. Following, we elaborate the different modifications and features that have been added to the reference algorithm:
 
 1. Instead of allowing the latest evidence to change the opinion completely, we take into account all accumulated evidence, to reduce the impact of high variability when there is already a large amount of evidence collected.
 2. Eliminate the counter and threshold scheme, and introduce instead two regimes of operation:
@@ -84,7 +77,7 @@ Claro is an evolution of the Snowball BBA algorithm, in which we tackle specific
 
 It’s worth delving a bit into the way the data is interpreted in order to reach a decision. Our approach is based conceptually on the paper [Confidence as Higher-Order Uncertainty](https://cis.temple.edu/~pwang/Publication/confidence.pdf), which describes a frequentist approach to decision certainty. The first-order certainty, measured by frequency, is caused by known positive evidence, and the higher-order certainty is caused by potential positive evidence. Because confidence is a relative measurement defined on evidence, it naturally follows comparing the amount of evidence the system knows with the amount that it will know in the near future (defining “near” as a constant). 
 
-Intuitively, we are looking for a function of **`w`**, call it **`c`** for confidence, that satisfies the following conditions:
+Intuitively, we are looking for a function of evidence, **`w`**, call it **`c`** for confidence, that satisfies the following conditions:
 
 1. Confidence `c` is a continuous and monotonically increasing function of `w`. (More evidence, higher confidence.)
 2. When `w = 0`, `c = 0`. (Without any evidence, confidence is minimum.)
@@ -104,7 +97,7 @@ compute a justification of the proposal, it sets its opinion to one of
 `YES` or `NO`.  If it cannot form an opinion, it leaves its opinion as
 `NONE`.
 
-For now, we will ignore the proposal dessimination process and assume all nodes participating have an initial opinion to repond to within a given request. Further research will relax this assumption and analyze timing attacks on proposal propagation through the network. 
+For now, we will ignore the proposal dissemination process and assume all nodes participating have an initial opinion to respond to within a given request. Further research will relax this assumption and analyze timing attacks on proposal propagation through the network. 
 
 
 The node then participates in a number of query rounds in which it
@@ -176,13 +169,13 @@ k_multiplier     ;; neighbor threshold multiplier
 max_k_multiplier_power 
   <-- 4
     
-;;; Initial numbers of nodes queried in a round
+;;; Initial number of nodes queried in a round
 k_initial 
   <-- 7
 
 ;;; maximum query rounds before termination
-max_rounds
-   <-- 997 ;; TODO justify
+max_rounds ;; placeholder for simulation work, no justification yet
+   <-- 100 
 ```
       
 The following variables are needed to keep the state of Claro:
@@ -215,7 +208,7 @@ $$
 P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j} 
 $$
 
-The list of nodes is maintained by a separate protocol (the network
+where `w` is evidence. The list of nodes is maintained by a separate protocol (the network
 layer), and eventual consistency of this knowledge in the network
 suffices. Even if there are slight divergences in the network view
 from different nodes, the algorithm is resilient to those.
@@ -239,7 +232,7 @@ the query size is done as follows:
 
 Every time the threshold is not reached, we multiply *`k`* by a
 constant. In our experiments, we found that a constant of 2 works
-well, but what really matter is that it stays within that order of
+well, but what really matters is that it stays within that order of
 magnitude.
 
 The growth is capped at 4 times the initial *`k`* value. Again, this
@@ -414,7 +407,7 @@ it initiates a [new query](#query).
 
 ### Termination
 
-A local round of Claro terminates in one of the following following
+A local round of Claro terminates in one of the following
 execution model considerations:
 
 
@@ -603,9 +596,6 @@ presupposition has some justification.  We can envision a need for
 tooling abstraction that allow one to just program the DAG itself, as
 they should be of stable interest no matter if Claro isn't. 
 
-
-# Colophon
-
 # Informative References
 
 0. [Logos](<https://logos.co/>)
@@ -643,10 +633,3 @@ they should be of stable interest no matter if Claro isn't.
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
-
-## Format
-
-This document attempts to be formatted in polyglot Markdown.
-
-This document was utilizing Pandoc 2.18's notion of Markdown, but is
-now trying to co-exist with SVG via MathJax 3.2 or Github.
