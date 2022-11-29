@@ -118,7 +118,9 @@ This is to prevent a newly registered peer from spamming the system by messaging
 The routing peers MUST check whether the provided Merkle root in the `RateLimitProof` is valid.
 It can do so by maintaining a local set of valid Merkle roots, which consist of `acceptable_root_window_size` past roots.
 These roots refer to the final state of the Merkle tree after a whole block consisting of group changes are processed.
-The Merkle roots are updated on a per-block instead of a per-event basis since a large number of group changes in a single block may fully populate the acceptable window of roots, effectively preventing some peers from sending messages with a root that refers to the state of the Merkle tree at a previous block. 
+The Merkle roots are updated on a per-block instead of a per-event basis.
+This is done since a large number of group changes in a single block may fully populate the acceptable window of roots.
+Updating the whole window would lead to some peers sending invalid messages with a root that refers to the state of the Merkle tree at a previous block. 
 This allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
 This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
 See [Recommended System Parameters](#recommended-system-parameters) on choosing an appropriate `acceptable_root_window_size`. 
