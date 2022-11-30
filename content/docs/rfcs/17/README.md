@@ -172,7 +172,7 @@ message WakuMessage {
   optional uint32 version = 3;
   optional sint64 timestamp = 10;
   optional bool ephemeral = 31;
-  bytes rate_limit_proof = 21;
++  optional bytes rate_limit_proof = 21;
 }
 
 ```
