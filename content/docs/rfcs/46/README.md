@@ -48,7 +48,7 @@ This section specifies the format of Tor push messages, as well as how Tor push 
 
 ## Wire Format
 
-The wire format of a Tor push message corresponds verbatim to a typical [libp2p pubsub message](https://docs.libp2p.io/concepts/multiplex/switch/).
+The wire format of a Tor push message corresponds verbatim to a typical [libp2p pubsub message](https://github.com/libp2p/specs/tree/master/pubsub#the-message).
 
 ```
 message Message {
@@ -171,7 +171,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 * [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
-* [pubsub](https://github.com/libp2p/specs/tree/master/pubsub)
+* [libp2p pubsub](https://github.com/libp2p/specs/tree/master/pubsub)
+* [libp2p pubsub message](https://github.com/libp2p/specs/tree/master/pubsub#the-message)
 * [libp2p switch](https://docs.libp2p.io/concepts/multiplex/switch)
 * [SOCKS5](https://www.rfc-editor.org/rfc/rfc1928)
 * [Tor](https://www.torproject.org/)
