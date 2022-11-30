@@ -15,6 +15,8 @@ bookMenuLevels: 1
   - [43/WAKU2-NOISE-PAIRING]({{< relref "/docs/rfcs/43/README.md" >}})
   - [44/WAKU2-DANDELION]({{< relref "/docs/rfcs/44/README.md" >}})
   - [45/WAKU2-ADVERSARIAL-MODELS]({{< relref "/docs/rfcs/45/README.md" >}})
+  - [46/GOSSIPSUB-TOR-PUSH]({{< relref "/docs/rfcs/46/README.md" >}})
+  - [47/WAKU2-TOR-PUSH]({{< relref "/docs/rfcs/47/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})

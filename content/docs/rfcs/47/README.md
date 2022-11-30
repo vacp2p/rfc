@@ -23,23 +23,12 @@ Note: Waku Tor push does not have a dedicated protocol identifier.
 It uses the same identifier as Waku relay.
 This allows Waku relay nodes that are oblivious to Tor push to process messages received via Tor push.
 
-# Background
-
-TODO
 
 # Functional Operation
-
-TODO
-
-# Specification
 
 In its current version, Waku Tor push corresponds to [46/GOSSIPSUB-TOR-PUSH](/spec/46)
 applied to [11/WAKU2-RELAY](/spec/11/),
 instead of [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md).
-
-# Implementation Suggestions
-
-TBD
 
 # Security/Privacy Considerations
 

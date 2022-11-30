@@ -26,9 +26,14 @@ This allows nodes that are oblivious to Tor push to process messages received vi
 
 Without extensions, [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
 does not protect sender identities.
-Tor push allows nodes to push messages over Tor into the gossipsub network, hiding their identities.
 
-TODO
+A possible design of an anonymity extension to gossipsub is pushing messages through an anonymization network before they enter the gossipsub network.
+[Tor](https://www.torproject.org/) is currently the largest anonymization network.
+It is well researched and works reliably.
+Basing our solution on Tor both inherits existing security research, as well as allows for a quick deployment.
+
+Using the anonymization network approach, even the first gossipsub node that relays a given message cannot link the message to its sender (within a relatively strong adversarial model).
+Taking the low bandwidth overhead and the low latency overhead into consideration, Tor offers very good anonymity properties.
 
 # Functional Operation
 
@@ -108,10 +113,6 @@ For each epoch, the Tp-context SHOULD be refreshed, which includes
 Both Tp-peer selection for the next epoch and establishing connections to the newly selected peers SHOULD be done during the current epoch
 and be completed before the new epoch starts.
 This avoids adding latency to message transmission.
-
-# Implementation Suggestions
-
-TBD
 
 # Security/Privacy Considerations
 
