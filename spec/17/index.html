@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
-Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.">
+Motivation # In open and anonymous p2p messaging networks, one big problem is spam resistance.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="17/WAKU2-RLN-RELAY" />
 <meta property="og:description" content="The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
-Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance." />
+Motivation # In open and anonymous p2p messaging networks, one big problem is spam resistance." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/17/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +21,7 @@ Motivation #  In open and anonymous p2p messaging networks, one big problem is s
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -191,10 +191,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="17waku2-rln-relay">17/WAKU2-RLN-RELAY</h1>
+  <h1 id="17waku2-rln-relay">
+  17/WAKU2-RLN-RELAY
+  <a class="anchor" href="#17waku2-rln-relay">#</a>
+</h1>
 
   
-      <h1 id="waku-v2-rln-relay">Waku v2 RLN Relay</h1>
+      <h1 id="waku-v2-rln-relay">
+  Waku v2 RLN Relay
+  <a class="anchor" href="#waku-v2-rln-relay">#</a>
+</h1>
 
   
 
@@ -253,7 +259,7 @@ The higher-level layers adopting <code>17/WAKU2-RLN-RELAY</code> MAY choose to e
 Registration is moderated through a smart contract deployed on the Ethereum blockchain.
 Each peer has an <a href="/spec/32">RLN key pair</a> denoted by <code>sk</code>  and <code>pk</code>.
 The  secret key <code>sk</code> is secret data and MUST be persisted securely by the peer.
-The state of the membership contract contains the list of registered members' public identity keys i.e., <code>pk</code>s.
+The state of the membership contract contains the list of registered members&rsquo; public identity keys i.e., <code>pk</code>s.
 For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its <code>pk</code> in the group.
 The transaction also transfers some amount of ether to the contract to be staked.
 This amount is denoted by <code>staked_fund</code> and is a system parameter.
@@ -341,27 +347,26 @@ The <code>sk</code> then can be used to delete the spammer from the group and wi
 </h1>
 <p>Payloads are protobuf messages implemented using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v3</a>.
 Nodes MAY extend the  <a href="/spec/14">14/WAKU2-MESSAGE</a> with a <code>rate_limit_proof</code> field to indicate that their message is not spam.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">
-syntax = &#34;proto3&#34;;
-
-message RateLimitProof {
-  bytes proof = 1;
-  bytes merkle_root = 2;
-  bytes epoch = 3;
-  bytes share_x = 4;
-  bytes share_y = 5;
-  bytes nullifier = 6;
-}
-
-message WakuMessage {
-  bytes payload = 1;
-  string contentTopic = 2;
-  uint32 version = 3;
-  double timestamp = 4;
-<span style="color:#a6e22e">+ RateLimitProof rate_limit_proof = 21;
-</span><span style="color:#a6e22e"></span>}
-
-</code></pre></div><h2 id="wakumessage">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>syntax = &#34;proto3&#34;;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>message RateLimitProof {
+</span></span><span style="display:flex;"><span>  bytes proof = 1;
+</span></span><span style="display:flex;"><span>  bytes merkle_root = 2;
+</span></span><span style="display:flex;"><span>  bytes epoch = 3;
+</span></span><span style="display:flex;"><span>  bytes share_x = 4;
+</span></span><span style="display:flex;"><span>  bytes share_y = 5;
+</span></span><span style="display:flex;"><span>  bytes nullifier = 6;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>message WakuMessage {
+</span></span><span style="display:flex;"><span>  bytes payload = 1;
+</span></span><span style="display:flex;"><span>  string contentTopic = 2;
+</span></span><span style="display:flex;"><span>  uint32 version = 3;
+</span></span><span style="display:flex;"><span>  double timestamp = 4;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+ RateLimitProof rate_limit_proof = 21;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>}
+</span></span></code></pre></div><h2 id="wakumessage">
   WakuMessage
   <a class="anchor" href="#wakumessage">#</a>
 </h2>

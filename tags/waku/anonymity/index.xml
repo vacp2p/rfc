@@ -12,7 +12,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/44/</guid>
-      <description>Abstract #  This document specifies a deanonymization mitigation technique, based on Dandelion and Dandelion++, for Waku Relay. It mitigates mass deanonymization in the multi-node (botnet) attacker model, even when the number of malicious nodes is linear in the number of total nodes in the network.
+      <description>Abstract # This document specifies a deanonymization mitigation technique, based on Dandelion and Dandelion++, for Waku Relay. It mitigates mass deanonymization in the multi-node (botnet) attacker model, even when the number of malicious nodes is linear in the number of total nodes in the network.
 Based on the insight that symmetric message propagation makes deanonymization easier, it introduces a probability for nodes to simply forward the message to one select relay node instead of disseminating messages as per usual relay operation.</description>
     </item>
     

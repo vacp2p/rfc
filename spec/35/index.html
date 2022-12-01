@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="This specification describes how payloads of Waku messages with version 2 can be encrypted in order to achieve confidentiality, authenticity, and integrity as well as some form of identity-hiding on communicating parties.
@@ -21,7 +21,7 @@ Specifically, it adds support to the ChaChaPoly cipher for symmetric authenticat
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -203,10 +203,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="35waku2-noise">35/WAKU2-NOISE</h1>
+  <h1 id="35waku2-noise">
+  35/WAKU2-NOISE
+  <a class="anchor" href="#35waku2-noise">#</a>
+</h1>
 
   
-      <h1 id="noise-protocols-for-waku-payload-encryption">Noise Protocols for Waku Payload Encryption</h1>
+      <h1 id="noise-protocols-for-waku-payload-encryption">
+  Noise Protocols for Waku Payload Encryption
+  <a class="anchor" href="#noise-protocols-for-waku-payload-encryption">#</a>
+</h1>
 
   
 
@@ -242,7 +248,7 @@ adapting key-exchange protocols to the knowledge communicating parties have of e
 <li><em>Confidentiality</em>: the adversary should not be able to learn what data is being sent from one Waku endpoint to one or several other Waku endpoints.
 <ul>
 <li><em>Strong forward secrecy</em>: an active adversary cannot decrypt messages nor infer any information on the employed encryption key,
-even in the case he has access to communicating parties' long-term private keys (during or after their communication).</li>
+even in the case he has access to communicating parties&rsquo; long-term private keys (during or after their communication).</li>
 </ul>
 </li>
 <li><em>Authenticity</em>: the adversary should not be able to cause a Waku endpoint to accept messages coming from an endpoint different than their original senders.</li>
@@ -351,28 +357,28 @@ The symmetric encryption authentication data for <code>transport-message</code>,
   <a class="anchor" href="#abnf">#</a>
 </h3>
 <p>Using <a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a> we have the following format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; message nametag</span>
-<span style="color:#a6e22e">message-nametag</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">16</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; protocol ID</span>
-<span style="color:#a6e22e">protocol-id</span>                 <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; contains the size of handshake-message</span>
-<span style="color:#a6e22e">handshake-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; contains one or more Diffie-Hellman public keys</span>
-<span style="color:#a6e22e">handshake-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; contains the size of transport-message</span>
-<span style="color:#a6e22e">transport-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; contains the transport message, eventually encrypted. </span>
-<span style="color:#75715e">; If encrypted, authentication data is appended</span>
-<span style="color:#a6e22e">transport-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; the Waku WakuMessage payload field</span>
-<span style="color:#a6e22e">payload</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">message-nametag</span> <span style="color:#a6e22e">protocol-id</span> <span style="color:#a6e22e">handshake-message-len</span> <span style="color:#a6e22e">handshake-message</span> <span style="color:#a6e22e">transport-message-len</span> <span style="color:#a6e22e">transport-message</span>
-</code></pre></div><h3 id="protocol-payload-format">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-abnf" data-lang="abnf"><span style="display:flex;"><span><span style="color:#75715e">; message nametag</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message-nametag</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">16</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; protocol ID</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">protocol-id</span>                 <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; contains the size of handshake-message</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handshake-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; contains one or more Diffie-Hellman public keys</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">handshake-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; contains the size of transport-message</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">transport-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; contains the transport message, eventually encrypted. </span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; If encrypted, authentication data is appended</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">transport-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; the Waku WakuMessage payload field</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">payload</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">message-nametag</span> <span style="color:#a6e22e">protocol-id</span> <span style="color:#a6e22e">handshake-message-len</span> <span style="color:#a6e22e">handshake-message</span> <span style="color:#a6e22e">transport-message-len</span> <span style="color:#a6e22e">transport-message</span>
+</span></span></code></pre></div><h3 id="protocol-payload-format">
   Protocol Payload Format
   <a class="anchor" href="#protocol-payload-format">#</a>
 </h3>
@@ -422,7 +428,7 @@ If <code>flag = 1</code>, it contains a symmetric encryption of an encoding of t
 (nonces are implicitely defined by Noise <a href="http://www.noiseprotocol.org/noise.html#processing-rules">processing rules</a>).</li>
 </ul>
 <p>In all supported Noise protocols,
-parties' static public keys are transmitted encrypted (cf. <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object"><code>EncryptAndHash</code></a>),
+parties&rsquo; static public keys are transmitted encrypted (cf. <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object"><code>EncryptAndHash</code></a>),
 while ephemeral keys MAY be encrypted after a handshake is complete.</p>
 <h3 id="padding">
   Padding
@@ -482,17 +488,17 @@ it SHOULD be decoded as the <code>data</code> field in <a href="/spec/26">26/WAK
 </h2>
 <p>Supported Noise handshakes address four typical scenarios occurring when an encrypted communication channel between Alice and Bob is going to be created:</p>
 <ul>
-<li>Alice and Bob know each others' static key.</li>
+<li>Alice and Bob know each others&rsquo; static key.</li>
 <li>Alice knows Bob&rsquo;s static key;</li>
-<li>Alice and Bob share no key material and they don&rsquo;t know each others' static key.</li>
-<li>Alice and Bob share some key material, but they don&rsquo;t know each others' static key.</li>
+<li>Alice and Bob share no key material and they don&rsquo;t know each others&rsquo; static key.</li>
+<li>Alice and Bob share some key material, but they don&rsquo;t know each others&rsquo; static key.</li>
 </ul>
 <p><strong>Adversarial Model</strong>: an active attacker who compromised one party&rsquo;s static key may lower the identity-hiding security guarantees provided by some handshakes. In our security model we exclude such adversary, but for completeness we report a summary of possible de-anonymization attacks that can be performed by an active attacker.</p>
 <h3 id="the-k1k1-handshake">
   The <code>K1K1</code> Handshake
   <a class="anchor" href="#the-k1k1-handshake">#</a>
 </h3>
-<p>If Alice and Bob know each others' static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a <code>K1K1</code> handshake.  Using <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">Noise notation</a> <em>(Alice is on the left)</em> this can be sketched as:</p>
+<p>If Alice and Bob know each others&rsquo; static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a <code>K1K1</code> handshake.  Using <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">Noise notation</a> <em>(Alice is on the left)</em> this can be sketched as:</p>
 <pre tabindex="0"><code> K1K1:
     -&gt;  s
     &lt;-  s
@@ -506,7 +512,7 @@ it SHOULD be decoded as the <code>data</code> field in <a href="/spec/26">26/WAK
   The <code>XK1</code> Handshake
   <a class="anchor" href="#the-xk1-handshake">#</a>
 </h3>
-<p>Here, Alice knows how to initiate a communication with Bob and she knows his public static key: such discovery can be achieved, for example, through a publicly accessible register of users' static keys, smart contracts, or through a previous public/private advertisement of Bob&rsquo;s static key.</p>
+<p>Here, Alice knows how to initiate a communication with Bob and she knows his public static key: such discovery can be achieved, for example, through a publicly accessible register of users&rsquo; static keys, smart contracts, or through a previous public/private advertisement of Bob&rsquo;s static key.</p>
 <p>A Noise handshake pattern that suits this scenario is <code>XK1</code>:</p>
 <pre tabindex="0"><code> XK1:
     &lt;-  s

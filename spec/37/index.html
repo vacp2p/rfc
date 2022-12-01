@@ -2,18 +2,18 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+<meta name="description" content="Introduction # In 35/WAKU2-NOISE we defined how Waku messages&rsquo; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
 Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
 This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
-Preliminaries #  We assume that two users, e.">
+Preliminaries # We assume that two users, e.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="37/WAKU2-NOISE-SESSIONS" />
-<meta property="og:description" content="Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+<meta property="og:description" content="Introduction # In 35/WAKU2-NOISE we defined how Waku messages&rsquo; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
 Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
 This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
-Preliminaries #  We assume that two users, e." />
+Preliminaries # We assume that two users, e." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/37/" /><meta property="article:section" content="docs" />
 
@@ -23,7 +23,7 @@ Preliminaries #  We assume that two users, e." />
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -135,7 +135,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -181,10 +181,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="37waku2-noise-sessions">37/WAKU2-NOISE-SESSIONS</h1>
+  <h1 id="37waku2-noise-sessions">
+  37/WAKU2-NOISE-SESSIONS
+  <a class="anchor" href="#37waku2-noise-sessions">#</a>
+</h1>
 
   
-      <h1 id="session-management-for-waku-noise">Session Management for Waku Noise</h1>
+      <h1 id="session-management-for-waku-noise">
+  Session Management for Waku Noise
+  <a class="anchor" href="#session-management-for-waku-noise">#</a>
+</h1>
 
   
 
@@ -204,7 +210,7 @@ https://github.com/alex-shpak/hugo-book
   Introduction
   <a class="anchor" href="#introduction">#</a>
 </h1>
-<p>In <a href="https://rfc.vac.dev/35/">35/WAKU2-NOISE</a> we defined how Waku messages' payloads can be encrypted using key material derived from key agreements based on the <a href="http://www.noiseprotocol.org/noise.html">Noise Protocol Framework</a>.</p>
+<p>In <a href="https://rfc.vac.dev/35/">35/WAKU2-NOISE</a> we defined how Waku messages&rsquo; payloads can be encrypted using key material derived from key agreements based on the <a href="http://www.noiseprotocol.org/noise.html">Noise Protocol Framework</a>.</p>
 <p>Once two users complete a Noise handshake,
 an encryption/decryption session - <em>or a Noise session</em> - would be instantiated.</p>
 <p>This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.</p>
@@ -239,11 +245,11 @@ and <code>/{application-name}/{application-version}/</code> identifies the appli
 <li>is always <strong>active</strong> as long as it is not marked as <strong>stale</strong>.
 For an active <code>session-id</code>, new messages are published on the content topic <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>;</li>
 <li>is marked as <strong>stale</strong> if a <a href="https://rfc.vac.dev/spec/35/#session-termination-message">session termination message</a> containing <code>Hash(session-id)</code> is published on the content topic <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>.
-Session information relative to stale sessions  MAY be deleted from users' device, unless required for later channel binding purposes.</li>
+Session information relative to stale sessions  MAY be deleted from users&rsquo; device, unless required for later channel binding purposes.</li>
 </ul>
 <p>When a Noise session is marked as stale, it means that one party requested its termination while being online,
 since publication of a hash pre-image for <code>ct-id</code> is required (i.e. <code>Hash(session-id)</code>).</p>
-<p>Currently, it is not possible to mark a Noise session as stale when <code>session-id</code> is lost or gets corrupted in users' devices.
+<p>Currently, it is not possible to mark a Noise session as stale when <code>session-id</code> is lost or gets corrupted in users&rsquo; devices.
 However, since <code>session-id</code> is shared between Alice and Bob,
 one party MAY decide to mark a Noise session as stale if no message from the other end was received within a certain fixed time window.</p>
 <p>The above mechanism allows a Noise session to be marked as stale either privately or publicly,
@@ -256,7 +262,7 @@ peers SHOULD wait a fixed amount of time before discarding stored messages corre
 and parties are required to instantiate a new Noise session if they wish to communicate again.</p>
 <p>However, parties can optionally persist and include the <code>session-id</code> corresponding to a stale Noise session in the <a href="https://noiseprotocol.org/noise.html#prologue">prologue information</a> employed in the Noise handshake they execute to instantiate their new Noise session.
 This effectively emulates a mechanism to <em>&ldquo;re-activate&rdquo;</em> a stale Noise session by binding it to a newly created active Noise session.</p>
-<p>In order to reduce users' metadata leakage, it is desirable (as suggested in <a href="https://rfc.vac.dev/spec/35/#after-handshake">35/WAKU2-NOISE</a>) that content topics used for communications change every time a new message is exchanged.
+<p>In order to reduce users&rsquo; metadata leakage, it is desirable (as suggested in <a href="https://rfc.vac.dev/spec/35/#after-handshake">35/WAKU2-NOISE</a>) that content topics used for communications change every time a new message is exchanged.
 This can be easily realized by employing a key derivation function to compute a new <code>session-id</code> from the previously employed one (e.g. <code>session-id = HKDF(prev-session-id)</code>),
 while keeping the Inbound/outbound Cipher States, the content topic derivation mechanism and the stale mechanism the same as above.
 In this case, when one party sends <strong>and</strong> receives at least one message,

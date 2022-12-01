@@ -12,7 +12,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/14/</guid>
-      <description>Abstract #  Waku v2 is a family of modular peer-to-peer protocols for secure communication. These protocols are designed to be secure, privacy-preserving, and censorship-resistant and can run in resource-restricted environments. At a high level, Waku v2 implements a Pub/Sub messaging pattern over libp2p and adds capabilities.
+      <description>Abstract # Waku v2 is a family of modular peer-to-peer protocols for secure communication. These protocols are designed to be secure, privacy-preserving, and censorship-resistant and can run in resource-restricted environments. At a high level, Waku v2 implements a Pub/Sub messaging pattern over libp2p and adds capabilities.
 The present document specifies the Waku v2 message format, a way to encapsulate the messages sent with specific information security goals, and Whisper/Waku v1 backward compatibility.</description>
     </item>
     
@@ -22,9 +22,9 @@ The present document specifies the Waku v2 message format, a way to encapsulate 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/34/</guid>
-      <description>Abstract #  This document specifies a simple request-response peer exchange protocol. Responders send information about a requested number of peers. The main purpose of this protocol is providing resource restricted devices with peers.
+      <description>Abstract # This document specifies a simple request-response peer exchange protocol. Responders send information about a requested number of peers. The main purpose of this protocol is providing resource restricted devices with peers.
 Protocol identifier: /vac/waku/peer-exchange/2.0.0-alpha1
-Background and Motivation #  It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as 33/WAKU2-DISCV5. The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.</description>
+Background and Motivation # It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as 33/WAKU2-DISCV5. The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.</description>
     </item>
     
     <item>
@@ -33,8 +33,8 @@ Background and Motivation #  It may not be feasible on resource restricted devic
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/43/</guid>
-      <description>Abstract #  In this document we describe a compound protocol for enabling two devices to mutually authenticate and securely exchange (arbitrary) information over the Waku network.
-Background / Rationale / Motivation #  In order to implement multi-device communications using one of the Noise session management mechanisms proposed in 37/WAKU2-NOISE-SESSIONS, we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
+      <description>Abstract # In this document we describe a compound protocol for enabling two devices to mutually authenticate and securely exchange (arbitrary) information over the Waku network.
+Background / Rationale / Motivation # In order to implement multi-device communications using one of the Noise session management mechanisms proposed in 37/WAKU2-NOISE-SESSIONS, we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
 Since, in this scenario, the devices would be close to each other, authentication can be initialized by exchanging a QR code out-of-band and then securely completed over the Waku network.</description>
     </item>
     

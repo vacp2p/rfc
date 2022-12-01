@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
@@ -15,7 +15,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <link rel="alternate" type="application/rss+xml" href="https://rfc.vac.dev/tags/waku-core/index.xml" title="Vac RFC" />
 <!--
 Made with Book Theme
@@ -128,7 +128,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -260,7 +260,7 @@ https://github.com/alex-shpak/hugo-book
 
 
     <p>WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
-Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering # Protocol identifier*: /vac/waku/filter/2.0.0-beta1
 Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.
         <a href="/spec/12/">...</a>
       
@@ -286,7 +286,7 @@ Content filtering is a way to do message-based filtering. Currently the only con
 
     <p>This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
 Protocol identifier*: /vac/waku/store/2.0.0-beta4
-Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.
+Design Requirements # Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.
         <a href="/spec/13/">...</a>
       
     </p>
@@ -310,8 +310,8 @@ Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-S
 
 
     <p>A bridge between Waku v1 and Waku v2.
-Bridge #  A bridge requires supporting both Waku versions:
- Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols  Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
+Bridge # A bridge requires supporting both Waku versions:
+Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
 Publishing such packet will require the creation of a new Message with a new WakuMessage as data field.
         <a href="/spec/15/">...</a>
       
@@ -335,9 +335,9 @@ Publishing such packet will require the creation of a new Message with a new Wak
   
 
 
-    <p>Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
-Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
-{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.
+    <p>Introduction # This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields # Field Description jsonrpc Contains the used JSON-RPC version (Default: 2.0) method Contains the JSON-RPC method that is being called params An array of parameters for the request id The request ID Types # In this specification, the primitive types Boolean, String, Number and Null, as well as the structured types Array and Object, are to be interpreted according to the JSON-RPC specification.
         <a href="/spec/16/">...</a>
       
     </p>
@@ -362,7 +362,7 @@ Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. Th
 
     <p>The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
-Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.
+Motivation # In open and anonymous p2p messaging networks, one big problem is spam resistance.
         <a href="/spec/17/">...</a>
       
     </p>
@@ -385,10 +385,10 @@ Motivation #  In open and anonymous p2p messaging networks, one big problem is s
   
 
 
-    <p>Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+    <p>Introduction # Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
 An alternative is to link existing Waku implementation as a static or dynamic library in their application.
 This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
-Design requirements #  The API should be generic enough, so:
+Design requirements # The API should be generic enough, so:
         <a href="/spec/36/">...</a>
       
     </p>

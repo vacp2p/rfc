@@ -13,7 +13,7 @@
       
       <guid>https://rfc.vac.dev/spec/20/</guid>
       <description>Content Topics:
- Public Key Broadcast: /eth-pm/1/public-key/proto, Private Message: /eth-pm/1/private-message/proto.  This specification explains the Toy Ethereum Private Message protocol which enables a peer to send an encrypted message to another peer using the Waku v2 network, and the peer&amp;rsquo;s Ethereum address.
+Public Key Broadcast: /eth-pm/1/public-key/proto, Private Message: /eth-pm/1/private-message/proto. This specification explains the Toy Ethereum Private Message protocol which enables a peer to send an encrypted message to another peer using the Waku v2 network, and the peer&amp;rsquo;s Ethereum address.
 The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes, using Ethereum accounts for identity. This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API.</description>
     </item>
     
@@ -25,9 +25,9 @@ The main purpose of this specification is to demonstrate how Waku v2 can be used
       <guid>https://rfc.vac.dev/spec/22/</guid>
       <description>Content Topic: /toy-chat/2/huilong/proto.
 This specification explains a toy chat example using Waku v2. This protocol is mainly used to:
- Dogfood Waku v2, Show an example of how to use Waku v2.  Currently, all main Waku v2 implementations support the toy chat protocol: nim-waku, js-waku (NodeJS and web) and go-waku.
+Dogfood Waku v2, Show an example of how to use Waku v2. Currently, all main Waku v2 implementations support the toy chat protocol: nim-waku, js-waku (NodeJS and web) and go-waku.
 Note that this is completely separate from the protocol the Status app is using for its chat functionality.
-Design #  The chat protocol enables sending and receiving messages in a chat room.</description>
+Design # The chat protocol enables sending and receiving messages in a chat room.</description>
     </item>
     
     <item>
@@ -37,9 +37,9 @@ Design #  The chat protocol enables sending and receiving messages in a chat roo
       
       <guid>https://rfc.vac.dev/spec/24/</guid>
       <description>This spec is a proposition for a voting protocol over Waku V2.
-Motivation #  In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
+Motivation # In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
 Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&amp;rsquo;t already submitted.
-Smart contract #  Voting should be finalized on chain so that the finished vote is immutable.</description>
+Smart contract # Voting should be finalized on chain so that the finished vote is immutable.</description>
     </item>
     
     <item>
@@ -49,7 +49,7 @@ Smart contract #  Voting should be finalized on chain so that the finished vote 
       
       <guid>https://rfc.vac.dev/spec/28/</guid>
       <description>This spec is a proposition of voting on community featuring over waku v2.
-Overview #  When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
+Overview # When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
 Rules of featuring: - Given community can&amp;rsquo;t be featured twice in a row. - Only one vote per user per community (single user can vote on multiple communities) - Voting will be done off-chain - If community hasn&amp;rsquo;t been featured votes for given community are still valid for the next 4 weeks</description>
     </item>
     

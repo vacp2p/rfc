@@ -2,14 +2,14 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
-Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices.">
+Motivation # Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="6/WAKU1" />
 <meta property="og:description" content="This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
-Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices." />
+Motivation # Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/6/" /><meta property="article:section" content="docs" />
 
@@ -19,7 +19,7 @@ Motivation #  Waku was created to incrementally improve in areas that Whisper is
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -131,7 +131,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -239,10 +239,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="6waku1">6/WAKU1</h1>
+  <h1 id="6waku1">
+  6/WAKU1
+  <a class="anchor" href="#6waku1">#</a>
+</h1>
 
   
-      <h1 id="waku-v1">Waku v1</h1>
+      <h1 id="waku-v1">
+  Waku v1
+  <a class="anchor" href="#waku-v1">#</a>
+</h1>
 
   
 
@@ -350,130 +356,130 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#abnf-specification">#</a>
 </h3>
 <p>Using <a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a> we have the following format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; Packet codes 0 - 127 are reserved for Waku protocol</span>
-<span style="color:#a6e22e">packet-code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*3</span><span style="color:#66d9ef">DIGIT</span>
-
-<span style="color:#75715e">; rate limits per packet</span>
-<span style="color:#a6e22e">packet-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-<span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-<span style="color:#a6e22e">packet-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-
-<span style="color:#75715e">; rate limits by size in bytes</span>
-<span style="color:#a6e22e">bytes-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-<span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-<span style="color:#a6e22e">bytes-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-
-<span style="color:#a6e22e">packet-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-limit-ip</span> <span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#a6e22e">packet-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-<span style="color:#a6e22e">bytes-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">bytes-limit-ip</span> <span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#a6e22e">bytes-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span>
-<span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1</span>
-<span style="color:#a6e22e">light-node-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">2</span>
-<span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">3</span>
-<span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span>
-<span style="color:#a6e22e">topic-interest-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">5</span>
-<span style="color:#a6e22e">bytes-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">6</span>
-
-<span style="color:#a6e22e">status-options</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span>
-  [ <span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#a6e22e">pow-requirement</span> ]
-  [ <span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#a6e22e">bloom-filter</span> ]
-  [ <span style="color:#a6e22e">light-node-key</span> <span style="color:#a6e22e">light-node</span> ]
-  [ <span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#a6e22e">confirmations-enabled</span> ]
-  [ <span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#a6e22e">packet-rate-limits</span> ]
-  [ <span style="color:#a6e22e">topic-interest-key</span> <span style="color:#a6e22e">topic-interest</span> ]
-  [ <span style="color:#a6e22e">bytes-limits-key</span> <span style="color:#a6e22e">bytes-rate-limits</span> ]
-<span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
-
-<span style="color:#a6e22e">status-update</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
-
-<span style="color:#a6e22e">confirmations-enabled</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
-
-<span style="color:#a6e22e">light-node</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
-
-<span style="color:#75715e">; pow is &#34;a single floating point value of PoW.</span>
-<span style="color:#75715e">; This value is the IEEE 754 binary representation</span>
-<span style="color:#75715e">; of a 64-bit floating point number packed as a uint64.</span>
-<span style="color:#75715e">; Values of qNAN, sNAN, INF and -INF are not allowed.</span>
-<span style="color:#75715e">; Negative values are also not allowed.&#34;</span>
-<span style="color:#a6e22e">pow</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span> <span style="color:#ae81ff">&#34;.&#34;</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-<span style="color:#a6e22e">pow-requirement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pow</span>
-
-<span style="color:#75715e">; bloom filter is &#34;a byte array&#34;</span>
-<span style="color:#a6e22e">bloom-filter</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#a6e22e">waku-envelope</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">expiry</span> <span style="color:#a6e22e">ttl</span> <span style="color:#a6e22e">topic</span> <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">nonce</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#75715e">; List of topics interested in</span>
-<span style="color:#a6e22e">topic-interest</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#f92672">*10000</span><span style="color:#a6e22e">topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#75715e">; 4 bytes (UNIX time in seconds)</span>
-<span style="color:#a6e22e">expiry</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; 4 bytes (time-to-live in seconds)</span>
-<span style="color:#a6e22e">ttl</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; 4 bytes of arbitrary data</span>
-<span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; byte array of arbitrary size</span>
-<span style="color:#75715e">; (contains encrypted payload)</span>
-<span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; 8 bytes of arbitrary data</span>
-<span style="color:#75715e">; (used for PoW calculation)</span>
-<span style="color:#a6e22e">nonce</span> <span style="color:#f92672">=</span> <span style="color:#f92672">8</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#a6e22e">messages</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
-
-<span style="color:#75715e">; version of the confirmation packet</span>
-<span style="color:#a6e22e">version</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-
-<span style="color:#75715e">; keccak256 hash of the envelopes batch data (raw bytes)</span>
-<span style="color:#75715e">; for which the confirmation is sent</span>
-<span style="color:#a6e22e">hash</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#a6e22e">hasherror</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; error code</span>
-<span style="color:#a6e22e">code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
-
-<span style="color:#75715e">; a descriptive error message</span>
-<span style="color:#a6e22e">description</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">ALPHA</span>
-
-<span style="color:#a6e22e">error</span>  <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hasherror</span> <span style="color:#a6e22e">code</span> <span style="color:#a6e22e">description</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-<span style="color:#a6e22e">errors</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">error</span>
-
-<span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hash</span> <span style="color:#a6e22e">errors</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#a6e22e">confirmation</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">version</span> <span style="color:#a6e22e">response</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#75715e">; message confirmation packet types</span>
-<span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
-<span style="color:#a6e22e">message-response</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
-
-<span style="color:#75715e">; mail server / client specific</span>
-<span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">waku-envelope</span>
-<span style="color:#a6e22e">p2p-message</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
-<span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
-
-<span style="color:#75715e">; packet-format needs to be paired with its</span>
-<span style="color:#75715e">; corresponding packet-format</span>
-<span style="color:#a6e22e">packet-format</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-code</span> <span style="color:#a6e22e">packet-format</span> <span style="color:#ae81ff">&#34;]&#34;</span>
-
-<span style="color:#a6e22e">required-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span> <span style="color:#a6e22e">status</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">1</span> <span style="color:#a6e22e">messages</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">22</span> <span style="color:#a6e22e">status-update</span> <span style="color:#f92672">/</span>
-
-<span style="color:#a6e22e">optional-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">11</span> <span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">12</span> <span style="color:#a6e22e">message-response</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">/</span>
-                  <span style="color:#f92672">127</span> <span style="color:#a6e22e">p2p-message</span>
-
-<span style="color:#a6e22e">packet</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">required-packet</span> [ <span style="color:#a6e22e">optional-packet</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
-</code></pre></div><p>All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from <code>0x00</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-abnf" data-lang="abnf"><span style="display:flex;"><span><span style="color:#75715e">; Packet codes 0 - 127 are reserved for Waku protocol</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*3</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; rate limits per packet</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; rate limits by size in bytes</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bytes-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bytes-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-limit-ip</span> <span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#a6e22e">packet-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bytes-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">bytes-limit-ip</span> <span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#a6e22e">bytes-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">light-node-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">3</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">topic-interest-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bytes-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">6</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">status-options</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span>
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#a6e22e">pow-requirement</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#a6e22e">bloom-filter</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">light-node-key</span> <span style="color:#a6e22e">light-node</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#a6e22e">confirmations-enabled</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#a6e22e">packet-rate-limits</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">topic-interest-key</span> <span style="color:#a6e22e">topic-interest</span> ]
+</span></span><span style="display:flex;"><span>  [ <span style="color:#a6e22e">bytes-limits-key</span> <span style="color:#a6e22e">bytes-rate-limits</span> ]
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">status-update</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">confirmations-enabled</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">light-node</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; pow is &#34;a single floating point value of PoW.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; This value is the IEEE 754 binary representation</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; of a 64-bit floating point number packed as a uint64.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; Values of qNAN, sNAN, INF and -INF are not allowed.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; Negative values are also not allowed.&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pow</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span> <span style="color:#ae81ff">&#34;.&#34;</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">pow-requirement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pow</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; bloom filter is &#34;a byte array&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">bloom-filter</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">waku-envelope</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">expiry</span> <span style="color:#a6e22e">ttl</span> <span style="color:#a6e22e">topic</span> <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">nonce</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; List of topics interested in</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">topic-interest</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#f92672">*10000</span><span style="color:#a6e22e">topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; 4 bytes (UNIX time in seconds)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">expiry</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; 4 bytes (time-to-live in seconds)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ttl</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; 4 bytes of arbitrary data</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; byte array of arbitrary size</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; (contains encrypted payload)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; 8 bytes of arbitrary data</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; (used for PoW calculation)</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">nonce</span> <span style="color:#f92672">=</span> <span style="color:#f92672">8</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">messages</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; version of the confirmation packet</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">version</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; keccak256 hash of the envelopes batch data (raw bytes)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; for which the confirmation is sent</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">hash</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">hasherror</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; error code</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; a descriptive error message</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">description</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">ALPHA</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">error</span>  <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hasherror</span> <span style="color:#a6e22e">code</span> <span style="color:#a6e22e">description</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">errors</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">error</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hash</span> <span style="color:#a6e22e">errors</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">confirmation</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">version</span> <span style="color:#a6e22e">response</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; message confirmation packet types</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">message-response</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; mail server / client specific</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">waku-envelope</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">p2p-message</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; packet-format needs to be paired with its</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">; corresponding packet-format</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet-format</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-code</span> <span style="color:#a6e22e">packet-format</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">required-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span> <span style="color:#a6e22e">status</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">1</span> <span style="color:#a6e22e">messages</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">22</span> <span style="color:#a6e22e">status-update</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">optional-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">11</span> <span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">12</span> <span style="color:#a6e22e">message-response</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#f92672">127</span> <span style="color:#a6e22e">p2p-message</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">packet</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">required-packet</span> [ <span style="color:#a6e22e">optional-packet</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
+</span></span></code></pre></div><p>All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from <code>0x00</code>.</p>
 <h3 id="packet-codes">
   Packet Codes
   <a class="anchor" href="#packet-codes">#</a>
@@ -830,7 +836,7 @@ If a node supports multiple versions of <code>waku</code>, those needs to be exp
 </h4>
 <p>A mailserver client fetches archival envelopes from a mailserver through a direct connection.
 In this direct connection, the client discloses its IP/ID as well as the topics/ bloom filter it is interested in to the mailserver.
-The collection of such information allows the mailserver to link clients' IP/IDs to their topic interests and build a profile for each client over time.
+The collection of such information allows the mailserver to link clients&rsquo; IP/IDs to their topic interests and build a profile for each client over time.
 As such, the mailserver client has to trust the mailserver with this level of information.</p>
 <h4 id="bloom-filter-privacy">
   Bloom filter privacy:
@@ -1032,14 +1038,14 @@ confirmations-enabled and rate-limits</li>
   Footnotes
   <a class="anchor" href="#footnotes">#</a>
 </h2>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p>Felix Lange et al. <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md">The RLPx Transport Protocol</a>. Ethereum.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 </article>
  
       

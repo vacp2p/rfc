@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="In this specification, we describe a method to construct message history that will aid the consistency guarantees of 2/MVDS. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
-Motivation #  In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
-Format #  We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.">
+Motivation # In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
+Format # We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="4/MVDS-META" />
 <meta property="og:description" content="In this specification, we describe a method to construct message history that will aid the consistency guarantees of 2/MVDS. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
-Motivation #  In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
-Format #  We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled." />
+Motivation # In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
+Format # We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/4/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +21,7 @@ Format #  We introduce the metadata message which is used to convey information 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -191,10 +191,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="4mvds-meta">4/MVDS-META</h1>
+  <h1 id="4mvds-meta">
+  4/MVDS-META
+  <a class="anchor" href="#4mvds-meta">#</a>
+</h1>
 
   
-      <h1 id="mvds-metadata-field">MVDS Metadata Field</h1>
+      <h1 id="mvds-metadata-field">
+  MVDS Metadata Field
+  <a class="anchor" href="#mvds-metadata-field">#</a>
+</h1>
 
   
 
@@ -234,20 +240,20 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#format">#</a>
 </h2>
 <p>We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf"><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>mvds;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Metadata</span> {<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> parents <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bool</span> ephemeral <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><p>Nodes MAY transmit a <code>Metadata</code> message by extending the MVDS <a href="/spec/2#payloads">message</a> with a <code>metadata</code> field.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">message Message {
-  bytes group_id = 6001;
-  int64 timestamp = 6002;
-  bytes body = 6003;
-<span style="color:#a6e22e">+ Metadata metadata = 6004;
-</span><span style="color:#a6e22e"></span>}
-</code></pre></div><h3 id="fields">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>mvds;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Metadata</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> parents <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bool</span> ephemeral <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Nodes MAY transmit a <code>Metadata</code> message by extending the MVDS <a href="/spec/2#payloads">message</a> with a <code>metadata</code> field.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span>message Message {
+</span></span><span style="display:flex;"><span>  bytes group_id = 6001;
+</span></span><span style="display:flex;"><span>  int64 timestamp = 6002;
+</span></span><span style="display:flex;"><span>  bytes body = 6003;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+ Metadata metadata = 6004;
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>}
+</span></span></code></pre></div><h3 id="fields">
   Fields
   <a class="anchor" href="#fields">#</a>
 </h3>
@@ -298,20 +304,20 @@ https://github.com/alex-shpak/hugo-book
   Footnotes
   <a class="anchor" href="#footnotes">#</a>
 </h2>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">https://en.wikipedia.org/wiki/Directed_acyclic_graph</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p>Jepsen. <a href="https://jepsen.io/consistency/models/causal">Causal Consistency</a>. Jepsen, LLC.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><a href="https://en.wikipedia.org/wiki/Eventual_consistency">https://en.wikipedia.org/wiki/Eventual_consistency</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 </article>
  
       

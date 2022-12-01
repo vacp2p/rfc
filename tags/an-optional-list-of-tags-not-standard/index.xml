@@ -12,11 +12,11 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/xx/</guid>
-      <description>(Info, remove this section) #  This section contains meta info about writing RFCs. This section (including its subsections) MUST be removed.
+      <description>(Info, remove this section) # This section contains meta info about writing RFCs. This section (including its subsections) MUST be removed.
 COSS explains the Vac RFC process.
-Tags #  The tags metadata SHOULD contain a list of tags if applicable.
+Tags # The tags metadata SHOULD contain a list of tags if applicable.
 Currently identified tags comprise
- waku/core-protocol for Waku protocol definitions (e.g. store, relay, light push), waku/application for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),  Abstract #  Background / Rationale / Motivation #  This section serves as an introduction providing background information and a motivation/rationale for why the specified protocol is useful.</description>
+waku/core-protocol for Waku protocol definitions (e.g. store, relay, light push), waku/application for applications built on top of Waku protocol (e.g. eth-dm, toy-chat), Abstract # Background / Rationale / Motivation # This section serves as an introduction providing background information and a motivation/rationale for why the specified protocol is useful.</description>
     </item>
     
   </channel>

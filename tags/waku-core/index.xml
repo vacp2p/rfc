@@ -22,7 +22,7 @@
       
       <guid>https://rfc.vac.dev/spec/12/</guid>
       <description>WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
-Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering # Protocol identifier*: /vac/waku/filter/2.0.0-beta1
 Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.</description>
     </item>
     
@@ -34,7 +34,7 @@ Content filtering is a way to do message-based filtering. Currently the only con
       <guid>https://rfc.vac.dev/spec/13/</guid>
       <description>This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
 Protocol identifier*: /vac/waku/store/2.0.0-beta4
-Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.</description>
+Design Requirements # Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.</description>
     </item>
     
     <item>
@@ -44,8 +44,8 @@ Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-S
       
       <guid>https://rfc.vac.dev/spec/15/</guid>
       <description>A bridge between Waku v1 and Waku v2.
-Bridge #  A bridge requires supporting both Waku versions:
- Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols  Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
+Bridge # A bridge requires supporting both Waku versions:
+Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
 Publishing such packet will require the creation of a new Message with a new WakuMessage as data field.</description>
     </item>
     
@@ -55,9 +55,9 @@ Publishing such packet will require the creation of a new Message with a new Wak
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/16/</guid>
-      <description>Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
-Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
-{ &amp;#34;jsonrpc&amp;#34;:&amp;#34;2.0&amp;#34;, &amp;#34;method&amp;#34;:&amp;#34;get_waku_v2_debug_info&amp;#34;, &amp;#34;params&amp;#34;:[], &amp;#34;id&amp;#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.</description>
+      <description>Introduction # This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &amp;#34;jsonrpc&amp;#34;:&amp;#34;2.0&amp;#34;, &amp;#34;method&amp;#34;:&amp;#34;get_waku_v2_debug_info&amp;#34;, &amp;#34;params&amp;#34;:[], &amp;#34;id&amp;#34;:1 } Fields # Field Description jsonrpc Contains the used JSON-RPC version (Default: 2.0) method Contains the JSON-RPC method that is being called params An array of parameters for the request id The request ID Types # In this specification, the primitive types Boolean, String, Number and Null, as well as the structured types Array and Object, are to be interpreted according to the JSON-RPC specification.</description>
     </item>
     
     <item>
@@ -68,7 +68,7 @@ Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. Th
       <guid>https://rfc.vac.dev/spec/17/</guid>
       <description>The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
-Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.</description>
+Motivation # In open and anonymous p2p messaging networks, one big problem is spam resistance.</description>
     </item>
     
     <item>
@@ -77,10 +77,10 @@ Motivation #  In open and anonymous p2p messaging networks, one big problem is s
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/36/</guid>
-      <description>Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+      <description>Introduction # Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
 An alternative is to link existing Waku implementation as a static or dynamic library in their application.
 This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
-Design requirements #  The API should be generic enough, so:</description>
+Design requirements # The API should be generic enough, so:</description>
     </item>
     
   </channel>

@@ -2,18 +2,18 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+<meta name="description" content="Introduction # Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
 An alternative is to link existing Waku implementation as a static or dynamic library in their application.
 This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
-Design requirements #  The API should be generic enough, so:">
+Design requirements # The API should be generic enough, so:">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="36/WAKU2-BINDINGS-API" />
-<meta property="og:description" content="Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+<meta property="og:description" content="Introduction # Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
 An alternative is to link existing Waku implementation as a static or dynamic library in their application.
 This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
-Design requirements #  The API should be generic enough, so:" />
+Design requirements # The API should be generic enough, so:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/36/" /><meta property="article:section" content="docs" />
 
@@ -23,7 +23,7 @@ Design requirements #  The API should be generic enough, so:" />
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -135,7 +135,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -267,10 +267,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="36waku2-bindings-api">36/WAKU2-BINDINGS-API</h1>
+  <h1 id="36waku2-bindings-api">
+  36/WAKU2-BINDINGS-API
+  <a class="anchor" href="#36waku2-bindings-api">#</a>
+</h1>
 
   
-      <h1 id="waku-v2-c-bindings-api">Waku v2 C Bindings API</h1>
+      <h1 id="waku-v2-c-bindings-api">
+  Waku v2 C Bindings API
+  <a class="anchor" href="#waku-v2-c-bindings-api">#</a>
+</h1>
 
   
 
@@ -329,30 +335,30 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
 <p>All the API functions return a <code>JsonResponse</code> unless specified otherwise.
 <code>JsonResponse</code> is a <code>char *</code> whose format depends on whether the function was executed successfully or not.</p>
 <p>On failure:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">error</span>: <span style="color:#66d9ef">string</span>;
-}
-</code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;the error message&#34;</span>
-}
-</code></pre></div><p>On success:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">result</span>: <span style="color:#66d9ef">any</span>
-}
-</code></pre></div><p>The type of the <code>result</code> object depends on the function it was returned by.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">error</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;the error message&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>On success:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">result</span>: <span style="color:#66d9ef">any</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The type of the <code>result</code> object depends on the function it was returned by.</p>
 <h3 id="jsonmessage-type">
   <code>JsonMessage</code> type
   <a class="anchor" href="#jsonmessage-type">#</a>
 </h3>
 <p>A Waku Message in JSON Format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">payload</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">contentTopic</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">version</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">timestamp</span>: <span style="color:#66d9ef">number</span>;
-}
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">payload</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">contentTopic</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">version</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">timestamp</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>payload</code>: base64 encoded payload, <a href="#extern-char-waku_utils_base64_encodechar-data"><code>waku_utils_base64_encode</code></a> can be used for this.</li>
 <li><code>contentTopic</code>: The content topic to be set on the message.</li>
@@ -364,13 +370,13 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <a class="anchor" href="#decodedpayload-type">#</a>
 </h3>
 <p>A payload once decoded, used when a received Waku Message is encrypted:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">DecodedPayload</span> {
-    <span style="color:#a6e22e">pubkey?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">signature?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">data</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">padding</span>: <span style="color:#66d9ef">string</span>;
-  }
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">DecodedPayload</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pubkey?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">signature?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">data</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">padding</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>pubkey</code>: Public key that signed the message (optional), hex encoded with <code>0x</code> prefix,</li>
 <li><code>signature</code>: Message signature (optional), hex encoded with <code>0x</code> prefix,</li>
@@ -382,11 +388,11 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <a class="anchor" href="#filtersubscription-type">#</a>
 </h3>
 <p>The criteria to create subscription to a light node in JSON Format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">contentFilters</span>: <span style="color:#66d9ef">ContentFilter</span>[];
-    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string?</span>;
-}
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">contentFilters</span>: <span style="color:#66d9ef">ContentFilter</span>[];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string?</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>contentFilters</code>: Array of <a href="#contentfilter-type"><code>ContentFilter</code></a> being subscribed to / unsubscribed from.</li>
 <li><code>topic</code>: Optional pubsub topic.</li>
@@ -395,10 +401,10 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <code>ContentFilter</code> type
   <a class="anchor" href="#contentfilter-type">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">contentTopic</span>: <span style="color:#66d9ef">string</span>;
-}
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">contentTopic</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>contentTopic</code>: The content topic of a Waku message.</li>
 </ul>
@@ -407,14 +413,14 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <a class="anchor" href="#storequery-type">#</a>
 </h3>
 <p>Criteria used to retrieve historical messages</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">StoreQuery</span> {
-    <span style="color:#a6e22e">pubsubTopic?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">contentFilters?</span>: <span style="color:#66d9ef">ContentFilter</span>[];
-    <span style="color:#a6e22e">startTime?</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">endTime?</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">pagingOptions?</span>: <span style="color:#66d9ef">PagingOptions</span>
-  }
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">StoreQuery</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pubsubTopic?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">contentFilters?</span>: <span style="color:#66d9ef">ContentFilter</span>[];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">startTime?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">endTime?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pagingOptions?</span>: <span style="color:#66d9ef">PagingOptions</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>pubsubTopic</code>: The pubsub topic on which messages are published.</li>
 <li><code>contentFilters</code>: Array of <a href="#contentfilter-type"><code>ContentFilter</code></a> to query for historical messages,</li>
@@ -427,11 +433,11 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <a class="anchor" href="#storeresponse-type">#</a>
 </h3>
 <p>The response received after doing a query to a store node:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">StoreResponse</span> {
-    <span style="color:#a6e22e">messages</span>: <span style="color:#66d9ef">JsonMessage</span>[];
-    <span style="color:#a6e22e">pagingOptions?</span>: <span style="color:#66d9ef">PagingOptions</span>;
-  }
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">StoreResponse</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">messages</span>: <span style="color:#66d9ef">JsonMessage</span>[];
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pagingOptions?</span>: <span style="color:#66d9ef">PagingOptions</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>messages</code>: Array of retrieved historical messages in <a href="#jsonmessage-type"><code>JsonMessage</code></a> format.</li>
 <li><code>pagingOption</code>: Paging information in <a href="#pagingoptions-type"><code>PagingOptions</code></a> format from which to resume further historical queries</li>
@@ -440,12 +446,12 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <code>PagingOptions</code> type
   <a class="anchor" href="#pagingoptions-type">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">PagingOptions</span> {
-    <span style="color:#a6e22e">pageSize</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">cursor?</span>: <span style="color:#66d9ef">Index</span>;
-    <span style="color:#a6e22e">forward</span>: <span style="color:#66d9ef">bool</span>;
-  }
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">PagingOptions</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pageSize</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">cursor?</span>: <span style="color:#66d9ef">Index</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">forward</span>: <span style="color:#66d9ef">bool</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>pageSize</code>: Number of messages to retrieve per page.</li>
 <li><code>cursor</code>: Message Index from which to perform pagination. If not included and forward is set to true, paging will be performed from the beginning of the list. If not included and forward is set to false, paging will be performed from the end of the list.</li>
@@ -455,13 +461,13 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <code>Index</code> type
   <a class="anchor" href="#index-type">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Index</span> {
-    <span style="color:#a6e22e">digest</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">receiverTime</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">senderTime</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string</span>;
-  }
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">Index</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">digest</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">receiverTime</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">senderTime</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>digest</code>: Hash of the message at this <a href="#index-type"><code>Index</code></a>.</li>
 <li><code>receiverTime</code>: UNIX timestamp in nanoseconds at which the message at this <a href="#index-type"><code>Index</code></a> was received.</li>
@@ -479,31 +485,31 @@ When an event is emitted, this callback will be triggered receiving a JSON strin
   <code>JsonSignal</code> type
   <a class="anchor" href="#jsonsignal-type">#</a>
 </h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#66d9ef">type</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">event</span>: <span style="color:#66d9ef">any</span>;
-}
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">type</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">event</span>: <span style="color:#66d9ef">any</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
 <ul>
 <li><code>type</code>: Type of signal being emitted. Currently, only <code>message</code> is available.</li>
 <li><code>event</code>: Format depends on the type of signal.</li>
 </ul>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
-  <span style="color:#f92672">&#34;event&#34;</span>: {
-    <span style="color:#f92672">&#34;subscriptionId&#34;</span>: <span style="color:#ae81ff">1</span>,
-    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
-    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
-    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
-      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
-      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
-      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
-      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
-    }
-  }
-}
-</code></pre></div><table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;event&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;subscriptionId&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><table>
 <thead>
 <tr>
 <th style="text-align:left"><code>type</code></th>
@@ -522,12 +528,12 @@ When an event is emitted, this callback will be triggered receiving a JSON strin
   <a class="anchor" href="#jsonmessageevent-type">#</a>
 </h3>
 <p>Type of <code>event</code> field for a <code>message</code> event:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts">{
-    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">messageId</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">wakuMessage</span>: <span style="color:#66d9ef">JsonMessage</span>;
-}
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">pubsubTopic</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">messageId</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">wakuMessage</span>: <span style="color:#66d9ef">JsonMessage</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
 <li><code>pubsubTopic</code>: The pubsub topic on which the message was received.</li>
 <li><code>messageId</code>: The message id.</li>
 <li><code>wakuMessage</code>: The message in <a href="#jsonmessage-type"><code>JsonMessage</code></a> format.</li>
@@ -552,17 +558,17 @@ The function signature for the callback should be <code>void myCallback(char* js
   <a class="anchor" href="#jsonconfig-type">#</a>
 </h3>
 <p>Type holding a node configuration:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">JsonConfig</span> {
-    <span style="color:#a6e22e">host?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">port?</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">advertiseAddr?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">nodeKey?</span>: <span style="color:#66d9ef">string</span>;
-    <span style="color:#a6e22e">keepAliveInterval?</span>: <span style="color:#66d9ef">number</span>;
-    <span style="color:#a6e22e">relay?</span>: <span style="color:#66d9ef">boolean</span>;
-    <span style="color:#a6e22e">minPeersToPublish?</span>: <span style="color:#66d9ef">number</span>
-    <span style="color:#a6e22e">filter?</span>: <span style="color:#66d9ef">boolean</span>;
-}
-</code></pre></div><p>Fields:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">JsonConfig</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">host?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">port?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">advertiseAddr?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">nodeKey?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">keepAliveInterval?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">relay?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">minPeersToPublish?</span>: <span style="color:#66d9ef">number</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">filter?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
 <p>All fields are optional.
 If a key is <code>undefined</code>, or <code>null</code>, a default value will be set.</p>
 <ul>
@@ -587,16 +593,16 @@ Default <code>0</code>.</li>
 Default <code>false</code>.</li>
 </ul>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
-  <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">60000</span>,
-  <span style="color:#f92672">&#34;advertiseAddr&#34;</span>: <span style="color:#e6db74">&#34;1.2.3.4&#34;</span>,
-  <span style="color:#f92672">&#34;nodeKey&#34;</span>: <span style="color:#e6db74">&#34;0x123...567&#34;</span>,
-  <span style="color:#f92672">&#34;keepAliveInterval&#34;</span>: <span style="color:#ae81ff">20</span>,
-  <span style="color:#f92672">&#34;relay&#34;</span>: <span style="color:#66d9ef">true</span>,
-  <span style="color:#f92672">&#34;minPeersToPublish&#34;</span>: <span style="color:#ae81ff">0</span>
-}
-</code></pre></div><h3 id="extern-char-waku_newchar-jsonconfig">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">60000</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;advertiseAddr&#34;</span>: <span style="color:#e6db74">&#34;1.2.3.4&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;nodeKey&#34;</span>: <span style="color:#e6db74">&#34;0x123...567&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;keepAliveInterval&#34;</span>: <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;relay&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;minPeersToPublish&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_newchar-jsonconfig">
   <code>extern char* waku_new(char* jsonConfig)</code>
   <a class="anchor" href="#extern-char-waku_newchar-jsonconfig">#</a>
 </h3>
@@ -611,10 +617,10 @@ It can be <code>NULL</code> to use defaults.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_start">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_start">
   <code>extern char* waku_start()</code>
   <a class="anchor" href="#extern-char-waku_start">#</a>
 </h3>
@@ -623,10 +629,10 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_stop">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_stop">
   <code>extern char* waku_stop()</code>
   <a class="anchor" href="#extern-char-waku_stop">#</a>
 </h3>
@@ -635,10 +641,10 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_peerid">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_peerid">
   <code>extern char* waku_peerid()</code>
   <a class="anchor" href="#extern-char-waku_peerid">#</a>
 </h3>
@@ -647,10 +653,10 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains the peer ID as a <code>string</code> (base58 encoded).</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#e6db74">&#34;QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP&#34;</span>
-}
-</code></pre></div><h3 id="extern-char-waku_listen_addresses">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#e6db74">&#34;QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_listen_addresses">
   <code>extern char* waku_listen_addresses()</code>
   <a class="anchor" href="#extern-char-waku_listen_addresses">#</a>
 </h3>
@@ -660,14 +666,14 @@ If the execution is successful, the <code>result</code> field contains the peer 
 If the execution is successful, the <code>result</code> field contains an array of multiaddresses.
 The multiaddresses are <code>string</code>s.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: [
-    <span style="color:#e6db74">&#34;/ip4/127.0.0.1/tcp/30303&#34;</span>,
-    <span style="color:#e6db74">&#34;/ip4/1.2.3.4/tcp/30303&#34;</span>,
-    <span style="color:#e6db74">&#34;/dns4/waku.node.example/tcp/8000/wss&#34;</span>
-  ]
-}
-</code></pre></div><h2 id="connecting-to-peers">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/ip4/127.0.0.1/tcp/30303&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/ip4/1.2.3.4/tcp/30303&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/dns4/waku.node.example/tcp/8000/wss&#34;</span>
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="connecting-to-peers">
   Connecting to peers
   <a class="anchor" href="#connecting-to-peers">#</a>
 </h2>
@@ -685,10 +691,10 @@ The multiaddresses are <code>string</code>s.</p>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains the peer ID as a base58 <code>string</code> of the peer that was added.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#e6db74">&#34;QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP&#34;</span>
-}
-</code></pre></div><h3 id="extern-char-waku_connectchar-address-int-timeoutms">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#e6db74">&#34;QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_connectchar-address-int-timeoutms">
   <code>extern char* waku_connect(char* address, int timeoutMs)</code>
   <a class="anchor" href="#extern-char-waku_connectchar-address-int-timeoutms">#</a>
 </h3>
@@ -705,10 +711,10 @@ Use <code>0</code> for no timeout.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_connect_peeridchar-peerid-int-timeoutms">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_connect_peeridchar-peerid-int-timeoutms">
   <code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code>
   <a class="anchor" href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms">#</a>
 </h3>
@@ -726,10 +732,10 @@ Use <code>0</code> for no timeout.</p>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_disconnectchar-peerid">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_disconnectchar-peerid">
   <code>extern char* waku_disconnect(char* peerId)</code>
   <a class="anchor" href="#extern-char-waku_disconnectchar-peerid">#</a>
 </h3>
@@ -742,10 +748,10 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_peer_count">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_peer_count">
   <code>extern char* waku_peer_count()</code>
   <a class="anchor" href="#extern-char-waku_peer_count">#</a>
 </h3>
@@ -754,10 +760,10 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains an <code>integer</code> which represents the number of connected peers.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#ae81ff">0</span>
-}
-</code></pre></div><h3 id="extern-char-waku_peers">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_peers">
   <code>extern char* waku_peers()</code>
   <a class="anchor" href="#extern-char-waku_peers">#</a>
 </h3>
@@ -765,23 +771,23 @@ If the execution is successful, the <code>result</code> field contains an <code>
 <p><strong>Returns</strong></p>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a> containing a list of peers.
 The list of peers has this format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: [
-    {
-      <span style="color:#f92672">&#34;peerID&#34;</span>: <span style="color:#e6db74">&#34;16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47RedcBafeDCBA&#34;</span>,
-      <span style="color:#f92672">&#34;protocols&#34;</span>: [
-        <span style="color:#e6db74">&#34;/ipfs/id/1.0.0&#34;</span>,
-        <span style="color:#e6db74">&#34;/vac/waku/relay/2.0.0&#34;</span>,
-        <span style="color:#e6db74">&#34;/ipfs/ping/1.0.0&#34;</span>
-      ],
-      <span style="color:#f92672">&#34;addrs&#34;</span>: [
-        <span style="color:#e6db74">&#34;/ip4/1.2.3.4/tcp/30303&#34;</span>
-      ],
-      <span style="color:#f92672">&#34;connected&#34;</span>: <span style="color:#66d9ef">true</span>
-    }
-  ]
-}
-</code></pre></div><h2 id="waku-relay">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: [
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;peerID&#34;</span>: <span style="color:#e6db74">&#34;16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47RedcBafeDCBA&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;protocols&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;/ipfs/id/1.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;/vac/waku/relay/2.0.0&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;/ipfs/ping/1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;addrs&#34;</span>: [
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;/ip4/1.2.3.4/tcp/30303&#34;</span>
+</span></span><span style="display:flex;"><span>      ],
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;connected&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="waku-relay">
   Waku Relay
   <a class="anchor" href="#waku-relay">#</a>
 </h2>
@@ -900,10 +906,10 @@ If <code>NULL</code>, it verifies the number of peers in the default pubsub topi
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains a <code>boolean</code> indicating whether there are enough peers.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h3 id="extern-char-waku_relay_subscribechar-topic">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_relay_subscribechar-topic">
   <code>extern char* waku_relay_subscribe(char* topic)</code>
   <a class="anchor" href="#extern-char-waku_relay_subscribechar-topic">#</a>
 </h3>
@@ -917,28 +923,28 @@ If <code>NULL</code>, it subscribes to the default pubsub topic.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><p><strong>Events</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Events</strong></p>
 <p>When a message is received, a ``&ldquo;message&rdquo;<code> event</code> is emitted containing the message, pubsub topic, and node ID in which
 the message was received.</p>
 <p>The <code>event</code> type is <a href="#jsonmessageevent-type"><code>JsonMessageEvent</code></a>.</p>
 <p>For Example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
-  <span style="color:#f92672">&#34;event&#34;</span>: {
-    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
-    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
-    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
-      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
-      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
-      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
-      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
-    }
-  }
-}
-</code></pre></div><h3 id="extern-char-waku_relay_unsubscribechar-topic">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;event&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_relay_unsubscribechar-topic">
   <code>extern char* waku_relay_unsubscribe(char* topic)</code>
   <a class="anchor" href="#extern-char-waku_relay_unsubscribechar-topic">#</a>
 </h3>
@@ -953,10 +959,10 @@ If <code>NULL</code>, unsubscribes from the default pubsub topic.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h2 id="waku-filter">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="waku-filter">
   Waku Filter
   <a class="anchor" href="#waku-filter">#</a>
 </h2>
@@ -982,28 +988,28 @@ Use <code>0</code> for no timeout.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><p><strong>Events</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>Events</strong></p>
 <p>When a message is received, a ``&ldquo;message&rdquo;<code> event</code> is emitted containing the message, pubsub topic, and node ID in which
 the message was received.</p>
 <p>The <code>event</code> type is <a href="#jsonmessageevent-type"><code>JsonMessageEvent</code></a>.</p>
 <p>For Example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
-  <span style="color:#f92672">&#34;event&#34;</span>: {
-    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
-    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
-    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
-      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
-      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
-      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
-      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
-    }
-  }
-}
-</code></pre></div><h3 id="extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;type&#34;</span>: <span style="color:#e6db74">&#34;message&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;event&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pubsubTopic&#34;</span>: <span style="color:#e6db74">&#34;/waku/2/default-waku/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;messageId&#34;</span>: <span style="color:#e6db74">&#34;0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;wakuMessage&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;TODO&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;contentTopic&#34;</span>: <span style="color:#e6db74">&#34;/my-app/1/notification/proto&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;version&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1647826358000000000</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms">
   <code>extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)</code>
   <a class="anchor" href="#extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms">#</a>
 </h3>
@@ -1020,10 +1026,10 @@ Use <code>0</code> for no timeout.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-}
-</code></pre></div><h2 id="waku-lightpush">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="waku-lightpush">
   Waku Lightpush
   <a class="anchor" href="#waku-lightpush">#</a>
 </h2>
@@ -1151,15 +1157,15 @@ If the execution is successful, the <code>result</code> field contains a <a href
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains the decoded payload as a <a href="#decodedpayload-type"><code>DecodedPayload</code></a>.
 An <code>error</code> message otherwise.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: {
-    <span style="color:#f92672">&#34;pubkey&#34;</span>: <span style="color:#e6db74">&#34;0x......&#34;</span>,
-    <span style="color:#f92672">&#34;signature&#34;</span>: <span style="color:#e6db74">&#34;0x....&#34;</span>,
-    <span style="color:#f92672">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>,
-    <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>
-  }
-}
-</code></pre></div><h3 id="extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pubkey&#34;</span>: <span style="color:#e6db74">&#34;0x......&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;signature&#34;</span>: <span style="color:#e6db74">&#34;0x....&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey">
   <code>extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)</code>
   <a class="anchor" href="#extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey">#</a>
 </h3>
@@ -1174,15 +1180,15 @@ An <code>error</code> message otherwise.</p>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains the decoded payload as a <a href="#decodedpayload-type"><code>DecodedPayload</code></a>.
 An <code>error</code> message otherwise.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: {
-    <span style="color:#f92672">&#34;pubkey&#34;</span>: <span style="color:#e6db74">&#34;0x......&#34;</span>,
-    <span style="color:#f92672">&#34;signature&#34;</span>: <span style="color:#e6db74">&#34;0x....&#34;</span>,
-    <span style="color:#f92672">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>,
-    <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>
-  }
-}
-</code></pre></div><h2 id="dns-discovery">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;pubkey&#34;</span>: <span style="color:#e6db74">&#34;0x......&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;signature&#34;</span>: <span style="color:#e6db74">&#34;0x....&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;data&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;...&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="dns-discovery">
   DNS Discovery
   <a class="anchor" href="#dns-discovery">#</a>
 </h2>
@@ -1205,14 +1211,14 @@ Use <code>0</code> for no timeout.</li>
 <p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field contains an array with multiaddresses.
 An <code>error</code> message otherwise.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;result&#34;</span>: [
-    <span style="color:#e6db74">&#34;/ip4/134.209.139.210/tcp/30303/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ&#34;</span>,
-    <span style="color:#e6db74">&#34;/ip4/104.154.239.128/tcp/30303/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS&#34;</span>,
-    <span style="color:#e6db74">&#34;/ip4/47.242.210.73/tcp/30303/p2p/16Uiu2HAkvWiyFsgRhuJEb9JfjYxEkoHLgnUQmr1N5mKWnYjxYRVm&#34;</span>
-  ]
-}
-</code></pre></div><h2 id="utils">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/ip4/134.209.139.210/tcp/30303/p2p/16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/ip4/104.154.239.128/tcp/30303/p2p/16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47Rxx5hw3q4YjS&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/ip4/47.242.210.73/tcp/30303/p2p/16Uiu2HAkvWiyFsgRhuJEb9JfjYxEkoHLgnUQmr1N5mKWnYjxYRVm&#34;</span>
+</span></span><span style="display:flex;"><span>  ]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="utils">
   Utils
   <a class="anchor" href="#utils">#</a>
 </h2>

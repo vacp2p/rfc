@@ -2,15 +2,15 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="This spec is a proposition of voting on community featuring over waku v2.
-Overview #  When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
+Overview # When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
 Rules of featuring: - Given community can&rsquo;t be featured twice in a row. - Only one vote per user per community (single user can vote on multiple communities) - Voting will be done off-chain - If community hasn&rsquo;t been featured votes for given community are still valid for the next 4 weeks">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="28/STATUS-FEATURING" />
 <meta property="og:description" content="This spec is a proposition of voting on community featuring over waku v2.
-Overview #  When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
+Overview # When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
 Rules of featuring: - Given community can&rsquo;t be featured twice in a row. - Only one vote per user per community (single user can vote on multiple communities) - Voting will be done off-chain - If community hasn&rsquo;t been featured votes for given community are still valid for the next 4 weeks" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/28/" /><meta property="article:section" content="docs" />
@@ -21,7 +21,7 @@ Rules of featuring: - Given community can&rsquo;t be featured twice in a row. - 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -174,10 +174,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="28status-featuring">28/STATUS-FEATURING</h1>
+  <h1 id="28status-featuring">
+  28/STATUS-FEATURING
+  <a class="anchor" href="#28status-featuring">#</a>
+</h1>
 
   
-      <h1 id="status-community-featuring-using-waku-v2">Status community featuring using waku v2</h1>
+      <h1 id="status-community-featuring-using-waku-v2">
+  Status community featuring using waku v2
+  <a class="anchor" href="#status-community-featuring-using-waku-v2">#</a>
+</h1>
 
   
 
@@ -212,14 +218,14 @@ Status community curation DApp should provide such a tool.</p>
 </h1>
 <p>Voting for featuring will be done through waku v2.</p>
 <p>Payload of waku message will be :</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FeatureVote</span> <span style="color:#f92672">=</span> {
-    <span style="color:#a6e22e">voter</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// address of a voter
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sntAmount</span>: <span style="color:#66d9ef">BigNumber</span> <span style="color:#75715e">// amount of snt voted on featuring
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">communityPK</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// public key of community
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">timestamp</span>: <span style="color:#66d9ef">number</span> <span style="color:#75715e">// timestamp of message, must match timestamp of wakuMessage
-</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sign</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// cryptographic signature of a transaction (signed fields: voterAddress,sntAmount,communityPK,timestamp)
-</span><span style="color:#75715e"></span>}
-</code></pre></div><p>timestamp is necessary so that votes can&rsquo;t be reused after 4 week period</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">FeatureVote</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">voter</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// address of a voter
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sntAmount</span>: <span style="color:#66d9ef">BigNumber</span> <span style="color:#75715e">// amount of snt voted on featuring
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">communityPK</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// public key of community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">timestamp</span>: <span style="color:#66d9ef">number</span> <span style="color:#75715e">// timestamp of message, must match timestamp of wakuMessage
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sign</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// cryptographic signature of a transaction (signed fields: voterAddress,sntAmount,communityPK,timestamp)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>timestamp is necessary so that votes can&rsquo;t be reused after 4 week period</p>
 <h1 id="counting-votes">
   Counting Votes
   <a class="anchor" href="#counting-votes">#</a>

@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
-Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
-{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.">
+<meta name="description" content="Introduction # This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields # Field Description jsonrpc Contains the used JSON-RPC version (Default: 2.0) method Contains the JSON-RPC method that is being called params An array of parameters for the request id The request ID Types # In this specification, the primitive types Boolean, String, Number and Null, as well as the structured types Array and Object, are to be interpreted according to the JSON-RPC specification.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="16/WAKU2-RPC" />
-<meta property="og:description" content="Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
-Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
-{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2." />
+<meta property="og:description" content="Introduction # This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields # Field Description jsonrpc Contains the used JSON-RPC version (Default: 2.0) method Contains the JSON-RPC method that is being called params An array of parameters for the request id The request ID Types # In this specification, the primitive types Boolean, String, Number and Null, as well as the structured types Array and Object, are to be interpreted according to the JSON-RPC specification." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/16/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +21,7 @@ Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. Th
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -244,10 +244,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="16waku2-rpc">16/WAKU2-RPC</h1>
+  <h1 id="16waku2-rpc">
+  16/WAKU2-RPC
+  <a class="anchor" href="#16waku2-rpc">#</a>
+</h1>
 
   
-      <h1 id="waku-v2-rpc-api">Waku v2 RPC API</h1>
+      <h1 id="waku-v2-rpc-api">
+  Waku v2 RPC API
+  <a class="anchor" href="#waku-v2-rpc-api">#</a>
+</h1>
 
   
 
@@ -277,13 +283,13 @@ https://github.com/alex-shpak/hugo-book
   <a class="anchor" href="#transport">#</a>
 </h2>
 <p>Nodes SHOULD expose an accessible <a href="https://www.jsonrpc.org/specification">JSON-RPC</a> API. The JSON-RPC version SHOULD be <code>2.0</code>. Below is an example request:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
-  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;get_waku_v2_debug_info&#34;</span>,
-  <span style="color:#f92672">&#34;params&#34;</span>:[],
-  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
-}
-</code></pre></div><h3 id="fields">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;get_waku_v2_debug_info&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;params&#34;</span>:[],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="fields">
   Fields
   <a class="anchor" href="#fields">#</a>
 </h3>
@@ -1354,13 +1360,13 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 </h4>
 <p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[&quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}]]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
-  &quot;params&quot;: [
-    &quot;&quot;,
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;method&#34;: &#34;get_waku_v2_store_v1_messages&#34;,
+  &#34;params&#34;: [
+    &#34;&#34;,
     [
-      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+      {&#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;}
     ]
   ]
 }
@@ -1369,35 +1375,35 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-18">#</a>
 </h4>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;result&quot;: {
-    &quot;messages&quot;: [
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;result&#34;: {
+    &#34;messages&#34;: [
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           1
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       },
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           2
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       },
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           3
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       }
     ],
-    &quot;pagingInfo&quot;: null
+    &#34;pagingInfo&#34;: null
   },
-  &quot;error&quot;: null
+  &#34;error&#34;: null
 }
 </code></pre><hr>
 <ol start="2">
@@ -1409,17 +1415,17 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 </h4>
 <p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[ &quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}],{&quot;pageSize&quot;:2,&quot;forward&quot;:false}]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
-  &quot;params&quot;: [
-    &quot;&quot;,
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;method&#34;: &#34;get_waku_v2_store_v1_messages&#34;,
+  &#34;params&#34;: [
+    &#34;&#34;,
     [
-      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+      {&#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;}
     ],
     {
-      &quot;pageSize&quot;: 2,
-      &quot;forward&quot;: false
+      &#34;pageSize&#34;: 2,
+      &#34;forward&#34;: false
     }
   ]
 }
@@ -1428,35 +1434,35 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-19">#</a>
 </h4>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;result&quot;: {
-    &quot;messages&quot;: [
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;result&#34;: {
+    &#34;messages&#34;: [
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           2
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       },
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           3
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       }
     ],
-    &quot;pagingInfo&quot;: {
-      &quot;pageSize&quot;: 2,
-      &quot;cursor&quot;: {
-        &quot;digest&quot;: &quot;abcdef&quot;,
-        &quot;receivedTime&quot;: 1605887187000000000
+    &#34;pagingInfo&#34;: {
+      &#34;pageSize&#34;: 2,
+      &#34;cursor&#34;: {
+        &#34;digest&#34;: &#34;abcdef&#34;,
+        &#34;receivedTime&#34;: 1605887187000000000
       },
-      &quot;forward&quot;: false
+      &#34;forward&#34;: false
     }
   },
-  &quot;error&quot;: null
+  &#34;error&#34;: null
 }
 </code></pre><hr>
 <ol start="3">
@@ -1468,21 +1474,21 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 </h4>
 <p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[ &quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}],{&quot;pageSize&quot;:2,&quot;cursor&quot;:{&quot;digest&quot;:&quot;abcdef&quot;,&quot;receivedTime&quot;:1605887187000000000},&quot;forward&quot;:false}]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
-  &quot;params&quot;: [
-    &quot;&quot;,
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;method&#34;: &#34;get_waku_v2_store_v1_messages&#34;,
+  &#34;params&#34;: [
+    &#34;&#34;,
     [
-      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+      {&#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;}
     ],
     {
-      &quot;pageSize&quot;: 2,
-      &quot;cursor&quot;: {
-        &quot;digest&quot;: &quot;abcdef&quot;,
-        &quot;receivedTime&quot;: 1605887187000000000
+      &#34;pageSize&#34;: 2,
+      &#34;cursor&#34;: {
+        &#34;digest&#34;: &#34;abcdef&#34;,
+        &#34;receivedTime&#34;: 1605887187000000000
       },
-      &quot;forward&quot;: false
+      &#34;forward&#34;: false
     }
   ]
 }
@@ -1491,28 +1497,28 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-20">#</a>
 </h4>
 <pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
-  &quot;jsonrpc&quot;: &quot;2.0&quot;,
-  &quot;id&quot;: &quot;id&quot;,
-  &quot;result&quot;: {
-    &quot;messages&quot;: [
+  &#34;jsonrpc&#34;: &#34;2.0&#34;,
+  &#34;id&#34;: &#34;id&#34;,
+  &#34;result&#34;: {
+    &#34;messages&#34;: [
       {
-        &quot;payload&quot;: [
+        &#34;payload&#34;: [
           1
         ],
-        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
-        &quot;version&quot;: 0
+        &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
+        &#34;version&#34;: 0
       }
     ],
-    &quot;pagingInfo&quot;: {
-      &quot;pageSize&quot;: 2,
-      &quot;cursor&quot;: {
-        &quot;digest&quot;: &quot;123abc&quot;,
-        &quot;receivedTime&quot;: 1605866187000000000
+    &#34;pagingInfo&#34;: {
+      &#34;pageSize&#34;: 2,
+      &#34;cursor&#34;: {
+        &#34;digest&#34;: &#34;123abc&#34;,
+        &#34;receivedTime&#34;: 1605866187000000000
       },
-      &quot;forward&quot;: false
+      &#34;forward&#34;: false
     }
   },
-  &quot;error&quot;: null
+  &#34;error&#34;: null
 }
 </code></pre><h1 id="references">
   References

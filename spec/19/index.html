@@ -2,18 +2,18 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
-Motivation and goals #  Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
+Motivation and goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
 19/WAKU2-LIGHTPUSH is a request/response protocol for this.
-Payloads #  syntax = &#34;proto3&#34;;message PushRequest { string pubsub_topic = 1; WakuMessage message = 2;}message PushResponse { bool is_success = 1; // Error messages, etc  string info = 2;}message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3;}Message relaying #  Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic.">
+Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message relaying # Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="19/WAKU2-LIGHTPUSH" />
 <meta property="og:description" content="Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
-Motivation and goals #  Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
+Motivation and goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
 19/WAKU2-LIGHTPUSH is a request/response protocol for this.
-Payloads #  syntax = &#34;proto3&#34;;message PushRequest { string pubsub_topic = 1; WakuMessage message = 2;}message PushResponse { bool is_success = 1; // Error messages, etc  string info = 2;}message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3;}Message relaying #  Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic." />
+Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message relaying # Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/19/" /><meta property="article:section" content="docs" />
 
@@ -23,7 +23,7 @@ Payloads #  syntax = &#34;proto3&#34;;message PushRequest { string pubsub_topic 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -135,7 +135,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -181,10 +181,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="19waku2-lightpush">19/WAKU2-LIGHTPUSH</h1>
+  <h1 id="19waku2-lightpush">
+  19/WAKU2-LIGHTPUSH
+  <a class="anchor" href="#19waku2-lightpush">#</a>
+</h1>
 
   
-      <h1 id="waku-v2-light-push">Waku v2 Light Push</h1>
+      <h1 id="waku-v2-light-push">
+  Waku v2 Light Push
+  <a class="anchor" href="#waku-v2-light-push">#</a>
+</h1>
 
   
 
@@ -214,25 +220,25 @@ one node).</p>
   Payloads
   <a class="anchor" href="#payloads">#</a>
 </h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushRequest</span> {<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> pubsub_topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    WakuMessage <span style="color:#66d9ef">message</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushResponse</span> {<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">bool</span> is_success <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// Error messages, etc
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">string</span> info <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushRPC</span> {<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> request_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    PushRequest request <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    PushResponse response <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><h2 id="message-relaying">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span>syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushRequest</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> pubsub_topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    WakuMessage <span style="color:#66d9ef">message</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">bool</span> is_success <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// Error messages, etc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">string</span> info <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PushRPC</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> request_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    PushRequest request <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    PushResponse response <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h2 id="message-relaying">
   Message relaying
   <a class="anchor" href="#message-relaying">#</a>
 </h2>

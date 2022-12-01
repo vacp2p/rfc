@@ -2,16 +2,16 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.
-Introduction #  This API is based off the Whisper V6 RPC API.
-Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be accessed.">
+Introduction # This API is based off the Whisper V6 RPC API.
+Wire Protocol # Transport # Nodes SHOULD expose a JSON RPC API that can be accessed. The JSON RPC version SHOULD be 2.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="9/WAKU-RPC" />
 <meta property="og:description" content="This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.
-Introduction #  This API is based off the Whisper V6 RPC API.
-Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be accessed." />
+Introduction # This API is based off the Whisper V6 RPC API.
+Wire Protocol # Transport # Nodes SHOULD expose a JSON RPC API that can be accessed. The JSON RPC version SHOULD be 2." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/9/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +21,7 @@ Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be acc
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -133,7 +133,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -187,10 +187,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="9waku-rpc">9/WAKU-RPC</h1>
+  <h1 id="9waku-rpc">
+  9/WAKU-RPC
+  <a class="anchor" href="#9waku-rpc">#</a>
+</h1>
 
   
-      <h1 id="waku-rpc-api">Waku RPC API</h1>
+      <h1 id="waku-rpc-api">
+  Waku RPC API
+  <a class="anchor" href="#waku-rpc-api">#</a>
+</h1>
 
   
 
@@ -232,13 +238,13 @@ be able to connect to any node implementation. The API described is privileged a
   <a class="anchor" href="#transport">#</a>
 </h3>
 <p>Nodes SHOULD expose a <a href="https://www.jsonrpc.org/specification">JSON RPC</a> API that can be accessed. The JSON RPC version SHOULD be <code>2.0</code>. Below is an example request:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
-  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;waku_version&#34;</span>,
-  <span style="color:#f92672">&#34;params&#34;</span>:[],
-  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
-}
-</code></pre></div><h4 id="fields">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;waku_version&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;params&#34;</span>:[],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="fields">
   Fields
   <a class="anchor" href="#fields">#</a>
 </h4>
@@ -730,25 +736,25 @@ be able to connect to any node implementation. The API described is privileged a
   <a class="anchor" href="#notifications">#</a>
 </h6>
 <p>Notifications received by the client contain a <a href="#message">message</a> matching the filter. Below is an example notification:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#f92672">&#34;jsonrpc&#34;</span>: <span style="color:#e6db74">&#34;2.0&#34;</span>,
-  <span style="color:#f92672">&#34;method&#34;</span>: <span style="color:#e6db74">&#34;waku_subscription&#34;</span>,
-  <span style="color:#f92672">&#34;params&#34;</span>: {
-    <span style="color:#f92672">&#34;subscription&#34;</span>: <span style="color:#e6db74">&#34;02c1f5c953804acee3b68eda6c0afe3f1b4e0bec73c7445e10d45da333616412&#34;</span>,
-    <span style="color:#f92672">&#34;result&#34;</span>: {
-      <span style="color:#f92672">&#34;sig&#34;</span>: <span style="color:#e6db74">&#34;0x0498ac1951b9078a0549c93c3f6088ec7c790032b17580dc3c0c9e900899a48d89eaa27471e3071d2de6a1f48716ecad8b88ee022f4321a7c29b6ffcbee65624ff&#34;</span>,
-      <span style="color:#f92672">&#34;recipientPublicKey&#34;</span>: <span style="color:#66d9ef">null</span>,
-      <span style="color:#f92672">&#34;ttl&#34;</span>: <span style="color:#ae81ff">10</span>,
-      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1498577270</span>,
-      <span style="color:#f92672">&#34;topic&#34;</span>: <span style="color:#e6db74">&#34;0xffaadd11&#34;</span>,
-      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;0xffffffdddddd1122&#34;</span>,
-      <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;0x35d017b66b124dd4c67623ed0e3f23ba68e3428aa500f77aceb0dbf4b63f69ccfc7ae11e39671d7c94f1ed170193aa3e327158dffdd7abb888b3a3cc48f718773dc0a9dcf1a3680d00fe17ecd4e8d5db31eb9a3c8e6e329d181ecb6ab29eb7a2d9889b49201d9923e6fd99f03807b730780a58924870f541a8a97c87533b1362646e5f573dc48382ef1e70fa19788613c9d2334df3b613f6e024cd7aadc67f681fda6b7a84efdea40cb907371cd3735f9326d02854&#34;</span>,
-      <span style="color:#f92672">&#34;pow&#34;</span>: <span style="color:#ae81ff">0.6714754098360656</span>,
-      <span style="color:#f92672">&#34;hash&#34;</span>: <span style="color:#e6db74">&#34;0x17f8066f0540210cf67ef400a8a55bcb32a494a47f91a0d26611c5c1d66f8c57&#34;</span>
-    }
-  }
-}
-</code></pre></div><h4 id="waku_unsubscribe">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;jsonrpc&#34;</span>: <span style="color:#e6db74">&#34;2.0&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;method&#34;</span>: <span style="color:#e6db74">&#34;waku_subscription&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;params&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;subscription&#34;</span>: <span style="color:#e6db74">&#34;02c1f5c953804acee3b68eda6c0afe3f1b4e0bec73c7445e10d45da333616412&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;result&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;sig&#34;</span>: <span style="color:#e6db74">&#34;0x0498ac1951b9078a0549c93c3f6088ec7c790032b17580dc3c0c9e900899a48d89eaa27471e3071d2de6a1f48716ecad8b88ee022f4321a7c29b6ffcbee65624ff&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;recipientPublicKey&#34;</span>: <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;ttl&#34;</span>: <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1498577270</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;topic&#34;</span>: <span style="color:#e6db74">&#34;0xffaadd11&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;0xffffffdddddd1122&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;0x35d017b66b124dd4c67623ed0e3f23ba68e3428aa500f77aceb0dbf4b63f69ccfc7ae11e39671d7c94f1ed170193aa3e327158dffdd7abb888b3a3cc48f718773dc0a9dcf1a3680d00fe17ecd4e8d5db31eb9a3c8e6e329d181ecb6ab29eb7a2d9889b49201d9923e6fd99f03807b730780a58924870f541a8a97c87533b1362646e5f573dc48382ef1e70fa19788613c9d2334df3b613f6e024cd7aadc67f681fda6b7a84efdea40cb907371cd3735f9326d02854&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;pow&#34;</span>: <span style="color:#ae81ff">0.6714754098360656</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;hash&#34;</span>: <span style="color:#e6db74">&#34;0x17f8066f0540210cf67ef400a8a55bcb32a494a47f91a0d26611c5c1d66f8c57&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="waku_unsubscribe">
   <code>waku_unsubscribe</code>
   <a class="anchor" href="#waku_unsubscribe">#</a>
 </h4>

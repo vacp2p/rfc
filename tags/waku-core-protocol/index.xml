@@ -12,9 +12,9 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/31/</guid>
-      <description>Abstract #  This RFC describes the usage of the ENR (Ethereum Node Records) format for 10/WAKU2 purposes. The ENR format is defined in EIP-778 [3].
+      <description>Abstract # This RFC describes the usage of the ENR (Ethereum Node Records) format for 10/WAKU2 purposes. The ENR format is defined in EIP-778 [3].
 This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
-Motivation #  EIP-1459 with the usage of ENR has been implemented [1] [2] as a discovery protocol for Waku v2.
+Motivation # EIP-1459 with the usage of ENR has been implemented [1] [2] as a discovery protocol for Waku v2.
 EIP-778 specifies a number of pre-defined keys.</description>
     </item>
     
@@ -35,10 +35,10 @@ Specifically, it adds support to the ChaChaPoly cipher for symmetric authenticat
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/37/</guid>
-      <description>Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+      <description>Introduction # In 35/WAKU2-NOISE we defined how Waku messages&amp;rsquo; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
 Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
 This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
-Preliminaries #  We assume that two users, e.</description>
+Preliminaries # We assume that two users, e.</description>
     </item>
     
   </channel>

@@ -2,14 +2,14 @@
 <html lang="en" dir="ltr">
 
 <head>
-  <meta name="generator" content="Hugo 0.92.2" />
+  <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract #  The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
-Motivation #  RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.">
+<meta name="description" content="Abstract # The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
+Motivation # RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="32/RLN" />
-<meta property="og:description" content="Abstract #  The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
-Motivation #  RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners." />
+<meta property="og:description" content="Abstract # The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
+Motivation # RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/32/" /><meta property="article:section" content="docs" />
 
@@ -19,7 +19,7 @@ Motivation #  RLN guarantees a messaging rate is enforced cryptographically whil
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<script defer src="/en.search.min.7c00b5fc16ddddd092e6e64e273bef834d34eb88bd78f440ffef29406d4ff12c.js" integrity="sha256-fAC1/Bbd3dCS5uZOJzvvg00064i9ePRA/&#43;8pQG1P8Sw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -131,7 +131,7 @@ https://github.com/alex-shpak/hugo-book
 
 
 
-  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
 
 
  
@@ -217,10 +217,16 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="32rln">32/RLN</h1>
+  <h1 id="32rln">
+  32/RLN
+  <a class="anchor" href="#32rln">#</a>
+</h1>
 
   
-      <h1 id="rate-limit-nullifier">Rate Limit Nullifier</h1>
+      <h1 id="rate-limit-nullifier">
+  Rate Limit Nullifier
+  <a class="anchor" href="#rate-limit-nullifier">#</a>
+</h1>
 
   
 
@@ -296,7 +302,7 @@ If the financial stake is put in place, the user also risks his stake being take
 <li>centralized registrations, by using a central server</li>
 <li>decentralized registrations, by using a smart contract</li>
 </ul>
-<p>What is important is that the users' identity commitments (explained in section <a href="#user-identity">User Indetity</a>) are stored in a Merkle tree,
+<p>What is important is that the users&rsquo; identity commitments (explained in section <a href="#user-identity">User Indetity</a>) are stored in a Merkle tree,
 and the users can obtain a merkle proof proving that they are part of the group.</p>
 <p>Also depending on the application requirements,
 usually a financial or social stake is introduced.</p>
@@ -804,60 +810,60 @@ The examples are written in <a href="https://www.typescriptlang.org/">typescript
   Generating identity credentials
   <a class="anchor" href="#generating-identity-credentials">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">      <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;@zk-kit/identity&#34;</span>
-
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
-</code></pre></div><h2 id="generating-proof-1">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>      <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;@zk-kit/identity&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
+</span></span></code></pre></div><h2 id="generating-proof-1">
   Generating proof
   <a class="anchor" href="#generating-proof-1">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span>, <span style="color:#a6e22e">MerkleProof</span>, <span style="color:#a6e22e">FullProof</span>, <span style="color:#a6e22e">genSignalHash</span>, <span style="color:#a6e22e">generateMerkleProof</span>, <span style="color:#a6e22e">genExternalNullifier</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
-    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/identity&#39;</span>
-    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">bigintToHex</span>, <span style="color:#a6e22e">hexToBigint</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;bigint-conversion&#39;</span>
-    
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">ZERO_VALUE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">BigInt</span>(<span style="color:#ae81ff">0</span>);
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">TREE_DEPTH</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>;
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES_PER_NODE</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES</span> <span style="color:#f92672">=</span> [...]; <span style="color:#75715e">// leaves should be an array of the leaf values of the membership merkle tree
-</span><span style="color:#75715e"></span>      <span style="color:#75715e">// the identity commitment generated below should be present in the LEAVES array
-</span><span style="color:#75715e"></span>
-      <span style="color:#75715e">// this is for illustrative purposes only. The identityCommitment should be present in the LEAVES array above.
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
-
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signal</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hey&#34;</span>
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signalHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genSignalHash</span>(<span style="color:#a6e22e">signal</span>)
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">epoch</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genExternalNullifier</span>(<span style="color:#e6db74">&#34;test-epoch&#34;</span>)
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">rlnIdentifier</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genIdentifier</span>()
-
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">merkleProof</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">generateMerkleProof</span>(<span style="color:#a6e22e">TREE_DEPTH</span>, <span style="color:#a6e22e">ZERO_VALUE</span>, <span style="color:#a6e22e">LEAVES_PER_NODE</span>, <span style="color:#a6e22e">LEAVES</span>, <span style="color:#a6e22e">identityCommitment</span>)
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">witness</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genWitness</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">merkleProof</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">signal</span>, <span style="color:#a6e22e">rlnIdentifier</span>)
-
-      <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">nullifier</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">calculateOutput</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">BigInt</span>(<span style="color:#a6e22e">epoch</span>), <span style="color:#a6e22e">rlnIdentifier</span>, <span style="color:#a6e22e">signalHash</span>)
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">publicSignals</span> <span style="color:#f92672">=</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">merkleProof</span>.<span style="color:#a6e22e">root</span>, <span style="color:#a6e22e">nullifier</span>, <span style="color:#a6e22e">signalHash</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">rlnIdentifier</span>]
-
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">wasmFilePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln.wasm&#34;</span>) <span style="color:#75715e">// path to the WASM compiled circuit
-</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">finalZkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln_final.zkey&#34;</span>) <span style="color:#75715e">// path to the prover key
-</span><span style="color:#75715e"></span>
-      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">fullProof</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genProof</span>(<span style="color:#a6e22e">witness</span>, <span style="color:#a6e22e">wasmFilePath</span>, <span style="color:#a6e22e">finalZkeyPath</span>)
-</code></pre></div><h2 id="verifiying-proof">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span>, <span style="color:#a6e22e">MerkleProof</span>, <span style="color:#a6e22e">FullProof</span>, <span style="color:#a6e22e">genSignalHash</span>, <span style="color:#a6e22e">generateMerkleProof</span>, <span style="color:#a6e22e">genExternalNullifier</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/identity&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">bigintToHex</span>, <span style="color:#a6e22e">hexToBigint</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;bigint-conversion&#39;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">ZERO_VALUE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">BigInt</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">TREE_DEPTH</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES_PER_NODE</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES</span> <span style="color:#f92672">=</span> [...]; <span style="color:#75715e">// leaves should be an array of the leaf values of the membership merkle tree
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#75715e">// the identity commitment generated below should be present in the LEAVES array
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// this is for illustrative purposes only. The identityCommitment should be present in the LEAVES array above.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signal</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hey&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signalHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genSignalHash</span>(<span style="color:#a6e22e">signal</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">epoch</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genExternalNullifier</span>(<span style="color:#e6db74">&#34;test-epoch&#34;</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">rlnIdentifier</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genIdentifier</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">merkleProof</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">generateMerkleProof</span>(<span style="color:#a6e22e">TREE_DEPTH</span>, <span style="color:#a6e22e">ZERO_VALUE</span>, <span style="color:#a6e22e">LEAVES_PER_NODE</span>, <span style="color:#a6e22e">LEAVES</span>, <span style="color:#a6e22e">identityCommitment</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">witness</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genWitness</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">merkleProof</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">signal</span>, <span style="color:#a6e22e">rlnIdentifier</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">nullifier</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">calculateOutput</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">BigInt</span>(<span style="color:#a6e22e">epoch</span>), <span style="color:#a6e22e">rlnIdentifier</span>, <span style="color:#a6e22e">signalHash</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">publicSignals</span> <span style="color:#f92672">=</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">merkleProof</span>.<span style="color:#a6e22e">root</span>, <span style="color:#a6e22e">nullifier</span>, <span style="color:#a6e22e">signalHash</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">rlnIdentifier</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">wasmFilePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln.wasm&#34;</span>) <span style="color:#75715e">// path to the WASM compiled circuit
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">finalZkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln_final.zkey&#34;</span>) <span style="color:#75715e">// path to the prover key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">fullProof</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genProof</span>(<span style="color:#a6e22e">witness</span>, <span style="color:#a6e22e">wasmFilePath</span>, <span style="color:#a6e22e">finalZkeyPath</span>)
+</span></span></code></pre></div><h2 id="verifiying-proof">
   Verifiying proof
   <a class="anchor" href="#verifiying-proof">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
-    
-    <span style="color:#75715e">// Public signal and the proof are received from the proving party
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// const publicSignals = [y, merkleProof.root, nullifier, signalHash, epoch, rlnIdentifier]
-</span><span style="color:#75715e"></span>    <span style="color:#75715e">// const proof = (await RLN.genProof(witness, wasmFilePath, finalZkeyPath)).proof
-</span><span style="color:#75715e"></span>
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;verification_key.json&#34;</span>) <span style="color:#75715e">// Path to the verifier key
-</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vKey</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">parse</span>(<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">readFileSync</span>(<span style="color:#a6e22e">vkeyPath</span>, <span style="color:#e6db74">&#34;utf-8&#34;</span>)) <span style="color:#75715e">// The verifier key
-</span><span style="color:#75715e"></span>
-    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">verifyProof</span>(<span style="color:#a6e22e">vKey</span>, { <span style="color:#a6e22e">proof</span>: <span style="color:#66d9ef">proof</span>, <span style="color:#a6e22e">publicSignals</span> })
-</code></pre></div><p>For more details please visit the <a href="https://github.com/appliedzkp/zk-kit"><code>zk-kit</code></a> library.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-typescript" data-lang="typescript"><span style="display:flex;"><span>    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Public signal and the proof are received from the proving party
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// const publicSignals = [y, merkleProof.root, nullifier, signalHash, epoch, rlnIdentifier]
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// const proof = (await RLN.genProof(witness, wasmFilePath, finalZkeyPath)).proof
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;verification_key.json&#34;</span>) <span style="color:#75715e">// Path to the verifier key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vKey</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">parse</span>(<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">readFileSync</span>(<span style="color:#a6e22e">vkeyPath</span>, <span style="color:#e6db74">&#34;utf-8&#34;</span>)) <span style="color:#75715e">// The verifier key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">verifyProof</span>(<span style="color:#a6e22e">vKey</span>, { <span style="color:#a6e22e">proof</span>: <span style="color:#66d9ef">proof</span>, <span style="color:#a6e22e">publicSignals</span> })
+</span></span></code></pre></div><p>For more details please visit the <a href="https://github.com/appliedzkp/zk-kit"><code>zk-kit</code></a> library.</p>
 <h1 id="copyright">
   Copyright
   <a class="anchor" href="#copyright">#</a>
