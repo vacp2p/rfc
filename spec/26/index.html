@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification describes how Waku provides confidentiality, authenticity, and integrity, as well as some form of unlinkability. Specifically, it describes how encryption, decryption and signing works in 6/WAKU1 and in 10/WAKU2 with 14/WAKU-MESSAGE version 1.
+This specification effectively replaces 7/WAKU-DATA as well as 6/WAKU1 Payload encryption but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
+Large sections of the specification originate from EIP-627: Whisper spec as well from RLPx Transport Protocol spec (ECIES encryption) with some modifications.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="26/WAKU-PAYLOAD" />
+<meta property="og:description" content="This specification describes how Waku provides confidentiality, authenticity, and integrity, as well as some form of unlinkability. Specifically, it describes how encryption, decryption and signing works in 6/WAKU1 and in 10/WAKU2 with 14/WAKU-MESSAGE version 1.
+This specification effectively replaces 7/WAKU-DATA as well as 6/WAKU1 Payload encryption but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
+Large sections of the specification originate from EIP-627: Whisper spec as well from RLPx Transport Protocol spec (ECIES encryption) with some modifications." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/26/" /><meta property="article:section" content="docs" />
+
+
+
+<title>26/WAKU-PAYLOAD | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/"class=active>26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>26/WAKU-PAYLOAD</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#cryptographic-primitives">Cryptographic primitives</a></li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#abnf">ABNF</a></li>
+        <li><a href="#signature">Signature</a></li>
+        <li><a href="#encryption">Encryption</a></li>
+        <li><a href="#padding">Padding</a></li>
+        <li><a href="#decoding-a-message">Decoding a message</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="26waku-payload">26/WAKU-PAYLOAD</h1>
+
+  
+      <h1 id="waku-message-payload-encryption">Waku Message Payload Encryption</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thoren <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+  </ul><p>This specification describes how Waku provides confidentiality, authenticity, and integrity, as well as some form of unlinkability.
+Specifically, it describes how encryption, decryption and signing works in <a href="/spec/6">6/WAKU1</a> and in <a href="/spec/10">10/WAKU2</a> with <a href="/spec/14/#version1">14/WAKU-MESSAGE version 1</a>.</p>
+<p>This specification effectively replaces <a href="/spec/7">7/WAKU-DATA</a> as well as <a href="/spec/6/#payload-encryption">6/WAKU1 Payload encryption</a> but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.</p>
+<p>Large sections of the specification originate from <a href="https://eips.ethereum.org/EIPS/eip-627">EIP-627: Whisper spec</a> as well from <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption">RLPx Transport Protocol spec (ECIES encryption)</a> with some modifications.</p>
+<h2 id="design-requirements">
+  Design requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h2>
+<ul>
+<li><em>Confidentiality</em>: The adversary should not be able to learn what data is being sent from one Waku node to one or several other Waku nodes.</li>
+<li><em>Authenticity</em>: The adversary should not be able to cause Waku endpoint to accept data from any third party as though it came from the other endpoint.</li>
+<li><em>Integrity</em>: The adversary should not be able to cause a Waku endpoint to accept data that has been tampered with.</li>
+</ul>
+<p>Notable, <em>forward secrecy</em> is not provided for at this layer.
+If this property is desired, a more fully featured secure communication protocol can be used on top, such as <a href="https://specs.status.im/spec/5">Status 5/SECURE-TRANSPORT</a>.</p>
+<p>It also provides some form of <em>unlinkability</em> since:</p>
+<ul>
+<li>only participants who are able to decrypt a message can see its signature</li>
+<li>payload are padded to a fixed length</li>
+</ul>
+<h2 id="cryptographic-primitives">
+  Cryptographic primitives
+  <a class="anchor" href="#cryptographic-primitives">#</a>
+</h2>
+<ul>
+<li>AES-256-GCM (for symmetric encryption)</li>
+<li>ECIES</li>
+<li>ECDSA</li>
+<li>KECCAK-256</li>
+</ul>
+<p>ECIES is using the following cryptosystem:</p>
+<ul>
+<li>Curve: secp256k1</li>
+<li>KDF: NIST SP 800-56 Concatenation Key Derivation Function, with SHA-256 option</li>
+<li>MAC: HMAC with SHA-256</li>
+<li>AES: AES-128-CTR</li>
+</ul>
+<h2 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h2>
+<p>For 6/WAKU1, the <code>data</code> field is used in the <code>waku envelope</code>, and the field MAY contain the encrypted payload.</p>
+<p>For 10/WAKU2, the <code>payload</code> field is used in <code>WakuMessage</code> and MAY contain the encrypted payload.</p>
+<p>The fields that are concatenated and encrypted as part of the <code>data</code> (Waku v1) / <code>payload</code> (Waku v2) field are:</p>
+<ul>
+<li>flags</li>
+<li>payload-length</li>
+<li>payload</li>
+<li>padding</li>
+<li>signature</li>
+</ul>
+<h3 id="abnf">
+  ABNF
+  <a class="anchor" href="#abnf">#</a>
+</h3>
+<p>Using <a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a> we have the following format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; 1 byte; first two bits contain the size of payload-length field,</span>
+<span style="color:#75715e">; third bit indicates whether the signature is present.</span>
+<span style="color:#a6e22e">flags</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; contains the size of payload.</span>
+<span style="color:#a6e22e">payload-length</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">4*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; byte array of arbitrary size (may be zero).</span>
+<span style="color:#a6e22e">payload</span>         <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; byte array of arbitrary size (may be zero).</span>
+<span style="color:#a6e22e">padding</span>         <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; 65 bytes, if present.</span>
+<span style="color:#a6e22e">signature</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">65</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">data</span>            <span style="color:#f92672">=</span> <span style="color:#a6e22e">flags</span> <span style="color:#a6e22e">payload-length</span> <span style="color:#a6e22e">payload</span> <span style="color:#a6e22e">padding</span> [<span style="color:#a6e22e">signature</span>]
+
+<span style="color:#75715e">; This field is called payload in Waku v2</span>
+<span style="color:#a6e22e">payload</span>         <span style="color:#f92672">=</span> <span style="color:#a6e22e">data</span>
+</code></pre></div><h3 id="signature">
+  Signature
+  <a class="anchor" href="#signature">#</a>
+</h3>
+<p>Those unable to decrypt the payload/data are also unable to access the signature.
+The signature, if provided, is the ECDSA signature of the Keccak-256 hash of the unencrypted data using the secret key of the originator identity.
+The signature is serialized as the concatenation of the <code>r</code>, <code>s</code> and <code>v</code> parameters of the SECP-256k1 ECDSA signature, in that order.
+<code>r</code> and <code>s</code> MUST be big-endian encoded, fixed-width 256-bit unsigned.
+<code>v</code> MUST be an 8-bit big-endian encoded, non-normalized and should be either 27 or 28.</p>
+<p>See <a href="https://ethereum.github.io/yellowpaper/paper.pdf">Ethereum &ldquo;Yellow paper&rdquo;: Appendix F Signing transactions</a> for more information on signature generation, parameters and public key recovery.</p>
+<h3 id="encryption">
+  Encryption
+  <a class="anchor" href="#encryption">#</a>
+</h3>
+<h4 id="symmetric">
+  Symmetric
+  <a class="anchor" href="#symmetric">#</a>
+</h4>
+<p>Symmetric encryption uses AES-256-GCM for <a href="https://en.wikipedia.org/wiki/Authenticated_encryption">authenticated encryption</a>.
+The output of encryption is of the form (<code>ciphertext</code>, <code>tag</code>, <code>iv</code>) where <code>ciphertext</code> is the encrypted message, <code>tag</code> is a 16 byte message authentication tag and <code>iv</code> is a 12 byte initialization vector  (nonce).
+The message authentication <code>tag</code> and initialization vector <code>iv</code> field MUST be appended to the resulting <code>ciphertext</code>, in that order.
+Note that previous specifications and some implementations might refer to <code>iv</code> as <code>nonce</code> or <code>salt</code>.</p>
+<h4 id="asymmetric">
+  Asymmetric
+  <a class="anchor" href="#asymmetric">#</a>
+</h4>
+<p>Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme (ECIES) with SECP-256k1 public key.</p>
+<h4 id="ecies">
+  ECIES
+  <a class="anchor" href="#ecies">#</a>
+</h4>
+<p>This section originates from the <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption">RLPx Transport Protocol spec</a> spec with minor modifications.</p>
+<p>The cryptosystem used is:</p>
+<ul>
+<li>The elliptic curve secp256k1 with generator <code>G</code>.</li>
+<li><code>KDF(k, len)</code>: the NIST SP 800-56 Concatenation Key Derivation Function.</li>
+<li><code>MAC(k, m)</code>: HMAC using the SHA-256 hash function.</li>
+<li><code>AES(k, iv, m)</code>: the AES-128 encryption function in CTR mode.</li>
+</ul>
+<p>Special notation used: <code>X || Y</code> denotes concatenation of <code>X</code> and <code>Y</code>.</p>
+<p>Alice wants to send an encrypted message that can be decrypted by Bob&rsquo;s static private key <code>kB</code>. Alice knows about Bobs static public key <code>KB</code>.</p>
+<p>To encrypt the message <code>m</code>, Alice generates a random number <code>r</code> and corresponding elliptic curve public key <code>R = r * G</code> and computes the shared secret <code>S = Px</code> where <code>(Px, Py) = r * KB</code>.
+She derives key material for encryption and authentication as <code>kE || kM = KDF(S, 32)</code> as well as a random initialization vector <code>iv</code>.
+Alice sends the encrypted message <code>R || iv || c || d</code> where <code>c = AES(kE, iv , m)</code> and <code>d = MAC(sha256(kM), iv || c)</code> to Bob.</p>
+<p>For Bob to decrypt the message <code>R || iv || c || d</code>, he derives the shared secret <code>S = Px</code> where <code>(Px, Py) = kB * R</code> as well as the encryption and authentication keys <code>kE || kM = KDF(S, 32)</code>.
+Bob verifies the authenticity of the message by checking whether <code>d == MAC(sha256(kM), iv || c)</code> then obtains the plaintext as <code>m = AES(kE, iv || c)</code>.</p>
+<h3 id="padding">
+  Padding
+  <a class="anchor" href="#padding">#</a>
+</h3>
+<p>The padding field is used to align data size, since data size alone might reveal important metainformation.
+Padding can be arbitrary size.
+However, it is recommended that the size of Data Field (excluding the IV and tag) before encryption (i.e. plain text) SHOULD be a multiple of 256 bytes.</p>
+<h3 id="decoding-a-message">
+  Decoding a message
+  <a class="anchor" href="#decoding-a-message">#</a>
+</h3>
+<p>In order to decode a message, a node SHOULD try to apply both symmetric and asymmetric decryption operations.
+This is because the type of encryption is not included in the message.</p>
+<h2 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h2>
+<ol>
+<li><a href="/spec/6">6/WAKU1</a></li>
+<li><a href="/spec/10">10/WAKU2</a></li>
+<li><a href="/spec/14/#version1">14/WAKU-MESSAGE version 1</a></li>
+<li><a href="/spec/7">7/WAKU-DATA</a></li>
+<li><a href="/spec/6/#payload-encryption">6/WAKU1 Payload encryption</a></li>
+<li><a href="https://eips.ethereum.org/EIPS/eip-627">EIP-627: Whisper spec</a></li>
+<li><a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md#ecies-encryption">RLPx Transport Protocol spec (ECIES encryption)</a></li>
+<li><a href="https://specs.status.im/spec/5">Status 5/SECURE-TRANSPORT</a></li>
+<li><a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a></li>
+<li><a href="https://ethereum.github.io/yellowpaper/paper.pdf">Ethereum &ldquo;Yellow paper&rdquo;: Appendix F Signing transactions</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Authenticated_encryption">Authenticated encryption</a></li>
+</ol>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#cryptographic-primitives">Cryptographic primitives</a></li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#abnf">ABNF</a></li>
+        <li><a href="#signature">Signature</a></li>
+        <li><a href="#encryption">Encryption</a></li>
+        <li><a href="#padding">Padding</a></li>
+        <li><a href="#decoding-a-message">Decoding a message</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

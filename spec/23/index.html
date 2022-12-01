@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
+ PubSub topics, used for routing Content topics, used for content-based filtering  PubSub topics #  PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
+As written in 10/WAKU2 spec there is a default PubSub topic:
+/waku/2/default-waku/proto
+This indicates that">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="23/WAKU2-TOPICS" />
+<meta property="og:description" content="This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
+ PubSub topics, used for routing Content topics, used for content-based filtering  PubSub topics #  PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
+As written in 10/WAKU2 spec there is a default PubSub topic:
+/waku/2/default-waku/proto
+This indicates that" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/23/" /><meta property="article:section" content="docs" />
+
+
+
+<title>23/WAKU2-TOPICS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/"class=active>23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>23/WAKU2-TOPICS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#pubsub-topics">PubSub topics</a>
+      <ul>
+        <li><a href="#pubsub-topic-format">PubSub topic format</a></li>
+        <li><a href="#default-pubsub-topic">Default PubSub topic</a></li>
+        <li><a href="#separation-of-two-applications-example">Separation of two applications example</a></li>
+        <li><a href="#topic-sharding-example">Topic sharding example</a></li>
+        <li><a href="#compression-example">Compression example</a></li>
+      </ul>
+    </li>
+    <li><a href="#content-topics">Content topics</a>
+      <ul>
+        <li><a href="#content-topic-format">Content topic format</a></li>
+      </ul>
+    </li>
+    <li><a href="#using-content-topics-for-your-application">Using content topics for your application</a></li>
+    <li><a href="#differences-with-waku-v1">Differences with Waku v1</a>
+      <ul>
+        <li><a href="#bridging-waku-v1-and-waku-v2">Bridging Waku v1 and Waku v2</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="23waku2-topics">23/WAKU2-TOPICS</h1>
+
+  
+      <h1 id="waku-v2-topic-usage-recommendations">Waku v2 Topic Usage Recommendations</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thoren <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a>
+          
+      </li>
+      
+  </ul><p>This document outlines recommended usage of topics in Waku v2.
+In <a href="/spec/10">10/WAKU2 spec</a> there are two types of topics:</p>
+<ul>
+<li>PubSub topics, used for routing</li>
+<li>Content topics, used for content-based filtering</li>
+</ul>
+<h2 id="pubsub-topics">
+  PubSub topics
+  <a class="anchor" href="#pubsub-topics">#</a>
+</h2>
+<p>PubSub topics are used for routing of messages, see <a href="/spec/11">11/WAKU2-RELAY</a> spec for more details of how this routing works.</p>
+<p>As written in <a href="/spec/10">10/WAKU2 spec</a> there is a default PubSub topic:</p>
+<p><code>/waku/2/default-waku/proto</code></p>
+<p>This indicates that</p>
+<ol>
+<li>It relates to the Waku problem domain</li>
+<li>version is 2</li>
+<li><code>default-waku</code> indicates that it is the default topic for exchanging WakuMessages</li>
+<li>that the <a href="/spec/11/#protobuf-definition">data field</a> in PubSub is serialized/encoded as protobuf as determined by WakuMessage</li>
+</ol>
+<h3 id="pubsub-topic-format">
+  PubSub topic format
+  <a class="anchor" href="#pubsub-topic-format">#</a>
+</h3>
+<p>PubSub topics SHOULD follow the following structure:</p>
+<p><code>/waku/2/{topic-name}/{encoding}</code></p>
+<p>This namespaced structure makes things like compatibility and discoverability and automatic handling of new topics easier.
+For example, if the encoding of the payload is changed, compression is introduced, etc.</p>
+<p>For more on this format of PubSub topics, see <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a> where inspiration for this format was taken from.</p>
+<h3 id="default-pubsub-topic">
+  Default PubSub topic
+  <a class="anchor" href="#default-pubsub-topic">#</a>
+</h3>
+<p>Unless there&rsquo;s a good reason, the default PubSub topic SHOULD be used for all protocols.
+However, in certain situations other topics MAY be used.</p>
+<p>Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
+See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkability</a>.</p>
+<p>If you use another PubSub topic, be aware that:</p>
+<ul>
+<li>Metadata protection might be weakened</li>
+<li>Nodes subscribing to other topics might not be connected to the rest of the network</li>
+<li>Other nodes in the network might not subscribe and relay on your given PubSub topic</li>
+<li>Store nodes might not store messages for your given PubSub topic</li>
+</ul>
+<p>This means you are likely to have to run your own full nodes which may make your application less robust.</p>
+<p>Below we outline some scenarios where this might apply.</p>
+<h3 id="separation-of-two-applications-example">
+  Separation of two applications example
+  <a class="anchor" href="#separation-of-two-applications-example">#</a>
+</h3>
+<p>Let&rsquo;s say we have two different topics that are both experience heavy traffic but are completely separate in terms of problem domain and infrastructure.
+This can be segregated into:</p>
+<pre tabindex="0"><code>/waku/2/status/proto
+/waku/2/walletconnect/proto
+</code></pre><p>This indicates that they are WakuMessages but for different domains completely.</p>
+<h3 id="topic-sharding-example">
+  Topic sharding example
+  <a class="anchor" href="#topic-sharding-example">#</a>
+</h3>
+<p>Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic.
+Here&rsquo;s an example of what this might look like:</p>
+<pre tabindex="0"><code>waku/2/waku-9_shard-0/proto
+...
+waku/2/waku-9_shard-9/proto
+</code></pre><p>This indicates explicitly that the network traffic has been partitioned into 10 buckets.</p>
+<h3 id="compression-example">
+  Compression example
+  <a class="anchor" href="#compression-example">#</a>
+</h3>
+<p>Not yet implemented, but would be easy to add with:</p>
+<p><code>/waku/2/default-waku/proto_snappy</code></p>
+<h2 id="content-topics">
+  Content topics
+  <a class="anchor" href="#content-topics">#</a>
+</h2>
+<p>The other type of topic that exists in Waku v2 is a content topic.
+This is used for content based filtering.
+See <a href="/spec/14">14/WAKU2-MESSAGE spec</a> for where this is specified.
+Note that this doesn&rsquo;t impact routing of messages between relaying nodes,
+but it does impact how request/reply protocols such as
+<a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a> and <a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a> are used.</p>
+<p>This is especially useful for nodes that have limited bandwidth,
+and only want to pull down messages that match this given content topic.</p>
+<p>Since all messages are relayed using the relay protocol regardless of content topic,
+you MAY use any content topic you wish without impacting how messages are relayed.</p>
+<h3 id="content-topic-format">
+  Content topic format
+  <a class="anchor" href="#content-topic-format">#</a>
+</h3>
+<p>The format for content topics is as follows:</p>
+<p><code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}</code></p>
+<p>The name of a content topic is application-specific.
+As an example, here&rsquo;s the content topic used for an upcoming testnet:</p>
+<p><code>/toychat/2/huilong/proto</code></p>
+<h2 id="using-content-topics-for-your-application">
+  Using content topics for your application
+  <a class="anchor" href="#using-content-topics-for-your-application">#</a>
+</h2>
+<p>Make sure you have a unique application-name to avoid conflicting issues with other protocols.</p>
+<p>If you have different versions of your protocol, this can be specified in the version field.</p>
+<p>The name of the content topic is up to your application and depends on the problem domain, how you want to separate content, what the bandwidth and privacy guarantees are, etc.</p>
+<p>The encoding field indicates the serialization/encoding scheme for the <a href="/spec/14/#payloads">WakuMessage payload</a> field.</p>
+<h2 id="differences-with-waku-v1">
+  Differences with Waku v1
+  <a class="anchor" href="#differences-with-waku-v1">#</a>
+</h2>
+<p>In <a href="/spec/6">6/WAKU1</a> there is no actual routing.
+All messages are sent to all other nodes.
+This means that we are implicitly using the same PubSub topic that would be something like:</p>
+<pre tabindex="0"><code>/waku/1/default-waku/rlp
+</code></pre><p>Topics in Waku v1 correspond to Content Topics in Waku v2.</p>
+<h3 id="bridging-waku-v1-and-waku-v2">
+  Bridging Waku v1 and Waku v2
+  <a class="anchor" href="#bridging-waku-v1-and-waku-v2">#</a>
+</h3>
+<p>To bridge Waku v1 and Waku v2 we have a <a href="/spec/15">15/WAKU-BRIDGE</a>.
+For mapping Waku v1 topics to Waku v2 content topics,
+the following structure for the content topic SHOULD be used:</p>
+<pre tabindex="0"><code>/waku/1/&lt;4bytes-waku-v1-topic&gt;/rfc26
+</code></pre><p>The <code>&lt;4bytes-waku-v1-topic&gt;</code> SHOULD be the lowercase hex representation of the 4-byte Waku v1 topic.
+A <code>0x</code> prefix SHOULD be used.
+<code>/rfc26</code> indicates that the bridged content is encoded according to RFC <a href="/spec/26">26/WAKU-PAYLOAD</a>.
+See <a href="/spec/15">15/WAKU-BRIDGE</a> for a description of the bridged fields.</p>
+<p>This creates a direct mapping between the two protocols.
+For example:</p>
+<pre tabindex="0"><code>/waku/1/0x007f80ff/rfc26
+</code></pre><h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li>
+<p><a href="/spec/10">10/WAKU2 spec</a></p>
+</li>
+<li>
+<p><a href="/spec/11">11/WAKU2-RELAY</a></p>
+</li>
+<li>
+<p><a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a></p>
+</li>
+<li>
+<p><a href="/spec/14">14/WAKU2-MESSAGE spec</a></p>
+</li>
+<li>
+<p><a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a></p>
+</li>
+<li>
+<p><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a></p>
+</li>
+<li>
+<p><a href="/spec/6">6/WAKU1</a></p>
+</li>
+<li>
+<p><a href="/spec/15">15/WAKU-BRIDGE</a></p>
+</li>
+<li>
+<p><a href="/spec/26">26/WAKU-PAYLOAD</a></p>
+</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#pubsub-topics">PubSub topics</a>
+      <ul>
+        <li><a href="#pubsub-topic-format">PubSub topic format</a></li>
+        <li><a href="#default-pubsub-topic">Default PubSub topic</a></li>
+        <li><a href="#separation-of-two-applications-example">Separation of two applications example</a></li>
+        <li><a href="#topic-sharding-example">Topic sharding example</a></li>
+        <li><a href="#compression-example">Compression example</a></li>
+      </ul>
+    </li>
+    <li><a href="#content-topics">Content topics</a>
+      <ul>
+        <li><a href="#content-topic-format">Content topic format</a></li>
+      </ul>
+    </li>
+    <li><a href="#using-content-topics-for-your-application">Using content topics for your application</a></li>
+    <li><a href="#differences-with-waku-v1">Differences with Waku v1</a>
+      <ul>
+        <li><a href="#bridging-waku-v1-and-waku-v2">Bridging Waku v1 and Waku v2</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  In this document we describe a compound protocol for enabling two devices to mutually authenticate and securely exchange (arbitrary) information over the Waku network.
+Background / Rationale / Motivation #  In order to implement multi-device communications using one of the Noise session management mechanisms proposed in 37/WAKU2-NOISE-SESSIONS, we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
+Since, in this scenario, the devices would be close to each other, authentication can be initialized by exchanging a QR code out-of-band and then securely completed over the Waku network.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="43/WAKU2-DEVICE-PAIRING" />
+<meta property="og:description" content="Abstract #  In this document we describe a compound protocol for enabling two devices to mutually authenticate and securely exchange (arbitrary) information over the Waku network.
+Background / Rationale / Motivation #  In order to implement multi-device communications using one of the Noise session management mechanisms proposed in 37/WAKU2-NOISE-SESSIONS, we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
+Since, in this scenario, the devices would be close to each other, authentication can be initialized by exchanging a QR code out-of-band and then securely completed over the Waku network." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/43/" /><meta property="article:section" content="docs" />
+
+
+
+<title>43/WAKU2-DEVICE-PAIRING | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/"class=active>43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>43/WAKU2-DEVICE-PAIRING</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#device-pairing">Device Pairing</a>
+      <ul>
+        <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
+        <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
+        <li><a href="#protocol-flow">Protocol Flow</a></li>
+        <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
+    <li><a href="#randomized-rekey">Randomized Rekey</a></li>
+    <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#assumptions">Assumptions</a></li>
+        <li><a href="#rationale">Rationale</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#normative">Normative</a></li>
+    <li><a href="#informative">Informative</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="43waku2-device-pairing">43/WAKU2-DEVICE-PAIRING</h1>
+
+  
+      <h1 id="device-pairing-and-secure-transfers-with-noise">Device pairing and secure transfers with Noise</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Giuseppe <a href="mailto:giuseppe@status.im">giuseppe@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>In this document we describe a compound protocol
+for enabling two devices to mutually authenticate
+and securely exchange (arbitrary) information over the Waku network.</p>
+<h1 id="background--rationale--motivation">
+  Background / Rationale / Motivation
+  <a class="anchor" href="#background--rationale--motivation">#</a>
+</h1>
+<p>In order to implement multi-device communications using one of the Noise session management mechanisms proposed in <a href="https://rfc.vac.dev/spec/37/">37/WAKU2-NOISE-SESSIONS</a>,
+we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.</p>
+<p>Since, in this scenario, the devices would be close to each other,
+authentication can be initialized by exchanging a QR code out-of-band
+and then securely completed over the Waku network.</p>
+<p>The protocol we propose consists of two main subprotocols or <em>phases</em>:</p>
+<ul>
+<li><a href="#Device-Pairing">Device Pairing</a>: two phisically close devices initialize the <em>pairing</em> by exchanging a QR code out-of-band. The devices then exchange and authenticate their respective long-term device ID static key by exchanging handshake messages over the Waku network;</li>
+<li><a href="#Secure-Transfer">Secure Transfer</a>: the devices securely exchange information in encrypted form using key material obtained during a successful pairing phase. The communication will happen over the Waku network, hence the devices do not need to be phisically close in this phase.</li>
+</ul>
+<h1 id="theory--semantics">
+  Theory / Semantics
+  <a class="anchor" href="#theory--semantics">#</a>
+</h1>
+<h2 id="device-pairing">
+  Device Pairing
+  <a class="anchor" href="#device-pairing">#</a>
+</h2>
+<p>In the pairing phase, device <code>B</code> requests to be paired to a device <code>A</code>.
+Once the two devices are paired, the devices will be mutually authenticated
+and will share a Noise session within which they can securely exchange information.</p>
+<p>The request is made by exposing a QR code that, by default, has to be scanned by device <code>A</code>.
+If device <code>A</code> doesn&rsquo;t have a camera while device <code>B</code> does,
+<a href="#Rationale">it is possible</a> to execute a slightly different pairing (with same security guarantees),
+where <code>A</code> is exposing a QR code instead.</p>
+<p>This protocol is designed in order to achieve two main security objectives:</p>
+<ul>
+<li>resistance to Man-in-the-Middle attacks;</li>
+<li>provide network anonymity on devices' static keys, i.e. only paired devices will learn each other static key.</li>
+</ul>
+<h3 id="employed-cryptographic-primitives">
+  Employed Cryptographic Primitives
+  <a class="anchor" href="#employed-cryptographic-primitives">#</a>
+</h3>
+<ul>
+<li><code>H</code>: the underlying cryptographically-secure hash function, e.g. SHA-256;</li>
+<li><code>HKDF</code>: the key derivation function (based on <code>H</code>);</li>
+<li><code>Curve25519</code>: the underlying elliptic curve for Diffie-Hellman (DH) operations.</li>
+</ul>
+<h3 id="the-wakupairing-noise-handshake">
+  The <code>WakuPairing</code> Noise Handshake
+  <a class="anchor" href="#the-wakupairing-noise-handshake">#</a>
+</h3>
+<p>The devices execute a custom handshake derived from <code>XX</code>,
+where they mutually exchange and authenticate their respective device static key
+by exchanging messages over the content topic with the following <a href="https://rfc.vac.dev/spec/23/#content-topic-format">format</a></p>
+<pre tabindex="0"><code>contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto
+</code></pre><p>The handshake, detailed in next section, can be summarized as:</p>
+<pre tabindex="0"><code>WakuPairing:
+a.   &lt;- eB              {H(sB||r), contentTopicParams, messageNametag}
+     ...
+b.   -&gt; eA, eAeB        {H(sA||s)}   [authcode]
+c.   &lt;- sB, eAsB        {r}
+d.   -&gt; sA, sAeB, sAsB  {s}
+
+{}: payload,    []: user interaction
+</code></pre><h3 id="protocol-flow">
+  Protocol Flow
+  <a class="anchor" href="#protocol-flow">#</a>
+</h3>
+<ol>
+<li>
+<p>The device <code>B</code> exposes through a QR code a Base64 serialization of:</p>
+<ul>
+<li>An ephemeral public key <code>eB</code>;</li>
+<li>The content topic parameters <code>contentTopicParams = {application-name}, {application-version}, {shard-id}</code>.</li>
+<li>A (randomly generated) 16-bytes long <code>messageNametag</code>.</li>
+<li>A commitment <code>H(sB||r)</code> for its static key <code>sB</code> where <code>r</code> is a random fixed-lenght value.</li>
+</ul>
+</li>
+<li>
+<p>The device <code>A</code>:</p>
+<ul>
+<li>scans the QR code;</li>
+<li>obtains <code>eB</code>, <code>contentTopicParams</code>, <code>messageNametag</code>, <code>Hash(sB||r)</code>;</li>
+<li>checks if <code>{application-name}</code> and <code>{application-version}</code> from <code>contentTopicParams</code> match the local application name and version: if not, aborts the pairing. Sets <code>contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto</code>;</li>
+<li>initializes the Noise handshake by passing <code>contentTopicParams</code>, <code>messageNametag</code> and <code>Hash(sB||r)</code> to the handshake prologue;</li>
+<li>executes the pre-handshake message, i.e. processes the key <code>eB</code>;</li>
+<li>executes the first handshake message over <code>contentTopic</code>, i.e.
+<ul>
+<li>processes and sends a Waku message containing an ephemeral key <code>eA</code>;</li>
+<li>performs <code>DH(eA,eB)</code> (which computes a symmetric encryption key);</li>
+<li>attaches as payload to the handshake message the (encrypted) commitment <code>H(sA||s)</code> for <code>A</code>&rsquo;s static key <code>sA</code>, where <code>s</code> is a random fixed-length value;</li>
+</ul>
+</li>
+<li>an 8-digits authorization code <code>authcode</code> obtained as <code>HKDF(h) mod 10^8</code> is displayed on the device, where <code>h</code> is the <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">handshake hash value</a> obtained once the first handshake message is processed.</li>
+</ul>
+</li>
+<li>
+<p>The device <code>B</code>:</p>
+<ul>
+<li>sets <code>contentTopic = /{application-name}/{application-version}/wakunoise/1/sessions_shard-{shard-id}/proto</code>;</li>
+<li>listens to messages sent to <code>contentTopic</code> and locally filters only those with <a href="https://rfc.vac.dev/spec/35/#abnf">Waku payload</a> starting with <code>messageNametag</code>. If any, continues.</li>
+<li>initializes the Noise handshake by passing <code>contentTopicParams</code>, <code>messageNametag</code> and <code>Hash(sB||r)</code> to the handshake prologue;</li>
+<li>executes the pre-handshake message, i.e. processes its ephemeral key <code>eB</code>;</li>
+<li>executes the first handshake message, i.e.
+<ul>
+<li>obtains from the received message a public key <code>eA</code>. If <code>eA</code> is not a valid public key, the protocol is aborted.</li>
+<li>performs <code>DH(eA,eB)</code> (which computes a symmetric encryption key);</li>
+<li>decrypts the commitment <code>H(sA||s)</code> for <code>A</code>&rsquo;s static key <code>sA</code>.</li>
+</ul>
+</li>
+<li>an 8 decimal digits authorization code <code>authcode</code> obtained as <code>HKDF(h) mod 10^8</code> is displayed on the device, where <code>h</code>is the <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">handshake hash value</a> obtained once the first handshake message is processed.</li>
+</ul>
+</li>
+<li>
+<p>Device <code>A</code> and <code>B</code> wait for the user to confirm with an interaction (button press)
+that the authorization code displayed on both devices are the same.
+If not, the protocol is aborted.</p>
+</li>
+<li>
+<p>The device <code>B</code>:</p>
+<ul>
+<li>executes the second handshake message, i.e.
+<ul>
+<li>processes and sends his (encrypted) device static key <code>sB</code> over <code>contentTopic</code>;</li>
+<li>performs <code>DH(eA,sB)</code> (which updates the symmetric encryption key);</li>
+<li>attaches as payload the (encrypted) commitment randomness <code>r</code> used to compute <code>H(sB||r)</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>The device <code>A</code>:</p>
+<ul>
+<li>listens to messages sent to <code>contentTopic</code> and locally filters only those with Waku payload starting with <code>messageNametag</code>. If any, continues.</li>
+<li>decrypts the received message and obtains the public key <code>sB</code>. If <code>sB</code> is not a valid public key, the protocol is aborted.</li>
+<li>performs <code>DH(eA,sB)</code> (which updates a symmetric encryption key);</li>
+<li>decrypts the payload to obtain the randomness <code>r</code>.</li>
+<li>computes <code>H(sB||r)</code> and checks if this value corresponds to the commitment obtained in step 2. If not, the protocol is aborted.</li>
+<li>executes the third handshake message, i.e.
+<ul>
+<li>processes and sends his (encrypted) device static key <code>sA</code> over <code>contentTopic</code>;</li>
+<li>performs <code>DH(sA,eB)</code> (which updates the symmetric encryption key);</li>
+<li>performs <code>DH(sA,sB)</code> (which updates the symmetric encryption key);</li>
+<li>attaches as payload the (encrypted) commitment randomness <code>s</code> used to compute <code>H(sA||s)</code>.</li>
+</ul>
+</li>
+<li>calls <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object">Split()</a> and obtains two cipher states to encrypt inbound and outbound messages.</li>
+</ul>
+</li>
+<li>
+<p>The device <code>B</code>:</p>
+<ul>
+<li>listens to messages sent to <code>contentTopic</code> and locally filters only those with Waku payload starting with <code>messageNametag</code>. If any, continues.</li>
+<li>obtains from decrypting the received message a public key <code>sA</code>. If <code>sA</code> is not a valid public key, the protocol is aborted.</li>
+<li>performs <code>DH(sA,eB)</code> (which updates a symmetric encryption key);</li>
+<li>performs <code>DH(sA,sB)</code> (which updates a symmetric encryption key);</li>
+<li>decrypts the payload to obtain the randomness <code>s</code>.</li>
+<li>Computes <code>H(sA||s)</code> and checks if this value corresponds to the commitment obtained in step 3. If not, the protocol is aborted.</li>
+<li>Calls <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object">Split()</a> and obtains two cipher states to encrypt inbound and outbound messages.</li>
+</ul>
+</li>
+</ol>
+<h3 id="the-wakupairing-for-devices-without-a-camera">
+  The <code>WakuPairing</code> for Devices without a Camera
+  <a class="anchor" href="#the-wakupairing-for-devices-without-a-camera">#</a>
+</h3>
+<p>In the above pairing handshake, the QR is by default exposed by device <code>B</code> and not by <code>A</code>
+because in most use-cases we foresee, the secure transfer phase would consist in
+exchanging a single message (e.g., Noise sessions, cryptographic keys, signatures, etc.) from device <code>A</code> to <code>B</code>.</p>
+<p>However, since the user(s) confirm(s) at the end of message <code>b.</code> that the authorization code is the same on both devices,
+the role of the handhsake initiator and responder can be safely swapped in message <code>a.</code> and <code>b.</code>.</p>
+<p>Indeed, if the pairing phase successfully completes on both devices,
+the authentication code, the committed static keys and the Noise processing rules will ensure that no Man-in-the-Middle attack took place
+and that messages can be securely exchanged bi-directionally in the transfer phase.</p>
+<p>This allows pairing in case device <code>A</code> does not have a camera to scan a QR (e.g. a desktop client) while device <code>B</code> has.</p>
+<p>The resulting handshake would then be:</p>
+<pre tabindex="0"><code>WakuPairing2:
+a.   -&gt; eA              {H(sB||r), contentTopicParams, messageNametag}
+     ...
+b.   &lt;- eB, eAeB        {H(sB||r)}   [authcode]
+c.   &lt;- sB, eAsB        {r}
+d.   -&gt; sA, sAeB, sAsB  {s}
+
+{}: payload,    []: user interaction
+</code></pre><h1 id="secure-transfer">
+  Secure Transfer
+  <a class="anchor" href="#secure-transfer">#</a>
+</h1>
+<p>The pairing phase is designed to be application-agnostic
+and should be flexible enough to mutually authenticate
+and allow exchange of cryptographic key material
+between two devices over a distributed network of Waku2 nodes.</p>
+<p>Once the handshake is concluded,
+(privacy-sensitive) information can be exchanged using the encryption keys agreed upon the pairing phase.
+If stronger security guarantees are required,
+some <a href="#Implementation-Suggestions">additional tweaks</a> are possible.</p>
+<h1 id="implementation-suggestions">
+  Implementation Suggestions
+  <a class="anchor" href="#implementation-suggestions">#</a>
+</h1>
+<h2 id="timebox-qr-exposure">
+  Timebox QR exposure
+  <a class="anchor" href="#timebox-qr-exposure">#</a>
+</h2>
+<p>We suggest to timebox the exposure of each pairing QR code to few seconds, e.g. 30.
+After this time limit, a QR code containing a new ephemeral key, random static key commitment and message nametag (content topic parameters could remain the same)
+should replace the previously exposed QR, which can then be discarded.</p>
+<p>The reason for such suggestion is due to the fact that if an attacker is able to compromise one of the ephemeral keys,
+he might successfully realize an undetected MitM attack up to the <code>authcode</code> confirmation
+(we note that compromising ephemeral keys is outside our and Noise security assumptions).</p>
+<p>The attacker could indeed proceed as follows:</p>
+<ul>
+<li>intercepts the QR;</li>
+<li>blocks/delays the delivery of the pairing message <code>b.</code>;</li>
+<li>compromises <code>A</code> or <code>B</code> ephemeral key;</li>
+<li>recovers the genuine <code>authcode</code> that would have been generated by <code>A</code> and <code>B</code>;</li>
+<li>generates ~<code>10^8</code> random <code>t</code> values until the Noise processing of the message <code>b'. -&gt; eC, eCeB  {H(sC||t)} </code>, where <code>eC</code> and <code>sC</code> are the attacker ephemeral and static key, respectively, results in computing the same <code>authcode</code> as the one between <code>A</code> and <code>B</code>;</li>
+<li>delivers the message <code>b'. -&gt; eC, eCeB  {H(sC||t)}</code> to <code>B</code> (before <code>A</code> is able to deliver its message <code>b.</code>).</li>
+</ul>
+<p>At this point <code>A</code> and <code>B</code> will observe the same <code>authcode</code> (and would then confirm it),
+but <code>B</code> will process the attacker&rsquo;s ephemeral key <code>eC</code> instead of <code>eA</code>.</p>
+<p>However, the attacker would not be able to open to device <code>A</code> the static key commitment <code>H(sB||s)</code> sent by device <code>B</code> out-of-band,
+and the pairing will abort on <code>A</code> side before it reveals its static key.
+Device <code>B</code>, instead, will successfully complete the pairing with the attacker.</p>
+<p>Hence, timeboxing the QR exposure,
+also in combination with increasing the number of decimal digits of the <code>authcode</code>,
+will strongly limit the probability that an attacker can successfully impersonate device <code>A</code> to <code>B</code>.</p>
+<p>We stress once more, that such attack requires the compromise of an ephemeral key (outside our security model)
+and that device <code>A</code> will in any case detect a mismatch and abort the pairing,
+regardless of the fact that the QR timeboxing mitigation is implemented or not.</p>
+<h2 id="randomized-rekey">
+  Randomized Rekey
+  <a class="anchor" href="#randomized-rekey">#</a>
+</h2>
+<p>The Noise Protocol framework supports <a href="http://www.noiseprotocol.org/noise.html#rekey"><code>Rekey()</code></a>
+in order to update encryption keys <em>&ldquo;so that a compromise of cipherstate keys will not decrypt older</em> [exchanged] <em>messages&rdquo;</em>.
+However, if a certain cipherstate key is compromised,
+it will be possible for the attacker not only to decrypt messages encrypted under that key,
+but also all those messages encrypted under any successive new key obtained through a call to <code>Rekey()</code>.</p>
+<p>This could be mitigated by attaching an ephemeral key to messages sent after a <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object">Split()</a>
+so that a new random symmetric key can be derived,
+in a similar fashion to <a href="https://signal.org/docs/specifications/doubleratchet/">Double-Ratchet</a>.</p>
+<p>This can be practically achieved by:</p>
+<ul>
+<li>keeping the full Handhshake State even after the handshake is complete (<em>by Noise specification a call to <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object"><code>Split()</code></a> should delete the Handshake State</em>)</li>
+<li>continuing updating the Handshake State by processing every after-handshake exchanged message (i.e. the <code>payload</code>) according to the Noise <a href="http://www.noiseprotocol.org/noise.html#processing-rules">processing rules</a> (i.e. by calling <code>EncryptAndHash(payload)</code> and <code>DecryptAndHash(payload)</code>);</li>
+<li>adding to each (or every few) message exchanged in the transfer phase a random ephemeral key <code>e</code> and perform Diffie-Hellman operations with the other party&rsquo;s ephemeral/static keys in order to update the underlying CipherState and recover new random inbound/outbound encryption keys by calling <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object"><code>Split()</code></a>.</li>
+</ul>
+<p>In short, the transfer phase would look like (but not necessarily the same as):</p>
+<pre tabindex="0"><code>TransferPhase:
+   -&gt; eA, eAeB, eAsB  {payload}
+   &lt;- eB, eAeB, sAeB  {payload}
+   ...
+   
+{}: payload
+</code></pre><h2 id="messages-nametag-derivation">
+  Messages Nametag Derivation
+  <a class="anchor" href="#messages-nametag-derivation">#</a>
+</h2>
+<p>To reduce metadata leakages and increase devices&rsquo;s anonymity over the p2p network,
+<a href="https://rfc.vac.dev/spec/37/#session-states">35/WAKU2-NOISE</a> suggests to use some common secrets <code>mntsInbound, mntsOutbound</code> (e.g. <code>mntsInbound, mntsOutbound = HKDF(h)</code>
+where <code>h</code> is the <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">handshake hash value</a> of the Handshake State at some point of the pairing phase)
+in order to frequently and deterministically change the <code>messageNametag</code> of messages exchanged during the pairing and transfer phase -
+ideally, at each message exchanged.</p>
+<p>Given the proposed construction,
+the <code>mntsInbound</code> and <code>mntsOutbound</code> secrets can be used to iteratively generate the <code>messageNametag</code> field of Waku payloads
+for inbound and outbound messages, respectively.</p>
+<p>The derivation of <code>messageNametag</code> should be deterministic only for communicating devices
+and independent from message content,
+otherwise lost messages will prevent computing the next message nametag.
+A possible approach consists in computing the <code>n</code>-th <code>messageNametag</code> as <code>H( mntsInbound || n)</code>,
+where <code>n</code> is serialized as <code>uint64</code>.</p>
+<p>In this way, sender&rsquo;s and recipient&rsquo;s devices
+can keep updated a buffer of <code>messageNametag</code> to sieve
+while listening to messages sent over <code>/{application-name}/{application-version}/wakunoise/1/sessions-{shard-id}/</code> (i.e., the next 50 not yet seen).
+They will then be able to further identify if one or more messages were eventually lost
+or not-yet-delivered during the communication.
+This approach brings also the advantage that
+communicating devices can efficiently identify encrypted messages addressed to them.</p>
+<p>We note that since the <code>ChaChaPoly</code> cipher used to encrypt messages supports <em>additional data</em>,
+an encrypted payload can be further authenticated by passing the <code>messageNametag</code> as additional data to the encryption/decryption routine.
+In this way, an attacker would be unable to craft an authenticated Waku message
+even in case the currently used symmetric encryption key is compromised,
+unless <code>mntsInbound</code>, <code>mntsOutbound</code> or the <code>messageNametag</code> buffer lists were compromised too.</p>
+<h1 id="securityprivacy-considerations">
+  Security/Privacy Considerations
+  <a class="anchor" href="#securityprivacy-considerations">#</a>
+</h1>
+<h3 id="assumptions">
+  Assumptions
+  <a class="anchor" href="#assumptions">#</a>
+</h3>
+<ul>
+<li>
+<p>The attacker is active, i.e. can interact with both devices <code>A</code> and <code>B</code> by sending messages over <code>contentTopic</code>.</p>
+</li>
+<li>
+<p>The attacker has access to the QR code, that is knows the ephemeral key <code>eB</code>, the commitment <code>H(sB||r)</code> and the <code>contentTopic</code> exposed by the device <code>B</code>.</p>
+</li>
+<li>
+<p>Devices <code>A</code> and <code>B</code> are considered trusted (otherwise the attacker will simply exfiltrate the relevant information from the attacked device).</p>
+</li>
+<li>
+<p>As common for Noise, we assume that ephemeral keys cannot be compromised, while static keys might be later compromised. However, we enforce in the pairing phase extra security mechanisms (i.e. use of commitments for static keys) that will prevent some attacks possible when ephemeral keys are weak or get compromised.</p>
+</li>
+</ul>
+<h3 id="rationale">
+  Rationale
+  <a class="anchor" href="#rationale">#</a>
+</h3>
+<ul>
+<li>
+<p>The device <code>B</code> exposes a commitment to its static key <code>sB</code> because:</p>
+<ul>
+<li>it can commit to its static key before the authentication code is confirmed without revealing it.</li>
+<li>If the private key of <code>eB</code> is weak or gets compromised, an attacker can impersonate <code>B</code> by sending in message <code>c.</code> to device <code>A</code> his own static key and successfully complete the pairing phase. Note that being able to compromise <code>eB</code> is not contemplated by our security assumptions.</li>
+<li><code>B</code> cannot adaptively choose a static key based on the state of the Noise handshake at the end of message <code>b.</code>, i.e. after the authentication code is confirmed. Note that device <code>B</code> is trusted in our security assumptions.</li>
+<li>Confirming the authentication code after processing message <code>b.</code> will ensure that no Man-in-the-Middle (MitM) can later send a static key different than <code>sB</code>.</li>
+</ul>
+</li>
+<li>
+<p>The device <code>A</code> sends a commitment to its static key <code>sA</code> because:</p>
+<ul>
+<li>it can commit to its static key before the authentication code is confirmed without revealing it.</li>
+<li><code>A</code> cannot adaptively choose a static key based on the state of the Noise handshake at the end of message <code>b.</code>, i.e. after the authentication code is confirmed. Note that device <code>A</code> is trusted in our security assumptions.</li>
+<li>Confirming the authentication code after processing message <code>b.</code> will ensure that no MitM can later send a static key different than <code>sA</code>.</li>
+</ul>
+</li>
+<li>
+<p>The authorization code is shown and has to be confirmed at the end of message <code>b.</code> because:</p>
+<ul>
+<li>an attacker that frontruns device <code>A</code> by sending faster his own ephemeral key would be detected before  he&rsquo;s able to know device <code>B</code> static key <code>sB</code>;</li>
+<li>it ensures that no MitM attacks will happen during <em>the whole</em> pairing handshake, since commitments to the (later exchanged) device static keys will be implicitly acknowledged by the authorization code confirmation;</li>
+<li>it enables to safely swap the role of handshake initiator and responder (see above);</li>
+</ul>
+</li>
+<li>
+<p>Device <code>B</code> sends his static key first because:</p>
+<ul>
+<li>by being the pairing requester, it cannot probe device <code>A</code> identity without revealing its own (static key) first. Note that device <code>B</code> static key and its commitment can be bound to other cryptographic material (e.g., seed phrase).</li>
+</ul>
+</li>
+<li>
+<p>Device <code>B</code> opens a commitment to its static key at message <code>c.</code> because:</p>
+<ul>
+<li>if device <code>A</code> replies concluding the handshake according to the protocol, device <code>B</code> acknowledges that device <code>A</code> correctly received his static key <code>sB</code>, since <code>r</code> was encrypted under an encryption key derived from the static key <code>sB</code> and the genuine (due to the previous <code>authcode</code> verification) ephemeral keys <code>eA</code> and <code>eB</code>.</li>
+</ul>
+</li>
+<li>
+<p>Device <code>A</code> opens a commitment to its static key at message <code>d.</code> because:</p>
+<ul>
+<li>if device <code>B</code> doesn&rsquo;t abort the pairing, device <code>A</code> acknowledges that device <code>B</code> correctly received his static key <code>sA</code>, since <code>s</code> was encrypted under an encryption key derived from the static keys <code>sA</code> and <code>sB</code> and the genuine (due to the previous <code>authcode</code> verification) ephemeral keys <code>eA</code> and <code>eB</code>.</li>
+</ul>
+</li>
+</ul>
+<h1 id="application-to-noise-sessions">
+  Application to Noise Sessions
+  <a class="anchor" href="#application-to-noise-sessions">#</a>
+</h1>
+<h2 id="the-n11m-session-management-mechanism">
+  The N11M session management mechanism
+  <a class="anchor" href="#the-n11m-session-management-mechanism">#</a>
+</h2>
+<p>In the <a href="https://rfc.vac.dev/spec/37/#the-n11m-session-management-mechanism"><code>N11M</code> session management mechanism</a>,
+one of Alice&rsquo;s devices is already communicating with one of Bob&rsquo;s devices within an active Noise session,
+e.g. after a successful execution of a Noise handshake.</p>
+<p>Alice and Bob would then share some cryptographic key material,
+used to encrypt their communications.
+According to <a href="https://rfc.vac.dev/spec/37/">37/WAKU2-NOISE-SESSIONS</a> this information consists of:</p>
+<ul>
+<li>A <code>session-id</code> (32 bytes)</li>
+<li>Two cipher state <code>CSOutbound</code>, <code>CSInbound</code>, where each of them contains:
+<ul>
+<li>an encryption key <code>k</code> (2x32bytes)</li>
+<li>a nonce <code>n</code> (2x8bytes)</li>
+<li>(optionally) an internal state hash <code>h</code> (2x32bytes)</li>
+</ul>
+</li>
+</ul>
+<p>for a total of <strong>176 bytes</strong> of information.</p>
+<p>In a <a href="https://rfc.vac.dev/spec/37/#the-n11m-session-management-mechanism"><code>N11M</code></a> session mechanism scenario,
+all (synced) Alice&rsquo;s devices that are communicating with Bob
+share the same Noise session cryptographic material.
+Hence, if Alice wishes to add a new device,
+she must securely transfer a copy of such data from one of her device <code>A</code> to a new device <code>B</code> in her possession.</p>
+<p>In order to do so she can:</p>
+<ul>
+<li>pair device <code>A</code> with <code>B</code> in order to have a Noise session between them;</li>
+<li>securely transfer within such session the 176 bytes serializing the active session with Bob;</li>
+<li>manually instantiate in <code>B</code> a Noise session with Bob from the received session serialization.</li>
+</ul>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<h2 id="normative">
+  Normative
+  <a class="anchor" href="#normative">#</a>
+</h2>
+<ul>
+<li><a href="https://rfc.vac.dev/spec/37/#session-states">35/WAKU2-NOISE</a></li>
+<li><a href="https://rfc.vac.dev/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+</ul>
+<h2 id="informative">
+  Informative
+  <a class="anchor" href="#informative">#</a>
+</h2>
+<ul>
+<li><a href="https://rfc.vac.dev/spec/35/#abnf">26/WAKU2-PAYLOAD</a></li>
+<li><a href="https://signal.org/docs/specifications/doubleratchet/">The Double-Ratchet Algorithm</a></li>
+<li><a href="http://www.noiseprotocol.org/noise.html">The Noise Protocol Framework specifications</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#device-pairing">Device Pairing</a>
+      <ul>
+        <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
+        <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
+        <li><a href="#protocol-flow">Protocol Flow</a></li>
+        <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
+    <li><a href="#randomized-rekey">Randomized Rekey</a></li>
+    <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#assumptions">Assumptions</a></li>
+        <li><a href="#rationale">Rationale</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#normative">Normative</a></li>
+    <li><a href="#informative">Informative</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

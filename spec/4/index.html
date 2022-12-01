@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this specification, we describe a method to construct message history that will aid the consistency guarantees of 2/MVDS. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+Motivation #  In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
+Format #  We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="4/MVDS-META" />
+<meta property="og:description" content="In this specification, we describe a method to construct message history that will aid the consistency guarantees of 2/MVDS. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+Motivation #  In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
+Format #  We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/4/" /><meta property="article:section" content="docs" />
+
+
+
+<title>4/MVDS-META | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/"class=active>4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>4/MVDS-META</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#format">Format</a>
+      <ul>
+        <li><a href="#fields">Fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#parents"><code>parents</code></a></li>
+        <li><a href="#ephemeral"><code>ephemeral</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="4mvds-meta">4/MVDS-META</h1>
+
+  
+      <h1 id="mvds-metadata-field">MVDS Metadata Field</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Andrea Maria Piana <a href="mailto:andreap@status.im">andreap@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+      </li>
+      
+  </ul><p>In this specification, we describe a method to construct message history that will aid the consistency guarantees of <a href="/spec/2">2/MVDS</a>. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.</p>
+<h2 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h2>
+<p>In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.</p>
+<h2 id="format">
+  Format
+  <a class="anchor" href="#format">#</a>
+</h2>
+<p>We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf"><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>mvds;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Metadata</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> parents <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bool</span> ephemeral <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>Nodes MAY transmit a <code>Metadata</code> message by extending the MVDS <a href="/spec/2#payloads">message</a> with a <code>metadata</code> field.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">message Message {
+  bytes group_id = 6001;
+  int64 timestamp = 6002;
+  bytes body = 6003;
+<span style="color:#a6e22e">+ Metadata metadata = 6004;
+</span><span style="color:#a6e22e"></span>}
+</code></pre></div><h3 id="fields">
+  Fields
+  <a class="anchor" href="#fields">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parents</code></td>
+<td>list of parent <a href="/spec/2#payloads"><code>message identifier</code>s</a> for the specific message.</td>
+</tr>
+<tr>
+<td><code>ephemeral</code></td>
+<td>indicates whether a message is ephemeral or not.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="usage">
+  Usage
+  <a class="anchor" href="#usage">#</a>
+</h2>
+<h3 id="parents">
+  <code>parents</code>
+  <a class="anchor" href="#parents">#</a>
+</h3>
+<p>This field contains a list of parent <a href="/spec/2#payloads"><code>message identifier</code>s</a> for the specific message. It MUST NOT contain any messages as parent whose <code>ack</code> flag was set to <code>false</code>. This establishes a directed acyclic graph (DAG)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> of persistent messages.</p>
+<p>Nodes MAY buffer messages until dependencies are satisfied for causal consistency<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, they MAY also pass the messages straight away for eventual consistency<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</p>
+<p>A parent is any message before a new message that a node is aware of that has no children.</p>
+<p>The number of parents for a given message is bound by [0, N], where N is the number of nodes participating in the conversation, therefore the space requirements for the <code>parents</code> field is O(N).</p>
+<p>If a message has no parents it is considered a root. There can be multiple roots, which might be disconnected, giving rise to multiple DAGs.</p>
+<h3 id="ephemeral">
+  <code>ephemeral</code>
+  <a class="anchor" href="#ephemeral">#</a>
+</h3>
+<p>When the <code>ephemeral</code> flag is set to <code>false</code>, a node MUST send an acknowledgment when they have received and processed a message. If it is set to <code>true</code>, it SHOULD NOT send any acknowledgment. The flag is <code>false</code> by default.</p>
+<p>Nodes MAY decide to not persist ephemeral messages, however they MUST NOT be shared as part of the message history.</p>
+<p>Nodes SHOULD send ephemeral messages in batch mode. As their delivery is not needed to be guaranteed.</p>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h2 id="footnotes">
+  Footnotes
+  <a class="anchor" href="#footnotes">#</a>
+</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">https://en.wikipedia.org/wiki/Directed_acyclic_graph</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Jepsen. <a href="https://jepsen.io/consistency/models/causal">Causal Consistency</a>. Jepsen, LLC.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Eventual_consistency">https://en.wikipedia.org/wiki/Eventual_consistency</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#format">Format</a>
+      <ul>
+        <li><a href="#fields">Fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#parents"><code>parents</code></a></li>
+        <li><a href="#ephemeral"><code>ephemeral</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

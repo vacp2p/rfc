@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol1. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
+We present a reference implementation2 including a simulation to demonstrate its performance.
+Definitions #     Term Description     Peer The other nodes that a node is connected to.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="2/MVDS" />
+<meta property="og:description" content="In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol1. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
+We present a reference implementation2 including a simulation to demonstrate its performance.
+Definitions #     Term Description     Peer The other nodes that a node is connected to." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/2/" /><meta property="article:section" content="docs" />
+
+
+
+<title>2/MVDS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/"class=active>2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>2/MVDS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#secure-transport">Secure Transport</a></li>
+        <li><a href="#payloads">Payloads</a></li>
+      </ul>
+    </li>
+    <li><a href="#synchronization">Synchronization</a>
+      <ul>
+        <li><a href="#state">State</a></li>
+        <li><a href="#flow">Flow</a></li>
+        <li><a href="#retransmission">Retransmission</a></li>
+      </ul>
+    </li>
+    <li><a href="#formal-specification">Formal Specification</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="2mvds">2/MVDS</h1>
+
+  
+      <h1 id="minimum-viable-data-synchronization">Minimum Viable Data Synchronization</h1>
+
+  
+
+  
+  
+  
+  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=flat-square" />
+  
+  
+  
+
+  <ul>
+      <li>Status: stable</li>
+      <li>Editor: Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+      </li>
+      
+  </ul><p>In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.</p>
+<p>We present a reference implementation<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> including a simulation to demonstrate its performance.</p>
+<h2 id="definitions">
+  Definitions
+  <a class="anchor" href="#definitions">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Peer</strong></td>
+<td>The other nodes that a node is connected to.</td>
+</tr>
+<tr>
+<td><strong>Record</strong></td>
+<td>Defines a payload element of either the type <code>OFFER</code>, <code>REQUEST</code>, <code>MESSAGE</code> or <code>ACK</code></td>
+</tr>
+<tr>
+<td><strong>Node</strong></td>
+<td>Some process that is able to store data, do processing and communicate for MVDS.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="wire-protocol">
+  Wire Protocol
+  <a class="anchor" href="#wire-protocol">#</a>
+</h2>
+<h3 id="secure-transport">
+  Secure Transport
+  <a class="anchor" href="#secure-transport">#</a>
+</h3>
+<p>This specification does not define anything related to the transport of packets. It is assumed that this is abstracted in such a way that any secure transport protocol could be easily implemented. Likewise, properties such as confidentiality, integrity, authenticity and forward secrecy are assumed to be provided by a layer below.</p>
+<h3 id="payloads">
+  Payloads
+  <a class="anchor" href="#payloads">#</a>
+</h3>
+<p>Payloads are implemented using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v3</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>mvds;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Payload</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> acks <span style="color:#f92672">=</span> <span style="color:#ae81ff">5001</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> offers <span style="color:#f92672">=</span> <span style="color:#ae81ff">5002</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> requests <span style="color:#f92672">=</span> <span style="color:#ae81ff">5003</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> Message messages <span style="color:#f92672">=</span> <span style="color:#ae81ff">5004</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Message</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> group_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">6001</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">int64</span> timestamp <span style="color:#f92672">=</span> <span style="color:#ae81ff">6002</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> body <span style="color:#f92672">=</span> <span style="color:#ae81ff">6003</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p><em>The payload field numbers are kept more &ldquo;unique&rdquo; to ensure no overlap with other protocol buffers.</em></p>
+<p>Each payload contains the following fields:</p>
+<ul>
+<li><strong>Acks:</strong> This field contains a list (can be empty) of <code>message identifiers</code> informing the recipient that sender holds a specific message.</li>
+<li><strong>Offers:</strong> This field contains a list (can be empty) of <code>message identifiers</code> that the sender would like to give to the recipient.</li>
+<li><strong>Requests:</strong> This field contains a list (can be empty) of <code>message identifiers</code> that the sender would like to receive from the recipient.</li>
+<li><strong>Messages:</strong> This field contains a list of messages (can be empty).</li>
+</ul>
+<p><strong>Message Identifiers:</strong> Each <code>message</code> has a message identifier calculated by hashing the <code>group_id</code>, <code>timestamp</code> and <code>body</code> fields as follows:</p>
+<pre tabindex="0"><code>HASH(&quot;MESSAGE_ID&quot;, group_id, timestamp, body);
+</code></pre><p><strong>Group Identifiers:</strong> Each <code>message</code> is assigned into a <strong>group</strong> using the <code>group_id</code> field, groups are independent synchronization contexts between peers.</p>
+<p>The current <code>HASH</code> function used is <code>sha256</code>.</p>
+<h2 id="synchronization">
+  Synchronization
+  <a class="anchor" href="#synchronization">#</a>
+</h2>
+<h3 id="state">
+  State
+  <a class="anchor" href="#state">#</a>
+</h3>
+<p>We refer to <code>state</code> as set of records for the types <code>OFFER</code>, <code>REQUEST</code> and <code>MESSAGE</code> that every node SHOULD store per peer. <code>state</code> MUST NOT contain <code>ACK</code> records as we do not retransmit those periodically. The following information is stored for records:</p>
+<ul>
+<li><strong>Type</strong> - Either <code>OFFER</code>, <code>REQUEST</code> or <code>MESSAGE</code></li>
+<li><strong>Send Count</strong> - The amount of times a record has been sent to a peer.</li>
+<li><strong>Send Epoch</strong> - The next epoch at which a record can be sent to a peer.</li>
+</ul>
+<h3 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h3>
+<p>A maximum of one payload SHOULD be sent to peers per epoch, this payload contains all <code>ACK</code>, <code>OFFER</code>, <code>REQUEST</code> and <code>MESSAGE</code> records for the specific peer. Payloads are created every epoch, containing reactions to previously received records by peers or new records being sent out by nodes.</p>
+<p>Nodes MAY have two modes with which they can send records: <code>BATCH</code> and <code>INTERACTIVE</code> mode. The following rules dictate how nodes construct payloads every epoch for any given peer for both modes.</p>
+<blockquote>
+<p><em><strong>NOTE:</strong> A node may send messages both in interactive and in batch mode.</em></p>
+</blockquote>
+<h4 id="interactive-mode">
+  Interactive Mode
+  <a class="anchor" href="#interactive-mode">#</a>
+</h4>
+<ul>
+<li>A node initially offers a <code>MESSAGE</code> when attempting to send it to a peer. This means an <code>OFFER</code> is added to the next payload and state for the given peer.</li>
+<li>When a node receives an <code>OFFER</code>, a <code>REQUEST</code> is added to the next payload and state for the given peer.</li>
+<li>When a node receives a <code>REQUEST</code> for a previously sent <code>OFFER</code>, the <code>OFFER</code> is removed from the state and the corresponding <code>MESSAGE</code> is added to the next payload and state for the given peer.</li>
+<li>When a node receives a <code>MESSAGE</code>, the <code>REQUEST</code> is removed from the state and an <code>ACK</code> is added to the next payload for the given peer.</li>
+<li>When a node receives an <code>ACK</code>, the <code>MESSAGE</code> is removed from the state for the given peer.</li>
+<li>All records that require retransmission are added to the payload, given <code>Send Epoch</code> has been reached.</li>
+</ul>
+<!-- raw HTML omitted -->
+<h4 id="batch-mode">
+  Batch Mode
+  <a class="anchor" href="#batch-mode">#</a>
+</h4>
+<ol>
+<li>When a node sends a <code>MESSAGE</code>, it is added to the next payload and the state for the given peer.</li>
+<li>When a node receives a <code>MESSAGE</code>, an <code>ACK</code> is added to the next payload for the corresponding peer.</li>
+<li>When a node receives an <code>ACK</code>, the <code>MESSAGE</code> is removed from the state for the given peer.</li>
+<li>All records that require retransmission are added to the payload, given <code>Send Epoch</code> has been reached.</li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<blockquote>
+<p><em><strong>NOTE:</strong> Batch mode is higher bandwidth whereas interactive mode is higher latency.</em></p>
+</blockquote>
+<!-- raw HTML omitted -->
+<h3 id="retransmission">
+  Retransmission
+  <a class="anchor" href="#retransmission">#</a>
+</h3>
+<p>The record of the type <code>Type</code> SHOULD be retransmitted every time <code>Send Epoch</code> is smaller than or equal to the current epoch.</p>
+<p><code>Send Epoch</code> and <code>Send Count</code> MUST be increased every time a record is retransmitted. Although no function is defined on how to increase <code>Send Epoch</code>, it SHOULD be exponentially increased until reaching an upper bound where it then goes back to a lower epoch in order to prevent a record&rsquo;s <code>Send Epoch</code>&rsquo;s from becoming too large.</p>
+<blockquote>
+<p><em><strong>NOTE:</strong> We do not retransmission <code>ACK</code>s as we do not know when they have arrived, therefore we simply resend them every time we receive a <code>MESSAGE</code>.</em></p>
+</blockquote>
+<h2 id="formal-specification">
+  Formal Specification
+  <a class="anchor" href="#formal-specification">#</a>
+</h2>
+<p>MVDS has been formally specified using TLA+: <a href="https://github.com/vacp2p/formalities/tree/master/MVDS">https://github.com/vacp2p/formalities/tree/master/MVDS</a>.</p>
+<h2 id="acknowledgments">
+  Acknowledgments
+  <a class="anchor" href="#acknowledgments">#</a>
+</h2>
+<ul>
+<li>Preston van Loon</li>
+<li>Greg Markou</li>
+<li>Rene Nayman</li>
+<li>Jacek Sieka</li>
+</ul>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h2 id="footnotes">
+  Footnotes
+  <a class="anchor" href="#footnotes">#</a>
+</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>akwizgran et al. <a href="https://code.briarproject.org/briar/briar-spec/blob/master/protocols/BSP.md">BSP</a>. Briar.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://github.com/vacp2p/mvds">https://github.com/vacp2p/mvds</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#secure-transport">Secure Transport</a></li>
+        <li><a href="#payloads">Payloads</a></li>
+      </ul>
+    </li>
+    <li><a href="#synchronization">Synchronization</a>
+      <ul>
+        <li><a href="#state">State</a></li>
+        <li><a href="#flow">Flow</a></li>
+        <li><a href="#retransmission">Retransmission</a></li>
+      </ul>
+    </li>
+    <li><a href="#formal-specification">Formal Specification</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

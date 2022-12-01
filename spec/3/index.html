@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A remote log is a replication of a local log. This means a node can read data that originally came from a node that is offline.
+This specification is complemented by a proof of concept implementation1.
+Definitions #     Term Definition     CAS Content-addressed storage. Stores data that can be addressed by its hash.   NS Name system. Associates mutable data to a name.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="3/REMOTE-LOG" />
+<meta property="og:description" content="A remote log is a replication of a local log. This means a node can read data that originally came from a node that is offline.
+This specification is complemented by a proof of concept implementation1.
+Definitions #     Term Definition     CAS Content-addressed storage. Stores data that can be addressed by its hash.   NS Name system. Associates mutable data to a name." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/3/" /><meta property="article:section" content="docs" />
+
+
+
+<title>3/REMOTE-LOG | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/"class=active>3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>3/REMOTE-LOG</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#secure-transport-storage-and-name-system">Secure Transport, storage, and name system</a></li>
+        <li><a href="#payloads">Payloads</a></li>
+      </ul>
+    </li>
+    <li><a href="#synchronization">Synchronization</a>
+      <ul>
+        <li><a href="#roles">Roles</a></li>
+        <li><a href="#flow">Flow</a></li>
+        <li><a href="#remote-log">Remote log</a></li>
+        <li><a href="#next-page-semantics">Next page semantics</a></li>
+        <li><a href="#interaction-with-mvds">Interaction with MVDS</a></li>
+      </ul>
+    </li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="3remote-log">3/REMOTE-LOG</h1>
+
+  
+      <h1 id="remote-log-specification">Remote log specification</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+      </li>
+      
+  </ul><p>A remote log is a replication of a local log. This means a node can read data that originally came from a node that is offline.</p>
+<p>This specification is complemented by a proof of concept implementation<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.</p>
+<h2 id="definitions">
+  Definitions
+  <a class="anchor" href="#definitions">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAS</td>
+<td>Content-addressed storage. Stores data that can be addressed by its hash.</td>
+</tr>
+<tr>
+<td>NS</td>
+<td>Name system. Associates mutable data to a name.</td>
+</tr>
+<tr>
+<td>Remote log</td>
+<td>Replication of a local log at a different location.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="wire-protocol">
+  Wire Protocol
+  <a class="anchor" href="#wire-protocol">#</a>
+</h2>
+<h3 id="secure-transport-storage-and-name-system">
+  Secure Transport, storage, and name system
+  <a class="anchor" href="#secure-transport-storage-and-name-system">#</a>
+</h3>
+<p>This specification does not define anything related to: secure transport,
+content addressed storage, or the name system. It is assumed these capabilities
+are abstracted away in such a way that any such protocol can easily be
+implemented.</p>
+<!-- raw HTML omitted -->
+<h3 id="payloads">
+  Payloads
+  <a class="anchor" href="#payloads">#</a>
+</h3>
+<p>Payloads are implemented using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v3</a>.</p>
+<p><strong>CAS service</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>cas;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> CAS {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> Add(Content) <span style="color:#66d9ef">returns</span> (Address) {}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> Get(Address) <span style="color:#66d9ef">returns</span> (Content) {}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Address</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Content</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> data <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><!-- raw HTML omitted -->
+<p><strong>NS service</strong>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>cas;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">service</span> NS {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> Update(NameUpdate) <span style="color:#66d9ef">returns</span> (Response) {}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">rpc</span> Fetch(Query) <span style="color:#66d9ef">returns</span> (Content) {}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">NameUpdate</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> content <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Query</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Content</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> data <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Response</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> data <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p><strong>Remote log:</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#f92672">package</span> vac<span style="color:#f92672">.</span>cas;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">RemoteLog</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> Pair pair <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> tail <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Pair</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">bytes</span> remoteHash <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">bytes</span> localHash <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">bytes</span> data <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="synchronization">
+  Synchronization
+  <a class="anchor" href="#synchronization">#</a>
+</h2>
+<h3 id="roles">
+  Roles
+  <a class="anchor" href="#roles">#</a>
+</h3>
+<p>There are four fundamental roles:</p>
+<ol>
+<li>Alice</li>
+<li>Bob</li>
+<li>Name system (NS)</li>
+<li>Content-addressed storage (CAS)</li>
+</ol>
+<p>The <em>remote log</em> protobuf is what is stored in the name system.</p>
+<p>&ldquo;Bob&rdquo; can represent anything from 0 to N participants. Unlike Alice, Bob only needs read-only access to NS and CAS.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h3>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="remote-log">
+  Remote log
+  <a class="anchor" href="#remote-log">#</a>
+</h3>
+<p>The remote log lets receiving nodes know what data they are missing. Depending
+on the specific requirements and capabilities of the nodes and name system, the
+information can be referred to differently. We distinguish between three rough
+modes:</p>
+<ol>
+<li>Fully replicated log</li>
+<li>Normal sized page with CAS mapping</li>
+<li>&ldquo;Linked list&rdquo; mode - minimally sized page with CAS mapping</li>
+</ol>
+<p><strong>Data format:</strong></p>
+<pre tabindex="0"><code>| H1_3 | H2_3 |
+| H1_2 | H2_2 |
+| H1_1 | H2_1 |
+| ------------|
+| next_page   |
+</code></pre><p>Here the upper section indicates a list of ordered pairs, and the lower section
+contains the address for the next page chunk. <code>H1</code> is the native hash function,
+and <code>H2</code> is the one used by the CAS. The numbers corresponds to the messages.</p>
+<p>To indicate which CAS is used, a remote log SHOULD use a multiaddr.</p>
+<p><strong>Embedded data:</strong></p>
+<p>A remote log MAY also choose to embed the wire payloads that corresponds to the
+native hash. This bypasses the need for a dedicated CAS and additional
+round-trips, with a trade-off in bandwidth usage.</p>
+<pre tabindex="0"><code>| H1_3 | | C_3 |
+| H1_2 | | C_2 |
+| H1_1 | | C_1 |
+| -------------|
+| next_page    |
+</code></pre><p>Here <code>C</code> stands for the content that would be stored at the CAS.</p>
+<p>Both patterns can be used in parallel, e,g. by storing the last <code>k</code> messages
+directly and use CAS pointers for the rest. Together with the <code>next_page</code> page
+semantics, this gives users flexibility in terms of bandwidth and
+latency/indirection, all the way from a simple linked list to a fully replicated
+log. The latter is useful for things like backups on durable storage.</p>
+<h3 id="next-page-semantics">
+  Next page semantics
+  <a class="anchor" href="#next-page-semantics">#</a>
+</h3>
+<p>The pointer to the &lsquo;next page&rsquo; is another remote log entry, at a previous point
+in time.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="interaction-with-mvds">
+  Interaction with MVDS
+  <a class="anchor" href="#interaction-with-mvds">#</a>
+</h3>
+<p><a href="/spec/2#payloads">vac.mvds.Message</a> payloads are the only payloads that MUST be uploaded. Other messages types MAY be uploaded, depending on the implementation.</p>
+<h2 id="acknowledgments">
+  Acknowledgments
+  <a class="anchor" href="#acknowledgments">#</a>
+</h2>
+<p>TBD.</p>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h2 id="footnotes">
+  Footnotes
+  <a class="anchor" href="#footnotes">#</a>
+</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://github.com/vacp2p/research/tree/master/remote_log">https://github.com/vacp2p/research/tree/master/remote_log</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#secure-transport-storage-and-name-system">Secure Transport, storage, and name system</a></li>
+        <li><a href="#payloads">Payloads</a></li>
+      </ul>
+    </li>
+    <li><a href="#synchronization">Synchronization</a>
+      <ul>
+        <li><a href="#roles">Roles</a></li>
+        <li><a href="#flow">Flow</a></li>
+        <li><a href="#remote-log">Remote log</a></li>
+        <li><a href="#next-page-semantics">Next page semantics</a></li>
+        <li><a href="#interaction-with-mvds">Interaction with MVDS</a></li>
+      </ul>
+    </li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

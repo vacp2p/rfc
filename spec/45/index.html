@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  This document lists adversarial models and attack-based threats relevant in the context of Waku v2.
+Motivation and Background #  Future versions of this document will serve as a comprehensive list of adversarial models and attack based threats relevant for Waku v2. The main purpose of this document is being a linkable resource for specifications that address protection as well as mitigation mechanisms within the listed models.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="45/WAKU2-ADVERSARIAL-MODELS" />
+<meta property="og:description" content="Abstract #  This document lists adversarial models and attack-based threats relevant in the context of Waku v2.
+Motivation and Background #  Future versions of this document will serve as a comprehensive list of adversarial models and attack based threats relevant for Waku v2. The main purpose of this document is being a linkable resource for specifications that address protection as well as mitigation mechanisms within the listed models." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/45/" /><meta property="article:section" content="docs" />
+
+
+
+<title>45/WAKU2-ADVERSARIAL-MODELS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/"class=active>45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>45/WAKU2-ADVERSARIAL-MODELS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#anonymity">Anonymity</a>
+      <ul>
+        <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+        <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+      </ul>
+    </li>
+    <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
+    <li><a href="#censorship-resistance">Censorship Resistance</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#internal">Internal</a>
+      <ul>
+        <li><a href="#single-node">Single Node</a></li>
+        <li><a href="#multi-node">Multi Node</a></li>
+        <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+      </ul>
+    </li>
+    <li><a href="#external">External</a>
+      <ul>
+        <li><a href="#local">Local</a></li>
+        <li><a href="#as">AS</a></li>
+        <li><a href="#global-on-net">Global (On-Net)</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
+    <li><a href="#sender-deanonymization">Sender Deanonymization</a>
+      <ul>
+        <li><a href="#replay-attack">Replay Attack</a></li>
+        <li><a href="#observing-messages">Observing Messages</a></li>
+        <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
+        <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
+        <li><a href="#correlation">Correlation</a></li>
+      </ul>
+    </li>
+    <li><a href="#mass-deanonymization">Mass Deanonymization</a>
+      <ul>
+        <li><a href="#graph-learning">Graph Learning</a></li>
+        <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
+      </ul>
+    </li>
+    <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
+      <ul>
+        <li><a href="#flooding">Flooding</a></li>
+        <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
+        <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="45waku2-adversarial-models">45/WAKU2-ADVERSARIAL-MODELS</h1>
+
+  
+      <h1 id="waku-v2-adversarial-models-and-attack-based-threat-list">Waku v2 Adversarial Models and Attack-based Threat List</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document lists adversarial models and attack-based threats relevant in the context of Waku v2.</p>
+<h1 id="motivation-and-background">
+  Motivation and Background
+  <a class="anchor" href="#motivation-and-background">#</a>
+</h1>
+<p>Future versions of this document will serve as a comprehensive list of adversarial models and attack based threats relevant for <a href="/spec/10/">Waku v2</a>.
+The main purpose of this document is being a linkable resource for specifications that address protection as well as mitigation mechanisms within the listed models.</p>
+<p>Discussing and introducing countermeasures to specific attacks in specific models is out of scope for this document.
+Analyses and further information about Waku&rsquo;s properties within these models may be found in our <em>Waku v2 Anonymity Analysis</em> series of research log posts:</p>
+<ul>
+<li><a href="https://vac.dev/wakuv2-relay-anon">Part I: Definitions and Waku Relay</a></li>
+</ul>
+<p>Note: This document adds to the adversarial models and threat list discussed in our <a href="https://vac.dev/wakuv2-relay-anon">research log post</a>.
+It does not cover analysis of Waku, as the research log post does.
+Future versions of this document will extend the adversarial models and threat list.</p>
+<h1 id="informal-definitions-security-privacy-and-anonymity">
+  Informal Definitions: Security, Privacy, and Anonymity
+  <a class="anchor" href="#informal-definitions-security-privacy-and-anonymity">#</a>
+</h1>
+<p>The concepts of security, privacy, and anonymity are linked and have quite a bit of overlap.</p>
+<h2 id="security">
+  Security
+  <a class="anchor" href="#security">#</a>
+</h2>
+<p>Of the three, <a href="https://en.wikipedia.org/wiki/Information_security">Security</a> has the clearest agreed upon definition,
+at least regarding its key concepts: <em>confidentiality</em>, <em>integrity</em>, and <em>availability</em>.</p>
+<ul>
+<li>confidentiality:  data is not disclosed to unauthorized entities.</li>
+<li>integrity: data is not modified by unauthorized entities.</li>
+<li>availability: data is available, i.e. accessible by authorized entities.</li>
+</ul>
+<p>While these are the key concepts, the definition of information security has been extended over time including further concepts,
+e.g. <a href="https://en.wikipedia.org/wiki/Authentication">authentication</a> and <a href="https://en.wikipedia.org/wiki/Non-repudiation">non-repudiation</a>.</p>
+<h2 id="privacy">
+  Privacy
+  <a class="anchor" href="#privacy">#</a>
+</h2>
+<p>Privacy allows users to choose which data and information</p>
+<ul>
+<li>they want to share</li>
+<li>and with whom they want to share it.</li>
+</ul>
+<p>This includes data and information that is associated with and/or generated by users.
+Protected data also comprises metadata that might be generated without users being aware of it.
+This means, no further information about the sender or the message is leaked.
+Metadata that is protected as part of the privacy-preserving property does not cover protecting the identities of sender and receiver.
+Identities are protected by the <a href="#anonymity">anonymity property</a>.</p>
+<p>Often privacy is realized by the confidentiality property of security.
+This neither makes privacy and security the same, nor the one a sub category of the other.
+While security is abstract itself (its properties can be realized in various ways), privacy lives on a more abstract level using security properties.
+Privacy typically does not use integrity and availability.
+An adversary who has no access to the private data, because the message has been encrypted, could still alter the message.</p>
+<h2 id="anonymity">
+  Anonymity
+  <a class="anchor" href="#anonymity">#</a>
+</h2>
+<p>Privacy and anonymity are closely linked.
+Both the identity of a user and data that allows inferring a user&rsquo;s identity should be part of the privacy policy.
+For the purpose of analysis, we want to have a clearer separation between these concepts.</p>
+<p>We define anonymity as <em>unlinkablity of users' identities and their shared data and/or actions</em>.</p>
+<p>We subdivide anonymity into <em>receiver anonymity</em> and <em>sender anonymity</em>.</p>
+<h3 id="receiver-anonymity">
+  Receiver Anonymity
+  <a class="anchor" href="#receiver-anonymity">#</a>
+</h3>
+<p>We define receiver anonymity as <em>unlinkability of users' identities and the data they receive and/or related actions</em>.
+Because each <a href="/spec/14/">Waku message</a> is associated with a content topic, and each receiver is interested in messages with specific content topics,
+receiver anonymity in the context of Waku corresponds to <em>subscriber-topic unlinkability</em>.
+An example for the &ldquo;action&rdquo; part of our receiver anonymity definition is subscribing to a specific topic.</p>
+<h3 id="sender-anonymity">
+  Sender Anonymity
+  <a class="anchor" href="#sender-anonymity">#</a>
+</h3>
+<p>We define sender anonymity as <em>unlinkability of users' identities and the data they send and/or related actions</em>.
+Because the data in the context of Waku is Waku messages, sender anonymity corresponds to <em>sender-message unlinkability</em>.</p>
+<h2 id="anonymity-trilemma">
+  Anonymity Trilemma
+  <a class="anchor" href="#anonymity-trilemma">#</a>
+</h2>
+<p><a href="https://freedom.cs.purdue.edu/projects/trilemma.html">The Anonymity trilemma</a> states that only two out of <em>strong anonymity</em>, <em>low bandwidth</em>, and <em>low latency</em> can be guaranteed in the <em>global attacker</em> model.
+Waku&rsquo;s goal, being a modular set of protocols, is to offer any combination of two out of these three properties, as well as blends.</p>
+<p>A fourth factor that influences <a href="https://freedom.cs.purdue.edu/projects/trilemma.html">the anonymity trilemma</a> is <em>frequency and patterns</em> of messages.
+The more messages there are, and the more randomly distributed they are, the better the anonymity protection offered by a given anonymous communication protocol.
+So, incentivising users to use the protocol, for instance by lowering entry barriers, helps protecting the anonymity of all users.
+The frequency/patterns factor is also related to <a href="https://en.wikipedia.org/wiki/K-anonymity">k-anonymity</a>.</p>
+<h2 id="censorship-resistance">
+  Censorship Resistance
+  <a class="anchor" href="#censorship-resistance">#</a>
+</h2>
+<p>Another security related property that Waku aims to offer is censorship resistance.
+Censorship resistance guarantees that users can participate even if an attacker tries to deny them access.
+So, censorship resistance ties into the availability aspect of security.
+In the context of Waku that means users should be able to send messages as well as receive all messages they are interested in,
+even if an attacker tries to prevent them from disseminating messages or tries to deny them access to messages.</p>
+<p>An example for a censorship resistance technique is Tor&rsquo;s <a href="https://www.pluggabletransports.info/about/">Pluggable Transports</a>.</p>
+<h1 id="adversarial-models">
+  Adversarial Models
+  <a class="anchor" href="#adversarial-models">#</a>
+</h1>
+<p>The following lists various attacker types with varying degrees of power.
+The more power an attacker has, the more difficult it is to gain the respective attacker position.</p>
+<p>Each attacker type comes in a passive and an active variant.
+While a passive attacker can stay hidden and is not suspicious,
+the respective active attacker has more (or at least the same) deanonymization power.</p>
+<p>We also distinguish between internal and external attackers.
+Since in permissionless protocols it is easy to obtain an internal position,
+in practice attackers are expected to mount combined attacks that leverage both internal and external attacks.</p>
+<h2 id="internal">
+  Internal
+  <a class="anchor" href="#internal">#</a>
+</h2>
+<p>In the passive variant, an internal attacker behaves like an honest node towards peers.
+The passive internal attacker has the same access rights as any honest node.
+In the active variant, an internal attacker can additionally drop, inject, and alter messages.
+With respect to Waku relay, for example, an internal attacker participates in the same pubsub topic as its victims,
+and can read messages related to that topic.</p>
+<h3 id="single-node">
+  Single Node
+  <a class="anchor" href="#single-node">#</a>
+</h3>
+<p>This attacker controls a single node.</p>
+<h3 id="multi-node">
+  Multi Node
+  <a class="anchor" href="#multi-node">#</a>
+</h3>
+<p>This attacker controls a fixed number of nodes (not scaling with the total number of nodes in the network).
+The multi node position can be achieved by setting up multiple nodes.
+Botnets might be leveraged to increase the number of available hosts.
+Multi node attackers could use <a href="https://en.wikipedia.org/wiki/Sybil_attack">Sybil attacks</a> to increase the number of controlled nodes.
+A countermeasure is for nodes to only accept libp2p gossipsub graft requests from peers with different IP addresses, or even different subnets.</p>
+<p>Nodes controlled by the attacker can efficiently communicate out-of-band to coordinate.</p>
+<h3 id="scaling-multi-node">
+  Scaling Multi Node
+  <a class="anchor" href="#scaling-multi-node">#</a>
+</h3>
+<p>This attacker controls a number of nodes that scales linearly with the number of nodes in the network.
+The attacker controls $p%$ of all nodes in the network.</p>
+<p>Nodes controlled by the attacker can efficiently communicate out-of-band to coordinate.</p>
+<h2 id="external">
+  External
+  <a class="anchor" href="#external">#</a>
+</h2>
+<p>An external attacker can only see encrypted traffic.
+Waku protocols are protected by a secure channel set up with <a href="/spec/35/">Noise</a>.</p>
+<h3 id="local">
+  Local
+  <a class="anchor" href="#local">#</a>
+</h3>
+<p>A local attacker has access to communication links in a local network segment.
+This could be a rogue access point (with routing capability).</p>
+<h3 id="as">
+  AS
+  <a class="anchor" href="#as">#</a>
+</h3>
+<p>An AS attacker controls a single AS (autonomous system).
+A passive AS attacker can listen to traffic on arbitrary links within the AS.
+An active AS attacker can drop, delay, inject, and alter traffic on arbitrary links within the AS.</p>
+<p>In practice, a malicious ISP would be considered as an AS attacker.
+A malicious ISP could also easily setup a set of nodes at specific points in the network,
+gaining internal attack power similar to a strong <em>multi node</em> or even <em>scaling multi node</em> attacker.</p>
+<h3 id="global-on-net">
+  Global (On-Net)
+  <a class="anchor" href="#global-on-net">#</a>
+</h3>
+<p>A global (on-net) attacker has complete overview over the whole network.
+A passive global attacker can listen to traffic on all links,
+while the active global attacker basically carries the traffic: it can freely drop, delay, inject, and alter traffic at all positions in the network.
+This basically corresponds to the <a href="https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model">Dolev-Yao model</a>.</p>
+<p>An entity with this power would, in practice, also have the power of the internal <em>scaling multi node</em> attacker.</p>
+<h1 id="attack-based-threats">
+  Attack-based Threats
+  <a class="anchor" href="#attack-based-threats">#</a>
+</h1>
+<p>The following lists various attacks against <a href="/spec/10/">Waku v2</a> protocols.
+If not specifically mentioned, the attacks refer to <a href="/spec/11">Waku relay</a> and the underlying <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p GossipSub</a>.
+We also list the weakest attacker model in which the attack can be successfully performed against.</p>
+<p>An attack is considered more powerful if it can be successfully performed in a weaker attacker model.</p>
+<p>Note: This list is work in progress.
+We will either expand this list adding more attacks in future versions of this document,
+or remove it and point to the &ldquo;Security Considerations&rdquo; sections of respective RFCs.</p>
+<h2 id="prerequisite-get-a-specific-position-in-the-network">
+  Prerequisite: Get a Specific Position in the Network
+  <a class="anchor" href="#prerequisite-get-a-specific-position-in-the-network">#</a>
+</h2>
+<p>Some attacks require the attacker node(s) to be in a specific position in the network.
+In most cases, this corresponds to trying to get into the mesh peer list for the desired pubsub topic of the victim node.</p>
+<p>In libp2p gossipsub, and by extension Waku v2 relay, nodes can simply send a graft message for the desired topic to the victim node.
+If the victim node still has open slots, the attacker gets the desired position.
+This only requires the attacker to know the gossipsub multiaddress of the victim node.</p>
+<p>A <em>scaling multi node</em> attacker can leverage DHT based discovery systems to boost the probability of malicious nodes being returned,
+which in turn significantly increases the probability of attacker nodes ending up in the peer lists of victim nodes.</p>
+<h2 id="sender-deanonymization">
+  Sender Deanonymization
+  <a class="anchor" href="#sender-deanonymization">#</a>
+</h2>
+<p>This section lists attacks that aim at deanonymizing a message sender.</p>
+<p>We assume that protocol messages are transmitted within a secure channel set up using the <a href="https://noiseprotocol.org/">Noise Protocol Framework</a>.
+For <a href="/spec/11">Waku Relay</a> this means we only consider messages with version field <code>2</code>,
+which indicates that the payload has to be encoded using <a href="/spec/35/">35/WAKU2-NOISE</a>.</p>
+<p>Note: The currently listed attacks are against libp2p in general.
+The <a href="/spec/11/#message-fields">data field of Waku v2 relay</a> must be a <a href="/spec/14/">Waku v2 message</a>.
+The attacks listed in the following do not leverage that fact.</p>
+<h3 id="replay-attack">
+  Replay Attack
+  <a class="anchor" href="#replay-attack">#</a>
+</h3>
+<p>In a replay attack, the attacker replays a valid message it received.</p>
+<p>Waku relay is inherently safe against replay attack,
+because GossipSub nodes, and by extension Waku relay nodes,
+feature a <code>seen</code> cache, and only relay messages they have not seen before.</p>
+<p>Further, replay attacks will be punished by <a href="/spec/17/">RLN Relay</a>.</p>
+<h3 id="observing-messages">
+  Observing Messages
+  <a class="anchor" href="#observing-messages">#</a>
+</h3>
+<p>If Waku relay was not protected with Noise, the AS attacker could simply check for messages leaving $v$ which have not been relayed to $v$.
+These are the messages sent by $v$.
+Waku relay protects against this attack by employing secure channels setup using Noise.</p>
+<h3 id="neighbourhood-surveillance">
+  Neighbourhood Surveillance
+  <a class="anchor" href="#neighbourhood-surveillance">#</a>
+</h3>
+<p>This attack can be performed by a single node attacker that is connected to all peers of the victim node $v$ with respect to a specific topic mesh.
+The attacker also has to be connected to $v$.
+In this position, the attacker will receive messages $m_v$ sent by $v$ both on the direct path from $v$, and on indirect paths relayed by peers of $v$.
+It will also receive messages $m_x$ that are not sent by $v$. These messages $m_x$ are relayed by both $v$ and the peers of $v$.
+Messages that are received (significantly) faster from $v$ than from any other of $v$&rsquo;s peers are very likely messages that $v$ sent,
+because for these messages the attacker is one hop closer to the source.</p>
+<p>The attacker can (periodically) measure latency between itself and $v$, and between itself and the peers of $v$ to get more accurate estimates for the expected timings.
+An AS attacker (and if the topology allows, even a local attacker) could also learn the latency between $v$ and its well-behaving peers.
+An active AS attacker could also increase the latency between $v$ and its peers to make the timing differences more prominent.
+This, however, might lead to $v$ switching to other peers.</p>
+<p>This attack cannot (reliably) distinguish messages $m_v$ sent by $v$ from messages $m_y$ relayed by peers of $v$ the attacker is not connected to.
+Still, there are hop-count variations that can be leveraged.
+Messages $m_v$ always have a hop-count of 1 on the path from $v$ to the attacker, while all other paths are longer.
+Messages $m_y$ might have the same hop-count on the path from $v$ as well as on other paths.
+Further techniques that are part of the <em>mass deanonymization</em> category, such as <a href="#bayesian-analysis">bayesian analysis</a>, can be used here as well.</p>
+<h3 id="controlled-neighbourhood">
+  Controlled Neighbourhood
+  <a class="anchor" href="#controlled-neighbourhood">#</a>
+</h3>
+<p>If a multi node attacker manages to control all peers of the victim node, it can trivially tell which messages originated from $v$.</p>
+<h3 id="correlation">
+  Correlation
+  <a class="anchor" href="#correlation">#</a>
+</h3>
+<p>Monitoring all traffic (in an AS or globally), allows the attacker to identify traffic correlated with messages originating from $v$.
+This (alone) does not allow an external attacker to learn which message $v$ sent, but it allows identifying the respective traffic propagating through the network.
+The more traffic in the network, the lower the success rate of this attack.</p>
+<p>Combined with just a few nodes controlled by the attacker, the actual message associated with the correlated traffic can eventually be identified.</p>
+<h2 id="mass-deanonymization">
+  Mass Deanonymization
+  <a class="anchor" href="#mass-deanonymization">#</a>
+</h2>
+<p>While attacks in the <em>sender deanonymization</em> category target a set of either specific or arbitrary users,
+attacks in the <em>mass deanonymization</em> category aim at deanonymizing (parts of) the whole network.
+Mass deanonymization attacks do not necessarily link messages to senders.
+They might only reduce the anonymity set in which senders hide,
+or infer information about the network topology.</p>
+<h3 id="graph-learning">
+  Graph Learning
+  <a class="anchor" href="#graph-learning">#</a>
+</h3>
+<p>Graph learning attacks are a prerequisite for some mass deanonymization attacks,
+in which the attacker learns the overlay network topology.
+Graph learning attacks require a <em>scaling multinode</em> attacker</p>
+<p>For gossipsub this means an attacker learns the topic mesh for specific pubsub topics.
+<a href="https://arxiv.org/abs/1805.11060">Dandelion++</a> describes ways to perform this attack.</p>
+<h3 id="bayesian-analysis">
+  Bayesian Analysis
+  <a class="anchor" href="#bayesian-analysis">#</a>
+</h3>
+<p>Bayesian analysis allows attackers to assign each node in the network a likelihood of having sent (originated) a specific message.
+Bayesian analysis for mass deanonymization is detailed in <a href="https://arxiv.org/pdf/2201.11860">On the Anonymity of Peer-To-Peer Network Anonymity Schemes Used by Cryptocurrencies</a>.
+It requires a <em>scaling node</em> attacker as well as knowledge of the network topology,
+which can be learned via <em>graph learning</em> attacks.</p>
+<h2 id="denial-of-service-dos">
+  Denial of Service (DoS)
+  <a class="anchor" href="#denial-of-service-dos">#</a>
+</h2>
+<h3 id="flooding">
+  Flooding
+  <a class="anchor" href="#flooding">#</a>
+</h3>
+<p>In a flooding attack, attackers flood the network with bogus messages.</p>
+<p>Waku employs <a href="/spec/17/">RLN Relay</a> as the main countermeasure to flooding.
+<a href="/spec/18/">SWAP</a> also helps mitigating DoS attacks.</p>
+<h3 id="black-hole-internal">
+  Black Hole (internal)
+  <a class="anchor" href="#black-hole-internal">#</a>
+</h3>
+<p>In a black hole attack, the attacker does not relay messages it is supposed to relay.
+Analogous to a black hole, attacker nodes do not allow messages to leave once they entered.</p>
+<p>While <em>single node</em> and smaller <em>multi node</em> attackers can have a negative effect on availability, the impact is not significant.
+A <em>scaling multi node</em> attacker, however, can significantly disrupt the network with such an attack.</p>
+<p>The effects of this attack are especially severe in conjunction with deanonymization mitigation techniques that reduce the out-degree of the overlay,
+such as <a href="/spec/44/">Waku Dandelion</a>.
+(<a href="/spec/44/">Waku Dandelion</a> also discusses mitigation techniques compensating the amplified black hole potential.)</p>
+<h3 id="traffic-filtering-external">
+  Traffic Filtering (external)
+  <a class="anchor" href="#traffic-filtering-external">#</a>
+</h3>
+<p>A local attacker can filter and drop all Waku traffic within its controlled network segment.
+An AS attacker can filter and drop all Waku traffic within its authority, while a global attacker can censor the whole network.
+A countermeasure are censorship resistance techniques like <a href="https://www.pluggabletransports.info/about/">Pluggable Transports</a>.</p>
+<p>An entity trying to censor Waku can employ both the <em>black hole</em> attack and <em>traffic filtering</em>;
+the former is internal while the latter is external.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p GossipSub</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Information_security">Security</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Authentication">Authentication</a></li>
+<li><a href="https://freedom.cs.purdue.edu/projects/trilemma.html">Anonymity Trilemma</a></li>
+<li><a href="/spec/14/">Waku v2 message</a></li>
+<li><a href="https://www.pluggabletransports.info/about/">Pluggable Transports</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Sybil_attack">Sybil attack</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Dolev%E2%80%93Yao_model">Dolev-Yao model</a></li>
+<li><a href="https://noiseprotocol.org/">Noise Protocol Framework</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/17/">17/WAKU-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="https://arxiv.org/abs/1805.11060">Dandelion++</a></li>
+<li><a href="https://arxiv.org/pdf/2201.11860">On the Anonymity of Peer-To-Peer Network Anonymity Schemes Used by Cryptocurrencies</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#security">Security</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#anonymity">Anonymity</a>
+      <ul>
+        <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+        <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+      </ul>
+    </li>
+    <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
+    <li><a href="#censorship-resistance">Censorship Resistance</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#internal">Internal</a>
+      <ul>
+        <li><a href="#single-node">Single Node</a></li>
+        <li><a href="#multi-node">Multi Node</a></li>
+        <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+      </ul>
+    </li>
+    <li><a href="#external">External</a>
+      <ul>
+        <li><a href="#local">Local</a></li>
+        <li><a href="#as">AS</a></li>
+        <li><a href="#global-on-net">Global (On-Net)</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
+    <li><a href="#sender-deanonymization">Sender Deanonymization</a>
+      <ul>
+        <li><a href="#replay-attack">Replay Attack</a></li>
+        <li><a href="#observing-messages">Observing Messages</a></li>
+        <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
+        <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
+        <li><a href="#correlation">Correlation</a></li>
+      </ul>
+    </li>
+    <li><a href="#mass-deanonymization">Mass Deanonymization</a>
+      <ul>
+        <li><a href="#graph-learning">Graph Learning</a></li>
+        <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
+      </ul>
+    </li>
+    <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
+      <ul>
+        <li><a href="#flooding">Flooding</a></li>
+        <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
+        <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

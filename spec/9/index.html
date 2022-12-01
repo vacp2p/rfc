@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.
+Introduction #  This API is based off the Whisper V6 RPC API.
+Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be accessed.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="9/WAKU-RPC" />
+<meta property="og:description" content="This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.
+Introduction #  This API is based off the Whisper V6 RPC API.
+Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be accessed." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/9/" /><meta property="article:section" content="docs" />
+
+
+
+<title>9/WAKU-RPC | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/"class=active>9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>9/WAKU-RPC</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#transport">Transport</a></li>
+        <li><a href="#objects">Objects</a></li>
+        <li><a href="#methods">Methods</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="9waku-rpc">9/WAKU-RPC</h1>
+
+  
+      <h1 id="waku-rpc-api">Waku RPC API</h1>
+
+  
+
+  
+  
+  
+  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=flat-square" />
+  
+  
+  
+
+  <ul>
+      <li>Status: stable</li>
+      <li>Editor: Andrea Maria Piana <a href="mailto:andreap@status.im">andreap@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+      </li>
+      
+  </ul><p>This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily
+be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.</p>
+<h2 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h2>
+<p>This API is based off the <a href="https://github.com/ethereum/go-ethereum/wiki/Whisper-v6-RPC-API">Whisper V6 RPC API</a>.</p>
+<h2 id="wire-protocol">
+  Wire Protocol
+  <a class="anchor" href="#wire-protocol">#</a>
+</h2>
+<h3 id="transport">
+  Transport
+  <a class="anchor" href="#transport">#</a>
+</h3>
+<p>Nodes SHOULD expose a <a href="https://www.jsonrpc.org/specification">JSON RPC</a> API that can be accessed. The JSON RPC version SHOULD be <code>2.0</code>. Below is an example request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
+  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;waku_version&#34;</span>,
+  <span style="color:#f92672">&#34;params&#34;</span>:[],
+  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
+}
+</code></pre></div><h4 id="fields">
+  Fields
+  <a class="anchor" href="#fields">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jsonrpc</code></td>
+<td>Contains the used JSON RPC version (<code>Default: 2.0</code>)</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>Contains the JSON RPC method that is being called</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>An array of parameters for the request</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>The request ID</td>
+</tr>
+</tbody>
+</table>
+<h3 id="objects">
+  Objects
+  <a class="anchor" href="#objects">#</a>
+</h3>
+<p>In this section you will find objects used throughout the JSON RPC API.</p>
+<h4 id="message">
+  Message
+  <a class="anchor" href="#message">#</a>
+</h4>
+<p>The message object represents a Waku message. Below you will find the description of the attributes contained in the message object. A message is the decrypted payload and padding of an <a href="/spec/7">envelope</a> along with all of its metadata and other extra information such as the hash.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>sig</code></td>
+<td style="text-align:center">string</td>
+<td>Public Key that signed this message</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>recipientPublicKey</code></td>
+<td style="text-align:center">string</td>
+<td>The recipients public key</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>ttl</code></td>
+<td style="text-align:center">number</td>
+<td>Time-to-live in seconds</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>timestamp</code></td>
+<td style="text-align:center">number</td>
+<td>Unix timestamp of the message generation</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center">string</td>
+<td>4 bytes, the message topic</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>payload</code></td>
+<td style="text-align:center">string</td>
+<td>Decrypted payload</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>padding</code></td>
+<td style="text-align:center">string</td>
+<td>Optional padding, byte array of arbitrary length</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>pow</code></td>
+<td style="text-align:center">number</td>
+<td>The proof of work value</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>hash</code></td>
+<td style="text-align:center">string</td>
+<td>Hash of the enveloped message</td>
+</tr>
+</tbody>
+</table>
+<h4 id="filter">
+  Filter
+  <a class="anchor" href="#filter">#</a>
+</h4>
+<p>The filter object represents filters that can be applied to retrieve messages. Below you will find the description of the attributes contained in the filter object.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>symKeyID</code></td>
+<td style="text-align:center">string</td>
+<td>ID of the symmetric key for message decryption</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>privateKeyID</code></td>
+<td style="text-align:center">string</td>
+<td>ID of private (asymmetric) key for message decryption</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>sig</code></td>
+<td style="text-align:center">string</td>
+<td>Public key of the signature</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>minPow</code></td>
+<td style="text-align:center">number</td>
+<td>Minimal PoW requirement for incoming messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>topics</code></td>
+<td style="text-align:center">array</td>
+<td>Array of possible topics, this can also contain partial topics</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>allowP2P</code></td>
+<td style="text-align:center">boolean</td>
+<td>Indicates if this filter allows processing of direct peer-to-peer messages</td>
+</tr>
+</tbody>
+</table>
+<p>All fields are optional, however <code>symKeyID</code> or <code>privateKeyID</code> must be present, it cannot be both. Additionally, the <code>topics</code> field is only optional when an asymmetric key is used.</p>
+<h3 id="methods">
+  Methods
+  <a class="anchor" href="#methods">#</a>
+</h3>
+<h4 id="waku_version">
+  <code>waku_version</code>
+  <a class="anchor" href="#waku_version">#</a>
+</h4>
+<p>The <code>waku_version</code> method returns the current version number.</p>
+<h5 id="parameters">
+  Parameters
+  <a class="anchor" href="#parameters">#</a>
+</h5>
+<p>none</p>
+<h5 id="response">
+  Response
+  <a class="anchor" href="#response">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The version number.</li>
+</ul>
+<h4 id="waku_info">
+  <code>waku_info</code>
+  <a class="anchor" href="#waku_info">#</a>
+</h4>
+<p>The <code>waku_info</code> method returns information about a Waku node.</p>
+<h5 id="parameters-1">
+  Parameters
+  <a class="anchor" href="#parameters-1">#</a>
+</h5>
+<p>none</p>
+<h5 id="response-1">
+  Response
+  <a class="anchor" href="#response-1">#</a>
+</h5>
+<p>The response is an <code>Object</code> containing the following fields:</p>
+<ul>
+<li><strong><code>minPow</code> [number]</strong> - The current PoW requirement.</li>
+<li><strong><code>maxEnvelopeSize</code> [float]</strong> - The current maximum envelope size in bytes.</li>
+<li><strong><code>memory</code> [number]</strong> - The memory size of the floating messages in bytes.</li>
+<li><strong><code>envelopes</code> [number]</strong> - The number of floating envelopes.</li>
+</ul>
+<h4 id="waku_setmaxenvelopesize">
+  <code>waku_setMaxEnvelopeSize</code>
+  <a class="anchor" href="#waku_setmaxenvelopesize">#</a>
+</h4>
+<p>Sets the maximum envelope size allowed by this node. Any envelopes larger than this size both incoming and outgoing will be rejected. The envelope size can never exceed the underlying envelope size of <code>10mb</code>.</p>
+<h5 id="parameters-2">
+  Parameters
+  <a class="anchor" href="#parameters-2">#</a>
+</h5>
+<ul>
+<li><strong>number</strong> - The message size in bytes.</li>
+</ul>
+<h5 id="response-2">
+  Response
+  <a class="anchor" href="#response-2">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_setminpow">
+  <code>waku_setMinPoW</code>
+  <a class="anchor" href="#waku_setminpow">#</a>
+</h4>
+<p>Sets the minimal PoW required by this node.</p>
+<h5 id="parameters-3">
+  Parameters
+  <a class="anchor" href="#parameters-3">#</a>
+</h5>
+<ul>
+<li><strong>number</strong> - The new PoW requirement.</li>
+</ul>
+<h5 id="response-3">
+  Response
+  <a class="anchor" href="#response-3">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_marktrustedpeer">
+  <code>waku_markTrustedPeer</code>
+  <a class="anchor" href="#waku_marktrustedpeer">#</a>
+</h4>
+<p>Marks a specific peer as trusted allowing it to send expired messages.</p>
+<h5 id="parameters-4">
+  Parameters
+  <a class="anchor" href="#parameters-4">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - <code>enode</code> of the peer.</li>
+</ul>
+<h5 id="response-4">
+  Response
+  <a class="anchor" href="#response-4">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_newkeypair">
+  <code>waku_newKeyPair</code>
+  <a class="anchor" href="#waku_newkeypair">#</a>
+</h4>
+<p>Generates a keypair used for message encryption and decryption.</p>
+<h5 id="parameters-5">
+  Parameters
+  <a class="anchor" href="#parameters-5">#</a>
+</h5>
+<p>none</p>
+<h5 id="response-5">
+  Response
+  <a class="anchor" href="#response-5">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - Key ID on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_addprivatekey">
+  <code>waku_addPrivateKey</code>
+  <a class="anchor" href="#waku_addprivatekey">#</a>
+</h4>
+<p>Stores a key and returns its ID.</p>
+<h5 id="parameters-6">
+  Parameters
+  <a class="anchor" href="#parameters-6">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - Private key as hex bytes.</li>
+</ul>
+<h5 id="response-6">
+  Response
+  <a class="anchor" href="#response-6">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - Key ID on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_deletekeypair">
+  <code>waku_deleteKeyPair</code>
+  <a class="anchor" href="#waku_deletekeypair">#</a>
+</h4>
+<p>Deletes a specific key if it exists.</p>
+<h5 id="parameters-7">
+  Parameters
+  <a class="anchor" href="#parameters-7">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key pair.</li>
+</ul>
+<h5 id="response-7">
+  Response
+  <a class="anchor" href="#response-7">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_haskeypair">
+  <code>waku_hasKeyPair</code>
+  <a class="anchor" href="#waku_haskeypair">#</a>
+</h4>
+<p>Checks if the node has a private key of a key pair matching the given ID.</p>
+<h5 id="parameters-8">
+  Parameters
+  <a class="anchor" href="#parameters-8">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key pair.</li>
+</ul>
+<h5 id="response-8">
+  Response
+  <a class="anchor" href="#response-8">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> or <code>false</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_getpublickey">
+  <code>waku_getPublicKey</code>
+  <a class="anchor" href="#waku_getpublickey">#</a>
+</h4>
+<p>Returns the public key for an ID.</p>
+<h5 id="parameters-9">
+  Parameters
+  <a class="anchor" href="#parameters-9">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key.</li>
+</ul>
+<h5 id="response-9">
+  Response
+  <a class="anchor" href="#response-9">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The public key or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_getprivatekey">
+  <code>waku_getPrivateKey</code>
+  <a class="anchor" href="#waku_getprivatekey">#</a>
+</h4>
+<p>Returns the private key for an ID.</p>
+<h5 id="parameters-10">
+  Parameters
+  <a class="anchor" href="#parameters-10">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key.</li>
+</ul>
+<h5 id="response-10">
+  Response
+  <a class="anchor" href="#response-10">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The private key or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_newsymkey">
+  <code>waku_newSymKey</code>
+  <a class="anchor" href="#waku_newsymkey">#</a>
+</h4>
+<p>Generates a random symmetric key and stores it under an ID. This key can be used to encrypt and decrypt messages where the key is known to both parties.</p>
+<h5 id="parameters-11">
+  Parameters
+  <a class="anchor" href="#parameters-11">#</a>
+</h5>
+<p>none</p>
+<h5 id="response-11">
+  Response
+  <a class="anchor" href="#response-11">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The key ID or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_addsymkey">
+  <code>waku_addSymKey</code>
+  <a class="anchor" href="#waku_addsymkey">#</a>
+</h4>
+<p>Stores the key and returns its ID.</p>
+<h5 id="parameters-12">
+  Parameters
+  <a class="anchor" href="#parameters-12">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The raw key for symmetric encryption hex encoded.</li>
+</ul>
+<h5 id="response-12">
+  Response
+  <a class="anchor" href="#response-12">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The key ID or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_generatesymkeyfrompassword">
+  <code>waku_generateSymKeyFromPassword</code>
+  <a class="anchor" href="#waku_generatesymkeyfrompassword">#</a>
+</h4>
+<p>Generates the key from a password and stores it.</p>
+<h5 id="parameters-13">
+  Parameters
+  <a class="anchor" href="#parameters-13">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The password.</li>
+</ul>
+<h5 id="response-13">
+  Response
+  <a class="anchor" href="#response-13">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The key ID or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_hassymkey">
+  <code>waku_hasSymKey</code>
+  <a class="anchor" href="#waku_hassymkey">#</a>
+</h4>
+<p>Returns whether there is a key associated with the ID.</p>
+<h5 id="parameters-14">
+  Parameters
+  <a class="anchor" href="#parameters-14">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key.</li>
+</ul>
+<h5 id="response-14">
+  Response
+  <a class="anchor" href="#response-14">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> or <code>false</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_getsymkey">
+  <code>waku_getSymKey</code>
+  <a class="anchor" href="#waku_getsymkey">#</a>
+</h4>
+<p>Returns the symmetric key associated with an ID.</p>
+<h5 id="parameters-15">
+  Parameters
+  <a class="anchor" href="#parameters-15">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key.</li>
+</ul>
+<h5 id="response-15">
+  Response
+  <a class="anchor" href="#response-15">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - Raw key on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> of failure.</li>
+</ul>
+<h4 id="waku_deletesymkey">
+  <code>waku_deleteSymKey</code>
+  <a class="anchor" href="#waku_deletesymkey">#</a>
+</h4>
+<p>Deletes the key associated with an ID.</p>
+<h5 id="parameters-16">
+  Parameters
+  <a class="anchor" href="#parameters-16">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the Key.</li>
+</ul>
+<h5 id="response-16">
+  Response
+  <a class="anchor" href="#response-16">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> or <code>false</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_subscribe">
+  <code>waku_subscribe</code>
+  <a class="anchor" href="#waku_subscribe">#</a>
+</h4>
+<p>Creates and registers a new subscription to receive notifications for inbound Waku messages.</p>
+<h5 id="parameters-17">
+  Parameters
+  <a class="anchor" href="#parameters-17">#</a>
+</h5>
+<p>The parameters for this request is an array containing the following fields:</p>
+<ol>
+<li><strong>string</strong> - The ID of the function call, in case of Waku this must contain the value &ldquo;messages&rdquo;.</li>
+<li><strong>object</strong> - The <a href="#filter">message filter</a>.</li>
+</ol>
+<h5 id="response-17">
+  Response
+  <a class="anchor" href="#response-17">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the subscription or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h6 id="notifications">
+  Notifications
+  <a class="anchor" href="#notifications">#</a>
+</h6>
+<p>Notifications received by the client contain a <a href="#message">message</a> matching the filter. Below is an example notification:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;jsonrpc&#34;</span>: <span style="color:#e6db74">&#34;2.0&#34;</span>,
+  <span style="color:#f92672">&#34;method&#34;</span>: <span style="color:#e6db74">&#34;waku_subscription&#34;</span>,
+  <span style="color:#f92672">&#34;params&#34;</span>: {
+    <span style="color:#f92672">&#34;subscription&#34;</span>: <span style="color:#e6db74">&#34;02c1f5c953804acee3b68eda6c0afe3f1b4e0bec73c7445e10d45da333616412&#34;</span>,
+    <span style="color:#f92672">&#34;result&#34;</span>: {
+      <span style="color:#f92672">&#34;sig&#34;</span>: <span style="color:#e6db74">&#34;0x0498ac1951b9078a0549c93c3f6088ec7c790032b17580dc3c0c9e900899a48d89eaa27471e3071d2de6a1f48716ecad8b88ee022f4321a7c29b6ffcbee65624ff&#34;</span>,
+      <span style="color:#f92672">&#34;recipientPublicKey&#34;</span>: <span style="color:#66d9ef">null</span>,
+      <span style="color:#f92672">&#34;ttl&#34;</span>: <span style="color:#ae81ff">10</span>,
+      <span style="color:#f92672">&#34;timestamp&#34;</span>: <span style="color:#ae81ff">1498577270</span>,
+      <span style="color:#f92672">&#34;topic&#34;</span>: <span style="color:#e6db74">&#34;0xffaadd11&#34;</span>,
+      <span style="color:#f92672">&#34;payload&#34;</span>: <span style="color:#e6db74">&#34;0xffffffdddddd1122&#34;</span>,
+      <span style="color:#f92672">&#34;padding&#34;</span>: <span style="color:#e6db74">&#34;0x35d017b66b124dd4c67623ed0e3f23ba68e3428aa500f77aceb0dbf4b63f69ccfc7ae11e39671d7c94f1ed170193aa3e327158dffdd7abb888b3a3cc48f718773dc0a9dcf1a3680d00fe17ecd4e8d5db31eb9a3c8e6e329d181ecb6ab29eb7a2d9889b49201d9923e6fd99f03807b730780a58924870f541a8a97c87533b1362646e5f573dc48382ef1e70fa19788613c9d2334df3b613f6e024cd7aadc67f681fda6b7a84efdea40cb907371cd3735f9326d02854&#34;</span>,
+      <span style="color:#f92672">&#34;pow&#34;</span>: <span style="color:#ae81ff">0.6714754098360656</span>,
+      <span style="color:#f92672">&#34;hash&#34;</span>: <span style="color:#e6db74">&#34;0x17f8066f0540210cf67ef400a8a55bcb32a494a47f91a0d26611c5c1d66f8c57&#34;</span>
+    }
+  }
+}
+</code></pre></div><h4 id="waku_unsubscribe">
+  <code>waku_unsubscribe</code>
+  <a class="anchor" href="#waku_unsubscribe">#</a>
+</h4>
+<p>Cancels and removes an existing subscription. The node MUST stop sending the client notifications.</p>
+<h5 id="parameters-18">
+  Parameters
+  <a class="anchor" href="#parameters-18">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The subscription ID.</li>
+</ul>
+<h5 id="response-18">
+  Response
+  <a class="anchor" href="#response-18">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> or <code>false</code></li>
+</ul>
+<h4 id="waku_newmessagefilter">
+  <code>waku_newMessageFilter</code>
+  <a class="anchor" href="#waku_newmessagefilter">#</a>
+</h4>
+<p>Creates a new message filter within the node. This filter can be used to poll for new messages that match the criteria.</p>
+<h5 id="parameters-19">
+  Parameters
+  <a class="anchor" href="#parameters-19">#</a>
+</h5>
+<p>The request must contain a <a href="#filter">message filter</a> as its parameter.</p>
+<h5 id="response-19">
+  Response
+  <a class="anchor" href="#response-19">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - The ID of the filter.</li>
+</ul>
+<h4 id="waku_deletemessagefilter">
+  <code>waku_deleteMessageFilter</code>
+  <a class="anchor" href="#waku_deletemessagefilter">#</a>
+</h4>
+<p>Removes a message filter from the node.</p>
+<h5 id="parameters-20">
+  Parameters
+  <a class="anchor" href="#parameters-20">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the filter created with <a href="#waku_newMessageFilter"><code>waku_newMessageFilter</code></a>.</li>
+</ul>
+<h5 id="response-20">
+  Response
+  <a class="anchor" href="#response-20">#</a>
+</h5>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h4 id="waku_getfiltermessages">
+  <code>waku_getFilterMessages</code>
+  <a class="anchor" href="#waku_getfiltermessages">#</a>
+</h4>
+<p>Retrieves messages that match a filter criteria and were received after the last time this function was called.</p>
+<h5 id="parameters-21">
+  Parameters
+  <a class="anchor" href="#parameters-21">#</a>
+</h5>
+<ul>
+<li><strong>string</strong> - ID of the filter created with <a href="#waku_newMessageFilter"><code>waku_newMessageFilter</code></a>.</li>
+</ul>
+<h5 id="response-21">
+  Response
+  <a class="anchor" href="#response-21">#</a>
+</h5>
+<p>The response contains an array of <a href="#messages">messages</a> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</p>
+<h4 id="waku_post">
+  <code>waku_post</code>
+  <a class="anchor" href="#waku_post">#</a>
+</h4>
+<p>The <code>waku_post</code> method creates a waku envelope and propagates it to the network.</p>
+<h5 id="parameters-22">
+  Parameters
+  <a class="anchor" href="#parameters-22">#</a>
+</h5>
+<p>The parameters is an <code>Object</code> containing the following fields:</p>
+<ul>
+<li><strong><code>symKeyID</code> [string]</strong> <code>optional</code> - The ID of the symmetric key used for encryption</li>
+<li><strong><code>pubKey</code> [string]</strong> <code>optional</code> - The public key for message encryption.</li>
+<li><strong><code>sig</code> [string]</strong> <code>optional</code> - The ID of the signing key.</li>
+<li><strong><code>ttl</code> [number]</strong> - The time-to-live in seconds.</li>
+<li><strong><code>topic</code> [string]</strong> - 4 bytes message topic.</li>
+<li><strong><code>payload</code> [string]</strong> - The payload to be encrypted.</li>
+<li><strong><code>padding</code> [string]</strong> <code>optional</code> - The padding, a byte array of arbitrary length.</li>
+<li><strong><code>powTime</code> [number]</strong> - Maximum time in seconds to be spent on the proof of work.</li>
+<li><strong><code>powTarget</code> [number]</strong> - Minimal PoW target required for this message.</li>
+<li><strong><code>targetPeer</code> [string]</strong> <code>optional</code> - The optional peer ID for peer-to-peer messages.</li>
+</ul>
+<p><em>Either the <strong><code>symKeyID</code></strong> or the <strong><code>pubKey</code></strong> need to be present. It can not be both.</em></p>
+<h4 id="response-22">
+  Response
+  <a class="anchor" href="#response-22">#</a>
+</h4>
+<ul>
+<li><strong>bool</strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h2 id="changelog">
+  Changelog
+  <a class="anchor" href="#changelog">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Version</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">1.0.0</a></td>
+<td>Initial release.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
+      <ul>
+        <li><a href="#transport">Transport</a></li>
+        <li><a href="#objects">Objects</a></li>
+        <li><a href="#methods">Methods</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

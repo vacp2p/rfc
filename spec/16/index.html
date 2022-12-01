@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="16/WAKU2-RPC" />
+<meta property="og:description" content="Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &#34;jsonrpc&#34;:&#34;2.0&#34;, &#34;method&#34;:&#34;get_waku_v2_debug_info&#34;, &#34;params&#34;:[], &#34;id&#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/16/" /><meta property="article:section" content="docs" />
+
+
+
+<title>16/WAKU2-RPC | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/"class=active>16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>16/WAKU2-RPC</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#transport">Transport</a>
+      <ul>
+        <li><a href="#fields">Fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#types">Types</a>
+      <ul>
+        <li><a href="#wakumessage">WakuMessage</a></li>
+      </ul>
+    </li>
+    <li><a href="#method-naming">Method naming</a></li>
+    <li><a href="#debug-api">Debug API</a>
+      <ul>
+        <li><a href="#types-1">Types</a></li>
+        <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
+        <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#relay-api">Relay API</a>
+      <ul>
+        <li><a href="#types-2">Types</a></li>
+        <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
+        <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
+        <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
+        <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#store-api">Store API</a>
+      <ul>
+        <li><a href="#types-3">Types</a></li>
+        <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#filter-api">Filter API</a>
+      <ul>
+        <li><a href="#types-4">Types</a></li>
+        <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
+        <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
+        <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#admin-api">Admin API</a>
+      <ul>
+        <li><a href="#types-5">Types</a></li>
+        <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
+        <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#private-api">Private API</a>
+      <ul>
+        <li><a href="#types-6">Types</a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#store-api-1">Store API</a>
+      <ul>
+        <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="16waku2-rpc">16/WAKU2-RPC</h1>
+
+  
+      <h1 id="waku-v2-rpc-api">Waku v2 RPC API</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a></li>
+      
+  </ul><h1 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h1>
+<p>This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the <a href="/spec/10/">Waku v2 specification</a> for more information on Waku v2.</p>
+<h1 id="wire-protocol">
+  Wire Protocol
+  <a class="anchor" href="#wire-protocol">#</a>
+</h1>
+<h2 id="transport">
+  Transport
+  <a class="anchor" href="#transport">#</a>
+</h2>
+<p>Nodes SHOULD expose an accessible <a href="https://www.jsonrpc.org/specification">JSON-RPC</a> API. The JSON-RPC version SHOULD be <code>2.0</code>. Below is an example request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#f92672">&#34;jsonrpc&#34;</span>:<span style="color:#e6db74">&#34;2.0&#34;</span>,
+  <span style="color:#f92672">&#34;method&#34;</span>:<span style="color:#e6db74">&#34;get_waku_v2_debug_info&#34;</span>,
+  <span style="color:#f92672">&#34;params&#34;</span>:[],
+  <span style="color:#f92672">&#34;id&#34;</span>:<span style="color:#ae81ff">1</span>
+}
+</code></pre></div><h3 id="fields">
+  Fields
+  <a class="anchor" href="#fields">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jsonrpc</code></td>
+<td>Contains the used JSON-RPC version (<code>Default: 2.0</code>)</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>Contains the JSON-RPC method that is being called</td>
+</tr>
+<tr>
+<td><code>params</code></td>
+<td>An array of parameters for the request</td>
+</tr>
+<tr>
+<td><code>id</code></td>
+<td>The request ID</td>
+</tr>
+</tbody>
+</table>
+<h2 id="types">
+  Types
+  <a class="anchor" href="#types">#</a>
+</h2>
+<p>In this specification, the primitive types <code>Boolean</code>, <code>String</code>, <code>Number</code> and <code>Null</code>, as well as the structured types <code>Array</code> and <code>Object</code>, are to be interpreted according to the <a href="https://www.jsonrpc.org/specification#conventions">JSON-RPC specification</a>. It also adopts the same capitalisation conventions.</p>
+<p>The following structured types are defined for use throughout the document:</p>
+<h3 id="wakumessage">
+  WakuMessage
+  <a class="anchor" href="#wakumessage">#</a>
+</h3>
+<p>Refer to <a href="/spec/14/"><code>Waku Message</code> specification</a> for more information.</p>
+<p><code>WakuMessage</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>payload</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The message payload as a hex encoded data string</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>contentTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>Message content topic for optional content-based filtering</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>version</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">optional</td>
+<td>Message version. Used to indicate type of payload encryption. Default version is 0 (no payload encryption).</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>timestamp</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">optional</td>
+<td>The time at which the message is generated by its sender. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>ephemeral</code></td>
+<td style="text-align:center"><code>Boolean</code></td>
+<td style="text-align:center">optional</td>
+<td>This flag indicates the transient nature of the message. Indicates if the message is eligible to be stored by the <code>store</code> protocol, <a href="/spec/13/">13/WAKU2-STORE</a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="method-naming">
+  Method naming
+  <a class="anchor" href="#method-naming">#</a>
+</h2>
+<p>The JSON-RPC methods in this document are designed to be mappable to HTTP REST endpoints. Method names follow the pattern <code>&lt;method_type&gt;_waku_&lt;protocol_version&gt;_&lt;api&gt;_&lt;api_version&gt;_&lt;resource&gt;</code></p>
+<ul>
+<li><code>&lt;method_type&gt;</code>: prefix of the HTTP method type that most closely matches the JSON-RPC function. Supported <code>method_type</code> values are <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code> or <code>patch</code>.</li>
+<li><code>&lt;protocol_version&gt;</code>: Waku version. Currently <strong>v2</strong>.</li>
+<li><code>&lt;api&gt;</code>: one of the listed APIs below, e.g. <code>store</code>, <code>debug</code>, or <code>relay</code>.</li>
+<li><code>&lt;api_version&gt;</code>: API definition version. Currently <strong>v1</strong> for all APIs.</li>
+<li><code>&lt;resource&gt;</code>: the resource or resource path being addressed</li>
+</ul>
+<p>The method <code>post_waku_v2_relay_v1_message</code>, for example, would map to the HTTP REST endpoint <code>POST /waku/v2/relay/v1/message</code>.</p>
+<h2 id="debug-api">
+  Debug API
+  <a class="anchor" href="#debug-api">#</a>
+</h2>
+<h3 id="types-1">
+  Types
+  <a class="anchor" href="#types-1">#</a>
+</h3>
+<p>The following structured types are defined for use on the Debug API:</p>
+<h4 id="wakuinfo">
+  WakuInfo
+  <a class="anchor" href="#wakuinfo">#</a>
+</h4>
+<p><code>WakuInfo</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>listenAddresses</code></td>
+<td style="text-align:center"><code>Array</code>[<code>String</code>]</td>
+<td style="text-align:center">mandatory</td>
+<td>Listening addresses of the node</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>enrUri</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>ENR URI of the node</td>
+</tr>
+</tbody>
+</table>
+<h4 id="wakuinfo-1">
+  WakuInfo
+  <a class="anchor" href="#wakuinfo-1">#</a>
+</h4>
+<h3 id="get_waku_v2_debug_v1_info">
+  <code>get_waku_v2_debug_v1_info</code>
+  <a class="anchor" href="#get_waku_v2_debug_v1_info">#</a>
+</h3>
+<p>The <code>get_waku_v2_debug_v1_info</code> method retrieves information about a Waku v2 node</p>
+<h4 id="parameters">
+  Parameters
+  <a class="anchor" href="#parameters">#</a>
+</h4>
+<p>none</p>
+<h4 id="response">
+  Response
+  <a class="anchor" href="#response">#</a>
+</h4>
+<ul>
+<li><a href="#wakuinfo"><strong><code>WakuInfo</code></strong></a> - information about a Waku v2 node</li>
+</ul>
+<h3 id="get_waku_v2_debug_v1_version">
+  <code>get_waku_v2_debug_v1_version</code>
+  <a class="anchor" href="#get_waku_v2_debug_v1_version">#</a>
+</h3>
+<p>The <code>get_waku_v2_debug_v1_version</code> method retrieves the version of a Waku v2 node as a string.
+The version SHOULD follow <a href="https://semver.org/">semantic versioning</a>.
+In case the node&rsquo;s current build is based on a git commit between semantic versions,
+the retrieved version string MAY contain the git commit hash alone or in combination with the latest semantic version.</p>
+<h4 id="parameters-1">
+  Parameters
+  <a class="anchor" href="#parameters-1">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-1">
+  Response
+  <a class="anchor" href="#response-1">#</a>
+</h4>
+<ul>
+<li><strong><code>string</code></strong> - represents the version of a Waku v2 node</li>
+</ul>
+<h2 id="relay-api">
+  Relay API
+  <a class="anchor" href="#relay-api">#</a>
+</h2>
+<p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md">Waku Relay specification</a> for more information on the relaying of messages.</p>
+<h3 id="types-2">
+  Types
+  <a class="anchor" href="#types-2">#</a>
+</h3>
+<p>The following structured types are defined for use on the Relay API:</p>
+<h4 id="wakurelaymessage">
+  WakuRelayMessage
+  <a class="anchor" href="#wakurelaymessage">#</a>
+</h4>
+<p><code>WakuRelayMessage</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>payload</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The payload being relayed as a hex encoded data string</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>contentTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>Message content topic for optional content-based filtering</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>timestamp</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">optional</td>
+<td>The time at which the message is generated by its sender. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>ephemeral</code></td>
+<td style="text-align:center"><code>Boolean</code></td>
+<td style="text-align:center">optional</td>
+<td>This flag indicates the transient nature of the message.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> <code>WakuRelayMessage</code> maps directly to a <a href="#wakumessage"><code>WakuMessage</code></a>, except that the latter contains an explicit message <code>version</code>. For <code>WakuRelay</code> purposes, the versioning is handled by the API.</p>
+</blockquote>
+<h3 id="post_waku_v2_relay_v1_message">
+  <code>post_waku_v2_relay_v1_message</code>
+  <a class="anchor" href="#post_waku_v2_relay_v1_message">#</a>
+</h3>
+<p>The <code>post_waku_v2_relay_v1_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a></p>
+<h4 id="parameters-2">
+  Parameters
+  <a class="anchor" href="#parameters-2">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>message</code></td>
+<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
+<td style="text-align:center">mandatory</td>
+<td>The <code>message</code> being relayed</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-2">
+  Response
+  <a class="anchor" href="#response-2">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="post_waku_v2_relay_v1_subscriptions">
+  <code>post_waku_v2_relay_v1_subscriptions</code>
+  <a class="anchor" href="#post_waku_v2_relay_v1_subscriptions">#</a>
+</h3>
+<p>The <code>post_waku_v2_relay_v1_subscriptions</code> method subscribes a node to an array of <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topics</code></a>.</p>
+<h4 id="parameters-3">
+  Parameters
+  <a class="anchor" href="#parameters-3">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topics</code></td>
+<td style="text-align:center"><code>Array</code>[<code>String</code>]</td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topics</code></a> being subscribed to</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-3">
+  Response
+  <a class="anchor" href="#response-3">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="delete_waku_v2_relay_v1_subscriptions">
+  <code>delete_waku_v2_relay_v1_subscriptions</code>
+  <a class="anchor" href="#delete_waku_v2_relay_v1_subscriptions">#</a>
+</h3>
+<p>The <code>delete_waku_v2_relay_v1_subscriptions</code> method unsubscribes a node from an array of <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topics</code></a>.</p>
+<h4 id="parameters-4">
+  Parameters
+  <a class="anchor" href="#parameters-4">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topics</code></td>
+<td style="text-align:center"><code>Array</code>[<code>String</code>]</td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topics</code></a> being unsubscribed from</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-4">
+  Response
+  <a class="anchor" href="#response-4">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_relay_v1_messages">
+  <code>get_waku_v2_relay_v1_messages</code>
+  <a class="anchor" href="#get_waku_v2_relay_v1_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_relay_v1_messages</code> method returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
+<h4 id="parameters-5">
+  Parameters
+  <a class="anchor" href="#parameters-5">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-5">
+  Response
+  <a class="anchor" href="#response-5">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h2 id="store-api">
+  Store API
+  <a class="anchor" href="#store-api">#</a>
+</h2>
+<p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-store.md">Waku Store specification</a> for more information on message history retrieval.</p>
+<h3 id="types-3">
+  Types
+  <a class="anchor" href="#types-3">#</a>
+</h3>
+<p>The following structured types are defined for use on the Store API:</p>
+<h4 id="storeresponse">
+  StoreResponse
+  <a class="anchor" href="#storeresponse">#</a>
+</h4>
+<p><code>StoreResponse</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>messages</code></td>
+<td style="text-align:center"><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</td>
+<td style="text-align:center">mandatory</td>
+<td>Array of retrieved historical messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>pagingOptions</code></td>
+<td style="text-align:center"><a href="#pagingOptions"><code>PagingOptions</code></a></td>
+<td style="text-align:center"><a href="#get_waku_v2_store_v1_messages">conditional</a></td>
+<td>Paging information from which to resume further historical queries</td>
+</tr>
+</tbody>
+</table>
+<h4 id="pagingoptions">
+  PagingOptions
+  <a class="anchor" href="#pagingoptions">#</a>
+</h4>
+<p><code>PagingOptions</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>pageSize</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Number of messages to retrieve per page</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>cursor</code></td>
+<td style="text-align:center"><a href="#Index"><code>Index</code></a></td>
+<td style="text-align:center">optional</td>
+<td>Message <a href="#Index"><code>Index</code></a> from which to perform pagination. If not included and <code>forward</code> is set to <code>true</code>, paging will be performed from the beginning of the list. If not included and <code>forward</code> is set to <code>false</code>, paging will be performed from the end of the list.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>forward</code></td>
+<td style="text-align:center"><code>Bool</code></td>
+<td style="text-align:center">mandatory</td>
+<td><code>true</code> if paging forward, <code>false</code> if paging backward</td>
+</tr>
+</tbody>
+</table>
+<h4 id="index">
+  Index
+  <a class="anchor" href="#index">#</a>
+</h4>
+<p><code>Index</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>digest</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>A hash for the message at this <a href="#Index"><code>Index</code></a></td>
+</tr>
+<tr>
+<td style="text-align:right"><code>receivedTime</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">mandatory</td>
+<td>UNIX timestamp in nanoseconds at which the message at this <a href="#Index"><code>Index</code></a> was received</td>
+</tr>
+</tbody>
+</table>
+<h4 id="contentfilter">
+  ContentFilter
+  <a class="anchor" href="#contentfilter">#</a>
+</h4>
+<p><code>ContentFilter</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>contentTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The content topic of a <a href="#wakumessage"><code>WakuMessage</code></a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_waku_v2_store_v1_messages">
+  <code>get_waku_v2_store_v1_messages</code>
+  <a class="anchor" href="#get_waku_v2_store_v1_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_store_v1_messages</code> method retrieves historical messages on specific content topics. This method MAY be called with <a href="#pagingoptions"><code>PagingOptions</code></a>, to retrieve historical messages on a per-page basis. If the request included <a href="#pagingoptions"><code>PagingOptions</code></a>, the node MUST return messages on a per-page basis and include <a href="#pagingoptions"><code>PagingOptions</code></a> in the response. These <a href="#pagingoptions"><code>PagingOptions</code></a> MUST contain a <code>cursor</code> pointing to the <a href="#Index"><code>Index</code></a> from which a new page can be requested.</p>
+<h4 id="parameters-6">
+  Parameters
+  <a class="anchor" href="#parameters-6">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>pubsubTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>The pubsub topic on which a  <a href="#wakumessage"><code>WakuMessage</code></a> is published</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>contentFilters</code></td>
+<td style="text-align:center"><code>Array</code>[<a href="#contentfilter"><code>ContentFilter</code></a>]</td>
+<td style="text-align:center">optional</td>
+<td>Array of content filters to query for historical messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>startTime</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">optional</td>
+<td>The inclusive lower bound on the <a href="/spec/14#Payloads"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>endTime</code></td>
+<td style="text-align:center"><code>Number</code></td>
+<td style="text-align:center">optional</td>
+<td>The inclusive upper bound on the <a href="/spec/14#Payloads"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>pagingOptions</code></td>
+<td style="text-align:center"><a href="#pagingoptions"><code>PagingOptions</code></a></td>
+<td style="text-align:center">optional</td>
+<td>Pagination information</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-6">
+  Response
+  <a class="anchor" href="#response-6">#</a>
+</h4>
+<ul>
+<li><a href="#storeresponse"><strong><code>StoreResponse</code></strong></a> - the response to a <code>query</code> for historical messages.</li>
+</ul>
+<h2 id="filter-api">
+  Filter API
+  <a class="anchor" href="#filter-api">#</a>
+</h2>
+<p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md">Waku Filter specification</a> for more information on content filtering.</p>
+<h3 id="types-4">
+  Types
+  <a class="anchor" href="#types-4">#</a>
+</h3>
+<p>The following structured types are defined for use on the Filter API:</p>
+<h4 id="contentfilter-1">
+  ContentFilter
+  <a class="anchor" href="#contentfilter-1">#</a>
+</h4>
+<p><code>ContentFilter</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>contentTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>message content topic</td>
+</tr>
+</tbody>
+</table>
+<h3 id="post_waku_v2_filter_v1_subscription">
+  <code>post_waku_v2_filter_v1_subscription</code>
+  <a class="anchor" href="#post_waku_v2_filter_v1_subscription">#</a>
+</h3>
+<p>The <code>post_waku_v2_filter_v1_subscription</code> method creates a subscription in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> for messages that matches a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<h4 id="parameters-7">
+  Parameters
+  <a class="anchor" href="#parameters-7">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>contentFilters</code></td>
+<td style="text-align:center"><code>Array</code>[<a href="#contentfilter"><code>ContentFilter</code></a>]</td>
+<td style="text-align:center">mandatory</td>
+<td>Array of content filters being subscribed to</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>Message topic</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-7">
+  Response
+  <a class="anchor" href="#response-7">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="delete_waku_v2_filter_v1_subscription">
+  <code>delete_waku_v2_filter_v1_subscription</code>
+  <a class="anchor" href="#delete_waku_v2_filter_v1_subscription">#</a>
+</h3>
+<p>The <code>delete_waku_v2_filter_v1_subscription</code> method removes subscriptions in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> matching a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<h4 id="parameters-8">
+  Parameters
+  <a class="anchor" href="#parameters-8">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>contentFilters</code></td>
+<td style="text-align:center"><code>Array</code>[<a href="#contentfilter"><code>ContentFilter</code></a>]</td>
+<td style="text-align:center">mandatory</td>
+<td>Array of content filters being unsubscribed from</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">optional</td>
+<td>Message topic</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-8">
+  Response
+  <a class="anchor" href="#response-8">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_filter_v1_messages">
+  <code>get_waku_v2_filter_v1_messages</code>
+  <a class="anchor" href="#get_waku_v2_filter_v1_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_filter_v1_messages</code> method returns a list of messages that were received on a subscribed content <code>topic</code> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled content <code>topic</code>. If no message has yet been received on the polled content <code>topic</code>, the server SHOULD respond with an empty list. This method can be used to poll a content <code>topic</code> for new messages.</p>
+<h4 id="parameters-9">
+  Parameters
+  <a class="anchor" href="#parameters-9">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>contentTopic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The content topic to poll for the latest messages</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-9">
+  Response
+  <a class="anchor" href="#response-9">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled content <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h2 id="admin-api">
+  Admin API
+  <a class="anchor" href="#admin-api">#</a>
+</h2>
+<p>The Admin API provides privileged accesses to the internal operations of a Waku v2 node.</p>
+<h3 id="types-5">
+  Types
+  <a class="anchor" href="#types-5">#</a>
+</h3>
+<p>The following structured types are defined for use on the Admin API:</p>
+<h4 id="wakupeer">
+  WakuPeer
+  <a class="anchor" href="#wakupeer">#</a>
+</h4>
+<p><code>WakuPeer</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>multiaddr</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Multiaddress containing this peer&rsquo;s location and identity</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>protocol</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Protocol that this peer is registered for</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>connected</code></td>
+<td style="text-align:center"><code>bool</code></td>
+<td style="text-align:center">mandatory</td>
+<td><code>true</code> if peer has active connection for this <code>protocol</code>, <code>false</code> if not</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_waku_v2_admin_v1_peers">
+  <code>get_waku_v2_admin_v1_peers</code>
+  <a class="anchor" href="#get_waku_v2_admin_v1_peers">#</a>
+</h3>
+<p>The <code>get_waku_v2_admin_v1_peers</code> method returns an array of peers registered on this node. Since a Waku v2 node may open either continuous or ad hoc connections, depending on the negotiated protocol, these peers may have different connected states. The same peer MAY appear twice in the returned array, if it is registered for more than one protocol.</p>
+<h4 id="parameters-10">
+  Parameters
+  <a class="anchor" href="#parameters-10">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-10">
+  Response
+  <a class="anchor" href="#response-10">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#WakuPeer"><code>WakuPeer</code></a>]</strong> - Array of peers registered on this node</li>
+</ul>
+<h3 id="post_waku_v2_admin_v1_peers">
+  <code>post_waku_v2_admin_v1_peers</code>
+  <a class="anchor" href="#post_waku_v2_admin_v1_peers">#</a>
+</h3>
+<p>The <code>post_waku_v2_admin_v1_peers</code> method connects a node to a list of peers.</p>
+<h4 id="parameters-11">
+  Parameters
+  <a class="anchor" href="#parameters-11">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>peers</code></td>
+<td style="text-align:center"><code>Array</code>[<code>String</code>]</td>
+<td style="text-align:center">mandatory</td>
+<td>Array of peer <code>multiaddrs</code> to connect to. Each <code>multiaddr</code> must contain the <a href="https://docs.libp2p.io/concepts/addressing/">location and identity addresses</a> of a peer.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-11">
+  Response
+  <a class="anchor" href="#response-11">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h2 id="private-api">
+  Private API
+  <a class="anchor" href="#private-api">#</a>
+</h2>
+<p>The Private API provides functionality to encrypt/decrypt <code>WakuMessage</code> payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md">Waku v1 nodes</a>.
+It is the API client&rsquo;s responsibility to keep track of the keys used for encrypted communication. Since keys must be cached by the client and provided to the node to encrypt/decrypt payloads, a Private API SHOULD NOT be exposed on non-local or untrusted nodes.</p>
+<h3 id="types-6">
+  Types
+  <a class="anchor" href="#types-6">#</a>
+</h3>
+<p>The following structured types are defined for use on the Private API:</p>
+<h4 id="keypair">
+  KeyPair
+  <a class="anchor" href="#keypair">#</a>
+</h4>
+<p><code>KeyPair</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>privateKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Private key as hex encoded data string</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>publicKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Public key as hex encoded data string</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_waku_v2_private_v1_symmetric_key">
+  <code>get_waku_v2_private_v1_symmetric_key</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_key">#</a>
+</h3>
+<p>Generates and returns a symmetric key that can be used for message encryption and decryption.</p>
+<h4 id="parameters-12">
+  Parameters
+  <a class="anchor" href="#parameters-12">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-12">
+  Response
+  <a class="anchor" href="#response-12">#</a>
+</h4>
+<ul>
+<li><strong><code>String</code></strong> - A new symmetric key as hex encoded data string</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_asymmetric_keypair">
+  <code>get_waku_v2_private_v1_asymmetric_keypair</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_keypair">#</a>
+</h3>
+<p>Generates and returns a public/private key pair that can be used for asymmetric message encryption and decryption.</p>
+<h4 id="parameters-13">
+  Parameters
+  <a class="anchor" href="#parameters-13">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-13">
+  Response
+  <a class="anchor" href="#response-13">#</a>
+</h4>
+<ul>
+<li><strong><a href="#KeyPair"><code>KeyPair</code></a></strong> - A new public/private key pair as hex encoded data strings</li>
+</ul>
+<h3 id="post_waku_v2_private_v1_symmetric_message">
+  <code>post_waku_v2_private_v1_symmetric_message</code>
+  <a class="anchor" href="#post_waku_v2_private_v1_symmetric_message">#</a>
+</h3>
+<p>The <code>post_waku_v2_private_v1_symmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>Before being relayed, the message payload is encrypted using the supplied symmetric key. The client MUST provide a symmetric key.</p>
+<h4 id="parameters-14">
+  Parameters
+  <a class="anchor" href="#parameters-14">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>message</code></td>
+<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
+<td style="text-align:center">mandatory</td>
+<td>The (unencrypted) <code>message</code> being relayed</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>symkey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-14">
+  Response
+  <a class="anchor" href="#response-14">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="post_waku_v2_private_v1_asymmetric_message">
+  <code>post_waku_v2_private_v1_asymmetric_message</code>
+  <a class="anchor" href="#post_waku_v2_private_v1_asymmetric_message">#</a>
+</h3>
+<p>The <code>post_waku_v2_private_v1_asymmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>Before being relayed, the message payload is encrypted using the supplied public key. The client MUST provide a public key.</p>
+<h4 id="parameters-15">
+  Parameters
+  <a class="anchor" href="#parameters-15">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>message</code></td>
+<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
+<td style="text-align:center">mandatory</td>
+<td>The (unencrypted) <code>message</code> being relayed</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>publicKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-15">
+  Response
+  <a class="anchor" href="#response-15">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_symmetric_messages">
+  <code>get_waku_v2_private_v1_symmetric_messages</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_private_v1_symmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
+<p>Before returning the messages, the server decrypts the message payloads using the supplied symmetric key. The client MUST provide a symmetric key.</p>
+<h4 id="parameters-16">
+  Parameters
+  <a class="anchor" href="#parameters-16">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>symkey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-16">
+  Response
+  <a class="anchor" href="#response-16">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakurelaymessage"><code>WakuRelayMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_asymmetric_messages">
+  <code>get_waku_v2_private_v1_asymmetric_messages</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_private_v1_asymmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
+<p>Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide a private key.</p>
+<h4 id="parameters-17">
+  Parameters
+  <a class="anchor" href="#parameters-17">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>privateKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-17">
+  Response
+  <a class="anchor" href="#response-17">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakurelaymessage"><code>WakuRelayMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h1 id="example-usage">
+  Example usage
+  <a class="anchor" href="#example-usage">#</a>
+</h1>
+<h2 id="store-api-1">
+  Store API
+  <a class="anchor" href="#store-api-1">#</a>
+</h2>
+<h3 id="get_waku_v2_store_v1_messages-1">
+  <code>get_waku_v2_store_v1_messages</code>
+  <a class="anchor" href="#get_waku_v2_store_v1_messages-1">#</a>
+</h3>
+<p>This method is part of the <code>store</code> API and the specific resources to retrieve are (historical) <code>messages</code>. The protocol (<code>waku</code>) is on <code>v2</code>, whereas the Store API definition is on <code>v1</code>.</p>
+<ol>
+<li><code>get</code> <em>all</em> the historical messages for content topic <strong>&quot;/waku/2/default-content/proto&quot;</strong>; no paging required</li>
+</ol>
+<h4 id="request">
+  Request
+  <a class="anchor" href="#request">#</a>
+</h4>
+<p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[&quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}]]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
+  &quot;params&quot;: [
+    &quot;&quot;,
+    [
+      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+    ]
+  ]
+}
+</code></pre><h4 id="response-18">
+  Response
+  <a class="anchor" href="#response-18">#</a>
+</h4>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;result&quot;: {
+    &quot;messages&quot;: [
+      {
+        &quot;payload&quot;: [
+          1
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      },
+      {
+        &quot;payload&quot;: [
+          2
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      },
+      {
+        &quot;payload&quot;: [
+          3
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      }
+    ],
+    &quot;pagingInfo&quot;: null
+  },
+  &quot;error&quot;: null
+}
+</code></pre><hr>
+<ol start="2">
+<li><code>get</code> a single page of historical messages for content topic <strong>&quot;/waku/2/default-content/proto&quot;</strong>; 2 messages per page, backward direction. Since this is the initial query, no <code>cursor</code> is provided, so paging will be performed from the end of the list.</li>
+</ol>
+<h4 id="request-1">
+  Request
+  <a class="anchor" href="#request-1">#</a>
+</h4>
+<p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[ &quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}],{&quot;pageSize&quot;:2,&quot;forward&quot;:false}]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
+  &quot;params&quot;: [
+    &quot;&quot;,
+    [
+      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+    ],
+    {
+      &quot;pageSize&quot;: 2,
+      &quot;forward&quot;: false
+    }
+  ]
+}
+</code></pre><h4 id="response-19">
+  Response
+  <a class="anchor" href="#response-19">#</a>
+</h4>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;result&quot;: {
+    &quot;messages&quot;: [
+      {
+        &quot;payload&quot;: [
+          2
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      },
+      {
+        &quot;payload&quot;: [
+          3
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      }
+    ],
+    &quot;pagingInfo&quot;: {
+      &quot;pageSize&quot;: 2,
+      &quot;cursor&quot;: {
+        &quot;digest&quot;: &quot;abcdef&quot;,
+        &quot;receivedTime&quot;: 1605887187000000000
+      },
+      &quot;forward&quot;: false
+    }
+  },
+  &quot;error&quot;: null
+}
+</code></pre><hr>
+<ol start="3">
+<li><code>get</code> the next page of historical messages for content topic <strong>&quot;/waku/2/default-content/proto&quot;</strong>, using the cursor received above; 2 messages per page, backward direction.</li>
+</ol>
+<h4 id="request-2">
+  Request
+  <a class="anchor" href="#request-2">#</a>
+</h4>
+<p><code>curl -d '{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:&quot;id&quot;,&quot;method&quot;:&quot;get_waku_v2_store_v1_messages&quot;, &quot;params&quot;:[ &quot;&quot;, [{&quot;contentTopic&quot;:&quot;/waku/2/default-content/proto&quot;}],{&quot;pageSize&quot;:2,&quot;cursor&quot;:{&quot;digest&quot;:&quot;abcdef&quot;,&quot;receivedTime&quot;:1605887187000000000},&quot;forward&quot;:false}]}' --header &quot;Content-Type: application/json&quot; http://localhost:8545</code></p>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;method&quot;: &quot;get_waku_v2_store_v1_messages&quot;,
+  &quot;params&quot;: [
+    &quot;&quot;,
+    [
+      {&quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;}
+    ],
+    {
+      &quot;pageSize&quot;: 2,
+      &quot;cursor&quot;: {
+        &quot;digest&quot;: &quot;abcdef&quot;,
+        &quot;receivedTime&quot;: 1605887187000000000
+      },
+      &quot;forward&quot;: false
+    }
+  ]
+}
+</code></pre><h4 id="response-20">
+  Response
+  <a class="anchor" href="#response-20">#</a>
+</h4>
+<pre tabindex="0"><code class="language-jsonrpc" data-lang="jsonrpc">{
+  &quot;jsonrpc&quot;: &quot;2.0&quot;,
+  &quot;id&quot;: &quot;id&quot;,
+  &quot;result&quot;: {
+    &quot;messages&quot;: [
+      {
+        &quot;payload&quot;: [
+          1
+        ],
+        &quot;contentTopic&quot;: &quot;/waku/2/default-content/proto&quot;,
+        &quot;version&quot;: 0
+      }
+    ],
+    &quot;pagingInfo&quot;: {
+      &quot;pageSize&quot;: 2,
+      &quot;cursor&quot;: {
+        &quot;digest&quot;: &quot;123abc&quot;,
+        &quot;receivedTime&quot;: 1605866187000000000
+      },
+      &quot;forward&quot;: false
+    }
+  },
+  &quot;error&quot;: null
+}
+</code></pre><h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="https://www.jsonrpc.org/specification">JSON-RPC specification</a></li>
+<li><a href="https://docs.libp2p.io/concepts/addressing/">LibP2P Addressing</a></li>
+<li><a href="https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor">LibP2P PubSub specification - topic descriptor</a></li>
+<li><a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md">Waku v2 specification</a></li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#transport">Transport</a>
+      <ul>
+        <li><a href="#fields">Fields</a></li>
+      </ul>
+    </li>
+    <li><a href="#types">Types</a>
+      <ul>
+        <li><a href="#wakumessage">WakuMessage</a></li>
+      </ul>
+    </li>
+    <li><a href="#method-naming">Method naming</a></li>
+    <li><a href="#debug-api">Debug API</a>
+      <ul>
+        <li><a href="#types-1">Types</a></li>
+        <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
+        <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#relay-api">Relay API</a>
+      <ul>
+        <li><a href="#types-2">Types</a></li>
+        <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
+        <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
+        <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
+        <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#store-api">Store API</a>
+      <ul>
+        <li><a href="#types-3">Types</a></li>
+        <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#filter-api">Filter API</a>
+      <ul>
+        <li><a href="#types-4">Types</a></li>
+        <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
+        <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
+        <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#admin-api">Admin API</a>
+      <ul>
+        <li><a href="#types-5">Types</a></li>
+        <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
+        <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#private-api">Private API</a>
+      <ul>
+        <li><a href="#types-6">Types</a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#store-api-1">Store API</a>
+      <ul>
+        <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

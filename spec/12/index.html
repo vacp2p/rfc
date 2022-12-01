@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="12/WAKU2-FILTER" />
+<meta property="og:description" content="WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/12/" /><meta property="article:section" content="docs" />
+
+
+
+<title>12/WAKU2-FILTER | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/"class=active>12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>12/WAKU2-FILTER</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rationale">Rationale</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#protobuf">Protobuf</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#next">Next</a></li>
+        <li><a href="#200-beta2">2.0.0-beta2</a></li>
+        <li><a href="#200-beta1">2.0.0-beta1</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="12waku2-filter">12/WAKU2-FILTER</h1>
+
+  
+      <h1 id="waku-v2-filter">Waku v2 Filter</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a>
+          
+              ,
+              Ebube Ud <a href="mailto:ebube@status.im">ebube@status.im</a>
+          
+      </li>
+      
+  </ul><p><code>WakuFilter</code> is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of <code>WakuRelay</code> specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.</p>
+<h1 id="content-filtering">
+  Content filtering
+  <a class="anchor" href="#content-filtering">#</a>
+</h1>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/filter/2.0.0-beta1</code></p>
+<p>Content filtering is a way to do <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering">message-based
+filtering</a>.
+Currently the only content filter being applied is on <code>contentTopic</code>. This
+corresponds to topics in Waku v1.</p>
+<h2 id="rationale">
+  Rationale
+  <a class="anchor" href="#rationale">#</a>
+</h2>
+<p>Unlike the <code>store</code> protocol for historical messages, this protocol allows for
+native lower latency scenarios such as instant messaging. It is thus
+complementary to it.</p>
+<p>Strictly speaking, it is not just doing basic request response, but performs
+sender push based on receiver intent. While this can be seen as a form of light
+pub/sub, it is only used between two nodes in a direct fashion. Unlike the
+Gossip domain, this is meant for light nodes which put a premium on bandwidth.
+No gossiping takes place.</p>
+<p>It is worth noting that a light node could get by with only using the <code>store</code>
+protocol to query for a recent time window, provided it is acceptable to do
+frequent polling.</p>
+<h1 id="design-requirements">
+  Design Requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h1>
+<p>The effectiveness and reliability of the content filtering service enabled by  <code>WakuFilter</code> protocol rely on the <em>high availability</em> of the full nodes as the service providers. To this end, full nodes must feature <em>high uptime</em> (to persistently listen and capture the network messages) as well as <em>high Bandwidth</em> (to provide timely message delivery to the light nodes).</p>
+<h1 id="security-consideration">
+  Security Consideration
+  <a class="anchor" href="#security-consideration">#</a>
+</h1>
+<p>Note that while using <code>WakuFilter</code> allows light nodes to save bandwidth, it comes with a privacy cost in the sense that they need to disclose their liking topics to the full nodes to retrieve the relevant messages. Currently, anonymous subscription is not supported by the <code>WakuFilter</code>, however, potential solutions in this regard are sketched below in <a href="#future-work">Future Work</a> section.</p>
+<h2 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h2>
+<p>The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. For example, the signature verification key, and the hash of one&rsquo;s static IP address are unique for each user and hence count as PII.</p>
+<h1 id="adversarial-model">
+  Adversarial Model
+  <a class="anchor" href="#adversarial-model">#</a>
+</h1>
+<p>Any node running the <code>WakuFilter</code> protocol i.e., both the subscriber node and the queried node are considered as an adversary. Furthermore, we consider the adversary as a passive entity that attempts to collect information from other nodes to conduct an attack but it does so without violating protocol definitions and instructions. For example, under the passive adversarial model, no malicious node intentionally hides the messages matching to one&rsquo;s subscribed content filter as it is against the description of the <code>WakuFilter</code> protocol.</p>
+<p>The following are not considered as part of the adversarial model:</p>
+<ul>
+<li>An adversary with a global view of all the nodes and their connections.</li>
+<li>An adversary that can eavesdrop on communication links between arbitrary pairs of nodes (unless the adversary is one end of the communication). In specific, the communication channels are assumed to be secure.</li>
+</ul>
+<h2 id="protobuf">
+  Protobuf
+  <a class="anchor" href="#protobuf">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf"><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterRequest</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bool</span> subscribe <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> ContentFilter contentFilters <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">ContentFilter</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> contentTopic <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MessagePush</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> WakuMessage messages <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterRPC</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> requestId <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  FilterRequest request <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  MessagePush push <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h4 id="filterrpc">
+  FilterRPC
+  <a class="anchor" href="#filterrpc">#</a>
+</h4>
+<p>A node MUST send all Filter messages (<code>FilterRequest</code>, <code>MessagePush</code>) wrapped inside a
+<code>FilterRPC</code> this allows the node handler to determine how to handle a message as the Waku
+Filter protocol is not a request response based protocol but instead a push based system.</p>
+<p>The <code>requestId</code> MUST be a uniquely generated string. When a <code>MessagePush</code> is sent
+the <code>requestId</code> MUST match the <code>requestId</code> of the subscribing <code>FilterRequest</code> whose filters
+matched the message causing it to be pushed.</p>
+<h4 id="filterrequest">
+  FilterRequest
+  <a class="anchor" href="#filterrequest">#</a>
+</h4>
+<p>A <code>FilterRequest</code> contains an optional topic, zero or more content filters and
+a boolean signifying whether to subscribe or unsubscribe to the given filters.
+True signifies &lsquo;subscribe&rsquo; and false signifies &lsquo;unsubscribe&rsquo;.</p>
+<p>A node that sends the RPC with a filter request and <code>subscribe</code> set to &lsquo;true&rsquo;
+requests that the filter node SHOULD notify the light requesting node of messages
+matching this filter.</p>
+<p>A node that sends the RPC with a filter request and <code>subscribe</code> set to &lsquo;false&rsquo;
+requests that the filter node SHOULD stop notifying the light requesting node
+of messages matching this filter if it is currently doing so.</p>
+<p>The filter matches when content filter and, optionally, a topic is matched.
+Content filter is matched when a <code>WakuMessage</code> <code>contentTopic</code> field is the same.</p>
+<p>A filter node SHOULD honor this request, though it MAY choose not to do so. If
+it chooses not to do so it MAY tell the light why. The mechanism for doing this
+is currently not specified. For notifying the light node a filter node sends a
+MessagePush message.</p>
+<p>Since such a filter node is doing extra work for a light node, it MAY also
+account for usage and be selective in how much service it provides. This
+mechanism is currently planned but underspecified.</p>
+<h4 id="messagepush">
+  MessagePush
+  <a class="anchor" href="#messagepush">#</a>
+</h4>
+<p>A filter node that has received a filter request SHOULD push all messages that
+match this filter to a light node. These <a href="./waku-message.md"><code>WakuMessage</code>&rsquo;s</a> are likely to come from the
+<code>relay</code> protocol and be kept at the Node, but there MAY be other sources or
+protocols where this comes from. This is up to the consumer of the protocol.</p>
+<p>A filter node MUST NOT send a push message for messages that have not been
+requested via a FilterRequest.</p>
+<p>If a specific light node isn&rsquo;t connected to a filter node for some specific
+period of time (e.g. a TTL), then the filter node MAY choose to not push these
+messages to the node. This period is up to the consumer of the protocol and node
+implementation, though a reasonable default is one minute.</p>
+<hr>
+<h1 id="future-work">
+  Future Work
+  <a class="anchor" href="#future-work">#</a>
+</h1>
+<!-- raw HTML omitted -->
+<p><strong>Anonymous filter subscription</strong>: This feature guarantees that nodes can anonymously subscribe for a message filter (i.e., without revealing their exact content filter). As such, no adversary in the <code>WakuFilter</code> protocol would be able to link nodes to their subscribed content filers. The current version of the <code>WakuFilter</code> protocol does not provide anonymity as the subscribing node has a direct connection to the full node and explicitly submits its content filter to be notified about the matching messages. However, one can consider preserving anonymity through one of the following ways:</p>
+<ul>
+<li>By hiding the source of the subscription i.e., anonymous communication. That is the subscribing node shall hide all its PII in its filter request e.g., its IP address. This can happen by the utilization of a proxy server or by using Tor<!-- raw HTML omitted -->.
+Note that the current structure of filter requests i.e., <code>FilterRPC</code> does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve anonymity.</li>
+<li>By deploying secure 2-party computations in which the subscribing node obtains the messages matching a content filter whereas the full node learns nothing about the content filter as well as the messages pushed to the subscribing node. Examples of such 2PC protocols are <a href="https://link.springer.com/referenceworkentry/10.1007%2F978-1-4419-5906-5_9#:~:text=Oblivious%20transfer%20%28OT%29%20is%20a,information%20the%20receiver%20actually%20obtains.">Oblivious Transfers</a> and one-way Private Set Intersections (PSI).</li>
+</ul>
+<h1 id="changelog">
+  Changelog
+  <a class="anchor" href="#changelog">#</a>
+</h1>
+<h3 id="next">
+  Next
+  <a class="anchor" href="#next">#</a>
+</h3>
+<ul>
+<li>Added initial threat model and security analysis.</li>
+</ul>
+<h3 id="200-beta2">
+  2.0.0-beta2
+  <a class="anchor" href="#200-beta2">#</a>
+</h3>
+<p>Initial draft version. Released <a href="https://github.com/vacp2p/specs/commit/5ceeb88cee7b918bb58f38e7c4de5d581ff31e68">2020-10-28</a></p>
+<ul>
+<li>Fix: Ensure contentFilter is a repeated field, on implementation</li>
+<li>Change: Add ability to unsubscribe from filters. Make <code>subscribe</code> an explicit boolean indication. Edit protobuf field order to be consistent with libp2p.</li>
+</ul>
+<h3 id="200-beta1">
+  2.0.0-beta1
+  <a class="anchor" href="#200-beta1">#</a>
+</h3>
+<p>Initial draft version. Released <a href="https://github.com/vacp2p/specs/commit/31857c7434fa17efc00e3cd648d90448797d107b">2020-10-05</a></p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering">Message Filtering (Wikipedia)</a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/tree/master/pubsub#topic-validation">Libp2p PubSub spec - topic validation</a></p>
+</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rationale">Rationale</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#protobuf">Protobuf</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#next">Next</a></li>
+        <li><a href="#200-beta2">2.0.0-beta2</a></li>
+        <li><a href="#200-beta1">2.0.0-beta1</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

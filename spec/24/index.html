@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This spec is a proposition for a voting protocol over Waku V2.
+Motivation #  In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
+Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&rsquo;t already submitted.
+Smart contract #  Voting should be finalized on chain so that the finished vote is immutable.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="24/STATUS-CURATION" />
+<meta property="og:description" content="This spec is a proposition for a voting protocol over Waku V2.
+Motivation #  In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
+Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&rsquo;t already submitted.
+Smart contract #  Voting should be finalized on chain so that the finished vote is immutable." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/24/" /><meta property="article:section" content="docs" />
+
+
+
+<title>24/STATUS-CURATION | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/"class=active>24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>24/STATUS-CURATION</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#double-voting">Double voting</a></li>
+    <li><a href="#initializing-vote">Initializing Vote</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sending-votes">Sending votes</a></li>
+    <li><a href="#aggregating-votes">Aggregating votes</a></li>
+    <li><a href="#submitting-to-chain">Submitting to chain</a></li>
+    <li><a href="#finalizing">Finalizing</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="24status-curation">24/STATUS-CURATION</h1>
+
+  
+      <h1 id="status-community-directory-curation-voting-using-waku-v2">Status Community Directory Curation Voting using Waku v2</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Szymon Szlachtowicz <a href="mailto:szymon.s@ethworks.io">szymon.s@ethworks.io</a></li>
+      
+  </ul><p>This spec is a proposition for a voting protocol over Waku V2.</p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.</p>
+<p>Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&rsquo;t already submitted.</p>
+<h1 id="smart-contract">
+  Smart contract
+  <a class="anchor" href="#smart-contract">#</a>
+</h1>
+<p>Voting should be finalized on chain so that the finished vote is immutable.
+Because of that, smart contract needs to be deployed.
+When votes are submitted smart contract has to verify what votes are properly signed and that sender has correct amount of SNT.
+When Vote is verified the amount of SNT voted on specific topic by specific sender is saved on chain.</p>
+<h2 id="double-voting">
+  Double voting
+  <a class="anchor" href="#double-voting">#</a>
+</h2>
+<p>Smart contract should also keep a list of all signatures so that no one can send the same vote twice.
+Another possibility is to allow each sender to only vote once.</p>
+<h2 id="initializing-vote">
+  Initializing Vote
+  <a class="anchor" href="#initializing-vote">#</a>
+</h2>
+<p>When someone wants to initialize vote he has to send a transaction to smart contract that will create a new voting session.
+When initializing a user has to specify type of vote (Addition, Deletion), amount of his initial SNT to submit and public key of community under vote.
+Smart contract will return a ID which is identifier of voting session.
+Also there will be function on Smart Contract that when given community public key it will return voting session ID or undefined if community isn&rsquo;t under vote.</p>
+<h1 id="voting">
+  Voting
+  <a class="anchor" href="#voting">#</a>
+</h1>
+<h2 id="sending-votes">
+  Sending votes
+  <a class="anchor" href="#sending-votes">#</a>
+</h2>
+<p>Sending votes is simple every peer is able to send a message to Waku topic specific to given application:</p>
+<pre tabindex="0"><code>/status-community-directory-curation-vote/1/{voting-session-id}/json
+</code></pre><p>vote object that is sent over waku should contain information about:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ts" data-lang="ts"><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Vote</span> <span style="color:#f92672">=</span> {
+    <span style="color:#a6e22e">sender</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// address of the sender
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">vote</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// vote sent eg. &#39;yes&#39; &#39;no&#39;
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sntAmount</span>: <span style="color:#66d9ef">BigNumber</span> <span style="color:#75715e">//number of snt cast on vote
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sign</span>: <span style="color:#66d9ef">string</span> <span style="color:#75715e">// cryptographic signature of a transaction (signed fields: sender,vote,sntAmount,nonce,sessionID)
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">nonce</span>: <span style="color:#66d9ef">number</span> <span style="color:#75715e">// number of votes cast from this address on current vote (only if we allow multiple votes from the same sender)
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">sessionID</span>: <span style="color:#66d9ef">number</span> <span style="color:#75715e">// ID of voting session
+</span><span style="color:#75715e"></span>}
+</code></pre></div><h2 id="aggregating-votes">
+  Aggregating votes
+  <a class="anchor" href="#aggregating-votes">#</a>
+</h2>
+<p>Every peer that is opening specific voting session will listen to votes sent over p2p network, and aggregate them for a single transaction to chain.</p>
+<h2 id="submitting-to-chain">
+  Submitting to chain
+  <a class="anchor" href="#submitting-to-chain">#</a>
+</h2>
+<p>Every peer that has aggregated at least one vote will be able to send them to smart contract.
+When someone votes he will aggregate his own vote and will be able to immediately send it.</p>
+<p>Peer doesn&rsquo;t need to vote to be able to submit the votes to the chain.</p>
+<p>Smart contract needs to verify that all votes are valid (eg. all senders had enough SNT, all votes are correctly signed) and that votes aren&rsquo;t duplicated on smart contract.</p>
+<h2 id="finalizing">
+  Finalizing
+  <a class="anchor" href="#finalizing">#</a>
+</h2>
+<p>Once the vote deadline has expired, the smart contract will not accept votes anymore.
+Also directory will be updated according to vote results (community added to directory, removed etc.)</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#double-voting">Double voting</a></li>
+    <li><a href="#initializing-vote">Initializing Vote</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sending-votes">Sending votes</a></li>
+    <li><a href="#aggregating-votes">Aggregating votes</a></li>
+    <li><a href="#submitting-to-chain">Submitting to chain</a></li>
+    <li><a href="#finalizing">Finalizing</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

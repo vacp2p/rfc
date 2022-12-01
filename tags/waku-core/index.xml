@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>waku-core on Vac RFC</title>
+    <link>https://rfc.vac.dev/tags/waku-core/</link>
+    <description>Recent content in waku-core on Vac RFC</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://rfc.vac.dev/tags/waku-core/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>11/WAKU2-RELAY</title>
+      <link>https://rfc.vac.dev/spec/11/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/11/</guid>
+      <description>11/WAKU2-RELAY specifies a Publish/Subscribe approach to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability. Its current implementation is a minor extension of the libp2p GossipSub protocol and prescribes gossip-based dissemination. As such the scope is limited to defining a separate protocol id for 11/WAKU2-RELAY, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.</description>
+    </item>
+    
+    <item>
+      <title>12/WAKU2-FILTER</title>
+      <link>https://rfc.vac.dev/spec/12/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/12/</guid>
+      <description>WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.</description>
+    </item>
+    
+    <item>
+      <title>13/WAKU2-STORE</title>
+      <link>https://rfc.vac.dev/spec/13/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/13/</guid>
+      <description>This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
+Protocol identifier*: /vac/waku/store/2.0.0-beta4
+Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.</description>
+    </item>
+    
+    <item>
+      <title>15/WAKU-BRIDGE</title>
+      <link>https://rfc.vac.dev/spec/15/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/15/</guid>
+      <description>A bridge between Waku v1 and Waku v2.
+Bridge #  A bridge requires supporting both Waku versions:
+ Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols  Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
+Publishing such packet will require the creation of a new Message with a new WakuMessage as data field.</description>
+    </item>
+    
+    <item>
+      <title>16/WAKU2-RPC</title>
+      <link>https://rfc.vac.dev/spec/16/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/16/</guid>
+      <description>Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &amp;#34;jsonrpc&amp;#34;:&amp;#34;2.0&amp;#34;, &amp;#34;method&amp;#34;:&amp;#34;get_waku_v2_debug_info&amp;#34;, &amp;#34;params&amp;#34;:[], &amp;#34;id&amp;#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.</description>
+    </item>
+    
+    <item>
+      <title>17/WAKU2-RLN-RELAY</title>
+      <link>https://rfc.vac.dev/spec/17/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/17/</guid>
+      <description>The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
+The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
+Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.</description>
+    </item>
+    
+    <item>
+      <title>36/WAKU2-BINDINGS-API</title>
+      <link>https://rfc.vac.dev/spec/36/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/36/</guid>
+      <description>Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+An alternative is to link existing Waku implementation as a static or dynamic library in their application.
+This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
+Design requirements #  The API should be generic enough, so:</description>
+    </item>
+    
+  </channel>
+</rss>

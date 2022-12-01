@@ -1,0 +1,33 @@
+# Sequence diagram for Waku v2 (WakuMessage, WakuData, Relay, Store, Filter)
+# PNG generated with https://mscgen.js.org
+msc {
+  hscale="1",
+  wordwraparcs=true;
+
+  a [label="A\nrelay\n(0)"],
+  b [label="B relay(pubtopic1)\n(0)"],
+  c [label="C relay(pubtopic2)\n(0)"],
+  d [label="D relay(pubtopic1), store(pubtopic1), filter\n(0)"],
+  e [label="E\nrelay, store\n(0)"],
+  f [label="F\nrelay, filter\n(0)"];
+
+  a rbox a [label="msg1=WakuMessage(contentTopic1, data) [14/WAKU2-MESSAGE] (1)"];
+  a note a [label="If version=1, encrypt data per [7/WAKU-DATA] (1)"];
+
+  f => d [label="FilterRequest(pubtopic1, contentTopic1) [12/WAKU2-FILTER] (2)"];
+  d rbox d [label="Subscribe F to filter [12/WAKU2-FILTER] (2)"];
+
+  a => b [label="Publish msg1 on pubtopic1 [11/WAKU2-RELAY] (3)"];
+  b => d [label="relay msg1 on pubtopic1 [11/WAKU2-RELAY] (3)"];
+
+  d rbox d [label="store: saves msg1 [13/WAKU2-STORE] (4)"];
+
+  d => f [label="MessagePush(msg1)[12/WAKU2-FILTER] (5)"];
+
+  ---;
+
+  e note e [label="E comes online (6)"];
+  e => d [label="HistoryQuery(pubtopic1, contentTopic1) [13/WAKU2-STORE] (6)"];
+  d => e [label="HistoryResponse(msg1, ...) [13/WAKU2-STORE] (6)"];
+
+}

@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
+Protocol identifier*: /vac/waku/swap/2.0.0-beta1
+Motivation #  The Waku network makes up a service network, and some nodes provide a useful service to other nodes.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="18/WAKU2-SWAP" />
+<meta property="og:description" content="This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
+Protocol identifier*: /vac/waku/swap/2.0.0-beta1
+Motivation #  The Waku network makes up a service network, and some nodes provide a useful service to other nodes." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/18/" /><meta property="article:section" content="docs" />
+
+
+
+<title>18/WAKU2-SWAP | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/"class=active>18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>18/WAKU2-SWAP</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#accounting">Accounting</a></li>
+    <li><a href="#flow">Flow</a></li>
+    <li><a href="#protobufs">Protobufs</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#soft-phase">Soft phase</a></li>
+    <li><a href="#mock-phase">Mock phase</a></li>
+    <li><a href="#hard-phase">Hard phase</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="18waku2-swap">18/WAKU2-SWAP</h1>
+
+  
+      <h1 id="waku-swap-accounting">Waku SWAP Accounting</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+  </ul><p>This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.</p>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/swap/2.0.0-beta1</code></p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>The Waku network makes up a service network, and some nodes provide a useful service to other nodes. We want to account for that, and when imbalances arise, settle this. The core of this approach has some theoretical backing in game theory, and variants of it have practically been proven to work in systems such as Bittorrent. The specific model use was developed by the Swarm project (previously part of Ethereum), and we re-use contracts that were written for this purpose.</p>
+<p>By using a delayed payment mechanism in the form of cheques, a barter-like mechanism can arise, and nodes can decide on their own policy as opposed to be strictly tied to a specific payment scheme. Additionally, this delayed settlement eases requirements on the underlying network in terms of transaction speed or costs.</p>
+<p>Theoretically, nodes providing and using resources over a long, indefinite, period of time can be seen as an iterated form of <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner&rsquo;s Dilemma (PD)</a>. Specifically, and more intuitively, since we have a cost and benefit profile for each provision/usage (of Waku Message&rsquo;s, e.g.), and the pricing can be set such that mutual cooperation is incentivized, this can be analyzed as a form of donations game.</p>
+<h1 id="game-theory---iterated-prisoners-dilemma--donation-game">
+  Game Theory - Iterated prisoner&rsquo;s dilemma / donation game
+  <a class="anchor" href="#game-theory---iterated-prisoners-dilemma--donation-game">#</a>
+</h1>
+<p>What follows is a sketch of what the game looks like between two nodes. We can look at it as a special case of iterated prisoner&rsquo;s dilemma called a <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma#Special_case:_donation_game">Donation game</a> where each node can cooperate with some benefit <code>b</code> at a personal cost <code>c</code>, where <code>b&gt;c</code>.</p>
+<p>From A&rsquo;s point of view:</p>
+<table>
+<thead>
+<tr>
+<th>A/B</th>
+<th>Cooperate</th>
+<th>Defect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cooperate</td>
+<td>b-c</td>
+<td>-c</td>
+</tr>
+<tr>
+<td>Defect</td>
+<td>b</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>What this means is that if A and B cooperates, A gets some benefit <code>b</code> minus a cost <code>c</code>. If A cooperates and B defects she only gets the cost, and if she defects and B cooperates A only gets the benefit. If both defect they get neither benefit nor cost.</p>
+<p>The generalized form of PD is:</p>
+<table>
+<thead>
+<tr>
+<th>A/B</th>
+<th>Cooperate</th>
+<th>Defect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cooperate</td>
+<td>R</td>
+<td>S</td>
+</tr>
+<tr>
+<td>Defect</td>
+<td>T</td>
+<td>P</td>
+</tr>
+</tbody>
+</table>
+<p>With R=reward, S=Sucker&rsquo;s payoff, T=temptation, P=punishment</p>
+<p>And the following holds:</p>
+<ul>
+<li><code>T&gt;R&gt;P&gt;S</code></li>
+<li><code>2R&gt;T+S</code></li>
+</ul>
+<p>In our case, this means <code>b&gt;b-c&gt;0&gt;-c</code> and <code>2(b-c)&gt; b-c</code> which is trivially true.</p>
+<p>As this is an iterated game with no clear finishing point in most circumstances, a tit-for-tat strategy is simple, elegant and functional. To be more theoretically precise, this also requires reasonable assumptions on error rate and discount parameter. This captures notions such as &ldquo;does the perceived action reflect the intended action&rdquo; and &ldquo;how much do you value future (uncertain) actions compared to previous actions&rdquo;. See <a href="https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation">Axelrod - Evolution of Cooperation (book)</a> for more details. In specific circumstances, nodes can choose slightly different policies if there&rsquo;s a strong need for it. A policy is simply how a node chooses to act given a set of circumstances.</p>
+<p>A tit-for-tat strategy basically means:</p>
+<ul>
+<li>cooperate first (perform service/beneficial action to other node)</li>
+<li>defect when node stops cooperating (disconnect and similar actions), i.e. when it stops performing according to set parameters re settlement</li>
+<li>resume cooperation if other node does so</li>
+</ul>
+<p>This can be complemented with node selection mechanisms.</p>
+<h1 id="swap-protocol-overview">
+  SWAP protocol overview
+  <a class="anchor" href="#swap-protocol-overview">#</a>
+</h1>
+<p>We use SWAP for accounting and settlement in conjunction with other request/reply protocols in Waku v2,
+where accounting is done in a pairwise manner.
+It is an acronym with several possible meanings (as defined in the Book
+of Swarm), for example:</p>
+<ul>
+<li>service wanted and provided</li>
+<li>settle with automated payments</li>
+<li>send waiver as payment</li>
+<li>start without a penny</li>
+</ul>
+<p>This approach is based on communicating payment thresholds and sending cheques as indications of later payments.
+Communicating payment thresholds MAY be done out-of-band or as part of the handshake.
+Sending cheques is done once payment threshold is hit.</p>
+<p>See <a href="https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth">Book of Swarm</a> section 3.2. on Peer-to-peer accounting etc., for more context and details.</p>
+<h2 id="accounting">
+  Accounting
+  <a class="anchor" href="#accounting">#</a>
+</h2>
+<p>Nodes perform their own accounting for each relevant peer based on some &ldquo;volume&rdquo;/bandwidth metric. For now we take this to mean the number of <code>WakuMessage</code>s exchanged.</p>
+<p>Additionally, a price is attached to each unit. Currently, this is simply a &ldquo;karma counter&rdquo; and equal to 1 per message.</p>
+<p>Each accounting balance SHOULD be w.r.t. to a given protocol it is accounting for.</p>
+<p>NOTE: This may later be complemented with other metrics, either as part of SWAP or more likely outside of it. For example, online time can be communicated and attested to as a form of enhanced quality of service to inform peer selection.</p>
+<h2 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h2>
+<p>Assuming we have two store nodes, one operating mostly as a client (A) and another as server (B).</p>
+<ol>
+<li>Node A performs a handshake with B node. B node responds and both nodes communicate their payment threshold.</li>
+<li>Node A and B creates an accounting entry for the other peer, keep track of peer and current balance.</li>
+<li>Node A issues a <code>HistoryRequest</code>, and B responds with a <code>HistoryResponse</code>. Based on the number of WakuMessages in the response, both nodes update their accounting records.</li>
+<li>When payment threshold is reached, Node A sends over a cheque to reach a neutral balance. Settlement of this is currently out of scope, but would occur through a SWAP contract (to be specified). (mock and hard phase).</li>
+<li>If disconnect threshold is reached, Node B disconnects Node A (mock and hard phase).</li>
+</ol>
+<p>Note that not all of these steps are mandatory in initial stages, see below for more details. For example, the payment threshold MAY initially be set out of bounds, and policy is only activated in the mock and hard phase.</p>
+<h2 id="protobufs">
+  Protobufs
+  <a class="anchor" href="#protobufs">#</a>
+</h2>
+<p>We use protobuf to specify the handshake and signature. This current protobuf is a work in progress. This is needed for mock and hard phase.</p>
+<p>A handshake gives initial information about payment thresholds and possibly other information. A cheque is best thought of as a promise to pay at a later date.</p>
+<pre tabindex="0"><code>message Handshake {
+    bytes payment_threshold = 1;
+}
+
+// TODO Signature?
+// Should probably be over the whole Cheque type
+message Cheque {
+    bytes beneficiary = 1;
+    // TODO epoch time or block time?
+    uint32 date = 2;
+    // TODO ERC20 extension?
+    // For now karma counter
+    uint32 amount = 3;
+}
+</code></pre><h1 id="incremental-integration-and-roll-out">
+  Incremental integration and roll-out
+  <a class="anchor" href="#incremental-integration-and-roll-out">#</a>
+</h1>
+<p>To incrementally integrate this into Waku v2, we have divided up the roll-out into three phases:</p>
+<ul>
+<li>Soft - accounting only</li>
+<li>Mock - send mock cheques and take word for it</li>
+<li>Hard Test - blockchain integration and deployed to public testnet (Goerli, Optimism testnet or similar)</li>
+<li>Hard Main - deployed to a public mainnet</li>
+</ul>
+<p>An implementation MAY support any of these phases.</p>
+<h2 id="soft-phase">
+  Soft phase
+  <a class="anchor" href="#soft-phase">#</a>
+</h2>
+<p>In the soft phase only accounting is performed, without consequence for the
+peers. No disconnect or sending of cheques is performed at this tage.</p>
+<p>SWAP protocol is performed in conjunction with another request-reply protocol to account for its usage.
+It SHOULD be done for <a href="/spec/13/">13/WAKU2-STORE</a>
+and it MAY be done for other request/reply protocols.</p>
+<p>A client SHOULD log accounting state per peer
+and SHOULD indicate when a peer is out of bounds (either of its thresholds met).</p>
+<h2 id="mock-phase">
+  Mock phase
+  <a class="anchor" href="#mock-phase">#</a>
+</h2>
+<p>In the mock phase, we send mock cheques and send cheques/disconnect peers as appropriate.</p>
+<ul>
+<li>If a node reaches a disconnect threshold, which MUST be outside the payment threshold, it SHOULD disconnect the other peer.</li>
+<li>If a node is within payment balance, the other node SHOULD stay connected to it.</li>
+<li>If a node receives a valid Cheque it SHOULD update its internal accounting records.</li>
+<li>If any node behaves badly, the other node is free to disconnect and pick another node.
+<ul>
+<li>Peer rating is out of scope of this specification.</li>
+</ul>
+</li>
+</ul>
+<h2 id="hard-phase">
+  Hard phase
+  <a class="anchor" href="#hard-phase">#</a>
+</h2>
+<p>In the hard phase, in addition to sending cheques and activating policy, this is
+done with blockchain integration on a public testnet. More details TBD.</p>
+<p>This also includes settlements where cheques can be redeemed.</p>
+<h2 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h2>
+<ol>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner&rsquo;s Dilemma</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma#Special_case:_donation_game">Donation game</a></p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/The_Evolution_of_Cooperation">Axelrod - Evolution of Cooperation (book)</a></p>
+</li>
+<li>
+<p><a href="https://web.archive.org/web/20210126130038/https://gateway.ethswarm.org/bzz/latest.bookofswarm.eth/">Book of Swarm</a></p>
+</li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#accounting">Accounting</a></li>
+    <li><a href="#flow">Flow</a></li>
+    <li><a href="#protobufs">Protobufs</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#soft-phase">Soft phase</a></li>
+    <li><a href="#mock-phase">Mock phase</a></li>
+    <li><a href="#hard-phase">Hard phase</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

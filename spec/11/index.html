@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="11/WAKU2-RELAY specifies a Publish/Subscribe approach to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability. Its current implementation is a minor extension of the libp2p GossipSub protocol and prescribes gossip-based dissemination. As such the scope is limited to defining a separate protocol id for 11/WAKU2-RELAY, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="11/WAKU2-RELAY" />
+<meta property="og:description" content="11/WAKU2-RELAY specifies a Publish/Subscribe approach to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability. Its current implementation is a minor extension of the libp2p GossipSub protocol and prescribes gossip-based dissemination. As such the scope is limited to defining a separate protocol id for 11/WAKU2-RELAY, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/11/" /><meta property="article:section" content="docs" />
+
+
+
+<title>11/WAKU2-RELAY | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/"class=active>11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>11/WAKU2-RELAY</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#protobuf-definitions">Protobuf definitions</a></li>
+    <li><a href="#message-fields">Message fields</a></li>
+    <li><a href="#subopts-fields">SubOpts fields</a></li>
+    <li><a href="#signature-policy">Signature Policy</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="11waku2-relay">11/WAKU2-RELAY</h1>
+
+  
+      <h1 id="waku-v2-relay">Waku v2 Relay</h1>
+
+  
+
+  
+  
+  
+  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=flat-square" />
+  
+  
+  
+
+  <ul>
+      <li>Status: stable</li>
+      <li>Editor: Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a>
+          
+      </li>
+      
+  </ul><p><code>11/WAKU2-RELAY</code> specifies a <a href="https://docs.libp2p.io/concepts/publish-subscribe/">Publish/Subscribe approach</a> to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability.
+Its current implementation is a minor extension of the <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p GossipSub protocol</a> and prescribes gossip-based dissemination.
+As such the scope is limited to defining a separate <a href="https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation"><code>protocol id</code></a> for <code>11/WAKU2-RELAY</code>, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.
+<code>11/WAKU2-RELAY</code> should not be confused with <a href="https://github.com/libp2p/specs/tree/master/relay">libp2p circuit relay</a>.</p>
+<p><strong>Protocol identifier</strong>: <code>/vac/waku/relay/2.0.0</code></p>
+<h1 id="security-requirements">
+  Security Requirements
+  <a class="anchor" href="#security-requirements">#</a>
+</h1>
+<p>The <code>11/WAKU2-RELAY</code> protocol is designed to provide the following security properties under a static <a href="#adversarial-model">Adversarial Model</a>.
+Note that data confidentiality, integrity, and authenticity are currently considered out of scope for <code>11/WAKU2-RELAY</code> and must be handled by higher layer protocols such as <a href="/spec/14"><code>14/WAKU2-MESSAGE</code></a>.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p><strong>Publisher-Message Unlinkability</strong>:
+This property indicates that no adversarial entity can link a published <code>Message</code> to its publisher.
+This feature also implies the unlinkability of the publisher to its published topic ID as the <code>Message</code> embodies the topic IDs.</p>
+</li>
+<li>
+<p><strong>Subscriber-Topic Unlinkability</strong>:
+This feature stands for the inability of any adversarial entity from linking a subscriber to its subscribed topic IDs.</p>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<h2 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h2>
+<p><em>Personally identifiable information</em> (PII) refers to any piece of data that can be used to uniquely identify a user.
+For example, the signature verification key, and the hash of one&rsquo;s static IP address are unique for each user and hence count as PII.</p>
+<h1 id="adversarial-model">
+  Adversarial Model
+  <a class="anchor" href="#adversarial-model">#</a>
+</h1>
+<ul>
+<li>Any entity running the <code>11/WAKU2-RELAY</code> protocol is considered an adversary.
+This includes publishers, subscribers, and all the peers' direct connections.
+Furthermore, we consider the adversary as a passive entity that attempts to collect information from others to conduct an attack but it does so without violating protocol definitions and instructions.
+For example, under the passive adversarial model, no malicious subscriber hides the messages it receives from other subscribers as it is against the description of <code>11/WAKU2-RELAY</code>.
+However, a malicious subscriber may learn which topics are subscribed to by which peers.</li>
+<li>The following are <strong>not</strong> considered as part of the adversarial model:
+<ul>
+<li>An adversary with a global view of all the peers and their connections.</li>
+<li>An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication).
+In other words, the communication channels are assumed to be secure.</li>
+</ul>
+</li>
+</ul>
+<h1 id="wire-specification">
+  Wire Specification
+  <a class="anchor" href="#wire-specification">#</a>
+</h1>
+<p>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md">PubSub interface specification</a> defines the protobuf RPC messages exchanged between peers participating in a GossipSub network.
+We republish these messages here for ease of reference and define how <code>11/WAKU2-RELAY</code> uses and interprets each field.</p>
+<h2 id="protobuf-definitions">
+  Protobuf definitions
+  <a class="anchor" href="#protobuf-definitions">#</a>
+</h2>
+<p>The PubSub RPC messages are specified using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v2</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto2&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">RPC</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> SubOpts subscriptions <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> Message publish <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">SubOpts</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> subscribe <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> topicid <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Message</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> from <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> data <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> seqno <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> topicIDs <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> signature <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> key <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><blockquote>
+<p><strong><em>NOTE:</em></strong>
+The various <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md#control-messages">control messages</a> defined for GossipSub are used as specified there.</p>
+</blockquote>
+<blockquote>
+<p><strong><em>NOTE:</em></strong>
+The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor"><code>TopicDescriptor</code></a> is not currently used by <code>11/WAKU2-RELAY</code>.</p>
+</blockquote>
+<h2 id="message-fields">
+  Message fields
+  <a class="anchor" href="#message-fields">#</a>
+</h2>
+<p>The <code>Message</code> protobuf defines the format in which content is relayed between peers.
+<code>11/WAKU2-RELAY</code> specifies the following usage requirements for each field:</p>
+<ul>
+<li>
+<p>The <code>from</code> field MUST NOT be used, following the <a href="#signature-policy"><code>StrictNoSign</code> signature policy</a>.</p>
+</li>
+<li>
+<p>The <code>data</code> field MUST be filled out with a <code>WakuMessage</code>.
+See <a href="/spec/14"><code>14/WAKU2-MESSAGE</code></a> for more details.</p>
+</li>
+<li>
+<p>The <code>seqno</code> field MUST NOT be used, following the <a href="#signature-policy"><code>StrictNoSign</code> signature policy</a>.</p>
+</li>
+<li>
+<p>The <code>topicIDs</code> field MUST contain the topics that a message is being published on.</p>
+</li>
+<li>
+<p>The <code>signature</code> field MUST NOT be used, following the <a href="#signature-policy"><code>StrictNoSign</code> signature policy</a>.</p>
+</li>
+<li>
+<p>The <code>key</code> field MUST NOT be used, following the <a href="#signature-solicy"><code>StrictNoSign</code> signature policy</a>.</p>
+</li>
+</ul>
+<h2 id="subopts-fields">
+  SubOpts fields
+  <a class="anchor" href="#subopts-fields">#</a>
+</h2>
+<p>The <code>SubOpts</code> protobuf defines the format in which subscription options are relayed between peers.
+A <code>11/WAKU2-RELAY</code> node MAY decide to subscribe or unsubscribe from topics by sending updates using <code>SubOpts</code>.
+The following usage requirements apply:</p>
+<ul>
+<li>
+<p>The <code>subscribe</code> field MUST contain a boolean, where <code>true</code> indicates subscribe and <code>false</code> indicates unsubscribe to a topic.</p>
+</li>
+<li>
+<p>The <code>topicid</code> field MUST contain the topic.</p>
+</li>
+</ul>
+<h2 id="signature-policy">
+  Signature Policy
+  <a class="anchor" href="#signature-policy">#</a>
+</h2>
+<p>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#signature-policy-options"><code>StrictNoSign</code> option</a> MUST be used, to ensure that messages are built without the <code>signature</code>, <code>key</code>, <code>from</code> and <code>seqno</code> fields.
+Note that this does not merely imply that these fields be empty, but that they MUST be <em>absent</em> from the marshalled message.</p>
+<h1 id="security-analysis">
+  Security Analysis
+  <a class="anchor" href="#security-analysis">#</a>
+</h1>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p><strong>Publisher-Message Unlinkability</strong>:
+To address publisher-message unlinkability, one should remove any PII from the published message.
+As such, <code>11/WAKU2-RELAY</code> follows the <code>StrictNoSign</code> policy as described in <a href="https://github.com/libp2p/specs/tree/master/pubsub#message-signing">libp2p PubSub specs</a>.
+As the result of the <code>StrictNoSign</code> policy, <code>Message</code>s should be built without the  <code>from</code>, <code>signature</code> and <code>key</code> fields since each of these three fields individually counts as PII for the author of the message (one can link the creation of the message with libp2p peerId and thus indirectly with the IP address of the publisher).
+Note that removing identifiable information from messages cannot lead to perfect unlinkability.
+The direct connections of a publisher might be able to figure out which <code>Message</code>s belong to that publisher by analyzing its traffic.
+The possibility of such inference may get higher when the <code>data</code> field is also not encrypted by the upper-level protocols. <!-- raw HTML omitted --></p>
+</li>
+<li>
+<p><strong>Subscriber-Topic Unlinkability:</strong>
+To preserve subscriber-topic unlinkability, it is recommended by <a href="/spec/10"><code>10/WAKU2</code></a> to use a single PubSub topic in the <code>11/WAKU2-RELAY</code> protocol.
+This allows an immediate subscriber-topic unlinkability where subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID.
+This level of unlinkability / anonymity is known as <a href="https://www.privitar.com/blog/k-anonymity-an-introduction/">k-anonymity</a> where k is proportional to the system size (number of participants of Waku relay protocol).
+However, note that <code>11/WAKU2-RELAY</code> supports the use of more than one topic.
+In case that more than one topic id is utilized, preserving unlinkability is the responsibility of the upper-level protocols which MAY adopt <a href="https://specs.status.im/spec/10#partitioned-topic">partitioned topics technique</a> to achieve K-anonymity for the subscribed peers.</p>
+</li>
+</ul>
+<h1 id="future-work">
+  Future work
+  <a class="anchor" href="#future-work">#</a>
+</h1>
+<ul>
+<li>
+<p><strong>Economic spam resistance</strong>:
+In the spam-protected <code>11/WAKU2-RELAY</code> protocol, no adversary can flood the system with spam messages (i.e., publishing a large number of messages in a short amount of time).
+Spam protection is partly provided by GossipSub v1.1 through <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures">scoring mechanism</a>.
+At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.
+<code>11/WAKU2-RELAY</code> aims at enabling an advanced spam protection mechanism with economic disincentives by utilizing Rate Limiting Nullifiers.
+In a nutshell, peers must conform to a certain message publishing rate per a system-defined epoch, otherwise, they get financially penalized for exceeding the rate.
+More details on this new technique can be found in <a href="/spec/17"><code>17/WAKU2-RLN-RELAY</code></a>.</p>
+<!-- raw HTML omitted -->
+</li>
+<li>
+<p>Providing <strong>Unlinkability</strong>, <strong>Integrity</strong> and  <strong>Authenticity</strong> simultaneously:
+Integrity and authenticity are typically addressed through digital signatures and Message Authentication Code (MAC) schemes, however, the usage of digital signatures (where each signature is bound to a particular peer) contradicts with the unlinkability requirement (messages signed under a certain signature key are verifiable by a verification key that is bound to a particular publisher).
+As such, integrity and authenticity are missing features in <code>11/WAKU2-RELAY</code> in the interest of unlinkability.
+In future work, advanced signature schemes like group signatures can be utilized to enable authenticity, integrity, and unlinkability simultaneously.
+In a group signature scheme, a member of a group can anonymously sign a message on behalf of the group as such the true signer is indistinguishable from other group members. <!-- raw HTML omitted --></p>
+</li>
+</ul>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li>
+<p><a href="/spec/10"><code>10/WAKU2</code></a></p>
+</li>
+<li>
+<p><a href="/spec/14"><code>14/WAKU2-MESSAGE</code></a></p>
+</li>
+<li>
+<p><a href="/spec/17"><code>17/WAKU-RLN</code></a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md">GossipSub v1.0</a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md">GossipSub v1.1</a></p>
+</li>
+<li>
+<p><a href="https://www.privitar.com/blog/k-anonymity-an-introduction/">K-anonimity</a></p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/publish-subscribe/"><code>libp2p</code> concepts: Publish/Subscribe</a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/blob/master/connections/README.md#protocol-negotiation"><code>libp2p</code> protocol negotiation</a></p>
+</li>
+<li>
+<p><a href="https://specs.status.im/spec/10#partitioned-topic">Partitioned topics</a></p>
+</li>
+<li>
+<p><a href="https://developers.google.com/protocol-buffers/">Protocol Buffers</a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md">PubSub interface for libp2p (r2, 2019-02-01)</a></p>
+</li>
+<li>
+<p><a href="https://specs.vac.dev/waku/waku.html">Waku v1 spec</a></p>
+</li>
+<li>
+<p><a href="https://eips.ethereum.org/EIPS/eip-627">Whisper spec (EIP627)</a></p>
+</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#protobuf-definitions">Protobuf definitions</a></li>
+    <li><a href="#message-fields">Message fields</a></li>
+    <li><a href="#subopts-fields">SubOpts fields</a></li>
+    <li><a href="#signature-policy">Signature Policy</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

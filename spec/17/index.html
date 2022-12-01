@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
+The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
+Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="17/WAKU2-RLN-RELAY" />
+<meta property="og:description" content="The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
+The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
+Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/17/" /><meta property="article:section" content="docs" />
+
+
+
+<title>17/WAKU2-RLN-RELAY | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/"class=active>17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>17/WAKU2-RLN-RELAY</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#setup-and-registration">Setup and Registration</a></li>
+    <li><a href="#publishing">Publishing</a></li>
+    <li><a href="#group-synchronization">Group Synchronization</a></li>
+    <li><a href="#routing">Routing</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#wakumessage">WakuMessage</a></li>
+    <li><a href="#ratelimitproof">RateLimitProof</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#epoch-length">Epoch Length</a></li>
+    <li><a href="#maximum-epoch-gap">Maximum Epoch Gap</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="17waku2-rln-relay">17/WAKU2-RLN-RELAY</h1>
+
+  
+      <h1 id="waku-v2-rln-relay">Waku v2 RLN Relay</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a>
+          
+      </li>
+      
+  </ul><p>The <code>17/WAKU2-RLN-RELAY</code> protocol is an extension of <code>11/WAKU2-RELAY</code> which additionally provides spam protection using <a href="/spec/32">Rate Limiting Nullifiers (RLN)</a>.</p>
+<p>The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
+Peers that violate the messaging rate are considered spammers and their message is considered spam.
+Spammers are also financially punished and removed from the system.</p>
+<!-- raw HTML omitted -->
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>In open and anonymous p2p messaging networks, one big problem is spam resistance.
+Existing solutions, such as Whisper’s proof of work are computationally expensive hence not suitable for resource-limited nodes.
+Other reputation-based approaches might not be desirable, due to issues around arbitrary exclusion and privacy.</p>
+<p>We augment the <a href="/spec/11"><code>11/WAKU2-RELAY</code></a> protocol with a novel construct of <a href="/spec/32">RLN</a> to enable an efficient economic spam prevention mechanism that can be run in resource-constrained environments.</p>
+<h1 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h1>
+<p>The messaging rate is defined by the <code>period</code> which indicates how many messages can be sent in a given period.
+We define an <code>epoch</code> as $\lceil$ <code>unix_time</code> / <code>period</code> $\rceil$. For example, if <code>unix_time</code> is <code>1644810116</code> and we set <code>period</code> to <code>30</code>, then <code>epoch</code> is  $\lceil$<code>(unix_time/period)</code>$\rceil$ <code>= 54827003</code>.
+Note that <code>epoch</code> refers to epoch in RLN and not Unix epoch. This means a message can only be sent every period, where period is up to the application.
+See see section <a href="#recommended-system-parameters">Recommended System Parameters</a> for some recommended ways to set a sensible <code>period</code> value depending on the application.
+Peers subscribed to a spam-protected <code>pubsubTopic</code> are only allowed to send one message per <code>epoch</code>.
+The higher-level layers adopting <code>17/WAKU2-RLN-RELAY</code> MAY choose to enforce the messaging rate for  <code>WakuMessages</code> with a specific <code>contentTopic</code> published on a <code>pubsubTopic</code>.</p>
+<h2 id="setup-and-registration">
+  Setup and Registration
+  <a class="anchor" href="#setup-and-registration">#</a>
+</h2>
+<p>Peers subscribed to a specific <code>pubsubTopic</code> form a <a href="/spec/32">RLN group</a>.</p>
+<!-- raw HTML omitted -->
+<p>Peers MUST be registered to the RLN group to be able to publish messages.
+Registration is moderated through a smart contract deployed on the Ethereum blockchain.
+Each peer has an <a href="/spec/32">RLN key pair</a> denoted by <code>sk</code>  and <code>pk</code>.
+The  secret key <code>sk</code> is secret data and MUST be persisted securely by the peer.
+The state of the membership contract contains the list of registered members' public identity keys i.e., <code>pk</code>s.
+For the registration, a peer creates a transaction that invokes the registration function of the contract via which registers its <code>pk</code> in the group.
+The transaction also transfers some amount of ether to the contract to be staked.
+This amount is denoted by <code>staked_fund</code> and is a system parameter.
+The peer who has the secret key <code>sk</code> associated with a registered <code>pk</code> would be able to withdraw a portion <code>reward_portion</code> of the staked fund by providing valid proof. <!-- raw HTML omitted -->
+<code>reward_portion</code> is also a system parameter.</p>
+<p>Note that  <code>sk</code> is initially only known to its owning peer however, it may get exposed to other peers in case the owner attempts spamming the system i.e., sending more than one message per <code>epoch</code>.
+An overview of registration is illustrated in Figure 1.</p>
+<p><img src="../../../../rfcs/17/rln-relay.png" alt="Figure 1: Registration." /></p>
+<h2 id="publishing">
+  Publishing
+  <a class="anchor" href="#publishing">#</a>
+</h2>
+<p>To publish at a given <code>epoch</code>, the publishing peer proceeds based on the regular <a href="/spec/11"><code>11/WAKU2-RELAY</code></a> protocol.<br>
+However, to protect against spamming, each <code>WakuMessage</code> (which is wrapped inside the <code>data</code> field of a PubSub message) MUST carry a <a href="##RateLimitProof"><code>RateLimitProof</code></a> with the following fields.
+Section <a href="#payloads">Payload</a> covers the details about the type and encoding of these fields.</p>
+<p>The <code>merkle_root</code> contains the root of the Merkle tree.</p>
+<p>The <code>epoch</code> represents the current epoch.</p>
+<p>The <code>nullifier</code> is an internal nullifier acting as a fingerprint that allows specifying whether two messages are published by the same peer during the same <code>epoch</code>.
+The <code>nullifier</code> is a deterministic value derived from <code>sk</code> and <code>epoch</code> therefore any two messages issued by the same peer (i.e., using the same <code>sk</code>) for the same <code>epoch</code> are guaranteed to have identical <code>nullifier</code>s.</p>
+<p>The <code>share_x</code> and <code>share_y</code> can be seen as partial disclosure of peer&rsquo;s <code>sk</code> for the intended <code>epoch</code>.
+They are derived deterministically from peer&rsquo;s <code>sk</code> and current <code>epoch</code> using <a href="/spec/32">Shamir secret sharing scheme</a>.
+If a peer discloses more than one such pair (<code>share_x</code>, <code>share_y</code>) for the same <code>epoch</code>, it would allow full disclosure of its  <code>sk</code> and hence get access to its staked fund in the membership contract.</p>
+<p>The <code>proof</code> field is a zero-knowledge proof signifying that:</p>
+<ol>
+<li>The message owner is the current member of the group i.e., her/his identity commitment key <code>pk</code> is part of the membership group Merkle tree with the root <code>merkle_root</code>.</li>
+<li><code>share_x</code> and <code>share_y</code>  are correctly computed.</li>
+<li>The <code>nullifier</code> is constructed correctly.
+For more details about the proof generation check <a href="/spec/32">RLN</a>
+The proof generation relies on the knowledge of two pieces of private information i.e., <code>sk</code> and <code>authPath</code>.
+The <code>authPath</code> is a subset of Merkle tree nodes by which a peer can prove the inclusion of its <code>pk</code> in the group. <!-- raw HTML omitted -->
+The proof generation also requires a set of public inputs which are: the Merkle tree root <code>merkle_root</code>, the current <code>epoch</code>, and the message for which the proof is going to be generated.
+In <code>17/WAKU2-RLN-RELAY</code>, the message is the concatenation of <code>WakuMessage</code>&rsquo;s  <code>payload</code> filed and its <code>contentTopic</code> i.e., <code>payload||contentTopic</code>.</li>
+</ol>
+<h2 id="group-synchronization">
+  Group Synchronization
+  <a class="anchor" href="#group-synchronization">#</a>
+</h2>
+<p>Proof generation relies on the knowledge of Merkle tree root <code>merkle_root</code> and <code>authPath</code> which both require access to the membership Merkle tree.
+Getting access to the Merkle tree can be done in various ways.
+One way is that all the peers construct the tree locally.
+This can be done by listening to the registration and deletion events emitted by the membership contract.
+Another approach for synchronizing the state of slashed <code>pk</code>s is to disseminate such information through a p2p GossipSub network to which all peers are subscribed.
+This is in addition to sending the deletion transaction to the membership contract.
+The benefit of an off-chain slashing is that it allows real-time removal of spammers as opposed to on-chain slashing in which peers get informed with a delay,
+where the delay is due to mining the slashing transaction.
+For the group synchronization, one important security consideration is that peers MUST make sure they always use the most recent Merkle tree root in their proof generation.
+The reason is that using an old root can allow inference about the index of the user&rsquo;s <code>pk</code> in the membership tree hence compromising user privacy and breaking message unlinkability.</p>
+<h2 id="routing">
+  Routing
+  <a class="anchor" href="#routing">#</a>
+</h2>
+<p>Upon the receipt of a PubSub message via <a href="/spec/11"><code>11/WAKU2-RELAY</code></a> protocol, the routing peer parses the <code>data</code> field as a <code>WakuMessage</code> and gets access to the <code>RateLimitProof</code> field.<br>
+The peer then validates the <code>RateLimitProof</code>  as explained next.</p>
+<p><strong>Epoch Validation</strong>
+If the <code>epoch</code> attached to the message is more than <code>max_epoch_gap</code> apart from the routing peer&rsquo;s current <code>epoch</code> then the message is discarded and considered invalid.
+This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs.
+<code>max_epoch_gap</code> is a system parameter for which we provide some recommendations in section <a href="#recommended-system-parameters">Recommended System Parameters</a>.</p>
+<p><strong>Merkle Root Validation</strong>
+The routing peers MUST check whether the provided Merkle root in the <code>RateLimitProof</code> is valid.
+It can do so by maintaining a local set of valid Merkle roots, which consist of <code>acceptable_root_window_size</code> past roots.
+This allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
+This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
+See <a href="#recommended-system-parameters">Recommended System Parameters</a> on choosing an appropriate <code>acceptable_root_window_size</code>.</p>
+<p><strong>Proof Verification</strong>
+The routing peers MUST check whether the zero-knowledge proof <code>proof</code> is valid.
+It does so by running the zk verification algorithm as explained in <a href="/spec/32">RLN</a>.
+If <code>proof</code> is invalid then the message is discarded.</p>
+<p><strong>Spam detection</strong>
+To enable local spam detection and slashing, routing peers MUST record the <code>nullifier</code>, <code>share_x</code>, and <code>share_y</code> of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
+To spot spam messages, the peer checks whether a message with an identical <code>nullifier</code> has already been relayed.</p>
+<ol>
+<li>If such a message exists and its <code>share_x</code> and <code>share_y</code> components are different from the incoming message, then slashing takes place.
+That is, the peer uses the  <code>share_x</code> and <code>share_y</code>  of the new message and the  <code>share'_x</code> and <code>share'_y</code> of the old record to reconstruct the <code>sk</code> of the message owner.
+The <code>sk</code> then can be used to delete the spammer from the group and withdraw a portion <code>reward_portion</code> of its staked fund.</li>
+<li>If the <code>share_x</code> and <code>share_y</code> fields of the previously relayed message are identical to the incoming message, then the message is a duplicate and shall be discarded.</li>
+<li>If none is found, then the message gets relayed.</li>
+</ol>
+<p>An overview of the routing procedure and slashing is provided in Figure 2.</p>
+<!-- raw HTML omitted -->
+<p><img src="../../../../rfcs/17/rln-message-verification.png" alt="Figure 2: Publishing, Routing and Slashing workflow." /></p>
+<hr>
+<h1 id="payloads">
+  Payloads
+  <a class="anchor" href="#payloads">#</a>
+</h1>
+<p>Payloads are protobuf messages implemented using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v3</a>.
+Nodes MAY extend the  <a href="/spec/14">14/WAKU2-MESSAGE</a> with a <code>rate_limit_proof</code> field to indicate that their message is not spam.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-diff" data-lang="diff">
+syntax = &#34;proto3&#34;;
+
+message RateLimitProof {
+  bytes proof = 1;
+  bytes merkle_root = 2;
+  bytes epoch = 3;
+  bytes share_x = 4;
+  bytes share_y = 5;
+  bytes nullifier = 6;
+}
+
+message WakuMessage {
+  bytes payload = 1;
+  string contentTopic = 2;
+  uint32 version = 3;
+  double timestamp = 4;
+<span style="color:#a6e22e">+ RateLimitProof rate_limit_proof = 21;
+</span><span style="color:#a6e22e"></span>}
+
+</code></pre></div><h2 id="wakumessage">
+  WakuMessage
+  <a class="anchor" href="#wakumessage">#</a>
+</h2>
+<p><code>rate_limit_proof</code> holds the information required to prove that the message owner has not exceeded the message rate limit.</p>
+<h2 id="ratelimitproof">
+  RateLimitProof
+  <a class="anchor" href="#ratelimitproof">#</a>
+</h2>
+<p>Below is the description of the fields of <code>RateLimitProof</code> and their types.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>proof</code></td>
+<td>array of 256 bytes</td>
+<td>the zkSNARK proof as explained in the <a href="##Publishing">Publishing process</a></td>
+</tr>
+<tr>
+<td style="text-align:right"><code>merkle_root</code></td>
+<td>array of 32 bytes in little-endian order</td>
+<td>the root of membership group Merkle tree at the time of publishing the message</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>share_x</code> and <code>share_y</code></td>
+<td>array of 32 bytes each</td>
+<td>Shamir secret shares of the user&rsquo;s secret identity key <code>sk</code> . <code>share_x</code> is the Poseidon hash of the <code>WakuMessage</code>&rsquo;s <code>payload</code> concatenated with its <code>contentTopic</code> . <code>share_y</code> is calculated using <a href="/spec/32">Shamir secret sharing scheme</a></td>
+</tr>
+<tr>
+<td style="text-align:right"><code>nullifier</code></td>
+<td>array of 32 bytes</td>
+<td>internal nullifier derived from <code>epoch</code> and peer&rsquo;s <code>sk</code> as explained in <a href="/spec/32">RLN construct</a></td>
+</tr>
+</tbody>
+</table>
+<h1 id="recommended-system-parameters">
+  Recommended System Parameters
+  <a class="anchor" href="#recommended-system-parameters">#</a>
+</h1>
+<p>The system parameters are summarized in the following table, and the recommended values for a subset of them are presented next.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>period</code></td>
+<td>the length of <code>epoch</code> in seconds</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>staked_fund</code></td>
+<td>the amount of wei to be staked by peers at the registration</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>reward_portion</code></td>
+<td>the percentage of <code>staked_fund</code> to be rewarded to the slashers</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>max_epoch_gap</code></td>
+<td>the maximum allowed gap between the <code>epoch</code> of a routing peer and the incoming message</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>acceptable_root_window_size</code></td>
+<td>The maximum number of past Merkle roots to store</td>
+</tr>
+</tbody>
+</table>
+<h2 id="epoch-length">
+  Epoch Length
+  <a class="anchor" href="#epoch-length">#</a>
+</h2>
+<p>A sensible value for the <code>period</code> depends on the application for which the spam protection is going to be used.
+For example, while the <code>period</code> of <code>1</code> second i.e., messaging rate of <code>1</code> per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
+One should look at the desired throughput of the application to decide on a proper <code>period</code> value.
+In the proof of concept implementation of <code>17/WAKU2-RLN-RELAY</code> protocol which is available in <a href="https://github.com/status-im/nim-waku">nim-waku</a>, the <code>period</code> is set to <code>1</code> second.
+Nevertheless, this value is also subject to change depending on user experience.</p>
+<h2 id="maximum-epoch-gap">
+  Maximum Epoch Gap
+  <a class="anchor" href="#maximum-epoch-gap">#</a>
+</h2>
+<p>We discussed in the <a href="#routing">Routing</a> section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by  <code>max_epoch_gap</code> .
+The value of  <code>max_epoch_gap</code>  can be measured based on the following factors.</p>
+<ul>
+<li>Network transmission delay <code>Network_Delay</code>: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.</li>
+<li>Clock asynchrony <code>Clock_Asynchrony</code>: The maximum difference between the Unix epoch clocks perceived by network peers which can be due to clock drifts.</li>
+</ul>
+<p>With a reasonable approximation of the preceding values, one can set  <code>max_epoch_gap</code>   as
+<code>max_epoch_gap</code> $= \lceil \frac{\text{Network Delay} + \text{Clock Asynchrony}}{\text{Epoch Length}}\rceil$   where  <code>period</code>  is the length of the <code>epoch</code> in seconds.
+<code>Network_Delay</code> and <code>Clock_Asynchrony</code> MUST have the same resolution as  <code>period</code> .
+By this formulation,  <code>max_epoch_gap</code>  indeed measures the maximum number of <code>epoch</code>s that can elapse since a message gets routed from its origin to all the other peers in the network.</p>
+<p><code>acceptable_root_window_size</code> depends upon the underlying chain&rsquo;s average blocktime, <code>block_time</code></p>
+<p>The lower bound for the <code>acceptable_root_window_size</code> SHOULD be set as $acceptable_root_window_size=(Network_Delay)/block_time$</p>
+<p><code>Network_Delay</code> MUST have the same resolution as <code>block_time</code>.</p>
+<p>By this formulation, <code>acceptable_root_window_size</code> will provide a lower bound of how many roots can be acceptable by a routing peer.</p>
+<p>The <code>acceptable_root_window_size</code> should indicate how many blocks may have been mined during the time it takes for a peer to receive a message.
+This formula represents a lower bound of the number of acceptable roots.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view">RLN documentation</a></li>
+<li><a href="https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs">Public inputs to the RLN circuit</a></li>
+<li><a href="https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Linear-Equation-amp-SSS">Shamir secret sharing scheme used in RLN</a></li>
+<li><a href="https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Nullifiers">RLN internal nullifier</a></li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#setup-and-registration">Setup and Registration</a></li>
+    <li><a href="#publishing">Publishing</a></li>
+    <li><a href="#group-synchronization">Group Synchronization</a></li>
+    <li><a href="#routing">Routing</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#wakumessage">WakuMessage</a></li>
+    <li><a href="#ratelimitproof">RateLimitProof</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#epoch-length">Epoch Length</a></li>
+    <li><a href="#maximum-epoch-gap">Maximum Epoch Gap</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
+Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="6/WAKU1" />
+<meta property="og:description" content="This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
+Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/6/" /><meta property="article:section" content="docs" />
+
+
+
+<title>6/WAKU1 | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/"class=active>6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>6/WAKU1</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+      <ul>
+        <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
+        <li><a href="#gossip-based-routing">Gossip based routing</a></li>
+        <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+      </ul>
+    </li>
+    <li><a href="#wire-specification">Wire Specification</a>
+      <ul>
+        <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
+        <li><a href="#abnf-specification">ABNF specification</a></li>
+        <li><a href="#packet-codes">Packet Codes</a></li>
+        <li><a href="#packet-usage">Packet usage</a></li>
+        <li><a href="#payload-encryption">Payload Encryption</a></li>
+        <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
+      </ul>
+    </li>
+    <li><a href="#additional-capabilities">Additional capabilities</a>
+      <ul>
+        <li><a href="#light-node">Light node</a></li>
+        <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
+      </ul>
+    </li>
+    <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
+      <ul>
+        <li><a href="#general-principles-and-policy">General principles and policy</a></li>
+        <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
+        <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
+        <li><a href="#forward-compatibility">Forward Compatibility</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
+      <ul>
+        <li><a href="#scalability-and-ux">Scalability and UX</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#spam-resistance">Spam resistance</a></li>
+        <li><a href="#censorship-resistance">Censorship resistance</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
+      <ul>
+        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+        <li><a href="#node-discovery">Node discovery</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a>
+      <ul>
+        <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
+        <li><a href="#version-11">Version 1.1</a></li>
+        <li><a href="#version-10">Version 1.0</a></li>
+        <li><a href="#version-06">Version 0.6</a></li>
+        <li><a href="#version-05">Version 0.5</a></li>
+        <li><a href="#version-04">Version 0.4</a></li>
+        <li><a href="#version-03">Version 0.3</a></li>
+        <li><a href="#version-02">Version 0.2</a></li>
+        <li><a href="#version-01">Version 0.1</a></li>
+        <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="6waku1">6/WAKU1</h1>
+
+  
+      <h1 id="waku-v1">Waku v1</h1>
+
+  
+
+  
+  
+  
+  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=flat-square" />
+  
+  
+  
+
+  <ul>
+      <li>Status: stable</li>
+      <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Adam Babik <a href="mailto:adam@status.im">adam@status.im</a>
+          
+              ,
+              Andrea Maria Piana <a href="mailto:andreap@status.im">andreap@status.im</a>
+          
+              ,
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Kim De Mey <a href="mailto:kimdemey@status.im">kimdemey@status.im</a>
+          
+      </li>
+      
+  </ul><p>This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes <a href="https://eips.ethereum.org/EIPS/eip-627">EIP-627</a>. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.</p>
+<h2 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h2>
+<p>Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices. We specify the standard for Waku packets in order to ensure forward compatibility of different Waku clients, backwards compatibility with Whisper clients, as well as to allow multiple implementations of Waku and its capabilities. We also modify the language to be more unambiguous, concise and consistent.</p>
+<h2 id="definitions">
+  Definitions
+  <a class="anchor" href="#definitions">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Batch Ack</strong></td>
+<td>An abbreviated term for Batch Acknowledgment</td>
+</tr>
+<tr>
+<td><strong>Light node</strong></td>
+<td>A Waku node that does not forward any envelopes through the Messages packet.</td>
+</tr>
+<tr>
+<td><strong>Envelope</strong></td>
+<td>Messages sent and received by Waku nodes. Described in <a href="#abnf-specification">ABNF spec <code>waku-envelope</code></a></td>
+</tr>
+<tr>
+<td><strong>Node</strong></td>
+<td>Some process that is able to communicate for Waku.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="underlying-transports-and-prerequisites">
+  Underlying Transports and Prerequisites
+  <a class="anchor" href="#underlying-transports-and-prerequisites">#</a>
+</h2>
+<h3 id="use-of-devp2p">
+  Use of DevP2P
+  <a class="anchor" href="#use-of-devp2p">#</a>
+</h3>
+<p>For nodes to communicate, they MUST implement devp2p and run RLPx. They MUST have some way of connecting to other nodes. Node discovery is largely out of scope for this spec, but see the appendix for some suggestions on how to do this.</p>
+<p>This protocol needs to advertise the <code>waku/1</code> <a href="https://ethereum.gitbooks.io/frontier-guide/devp2p.html">capability</a>.</p>
+<h3 id="gossip-based-routing">
+  Gossip based routing
+  <a class="anchor" href="#gossip-based-routing">#</a>
+</h3>
+<p>In Whisper, envelopes are gossiped between peers. Whisper is a form of rumor-mongering protocol that works by flooding to its connected peers based on some factors. Envelopes are eligible for retransmission until their TTL expires. A node SHOULD relay envelopes to all connected nodes if an envelope matches their PoW and bloom filter settings. If a node works in light mode, it MAY choose not to forward envelopes. A node MUST NOT send expired envelopes, unless the envelopes are sent as a <a href="spec/8">mailserver</a> response. A node SHOULD NOT send an envelope to a peer that it has already sent before.</p>
+<h3 id="maximum-packet-size">
+  Maximum Packet Size
+  <a class="anchor" href="#maximum-packet-size">#</a>
+</h3>
+<p>Nodes SHOULD limit the maximum size of both packets and envelopes. If a packet or envelope exceeds its limit, it MUST be dropped.</p>
+<ul>
+<li><strong>RLPx Packet Size</strong> - This size MUST be checked before a message is decoded.</li>
+<li><strong>Waku Envelope Size</strong> - Each envelope contained in an RLPx packet MUST then separately be checked against the maximum envelope size.</li>
+</ul>
+<p>Clients MAY use their own maximum packet and envelope sizes. The default values are <code>1.5mb</code> for the RLPx Packet and <code>1mb</code> for a Waku envelope.</p>
+<h2 id="wire-specification">
+  Wire Specification
+  <a class="anchor" href="#wire-specification">#</a>
+</h2>
+<h3 id="use-of-rlpx-transport-protocol">
+  Use of RLPx transport protocol
+  <a class="anchor" href="#use-of-rlpx-transport-protocol">#</a>
+</h3>
+<p>All Waku packets are sent as devp2p RLPx transport protocol, version 5<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> packets. These packets MUST be RLP-encoded arrays of data containing two objects: packet code followed by another object (whose type depends on the packet code).  See <a href="https://github.com/ethereum/wiki/wiki/RLP">informal RLP spec</a> and the <a href="https://ethereum.github.io/yellowpaper/paper.pdf">Ethereum Yellow Paper, appendix B</a> for more details on RLP.</p>
+<p>Waku is a RLPx subprotocol called <code>waku</code> with version <code>0</code>. The version number corresponds to the major version in the header spec. Minor versions should not break compatibility of <code>waku</code>, this would result in a new major. (Some exceptions to this apply in the Draft stage of where client implementation is rapidly change).</p>
+<h3 id="abnf-specification">
+  ABNF specification
+  <a class="anchor" href="#abnf-specification">#</a>
+</h3>
+<p>Using <a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a> we have the following format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; Packet codes 0 - 127 are reserved for Waku protocol</span>
+<span style="color:#a6e22e">packet-code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*3</span><span style="color:#66d9ef">DIGIT</span>
+
+<span style="color:#75715e">; rate limits per packet</span>
+<span style="color:#a6e22e">packet-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+<span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+<span style="color:#a6e22e">packet-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+
+<span style="color:#75715e">; rate limits by size in bytes</span>
+<span style="color:#a6e22e">bytes-limit-ip</span>     <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+<span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+<span style="color:#a6e22e">bytes-limit-topic</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+
+<span style="color:#a6e22e">packet-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-limit-ip</span> <span style="color:#a6e22e">packet-limit-peerid</span> <span style="color:#a6e22e">packet-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+<span style="color:#a6e22e">bytes-rate-limits</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">bytes-limit-ip</span> <span style="color:#a6e22e">bytes-limit-peerid</span> <span style="color:#a6e22e">bytes-limit-topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span>
+<span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1</span>
+<span style="color:#a6e22e">light-node-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">2</span>
+<span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">3</span>
+<span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span>
+<span style="color:#a6e22e">topic-interest-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">5</span>
+<span style="color:#a6e22e">bytes-rate-limits-key</span> <span style="color:#f92672">=</span> <span style="color:#f92672">6</span>
+
+<span style="color:#a6e22e">status-options</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span>
+  [ <span style="color:#a6e22e">pow-requirement-key</span> <span style="color:#a6e22e">pow-requirement</span> ]
+  [ <span style="color:#a6e22e">bloom-filter-key</span> <span style="color:#a6e22e">bloom-filter</span> ]
+  [ <span style="color:#a6e22e">light-node-key</span> <span style="color:#a6e22e">light-node</span> ]
+  [ <span style="color:#a6e22e">confirmations-enabled-key</span> <span style="color:#a6e22e">confirmations-enabled</span> ]
+  [ <span style="color:#a6e22e">packet-rate-limits-key</span> <span style="color:#a6e22e">packet-rate-limits</span> ]
+  [ <span style="color:#a6e22e">topic-interest-key</span> <span style="color:#a6e22e">topic-interest</span> ]
+  [ <span style="color:#a6e22e">bytes-limits-key</span> <span style="color:#a6e22e">bytes-rate-limits</span> ]
+<span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">status</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
+
+<span style="color:#a6e22e">status-update</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">status-options</span>
+
+<span style="color:#a6e22e">confirmations-enabled</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
+
+<span style="color:#a6e22e">light-node</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">BIT</span>
+
+<span style="color:#75715e">; pow is &#34;a single floating point value of PoW.</span>
+<span style="color:#75715e">; This value is the IEEE 754 binary representation</span>
+<span style="color:#75715e">; of a 64-bit floating point number packed as a uint64.</span>
+<span style="color:#75715e">; Values of qNAN, sNAN, INF and -INF are not allowed.</span>
+<span style="color:#75715e">; Negative values are also not allowed.&#34;</span>
+<span style="color:#a6e22e">pow</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span> <span style="color:#ae81ff">&#34;.&#34;</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+<span style="color:#a6e22e">pow-requirement</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pow</span>
+
+<span style="color:#75715e">; bloom filter is &#34;a byte array&#34;</span>
+<span style="color:#a6e22e">bloom-filter</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">waku-envelope</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">expiry</span> <span style="color:#a6e22e">ttl</span> <span style="color:#a6e22e">topic</span> <span style="color:#a6e22e">data</span> <span style="color:#a6e22e">nonce</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#75715e">; List of topics interested in</span>
+<span style="color:#a6e22e">topic-interest</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#f92672">*10000</span><span style="color:#a6e22e">topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#75715e">; 4 bytes (UNIX time in seconds)</span>
+<span style="color:#a6e22e">expiry</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; 4 bytes (time-to-live in seconds)</span>
+<span style="color:#a6e22e">ttl</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; 4 bytes of arbitrary data</span>
+<span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; byte array of arbitrary size</span>
+<span style="color:#75715e">; (contains encrypted payload)</span>
+<span style="color:#a6e22e">data</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; 8 bytes of arbitrary data</span>
+<span style="color:#75715e">; (used for PoW calculation)</span>
+<span style="color:#a6e22e">nonce</span> <span style="color:#f92672">=</span> <span style="color:#f92672">8</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">messages</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
+
+<span style="color:#75715e">; version of the confirmation packet</span>
+<span style="color:#a6e22e">version</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+
+<span style="color:#75715e">; keccak256 hash of the envelopes batch data (raw bytes)</span>
+<span style="color:#75715e">; for which the confirmation is sent</span>
+<span style="color:#a6e22e">hash</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">hasherror</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; error code</span>
+<span style="color:#a6e22e">code</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#66d9ef">DIGIT</span>
+
+<span style="color:#75715e">; a descriptive error message</span>
+<span style="color:#a6e22e">description</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">ALPHA</span>
+
+<span style="color:#a6e22e">error</span>  <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hasherror</span> <span style="color:#a6e22e">code</span> <span style="color:#a6e22e">description</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+<span style="color:#a6e22e">errors</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">error</span>
+
+<span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">hash</span> <span style="color:#a6e22e">errors</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">confirmation</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">version</span> <span style="color:#a6e22e">response</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#75715e">; message confirmation packet types</span>
+<span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
+<span style="color:#a6e22e">message-response</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">confirmation</span>
+
+<span style="color:#75715e">; mail server / client specific</span>
+<span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">waku-envelope</span>
+<span style="color:#a6e22e">p2p-message</span> <span style="color:#f92672">=</span> <span style="color:#f92672">1*</span><span style="color:#a6e22e">waku-envelope</span>
+<span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; packet-format needs to be paired with its</span>
+<span style="color:#75715e">; corresponding packet-format</span>
+<span style="color:#a6e22e">packet-format</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">packet-code</span> <span style="color:#a6e22e">packet-format</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">required-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">0</span> <span style="color:#a6e22e">status</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">1</span> <span style="color:#a6e22e">messages</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">22</span> <span style="color:#a6e22e">status-update</span> <span style="color:#f92672">/</span>
+
+<span style="color:#a6e22e">optional-packet</span> <span style="color:#f92672">=</span> <span style="color:#f92672">11</span> <span style="color:#a6e22e">batch-ack</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">12</span> <span style="color:#a6e22e">message-response</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request-complete</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">126</span> <span style="color:#a6e22e">p2p-request</span> <span style="color:#f92672">/</span>
+                  <span style="color:#f92672">127</span> <span style="color:#a6e22e">p2p-message</span>
+
+<span style="color:#a6e22e">packet</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">required-packet</span> [ <span style="color:#a6e22e">optional-packet</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
+</code></pre></div><p>All primitive types are RLP encoded. Note that, per RLP specification, integers are encoded starting from <code>0x00</code>.</p>
+<h3 id="packet-codes">
+  Packet Codes
+  <a class="anchor" href="#packet-codes">#</a>
+</h3>
+<p>The packet codes reserved for Waku protocol: 0 - 127.</p>
+<p>Packets with unknown codes MUST be ignored without generating any error, for forward compatibility of future versions.</p>
+<p>The Waku sub-protocol MUST support the following packet codes:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Int Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Status</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Messages</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Status Update</td>
+<td>22</td>
+</tr>
+</tbody>
+</table>
+<p>The following message codes are optional, but they are reserved for specific purpose.</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Int Value</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Batch Ack</td>
+<td>11</td>
+<td></td>
+</tr>
+<tr>
+<td>Message Response</td>
+<td>12</td>
+<td></td>
+</tr>
+<tr>
+<td>P2P Request Complete</td>
+<td>125</td>
+<td></td>
+</tr>
+<tr>
+<td>P2P Request</td>
+<td>126</td>
+<td></td>
+</tr>
+<tr>
+<td>P2P Message</td>
+<td>127</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="packet-usage">
+  Packet usage
+  <a class="anchor" href="#packet-usage">#</a>
+</h3>
+<h4 id="status">
+  Status
+  <a class="anchor" href="#status">#</a>
+</h4>
+<p>The Status packet serves as a Waku handshake and peers MUST exchange this
+packet upon connection. It MUST be sent after the RLPx handshake and prior to
+any other Waku packets.</p>
+<p>A Waku node MUST await the Status packet from a peer before engaging in other Waku protocol activity with that peer.
+When a node does not receive the Status packet from a peer, before a configurable timeout, it SHOULD disconnect from that peer.</p>
+<p>Upon retrieval of the Status packet, the node SHOULD validate the packet
+received and validated the Status packet. Note that its peer might not be in
+the same state.</p>
+<p>When a node is receiving other Waku packets from a peer before a Status
+packet is received, the node MUST ignore these packets and SHOULD disconnect from that peer. Status packets received after the handshake is completed MUST also be ignored.</p>
+<p>The Status packet MUST contain an association list containing various options. All options within this association list are OPTIONAL, ordering of the key-value pairs is not guaranteed and therefore MUST NOT be relied on. Unknown keys in the association list SHOULD be ignored.</p>
+<h4 id="messages">
+  Messages
+  <a class="anchor" href="#messages">#</a>
+</h4>
+<p>This packet is used for sending the standard Waku envelopes.</p>
+<h4 id="status-update">
+  Status Update
+  <a class="anchor" href="#status-update">#</a>
+</h4>
+<p>The Status Update packet is used to communicate an update of the settings of the node.
+The format is the same as the Status packet, all fields are optional.
+If none of the options are specified the packet MUST be ignored and considered a noop.
+Fields that are omitted are considered unchanged, fields that haven&rsquo;t changed SHOULD not
+be transmitted.</p>
+<h5 id="pow-requirement-field">
+  PoW Requirement Field
+  <a class="anchor" href="#pow-requirement-field">#</a>
+</h5>
+<p>When PoW Requirement is updated, peers MUST NOT deliver envelopes with PoW lower than the PoW Requirement specified.</p>
+<p>PoW is defined as average number of iterations, required to find the current BestBit (the number of leading zero bits in the hash), divided by envelope size and TTL:</p>
+<pre><code>PoW = (2**BestBit) / (size * TTL)
+</code></pre>
+<p>PoW calculation:</p>
+<pre><code>fn short_rlp(envelope) = rlp of envelope, excluding env_nonce field.
+fn pow_hash(envelope, env_nonce) = sha3(short_rlp(envelope) ++ env_nonce)
+fn pow(pow_hash, size, ttl) = 2**leading_zeros(pow_hash) / (size * ttl)
+</code></pre>
+<p>where size is the size of the RLP-encoded envelope, excluding <code>env_nonce</code> field (size of <code>short_rlp(envelope)</code>).</p>
+<h5 id="bloom-filter-field">
+  Bloom Filter Field
+  <a class="anchor" href="#bloom-filter-field">#</a>
+</h5>
+<p>The bloom filter is used to identify a number of topics to a peer without compromising (too much) privacy over precisely what topics are of interest. Precise control over the information content (and thus efficiency of the filter) may be maintained through the addition of bits.</p>
+<p>Blooms are formed by the bitwise OR operation on a number of bloomed topics. The bloom function takes the topic and projects them onto a 512-bit slice. At most, three bits are marked for each bloomed topic.</p>
+<p>The projection function is defined as a mapping from a 4-byte slice S to a 512-bit slice D; for ease of explanation, S will dereference to bytes, whereas D will dereference to bits.</p>
+<pre><code>LET D[*] = 0
+FOREACH i IN { 0, 1, 2 } DO
+LET n = S[i]
+IF S[3] &amp; (2 ** i) THEN n += 256
+D[n] = 1
+END FOR
+</code></pre>
+<p>A full bloom filter (all the bits set to 1) means that the node is to be considered a <code>Full Node</code> and it will accept any topic.</p>
+<p>If both topic interest and bloom filter are specified, topic interest always takes precedence and bloom filter MUST be ignored.</p>
+<p>If only bloom filter is specified, the current topic interest MUST be discarded and only the updated bloom filter MUST be used when forwarding or posting envelopes.</p>
+<p>A bloom filter with all bits set to 0 signals that the node is not currently interested in receiving any envelope.</p>
+<h5 id="topic-interest-field">
+  Topic Interest Field
+  <a class="anchor" href="#topic-interest-field">#</a>
+</h5>
+<p>Topic interest is used to share a node&rsquo;s interest in envelopes with specific topics. It does this in a more bandwidth considerate way, at the expense of some metadata protection. Peers MUST only send envelopes with specified topics.</p>
+<p>It is currently bounded to a maximum of 10000 topics. If you are interested in more topics than that, this is currently underspecified and likely requires updating it. The constant is subject to change.</p>
+<p>If only topic interest is specified, the current bloom filter MUST be discarded and only the updated topic interest MUST be used when forwarding or posting envelopes.</p>
+<p>An empty array signals that the node is not currently interested in receiving any envelope.</p>
+<h5 id="rate-limits-field">
+  Rate Limits Field
+  <a class="anchor" href="#rate-limits-field">#</a>
+</h5>
+<p>Rate limits is used to inform other nodes of their self defined rate limits.</p>
+<p>In order to provide basic Denial-of-Service attack protection, each node SHOULD define its own rate limits. The rate limits SHOULD be applied on IPs, peer IDs, and envelope topics.</p>
+<p>Each node MAY decide to whitelist, i.e. do not rate limit, selected IPs or peer IDs.</p>
+<p>If a peer exceeds node&rsquo;s rate limits, the connection between them MAY be dropped.</p>
+<p>Each node SHOULD broadcast its rate limits to its peers using the <code>status-update</code> packet. The rate limits MAY also be sent as an optional parameter in the handshake.</p>
+<p>Each node SHOULD respect rate limits advertised by its peers. The number of packets SHOULD be throttled in order not to exceed peer&rsquo;s rate limits. If the limit gets exceeded, the connection MAY be dropped by the peer.</p>
+<p>Two rate limits strategies are applied:</p>
+<ol>
+<li>Number of packets per second</li>
+<li>Size of packets (in bytes) per second</li>
+</ol>
+<p>Both strategies SHOULD be applied per IP address, peer id and topic.</p>
+<p>The size limit SHOULD be greater or equal than the maximum packet size.</p>
+<h5 id="light-node-field">
+  Light Node Field
+  <a class="anchor" href="#light-node-field">#</a>
+</h5>
+<p>When the node&rsquo;s <code>light-node</code> field is set to true, the node SHOULD NOT forward Envelopes from its peers.</p>
+<p>A node connected to a peer with the <code>light-node</code> field set to true MUST NOT depend on the peer for forwarding Envelopes.</p>
+<h5 id="confirmations-enabled-field">
+  Confirmations Enabled Field
+  <a class="anchor" href="#confirmations-enabled-field">#</a>
+</h5>
+<p>When the node&rsquo;s <code>confirmations-enabled</code> field is set to true, the node SHOULD send <a href="#batch-ack-and-message-response">message confirmations</a> to its peers.</p>
+<h4 id="batch-ack-and-message-response">
+  Batch Ack and Message Response
+  <a class="anchor" href="#batch-ack-and-message-response">#</a>
+</h4>
+<p>Message confirmations tell a node that an envelope originating from it has been received by its peers, allowing a node to know whether an envelope has or has not been received.</p>
+<p>A node MAY send a message confirmation for any batch of envelopes received with a Messages packet (<code>0x01</code>).</p>
+<p>A message confirmation is sent using Batch Ack packet (<code>0x0B</code>) or Message Response packet (<code>0x0C</code>). The message confirmation is specified in the <a href="#abnf-specification">ABNF specification</a>.</p>
+<p>The current <code>version</code> in the <code>confirmation</code> is <code>1</code>.</p>
+<p>The supported error codes:</p>
+<ul>
+<li><code>1</code>: time sync error which happens when an envelope is too old or was created in the future (typically because of an unsynchronized clock of a node).</li>
+</ul>
+<p>The drawback of sending message confirmations is that it increases the noise in the network because for each sent envelope, a corresponding confirmation is broadcast by one or more peers.</p>
+<h4 id="p2p-request">
+  P2P Request
+  <a class="anchor" href="#p2p-request">#</a>
+</h4>
+<p>This packet is used for sending Dapp-level peer-to-peer requests, e.g. Waku Mail Client requesting historic (expired) envelopes from the <a href="./mailserver.md">Waku Mail Server</a>.</p>
+<h4 id="p2p-message">
+  P2P Message
+  <a class="anchor" href="#p2p-message">#</a>
+</h4>
+<p>This packet is used for sending the peer-to-peer envelopes, which are not supposed to be forwarded any further. E.g. it might be used by the Waku Mail Server for delivery of historic (expired) envelopes, which is otherwise not allowed.</p>
+<h4 id="p2p-request-complete">
+  P2P Request Complete
+  <a class="anchor" href="#p2p-request-complete">#</a>
+</h4>
+<p>This packet is used to indicate that all envelopes, requested earlier with a P2P Request packet (<code>0x7E</code>), have been sent via one or more P2P Message packets (<code>0x7F</code>).</p>
+<p>The content of the packet is explained in the <a href="./mailserver.md">Waku Mail Server</a> specification.</p>
+<h3 id="payload-encryption">
+  Payload Encryption
+  <a class="anchor" href="#payload-encryption">#</a>
+</h3>
+<p>Asymmetric encryption uses the standard Elliptic Curve Integrated Encryption Scheme with SECP-256k1 public key.</p>
+<p>Symmetric encryption uses AES GCM algorithm with random 96-bit nonce.</p>
+<h3 id="packet-code-rationale">
+  Packet code Rationale
+  <a class="anchor" href="#packet-code-rationale">#</a>
+</h3>
+<p>Packet codes <code>0x00</code> and <code>0x01</code> are already used in all Waku / Whisper versions. Packet code <code>0x02</code> and <code>0x03</code> were previously used in Whisper but are deprecated as of Waku v0.4</p>
+<p>Packet code <code>0x22</code> is used to dynamically change the settings of a node.</p>
+<p>Packet codes <code>0x7E</code> and <code>0x7F</code> may be used to implement Waku Mail Server and Client. Without the P2P Message packet it would be impossible to deliver the historic envelopes, since they will be recognized as expired, and the peer will be disconnected for violating the Waku protocol. They might be useful for other purposes when it is not possible to spend time on PoW, e.g. if a stock exchange will want to provide live feed about the latest trades.</p>
+<h2 id="additional-capabilities">
+  Additional capabilities
+  <a class="anchor" href="#additional-capabilities">#</a>
+</h2>
+<p>Waku supports multiple capabilities. These include light node, rate limiting and bridging of traffic. Here we list these capabilities, how they are identified, what properties they have and what invariants they must maintain.</p>
+<p>Additionally there is the capability of a mailserver which is documented in its on <a href="mailserver.md">specification</a>.</p>
+<h3 id="light-node">
+  Light node
+  <a class="anchor" href="#light-node">#</a>
+</h3>
+<p>The rationale for light nodes is to allow for interaction with waku on resource restricted devices as bandwidth can often be an issue.</p>
+<p>Light nodes MUST NOT forward any incoming envelopes, they MUST only send their own envelopes. When light nodes happen to connect to each other, they SHOULD disconnect. As this would result in envelopes being dropped between the two.</p>
+<p>Light nodes are identified by the <code>light_node</code> value in the Status packet.</p>
+<h3 id="accounting-for-resources-experimental">
+  Accounting for resources (experimental)
+  <a class="anchor" href="#accounting-for-resources-experimental">#</a>
+</h3>
+<p>Nodes MAY implement accounting, keeping track of resource usage. It is heavily inspired by Swarm&rsquo;s <a href="https://www.bokconsulting.com.au/wp-content/uploads/2016/09/tron-fischer-sw3.pdf">SWAP protocol</a>, and works by doing pairwise accounting for resources.</p>
+<p>Each node keeps track of resource usage with all other nodes. Whenever an envelope is received from a node that is expected (fits bloom filter or topic interest, is legal, etc) this is tracked.</p>
+<p>Every epoch (say, every minute or every time an event happens) statistics SHOULD be aggregated and saved by the client:</p>
+<table>
+<thead>
+<tr>
+<th>peer</th>
+<th>sent</th>
+<th>received</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>peer1</td>
+<td>0</td>
+<td>123</td>
+</tr>
+<tr>
+<td>peer2</td>
+<td>10</td>
+<td>40</td>
+</tr>
+</tbody>
+</table>
+<p>In later versions this will be amended by nodes communication thresholds, settlements and disconnect logic.</p>
+<h2 id="upgradability-and-compatibility">
+  Upgradability and Compatibility
+  <a class="anchor" href="#upgradability-and-compatibility">#</a>
+</h2>
+<h3 id="general-principles-and-policy">
+  General principles and policy
+  <a class="anchor" href="#general-principles-and-policy">#</a>
+</h3>
+<p>The currently advertised capability is <code>waku/1</code>. This needs to be advertised in the <code>hello</code> <code>ÐΞVp2p</code> <a href="https://ethereum.gitbooks.io/frontier-guide/devp2p.html">packet</a>.
+If a node supports multiple versions of <code>waku</code>, those needs to be explicitly advertised. For example if both <code>waku/0</code> and <code>waku/1</code> are supported, both <code>waku/0</code> and <code>waku/1</code> MUST be advertised.</p>
+<p>These are policies that guide how we make decisions when it comes to upgradability, compatibility, and extensibility:</p>
+<ol>
+<li>
+<p>Waku aims to be compatible with previous and future versions.</p>
+</li>
+<li>
+<p>In cases where we want to break this compatibility, we do so gracefully and as a single decision point.</p>
+</li>
+<li>
+<p>To achieve this, we employ the following two general strategies:</p>
+</li>
+</ol>
+<ul>
+<li>a) Accretion (including protocol negotiation) over changing data</li>
+<li>b) When we want to change things, we give it a new name (for example, a version number).</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>We enable bridging between <code>shh/6</code> and <code>waku/1</code> until such a time as when we are ready to gracefully drop support for <code>shh/6</code> (1, 2, 3).</li>
+<li>When we add parameter fields, we (currently) do so by accreting them in a list, so old clients can ignore new fields (dynamic list) and new clients can use new capabilities (1, 3).</li>
+<li>To better support (2) and (3) in the future, we will likely release a new version that gives better support for open, growable maps (association lists or native map type) (3)</li>
+<li>When we we want to provide a new set of packets that have different requirements, we do so under a new protocol version and employ protocol versioning. This is a form of accretion at a level above - it ensures a client can support both protocols at once and drop support for legacy versions gracefully. (1,2,3)</li>
+</ul>
+<h3 id="backwards-compatibility">
+  Backwards Compatibility
+  <a class="anchor" href="#backwards-compatibility">#</a>
+</h3>
+<p>Waku is a different subprotocol from Whisper so it isn&rsquo;t directly compatible. However, the data format is the same, so compatibility can be achieved by the use of a bridging mode as described below. Any client which does not implement certain packet codes should gracefully ignore the packets with those codes. This will ensure the forward compatibility.</p>
+<h3 id="waku-whisper-bridging">
+  Waku-Whisper bridging
+  <a class="anchor" href="#waku-whisper-bridging">#</a>
+</h3>
+<p><code>waku/1</code> and <code>shh/6</code> are different DevP2P subprotocols, however they share the same data format making their envelopes compatible. This means we can bridge the protocols naively, this works as follows.</p>
+<p><strong>Roles:</strong></p>
+<ul>
+<li>Waku client A, only Waku capability</li>
+<li>Whisper client B, only Whisper capability</li>
+<li>WakuWhisper bridge C, both Waku and Whisper capability</li>
+</ul>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>A posts envelope; B posts envelope.</li>
+<li>C picks up envelope from A and B and relays them both to Waku and Whisper.</li>
+<li>A receives envelope on Waku; B on Whisper.</li>
+</ol>
+<p><strong>Note</strong>: This flow means if another bridge C1 is active, we might get duplicate relaying for a envelope between C1 and C2. I.e. Whisper(&lt;&gt;Waku&lt;&gt;Whisper)&lt;&gt;Waku, A-C1-C2-B. Theoretically this bridging chain can get as long as TTL permits.</p>
+<h3 id="forward-compatibility">
+  Forward Compatibility
+  <a class="anchor" href="#forward-compatibility">#</a>
+</h3>
+<p>It is desirable to have a strategy for maintaining forward compatibility between <code>waku/1</code> and future version of waku. Here we outline some concerns and strategy for this.</p>
+<ul>
+<li><strong>Connecting to nodes with multiple versions:</strong> The way this SHOULD be accomplished is by negotiating the versions of subprotocols, within the <code>hello</code> packet nodes transmit their capabilities along with a version. The highest common version should then be used.</li>
+<li><strong>Adding new packet codes:</strong> New packet codes can be added easily due to the available packet codes. Unknown packet codes SHOULD be ignored. Upgrades that add new packet codes SHOULD implement some fallback mechanism if no response was received for nodes that do not yet understand this packet.</li>
+<li><strong>Adding new options in <code>status-options</code>:</strong> New options can be added to the <code>status-options</code> association list in the <code>status</code> and <code>status-update</code> packet as options are OPTIONAL and unknown option keys SHOULD be ignored. A node SHOULD NOT disconnect from a peer when receiving <code>status-options</code> with unknown option keys.</li>
+</ul>
+<h2 id="appendix-a-security-considerations">
+  Appendix A: Security considerations
+  <a class="anchor" href="#appendix-a-security-considerations">#</a>
+</h2>
+<p>There are several security considerations to take into account when running Waku. Chief among them are: scalability, DDoS-resistance and privacy. These also vary depending on what capabilities are used. The security considerations for extra capabilities such as <a href="./mailserver.md#security-considerations">mailservers</a> can be found in their respective specifications.</p>
+<h3 id="scalability-and-ux">
+  Scalability and UX
+  <a class="anchor" href="#scalability-and-ux">#</a>
+</h3>
+<h4 id="bandwidth-usage">
+  Bandwidth usage:
+  <a class="anchor" href="#bandwidth-usage">#</a>
+</h4>
+<p>In version 0 of Waku, bandwidth usage is likely to be an issue. For more investigation into this, see the theoretical scaling model described <a href="https://github.com/vacp2p/research/tree/dcc71f4779be832d3b5ece9c4e11f1f7ec24aac2/whisper_scalability">here</a>.</p>
+<h4 id="gossip-based-routing-1">
+  Gossip-based routing:
+  <a class="anchor" href="#gossip-based-routing-1">#</a>
+</h4>
+<p>Use of gossip-based routing doesn&rsquo;t necessarily scale. It means each node can see an envelope multiple times, and having too many light nodes can cause propagation probability that is too low. See <a href="https://our.status.im/whisper-pss-comparison/">Whisper vs PSS</a> for more and a possible Kademlia based alternative.</p>
+<h4 id="lack-of-incentives">
+  Lack of incentives:
+  <a class="anchor" href="#lack-of-incentives">#</a>
+</h4>
+<p>Waku currently lacks incentives to run nodes, which means node operators are more likely to create centralized choke points.</p>
+<h3 id="privacy">
+  Privacy
+  <a class="anchor" href="#privacy">#</a>
+</h3>
+<h4 id="light-node-privacy">
+  Light node privacy:
+  <a class="anchor" href="#light-node-privacy">#</a>
+</h4>
+<p>The main privacy concern with a light node is that it has to reveal its topic interests (in addition to its IP/ID) to its directed peers. This is because when a light node publishes an envelope, its directed peers will know that the light node owns that envelope (as light nodes do not relay other envelopes). Therefore, the directed peers of a light node can make assumptions about what envelopes (topics) the light node is interested in.</p>
+<h4 id="mailserver-client-privacy">
+  Mailserver client privacy:
+  <a class="anchor" href="#mailserver-client-privacy">#</a>
+</h4>
+<p>A mailserver client fetches archival envelopes from a mailserver through a direct connection.
+In this direct connection, the client discloses its IP/ID as well as the topics/ bloom filter it is interested in to the mailserver.
+The collection of such information allows the mailserver to link clients' IP/IDs to their topic interests and build a profile for each client over time.
+As such, the mailserver client has to trust the mailserver with this level of information.</p>
+<h4 id="bloom-filter-privacy">
+  Bloom filter privacy:
+  <a class="anchor" href="#bloom-filter-privacy">#</a>
+</h4>
+<p>By having a bloom filter where only the topics you are interested in are set, you reveal which envelopes you are interested in. This is a fundamental tradeoff between bandwidth usage and privacy, though the tradeoff space is likely suboptimal in terms of the <a href="https://eprint.iacr.org/2017/954.pdf">Anonymity</a> <a href="https://petsymposium.org/2019/files/hotpets/slides/coordination-helps-anonymity-slides.pdf">trilemma</a>.</p>
+<h4 id="privacy-guarantees-not-rigorous">
+  Privacy guarantees not rigorous:
+  <a class="anchor" href="#privacy-guarantees-not-rigorous">#</a>
+</h4>
+<p>Privacy for Whisper / Waku haven&rsquo;t been studied rigorously for various threat models like global passive adversary, local active attacker, etc. This is unlike e.g. Tor and mixnets.</p>
+<h4 id="topic-hygiene">
+  Topic hygiene:
+  <a class="anchor" href="#topic-hygiene">#</a>
+</h4>
+<p>Similar to bloom filter privacy, if you use a very specific topic you reveal more information. See scalability model linked above.</p>
+<h3 id="spam-resistance">
+  Spam resistance
+  <a class="anchor" href="#spam-resistance">#</a>
+</h3>
+<p><strong>PoW bad for heterogeneous devices:</strong></p>
+<p>Proof of work is a poor spam prevention mechanism. A mobile device can only have a very low PoW in order not to use too much CPU / burn up its phone battery. This means someone can spin up a powerful node and overwhelm the network.</p>
+<h3 id="censorship-resistance">
+  Censorship resistance
+  <a class="anchor" href="#censorship-resistance">#</a>
+</h3>
+<p><strong>Devp2p TCP port blockable:</strong></p>
+<p>By default Devp2p runs on port <code>30303</code>, which is not commonly used for any other service. This means it is easy to censor, e.g. airport WiFi. This can be mitigated somewhat by running on e.g. port <code>80</code> or <code>443</code>, but there are still outstanding issues. See libp2p and Tor&rsquo;s Pluggable Transport for how this can be improved.</p>
+<h2 id="appendix-b-implementation-notes">
+  Appendix B: Implementation Notes
+  <a class="anchor" href="#appendix-b-implementation-notes">#</a>
+</h2>
+<h3 id="implementation-matrix">
+  Implementation Matrix
+  <a class="anchor" href="#implementation-matrix">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>Client</th>
+<th>Spec supported</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Status-go</strong></td>
+<td>0.5</td>
+<td><a href="https://github.com/status-im/status-go/blob/develop/WAKU.md">details</a></td>
+</tr>
+<tr>
+<td><strong>Nim-waku</strong></td>
+<td>1.0</td>
+<td><a href="https://github.com/status-im/nim-waku/blob/master/README.md">details</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="recommendations-for-clients">
+  Recommendations for clients
+  <a class="anchor" href="#recommendations-for-clients">#</a>
+</h3>
+<p>Notes useful for implementing Waku mode.</p>
+<ol>
+<li>
+<p>Avoid duplicate envelopes</p>
+<p>To avoid duplicate envelopes, only connect to one Waku node. Benign duplicate envelopes is an intrinsic property of Whisper which often leads to a N factor increase in traffic, where N is the number of peers you are connected to.</p>
+</li>
+<li>
+<p>Topic specific recommendations</p>
+<p>Consider partition topics based on some usage, to avoid too much traffic on a single topic.</p>
+</li>
+</ol>
+<h3 id="node-discovery">
+  Node discovery
+  <a class="anchor" href="#node-discovery">#</a>
+</h3>
+<p>Resource restricted devices SHOULD use <a href="https://eips.ethereum.org/EIPS/eip-1459">EIP-1459</a> to discover nodes.</p>
+<p>Known static nodes MAY also be used.</p>
+<h2 id="changelog">
+  Changelog
+  <a class="anchor" href="#changelog">#</a>
+</h2>
+<h3 id="initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8">
+  <a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a>
+  <a class="anchor" href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8">#</a>
+</h3>
+<ul>
+<li>Add section on P2P Request Complete packet and update packet code table.</li>
+<li>Correct the header hierarchy for the status-options fields.</li>
+<li>Consistent use of the words packet, message and envelope.</li>
+<li>Added section on max packet size</li>
+<li>Complete the ABNF specification and minor ABNF fixes.</li>
+</ul>
+<h3 id="version-11">
+  Version 1.1
+  <a class="anchor" href="#version-11">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/33b8d7304c9ebece90ea94e601f11080a8ac2c4d">June 09, 2020</a></p>
+<ul>
+<li>Add rate limit per bytes</li>
+</ul>
+<h3 id="version-10">
+  Version 1.0
+  <a class="anchor" href="#version-10">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125">April 21,2020</a></p>
+<ul>
+<li>Removed <code>version</code> from handshake</li>
+<li>Changed <code>RLP</code> keys from 48,49.. to 0,1..</li>
+<li>Upgraded to <code>waku/1</code></li>
+</ul>
+<h3 id="version-06">
+  Version 0.6
+  <a class="anchor" href="#version-06">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/9e650995f24179844857520c68fa3e8f6018b125">April 21,2020</a></p>
+<ul>
+<li>Mark spec as Deprecated mode in terms of its lifecycle.</li>
+</ul>
+<h3 id="version-05">
+  Version 0.5
+  <a class="anchor" href="#version-05">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/7b9dc562bc50c6bb844ac575cb221ec9cda2530a">March 17,2020</a></p>
+<ul>
+<li>Clarify the preferred way of handling unknown keys in the <code>status-options</code> association list.</li>
+<li>Correct spec/implementation mismatch: Change RLP keys to be the their int values in order to reflect production behavior</li>
+</ul>
+<h3 id="version-04">
+  Version 0.4
+  <a class="anchor" href="#version-04">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/17bd066e317bbe33af07146b721d73f24de47e88">February 21, 2020</a>.</p>
+<ul>
+<li>Simplify implementation matrix with latest state</li>
+<li>Introduces a new required packet code Status Code (<code>0x22</code>) for communicating option changes</li>
+<li>Deprecates the following packet codes: PoW Requirement (<code>0x02</code>), Bloom Filter (<code>0x03</code>), Rate limits (<code>0x20</code>), Topic interest (<code>0x21</code>) - all superseded by the new Status Code (<code>0x22</code>)</li>
+<li>Increased <code>topic-interest</code> capacity from 1000 to 10000</li>
+</ul>
+<h3 id="version-03">
+  Version 0.3
+  <a class="anchor" href="#version-03">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/commit/73138d6ba954ab4c315e1b8d210ac7631b6d1428">February 13, 2020</a>.</p>
+<ul>
+<li>Recommend DNS based node discovery over other Discovery methods.</li>
+<li>Mark spec as Draft mode in terms of its lifecycle.</li>
+<li>Simplify Changelog and misc formatting.</li>
+<li>Handshake/Status packet not compatible with shh/6 nodes; specifying options as association list.</li>
+<li>Include topic-interest in Status handshake.</li>
+<li>Upgradability policy.</li>
+<li><code>topic-interest</code> packet code.</li>
+</ul>
+<h3 id="version-02">
+  Version 0.2
+  <a class="anchor" href="#version-02">#</a>
+</h3>
+<p>Released <a href="https://github.com/vacp2p/specs/blob/waku-0.2.0/waku.md">December 10, 2019</a>.</p>
+<ul>
+<li>General style improvements.</li>
+<li>Fix ABNF grammar.</li>
+<li>Mailserver requesting/receiving.</li>
+<li>New packet codes: topic-interest (experimental), rate limits (experimental).</li>
+<li>More details on handshake modifications.</li>
+<li>Accounting for resources mode (experimental)</li>
+<li>Appendix with security considerations: scalability and UX, privacy, and spam resistance.</li>
+<li>Appendix with implementation notes and implementation matrix across various clients with breakdown per capability.</li>
+<li>More details on handshake and parameters.</li>
+<li>Describe rate limits in more detail.</li>
+<li>More details on mailserver and mail client API.</li>
+<li>Accounting for resources mode (very experimental).</li>
+<li>Clarify differences with Whisper.</li>
+</ul>
+<h3 id="version-01">
+  Version 0.1
+  <a class="anchor" href="#version-01">#</a>
+</h3>
+<p>Initial version. Released <a href="https://github.com/vacp2p/specs/blob/b59b9247f2ac1bf45c75bd3227a2e5dd87b6d7b0/waku.md">November 21, 2019</a>.</p>
+<h3 id="differences-between-shh6-and-waku1">
+  Differences between shh/6 and waku/1
+  <a class="anchor" href="#differences-between-shh6-and-waku1">#</a>
+</h3>
+<p>Summary of main differences between this spec and Whisper v6, as described in <a href="https://eips.ethereum.org/EIPS/eip-627">EIP-627</a>:</p>
+<ul>
+<li>RLPx subprotocol is changed from <code>shh/6</code> to <code>waku/1</code>.</li>
+<li>Light node capability is added.</li>
+<li>Optional rate limiting is added.</li>
+<li>Status packet has following additional parameters: light-node,
+confirmations-enabled and rate-limits</li>
+<li>Mail Server and Mail Client functionality is now part of the specification.</li>
+<li>P2P Message packet contains a list of envelopes instead of a single envelope.</li>
+</ul>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h2 id="footnotes">
+  Footnotes
+  <a class="anchor" href="#footnotes">#</a>
+</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Felix Lange et al. <a href="https://github.com/ethereum/devp2p/blob/master/rlpx.md">The RLPx Transport Protocol</a>. Ethereum.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#definitions">Definitions</a></li>
+    <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+      <ul>
+        <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
+        <li><a href="#gossip-based-routing">Gossip based routing</a></li>
+        <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+      </ul>
+    </li>
+    <li><a href="#wire-specification">Wire Specification</a>
+      <ul>
+        <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
+        <li><a href="#abnf-specification">ABNF specification</a></li>
+        <li><a href="#packet-codes">Packet Codes</a></li>
+        <li><a href="#packet-usage">Packet usage</a></li>
+        <li><a href="#payload-encryption">Payload Encryption</a></li>
+        <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
+      </ul>
+    </li>
+    <li><a href="#additional-capabilities">Additional capabilities</a>
+      <ul>
+        <li><a href="#light-node">Light node</a></li>
+        <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
+      </ul>
+    </li>
+    <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
+      <ul>
+        <li><a href="#general-principles-and-policy">General principles and policy</a></li>
+        <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
+        <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
+        <li><a href="#forward-compatibility">Forward Compatibility</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
+      <ul>
+        <li><a href="#scalability-and-ux">Scalability and UX</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#spam-resistance">Spam resistance</a></li>
+        <li><a href="#censorship-resistance">Censorship resistance</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
+      <ul>
+        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+        <li><a href="#node-discovery">Node discovery</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a>
+      <ul>
+        <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
+        <li><a href="#version-11">Version 1.1</a></li>
+        <li><a href="#version-10">Version 1.0</a></li>
+        <li><a href="#version-06">Version 0.6</a></li>
+        <li><a href="#version-05">Version 0.5</a></li>
+        <li><a href="#version-04">Version 0.4</a></li>
+        <li><a href="#version-03">Version 0.3</a></li>
+        <li><a href="#version-02">Version 0.2</a></li>
+        <li><a href="#version-01">Version 0.1</a></li>
+        <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#footnotes">Footnotes</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

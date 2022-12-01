@@ -1,0 +1,25 @@
+# Sequence diagram for RLN Relay protocol (registration)
+msc {
+  hscale = "1.3";
+
+  d [label = " "], a [label = " "],b [label = " "];
+  a rbox a [label="Relay Node A"], 
+  b note b [label="Membership Contract"],
+  d rbox d [label = "Relay Node B"];
+ 
+  |||;
+  d abox d [ label=" \n Listening to the membership contract \n "] ;
+
+  a box a [ label=" \n Generate sk,pk \n "] ;
+  a=>b [ label = "Register(pk, x ETH)" ] ;
+  a abox a [ label=" \n Listening to the membership contract \n "] ;
+
+  b box b [label=" \n Insert pk  to the list. \n Emit an event announcing the insertion of pk and its index in the list. \n  "];
+  |||;
+  ---;
+  b abox b [ label=" \n Block containing the insertion transaction is mined \n "] ;
+  b=>a [ label = "Insert(pk, index)"];
+  b=>d [ label = "Insert(pk, index)"];
+
+
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  This RFC describes the usage of the ENR (Ethereum Node Records) format for 10/WAKU2 purposes. The ENR format is defined in EIP-778 [3].
+This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
+Motivation #  EIP-1459 with the usage of ENR has been implemented [1] [2] as a discovery protocol for Waku v2.
+EIP-778 specifies a number of pre-defined keys.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="31/WAKU2-ENR" />
+<meta property="og:description" content="Abstract #  This RFC describes the usage of the ENR (Ethereum Node Records) format for 10/WAKU2 purposes. The ENR format is defined in EIP-778 [3].
+This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
+Motivation #  EIP-1459 with the usage of ENR has been implemented [1] [2] as a discovery protocol for Waku v2.
+EIP-778 specifies a number of pre-defined keys." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/31/" /><meta property="article:section" content="docs" />
+
+
+
+<title>31/WAKU2-ENR | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/"class=active>31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>31/WAKU2-ENR</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#usage-of-multiaddr-format-rationale">Usage of Multiaddr Format Rationale</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#many-connection-types">Many connection types</a></li>
+        <li><a href="#raw-tcp-only">Raw TCP only</a></li>
+      </ul>
+    </li>
+    <li><a href="#limitations">Limitations</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#usage-1">Usage</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="31waku2-enr">31/WAKU2-ENR</h1>
+
+  
+      <h1 id="waku-v2-usage-of-enr">Waku v2 usage of ENR</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Franck Royer <a href="mailto:franck@status.im">franck@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This RFC describes the usage of the ENR (Ethereum Node Records) format for <a href="/specs/10">10/WAKU2</a> purposes.
+The ENR format is defined in <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> <a href="#references">[3]</a>.</p>
+<p>This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.</p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>EIP-1459 with the usage of ENR has been implemented <a href="#references">[1]</a> <a href="#references">[2]</a> as a discovery protocol for Waku v2.</p>
+<p>EIP-778 specifies a number of pre-defined keys.
+However, the usage of these keys alone does not allow for certain transport capabilities to be encoded,
+such as Websocket.
+Currently, Waku v2 nodes running in a Browser only support websocket transport protocol.
+Hence, new ENR keys need to be defined to allow for the encoding of transport protocol other than raw TCP.</p>
+<h2 id="usage-of-multiaddr-format-rationale">
+  Usage of Multiaddr Format Rationale
+  <a class="anchor" href="#usage-of-multiaddr-format-rationale">#</a>
+</h2>
+<p>One solution would be to define new keys such as <code>ws</code> to encode the websocket port of a node.
+However, we expect new transport protocols to be added overtime such as quic.
+Hence, this would only provide a short term solution until another RFC would need to be added.</p>
+<p>Moreover, secure websocket involves SSL certificates.
+SSL certificates are only valid for a given domain and ip, so an ENR containing the following information:</p>
+<ul>
+<li>secure websocket port</li>
+<li>ipv4 fqdn</li>
+<li>ipv4 address</li>
+<li>ipv6 address</li>
+</ul>
+<p>Would carry some ambiguity: Is the certificate securing the websocket port valid for the ipv4 fqdn?
+the ipv4 address?
+the ipv6 address?</p>
+<p>The <a href="/specs/10">10/WAKU2</a> protocol family is built on the <a href="https://github.com/libp2p/specs">libp2p</a> protocol stack.
+Hence, it uses <a href="https://github.com/multiformats/multiaddr">multiaddr</a> to format network addresses.</p>
+<p>Directly storing one or several multiaddresses in the ENR would fix the issues listed above:</p>
+<ul>
+<li>multiaddr is self-describing and support addresses for any network protocol:
+No new RFC would be needed to support encoding other transport protocols in an ENR.</li>
+<li>multiaddr contains both the host and port information, allowing the ambiguity previously described to be resolved.</li>
+</ul>
+<h1 id="multiaddrs-enr-key">
+  <code>multiaddrs</code> ENR key
+  <a class="anchor" href="#multiaddrs-enr-key">#</a>
+</h1>
+<p>We define a  <code>multiaddrs</code> key.</p>
+<ul>
+<li>The value MUST be a list of binary encoded multiaddr prefixed by their size.</li>
+<li>The size of the multiaddr MUST be encoded in a Big Endian unsigned 16-bit integer.</li>
+<li>The size of the multiaddr MUST be encoded in 2 bytes.</li>
+<li>The <code>secp256k1</code> value MUST be present on the record;
+<code>secp256k1</code> is defined in <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> and contains the compressed secp256k1 public key.</li>
+<li>The node&rsquo;s peer id SHOULD be deduced from the <code>secp256k1</code> value.</li>
+<li>The multiaddresses SHOULD NOT contain a peer id.</li>
+<li>For raw TCP &amp; UDP connections details, <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> pre-defined keys SHOULD be used;
+The keys <code>tcp</code>, <code>udp</code>, <code>ip</code> (and <code>tcp6</code>, <code>udp6</code>, <code>ip6</code> for IPv6) are enough to convey all necessary information;</li>
+<li>To save space, <code>multiaddrs</code> key SHOULD only be used for connection details that cannot be represented using the <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> pre-defined keys.</li>
+<li>The 300 bytes size limit as defined by <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> still applies;
+In practice, it is possible to encode 3 multiaddresses in ENR, more or less could be encoded depending on the size of each multiaddress.</li>
+</ul>
+<h2 id="usage">
+  Usage
+  <a class="anchor" href="#usage">#</a>
+</h2>
+<h3 id="many-connection-types">
+  Many connection types
+  <a class="anchor" href="#many-connection-types">#</a>
+</h3>
+<p>Alice is a node operator, she runs a node that supports inbound connection for the following protocols:</p>
+<ul>
+<li>TCP 10101 on <code>1.2.3.4</code></li>
+<li>UDP 20202 on <code>1.2.3.4</code></li>
+<li>TCP 30303 on <code>1234:5600:101:1::142</code></li>
+<li>UDP 40404 on <code>1234:5600:101:1::142</code></li>
+<li>Secure Websocket on <code>wss://example.com:443/</code></li>
+<li>QUIC on <code>quic://quic.example.com:443/</code></li>
+</ul>
+<p>Alice SHOULD structure the ENR for her node as follows:</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tcp</code></td>
+<td><code>10101</code></td>
+</tr>
+<tr>
+<td><code>udp</code></td>
+<td><code>20202</code></td>
+</tr>
+<tr>
+<td><code>tcp6</code></td>
+<td><code>30303</code></td>
+</tr>
+<tr>
+<td><code>udp6</code></td>
+<td><code>40404</code></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td><code>1.2.3.4</code></td>
+</tr>
+<tr>
+<td><code>ip6</code></td>
+<td><code>1234:5600:101:1::142</code></td>
+</tr>
+<tr>
+<td><code>secp256k1</code></td>
+<td>Alice&rsquo;s compressed secp256k1 public key, 33 bytes</td>
+</tr>
+<tr>
+<td><code>multiaddrs</code></td>
+<td><!-- raw HTML omitted -->len1 | /dns4/example.com/tcp/443/wss | len2 | /dns4/quic.examle.com/tcp/443/quic<!-- raw HTML omitted --></td>
+</tr>
+</tbody>
+</table>
+<p>Where:</p>
+<ul>
+<li><code>|</code> is the concatenation operator,</li>
+<li><code>len1</code> is the length of <code>/dns4/example.com/tcp/443/wss</code> byte representation,</li>
+<li><code>len2</code> is the length of <code>/dns4/quic.examle.com/tcp/443/quic</code> byte representation.</li>
+</ul>
+<h3 id="raw-tcp-only">
+  Raw TCP only
+  <a class="anchor" href="#raw-tcp-only">#</a>
+</h3>
+<p>Bob is a node operator, he runs a node that supports inbound connection for the following protocols:</p>
+<ul>
+<li>TCP 10101 on <code>1.2.3.4</code></li>
+</ul>
+<p>Bob SHOULD structure the ENR for her node as follows:</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tcp</code></td>
+<td><code>10101</code></td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td><code>1.2.3.4</code></td>
+</tr>
+<tr>
+<td><code>secp256k1</code></td>
+<td>Bob&rsquo;s compressed secp256k1 public key, 33 bytes</td>
+</tr>
+</tbody>
+</table>
+<p>Indeed, as Bob&rsquo;s node&rsquo;s connection details can be represented with EIP-778&rsquo;s pre-defined keys only
+then it is not needed to use the <code>multiaddrs</code> key.</p>
+<h2 id="limitations">
+  Limitations
+  <a class="anchor" href="#limitations">#</a>
+</h2>
+<p>Supported key type is <code>secp256k1</code> only.</p>
+<p>In the future, an extension of this RFC could be made to support other elliptic curve cryptography such as <code>ed25519</code>.</p>
+<h1 id="waku2-enr-key">
+  <code>waku2</code> ENR key
+  <a class="anchor" href="#waku2-enr-key">#</a>
+</h1>
+<p>We define a <code>waku2</code> field key:</p>
+<ul>
+<li>The value MUST be an 8-bit flag field,
+where bits set to <code>1</code> indicate <code>true</code> and bits set to <code>0</code> indicate <code>false</code> for the relevant flags.</li>
+<li>The flag values already defined are set out below,
+with <code>bit 7</code> the most significant bit and <code>bit 0</code> the least significant bit.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>bit 7</th>
+<th>bit 6</th>
+<th>bit 5</th>
+<th>bit 4</th>
+<th>bit 3</th>
+<th>bit 2</th>
+<th>bit 1</th>
+<th>bit 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>undef</code></td>
+<td><code>undef</code></td>
+<td><code>undef</code></td>
+<td><code>undef</code></td>
+<td><code>lightpush</code></td>
+<td><code>filter</code></td>
+<td><code>store</code></td>
+<td><code>relay</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>In the scheme above, the flags <code>lightpush</code>, <code>filter</code>, <code>store</code> and <code>relay</code> correlates with support for protocols with the same name.
+If a protocol is not supported, the corresponding field MUST be set to <code>false</code>.
+Indicating positive support for any specific protocol is OPTIONAL,
+though it MAY be required by the relevant application or discovery process.</li>
+<li>Flags marked as <code>undef</code> is not yet defined.
+These SHOULD be set to <code>false</code> by default.</li>
+</ul>
+<h2 id="usage-1">
+  Usage
+  <a class="anchor" href="#usage-1">#</a>
+</h2>
+<ul>
+<li>A Waku v2 node MAY choose to populate the <code>waku2</code> field for enhanced discovery capabilities,
+such as indicating supported protocols.
+Such a node MAY indicate support for any specific protocol by setting the corresponding flag to <code>true</code>.</li>
+<li>Waku v2 nodes that want to participate in <a href="https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md">Node Discovery Protocol v5</a> <a href="#references">[4]</a>, however,
+MUST implement the <code>waku2</code> key with at least one flag set to <code>true</code>.</li>
+<li>Waku v2 nodes that discovered other participants using Discovery v5,
+MUST filter out participant records that do not implement this field or do not have at least one flag set to <code>true</code>.</li>
+<li>In addition, such nodes MAY choose to filter participants on specific flags (such as supported protocols),
+or further interpret the <code>waku2</code> field as required by the application.</li>
+</ul>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li>[1] <a href="https://github.com/status-im/nim-waku/pull/690">https://github.com/status-im/nim-waku/pull/690</a></li>
+<li>[2] <a href="https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940">https://github.com/vacp2p/rfc/issues/462#issuecomment-943869940</a></li>
+<li>[3] <a href="https://eips.ethereum.org/EIPS/eip-778">https://eips.ethereum.org/EIPS/eip-778</a></li>
+<li>[4] <a href="https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md">https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#usage-of-multiaddr-format-rationale">Usage of Multiaddr Format Rationale</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#many-connection-types">Many connection types</a></li>
+        <li><a href="#raw-tcp-only">Raw TCP only</a></li>
+      </ul>
+    </li>
+    <li><a href="#limitations">Limitations</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#usage-1">Usage</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

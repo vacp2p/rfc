@@ -1,0 +1,43 @@
+# Sequence diagram for RLN Relay protocol (publishing,routing, and slashing)
+msc {
+  hscale="1",
+  wordwraparcs=true;
+
+  a [label=" "],
+  b [label=" "],
+  c [label=" "],
+  d [label=" "],
+  e [label=" "];
+
+  a rbox a [label="Relay Node: Publisher"],
+  b rbox b [label="Relay Node: Router"],
+  c rbox c [label="Relay Node"],
+  d rbox d [label="Relay Node"],
+  e note e [label="Membership Contract"];
+  |||;
+  b box b [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n  Initialize an empty map of the received nullifiers \n "],
+  c box c [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n Initialize an empty map of the received nullifiers \n "],
+  d box d [label=" \n nullifierMap= [(nullifier, shareX, shareY)...] \n \n Initialize an empty map of the received nullifiers \n "];
+  |||;
+  ...,
+  a -> a [label="Keep track of epoch"],
+  b -> b [label="Keep track of epoch"],
+  c -> c [label="Keep track of epoch"],
+  d -> d [label="Keep track of epoch"];
+  a box a [label=" \n Message: the intended message \n \n epoch: the current epoch \n "];
+  a box a [label=" \n  A(x) = sk + H(sk, epoch)x \n \n shareX = H(message), shareY = A(shareX) \n \n nullifier = H(H(sk,epoch)) \n "];
+  a box a [label="  \n  zkProof: generate the proof using zkSNARK \n "];
+  |||;
+  a => b [label="Message, epoch, proofBundle:(shareX, shareY, nullifier, zkProof) \n "];
+  b box b [label="1. If the received epoch is far from the current epoch"];
+  b -x c [label="Do not relay"];
+  b box b [label=" \n 2. If verification of zkProof failed \n "];
+  b -x c [label="Do not relay"];
+  b box b [label=" \n 3. If identical nullifier exists in the nullifierMap, \n \n extract the publisher sk \n "];
+  b -x c [label="Do not relay"];
+  b => e [label="Slash the publisher: Unlbock the deposit associated with sk"];
+  e => b [label="x ETH"];
+  b box b [label=" \n 4. If none of  1-3 happens, update the nullifierMap \n "];
+  b => c [label="Relay"];
+  b => d [label="Relay"];
+}

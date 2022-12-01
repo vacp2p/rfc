@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Vac RFC</title>
+    <link>https://rfc.vac.dev/tags/</link>
+    <description>Recent content in Tags on Vac RFC</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://rfc.vac.dev/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>an optional list of tags, not standard</title>
+      <link>https://rfc.vac.dev/tags/an-optional-list-of-tags-not-standard/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/an-optional-list-of-tags-not-standard/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>waku-application</title>
+      <link>https://rfc.vac.dev/tags/waku-application/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/waku-application/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>waku-core</title>
+      <link>https://rfc.vac.dev/tags/waku-core/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/waku-core/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>waku-core-protocol</title>
+      <link>https://rfc.vac.dev/tags/waku-core-protocol/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/waku-core-protocol/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>waku/anonymity</title>
+      <link>https://rfc.vac.dev/tags/waku/anonymity/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/waku/anonymity/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>waku/core-protocol</title>
+      <link>https://rfc.vac.dev/tags/waku/core-protocol/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/tags/waku/core-protocol/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

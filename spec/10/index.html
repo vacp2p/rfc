@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  Waku v2 is family of modular peer-to-peer protocols for secure communication. The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments. At a high level, it implements Pub/Sub over libp2p and adds a set of capabilities to it. These capabilities are things such as: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network (iii) preserving bandwidth usage for resource-restriced devices">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="10/WAKU2" />
+<meta property="og:description" content="Abstract #  Waku v2 is family of modular peer-to-peer protocols for secure communication. The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments. At a high level, it implements Pub/Sub over libp2p and adds a set of capabilities to it. These capabilities are things such as: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network (iii) preserving bandwidth usage for resource-restriced devices" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/10/" /><meta property="article:section" content="docs" />
+
+
+
+<title>10/WAKU2 | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/"class=active>10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>10/WAKU2</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation-and-goals">Motivation and goals</a></li>
+    <li><a href="#network-interaction-domains">Network interaction domains</a>
+      <ul>
+        <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
+        <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
+        <li><a href="#gossip-domain">Gossip domain</a></li>
+        <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#discovery-domain">Discovery domain</a></li>
+        <li><a href="#requestreply-domain">Request/Reply domain</a></li>
+        <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+      <ul>
+        <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
+    <li><a href="#security-features">Security Features</a>
+      <ul>
+        <li><a href="#pseudonymity">Pseudonymity</a></li>
+        <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
+        <li><a href="#spam-protection">Spam protection</a></li>
+        <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+      </ul>
+    </li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
+      <ul>
+        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="10waku2">10/WAKU2</h1>
+
+  
+      <h1 id="waku-v2">Waku v2</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a>
+          
+              ,
+              Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a>
+          
+              ,
+              Reeshav Khan <a href="mailto:reeshav@status.im">reeshav@status.im</a>
+          
+              ,
+              Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a>
+          
+      </li>
+      
+  </ul><h2 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h2>
+<p>Waku v2 is family of modular peer-to-peer protocols for secure communication.
+The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments.
+At a high level, it implements Pub/Sub over <a href="https://github.com/libp2p/specs">libp2p</a> and adds a set of capabilities to it.
+These capabilities are things such as:
+(i) retrieving historical messages for mostly-offline devices
+(ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network
+(iii) preserving bandwidth usage for resource-restriced devices</p>
+<p>This makes Waku ideal for running a p2p protocol on mobile and in similarly restricted environments.</p>
+<p>Historically, it has its roots in <a href="/spec/6">Waku v1</a>,
+which stems from <a href="https://eips.ethereum.org/EIPS/eip-627">Whisper</a>, originally part of the Ethereum stack.
+However, Waku v2 acts more as a thin wrapper for PubSub and has a different API.
+It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p.
+See <a href="https://vac.dev/waku-v2-plan">rough road map (2020)</a> for more historical context.</p>
+<h2 id="motivation-and-goals">
+  Motivation and goals
+  <a class="anchor" href="#motivation-and-goals">#</a>
+</h2>
+<p>Waku as a family of protocols is designed to have a set of properties that are useful for many applications:</p>
+<ol>
+<li><strong>Useful for generalized messaging.</strong></li>
+</ol>
+<p>Many applications require some form of messaging protocol to communicate between different subsystems or different nodes.
+This messaging can be human-to-human or machine-to-machine or a mix.
+Waku is designed to work for all these scenarios.</p>
+<ol start="2">
+<li><strong>Peer-to-peer.</strong></li>
+</ol>
+<p>Applications sometimes have requirements that make them suitable for peer-to-peer solutions:</p>
+<ul>
+<li>Censorship-resistant with no single point of failure</li>
+<li>Adaptive and scalable network</li>
+<li>Shared infrastructure</li>
+</ul>
+<ol start="3">
+<li><strong>Runs anywhere.</strong></li>
+</ol>
+<p>Applications often run in restricted environments, where resources or the environment is restricted in some fashion.
+For example:</p>
+<ul>
+<li>Limited bandwidth, CPU, memory, disk, battery, etc</li>
+<li>Not being publicly connectable</li>
+<li>Only being intermittently connected; mostly-offline</li>
+</ul>
+<ol start="4">
+<li><strong>Privacy-preserving.</strong></li>
+</ol>
+<p>Applications often have a desire for some privacy guarantees, such as:</p>
+<ul>
+<li>Pseudonymity and not being tied to any personally identifiable information (PII)</li>
+<li>Metadata protection in transit</li>
+<li>Various forms of unlinkability, etc</li>
+</ul>
+<ol start="5">
+<li><strong>Modular design.</strong></li>
+</ol>
+<p>Applications often have different trade-offs when it comes to what properties they and their users value.
+Waku is designed in a modular fashion where an application protocol or node can choose what protocols they run.
+We call this concept <em>adaptive nodes</em>.</p>
+<p>For example:</p>
+<ul>
+<li>Resource usage vs metadata protection</li>
+<li>Providing useful services to the network vs mostly using it</li>
+<li>Stronger guarantees for spam protection vs economic registration cost</li>
+</ul>
+<p>For more on the concept of adaptive nodes and what this means in practice,
+please see the <a href="/spec/30">30/ADAPTIVE-NODES</a> spec.</p>
+<h2 id="network-interaction-domains">
+  Network interaction domains
+  <a class="anchor" href="#network-interaction-domains">#</a>
+</h2>
+<p>While Waku is best thought of as a single cohesive thing, there are three network interaction domains:</p>
+<p>(a) gossip domain
+(b) discovery domain
+(c) req/resp domain</p>
+<h3 id="protocols-and-identifiers">
+  Protocols and identifiers
+  <a class="anchor" href="#protocols-and-identifiers">#</a>
+</h3>
+<p>Since Waku v2 is built on top of libp2p, many protocols have a libp2p protocol identifier.
+The current main <a href="https://docs.libp2p.io/concepts/protocols/">protocol identifiers</a> are:</p>
+<ol>
+<li><code>/vac/waku/relay/2.0.0</code></li>
+<li><code>/vac/waku/store/2.0.0-beta4</code></li>
+<li><code>/vac/waku/filter/2.0.0-beta1</code></li>
+<li><code>/vac/waku/lightpush/2.0.0-beta1</code></li>
+</ol>
+<p>This is in addition to protocols that specify messages, payloads, and recommended usages.
+Since these aren&rsquo;t negotiated libp2p protocols, they are referred to by their RFC ID.
+For example:</p>
+<ul>
+<li><a href="/spec/14">14/WAKU2-MESSAGE</a>and <a href="/spec/26">26/WAKU2-PAYLOAD</a> for message payloads</li>
+<li><a href="/spec/23">23/WAKU2-TOPICS</a> and <a href="/spec/27">27/WAKU2-PEERS</a> for recommendations around usage</li>
+</ul>
+<p>There are also more experimental libp2p protocols such as:</p>
+<ol>
+<li><code>/vac/waku/swap/2.0.0-beta1</code></li>
+<li><code>/vac/waku/waku-rln-relay/2.0.0-alpha1</code></li>
+</ol>
+<p>These protocols and their semantics are elaborated on in their own specs.</p>
+<h3 id="use-of-libp2p-and-protobuf">
+  Use of libp2p and protobuf
+  <a class="anchor" href="#use-of-libp2p-and-protobuf">#</a>
+</h3>
+<p>Unless otherwise specified, all protocols are implemented over libp2p and use Protobuf by default.
+Since messages are exchanged over a <a href="https://docs.libp2p.io/concepts/protocols/">bi-directional binary stream</a>,
+as a convention, libp2p protocols prefix binary message payloads with the length of the message in bytes.
+This length integer is encoded as a <a href="https://developers.google.com/protocol-buffers/docs/encoding#varints">protobuf varint</a>.</p>
+<h3 id="gossip-domain">
+  Gossip domain
+  <a class="anchor" href="#gossip-domain">#</a>
+</h3>
+<p>Waku is using gossiping to disseminate messages throughout the network.</p>
+<p><strong>Protocol identifier</strong>: <code>/vac/waku/relay/2.0.0</code></p>
+<p>See <a href="/spec/11">11/WAKU2-RELAY</a> spec for more details.</p>
+<p>For an experimental privacy-preserving economic spam protection mechanism, see <a href="/spec/17">17/WAKU2-RLN-RELAY</a>.</p>
+<p>See <a href="/spec/23">23/WAKU2-TOPICS</a> for more information about recommended topic usage.</p>
+<h3 id="direct-use-of-libp2p-protocols">
+  Direct use of libp2p protocols
+  <a class="anchor" href="#direct-use-of-libp2p-protocols">#</a>
+</h3>
+<p>In addition to <code>/vac/waku/*</code> protocols, Waku v2 MAY directly use the following libp2p protocols:</p>
+<ul>
+<li><a href="https://docs.libp2p.io/concepts/protocols/#ping">libp2p ping protocol</a> with protocol id</li>
+</ul>
+<pre tabindex="0"><code>/ipfs/ping/1.0.0
+</code></pre><p>for liveness checks between peers, or to keep peer-to-peer connections alive.</p>
+<ul>
+<li><a href="https://docs.libp2p.io/concepts/protocols/#identify">libp2p identity and identity/push</a> with protocol IDs</li>
+</ul>
+<pre tabindex="0"><code>/ipfs/id/1.0.0
+
+</code></pre><p>and</p>
+<pre tabindex="0"><code>/ipfs/id/push/1.0.0
+</code></pre><p>respectively, as basic means for capability discovery.
+These protocols are anyway used by the libp2p connection establishment layer Waku v2 is built on.
+We plan to introduce a new Vac capability discovery protocol with better anonymity properties and more functionality.</p>
+<h1 id="transports">
+  Transports
+  <a class="anchor" href="#transports">#</a>
+</h1>
+<p>Waku v2 is built in top of libp2p, and like libp2p it strives to be transport agnostic.
+We define a set of recommended transports in order to achieve a baseline of interoperability between clients.</p>
+<p>This section describes these recommended transports.</p>
+<p>Waku client implementations SHOULD support the TCP transport.</p>
+<p>Where TCP is supported it MUST be enabled for both dialing and listening, even if other transports are available.</p>
+<p>Waku v2 nodes where the environment do not allow to use TCP directly, MAY use other transports.</p>
+<p>A Waku v2 node SHOULD support secure websockets for bidirectional communication streams, for example in a web browser context.</p>
+<p>A node MAY support unsecure websockets if required by the application or running environment.</p>
+<h3 id="discovery-domain">
+  Discovery domain
+  <a class="anchor" href="#discovery-domain">#</a>
+</h3>
+<h4 id="discovery-methods">
+  Discovery methods
+  <a class="anchor" href="#discovery-methods">#</a>
+</h4>
+<p>Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per <a href="https://eips.ethereum.org/EIPS/eip-1459">EIP-1459</a>.
+While this is a useful way of bootstrapping connection to a set of peers,
+it MAY be used in conjunction with an <a href="https://docs.libp2p.io/concepts/publish-subscribe/#discovery">ambient peer discovery</a> procedure to find still other nodes to connect to,
+such as <a href="https://github.com/ethereum/devp2p/blob/8fd5f7e1c1ec496a9d8dc1640a8548b8a8b5986b/discv5/discv5.md">Node Discovery v5</a>.
+More ambient peer discovery methods are being tested for Waku v2,
+and will be specified for wider adoption.
+It is possible to bypass the discovery domain by specifying static nodes.</p>
+<h4 id="use-of-enr">
+  Use of ENR
+  <a class="anchor" href="#use-of-enr">#</a>
+</h4>
+<p><a href="/spec/31">31/WAKU2-ENR</a> describes the usage of <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778 ENR (Ethereum Node Records)</a> for Waku v2 discovery purposes.
+It introduces two new ENR fields, <code>multiaddrs</code> and <code>waku2</code>, that a Waku v2 node MAY use for discovery purposes.
+These fields MUST be used under certain conditions, as set out in the spec.
+Both EIP-1459 DNS-based discovery and Node Discovery v5 operates on ENR,
+and it&rsquo;s reasonable to expect even wider utility for ENR in Waku v2 networks in future.</p>
+<h3 id="requestreply-domain">
+  Request/Reply domain
+  <a class="anchor" href="#requestreply-domain">#</a>
+</h3>
+<p>In addition to the Gossip domain,
+Waku provides a set of Request/Reply protocols.
+They are primarily used in order to get Waku to run in resource restricted environments,
+such as low bandwidth or being mostly offline.</p>
+<h4 id="historical-message-support">
+  Historical message support
+  <a class="anchor" href="#historical-message-support">#</a>
+</h4>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/store/2.0.0-beta4</code></p>
+<p>This is used to fetch historical messages for mostly offline devices.
+See <a href="/spec/13">13/WAKU2-STORE</a> spec for more details.</p>
+<p>There is also an experimental fault-tolerant addition to the store protocol that relaxes the high availability requirement.
+See <a href="/spec/21">21/WAKU2-FT-STORE</a></p>
+<h4 id="content-filtering">
+  Content filtering
+  <a class="anchor" href="#content-filtering">#</a>
+</h4>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/filter/2.0.0-beta1</code></p>
+<p>This is used to make fetching of a subset of messages more bandwidth preserving.
+See <a href="/spec/12">12/WAKU2-FILTER</a> spec for more details.</p>
+<h4 id="light-push">
+  Light push
+  <a class="anchor" href="#light-push">#</a>
+</h4>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/lightpush/2.0.0-beta1</code></p>
+<p>This is used for nodes with short connection windows and limited bandwidth to publish messages into the Waku network.
+See <a href="/spec/19">19/WAKU2-LIGHTPUSH</a> spec for more details.</p>
+<h4 id="other-protocols">
+  Other protocols
+  <a class="anchor" href="#other-protocols">#</a>
+</h4>
+<p>The above is a non-exhaustive list,
+and due to the modular design of Waku there may be other protocols here that provide a useful service to the Waku network.</p>
+<h3 id="overview-of-protocol-interaction">
+  Overview of protocol interaction
+  <a class="anchor" href="#overview-of-protocol-interaction">#</a>
+</h3>
+<p>See the sequence diagram below for an overview of how different protocols interact.</p>
+<p><img src="../../../../rfcs/10/overview.png" alt="Overview of how protocols interact in Waku v2." /></p>
+<ol start="0">
+<li>
+<p>We have six nodes, A-F.
+The protocols initially mounted are indicated as such.
+The PubSub topics <code>pubtopic1</code> and <code>pubtopic2</code> is used for routing and indicates that it is subscribed to messages on that topic for relay, see <a href="/spec/11">11/WAKU2-RELAY</a> for details.
+Ditto for <a href="/spec/13">13/WAKU2-STORE</a> where it indicates that these messages are persisted on that node.</p>
+</li>
+<li>
+<p>Node A creates a WakuMessage <code>msg1</code> with a ContentTopic <code>contentTopic1</code>.
+See <a href="/spec/14">14/WAKU2-MESSAGE</a> for more details.
+If WakuMessage version is set to 1, we use the <a href="/spec/6">6/WAKU1</a> compatible <code>data</code> field with encryption.
+See <a href="/spec/7">7/WAKU-DATA</a> for more details.</p>
+</li>
+<li>
+<p>Node F requests to get messages filtered by PubSub topic <code>pubtopic1</code> and ContentTopic <code>contentTopic1</code>.
+Node D subscribes F to this filter and will in the future forward messages that match that filter.
+See <a href="/spec/12">12/WAKU2-FILTER</a> for more details.</p>
+</li>
+<li>
+<p>Node A publishes <code>msg1</code> on <code>pubtopic1</code> and subscribes to that relay topic pick it up.
+It then gets relayed further from B to D, but not C since it doesn&rsquo;t subscribe to that topic.
+See <a href="/spec/11">11/WAKU2-RELAY</a>.</p>
+</li>
+<li>
+<p>Node D saves <code>msg1</code> for possible later retrieval by other nodes.
+See <a href="/spec/13">13/WAKU2-STORE</a>.</p>
+</li>
+<li>
+<p>Node D also pushes <code>msg1</code> to F, as it has previously subscribed F to this filter.
+See <a href="/spec/12">12/WAKU2-FILTER</a>.</p>
+</li>
+<li>
+<p>At a later time, Node E comes online.
+It then requests messages matching <code>pubtopic1</code> and <code>contentTopic1</code> from Node D.
+Node D responds with messages meeting this (and possibly other) criteria. See <a href="/spec/13">13/WAKU2-STORE</a>.</p>
+</li>
+</ol>
+<h2 id="appendix-a-upgradability-and-compatibility">
+  Appendix A: Upgradability and Compatibility
+  <a class="anchor" href="#appendix-a-upgradability-and-compatibility">#</a>
+</h2>
+<h3 id="compatibility-with-waku-v1">
+  Compatibility with Waku v1
+  <a class="anchor" href="#compatibility-with-waku-v1">#</a>
+</h3>
+<p>Waku v1 and Waku v2 are different protocols all together.
+They use a different transport protocol underneath; Waku v1 is devp2p RLPx based while Waku v2 uses libp2p.
+The protocols themselves also differ as does their data format.
+Compatibility can be achieved only by using a bridge that not only talks both devp2p RLPx and libp2p, but that also transfers (partially) the content of a packet from one version to the other.</p>
+<p>See <a href="/spec/15">15/WAKU-BRIDGE</a> for details on a bidirectional bridge mode.</p>
+<h1 id="appendix-b-security">
+  Appendix B: Security
+  <a class="anchor" href="#appendix-b-security">#</a>
+</h1>
+<p>Each protocol layer of Waku v2 provides a distinct service and is associated with a separate set of security features and concerns.
+Therefore, the overall security of Waku v2 depends on how the different layers are utilized.
+In this section, we overview the security properties of Waku v2 protocols against a static adversarial model which is described below.
+Note that a more detailed security analysis of each Waku protocol is supplied in its respective specification as well.</p>
+<h2 id="primary-adversarial-model">
+  Primary Adversarial Model
+  <a class="anchor" href="#primary-adversarial-model">#</a>
+</h2>
+<p>In the primary adversarial model, we consider adversary as a passive entity that attempts to collect information from others to conduct an attack,
+but it does so without violating protocol definitions and instructions.</p>
+<p>The following are <strong>not</strong> considered as part of the adversarial model:</p>
+<ul>
+<li>An adversary with a global view of all the peers and their connections.</li>
+<li>An adversary that can eavesdrop on communication links between arbitrary pairs of peers
+(unless the adversary is one end of the communication).
+Specifically, the communication channels are assumed to be secure.</li>
+</ul>
+<h2 id="security-features">
+  Security Features
+  <a class="anchor" href="#security-features">#</a>
+</h2>
+<h3 id="pseudonymity">
+  Pseudonymity
+  <a class="anchor" href="#pseudonymity">#</a>
+</h3>
+<p>Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity
+and instead they utilize libp2p <code>PeerID</code> as their identifiers.
+While pseudonymity is an appealing security feature, it does not guarantee full anonymity since the actions taken under the same pseudonym
+i.e., <code>PeerID</code> can be linked together and potentially result in the re-identification of the true actor.</p>
+<h3 id="anonymity--unlinkability">
+  Anonymity / Unlinkability
+  <a class="anchor" href="#anonymity--unlinkability">#</a>
+</h3>
+<p>At a high level, anonymity is the inability of an adversary in linking an actor to its data/performed action (the actor and action are context-dependent).
+To be precise about linkability, we use the term Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party.
+For example, the signature verification key, and the hash of one&rsquo;s static IP address are unique for each user and hence count as PII.
+Notice that users' actions can be traced through their PIIs (e.g., signatures) and hence result in their re-identification risk.
+As such, we seek anonymity by avoiding linkability between actions and the actors / actors' PII. Concerning anonymity, Waku v2 provides the following features:</p>
+<p><strong>Publisher-Message Unlinkability</strong>:
+This feature signifies the unlinkability of a publisher to its published messages in the 11/WAKU2-RELAY protocol.
+The <a href="/spec/11#security-analysis">Publisher-Message Unlinkability</a> is enforced through the <code>StrictNoSign</code> policy due to which the data fields of pubsub messages that count as PII for the publisher must be left unspecified.</p>
+<p><strong>Subscriber-Topic Unlinkability</strong>:
+This feature stands for the unlinkability of the subscriber to its subscribed topics in the 11/WAKU2-RELAY protocol.
+The <a href="/spec/11/#security-analysis">Subscriber-Topic Unlinkability</a> is achieved through the utilization of a single PubSub topic.
+As such, subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID.
+This level of unlinkability / anonymity is known as <a href="https://www.privitar.com/blog/k-anonymity-an-introduction/">k-anonymity</a> where k is proportional to the system size (number of subscribers).
+Note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended for the sake of anonymity.</p>
+<h3 id="spam-protection">
+  Spam protection
+  <a class="anchor" href="#spam-protection">#</a>
+</h3>
+<p>This property indicates that no adversary can flood the system (i.e., publishing a large number of messages in a short amount of time), either accidentally or deliberately, with any kind of message i.e. even if the message content is valid or useful.
+Spam protection is partly provided in <code>11/WAKU2-RELAY</code> through the <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures">scoring mechanism</a> provided for by GossipSub v1.1.
+At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.</p>
+<h3 id="data-confidentiality-integrity-and-authenticity">
+  Data confidentiality, Integrity, and Authenticity
+  <a class="anchor" href="#data-confidentiality-integrity-and-authenticity">#</a>
+</h3>
+<p>Confidentiality can be addressed through data encryption whereas integrity and authenticity are achievable through digital signatures.
+These features are provided for in <a href="/spec/14#version-1">14/WAKU2-MESSAGE (version 1)</a>` through payload encryption as well as encrypted signatures.</p>
+<h2 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h2>
+<p><strong>Lack of anonymity/unlinkability in the protocols involving direct connections including <code>13/WAKU2-STORE</code> and <code>12/WAKU2-FILTER</code> protocols</strong>:
+The anonymity/unlinkability is not guaranteed in the protocols like <code>13/WAKU2-STORE</code> and <code>12/WAKU2-FILTER</code> where peers need to have direct connections to benefit from the designated service.
+This is because during the direct connections peers utilize <code>PeerID</code> to identify each other,
+therefore the service obtained in the protocol is linkable to the beneficiary&rsquo;s <code>PeerID</code> (which counts as PII).
+For <code>13/WAKU2-STORE</code>, the queried node would be able to link the querying node&rsquo;s <code>PeerID</code> to its queried topics.
+Likewise, in the <code>12/WAKU2-FILTER</code>, a full node can link the light node&rsquo;s <code>PeerID</code>s to its content filter.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="appendix-c-implementation-notes">
+  Appendix C: Implementation Notes
+  <a class="anchor" href="#appendix-c-implementation-notes">#</a>
+</h2>
+<h3 id="implementation-matrix">
+  Implementation Matrix
+  <a class="anchor" href="#implementation-matrix">#</a>
+</h3>
+<p>There are multiple implementations of Waku v2 and its protocols:</p>
+<ul>
+<li><a href="https://github.com/status-im/nim-waku/">nim-waku (Nim)</a></li>
+<li><a href="https://github.com/status-im/go-waku/">go-waku (Go)</a></li>
+<li><a href="https://github.com/status-im/js-waku/">js-waku (NodeJS and Browser)</a></li>
+</ul>
+<p>Below you can find an overview of the specs that they implement as they relate to Waku v2.
+This includes Waku v1 specs, as they are used for bridging between the two networks.</p>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>nim-waku (Nim)</th>
+<th>go-waku (Go)</th>
+<th>js-waku (Node JS)</th>
+<th>js-waku (Browser JS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/spec/6">6/WAKU1</a></td>
+<td>✔</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/7">7/WAKU-DATA</a></td>
+<td>✔</td>
+<td>✔</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/8">8/WAKU-MAIL</a></td>
+<td>✔</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/9">9/WAKU-RPC</a></td>
+<td>✔</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/10">10/WAKU2</a></td>
+<td>✔</td>
+<td>🚧</td>
+<td>🚧</td>
+<td>🚧</td>
+</tr>
+<tr>
+<td><a href="/spec/11">11/WAKU2-RELAY</a></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><a href="/spec/12">12/WAKU2-FILTER</a></td>
+<td>✔</td>
+<td>✔</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/13">13/WAKU2-STORE</a></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔*</td>
+<td>✔*</td>
+</tr>
+<tr>
+<td><a href="/spec/14">14/WAKU2-MESSAGE</a></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td><a href="/spec/15">15/WAKU2-BRIDGE</a></td>
+<td>✔</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/16">16/WAKU2-RPC</a></td>
+<td>✔</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/17">17/WAKU2-RLN-RELAY</a></td>
+<td>🚧</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/18">18/WAKU2-SWAP</a></td>
+<td>🚧</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="/spec/19">19/WAKU2-LIGHTPUSH</a></td>
+<td>✔</td>
+<td>✔</td>
+<td>✔**</td>
+<td>✔**</td>
+</tr>
+<tr>
+<td><a href="/spec/21">21/WAKU2-FAULT-TOLERANT-STORE</a></td>
+<td>✔</td>
+<td>✔</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>*js-waku implements <a href="/spec/13">13/WAKU2-STORE</a> as a querying node only.
+**js-waku only implements <a href="/spec/19">19/WAKU2-LIGHTPUSH</a> requests.</p>
+<h3 id="recommendations-for-clients">
+  Recommendations for clients
+  <a class="anchor" href="#recommendations-for-clients">#</a>
+</h3>
+<p>To implement a minimal Waku v2 client, we recommend implementing the following subset in the following order:</p>
+<ul>
+<li><a href="/spec/10">10/WAKU2</a> - this spec</li>
+<li><a href="/spec/11">11/WAKU2-RELAY</a> - for basic operation</li>
+<li><a href="/spec/14">14/WAKU2-MESSAGE</a> - version 0 (unencrypted)</li>
+<li><a href="/spec/13">13/WAKU2-STORE</a> - for historical messaging (query mode only)</li>
+</ul>
+<p>To get compatibility with Waku v1:</p>
+<ul>
+<li><a href="/spec/7">7/WAKU-DATA</a></li>
+<li><a href="/spec/14">14/WAKU2-MESSAGE</a> - version 1 (encrypted with <code>7/WAKU-DATA</code>)</li>
+</ul>
+<p>For an interoperable keep-alive mechanism:</p>
+<ul>
+<li><a href="https://docs.libp2p.io/concepts/protocols/#ping">libp2p ping protocol</a>,
+with periodic pings to connected peers</li>
+</ul>
+<h2 id="appendix-d-future-work">
+  Appendix D: Future work
+  <a class="anchor" href="#appendix-d-future-work">#</a>
+</h2>
+<p>The following features are currently experimental and under research and initial implementation:</p>
+<p><strong>Economic Spam resistance</strong>:
+We aim to enable an incentivized spam protection technique to enhance <code>11/WAKU2-RELAY</code> by using rate limiting nullifiers.
+More details on this can be found in <a href="/spec/17">17/WAKU2-RLN-RELAY</a>.
+In this advanced method, peers are limited to a certain rate of messaging per epoch and an immediate financial penalty is enforced for spammers who break this rate.</p>
+<p><strong>Prevention of Denial of Service (DoS) and Node Incentivization</strong>:
+Denial of service signifies the case where an adversarial node exhausts another node&rsquo;s service capacity (e.g., by making a large number of requests) and makes it unavailable to the rest of the system.
+DoS attack is to be mitigated through the accounting model as described in <a href="/spec/18">18/WAKU2-SWAP</a>.
+In a nutshell, peers have to pay for the service they obtain from each other.
+In addition to incentivizing the service provider, accounting also makes DoS attacks costly for malicious peers.
+The accounting model can be used in <code>13/WAKU2-STORE</code> and <code>12/WAKU2-FILTER</code> to protect against DoS attacks.</p>
+<p>Additionally, this gives node operators who provide a useful service to the network an incentive to perform that service.
+See <a href="/spec/18">18/WAKU2-SWAP</a> for more details on this piece of work.</p>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h2 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h2>
+<ol>
+<li>
+<p><a href="https://github.com/libp2p/specs">libp2p specs</a></p>
+</li>
+<li>
+<p><a href="/spec/6">6/WAKU1 spec</a></p>
+</li>
+<li>
+<p><a href="https://eips.ethereum.org/EIPS/eip-627">Whisper spec (EIP627)</a></p>
+</li>
+<li>
+<p><a href="https://vac.dev/waku-v2-plan">Waku v2 plan</a></p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/protocols/">Protocol Identifiers</a></p>
+</li>
+<li>
+<p><a href="https://developers.google.com/protocol-buffers/docs/encoding#varints">Protobuf varint encoding</a></p>
+</li>
+<li>
+<p><a href="/spec/7">7/WAKU-DATA spec</a></p>
+</li>
+<li>
+<p><a href="/spec/11">11/WAKU2-RELAY spec</a></p>
+</li>
+<li>
+<p><a href="/spec/13">13/WAKU2-STORE spec</a></p>
+</li>
+<li>
+<p><a href="/spec/12">12/WAKU2-FILTER spec</a></p>
+</li>
+<li>
+<p><a href="/spec/15">15/WAKU2-BRIDGE spec</a></p>
+</li>
+<li>
+<p><a href="https://www.privitar.com/blog/k-anonymity-an-introduction/">k-anonymity</a></p>
+</li>
+<li>
+<p><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md">GossipSub v1.1</a></p>
+</li>
+<li>
+<p><a href="/spec/14">14/WAKU2-MESSAGE spec</a></p>
+</li>
+<li>
+<p><a href="/spec/17">17/WAKU2-RLN-RELAY spec</a></p>
+</li>
+<li>
+<p><a href="/spec/18">18/WAKU2-SWAP spec</a></p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/protocols/#ping">Ping protocol</a></p>
+</li>
+<li>
+<p><a href="https://eips.ethereum.org/EIPS/eip-1459">EIP-1459</a></p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/publish-subscribe/#discovery">Ambient peer discovery</a></p>
+</li>
+<li>
+<p><a href="https://github.com/ethereum/devp2p/blob/8fd5f7e1c1ec496a9d8dc1640a8548b8a8b5986b/discv5/discv5.md">Node Discovery v5</a></p>
+</li>
+<li>
+<p><a href="/spec/31">31/WAKU2-ENR spec</a></p>
+</li>
+<li>
+<p><a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a></p>
+</li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation-and-goals">Motivation and goals</a></li>
+    <li><a href="#network-interaction-domains">Network interaction domains</a>
+      <ul>
+        <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
+        <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
+        <li><a href="#gossip-domain">Gossip domain</a></li>
+        <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#discovery-domain">Discovery domain</a></li>
+        <li><a href="#requestreply-domain">Request/Reply domain</a></li>
+        <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+      <ul>
+        <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
+    <li><a href="#security-features">Security Features</a>
+      <ul>
+        <li><a href="#pseudonymity">Pseudonymity</a></li>
+        <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
+        <li><a href="#spam-protection">Spam protection</a></li>
+        <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+      </ul>
+    </li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
+      <ul>
+        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+      </ul>
+    </li>
+    <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

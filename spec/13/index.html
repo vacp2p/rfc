@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
+Protocol identifier*: /vac/waku/store/2.0.0-beta4
+Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="13/WAKU2-STORE" />
+<meta property="og:description" content="This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
+Protocol identifier*: /vac/waku/store/2.0.0-beta4
+Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/13/" /><meta property="article:section" content="docs" />
+
+
+
+<title>13/WAKU2-STORE | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/"class=active>13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>13/WAKU2-STORE</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#payloads">Payloads</a>
+      <ul>
+        <li><a href="#index">Index</a></li>
+        <li><a href="#paginginfo">PagingInfo</a></li>
+        <li><a href="#contentfilter">ContentFilter</a></li>
+        <li><a href="#historyquery">HistoryQuery</a></li>
+        <li><a href="#historyresponse">HistoryResponse</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="13waku2-store">13/WAKU2-STORE</h1>
+
+  
+      <h1 id="waku-v2-store">Waku v2 Store</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a>
+          
+      </li>
+      
+  </ul><p>This specification explains the Waku <code>13/WAKU2-STORE</code> protocol which enables querying of messages received through relay protocol and stored by other nodes.
+It also supports pagination for more efficient querying of historical messages.</p>
+<p><strong>Protocol identifier</strong>*: <code>/vac/waku/store/2.0.0-beta4</code></p>
+<h1 id="design-requirements">
+  Design Requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h1>
+<p>Nodes willing to provide storage service using <code>13/WAKU2-STORE</code> protocol SHOULD provide a complete and full view of message history.
+As such, they are required to be <em>highly available</em> and in specific have a <em>high uptime</em> to consistently receive and store network messages.
+The high uptime requirement makes sure that no message is missed out hence a complete and intact view of the message history is delivered to the querying nodes.
+Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.</p>
+<p>The concept of &ldquo;ephemeral&rdquo; messages introduced in <code>[14/WAKU2-MESSAGE](/spec/14)</code> affects <code>13/WAKU2-STORE</code> as well.
+Nodes running <a href="/spec/13">13/WAKU2-STORE</a> SHOULD support &ldquo;ephemeral&rdquo; messages as specified in <a href="/spec/14">14/WAKU2-MESSAGE</a>.
+Nodes running <a href="/spec/13">13/WAKU2-STORE</a> SHOULD NOT store messages with the <code>ephemeral</code> flag set to <code>true</code>.</p>
+<h1 id="security-consideration">
+  Security Consideration
+  <a class="anchor" href="#security-consideration">#</a>
+</h1>
+<p>The main security consideration to take into account while using <code>13/WAKU2-STORE</code> is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.</p>
+<h2 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h2>
+<p>The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user.
+For example, the signature verification key, and the hash of one&rsquo;s static IP address are unique for each user and hence count as PII.</p>
+<h1 id="adversarial-model">
+  Adversarial Model
+  <a class="anchor" href="#adversarial-model">#</a>
+</h1>
+<p>Any peer running the <code>13/WAKU2-STORE</code> protocol, i.e. both the querying node and the queried node, are considered as an adversary.
+Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions.
+As we evolve the protocol, further adversarial models will be considered.
+For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the <code>13/WAKU2-STORE</code> protocol.</p>
+<p>The following are not considered as part of the adversarial model:</p>
+<ul>
+<li>An adversary with a global view of all the peers and their connections.</li>
+<li>An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication).
+In specific, the communication channels are assumed to be secure.</li>
+</ul>
+<h1 id="wire-specification">
+  Wire Specification
+  <a class="anchor" href="#wire-specification">#</a>
+</h1>
+<p>Peers communicate with each other using a request / response API.
+The messages sent are Protobuf RPC messages which are implemented using <a href="https://developers.google.com/protocol-buffers/">protocol buffers v3</a>.
+The followings are the specifications of the Protobuf messages.</p>
+<h2 id="payloads">
+  Payloads
+  <a class="anchor" href="#payloads">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Index</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> digest <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">sint64</span> receiverTime <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">sint64</span> senderTime <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> pubsubTopic <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PagingInfo</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">uint64</span> pageSize <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  Index cursor <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">enum</span> Direction {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    BACKWARD <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    FORWARD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  Direction direction <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">ContentFilter</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> contentTopic <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">HistoryQuery</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// the first field is reserved for future use
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> pubsubtopic <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> ContentFilter contentFilters <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  PagingInfo pagingInfo <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">HistoryResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// the first field is reserved for future use
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> WakuMessage messages <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  PagingInfo pagingInfo <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">enum</span> Error {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    NONE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>    INVALID_CURSOR <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  Error error <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">HistoryRPC</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> request_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  HistoryQuery query <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  HistoryResponse response <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><h3 id="index">
+  Index
+  <a class="anchor" href="#index">#</a>
+</h3>
+<p>To perform pagination, each <code>WakuMessage</code> stored at a node running the <code>13/WAKU2-STORE</code> protocol is associated with a unique <code>Index</code> that encapsulates the following parts.</p>
+<ul>
+<li><code>digest</code>:  a sequence of bytes representing the SHA256 hash of a <code>WakuMessage</code>.
+The hash is computed over the concatenation of <code>contentTopic</code> and <code>payload</code> fields of a <code>WakuMessage</code> (see <a href="/spec/14">14/WAKU2-MESSAGE</a>).</li>
+<li><code>receiverTime</code>: the UNIX time in nanoseconds at which the waku message is received by the receiving node.</li>
+<li><code>senderTime</code>: the UNIX time in nanoseconds at which the waku message is generated by its sender.</li>
+<li><code>pubsubTopic</code>: the pubsub topic on which the waku message is received</li>
+</ul>
+<h3 id="paginginfo">
+  PagingInfo
+  <a class="anchor" href="#paginginfo">#</a>
+</h3>
+<p><code>PagingInfo</code> holds the information required for pagination. It consists of the following components.</p>
+<ul>
+<li><code>pageSize</code>: A positive integer indicating the number of queried <code>WakuMessage</code>s in a <code>HistoryQuery</code> (or retrieved  <code>WakuMessage</code>s in a <code>HistoryResponse</code>).</li>
+<li><code>cursor</code>: holds the <code>Index</code> of a <code>WakuMessage</code>.</li>
+<li><code>direction</code>: indicates the direction of paging which can be either <code>FORWARD</code> or <code>BACKWARD</code>.</li>
+</ul>
+<h3 id="contentfilter">
+  ContentFilter
+  <a class="anchor" href="#contentfilter">#</a>
+</h3>
+<p><code>ContentFilter</code> carries the information required for filtering historical messages.</p>
+<ul>
+<li><code>contentTopic</code> represents the content topic of the queried historical Waku messages.
+This field maps to the <code>contentTopic</code> field of the <a href="/spec/14">14/WAKU2-MESSAGE</a>.</li>
+</ul>
+<h3 id="historyquery">
+  HistoryQuery
+  <a class="anchor" href="#historyquery">#</a>
+</h3>
+<p>RPC call to query historical messages.</p>
+<ul>
+<li>The <code>pubsubTopic</code> field MUST indicate the pubsub topic of the historical messages to be retrieved.
+This field denotes the pubsub topic on which waku messages are published.
+This field maps to <code>topicIDs</code> field of <code>Message</code> in <a href="/spec/11"><code>11/WAKU2-RELAY</code></a>.
+Leaving this field empty means no filter on the pubsub topic of message history is requested.
+This field SHOULD be left empty in order to retrieve the historical waku messages regardless of the pubsub topics on which they are published.</li>
+<li>The <code>contentFilters</code> field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
+Leaving this field empty means no filter on the content topic of message history is required.
+This field SHOULD be left empty in order to retrieve historical waku messages regardless of their content topics.</li>
+<li><code>PagingInfo</code> holds the information required for pagination.<br>
+Its <code>pageSize</code> field indicates the number of  <code>WakuMessage</code>s to be included in the corresponding <code>HistoryResponse</code>.
+It is RECOMMENDED that the queried node defines a maximum page size internally.
+If the querying node leaves the <code>pageSize</code> unspecified,
+or if the <code>pageSize</code> exceeds the maximum page size,
+the queried node SHOULD auto-paginate the <code>HistoryResponse</code> to no more than the configured maximum page size.
+This allows mitigation of long response time for <code>HistoryQuery</code>.
+In the forward pagination request, the <code>messages</code> field of the <code>HistoryResponse</code> shall contain at maximum the <code>pageSize</code> amount of waku messages whose <code>Index</code> values are larger than the given <code>cursor</code> (and vise versa for the backward pagination).
+Note that the <code>cursor</code> of a <code>HistoryQuery</code> may be empty (e.g., for the initial query), as such, and depending on whether the  <code>direction</code> is <code>BACKWARD</code> or <code>FORWARD</code>  the last or the first <code>pageSize</code> waku messages shall be returned, respectively.
+The queried node MUST sort the <code>WakuMessage</code>s based on their <code>Index</code>, where the <code>senderTime</code> constitutes the most significant part and the <code>digest</code> comes next, and then perform pagination on the sorted result.
+As such, the retrieved page contains an ordered list of <code>WakuMessage</code>s from the oldest message to the most recent one.</li>
+</ul>
+<p>Alternatively, the <code>receiverTime</code> (instead of <code>senderTime</code> ) MAY be used to sort <code>WakuMessage</code>s during the paging process.
+However, we RECOMMEND the use of the <code>senderTime</code> for sorting as it is invariant and consistent across all the nodes.
+This has the benefit of <code>cursor</code> reusability i.e., a <code>cursor</code> obtained from one node can be consistently used to query from another node.
+However, this <code>cursor</code> reusability  does not hold when the <code>receiverTime</code> is utilized as the receiver time is affected by the network delay and nodes' clock asynchrony.</p>
+<h3 id="historyresponse">
+  HistoryResponse
+  <a class="anchor" href="#historyresponse">#</a>
+</h3>
+<p>RPC call to respond to a HistoryQuery call.</p>
+<ul>
+<li>The <code>messages</code> field MUST contain the messages found, these are [<code>WakuMessage</code>] types as defined in the corresponding <a href="./waku-message.md">specification</a>.</li>
+<li><code>PagingInfo</code>  holds the paging information based on which the querying node can resume its further history queries.
+The <code>pageSize</code> indicates the number of returned waku messages (i.e., the number of messages included in the <code>messages</code> field of <code>HistoryResponse</code>).
+The <code>direction</code> is the same direction as in the corresponding <code>HistoryQuery</code>.
+In the forward pagination, the <code>cursor</code> holds the <code>Index</code> of the last message in the <code>HistoryResponse</code> <code>messages</code> (and the first message in the backward paging).
+The requester shall embed the returned  <code>cursor</code> inside its next <code>HistoryQuery</code> to retrieve the next page of the waku messages.<br>
+The  <code>cursor</code> obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.</li>
+<li>The <code>error</code> field contains information about any error that has occurred while processing the corresponding <code>HistoryQuery</code>.
+<code>NONE</code> stands for no error. This is also the default value.
+<code>INVALID_CURSOR</code> means that the  <code>cursor</code> field of <code>HistoryQuery</code> does not match with the <code>Index</code> of any of the  <code>WakuMessage</code>s persisted by the queried node.</li>
+</ul>
+<h1 id="future-work">
+  Future Work
+  <a class="anchor" href="#future-work">#</a>
+</h1>
+<ul>
+<li><strong>Anonymous query</strong>: This feature guarantees that nodes can anonymously query historical messages from other nodes i.e., without disclosing the exact topics of waku messages they are interested in.<br>
+As such, no adversary in the <code>13/WAKU2-STORE</code> protocol would be able to learn which peer is interested in which content filters i.e., content topics of waku message.
+The current version of the <code>13/WAKU2-STORE</code> protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the <code>13/WAKU2-STORE</code> protocol and explicitly disclose the content filters of its interest to retrieve the corresponding messages.
+However, one can consider preserving anonymity through one of the following ways:
+<ul>
+<li>By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address.
+This can happen by the utilization of a proxy server or by using Tor.
+Note that the current structure of historical requests does not embody any piece of PII, otherwise, such data fields must be treated carefully to achieve query anonymity.</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>By deploying secure 2-party computations in which the querying node obtains the historical messages of a certain topic whereas the queried node learns nothing about the query.
+Examples of such 2PC protocols are secure one-way Private Set Intersections (PSI).</li>
+</ul>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<ul>
+<li>
+<p><strong>Robust and verifiable timestamps</strong>: Messages timestamp is a way to show that the message existed prior to some point in time. However, the lack of timestamp verifiability can create room for a range of attacks, including injecting messages with invalid timestamps pointing to the far future.<br>
+To better understand the attack, consider a store node whose current clock shows <code>2021-01-01 00:00:30</code> (and assume all the other nodes have a synchronized clocks +-20seconds).
+The store node already has a list of messages <code>(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20)</code> that are sorted based on their timestamp.<br>
+An attacker sends a message with an arbitrary large timestamp e.g., 10 hours ahead of the correct clock <code>(m',2021-01-01 10:00:30)</code>.
+The store node places <code>m'</code> at the end of the list <code>(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m',2021-01-01 10:00:30)</code>.
+Now another message arrives with a valid timestamp e.g., <code>(m11, 2021-01-01 00:00:45)</code>. However, since its timestamp precedes the malicious message <code>m'</code>, it gets placed before <code>m'</code> in the list i.e.,  <code>(m1,2021-01-01 00:00:00), (m2,2021-01-01 00:00:01), ..., (m10:2021-01-01 00:00:20), (m11, 2021-01-01 00:00:45), (m',2021-01-01 10:00:30)</code>.
+In fact, for the next 10 hours, <code>m'</code> will always be considered as the most recent message and served as the last message to the querying nodes irrespective of how many other messages arrive afterward.</p>
+<p>A robust and verifiable timestamp allows the receiver of a message to verify that a message has been generated prior to the claimed timestamp.
+One solution is the use of <a href="https://opentimestamps.org/">open timestamps</a> e.g.,  block height in Blockchain-based timestamps.
+That is, messages contain the most recent block height perceived by their senders at the time of message generation.
+This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination.</p>
+</li>
+</ul>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="https://opentimestamps.org/">Open timestamps</a></li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#payloads">Payloads</a>
+      <ul>
+        <li><a href="#index">Index</a></li>
+        <li><a href="#paginginfo">PagingInfo</a></li>
+        <li><a href="#contentfilter">ContentFilter</a></li>
+        <li><a href="#historyquery">HistoryQuery</a></li>
+        <li><a href="#historyresponse">HistoryResponse</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

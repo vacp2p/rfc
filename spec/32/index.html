@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
+Motivation #  RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="32/RLN" />
+<meta property="og:description" content="Abstract #  The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
+Motivation #  RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/32/" /><meta property="article:section" content="docs" />
+
+
+
+<title>32/RLN | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/"class=active>32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>32/RLN</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#registration">Registration</a>
+      <ul>
+        <li><a href="#implementation-notes">Implementation notes</a></li>
+      </ul>
+    </li>
+    <li><a href="#signaling">Signaling</a>
+      <ul>
+        <li><a href="#implementation-notes-1">Implementation notes</a></li>
+      </ul>
+    </li>
+    <li><a href="#verification-and-slashing">Verification and slashing</a>
+      <ul>
+        <li><a href="#implementation-notes-2">Implementation notes</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
+    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+      <ul>
+        <li><a href="#system-parameters">System parameters</a></li>
+        <li><a href="#circuit-parameters">Circuit parameters</a></li>
+        <li><a href="#hash-function">Hash function</a></li>
+        <li><a href="#membership-implementation">Membership implementation</a></li>
+        <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+      </ul>
+    </li>
+    <li><a href="#identity-credentials-generation">Identity credentials generation</a>
+      <ul>
+        <li><a href="#identity_secret"><code>identity_secret</code></a></li>
+        <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
+        <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
+    <li><a href="#generating-proof-1">Generating proof</a></li>
+    <li><a href="#verifiying-proof">Verifiying proof</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="32rln">32/RLN</h1>
+
+  
+      <h1 id="rate-limit-nullifier">Rate Limit Nullifier</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Blagoj Dimovski <a href="mailto:blagoj.dimovski@yandex.com">blagoj.dimovski@yandex.com</a></li>
+      
+      <li>Contributors:
+          
+              
+              Barry Whitehat <a href="mailto:barrywhitehat@protonmail.com">barrywhitehat@protonmail.com</a>
+          
+              ,
+              Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Onur Kilic <a href="mailto:onurkilic1004@gmail.com">onurkilic1004@gmail.com</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it.
+Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments.
+Anonymity refers to the unlinkability of messages to their owner.</p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.
+A wide range of applications can benefit from RLN and provide desirable security features.
+For example, an e-voting system can integrate RLN to contain the voting rate while protecting the voters-vote unlinkability.
+Another use case is to protect an anonymous messaging system against DDoS and spam attacks by containing messaging rate of users.
+This latter use case is explained in <a href="/spec/17">17/WAKU2-RLN-RELAY RFC</a>.</p>
+<h1 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h1>
+<p>The users participate in the protocol by first registering to an application-defined group referred by the <em>membership group</em>.
+Registration to the group is mandatory for signaling in the application.
+After registration, group members can generate Zero-knowledge Proof of membership for their signals and can participate in the application.
+Usually, the membership requires a financial or social stake which
+is beneficial for the prevention of Sybil attacks and double-signaling.
+Group members are allowed to send one signal per external nullifier (an identifier that groups signals and can be thought of as a voting booth. Usually a timestamp or time interval in the RLN apps).
+If a user generates more signals than allowed,
+the user risks being slashed - by revealing his membership secret credentials.
+If the financial stake is put in place, the user also risks his stake being taken.</p>
+<p>Generally the flow can be described by the following steps:</p>
+<ol>
+<li>Registration</li>
+<li>Signaling</li>
+<li>Verification and slashing</li>
+</ol>
+<h2 id="registration">
+  Registration
+  <a class="anchor" href="#registration">#</a>
+</h2>
+<p>Depending on the application requirements, the registration can be implemented in different ways, for example:</p>
+<ul>
+<li>centralized registrations, by using a central server</li>
+<li>decentralized registrations, by using a smart contract</li>
+</ul>
+<p>What is important is that the users' identity commitments (explained in section <a href="#user-identity">User Indetity</a>) are stored in a Merkle tree,
+and the users can obtain a merkle proof proving that they are part of the group.</p>
+<p>Also depending on the application requirements,
+usually a financial or social stake is introduced.</p>
+<p>An example for financial stake is: For each registration a certain amount of ETH is required.
+An example for social stake is using InterRep as a registry -
+users need to prove that they have a highly reputable social media account.</p>
+<h3 id="implementation-notes">
+  Implementation notes
+  <a class="anchor" href="#implementation-notes">#</a>
+</h3>
+<h4 id="user-identity">
+  User identity
+  <a class="anchor" href="#user-identity">#</a>
+</h4>
+<p>The user&rsquo;s identity is composed of:</p>
+<pre tabindex="0"><code>{
+    identity_secret: [identity_nullifier, identity_trapdoor],
+    identity_secret_hash: poseidonHash(identity_secret),
+    identity_commitment: poseidonHash([identity_secret_hash])
+}
+</code></pre><p>For registration, the user needs to submit their <code>identity_commitment</code> (along with any additional registration requirements) to the registry.
+Upon registration, they should receive <code>leaf_index</code> value which represents their position in the merkle tree.
+Receiving a <code>leaf_index</code> is not a hard requirement and is application specific.
+The other way around is the users calculating the <code>leaf_index</code> themselves upon successful registration.</p>
+<h2 id="signaling">
+  Signaling
+  <a class="anchor" href="#signaling">#</a>
+</h2>
+<p>After registration,
+the users can participate in the application by sending signals to the other participants in a decentralised manner or to a centralised server.
+Along with their signal,
+they need to generate a ZK-Proof by using the circuit with the specification described above.</p>
+<p>For generating a proof,
+the users need to obtain the required parameters or compute them themselves,
+depending on the application implementation and client libraries supported by the application.
+For example the users can store the membership merkle tree on their end and
+generate a merkle proof whenever they want to generate a signal.</p>
+<h3 id="implementation-notes-1">
+  Implementation notes
+  <a class="anchor" href="#implementation-notes-1">#</a>
+</h3>
+<h4 id="signal-hash">
+  Signal hash
+  <a class="anchor" href="#signal-hash">#</a>
+</h4>
+<p>The signal hash can be generated by hashing the raw signal (or content) using the <code>keccak256</code> hash function.</p>
+<h4 id="external-nullifier">
+  External nullifier
+  <a class="anchor" href="#external-nullifier">#</a>
+</h4>
+<p>The external nullifier can be generated by hashing a raw string (i.e UNIX timestamp) value using <code>keccak256</code>.</p>
+<h4 id="obtaining-merkle-proof">
+  Obtaining merkle proof
+  <a class="anchor" href="#obtaining-merkle-proof">#</a>
+</h4>
+<p>The merkle proof should be obtained locally or from a trusted third party.
+By using the <a href="https://github.com/appliedzkp/incrementalquintree/blob/master/ts/IncrementalQuinTree.ts">incremental merkle tree algorithm</a>,
+the merkle can be obtained by providing the <code>leaf_index</code> of the <code>identity_commitment</code>.
+The proof (<code>merkle_proof</code>) is composed of the following fields:</p>
+<pre tabindex="0"><code>{
+  root: bigint
+  indices: number[]
+  path_elements: bigint[][]
+}
+</code></pre><ol>
+<li><strong>root</strong> - The root of membership group Merkle tree at the time of publishing the message</li>
+<li><strong>indices</strong> - The index fields of the leafs in the merkle tree - used by the merkle tree algorithm for verification</li>
+<li><strong>path_elements</strong> - Auxiliary data structure used for storing the path to the leaf - used by the merkle proof algorithm for verificaton</li>
+</ol>
+<h4 id="generating-proof">
+  Generating proof
+  <a class="anchor" href="#generating-proof">#</a>
+</h4>
+<p>For proof generation,
+the user need to submit the following fields to the circuit:</p>
+<pre tabindex="0"><code>    {
+      identity_secret: identity_secret_hash,
+      path_elements: merkle_proof.path_elements,
+      identity_path_index: merkle_proof.indices,
+      x: signal_hash,
+      external_nullifier: external_nullifier,
+      rln_identifier: rln_identifier
+    }
+</code></pre><h4 id="calculating-output">
+  Calculating output
+  <a class="anchor" href="#calculating-output">#</a>
+</h4>
+<p>The proof output is calculated locally,
+in order for the required fields for proof verification to be sent along with the proof.
+The proof output is composed of the <code>y</code> share of the secret equation and the <code>internal_nullifier</code>.
+The <code>internal_nullifier</code> represents an unique fingerprint for the user for the <code>external_nullifier</code>.
+The following fields are needed for proof output calculation:</p>
+<pre tabindex="0"><code>{
+  identity_secret_hash: bigint, 
+  external_nullifier: bigint, 
+  rln_identifier: bigint,
+  x: bigint, 
+}
+</code></pre><p>The output <code>[y, internal_nullifier]</code> is calculated in the following way:</p>
+<pre tabindex="0"><code>a_0 = identity_secret
+a_1 = poseidonHash([a0, external_nullifier])
+
+y = a_0 + x * a_1
+
+internal_nullifier = poseidonHash([a_1, rln_identifier])
+</code></pre><p>It relies on the properties of the <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir&rsquo;s Secret sharing scheme</a>.</p>
+<h4 id="sending-the-output-message">
+  Sending the output message
+  <a class="anchor" href="#sending-the-output-message">#</a>
+</h4>
+<p>The user&rsquo;s output message (<code>output_message</code>),
+containing the signal should contain the following fields at minimum:</p>
+<pre tabindex="0"><code>{
+    signal: signal, # non-hashed signal
+    proof: zk_proof,
+    internal_nullifier: internal_nullifier,
+    x: x, # signal_hash
+    y: y,
+    rln_identifier: rln_identifier
+}
+</code></pre><p>Additionally depending on the application,
+the following fields might be required:</p>
+<pre tabindex="0"><code>  {
+      root: merkle_proof.root,
+      external_nullifier: external_nullifier
+  }
+</code></pre><h2 id="verification-and-slashing">
+  Verification and slashing
+  <a class="anchor" href="#verification-and-slashing">#</a>
+</h2>
+<p>The slashing implementation is dependent on the type of application.
+If the application is implemented in a centralised manner,
+and everything is stored on a single server,
+the slashing will be implemented only on the server.
+Otherwise if the application is distributed,
+the slashing will be implemented on each user&rsquo;s client.</p>
+<h3 id="implementation-notes-2">
+  Implementation notes
+  <a class="anchor" href="#implementation-notes-2">#</a>
+</h3>
+<p>Each user of the protocol (server or otherwise) will need to store metadata for each message received by each user,
+for the given <code>external_nullifier</code>.
+The data can be deleted when the <code>external_nullifier</code> passes.
+Storing metadata is required, so that if a user sends more than one unique signal per <code>external_nullifier</code>,
+they can be slashed and removed from the protocol.
+The metadata stored contains the <code>x</code>, <code>y</code> shares and the <code>internal_nullifier</code> for the user for each message.
+If enough such shares are present, the user&rsquo;s secret can be retreived.</p>
+<p>One way of storing received metadata (<code>messaging_metadata</code>) is the following format:</p>
+<pre tabindex="0"><code>{
+    [external_nullifier]: {
+        [internal_nullifier]: {
+            x_shares: [],
+            y_shares: []
+        }
+    }
+}
+</code></pre><h4 id="verification">
+  Verification
+  <a class="anchor" href="#verification">#</a>
+</h4>
+<p>The output message verification consists of the following steps:</p>
+<ul>
+<li><code>external_nullifier</code> correctness</li>
+<li>non-duplicate message check</li>
+<li><code>zk_proof</code> verification</li>
+<li>spam verification</li>
+</ul>
+<p><strong>1. <code>external_nullifier</code> correctness</strong>
+Upon received <code>output_message</code>, first the <code>external_nullifier</code> field is checked,
+to ensure that the message matches the current <code>external_nullifier</code>.
+If the <code>external_nullifier</code> is correct the verification continues, otherwise, the message is discarded.</p>
+<p><strong>2. non-duplicate message check</strong>
+The received message is checked to ensure it is not duplicate.
+The duplicate message check is performed by verifying that the <code>x</code> and <code>y</code> fields do not exist in the <code>messaging_metadata</code> object.
+If the <code>x</code> and <code>y</code> fields exist in the <code>x_shares</code> and <code>y_shares</code> array for the <code>external_nullifier</code> and
+the <code>internal_nullifier</code> the message can be considered as a duplicate.
+Duplicate messages are discarded.</p>
+<p><strong>3. <code>zk_proof</code> verification</strong></p>
+<p>The <code>zk_proof</code> should be verified by providing the <code>zk_proof</code> field to the circuit verifier along with the <code>public_signal</code>:</p>
+<pre tabindex="0"><code>[
+    y,
+    merkle_proof.root,
+    internal_nullifier,
+    signal_hash,
+    external_nullifier,
+    rln_identifier
+]
+</code></pre><p>If the proof verification is correct,
+the verification continues, otherwise the message is discarded.</p>
+<p><strong>4. Double signaling verification</strong></p>
+<p>After the proof is verified the <code>x</code>, and <code>y</code> fields are added to the <code>x_shares</code> and <code>y_shares</code> arrays of the <code>messaging_metadata</code> <code>external_nullifier</code> and <code>internal_nullifier</code> object.
+If the length of the arrays is equal to the signaling threshold (<code>limit</code>), the user can be slashed.</p>
+<h4 id="slashing">
+  Slashing
+  <a class="anchor" href="#slashing">#</a>
+</h4>
+<p>After the verification, the user can be slashed if two different shares are present to reconstruct their <code>identity_secret_hash</code> from <code>x_shares</code> and <code>y_shares</code> fields,
+for their <code>internal_nullifier</code>.
+The secret can be retreived by the properties of the Shamir&rsquo;s secret sharing scheme.
+In particular the secret (<code>a_0</code>) can be retrieved by computing <a href="https://en.wikipedia.org/wiki/Lagrange_polynomial">Lagrange polynomials</a>.</p>
+<p>After the secret is retreived,
+the user&rsquo;s <code>identity_commitment</code> can be generated from the secret and it can be used for removing the user from the membership merkle tree (zeroing out the leaf that contains the user&rsquo;s <code>identity_commitment</code>).
+Additionally, depending on the application the <code>identity_secret_hash</code> can be used for taking the user&rsquo;s provided stake.</p>
+<h1 id="technical-overview">
+  Technical overview
+  <a class="anchor" href="#technical-overview">#</a>
+</h1>
+<p>The main RLN construct is implemented using a <a href="https://z.cash/technology/zksnarks/">ZK-SNARK</a> circuit.
+However it is helpful to describe the other necessary outside components for interaction with the circuit,
+which together with the ZK-SNARK circuit enable the above mentioned features.</p>
+<h2 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZK-SNARK</strong></td>
+<td><a href="https://z.cash/technology/zksnarks/">https://z.cash/technology/zksnarks/</a></td>
+</tr>
+<tr>
+<td><strong>Stake</strong></td>
+<td>Financial or social stake required for registering in the RLN applications.  Common stake examples are: locking cryptocurrency (financial), linking reputable social identity.</td>
+</tr>
+<tr>
+<td><strong>Identity secret</strong></td>
+<td>An array of two unique random components (identity nullifier and identity trapdoor), which must be kept private by the user. Secret hash and identity commitment are derived from this array.</td>
+</tr>
+<tr>
+<td><strong>Identity nullifier</strong></td>
+<td>Random 32 byte value used as component for identity secret generation.</td>
+</tr>
+<tr>
+<td><strong>Identity trapdoor</strong></td>
+<td>Random 32 byte value used as component for identity secret generation.</td>
+</tr>
+<tr>
+<td><strong>Identity secret hash</strong></td>
+<td>The hash of the identity secret, obtained using the Poseidon hash function. It is used for deriving the identity commitment of the user, and as a private input for zk proof generation. The secret hash should be kept private by the user.</td>
+</tr>
+<tr>
+<td><strong>Identity commitment</strong></td>
+<td>Hash obtained from the <code>Identity secret hash</code> by using the poseidon hash function. It is used by the users for registering in the protocol.</td>
+</tr>
+<tr>
+<td><strong>Signal</strong></td>
+<td>The message generated by a user. It is an arbitrary bit string that may represent a chat message, a URL request, protobuf message, etc.</td>
+</tr>
+<tr>
+<td><strong>Signal hash</strong></td>
+<td>Keccak hash of the signal, used as an input in the RLN circuit.</td>
+</tr>
+<tr>
+<td><strong>RLN Identifier</strong></td>
+<td>Random finite field value unique per RLN app. It is used for additional cross-application security. The role of the RLN identifier is protection of the user secrets being compromised if signals are being generated with the same credentials at different apps.</td>
+</tr>
+<tr>
+<td><strong>RLN membership tree</strong></td>
+<td>Merkle tree data structure, filled with identity commitments of the users. Serves as a data structure that ensures user registrations.</td>
+</tr>
+<tr>
+<td><strong>Merkle proof</strong></td>
+<td>Proof that a user is member of the RLN membership tree.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rln-zk-circuit-specific-terms">
+  RLN ZK-Circuit specific terms
+  <a class="anchor" href="#rln-zk-circuit-specific-terms">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>x</strong></td>
+<td>Keccak hash of the signal, same as signal hash (Defined above).</td>
+</tr>
+<tr>
+<td><strong>A0</strong></td>
+<td>The identity secret hash.</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td>Poseidon hash of [A0, External nullifier] (see about External nullifier below).</td>
+</tr>
+<tr>
+<td><strong>y</strong></td>
+<td>The result of the polynomial equation (y = a0 + a1*x). The public output of the circuit.</td>
+</tr>
+<tr>
+<td><strong>External nullifier</strong></td>
+<td><code>keccak256</code> hash of a string. An identifier that groups signals and can be thought of as a voting booth. Usually a timestamp or time interval in the RLN apps.</td>
+</tr>
+<tr>
+<td><strong>Internal nullifier</strong></td>
+<td>Poseidon hash of [A1, RLN Identifier]. This field ensures that a user can send only one valid signal per external nullifier without risking being slashed. Public input of the circuit.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="zk-circuits-specification">
+  ZK Circuits specification
+  <a class="anchor" href="#zk-circuits-specification">#</a>
+</h2>
+<p>Anonymous signaling with a controlled rate limit is enabled by proving that the user is part of a group which has high barriers to entry (form of stake) and
+enabling secret reveal if more than 1 unique signal is produced per external nullifier.
+The membership part is implemented using membership <a href="https://en.wikipedia.org/wiki/Merkle_tree">merkle trees</a> and merkle proofs,
+while the secret reveal part is enabled by using the Shamir&rsquo;s Secret Sharing scheme.
+Essentially the protocol requires the users to generate zero-knowledge proof to be able to send signals and participate in the application.
+The zero knowledge proof proves that the user is member of a group,
+but also enforces the user to share part of their secret for each signal in an external nullifier.
+The external nullifier is usually represented by timestamp or a time interval.
+It can also be thought of as a voting booth in voting applications.</p>
+<p>The ZK Circuit is implemented using a <a href="https://eprint.iacr.org/2016/260.pdf">Groth-16 ZK-SNARK</a>,
+using the <a href="https://docs.circom.io/">circomlib</a> library.</p>
+<h3 id="system-parameters">
+  System parameters
+  <a class="anchor" href="#system-parameters">#</a>
+</h3>
+<ul>
+<li><code>n_levels</code> - merkle tree depth</li>
+</ul>
+<h3 id="circuit-parameters">
+  Circuit parameters
+  <a class="anchor" href="#circuit-parameters">#</a>
+</h3>
+<p><strong>Public Inputs</strong></p>
+<ul>
+<li><code>x</code></li>
+<li><code>external_nullifier</code></li>
+<li><code>rln_identifier</code></li>
+</ul>
+<p><strong>Private Inputs</strong></p>
+<ul>
+<li><code>identity_secret_hash</code></li>
+<li><code>path_elements</code> - rln membership proof component</li>
+<li><code>identity_path_index</code> - rln membership proof component</li>
+</ul>
+<p><strong>Outputs</strong></p>
+<ul>
+<li><code>y</code></li>
+<li><code>root</code> - the rln membership tree root</li>
+<li><code>internal_nullifier</code></li>
+</ul>
+<h3 id="hash-function">
+  Hash function
+  <a class="anchor" href="#hash-function">#</a>
+</h3>
+<p>Canonical <a href="https://eprint.iacr.org/2019/458.pdf">Poseidon hash implementation</a> is used,
+as implemented in the <a href="https://github.com/iden3/circomlib/blob/master/circuits/poseidon.circom">circomlib library</a>, according to the Poseidon paper.
+This Poseidon hash version (canonical implementation) uses the following parameters:</p>
+<ul>
+<li><code>t</code>: 3</li>
+<li><code>RF</code>: 8</li>
+<li><code>RP</code>: 57</li>
+</ul>
+<h3 id="membership-implementation">
+  Membership implementation
+  <a class="anchor" href="#membership-implementation">#</a>
+</h3>
+<p>For a valid signal, a user&rsquo;s <code>identity_commitment</code> (more on identity commitments below) must exist in identity membership tree.
+Membership is proven by providing a membership proof (witness).
+The fields from the membership proof required for the verification are:
+<code>path_elements</code> and <code>identity_path_index</code>.</p>
+<p><a href="https://github.com/appliedzkp/incrementalquintree">IncrementalQuinTree</a> algorithm is used for constructing the Membership merkle tree.
+The circuits are reused from this repository.
+You can find out more details about the IncrementalQuinTree algorithm <a href="https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446">here</a>.</p>
+<h3 id="slashing-and-shamirs-secret-sharing">
+  Slashing and Shamir&rsquo;s Secret Sharing
+  <a class="anchor" href="#slashing-and-shamirs-secret-sharing">#</a>
+</h3>
+<p>Slashing is enabled by using polynomials and <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamir&rsquo;s Secret sharing</a>.
+In order to produce a valid proof, <code>identity_secret_hash</code> as a private input to the circuit.
+Then a secret equation is created in the form of:</p>
+<pre tabindex="0"><code>y = a_0 + x*a_1,
+</code></pre><p>where <code>a_0</code> is the <code>identity_secret_hash</code> and <code>a_1 = hash(a_0, external nullifier)</code>.
+Along with the generated proof,
+the users need to provide a (x, y) share which satisfies the line equation,
+in order for their proof to be verified.
+<code>x</code> is the hashed signal, while the <code>y</code> is the circuit output.
+With more than one pair of unique shares, anyone can derive <code>a_0</code>, the <code>identity_secret_hash</code> .
+The hash of a signal will be evaluation point <code>x</code>.
+So that a member who sends more than one unique signal per <code>external_nullifier</code> risks their identity secret being revealed.</p>
+<p>Note that shares used for different external nullifiers and different RLN apps cannot be used to derive the secret key.</p>
+<p>The <code>rln_identifier</code> is a random value from a finite field,
+unique per RLN app,
+and is used for additional cross-application security - to protect the user secrets being compromised if they use the same credentials accross different RLN apps.
+If <code>rln_identifier</code> is not present,
+the user uses the same credentials and sends a different message for two different RLN apps using the same <code>external_nullifier</code>,
+then their user signals can be grouped by the <code>internal_nullifier</code> which could lead the user&rsquo;s secret revealed.
+This is because two separate signals under the same <code>internal_nullifier</code> can be treated as rate limiting violation.
+With adding the <code>rln_identifier</code> field we obscure the <code>internal_nullifier</code>,
+so this kind of attack can be hardened because we don&rsquo;t have the same <code>internal_nullifier</code> anymore.
+The only kind of attack that is possible is if we have an entity with a global view of all messages,
+and they try to brute force different combinations of <code>x</code> and <code>y</code> shares for different <code>internal_nullifier</code>s.</p>
+<h2 id="identity-credentials-generation">
+  Identity credentials generation
+  <a class="anchor" href="#identity-credentials-generation">#</a>
+</h2>
+<p>In order to be able to generate valid proofs, the users need to be part of the identity membership merkle tree.
+They are part of the identity membership merkle tree if their <code>identity_commitment</code> is placed in a leaf in the tree.</p>
+<p>The identity credentials of a user are composed of:</p>
+<ul>
+<li><code>identity_secret</code></li>
+<li><code>identity_secret_hash</code></li>
+<li><code>identity_commitment</code></li>
+</ul>
+<h3 id="identity_secret">
+  <code>identity_secret</code>
+  <a class="anchor" href="#identity_secret">#</a>
+</h3>
+<p>The <code>identity_secret</code> is generated in the following way:</p>
+<pre tabindex="0"><code>    identity_nullifier = random_32_byte_buffer
+    identity_trapdoor = random_32_byte_buffer
+    identity_secret = [identity_nullifier, identity_trapdoor]
+</code></pre><p>The same secret should not be used accross different protocols,
+because revealing the secret at one protocol could break privacy for the user in the other protocols.</p>
+<h3 id="identity_secret_hash">
+  <code>identity_secret_hash</code>
+  <a class="anchor" href="#identity_secret_hash">#</a>
+</h3>
+<p>The <code>identity_secret_hash</code> is generated by obtaining a Poseidon hash of the <code>identity_secret</code> array:</p>
+<pre tabindex="0"><code>    identity_secret_hash = poseidonHash(identity_secret)
+</code></pre><h3 id="identity_commitment">
+  <code>identity_commitment</code>
+  <a class="anchor" href="#identity_commitment">#</a>
+</h3>
+<p>The <code>identity_commitment</code> is generated by obtaining a Poseidon hash of the <code>identity_secret_hash</code>:</p>
+<pre tabindex="0"><code>identity_commitment = poseidonHash([identity_secret_hash])
+</code></pre><h1 id="appendix-a-security-considerations">
+  Appendix A: Security considerations
+  <a class="anchor" href="#appendix-a-security-considerations">#</a>
+</h1>
+<p>RLN is an experimental and still un-audited technology. This means that the circuits have not been yet audited.
+Another consideration is the security of the underlying primitives.
+zk-SNARKS require a trusted setup for generating a prover and verifier keys.
+The standard for this is to use trusted <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">Multi-Party Computation (MPC)</a> ceremony,
+which requires two phases.
+Trusted MPC ceremony has not yet been performed for the RLN circuits.</p>
+<h1 id="appendix-b-identity-scheme-choice">
+  Appendix B: Identity scheme choice
+  <a class="anchor" href="#appendix-b-identity-scheme-choice">#</a>
+</h1>
+<p>The hashing scheme used is based on the design decisions which also include the Semaphore circuits.
+Our goal was to ensure compatibility of the secrets for apps that use Semaphore and
+RLN circuits while also not compromising on security because of using the same secrets.</p>
+<p>For example let&rsquo;s say there is a voting app that uses Semaphore,
+and also a chat app that uses RLN.
+The UX would be better if the users would not need to care about complicated identity management (secrets and commitments) t
+hey use for each app, and it would be much better if they could use a single id commitment for this.
+Also in some cases these kind of dependency is required -
+RLN chat app using Interep as a registry (instead of using financial stake).
+One potential concern about this interoperability is a slashed user on the RLN app side
+having their security compromised on the semaphore side apps as well.
+I.e obtaining the user&rsquo;s secret, anyone would be able to generate valid semaphore proofs as the slashed user.
+We don&rsquo;t want that, and we should keep user&rsquo;s app specific security threats in the domain of that app alone.</p>
+<p>To achieve the above interoperability UX while preventing the shared app security model
+(i.e slashing user on an RLN app having impact on Semaphore apps),
+we had to do the follow in regard the identity secret and identity commitment:</p>
+<pre tabindex="0"><code>    identity_secret = [identity_nullifier, identity_trapdoor]
+    identity_secret_hash = poseidonHash(identity_secret)
+    identity_commitment = poseidonHash([identity_secret_hash])
+</code></pre><p>Secret components for generating Semaphore proof:</p>
+<pre tabindex="0"><code>identity_nullifier
+identity_trapdoor
+</code></pre><p>Secret components for generting RLN proof:</p>
+<pre tabindex="0"><code>identity_secret_hash
+</code></pre><p>When a user is slashed on the RLN app side, their identity secret hash is revealed.
+However a semaphore proof can&rsquo;t be generated because we do not know the user&rsquo;s nullifier and trapdoor.</p>
+<p>With this design we achieve:</p>
+<p>identity commitment (Semaphore) == identity commitment (RLN)
+secret (semaphore) != secret (RLN).</p>
+<p>This is the only option we had for the scheme in order to satisfy the properties described above.</p>
+<p>Also for RLN we do a single secret component input for the circuit.
+Thus we need to hash the secret array (two components) to a secret hash,
+and we use that as a secret component input.</p>
+<h1 id="apendix-c-auxiliary-tooling">
+  Apendix C: Auxiliary tooling
+  <a class="anchor" href="#apendix-c-auxiliary-tooling">#</a>
+</h1>
+<p>There are few additional tools implemented for easier integrations and usage of the RLN protocol.</p>
+<p><a href="https://github.com/appliedzkp/zk-kit"><code>zk-kit</code></a> is a typescript library which exposes APIs for identity credentials generation,
+as well as proof generation.
+It supports various protocols (<code>Semaphore</code>, <code>RLN</code>),.</p>
+<p><a href="https://github.com/akinovak/zk-keeper"><code>zk-keeper</code></a> is a browser plugin which allows for safe credential storing and proof generation.
+You can think of MetaMask for ZK-Proofs.
+It uses <code>zk-kit</code> under the hood.</p>
+<h1 id="apendix-d-example-usage">
+  Apendix D: Example usage
+  <a class="anchor" href="#apendix-d-example-usage">#</a>
+</h1>
+<p>The following examples are code snippets using the <code>zk-kit</code> library.
+The examples are written in <a href="https://www.typescriptlang.org/">typescript</a>.</p>
+<h2 id="generating-identity-credentials">
+  Generating identity credentials
+  <a class="anchor" href="#generating-identity-credentials">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">      <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#34;@zk-kit/identity&#34;</span>
+
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
+</code></pre></div><h2 id="generating-proof-1">
+  Generating proof
+  <a class="anchor" href="#generating-proof-1">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span>, <span style="color:#a6e22e">MerkleProof</span>, <span style="color:#a6e22e">FullProof</span>, <span style="color:#a6e22e">genSignalHash</span>, <span style="color:#a6e22e">generateMerkleProof</span>, <span style="color:#a6e22e">genExternalNullifier</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
+    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">ZkIdentity</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/identity&#39;</span>
+    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">bigintToHex</span>, <span style="color:#a6e22e">hexToBigint</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;bigint-conversion&#39;</span>
+    
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">ZERO_VALUE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">BigInt</span>(<span style="color:#ae81ff">0</span>);
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">TREE_DEPTH</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span>;
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES_PER_NODE</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">LEAVES</span> <span style="color:#f92672">=</span> [...]; <span style="color:#75715e">// leaves should be an array of the leaf values of the membership merkle tree
+</span><span style="color:#75715e"></span>      <span style="color:#75715e">// the identity commitment generated below should be present in the LEAVES array
+</span><span style="color:#75715e"></span>
+      <span style="color:#75715e">// this is for illustrative purposes only. The identityCommitment should be present in the LEAVES array above.
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">ZkIdentity</span>()
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">secretHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">getSecretHash</span>()
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">identityCommitment</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">identity</span>.<span style="color:#a6e22e">genIdentityCommitment</span>()
+
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signal</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;hey&#34;</span>
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">signalHash</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genSignalHash</span>(<span style="color:#a6e22e">signal</span>)
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">epoch</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">genExternalNullifier</span>(<span style="color:#e6db74">&#34;test-epoch&#34;</span>)
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">rlnIdentifier</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genIdentifier</span>()
+
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">merkleProof</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">generateMerkleProof</span>(<span style="color:#a6e22e">TREE_DEPTH</span>, <span style="color:#a6e22e">ZERO_VALUE</span>, <span style="color:#a6e22e">LEAVES_PER_NODE</span>, <span style="color:#a6e22e">LEAVES</span>, <span style="color:#a6e22e">identityCommitment</span>)
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">witness</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genWitness</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">merkleProof</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">signal</span>, <span style="color:#a6e22e">rlnIdentifier</span>)
+
+      <span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">nullifier</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">calculateOutput</span>(<span style="color:#a6e22e">secretHash</span>, <span style="color:#a6e22e">BigInt</span>(<span style="color:#a6e22e">epoch</span>), <span style="color:#a6e22e">rlnIdentifier</span>, <span style="color:#a6e22e">signalHash</span>)
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">publicSignals</span> <span style="color:#f92672">=</span> [<span style="color:#a6e22e">y</span>, <span style="color:#a6e22e">merkleProof</span>.<span style="color:#a6e22e">root</span>, <span style="color:#a6e22e">nullifier</span>, <span style="color:#a6e22e">signalHash</span>, <span style="color:#a6e22e">epoch</span>, <span style="color:#a6e22e">rlnIdentifier</span>]
+
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">wasmFilePath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln.wasm&#34;</span>) <span style="color:#75715e">// path to the WASM compiled circuit
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">finalZkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;rln_final.zkey&#34;</span>) <span style="color:#75715e">// path to the prover key
+</span><span style="color:#75715e"></span>
+      <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">fullProof</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">genProof</span>(<span style="color:#a6e22e">witness</span>, <span style="color:#a6e22e">wasmFilePath</span>, <span style="color:#a6e22e">finalZkeyPath</span>)
+</code></pre></div><h2 id="verifiying-proof">
+  Verifiying proof
+  <a class="anchor" href="#verifiying-proof">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-typescript" data-lang="typescript">    <span style="color:#66d9ef">import</span> { <span style="color:#a6e22e">RLN</span> } <span style="color:#66d9ef">from</span> <span style="color:#e6db74">&#39;@zk-kit/protocols&#39;</span>
+    
+    <span style="color:#75715e">// Public signal and the proof are received from the proving party
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// const publicSignals = [y, merkleProof.root, nullifier, signalHash, epoch, rlnIdentifier]
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// const proof = (await RLN.genProof(witness, wasmFilePath, finalZkeyPath)).proof
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vkeyPath</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">path</span>.<span style="color:#a6e22e">join</span>(<span style="color:#a6e22e">zkeyFiles</span>, <span style="color:#e6db74">&#34;rln&#34;</span>, <span style="color:#e6db74">&#34;verification_key.json&#34;</span>) <span style="color:#75715e">// Path to the verifier key
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">vKey</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">JSON</span>.<span style="color:#a6e22e">parse</span>(<span style="color:#a6e22e">fs</span>.<span style="color:#a6e22e">readFileSync</span>(<span style="color:#a6e22e">vkeyPath</span>, <span style="color:#e6db74">&#34;utf-8&#34;</span>)) <span style="color:#75715e">// The verifier key
+</span><span style="color:#75715e"></span>
+    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">response</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">await</span> <span style="color:#a6e22e">RLN</span>.<span style="color:#a6e22e">verifyProof</span>(<span style="color:#a6e22e">vKey</span>, { <span style="color:#a6e22e">proof</span>: <span style="color:#66d9ef">proof</span>, <span style="color:#a6e22e">publicSignals</span> })
+</code></pre></div><p>For more details please visit the <a href="https://github.com/appliedzkp/zk-kit"><code>zk-kit</code></a> library.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a></p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li>[1] <a href="https://medium.com/privacy-scaling-explorations/rate-limiting-nullifier-a-spam-protection-mechanism-for-anonymous-environments-bbe4006a57d">https://medium.com/privacy-scaling-explorations/rate-limiting-nullifier-a-spam-protection-mechanism-for-anonymous-environments-bbe4006a57d</a></li>
+<li>[2] <a href="https://github.com/appliedzkp/zk-kit">https://github.com/appliedzkp/zk-kit</a></li>
+<li>[3] <a href="https://github.com/akinovak/zk-keeper">https://github.com/akinovak/zk-keeper</a></li>
+<li>[4] <a href="https://z.cash/technology/zksnarks/">https://z.cash/technology/zksnarks/</a></li>
+<li>[5] <a href="https://en.wikipedia.org/wiki/Merkle_tree">https://en.wikipedia.org/wiki/Merkle_tree</a></li>
+<li>[6] <a href="https://eprint.iacr.org/2016/260.pdf">https://eprint.iacr.org/2016/260.pdf</a></li>
+<li>[7] <a href="https://docs.circom.io/">https://docs.circom.io/</a></li>
+<li>[8] <a href="https://eprint.iacr.org/2019/458.pdf">https://eprint.iacr.org/2019/458.pdf</a></li>
+<li>[9] <a href="https://github.com/appliedzkp/incrementalquintree">https://github.com/appliedzkp/incrementalquintree</a></li>
+<li>[10] <a href="https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446">https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446</a></li>
+<li>[11] <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing</a></li>
+<li>[12] <a href="https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/">https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#registration">Registration</a>
+      <ul>
+        <li><a href="#implementation-notes">Implementation notes</a></li>
+      </ul>
+    </li>
+    <li><a href="#signaling">Signaling</a>
+      <ul>
+        <li><a href="#implementation-notes-1">Implementation notes</a></li>
+      </ul>
+    </li>
+    <li><a href="#verification-and-slashing">Verification and slashing</a>
+      <ul>
+        <li><a href="#implementation-notes-2">Implementation notes</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
+    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+      <ul>
+        <li><a href="#system-parameters">System parameters</a></li>
+        <li><a href="#circuit-parameters">Circuit parameters</a></li>
+        <li><a href="#hash-function">Hash function</a></li>
+        <li><a href="#membership-implementation">Membership implementation</a></li>
+        <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+      </ul>
+    </li>
+    <li><a href="#identity-credentials-generation">Identity credentials generation</a>
+      <ul>
+        <li><a href="#identity_secret"><code>identity_secret</code></a></li>
+        <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
+        <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
+    <li><a href="#generating-proof-1">Generating proof</a></li>
+    <li><a href="#verifiying-proof">Verifiying proof</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

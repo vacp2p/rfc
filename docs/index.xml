@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Docs on Vac RFC</title>
+    <link>https://rfc.vac.dev/docs/</link>
+    <description>Recent content in Docs on Vac RFC</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://rfc.vac.dev/docs/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>1/COSS</title>
+      <link>https://rfc.vac.dev/spec/1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/1/</guid>
+      <description>This document describes a consensus-oriented specification system (COSS) for building interoperable technical specifications. COSS is based on a lightweight editorial process that seeks to engage the widest possible range of interested parties and move rapidly to consensus through working code.
+This specification is based on Unprotocols 2/COSS, used by the ZeromMQ project. It is equivalent except for some areas:
+ recommending the use of a permissive licenses, such as CC0 (with the exception of this document); miscellaneous metadata, editor, and format/link updates; more inheritance from the [IETF Standards Process][https://www.</description>
+    </item>
+    
+    <item>
+      <title>10/WAKU2</title>
+      <link>https://rfc.vac.dev/spec/10/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/10/</guid>
+      <description>Abstract #  Waku v2 is family of modular peer-to-peer protocols for secure communication. The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments. At a high level, it implements Pub/Sub over libp2p and adds a set of capabilities to it. These capabilities are things such as: (i) retrieving historical messages for mostly-offline devices (ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network (iii) preserving bandwidth usage for resource-restriced devices</description>
+    </item>
+    
+    <item>
+      <title>11/WAKU2-RELAY</title>
+      <link>https://rfc.vac.dev/spec/11/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/11/</guid>
+      <description>11/WAKU2-RELAY specifies a Publish/Subscribe approach to peer-to-peer messaging with a strong focus on privacy, censorship-resistance, security and scalability. Its current implementation is a minor extension of the libp2p GossipSub protocol and prescribes gossip-based dissemination. As such the scope is limited to defining a separate protocol id for 11/WAKU2-RELAY, establishing privacy and security requirements, and defining how the underlying GossipSub is to be interpreted and implemented within the Waku and cryptoeconomic domain.</description>
+    </item>
+    
+    <item>
+      <title>12/WAKU2-FILTER</title>
+      <link>https://rfc.vac.dev/spec/12/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/12/</guid>
+      <description>WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering #  Protocol identifier*: /vac/waku/filter/2.0.0-beta1
+Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.</description>
+    </item>
+    
+    <item>
+      <title>13/WAKU2-STORE</title>
+      <link>https://rfc.vac.dev/spec/13/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/13/</guid>
+      <description>This specification explains the Waku 13/WAKU2-STORE protocol which enables querying of messages received through relay protocol and stored by other nodes. It also supports pagination for more efficient querying of historical messages.
+Protocol identifier*: /vac/waku/store/2.0.0-beta4
+Design Requirements #  Nodes willing to provide storage service using 13/WAKU2-STORE protocol SHOULD provide a complete and full view of message history. As such, they are required to be highly available and in specific have a high uptime to consistently receive and store network messages.</description>
+    </item>
+    
+    <item>
+      <title>14/WAKU2-MESSAGE</title>
+      <link>https://rfc.vac.dev/spec/14/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/14/</guid>
+      <description>Abstract #  Waku v2 is a family of modular peer-to-peer protocols for secure communication. These protocols are designed to be secure, privacy-preserving, and censorship-resistant and can run in resource-restricted environments. At a high level, Waku v2 implements a Pub/Sub messaging pattern over libp2p and adds capabilities.
+The present document specifies the Waku v2 message format, a way to encapsulate the messages sent with specific information security goals, and Whisper/Waku v1 backward compatibility.</description>
+    </item>
+    
+    <item>
+      <title>15/WAKU-BRIDGE</title>
+      <link>https://rfc.vac.dev/spec/15/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/15/</guid>
+      <description>A bridge between Waku v1 and Waku v2.
+Bridge #  A bridge requires supporting both Waku versions:
+ Waku v1 - using devp2p RLPx protocol Waku v2 - using libp2p protocols  Packets received on the Waku v1 network SHOULD be published just once on the Waku v2 network. More specifically, the bridge SHOULD publish this through the Waku Relay (PubSub domain).
+Publishing such packet will require the creation of a new Message with a new WakuMessage as data field.</description>
+    </item>
+    
+    <item>
+      <title>16/WAKU2-RPC</title>
+      <link>https://rfc.vac.dev/spec/16/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/16/</guid>
+      <description>Introduction #  This specification describes the JSON-RPC API that Waku v2 nodes MAY adhere to. Refer to the Waku v2 specification for more information on Waku v2.
+Wire Protocol #  Transport #  Nodes SHOULD expose an accessible JSON-RPC API. The JSON-RPC version SHOULD be 2.0. Below is an example request:
+{ &amp;#34;jsonrpc&amp;#34;:&amp;#34;2.0&amp;#34;, &amp;#34;method&amp;#34;:&amp;#34;get_waku_v2_debug_info&amp;#34;, &amp;#34;params&amp;#34;:[], &amp;#34;id&amp;#34;:1 } Fields #     Field Description     jsonrpc Contains the used JSON-RPC version (Default: 2.</description>
+    </item>
+    
+    <item>
+      <title>17/WAKU2-RLN-RELAY</title>
+      <link>https://rfc.vac.dev/spec/17/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/17/</guid>
+      <description>The 17/WAKU2-RLN-RELAY protocol is an extension of 11/WAKU2-RELAY which additionally provides spam protection using Rate Limiting Nullifiers (RLN).
+The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers. Peers that violate the messaging rate are considered spammers and their message is considered spam. Spammers are also financially punished and removed from the system.
+Motivation #  In open and anonymous p2p messaging networks, one big problem is spam resistance.</description>
+    </item>
+    
+    <item>
+      <title>18/WAKU2-SWAP</title>
+      <link>https://rfc.vac.dev/spec/18/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/18/</guid>
+      <description>This specification outlines how we do accounting and settlement based on the provision and usage of resources, most immediately bandwidth usage and/or storing and retrieving of Waku message. This enables nodes to cooperate and efficiently share resources, and in the case of unequal nodes to settle the difference through a relaxed payment mechanism in the form of sending cheques.
+Protocol identifier*: /vac/waku/swap/2.0.0-beta1
+Motivation #  The Waku network makes up a service network, and some nodes provide a useful service to other nodes.</description>
+    </item>
+    
+    <item>
+      <title>19/WAKU2-LIGHTPUSH</title>
+      <link>https://rfc.vac.dev/spec/19/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/19/</guid>
+      <description>Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
+Motivation and goals #  Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &amp;ldquo;by the network&amp;rdquo; (here, at least one node).
+19/WAKU2-LIGHTPUSH is a request/response protocol for this.
+Payloads #  syntax = &amp;#34;proto3&amp;#34;;message PushRequest { string pubsub_topic = 1; WakuMessage message = 2;}message PushResponse { bool is_success = 1; // Error messages, etc  string info = 2;}message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3;}Message relaying #  Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic.</description>
+    </item>
+    
+    <item>
+      <title>2/MVDS</title>
+      <link>https://rfc.vac.dev/spec/2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/2/</guid>
+      <description>In this specification, we describe a minimum viable protocol for data synchronization inspired by the Bramble Synchronization Protocol1. This protocol is designed to ensure reliable messaging between peers across an unreliable peer-to-peer (P2P) network where they may be unreachable or unresponsive.
+We present a reference implementation2 including a simulation to demonstrate its performance.
+Definitions #     Term Description     Peer The other nodes that a node is connected to.</description>
+    </item>
+    
+    <item>
+      <title>20/TOY-ETH-PM</title>
+      <link>https://rfc.vac.dev/spec/20/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/20/</guid>
+      <description>Content Topics:
+ Public Key Broadcast: /eth-pm/1/public-key/proto, Private Message: /eth-pm/1/private-message/proto.  This specification explains the Toy Ethereum Private Message protocol which enables a peer to send an encrypted message to another peer using the Waku v2 network, and the peer&amp;rsquo;s Ethereum address.
+The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes, using Ethereum accounts for identity. This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API.</description>
+    </item>
+    
+    <item>
+      <title>21/WAKU2-FAULT-TOLERANT-STORE</title>
+      <link>https://rfc.vac.dev/spec/21/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/21/</guid>
+      <description>The reliability of 13/WAKU2-STORE protocol heavily relies on the fact that full nodes i.e., those who persist messages have high availability and uptime and do not miss any messages. If a node goes offline, then it will risk missing all the messages transmitted in the network during that time. In this specification, we provide a method that makes the store protocol resilient in presence of faulty nodes. Relying on this method, nodes that have been offline for a time window will be able to fix the gap in their message history when getting back online.</description>
+    </item>
+    
+    <item>
+      <title>22/TOY-CHAT</title>
+      <link>https://rfc.vac.dev/spec/22/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/22/</guid>
+      <description>Content Topic: /toy-chat/2/huilong/proto.
+This specification explains a toy chat example using Waku v2. This protocol is mainly used to:
+ Dogfood Waku v2, Show an example of how to use Waku v2.  Currently, all main Waku v2 implementations support the toy chat protocol: nim-waku, js-waku (NodeJS and web) and go-waku.
+Note that this is completely separate from the protocol the Status app is using for its chat functionality.
+Design #  The chat protocol enables sending and receiving messages in a chat room.</description>
+    </item>
+    
+    <item>
+      <title>23/WAKU2-TOPICS</title>
+      <link>https://rfc.vac.dev/spec/23/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/23/</guid>
+      <description>This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
+ PubSub topics, used for routing Content topics, used for content-based filtering  PubSub topics #  PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
+As written in 10/WAKU2 spec there is a default PubSub topic:
+/waku/2/default-waku/proto
+This indicates that</description>
+    </item>
+    
+    <item>
+      <title>24/STATUS-CURATION</title>
+      <link>https://rfc.vac.dev/spec/24/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/24/</guid>
+      <description>This spec is a proposition for a voting protocol over Waku V2.
+Motivation #  In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
+Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&amp;rsquo;t already submitted.
+Smart contract #  Voting should be finalized on chain so that the finished vote is immutable.</description>
+    </item>
+    
+    <item>
+      <title>25/LIBP2P-DNS-DISCOVERY</title>
+      <link>https://rfc.vac.dev/spec/25/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/25/</guid>
+      <description>25/LIBP2P-DNS-DISCOVERY specifies a scheme to implement libp2p peer discovery via DNS for Waku v2. The generalised purpose is to retrieve an arbitrarily long, authenticated, updateable list of libp2p peers to bootstrap connection to a libp2p network. Since 10/WAKU2 currently specifies use of libp2p peer identities, this method is suitable for a new Waku v2 node to discover other Waku v2 nodes to connect to.
+This specification is largely based on EIP-1459, with the only deviation being the type of address being encoded (multiaddr vs enr).</description>
+    </item>
+    
+    <item>
+      <title>26/WAKU-PAYLOAD</title>
+      <link>https://rfc.vac.dev/spec/26/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/26/</guid>
+      <description>This specification describes how Waku provides confidentiality, authenticity, and integrity, as well as some form of unlinkability. Specifically, it describes how encryption, decryption and signing works in 6/WAKU1 and in 10/WAKU2 with 14/WAKU-MESSAGE version 1.
+This specification effectively replaces 7/WAKU-DATA as well as 6/WAKU1 Payload encryption but written in a way that is agnostic and self-contained for Waku v1 and Waku v2.
+Large sections of the specification originate from EIP-627: Whisper spec as well from RLPx Transport Protocol spec (ECIES encryption) with some modifications.</description>
+    </item>
+    
+    <item>
+      <title>27/WAKU2-PEERS</title>
+      <link>https://rfc.vac.dev/spec/27/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/27/</guid>
+      <description>27/WAKU2-PEERS describes a recommended minimal set of peer storage and peer management features to be implemented by Waku v2 clients.
+In this context, peer storage refers to a client&amp;rsquo;s ability to keep track of discovered or statically-configured peers and their metadata. It also deals with matters of peer persistence, or the ability to store peer data on disk to resume state after a client restart.
+Peer management is a closely related concept and refers to the set of actions a client MAY choose to perform based on its knowledge of its connected peers, e.</description>
+    </item>
+    
+    <item>
+      <title>28/STATUS-FEATURING</title>
+      <link>https://rfc.vac.dev/spec/28/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/28/</guid>
+      <description>This spec is a proposition of voting on community featuring over waku v2.
+Overview #  When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
+Rules of featuring: - Given community can&amp;rsquo;t be featured twice in a row. - Only one vote per user per community (single user can vote on multiple communities) - Voting will be done off-chain - If community hasn&amp;rsquo;t been featured votes for given community are still valid for the next 4 weeks</description>
+    </item>
+    
+    <item>
+      <title>29/WAKU2-CONFIG</title>
+      <link>https://rfc.vac.dev/spec/29/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/29/</guid>
+      <description>29/WAKU2-CONFIG describes the RECOMMENDED values to assign to configurable parameters for Waku v2 clients. Since Waku v2 is built on libp2p, most of the parameters and reasonable defaults are derived from there.
+Waku v2 relay messaging is specified in 11/WAKU2-RELAY, a minor extension of the libp2p GossipSub protocol. GossipSub behaviour is controlled by a series of adjustable parameters. Waku v2 clients SHOULD configure these parameters to the recommended values below.</description>
+    </item>
+    
+    <item>
+      <title>3/REMOTE-LOG</title>
+      <link>https://rfc.vac.dev/spec/3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/3/</guid>
+      <description>A remote log is a replication of a local log. This means a node can read data that originally came from a node that is offline.
+This specification is complemented by a proof of concept implementation1.
+Definitions #     Term Definition     CAS Content-addressed storage. Stores data that can be addressed by its hash.   NS Name system. Associates mutable data to a name.</description>
+    </item>
+    
+    <item>
+      <title>30/ADAPTIVE-NODES</title>
+      <link>https://rfc.vac.dev/spec/30/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/30/</guid>
+      <description>This is an informational spec that show cases the concept of adaptive nodes.
+Node types - a continuum #  We can look at node types as a continuum, from more restricted to less restricted, fewer resources to more resources.
+Possible limitations #   Connectivity: Not publicly connectable vs static IP and DNS Connectivity: Mostly offline to mostly online to always online Resources: Storage, CPU, Memory, Bandwidth  Accessibility and motivation #  Some examples:</description>
+    </item>
+    
+    <item>
+      <title>31/WAKU2-ENR</title>
+      <link>https://rfc.vac.dev/spec/31/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/31/</guid>
+      <description>Abstract #  This RFC describes the usage of the ENR (Ethereum Node Records) format for 10/WAKU2 purposes. The ENR format is defined in EIP-778 [3].
+This RFC is an extension of EIP-778, ENR used in Waku v2 MUST adhere to both EIP-778 and 31/WAKU2-ENR.
+Motivation #  EIP-1459 with the usage of ENR has been implemented [1] [2] as a discovery protocol for Waku v2.
+EIP-778 specifies a number of pre-defined keys.</description>
+    </item>
+    
+    <item>
+      <title>32/RLN</title>
+      <link>https://rfc.vac.dev/spec/32/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/32/</guid>
+      <description>Abstract #  The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
+Motivation #  RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.</description>
+    </item>
+    
+    <item>
+      <title>33/WAKU2-DISCV5</title>
+      <link>https://rfc.vac.dev/spec/33/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/33/</guid>
+      <description>Abstract #  33/WAKU2-DISCV5 specifies a modified version of Ethereum&amp;rsquo;s Node Discovery Protocol v5 as a means for ambient node discovery. 10/WAKU2 uses the 33/WAKU2-DISCV5 ambient node discovery network for establishing a decentralized network of interconnected Waku2 nodes. In its current version, the 33/WAKU2-DISCV5 discovery network is isolated from the Ethereum Discovery v5 network. Isolation improves discovery efficiency, which is especially significant with a low number of Waku nodes compared to the total number of Ethereum nodes.</description>
+    </item>
+    
+    <item>
+      <title>34/WAKU2-PEER-EXCHANGE</title>
+      <link>https://rfc.vac.dev/spec/34/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/34/</guid>
+      <description>Abstract #  This document specifies a simple request-response peer exchange protocol. Responders send information about a requested number of peers. The main purpose of this protocol is providing resource restricted devices with peers.
+Protocol identifier: /vac/waku/peer-exchange/2.0.0-alpha1
+Background and Motivation #  It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as 33/WAKU2-DISCV5. The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.</description>
+    </item>
+    
+    <item>
+      <title>35/WAKU2-NOISE</title>
+      <link>https://rfc.vac.dev/spec/35/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/35/</guid>
+      <description>This specification describes how payloads of Waku messages with version 2 can be encrypted in order to achieve confidentiality, authenticity, and integrity as well as some form of identity-hiding on communicating parties.
+This specification extends the functionalities provided by 26/WAKU-PAYLOAD, adding support to modern symmetric encryption primitives and asymmetric key-exchange protocols.
+Specifically, it adds support to the ChaChaPoly cipher for symmetric authenticated encryption. It further describes how the Noise Protocol Framework can be used to exchange cryptographic keys and encrypt/decrypt messages in a way that the latter are authenticated and protected by strong forward secrecy.</description>
+    </item>
+    
+    <item>
+      <title>36/WAKU2-BINDINGS-API</title>
+      <link>https://rfc.vac.dev/spec/36/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/36/</guid>
+      <description>Introduction #  Native applications that wish to integrate Waku may not be able to use nwaku and its JSON RPC API due to constraints on packaging, performance or executables.
+An alternative is to link existing Waku implementation as a static or dynamic library in their application.
+This specification describes the C API that SHOULD be implemented by native Waku library and that SHOULD be used to consume them.
+Design requirements #  The API should be generic enough, so:</description>
+    </item>
+    
+    <item>
+      <title>37/WAKU2-NOISE-SESSIONS</title>
+      <link>https://rfc.vac.dev/spec/37/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/37/</guid>
+      <description>Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
+This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
+Preliminaries #  We assume that two users, e.</description>
+    </item>
+    
+    <item>
+      <title>4/MVDS-META</title>
+      <link>https://rfc.vac.dev/spec/4/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/4/</guid>
+      <description>In this specification, we describe a method to construct message history that will aid the consistency guarantees of 2/MVDS. Additionally, we explain how data sync can be used for more lightweight messages that do not require full synchronization.
+Motivation #  In order for more efficient synchronization of conversational messages, information should be provided allowing a node to more effectively synchronize the dependencies for any given message.
+Format #  We introduce the metadata message which is used to convey information about a message and how it SHOULD be handled.</description>
+    </item>
+    
+    <item>
+      <title>43/WAKU2-DEVICE-PAIRING</title>
+      <link>https://rfc.vac.dev/spec/43/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/43/</guid>
+      <description>Abstract #  In this document we describe a compound protocol for enabling two devices to mutually authenticate and securely exchange (arbitrary) information over the Waku network.
+Background / Rationale / Motivation #  In order to implement multi-device communications using one of the Noise session management mechanisms proposed in 37/WAKU2-NOISE-SESSIONS, we require a protocol to securely exchange (cryptographic) information between 2 or more devices possessed by a user.
+Since, in this scenario, the devices would be close to each other, authentication can be initialized by exchanging a QR code out-of-band and then securely completed over the Waku network.</description>
+    </item>
+    
+    <item>
+      <title>44/WAKU2-DANDELION</title>
+      <link>https://rfc.vac.dev/spec/44/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/44/</guid>
+      <description>Abstract #  This document specifies a deanonymization mitigation technique, based on Dandelion and Dandelion++, for Waku Relay. It mitigates mass deanonymization in the multi-node (botnet) attacker model, even when the number of malicious nodes is linear in the number of total nodes in the network.
+Based on the insight that symmetric message propagation makes deanonymization easier, it introduces a probability for nodes to simply forward the message to one select relay node instead of disseminating messages as per usual relay operation.</description>
+    </item>
+    
+    <item>
+      <title>45/WAKU2-ADVERSARIAL-MODELS</title>
+      <link>https://rfc.vac.dev/spec/45/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/45/</guid>
+      <description>Abstract #  This document lists adversarial models and attack-based threats relevant in the context of Waku v2.
+Motivation and Background #  Future versions of this document will serve as a comprehensive list of adversarial models and attack based threats relevant for Waku v2. The main purpose of this document is being a linkable resource for specifications that address protection as well as mitigation mechanisms within the listed models.</description>
+    </item>
+    
+    <item>
+      <title>5/WAKU0</title>
+      <link>https://rfc.vac.dev/spec/5/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/5/</guid>
+      <description>This specification describes the format of Waku messages within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic messages (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
+Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices.</description>
+    </item>
+    
+    <item>
+      <title>6/WAKU1</title>
+      <link>https://rfc.vac.dev/spec/6/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/6/</guid>
+      <description>This specification describes the format of Waku packets within the ÐΞVp2p Wire Protocol. This spec substitutes EIP-627. Waku is a fork of the original Whisper protocol that enables better usability for resource restricted devices, such as mostly-offline bandwidth-constrained smartphones. It does this through (a) light node support, (b) historic envelopes (with a mailserver) (c) expressing topic interest for better bandwidth usage and (d) basic rate limiting.
+Motivation #  Waku was created to incrementally improve in areas that Whisper is lacking in, with special attention to resource restricted devices.</description>
+    </item>
+    
+    <item>
+      <title>7/WAKU-DATA</title>
+      <link>https://rfc.vac.dev/spec/7/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/7/</guid>
+      <description>This specification describes the encryption, decryption and signing of the content in the data field used in Waku.
+Specification #  The data field is used within the waku envelope, the field MUST contain the encrypted payload of the envelope.
+The fields that are concatenated and encrypted as part of the data field are:
+ flags auxiliary field payload padding signature  In case of symmetric encryption, a salt (a.k.a. AES Nonce, 12 bytes) field MUST be appended.</description>
+    </item>
+    
+    <item>
+      <title>8/WAKU-MAIL</title>
+      <link>https://rfc.vac.dev/spec/8/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/8/</guid>
+      <description>Abstract #  In this specification, we describe Mailservers. These are nodes responsible for archiving envelopes and delivering them to peers on-demand.
+Specification #  A node which wants to provide mailserver functionality MUST store envelopes from incoming Messages packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
+A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.</description>
+    </item>
+    
+    <item>
+      <title>9/WAKU-RPC</title>
+      <link>https://rfc.vac.dev/spec/9/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/9/</guid>
+      <description>This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily be able to connect to any node implementation. The API described is privileged as a node stores the keys of clients.
+Introduction #  This API is based off the Whisper V6 RPC API.
+Wire Protocol #  Transport #  Nodes SHOULD expose a JSON RPC API that can be accessed.</description>
+    </item>
+    
+    <item>
+      <title>XX/(WAKU2|LOGOS|CODEX|*)-TEMPLATE</title>
+      <link>https://rfc.vac.dev/spec/xx/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/xx/</guid>
+      <description>(Info, remove this section) #  This section contains meta info about writing RFCs. This section (including its subsections) MUST be removed.
+COSS explains the Vac RFC process.
+Tags #  The tags metadata SHOULD contain a list of tags if applicable.
+Currently identified tags comprise
+ waku/core-protocol for Waku protocol definitions (e.g. store, relay, light push), waku/application for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),  Abstract #  Background / Rationale / Motivation #  This section serves as an introduction providing background information and a motivation/rationale for why the specified protocol is useful.</description>
+    </item>
+    
+  </channel>
+</rss>

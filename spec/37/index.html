@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
+This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
+Preliminaries #  We assume that two users, e.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="37/WAKU2-NOISE-SESSIONS" />
+<meta property="og:description" content="Introduction #  In 35/WAKU2-NOISE we defined how Waku messages&#39; payloads can be encrypted using key material derived from key agreements based on the Noise Protocol Framework.
+Once two users complete a Noise handshake, an encryption/decryption session - or a Noise session - would be instantiated.
+This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.
+Preliminaries #  We assume that two users, e." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/37/" /><meta property="article:section" content="docs" />
+
+
+
+<title>37/WAKU2-NOISE-SESSIONS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/"class=active>37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>37/WAKU2-NOISE-SESSIONS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-n11m-session-management-mechanism">The $N11M$ session management mechanism</a></li>
+    <li><a href="#the-nm-session-management-mechanism">The $NM$ session management mechanism</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="37waku2-noise-sessions">37/WAKU2-NOISE-SESSIONS</h1>
+
+  
+      <h1 id="session-management-for-waku-noise">Session Management for Waku Noise</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Giuseppe <a href="mailto:giuseppe@status.im">giuseppe@status.im</a></li>
+      
+  </ul><h1 id="introduction">
+  Introduction
+  <a class="anchor" href="#introduction">#</a>
+</h1>
+<p>In <a href="https://rfc.vac.dev/35/">35/WAKU2-NOISE</a> we defined how Waku messages' payloads can be encrypted using key material derived from key agreements based on the <a href="http://www.noiseprotocol.org/noise.html">Noise Protocol Framework</a>.</p>
+<p>Once two users complete a Noise handshake,
+an encryption/decryption session - <em>or a Noise session</em> - would be instantiated.</p>
+<p>This post provides an overview on how we can possibly implement and manage one or multiple Noise sessions in Waku.</p>
+<h1 id="preliminaries">
+  Preliminaries
+  <a class="anchor" href="#preliminaries">#</a>
+</h1>
+<p>We assume that two users, e.g. Alice and Bob, successfully completed a Noise handshake.</p>
+<p>Using <a href="%28http://www.noiseprotocol.org/noise.html%29">Noise terminology</a>, at the end of the handshake they will share:</p>
+<ul>
+<li>two <em>Cipher States</em> <code>CSOutbound</code> and <code>CSInbound</code>, to encrypt and decrypt outbound and inbound messages, respectively;</li>
+<li>a handshake hash value <code>h</code>.</li>
+</ul>
+<p>As suggested in Noise specifications in regards to <a href="http://www.noiseprotocol.org/noise.html#channel-binding">Channel Binding</a>,
+we can identify a Noise session with a <code>session-id</code> derived from the handshake hash value <code>h</code> shared on completion of a Noise handshake.</p>
+<p>More specifically, when Alice and Bob call <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object">Split()</a> in order to derive the two final encryption and decryption Cipher States,
+they further compute <code>session-id  = HKDF(h)</code> using the supported key derivation function <code>HKDF</code>.</p>
+<p>Such <code>session-id</code> will uniquely identify the Noise cryptographic session instantiated on completion of a Noise handshake,
+which would then consist of the tuple <code>(session-id, CSOutbound, CSInbound)</code>.
+For each instantiated Noise session we assume this tuple to be properly persisted,
+since it is required to either retrieve and encrypt/decrypt any further exchanged message.</p>
+<p>Once a Noise session is instantiated,
+any further encrypted message between Alice and Bob within this session is exchanged on a <code>contentTopic</code> with name <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>,
+where <code>ct-id = Hash(Hash(session-id))</code>
+and <code>/{application-name}/{application-version}/</code> identifies the application currently employing <a href="https://rfc.vac.dev/35/">35/WAKU2-NOISE</a>.</p>
+<h1 id="session-states">
+  Session states
+  <a class="anchor" href="#session-states">#</a>
+</h1>
+<p>A Noise session corresponding to a certain <code>session-id</code>:</p>
+<ul>
+<li>is always <strong>active</strong> as long as it is not marked as <strong>stale</strong>.
+For an active <code>session-id</code>, new messages are published on the content topic <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>;</li>
+<li>is marked as <strong>stale</strong> if a <a href="https://rfc.vac.dev/spec/35/#session-termination-message">session termination message</a> containing <code>Hash(session-id)</code> is published on the content topic <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>.
+Session information relative to stale sessions  MAY be deleted from users' device, unless required for later channel binding purposes.</li>
+</ul>
+<p>When a Noise session is marked as stale, it means that one party requested its termination while being online,
+since publication of a hash pre-image for <code>ct-id</code> is required (i.e. <code>Hash(session-id)</code>).</p>
+<p>Currently, it is not possible to mark a Noise session as stale when <code>session-id</code> is lost or gets corrupted in users' devices.
+However, since <code>session-id</code> is shared between Alice and Bob,
+one party MAY decide to mark a Noise session as stale if no message from the other end was received within a certain fixed time window.</p>
+<p>The above mechanism allows a Noise session to be marked as stale either privately or publicly,
+depending if <code>Hash(session-id)</code> is sent on <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code> to the other party in encrypted form or not, respectively.</p>
+<p>When a Noise session is publicly marked as stale,
+network peers MAY discard all <a href="https://rfc.vac.dev/spec/13/">stored</a> messages addressed to the content topic <code>/{application-name}/{application-version}/wakunoise/1/sessions/{ct-id}/proto</code>.
+In this the case and in order for parties to retrieve any eventually delayed message,
+peers SHOULD wait a fixed amount of time before discarding stored messages corresponding to a stale Noise session.</p>
+<p>A stale Noise session cannot be directly marked as active
+and parties are required to instantiate a new Noise session if they wish to communicate again.</p>
+<p>However, parties can optionally persist and include the <code>session-id</code> corresponding to a stale Noise session in the <a href="https://noiseprotocol.org/noise.html#prologue">prologue information</a> employed in the Noise handshake they execute to instantiate their new Noise session.
+This effectively emulates a mechanism to <em>&ldquo;re-activate&rdquo;</em> a stale Noise session by binding it to a newly created active Noise session.</p>
+<p>In order to reduce users' metadata leakage, it is desirable (as suggested in <a href="https://rfc.vac.dev/spec/35/#after-handshake">35/WAKU2-NOISE</a>) that content topics used for communications change every time a new message is exchanged.
+This can be easily realized by employing a key derivation function to compute a new <code>session-id</code> from the previously employed one (e.g. <code>session-id = HKDF(prev-session-id)</code>),
+while keeping the Inbound/outbound Cipher States, the content topic derivation mechanism and the stale mechanism the same as above.
+In this case, when one party sends <strong>and</strong> receives at least one message,
+he SHALL publicly mark as stale all Noise sessions relative to messages exchanged before the earlier of these two send/receive events.</p>
+<h1 id="multi-device-support">
+  Multi-Device support
+  <a class="anchor" href="#multi-device-support">#</a>
+</h1>
+<p>Alice and Bob might possess one or more devices (e.g. laptops, smartphones, etc.) they wish to use to communicate.
+In the following, we assume Alice and Bob to possess $N$ and $M$ devices, respectively.</p>
+<p>Since a Noise session contains cryptographic material required to encrypt and decrypt messages exchanged on a pre-defined content topic derived from a <code>session-id</code>,
+messages should be encrypted and decrypted within the Noise session instantiated between the currently-in-use sender&rsquo;s and receiver&rsquo;s device.</p>
+<p>This is achieved through two main supported session management mechanisms that we called <code>N11M</code> and <code>NM</code>, respectively.</p>
+<h2 id="the-n11m-session-management-mechanism">
+  The $N11M$ session management mechanism
+  <a class="anchor" href="#the-n11m-session-management-mechanism">#</a>
+</h2>
+<p>In a $N11M$ setting, each party&rsquo;s device shares the same Noise session information used to encrypt and decrypt messages exchanged with the other party.</p>
+<p><img src="../../../../rfcs/37/N11M.png" alt="" /></p>
+<p>More precisely, once the first Noise session between any of Alice&rsquo;s and Bob&rsquo;s device is instantiated,
+its session information is securely propagated to all other devices,
+which then become able to send and receive new messages on the content topic associated to such session.
+We note, however, that two devices belonging to one party cannot simultaneously send different messages to the other, since only the first message received will be correctly decrypted using the next nonce.</p>
+<p>The most updated session information between Alice and Bob is propagated in encrypted form to other devices,
+using previously instantiated Noise sessions.
+In particular, all Alice&rsquo;s (resp., Bob&rsquo;s) devices that want to receive such updated session information, are required to have an already instantiated Noise session between them in order to receive it in encrypted form.
+The propagated session information corresponds to the latest session information stored on the device currently communicating with (any of the devices of) the other party.</p>
+<p>We note that sessions information is propagated only among devices belonging to the same party and not with other party&rsquo;s devices.
+Hence, Alice has no knowledge on the number of devices Bob is using and vice versa.</p>
+<p>When any device marks a Noise session between Alice and Bob as stale,
+all other (updated) devices will consider such session as stale
+without publishing the <code>Hash(session-id)</code> on the corresponding session content topic.</p>
+<p>In case a Noise session between two devices belonging to the same party is marked as stale,
+such two devices stop to reciprocally propagate any information regarding Noise sessions instantiated with other parties.</p>
+<p>As regards security, an attacker that compromises an encrypted message propagating session information,
+might be able to compromise one or multiple messages exchanged within the session such information refers to.
+This can be mitigated by adopting techniques similar to the the ones proposed in <a href="https://rfc.vac.dev/spec/35/#after-handshake">35/WAKU2-NOISE</a>,
+where encryption keys are changed every time a new message is exchanged.</p>
+<p>This session management mechanism is loosely based on the paper <a href="https://eprint.iacr.org/2019/1363.pdf">&ldquo;Multi-Device for Signal&rdquo;</a>.</p>
+<h2 id="the-nm-session-management-mechanism">
+  The $NM$ session management mechanism
+  <a class="anchor" href="#the-nm-session-management-mechanism">#</a>
+</h2>
+<p>In a $NM$ setting, we require all of $N$ Alice&rsquo;s devices to have an active Noise session with each of Bob&rsquo;s $M$ devices,
+for a total of $NM$ concurrently active Noise sessions between Alice and Bob.</p>
+<p><img src="../../../../rfcs/37/NM.png" alt="" /></p>
+<p>A message is sent from the currently-in-use sender&rsquo;s device to all recipent&rsquo;s devices,
+by properly encrypting and sending it to the content topics of each corresponding active Noise session.</p>
+<p>We note that this allows the recipient to receive a message on all his devices simultaneously.
+However, on the sender side, only the device which effectively sent the message will know its full content.</p>
+<p>If it is required for sent messages to be available on all sender&rsquo;s devices,
+each pair of sender&rsquo;s devices SHOULD have an active Noise session used for syncing purposes:
+this sums up to a total of $N-1$ and $M-1$ extra Noise sessions instantiated on each Alice&rsquo;s and Bob&rsquo;s device, respectively.</p>
+<p>Thus, if Alice wants to send a message to Bob from one of her $N$ devices,
+she encrypts and sends her message to each of Bob&rsquo;s $M$ devices
+(and, eventually, to each of her other $N-1$ devices),
+using the appropriate Noise session information.</p>
+<p>If one device marks a Noise session as stale,
+all active sessions instantiated with such device SHOULD be marked as stale as soon as possible.
+If the device declaring a stale session does not send a session termination message to all the other party&rsquo;s devices with which has an active session,
+the other party SHOULD send a termination message to mark all such Noise sessions as stale.</p>
+<p>This session management mechanism is loosely based on <a href="https://signal.org/docs/specifications/sesame/">Signal&rsquo;s Sesame Algorithm</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="https://rfc.vac.dev/35/">35/WAKU2-NOISE</a></li>
+<li><a href="http://www.noiseprotocol.org/noise.html">The Noise Protocol Framework</a></li>
+<li><a href="https://signal.org/docs/specifications/sesame/">The Sesame Algorithm: Session Management for Asynchronous Message Encryption</a></li>
+<li><a href="https://eprint.iacr.org/2019/1363.pdf">&ldquo;Multi-Device for Signal&rdquo;</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-n11m-session-management-mechanism">The $N11M$ session management mechanism</a></li>
+    <li><a href="#the-nm-session-management-mechanism">The $NM$ session management mechanism</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

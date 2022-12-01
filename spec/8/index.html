@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  In this specification, we describe Mailservers. These are nodes responsible for archiving envelopes and delivering them to peers on-demand.
+Specification #  A node which wants to provide mailserver functionality MUST store envelopes from incoming Messages packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
+A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="8/WAKU-MAIL" />
+<meta property="og:description" content="Abstract #  In this specification, we describe Mailservers. These are nodes responsible for archiving envelopes and delivering them to peers on-demand.
+Specification #  A node which wants to provide mailserver functionality MUST store envelopes from incoming Messages packets (Waku packet-code 0x01). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.
+A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/8/" /><meta property="article:section" content="docs" />
+
+
+
+<title>8/WAKU-MAIL | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/"class=active>8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>8/WAKU-MAIL</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#requesting-historic-envelopes">Requesting Historic Envelopes</a></li>
+        <li><a href="#receiving-historic-envelopes">Receiving Historic Envelopes</a></li>
+        <li><a href="#security-considerations">Security considerations</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a>
+      <ul>
+        <li><a href="#difference-between-wms-01-and-wms-02">Difference between wms 0.1 and wms 0.2</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="8waku-mail">8/WAKU-MAIL</h1>
+
+  
+      <h1 id="waku-mailserver">Waku Mailserver</h1>
+
+  
+
+  
+  
+  
+  <img src="https://img.shields.io/badge/status-stable-brightgreen?style=flat-square" />
+  
+  
+  
+
+  <ul>
+      <li>Status: stable</li>
+      <li>Editor: Andrea Maria Piana <a href="mailto:andreap@status.im">andreap@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Adam Babik <a href="mailto:adam@status.im">adam@status.im</a>
+          
+              ,
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+      </li>
+      
+  </ul><h2 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h2>
+<p>In this specification, we describe Mailservers. These are nodes responsible for archiving envelopes and delivering them to peers on-demand.</p>
+<h2 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h2>
+<p>A node which wants to provide mailserver functionality MUST store envelopes from incoming Messages packets (Waku packet-code <code>0x01</code>). The envelopes can be stored in any format, however they MUST be serialized and deserialized to the Waku envelope format.</p>
+<p>A mailserver SHOULD store envelopes for all topics to be generally useful for any peer, however for specific use cases it MAY store envelopes for a subset of topics.</p>
+<h3 id="requesting-historic-envelopes">
+  Requesting Historic Envelopes
+  <a class="anchor" href="#requesting-historic-envelopes">#</a>
+</h3>
+<p>In order to request historic envelopes, a node MUST send a packet P2P Request (<code>0x7e</code>) to a peer providing mailserver functionality. This packet requires one argument which MUST be a Waku envelope.</p>
+<p>In the Waku envelope&rsquo;s payload section, there MUST be RLP-encoded information about the details of the request:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; UNIX time in seconds; oldest requested envelope&#39;s creation time</span>
+<span style="color:#a6e22e">lower</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; UNIX time in seconds; newest requested envelope&#39;s creation time</span>
+<span style="color:#a6e22e">upper</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; array of Waku topics encoded in a bloom filter to filter envelopes</span>
+<span style="color:#a6e22e">bloom</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">64</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; unsigned integer limiting the number of returned envelopes</span>
+<span style="color:#a6e22e">limit</span>  <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; array of a cursor returned from the previous request (optional)</span>
+<span style="color:#a6e22e">cursor</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; List of topics interested in</span>
+<span style="color:#a6e22e">topics</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#f92672">*1000</span><span style="color:#a6e22e">topic</span> <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#75715e">; 4 bytes of arbitrary data</span>
+<span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> <span style="color:#f92672">4</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">payload-without-topic</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">lower</span> <span style="color:#a6e22e">upper</span> <span style="color:#a6e22e">bloom</span> <span style="color:#a6e22e">limit</span> [ <span style="color:#a6e22e">cursor</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">payload-with-topic</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">lower</span> <span style="color:#a6e22e">upper</span> <span style="color:#a6e22e">bloom</span> <span style="color:#a6e22e">limit</span> <span style="color:#a6e22e">cursor</span> [ <span style="color:#a6e22e">topics</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
+
+<span style="color:#a6e22e">payload</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">payload-with-topic</span> | <span style="color:#a6e22e">payload-without-topic</span>
+</code></pre></div><p>The <code>Cursor</code> field SHOULD be filled in if a number of envelopes between <code>Lower</code> and <code>Upper</code> is greater than <code>Limit</code> so that the requester can send another request using the obtained <code>Cursor</code> value. What exactly is in the <code>Cursor</code> is up to the implementation. The requester SHOULD NOT use a <code>Cursor</code> obtained from one mailserver in a request to another mailserver because the format or the result MAY be different.</p>
+<p>The envelope MUST be encrypted with a symmetric key agreed between the requester and Mailserver.</p>
+<p>If <code>Topics</code> is used the <code>Cursor</code> field MUST be specified for the argument order to be unambiguous. However, it MAY be set to <code>null</code>. <code>Topics</code> is used to specify which topics a node is interested in. If <code>Topics</code> is not empty, a mailserver MUST only send envelopes that belong to a topic from <code>Topics</code> list and <code>Bloom</code> value MUST be ignored.</p>
+<h3 id="receiving-historic-envelopes">
+  Receiving Historic Envelopes
+  <a class="anchor" href="#receiving-historic-envelopes">#</a>
+</h3>
+<p>Historic envelopes MUST be sent to a peer as a packet with a P2P Message code (<code>0x7f</code>) followed by an array of Waku envelopes. A Mailserver MUST limit the amount of messages sent, either by the <code>Limit</code> specified in the request or limited to the maximum <a href="./waku#maximum-packet-size">RLPx packet size</a>, whichever limit comes first.</p>
+<p>In order to receive historic envelopes from a mailserver, a node MUST trust the selected mailserver, that is allow to receive expired packets with the P2P Message code. By default, such packets are discarded.</p>
+<p>Received envelopes MUST be passed through the Whisper envelope pipelines so that they are picked up by registered filters and passed to subscribers.</p>
+<p>For a requester, to know that all envelopes have been sent by mailserver, it SHOULD handle P2P Request Complete code (<code>0x7d</code>). This code is followed by a list with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; array with a Keccak-256 hash of the envelope containing the original request.</span>
+<span style="color:#a6e22e">request-id</span> <span style="color:#f92672">=</span> <span style="color:#f92672">32</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; array with a Keccak-256 hash of the last sent envelope for the request. </span>
+<span style="color:#a6e22e">last-envelope-hash</span> <span style="color:#f92672">=</span> <span style="color:#f92672">32</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; array of a cursor returned from the previous request (optional)</span>
+<span style="color:#a6e22e">cursor</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#a6e22e">payload</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">&#34;[&#34;</span> <span style="color:#a6e22e">request-id</span> <span style="color:#a6e22e">last-envelope-hash</span> [ <span style="color:#a6e22e">cursor</span> ] <span style="color:#ae81ff">&#34;]&#34;</span>
+</code></pre></div><p>If <code>Cursor</code> is not empty, it means that not all envelopes were sent due to the set <code>Limit</code> in the request. One or more consecutive requests MAY be sent with <code>Cursor</code> field filled in in order to receive the rest of the envelopes.</p>
+<h3 id="security-considerations">
+  Security considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h3>
+<p>There are several security considerations to take into account when running or interacting with Mailservers. Chief among them are: scalability, DDoS-resistance and privacy.</p>
+<p><strong>Mailserver High Availability requirement:</strong></p>
+<p>A mailserver has to be online to receive envelopes for other nodes, this puts a high availability requirement on it.</p>
+<p><strong>Mailserver client privacy:</strong></p>
+<p>A mailserver client fetches archival envelopes from a mailserver through a direct connection.
+In this direct connection, the client discloses its IP/ID as well as the topics/ bloom filter it is interested in to the mailserver.
+The collection of such information allows the mailserver to link clients' IP/IDs to their topic interests and build a profile for each client over time.
+As such, the mailserver client has to trust the mailserver with this level of information.
+A similar concern exists for the light nodes and their direct peers which is discussed in the security considerations of <a href="/spec/7">6/WAKU1</a>.</p>
+<p><strong>Mailserver trusted connection:</strong></p>
+<p>A mailserver has a direct TCP connection, which means they are trusted to send traffic. This means a malicious or malfunctioning mailserver can overwhelm an individual node.</p>
+<h2 id="changelog">
+  Changelog
+  <a class="anchor" href="#changelog">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Version</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">1.0.0</a></td>
+<td>marked stable as it is in use.</td>
+</tr>
+<tr>
+<td style="text-align:center">0.2.0</td>
+<td>Add topic interest to reduce bandwidth usage</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="https://github.com/vacp2p/specs/blob/06d4c736c920526472a507e5d842212843a112ed/wms.md">0.1.0</a></td>
+<td>Initial Release</td>
+</tr>
+</tbody>
+</table>
+<h3 id="difference-between-wms-01-and-wms-02">
+  Difference between wms 0.1 and wms 0.2
+  <a class="anchor" href="#difference-between-wms-01-and-wms-02">#</a>
+</h3>
+<ul>
+<li><code>topics</code> option</li>
+</ul>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#requesting-historic-envelopes">Requesting Historic Envelopes</a></li>
+        <li><a href="#receiving-historic-envelopes">Receiving Historic Envelopes</a></li>
+        <li><a href="#security-considerations">Security considerations</a></li>
+      </ul>
+    </li>
+    <li><a href="#changelog">Changelog</a>
+      <ul>
+        <li><a href="#difference-between-wms-01-and-wms-02">Difference between wms 0.1 and wms 0.2</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

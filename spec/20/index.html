@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Content Topics:
+ Public Key Broadcast: /eth-pm/1/public-key/proto, Private Message: /eth-pm/1/private-message/proto.  This specification explains the Toy Ethereum Private Message protocol which enables a peer to send an encrypted message to another peer using the Waku v2 network, and the peer&rsquo;s Ethereum address.
+The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes, using Ethereum accounts for identity. This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="20/TOY-ETH-PM" />
+<meta property="og:description" content="Content Topics:
+ Public Key Broadcast: /eth-pm/1/public-key/proto, Private Message: /eth-pm/1/private-message/proto.  This specification explains the Toy Ethereum Private Message protocol which enables a peer to send an encrypted message to another peer using the Waku v2 network, and the peer&rsquo;s Ethereum address.
+The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes, using Ethereum accounts for identity. This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/20/" /><meta property="article:section" content="docs" />
+
+
+
+<title>20/TOY-ETH-PM | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/"class=active>20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>20/TOY-ETH-PM</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#limitations">Limitations</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#generate-encryption-keypair">Generate Encryption KeyPair</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sign-encryption-public-key">Sign Encryption Public Key</a></li>
+    <li><a href="#public-key-message">Public Key Message</a></li>
+    <li><a href="#consideration-for-a-non-interactiveuncoordinated-protocol">Consideration for a non-interactive/uncoordinated protocol</a>
+      <ul>
+        <li><a href="#retrieve-the-public-key-from-the-blockchain">Retrieve the public key from the blockchain</a></li>
+        <li><a href="#publishing-the-public-in-long-term-storage">Publishing the public in long term storage</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="20toy-eth-pm">20/TOY-ETH-PM</h1>
+
+  
+      <h1 id="toy-ethereum-private-message">Toy Ethereum Private Message</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Franck Royer <a href="mailto:franck@status.im">franck@status.im</a></li>
+      
+  </ul><p><strong>Content Topics</strong>:</p>
+<ul>
+<li>Public Key Broadcast: <code>/eth-pm/1/public-key/proto</code>,</li>
+<li>Private Message: <code>/eth-pm/1/private-message/proto</code>.</li>
+</ul>
+<p>This specification explains the Toy Ethereum Private Message protocol
+which enables a peer to send an encrypted message to another peer
+using the Waku v2 network, and the peer&rsquo;s Ethereum address.</p>
+<p>The main purpose of this specification is to demonstrate how Waku v2 can be used for encrypted messaging purposes,
+using Ethereum accounts for identity.
+This protocol caters for Web3 wallets restrictions, allowing it to be implemented only using standard Web3 API.
+In the current state, the protocol has privacy and features <a href="#limitations">limitations</a>, has not been audited
+and hence is not fit for production usage.
+We hope this can be an inspiration for developers wishing to build on top of Waku v2.</p>
+<h1 id="goal">
+  Goal
+  <a class="anchor" href="#goal">#</a>
+</h1>
+<p>Alice wants to send an encrypted message to Bob, where only Bob can decrypt the message.
+Alice only knows Bob&rsquo;s Ethereum Address.</p>
+<h1 id="variables">
+  Variables
+  <a class="anchor" href="#variables">#</a>
+</h1>
+<p>Here are the variables used in the protocol and their definition:</p>
+<ul>
+<li><code>B</code> is Bob&rsquo;s Ethereum address (or account),</li>
+<li><code>b</code> is the private key of <code>B</code>, and is only known by Bob.</li>
+<li><code>B'</code> is Bob&rsquo;s Encryption Public Key, for which <code>b'</code> is the private key.</li>
+<li><code>M</code> is the private message that Alice sends to Bob.</li>
+</ul>
+<h1 id="design-requirements">
+  Design Requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h1>
+<p>The proposed protocol MUST adhere to the following design requirements:</p>
+<ol>
+<li>Alice knows Bob&rsquo;s Ethereum address,</li>
+<li>Bob is willing to participate to Eth-PM, and publishes <code>B'</code>,</li>
+<li>Bob&rsquo;s ownership of <code>B'</code> MUST be verifiable,</li>
+<li>Alice wants to send message <code>M</code> to Bob,</li>
+<li>Bob SHOULD be able to get <code>M</code> using <a href="/spec/13">10/WAKU2</a>,</li>
+<li>Participants only have access to their Ethereum Wallet via the Web3 API,</li>
+<li>Carole MUST NOT be able to read <code>M</code>&rsquo;s content even if she is storing it or relaying it,</li>
+<li><a href="/spec/26/">Waku Message Version 1</a> Asymmetric Encryption is used for encryption purposes.</li>
+</ol>
+<h2 id="limitations">
+  Limitations
+  <a class="anchor" href="#limitations">#</a>
+</h2>
+<p>Alice&rsquo;s details are not included in the message&rsquo;s structure,
+meaning that there is no programmatic way for Bob to reply to Alice
+or verify her identity.</p>
+<p>Private messages are sent on the same content topic for all users.
+As the recipient data is encrypted, all participants must decrypt all messages which can lead to scalability issues.</p>
+<p>This protocol does not guarantee Perfect Forward Secrecy nor Future Secrecy:
+If Bob&rsquo;s private key is compromised, past and future messages could be decrypted.
+A solution combining regular <a href="https://www.signal.org/docs/specifications/x3dh/">X3DH</a>
+bundle broadcast with <a href="https://signal.org/docs/specifications/doubleratchet/">Double Ratchet</a> encryption would remove these limitations;
+See the <a href="https://specs.status.im/spec/5">Status secure transport spec</a> for an example of a protocol that achieves this in a peer-to-peer setting.</p>
+<p>Bob MUST decide to participate in the protocol before Alice can send him a message.
+This is discussed in more in details in <a href="#consideration-for-a-non-interactiveuncoordinated-protocol">Consideration for a non-interactive/uncoordinated protocol</a></p>
+<h1 id="the-protocol">
+  The protocol
+  <a class="anchor" href="#the-protocol">#</a>
+</h1>
+<h2 id="generate-encryption-keypair">
+  Generate Encryption KeyPair
+  <a class="anchor" href="#generate-encryption-keypair">#</a>
+</h2>
+<p>First, Bob needs to generate a keypair for Encryption purposes.</p>
+<p>Bob SHOULD get 32 bytes from a secure random source as Encryption Private Key, <code>b'</code>.
+Then Bob can compute the corresponding SECP-256k1 Public Key, <code>B'</code>.</p>
+<h1 id="broadcast-encryption-public-key">
+  Broadcast Encryption Public Key
+  <a class="anchor" href="#broadcast-encryption-public-key">#</a>
+</h1>
+<p>For Alice to encrypt messages for Bob,
+Bob SHOULD broadcast his Encryption Public Key <code>B'</code>.
+To prove that the Encryption Public Key <code>B'</code> is indeed owned by the owner of Bob&rsquo;s Ethereum Account <code>B</code>,
+Bob MUST sign <code>B'</code> using <code>B</code>.</p>
+<h2 id="sign-encryption-public-key">
+  Sign Encryption Public Key
+  <a class="anchor" href="#sign-encryption-public-key">#</a>
+</h2>
+<p>To prove ownership of the Encryption Public Key,
+Bob must sign it using <a href="https://eips.ethereum.org/EIPS/eip-712">EIP-712</a> v3,
+meaning calling <code>eth_signTypedData_v3</code> on his Wallet&rsquo;s API.</p>
+<p>Note: While v4 also exists,
+it is not available on all wallets and the features brought by v4 is not needed for the current use case.</p>
+<p>The <code>TypedData</code> to be passed to <code>eth_signTypedData_v3</code> MUST be as follows, where:</p>
+<ul>
+<li><code>encryptionPublicKey</code> is Bob&rsquo;s Encryption Public Key, <code>B'</code>, in hex format, <strong>without</strong> <code>0x</code> prefix.</li>
+<li><code>bobAddress</code> is Bob&rsquo;s Ethereum address, corresponding to <code>B</code>, in hex format, <strong>with</strong> <code>0x</code> prefix.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-js" data-lang="js"><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">typedData</span> <span style="color:#f92672">=</span> {
+    <span style="color:#a6e22e">domain</span><span style="color:#f92672">:</span> {
+      <span style="color:#a6e22e">chainId</span><span style="color:#f92672">:</span> <span style="color:#ae81ff">1</span>,
+      <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;Ethereum Private Message over Waku&#39;</span>,
+      <span style="color:#a6e22e">version</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;1&#39;</span>,
+    },
+    <span style="color:#a6e22e">message</span><span style="color:#f92672">:</span> {
+      <span style="color:#a6e22e">encryptionPublicKey</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">encryptionPublicKey</span>,
+      <span style="color:#a6e22e">ownerAddress</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">bobAddress</span>,
+    },
+    <span style="color:#a6e22e">primaryType</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;PublishEncryptionPublicKey&#39;</span>,
+    <span style="color:#a6e22e">types</span><span style="color:#f92672">:</span> {
+      <span style="color:#a6e22e">EIP712Domain</span><span style="color:#f92672">:</span> [
+        { <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;name&#39;</span>, <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;string&#39;</span> },
+        { <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;version&#39;</span>, <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;string&#39;</span> },
+        { <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;chainId&#39;</span>, <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;uint256&#39;</span> },
+      ],
+      <span style="color:#a6e22e">PublishEncryptionPublicKey</span><span style="color:#f92672">:</span> [
+        { <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;encryptionPublicKey&#39;</span>, <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;string&#39;</span> },
+        { <span style="color:#a6e22e">name</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;ownerAddress&#39;</span>, <span style="color:#a6e22e">type</span><span style="color:#f92672">:</span> <span style="color:#e6db74">&#39;string&#39;</span> },
+      ],
+    },
+  }
+</code></pre></div><h2 id="public-key-message">
+  Public Key Message
+  <a class="anchor" href="#public-key-message">#</a>
+</h2>
+<p>The resulting signature is then included in a <code>PublicKeyMessage</code>, where</p>
+<ul>
+<li><code>encryption_public_key</code> is Bob&rsquo;s Encryption Public Key <code>B'</code>, not compressed,</li>
+<li><code>eth_address</code> is Bob&rsquo;s Ethereum Address <code>B</code>,</li>
+<li><code>signature</code> is the EIP-712 as described above.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PublicKeyMessage</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>   <span style="color:#66d9ef">bytes</span> encryption_public_key <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>   <span style="color:#66d9ef">bytes</span> eth_address <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>   <span style="color:#66d9ef">bytes</span> signature <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>This MUST be wrapped in a Waku Message version 0, with the Public Key Broadcast content topic.
+Finally, Bob SHOULD publish the message on Waku v2.</p>
+<h2 id="consideration-for-a-non-interactiveuncoordinated-protocol">
+  Consideration for a non-interactive/uncoordinated protocol
+  <a class="anchor" href="#consideration-for-a-non-interactiveuncoordinated-protocol">#</a>
+</h2>
+<p>Alice has to get Bob&rsquo;s public Key to send a message to Bob.
+Because an Ethereum Address is part of the hash of the public key&rsquo;s account,
+it is not enough in itself to deduce Bob&rsquo;s Public Key.</p>
+<p>This is why the protocol dictates that Bob MUST send his Public Key first,
+and Alice MUST receive it before she can send him a message.</p>
+<p>Moreover, nim-waku, the reference implementation of <a href="/spec/13/">13/WAKU2-STORE</a>,
+stores messages for a maximum period of 30 days.
+This means that Bob would need to broadcast his public key at least every 30 days to be reachable.</p>
+<p>Below we are reviewing possible solutions to mitigate this &ldquo;sign up&rdquo; step.</p>
+<h3 id="retrieve-the-public-key-from-the-blockchain">
+  Retrieve the public key from the blockchain
+  <a class="anchor" href="#retrieve-the-public-key-from-the-blockchain">#</a>
+</h3>
+<p>If Bob has signed at least one transaction with his account then his Public Key can be extracted from the transaction&rsquo;s ECDSA signature.
+The challenge with this method is that standard Web3 Wallet API does not allow Alice to specifically retrieve all/any transaction sent by Bob.</p>
+<p>Alice would instead need to use the <code>eth.getBlock</code> API to retrieve Ethereum blocks one by one.
+For each block, she would need to check the <code>from</code> value of each transaction until she finds a transaction sent by Bob.</p>
+<p>This process is resource intensive and can be slow when using services such as Infura due to rate limits in place,
+which makes it inappropriate for a browser or mobile phone environment.</p>
+<p>An alternative would be to either run a backend that can connect directly to an Ethereum node,
+use a centralized blockchain explorer
+or use a decentralized indexing service such as <a href="https://thegraph.com/">The Graph</a>.</p>
+<p>Note that these would resolve a UX issue only if a sender wants to proceed with <em>air drops</em>.</p>
+<p>Indeed, if Bob does not publish his Public Key in the first place
+then it can be an indication that he simply does not participate in this protocol and hence will not receive messages.</p>
+<p>However, these solutions would be helpful if the sender wants to proceed with an <em>air drop</em> of messages:
+Send messages over Waku for users to retrieve later, once they decide to participate in this protocol.
+Bob may not want to participate first but may decide to participate at a later stage
+and would like to access previous messages.
+This could make sense in an NFT offer scenario:
+Users send offers to any NFT owner,
+NFT owner may decide at some point to participate in the protocol and retrieve previous offers.</p>
+<h3 id="publishing-the-public-in-long-term-storage">
+  Publishing the public in long term storage
+  <a class="anchor" href="#publishing-the-public-in-long-term-storage">#</a>
+</h3>
+<p>Another improvement would be for Bob not having to re-publish his public key every 30 days or less.
+Similarly to above, if Bob stops publishing his public key then it may be an indication that he does not participate in the protocol anymore.</p>
+<p>In any case, the protocol could be modified to store the Public Key in a more permanent storage, such as a dedicated smart contract on the blockchain.</p>
+<h1 id="send-private-message">
+  Send Private Message
+  <a class="anchor" href="#send-private-message">#</a>
+</h1>
+<p>Alice MAY monitor the Waku v2 to collect Ethereum Address and Encryption Public Key tuples.
+Alice SHOULD verify that the <code>signature</code>s of <code>PublicKeyMessage</code>s she receives are valid as per EIP-712.
+She SHOULD drop any message without a signature or with an invalid signature.</p>
+<p>Using Bob&rsquo;s Encryption Public Key, retrieved via <a href="/spec/13">10/WAKU2</a>, Alice MAY now send an encrypted message to Bob.</p>
+<p>If she wishes to do so, Alice MUST encrypt her message <code>M</code> using Bob&rsquo;s Encryption Public Key <code>B'</code>,
+as per <a href="/spec/26/#asymmetric">26/WAKU-PAYLOAD Asymmetric Encryption specs</a>.</p>
+<p>Alice SHOULD now publish this message on the Private Message content topic.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#limitations">Limitations</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#generate-encryption-keypair">Generate Encryption KeyPair</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#sign-encryption-public-key">Sign Encryption Public Key</a></li>
+    <li><a href="#public-key-message">Public Key Message</a></li>
+    <li><a href="#consideration-for-a-non-interactiveuncoordinated-protocol">Consideration for a non-interactive/uncoordinated protocol</a>
+      <ul>
+        <li><a href="#retrieve-the-public-key-from-the-blockchain">Retrieve the public key from the blockchain</a></li>
+        <li><a href="#publishing-the-public-in-long-term-storage">Publishing the public in long term storage</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

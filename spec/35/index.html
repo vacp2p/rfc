@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This specification describes how payloads of Waku messages with version 2 can be encrypted in order to achieve confidentiality, authenticity, and integrity as well as some form of identity-hiding on communicating parties.
+This specification extends the functionalities provided by 26/WAKU-PAYLOAD, adding support to modern symmetric encryption primitives and asymmetric key-exchange protocols.
+Specifically, it adds support to the ChaChaPoly cipher for symmetric authenticated encryption. It further describes how the Noise Protocol Framework can be used to exchange cryptographic keys and encrypt/decrypt messages in a way that the latter are authenticated and protected by strong forward secrecy.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="35/WAKU2-NOISE" />
+<meta property="og:description" content="This specification describes how payloads of Waku messages with version 2 can be encrypted in order to achieve confidentiality, authenticity, and integrity as well as some form of identity-hiding on communicating parties.
+This specification extends the functionalities provided by 26/WAKU-PAYLOAD, adding support to modern symmetric encryption primitives and asymmetric key-exchange protocols.
+Specifically, it adds support to the ChaChaPoly cipher for symmetric authenticated encryption. It further describes how the Noise Protocol Framework can be used to exchange cryptographic keys and encrypt/decrypt messages in a way that the latter are authenticated and protected by strong forward secrecy." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/35/" /><meta property="article:section" content="docs" />
+
+
+
+<title>35/WAKU2-NOISE | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/"class=active>35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>35/WAKU2-NOISE</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+      <ul>
+        <li><a href="#noise-protocols">Noise Protocols</a></li>
+        <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+      </ul>
+    </li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#abnf">ABNF</a></li>
+        <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
+        <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
+        <li><a href="#padding">Padding</a></li>
+      </ul>
+    </li>
+    <li><a href="#after-handshake">After-handshake</a></li>
+    <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
+    <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
+      <ul>
+        <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
+        <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
+        <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="35waku2-noise">35/WAKU2-NOISE</h1>
+
+  
+      <h1 id="noise-protocols-for-waku-payload-encryption">Noise Protocols for Waku Payload Encryption</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Giuseppe <a href="mailto:giuseppe@status.im">giuseppe@status.im</a></li>
+      
+  </ul><p>This specification describes how payloads of <a href="spec/14/">Waku messages</a> with <a href="/spec/14/#version2">version 2</a> can be encrypted
+in order to achieve confidentiality, authenticity, and integrity
+as well as some form of identity-hiding on communicating parties.</p>
+<p>This specification extends the functionalities provided by <a href="/spec/26">26/WAKU-PAYLOAD</a>,
+adding support to modern symmetric encryption primitives
+and asymmetric key-exchange protocols.</p>
+<p>Specifically, it adds support to the <a href="https://www.ietf.org/rfc/rfc7539.txt"><code>ChaChaPoly</code></a> cipher for symmetric authenticated encryption.
+It further describes how the <a href="http://www.noiseprotocol.org/noise.html">Noise Protocol Framework</a> can be used to exchange cryptographic keys and encrypt/decrypt messages
+in a way that the latter are authenticated and protected by <em>strong forward secrecy</em>.</p>
+<p>This ultimately allows Waku applications to instantiate end-to-end encrypted communication channels with strong conversational security guarantees,
+as similarly done by <a href="https://specs.status.im/spec/5">5/SECURE-TRANSPORT</a> but in a more modular way,
+adapting key-exchange protocols to the knowledge communicating parties have of each other.</p>
+<h2 id="design-requirements">
+  Design requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h2>
+<ul>
+<li><em>Confidentiality</em>: the adversary should not be able to learn what data is being sent from one Waku endpoint to one or several other Waku endpoints.
+<ul>
+<li><em>Strong forward secrecy</em>: an active adversary cannot decrypt messages nor infer any information on the employed encryption key,
+even in the case he has access to communicating parties' long-term private keys (during or after their communication).</li>
+</ul>
+</li>
+<li><em>Authenticity</em>: the adversary should not be able to cause a Waku endpoint to accept messages coming from an endpoint different than their original senders.</li>
+<li><em>Integrity</em>: the adversary should not be able to cause a Waku endpoint to accept data that has been tampered with.</li>
+<li><em>Identity-hiding</em>: once a secure communication channel is established,
+a passive adversary should not be able to link exchanged encrypted messages to their corresponding sender and recipient.</li>
+</ul>
+<h2 id="supported-cryptographic-protocols">
+  Supported Cryptographic Protocols
+  <a class="anchor" href="#supported-cryptographic-protocols">#</a>
+</h2>
+<h3 id="noise-protocols">
+  Noise Protocols
+  <a class="anchor" href="#noise-protocols">#</a>
+</h3>
+<p>Two parties executing a Noise protocol exchange one or more <a href="http://www.noiseprotocol.org/noise.html#message-format"><em>handshake messages</em></a> and/or <a href="http://www.noiseprotocol.org/noise.html#message-format"><em>transport messages</em></a>.
+A Noise protocol consists of one or more Noise handshakes.
+During a Noise handshake, two parties exchange multiple handshake messages.
+A handshake message contains <em>ephemeral keys</em> and/or <em>static keys</em> from one of the parties
+and an encrypted or unencrypted payload that can be used to transmit optional data.
+These public keys are used to perform a protocol-dependent sequence of Diffie-Hellman operations,
+whose results are all hashed into a shared secret key.
+After a handshake is complete, each party will then use the derived shared secret key to send and receive authenticated encrypted transport messages.
+We refer to <a href="http://www.noiseprotocol.org/noise.html#processing-rules">Noise protocol framework specifications</a> for the full details on how parties shared secret key is derived from each exchanged message.</p>
+<p>Four Noise handshakes are currently supported: <code>K1K1</code>, <code>XK1</code>, <code>XX</code>, <code>XXpsk0</code>. Their description can be found in <a href="#Appendix-Supported-Handshake-Description">Appendix: Supported Handshakes Description</a>.
+These are instantiated combining the following cryptographic primitives:</p>
+<ul>
+<li><a href="http://www.noiseprotocol.org/noise.html#the-25519-dh-functions"><code>Curve25519</code></a> for Diffie-Hellman key-exchanges (32 bytes curve coordinates);</li>
+<li><a href="http://www.noiseprotocol.org/noise.html#the-chachapoly-cipher-functions"><code>ChaChaPoly</code></a> for symmetric authenticated encryption (16 bytes authentication tag);</li>
+<li><a href="http://www.noiseprotocol.org/noise.html#the-sha256-hash-function"><code>SHA256</code></a> hash function used in <a href="http://www.noiseprotocol.org/noise.html#hash-functions"><code>HMAC</code></a> and <a href="http://www.noiseprotocol.org/noise.html#hash-functions"><code>HKDF</code></a> keys derivation chains (32 bytes output size);</li>
+</ul>
+<h4 id="content-topics-and-message-nametags-of-noise-handshake-messages">
+  Content Topics and Message Nametags of Noise Handshake Messages
+  <a class="anchor" href="#content-topics-and-message-nametags-of-noise-handshake-messages">#</a>
+</h4>
+<p>We note that all <a href="#Design-requirements">design requirements</a> on exchanged messages would be satisfied only <em>after</em> a supported Noise handshake is completed,
+corresponding to a total of 1 Round Trip Time communication <em>(1-RTT)</em>.<br>
+In particular, identity-hiding properties can be guaranteed only if the recommendation described in <a href="#After-handshake">After-handshake</a> are implemented.</p>
+<p>In the following, we assume that communicating parties reciprocally know an initial <a href="/spec/14/#wakumessage"><code>contentTopic</code></a>
+where they can send/receive the first handshake message(s).
+We further assume that messages sent over a certain <code>contentTopic</code> can be efficiently identified by their intended recipients
+thanks to an arbitrary 16 bytes long <code>message-nametag</code> field embedded in the message payload
+which is known in advance before messages reception.</p>
+<p>The second handshake message MAY be sent/received with a <code>message-nametag</code> deterministically derived from the handshake state obtained after processing the first handshake message
+(using, for example, <code>HKDF</code> over the handshake hash value <code>h</code>).
+This allows</p>
+<ul>
+<li>the recipient to efficiently continue the handshakes started by each initiator;</li>
+<li>the initiators to efficiently associate the recipient&rsquo;s second handshake message to their first handshake message,
+However, this does not provide any identity-hiding guarantee to the recipient.</li>
+</ul>
+<p>After the second handshake message is correctly received by initiators, the recommendation described in <a href="#After-handshake">After-handshake</a> SHOULD be implemented to provide full identity-hiding guarantees for both initiator and recipient against passive attackers.</p>
+<h3 id="encryption-primitives">
+  Encryption Primitives
+  <a class="anchor" href="#encryption-primitives">#</a>
+</h3>
+<p>The symmetric primitives supported are:</p>
+<ul>
+<li><a href="https://www.ietf.org/rfc/rfc7539.txt"><code>ChaChaPoly</code></a> for authenticated encryption (16 bytes authentication tag).</li>
+</ul>
+<h2 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h2>
+<p>When <a href="/spec/14/#payload-encryption">14/WAKU-MESSAGE version</a> is set to 2,
+the corresponding <code>WakuMessage</code>&rsquo;s <code>payload</code> will encapsulate the two fields <code>handshake-message</code> and <code>transport-message</code>.</p>
+<p>The <code>handshake-message</code> field MAY contain</p>
+<ul>
+<li>a Noise handhshake message (only encrypted/unencrypted public keys).</li>
+</ul>
+<p>The <code>transport-message</code> field MAY contain</p>
+<ul>
+<li>a Noise handshake message payload (encrypted/unencrypted);</li>
+<li>a Noise transport message;</li>
+<li>a <code>ChaChaPoly</code> ciphertext.</li>
+</ul>
+<p>When a <code>transport-message</code> encodes a <code>ChaChaPoly</code> ciphertext, the corresponding <code>handshake-message</code> field MUST be empty.</p>
+<p>The following fields are concatenated to form the <code>payload</code> field:</p>
+<ul>
+<li><code>message-nametag</code>: an arbitrary identifier for the Waku message (16 byte).
+If the underlying encryption primitive supports it, the contents of this field SHOULD be passed as additional data to the encryption and decryption routines.</li>
+<li><code>protocol-id</code>: identifies the protocol or primitive in use (1 byte).
+Supported values are:
+<ul>
+<li><code>0</code>:  protocol specification omitted (set for <a href="#After-handshake">after-handshake</a> messages);</li>
+<li><code>10</code>: Noise protocol <code>Noise_K1K1_25519_ChaChaPoly_SHA256</code>;</li>
+<li><code>11</code>: Noise protocol <code>Noise_XK1_25519_ChaChaPoly_SHA256</code>;</li>
+<li><code>12</code>: Noise protocol <code>Noise_XX_25519_ChaChaPoly_SHA256</code>;</li>
+<li><code>13</code>: Noise protocol <code>Noise_XXpsk0_25519_ChaChaPoly_SHA256</code>;</li>
+<li><code>30</code>: <code>ChaChaPoly</code> symmetric encryption.</li>
+</ul>
+</li>
+<li><code>handshake-message-len</code>: the length in bytes of the Noise handshake message  (1 byte).
+If <code>protocol-id</code> is not equal to <code>0</code>, <code>10</code>, <code>11</code>, <code>12</code>, <code>13</code>, this field MUST be set to <code>0</code>;</li>
+<li><code>handshake-message</code>: the Noise handshake message (<code>handshake-message-len</code> bytes).
+If <code>handshake-message-len</code> is not <code>0</code>,
+it contains the concatenation of one or more Noise Diffie-Hellman ephemeral or static keys
+encoded as in <a href="#Public-Keys-Encoding">Public Keys Encoding</a>;</li>
+<li><code>transport-message-len</code>: the length in bytes of <code>transport-message</code> (8 bytes, stored in Little-Endian);</li>
+<li><code>transport-message</code>: the transport message (<code>transport-message-len</code> bytes);
+Only during a Noise handshake, this field would contain the Noise handshake message payload.
+The symmetric encryption authentication data for <code>transport-message</code>, when present, is appended at the end of <code>transport-message</code> (16 bytes).</li>
+</ul>
+<h3 id="abnf">
+  ABNF
+  <a class="anchor" href="#abnf">#</a>
+</h3>
+<p>Using <a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a> we have the following format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-abnf" data-lang="abnf"><span style="color:#75715e">; message nametag</span>
+<span style="color:#a6e22e">message-nametag</span>             <span style="color:#f92672">=</span> <span style="color:#f92672">16</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; protocol ID</span>
+<span style="color:#a6e22e">protocol-id</span>                 <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; contains the size of handshake-message</span>
+<span style="color:#a6e22e">handshake-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">1</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; contains one or more Diffie-Hellman public keys</span>
+<span style="color:#a6e22e">handshake-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; contains the size of transport-message</span>
+<span style="color:#a6e22e">transport-message-len</span>       <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; contains the transport message, eventually encrypted. </span>
+<span style="color:#75715e">; If encrypted, authentication data is appended</span>
+<span style="color:#a6e22e">transport-message</span>           <span style="color:#f92672">=</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">OCTET</span>
+
+<span style="color:#75715e">; the Waku WakuMessage payload field</span>
+<span style="color:#a6e22e">payload</span>  <span style="color:#f92672">=</span> <span style="color:#a6e22e">message-nametag</span> <span style="color:#a6e22e">protocol-id</span> <span style="color:#a6e22e">handshake-message-len</span> <span style="color:#a6e22e">handshake-message</span> <span style="color:#a6e22e">transport-message-len</span> <span style="color:#a6e22e">transport-message</span>
+</code></pre></div><h3 id="protocol-payload-format">
+  Protocol Payload Format
+  <a class="anchor" href="#protocol-payload-format">#</a>
+</h3>
+<p>Based on the specified <code>protocol-id</code>,
+the Waku message <code>payload</code> field will encode different types of protocol-dependent messages.</p>
+<p>In particular, if <code>protocol-id</code> is</p>
+<ul>
+<li><code>0</code>:  payload encodes an <a href="#After-handshake">after-handshake</a> message.
+<ul>
+<li><code>handshake-message-len</code> MAY be 0;</li>
+<li><code>transport-message</code> contains the Noise transport message;</li>
+</ul>
+</li>
+<li><code>10</code>,<code>11</code>,<code>12</code>,<code>13</code>: payload encodes a supported Noise handshake message.
+<ul>
+<li><code>transport-message</code> contains the Noise transport message;</li>
+</ul>
+</li>
+<li><code>30</code>: payload encapsulate a <code>ChaChaPoly</code> ciphertext <code>ct</code>.
+<ul>
+<li><code>handshake-message-len</code> is set to <code>0</code>;</li>
+<li><code>transport-message</code> contains the concatenation of the encryption nonce (12 bytes) followed by the ciphertext <code>ct</code> and the authentication data for <code>ct</code> (16 bytes);</li>
+<li><code>transport-message-len</code> is set accordingly to <code>transport-message</code> length;</li>
+</ul>
+</li>
+</ul>
+<h3 id="public-keys-serialization">
+  Public Keys Serialization
+  <a class="anchor" href="#public-keys-serialization">#</a>
+</h3>
+<p>Diffie-Hellman public keys can be trasmitted in clear
+or in encrypted form (cf. <a href="http://www.noiseprotocol.org/noise.html#the-handshakestate-object"><code>WriteMessage</code></a>) with authentication data attached.
+To distinguish between these two cases, public keys are serialized as the concatenation of the following three fields:</p>
+<ul>
+<li><code>flag</code>:
+is equal to <code>1</code> if the public key is encrypted;
+<code>0</code> otherwise (1 byte);</li>
+<li><code>pk</code>:
+if <code>flag = 0</code>, it contains an encoding of the X coordinate of the public key.
+If <code>flag = 1</code>, it contains a symmetric encryption of an encoding of the X coordinate of the public key, followed by encryption&rsquo;s authentication data;</li>
+</ul>
+<p>The corresponding serialization is obtained as <code>flag pk</code>.</p>
+<p>As regards the underlying supported <a href="#Cryptographic-primitives">cryptographic primitives</a>:</p>
+<ul>
+<li><code>Curve25519</code> public keys X coordinates are encoded in little-endian as 32 bytes arrays;</li>
+<li><code>ChaChaPoly</code> authentication data consists of 16 bytes
+(nonces are implicitely defined by Noise <a href="http://www.noiseprotocol.org/noise.html#processing-rules">processing rules</a>).</li>
+</ul>
+<p>In all supported Noise protocols,
+parties' static public keys are transmitted encrypted (cf. <a href="http://www.noiseprotocol.org/noise.html#the-symmetricstate-object"><code>EncryptAndHash</code></a>),
+while ephemeral keys MAY be encrypted after a handshake is complete.</p>
+<h3 id="padding">
+  Padding
+  <a class="anchor" href="#padding">#</a>
+</h3>
+<p>To prevent some metadata leakage,
+encrypted transport messages SHOULD be padded before encryption.</p>
+<p>It is therefore recommended to right pad transport messages using <a href="https://datatracker.ietf.org/doc/html/rfc2630#section-6.3">RFC2630</a> so that their final length is a multiple of 248 bytes.</p>
+<h2 id="after-handshake">
+  After-handshake
+  <a class="anchor" href="#after-handshake">#</a>
+</h2>
+<p>During the initial 1-RTT communication,
+handshake messages <a href="#Content-Topics-and-Message-Nametags-of-Noise-Handshake-Messages">might be linked</a>,
+depending on the <code>message-nametag</code> derivation rule implemented,
+to the respective parties through the <code>contentTopic</code> and <code>message-nametag</code> fields employed for such communication.</p>
+<p>After a handshake is completed,
+parties MAY derive from their shared secret key (preferably using <code>HKDF</code>)
+two random <code>nametag-secret-outbound</code> and <code>nametag-secret-inbound</code> values used to deterministically derive
+two arbitrary-long ordered lists of <code>message-nametag</code>
+used to indentify outbound and inbound messages, respectively
+(e.g. the <code>n</code>-th inbound <code>message-nametag</code> MAY be computed as <code>HKDF(nametag-secret-inbound || n)</code>).
+This allows communicating parties to efficiently identify messages addressed to them sent over a certain <code>contentTopic</code>
+and thus minimize the number of trial decryptions.</p>
+<p>When communicating,
+parties SHOULD set <code>protocol-id</code> to <code>0</code>
+to reduce metadata leakages and indicate that the message is an <em>after-handshake</em> message.</p>
+<p>Each party SHOULD attach an (unencrypted) ephemeral key in <code>handshake-message</code> to every message sent.
+According to <a href="http://www.noiseprotocol.org/noise.html#processing-rules">Noise processing rules</a>,
+this allows updates to the shared secret key
+by hashing the result of an ephemeral-ephemeral Diffie-Hellman exchange every 1-RTT communication.</p>
+<h2 id="backward-support-for-symmetricasymmetric-encryption">
+  Backward Support for Symmetric/Asymmetric Encryption
+  <a class="anchor" href="#backward-support-for-symmetricasymmetric-encryption">#</a>
+</h2>
+<p>It is possible to have backward compatibility to symmetric/asymmetric encryption primitives from <a href="/spec/26">26/WAKU-PAYLOAD</a>,
+effectively encapsulating  payload encryption <a href="/spec/14/#version1">14/WAKU-MESSAGE version 1</a> in <a href="/spec/14/#version2">version 2</a>.</p>
+<p>It suffices to extend the list of supported <code>protocol-id</code> to:</p>
+<ul>
+<li><code>254</code>: AES-256-GCM symmetric encryption;</li>
+<li><code>255</code>: ECIES asymmetric encryption.</li>
+</ul>
+<p>and set the <code>transport-message</code> field to the <a href="/spec/26">26/WAKU-PAYLOAD</a> <code>data</code> field, whenever these <code>protocol-id</code> values are set.</p>
+<p>Namely, if <code>protocol-id = 254, 255</code> then:</p>
+<ul>
+<li><code>message-nametag</code>: is empty;</li>
+<li><code>handshake-message-len</code>: is set to <code>0</code>;</li>
+<li><code>handshake-message</code>: is empty;</li>
+<li><code>transport-message</code>: contains the <a href="/spec/26">26/WAKU-PAYLOAD</a> <code>data</code> field (AES-256-GCM or ECIES, depending on <code>protocol-id</code>);</li>
+<li><code>transport-message-len</code> is set accordingly to <code>transport-message</code> length;</li>
+</ul>
+<p>When a <code>transport-message</code> corresponding to <code>protocol-id = 254, 255</code> is retrieved,
+it SHOULD be decoded as the <code>data</code> field in <a href="/spec/26">26/WAKU-PAYLOAD</a> specification.</p>
+<h2 id="appendix-supported-handshakes-description">
+  Appendix: Supported Handshakes Description
+  <a class="anchor" href="#appendix-supported-handshakes-description">#</a>
+</h2>
+<p>Supported Noise handshakes address four typical scenarios occurring when an encrypted communication channel between Alice and Bob is going to be created:</p>
+<ul>
+<li>Alice and Bob know each others' static key.</li>
+<li>Alice knows Bob&rsquo;s static key;</li>
+<li>Alice and Bob share no key material and they don&rsquo;t know each others' static key.</li>
+<li>Alice and Bob share some key material, but they don&rsquo;t know each others' static key.</li>
+</ul>
+<p><strong>Adversarial Model</strong>: an active attacker who compromised one party&rsquo;s static key may lower the identity-hiding security guarantees provided by some handshakes. In our security model we exclude such adversary, but for completeness we report a summary of possible de-anonymization attacks that can be performed by an active attacker.</p>
+<h3 id="the-k1k1-handshake">
+  The <code>K1K1</code> Handshake
+  <a class="anchor" href="#the-k1k1-handshake">#</a>
+</h3>
+<p>If Alice and Bob know each others' static key (e.g., these are public or were already exchanged in a previous handshake) , they MAY execute a <code>K1K1</code> handshake.  Using <a href="https://noiseprotocol.org/noise.html#overview-of-handshake-state-machine">Noise notation</a> <em>(Alice is on the left)</em> this can be sketched as:</p>
+<pre tabindex="0"><code> K1K1:
+    -&gt;  s
+    &lt;-  s
+       ...
+    -&gt;  e
+    &lt;-  e, ee, es
+    -&gt;  se
+</code></pre><p>We note that here only ephemeral keys are exchanged. This handshake is useful in case Alice needs to instantiate a new separate encrypted communication channel with Bob, e.g. opening multiple parallel connections, file transfers, etc.</p>
+<p><strong>Security considerations on identity-hiding (active attacker)</strong>: no static key is transmitted, but an active attacker impersonating Alice can check candidates for Bob&rsquo;s static key.</p>
+<h3 id="the-xk1-handshake">
+  The <code>XK1</code> Handshake
+  <a class="anchor" href="#the-xk1-handshake">#</a>
+</h3>
+<p>Here, Alice knows how to initiate a communication with Bob and she knows his public static key: such discovery can be achieved, for example, through a publicly accessible register of users' static keys, smart contracts, or through a previous public/private advertisement of Bob&rsquo;s static key.</p>
+<p>A Noise handshake pattern that suits this scenario is <code>XK1</code>:</p>
+<pre tabindex="0"><code> XK1:
+    &lt;-  s
+       ...
+    -&gt;  e
+    &lt;-  e, ee, es
+    -&gt;  s, se
+</code></pre><p>Within this handshake, Alice and Bob reciprocally authenticate their static keys <code>s</code> using ephemeral keys <code>e</code>. We note that while Bob&rsquo;s static key is assumed to be known to Alice (and hence is not transmitted), Alice&rsquo;s static key is sent to Bob encrypted with a key derived from both parties ephemeral keys and Bob&rsquo;s static key.</p>
+<p><strong>Security considerations on identity-hiding (active attacker)</strong>: Alice&rsquo;s static key is encrypted with forward secrecy to an authenticated party. An active attacker initiating the handshake can check candidates for Bob&rsquo;s static key against recorded/accepted exchanged handshake messages.</p>
+<h3 id="the-xx-and-xxpsk0-handshakes">
+  The <code>XX</code> and <code>XXpsk0</code> Handshakes
+  <a class="anchor" href="#the-xx-and-xxpsk0-handshakes">#</a>
+</h3>
+<p>If Alice is not aware of any static key belonging to Bob (and neither Bob knows anything about Alice), she can execute an <code>XX</code> handshake, where each party tran<strong>X</strong>mits to the other its own static key.</p>
+<p>The handshake goes as follows:</p>
+<pre tabindex="0"><code> XX:
+    -&gt;  e
+    &lt;-  e, ee, s, es
+    -&gt;  s, se
+</code></pre><p>We note that the main difference with <code>XK1</code> is that in second step Bob sends to Alice his own static key encrypted with a key obtained from an ephemeral-ephemeral Diffie-Hellman exchange.</p>
+<p>This handshake can be slightly changed in case both Alice and Bob pre-shares some secret <code>psk</code> which can be used to strengthen their mutual authentication during the handshake execution. One of the resulting protocol, called <code>XXpsk0</code>, goes as follow:</p>
+<pre tabindex="0"><code> XXpsk0:
+    -&gt;  psk, e
+    &lt;-  e, ee, s, es
+    -&gt;  s, se
+</code></pre><p>The main difference with <code>XX</code> is that Alice&rsquo;s and Bob&rsquo;s static keys, when transmitted, would be encrypted with a key derived from <code>psk</code> as well.</p>
+<p><strong>Security considerations on identity-hiding (active attacker)</strong>: Alice&rsquo;s static key is encrypted with forward secrecy to an authenticated party for both <code>XX</code> and <code>XXpsk0</code> handshakes. In <code>XX</code>, Bob&rsquo;s static key is encrypted with forward secrecy but is transmitted to a non-authenticated user which can then be an active attacker. In <code>XXpsk0</code>, instead, Bob&rsquo;s secret key is protected by forward secrecy to a partially authenticated party (through the pre-shared secret <code>psk</code> but not through any static key), provided that <code>psk</code> was not previously compromised (in such case identity-hiding properties provided by the <code>XX</code> handshake applies).</p>
+<h2 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h2>
+<ol>
+<li><a href="https://specs.status.im/spec/5">5/SECURE-TRANSPORT</a></li>
+<li><a href="/spec/10">10/WAKU2</a></li>
+<li><a href="/spec/26">26/WAKU-PAYLOAD</a></li>
+<li><a href="/spec/14/#version1">14/WAKU-MESSAGE</a></li>
+<li><a href="http://www.noiseprotocol.org/noise.html">Noise protocol</a></li>
+<li><a href="https://forum.vac.dev/t/noise-handshakes-as-key-exchange-mechanism-for-waku2/130">Noise handshakes as key-exchange mechanism for Waku2</a></li>
+<li><a href="https://tools.ietf.org/html/rfc5234">Augmented Backus-Naur form (ABNF)</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc2630#section-6.3">RFC2630 - Content-encryption Process and padding</a></li>
+</ol>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+      <ul>
+        <li><a href="#noise-protocols">Noise Protocols</a></li>
+        <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+      </ul>
+    </li>
+    <li><a href="#specification">Specification</a>
+      <ul>
+        <li><a href="#abnf">ABNF</a></li>
+        <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
+        <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
+        <li><a href="#padding">Padding</a></li>
+      </ul>
+    </li>
+    <li><a href="#after-handshake">After-handshake</a></li>
+    <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
+    <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
+      <ul>
+        <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
+        <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
+        <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

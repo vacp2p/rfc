@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This is an informational spec that show cases the concept of adaptive nodes.
+Node types - a continuum #  We can look at node types as a continuum, from more restricted to less restricted, fewer resources to more resources.
+Possible limitations #   Connectivity: Not publicly connectable vs static IP and DNS Connectivity: Mostly offline to mostly online to always online Resources: Storage, CPU, Memory, Bandwidth  Accessibility and motivation #  Some examples:">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="30/ADAPTIVE-NODES" />
+<meta property="og:description" content="This is an informational spec that show cases the concept of adaptive nodes.
+Node types - a continuum #  We can look at node types as a continuum, from more restricted to less restricted, fewer resources to more resources.
+Possible limitations #   Connectivity: Not publicly connectable vs static IP and DNS Connectivity: Mostly offline to mostly online to always online Resources: Storage, CPU, Memory, Bandwidth  Accessibility and motivation #  Some examples:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/30/" /><meta property="article:section" content="docs" />
+
+
+
+<title>30/ADAPTIVE-NODES | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/"class=active>30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>30/ADAPTIVE-NODES</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#possible-limitations">Possible limitations</a></li>
+    <li><a href="#accessibility-and-motivation">Accessibility and motivation</a></li>
+    <li><a href="#adaptive-nodes">Adaptive nodes</a></li>
+    <li><a href="#planned-incentives">Planned incentives</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#topology-and-topics">Topology and topics</a></li>
+    <li><a href="#legend">Legend</a></li>
+    <li><a href="#auxiliary-network">Auxiliary network</a></li>
+    <li><a href="#node-cross-section">Node Cross Section</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="30adaptive-nodes">30/ADAPTIVE-NODES</h1>
+
+  
+      <h1 id="adaptive-nodes">Adaptive nodes</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+  </ul><p>This is an informational spec that show cases the concept of adaptive nodes.</p>
+<h1 id="node-types---a-continuum">
+  Node types - a continuum
+  <a class="anchor" href="#node-types---a-continuum">#</a>
+</h1>
+<p>We can look at node types as a continuum, from more restricted to less restricted, fewer resources to more resources.</p>
+<p><img src="../../../../rfcs/30/adaptive_node_continuum2.png" alt="Node types - a continuum" /></p>
+<h2 id="possible-limitations">
+  Possible limitations
+  <a class="anchor" href="#possible-limitations">#</a>
+</h2>
+<ul>
+<li>Connectivity: Not publicly connectable vs static IP and DNS</li>
+<li>Connectivity: Mostly offline to mostly online to always online</li>
+<li>Resources: Storage, CPU, Memory, Bandwidth</li>
+</ul>
+<h2 id="accessibility-and-motivation">
+  Accessibility and motivation
+  <a class="anchor" href="#accessibility-and-motivation">#</a>
+</h2>
+<p>Some examples:</p>
+<ul>
+<li>Opening browser window: costs nothing, but contribute nothing</li>
+<li>Desktop: download, leave in background, contribute somewhat</li>
+<li>Cluster: expensive, upkeep, but can contribute a lot</li>
+</ul>
+<p>These are also illustrative, so a node in a browser in certain environment might contribute similarly to Desktop.</p>
+<h2 id="adaptive-nodes">
+  Adaptive nodes
+  <a class="anchor" href="#adaptive-nodes">#</a>
+</h2>
+<p>We call these nodes <em>adaptive nodes</em> to highlights different modes of contributing, such as:</p>
+<ul>
+<li>Only leeching from the network</li>
+<li>Relaying messages for one or more topics</li>
+<li>Providing services for lighter nodes such as lightpush and filter</li>
+<li>Storing historical messages to various degrees</li>
+<li>Ensuring relay network can&rsquo;t be spammed with RLN</li>
+</ul>
+<h2 id="planned-incentives">
+  Planned incentives
+  <a class="anchor" href="#planned-incentives">#</a>
+</h2>
+<p>Incentives to run a node is currently planned around:</p>
+<ul>
+<li>SWAP for accounting and settlement of services provided</li>
+<li>RLN RELAY for spam protection</li>
+<li>Other incentivization schemes are likely to follow and is an area of active research</li>
+</ul>
+<h1 id="node-protocol-selection">
+  Node protocol selection
+  <a class="anchor" href="#node-protocol-selection">#</a>
+</h1>
+<p>Each node can choose which protocols to support, depending on its resources and goals.</p>
+<p><img src="../../../../rfcs/30/adaptive_node_protocol_selection2.png" alt="Protocol selection" /></p>
+<p>In the case of protocols like 11/WAKU2-RELAY etc (12, 13, 19, 21) these correspond to Libp2p protocols.</p>
+<p>However, other protocols like 16/WAKU2-RPC (local HTTP JSON-RPC), 25/LIBP2P-DNS-DISCOVERY, Discovery v5 (DevP2P) or interfacing with distributed storage, are running on different network stacks.</p>
+<p>This is in addition to protocols that specify payloads, such as 14/WAKU2-MESSAGE, 26/WAKU2-PAYLOAD, or application specific ones. As well as specs that act more as recommendations, such as 23/WAKU2-TOPICS or 27/WAKU2-PEERS.</p>
+<h1 id="waku-network-visualization">
+  Waku network visualization
+  <a class="anchor" href="#waku-network-visualization">#</a>
+</h1>
+<p>We can better visualize the network with some illustrative examples.</p>
+<h2 id="topology-and-topics">
+  Topology and topics
+  <a class="anchor" href="#topology-and-topics">#</a>
+</h2>
+<p>The first one shows an example topology with different PubSub topics for the relay protocol.</p>
+<p><img src="../../../../rfcs/30/adaptive_node_network_topology_protocols2.png" alt="Waku Network visualization" /></p>
+<h2 id="legend">
+  Legend
+  <a class="anchor" href="#legend">#</a>
+</h2>
+<p><img src="../../../../rfcs/30/adaptive_node_network_topology_protocols_legend.png" alt="Waku Network visualization legend" /></p>
+<p>The dotted box shows what content topics (application-specific) a node is interested in.</p>
+<p>A node that is purely providing a service to the network might not care.</p>
+<p>In this example, we see support for toy chat, a topic in Waku v1 (Status chat), WalletConnect, and SuperRare community.</p>
+<h2 id="auxiliary-network">
+  Auxiliary network
+  <a class="anchor" href="#auxiliary-network">#</a>
+</h2>
+<p>This is a separate component with its own topology.</p>
+<p>Behavior and interaction with other protocols specified in Vac RFCs, e.g. 25/LIBP2P-DNS-DISCOVERY, 15/WAKU-BRIDGE, etc.</p>
+<h2 id="node-cross-section">
+  Node Cross Section
+  <a class="anchor" href="#node-cross-section">#</a>
+</h2>
+<p>This one shows a cross-section of nodes in different dimensions and shows how the connections look different for different protocols.</p>
+<p><img src="../../../../rfcs/30/adaptive_node_cross_section2.png" alt="Node Cross Section" /></p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#possible-limitations">Possible limitations</a></li>
+    <li><a href="#accessibility-and-motivation">Accessibility and motivation</a></li>
+    <li><a href="#adaptive-nodes">Adaptive nodes</a></li>
+    <li><a href="#planned-incentives">Planned incentives</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#topology-and-topics">Topology and topics</a></li>
+    <li><a href="#legend">Legend</a></li>
+    <li><a href="#auxiliary-network">Auxiliary network</a></li>
+    <li><a href="#node-cross-section">Node Cross Section</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

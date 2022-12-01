@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="This document describes a consensus-oriented specification system (COSS) for building interoperable technical specifications. COSS is based on a lightweight editorial process that seeks to engage the widest possible range of interested parties and move rapidly to consensus through working code.
+This specification is based on Unprotocols 2/COSS, used by the ZeromMQ project. It is equivalent except for some areas:
+ recommending the use of a permissive licenses, such as CC0 (with the exception of this document); miscellaneous metadata, editor, and format/link updates; more inheritance from the [IETF Standards Process][https://www.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="1/COSS" />
+<meta property="og:description" content="This document describes a consensus-oriented specification system (COSS) for building interoperable technical specifications. COSS is based on a lightweight editorial process that seeks to engage the widest possible range of interested parties and move rapidly to consensus through working code.
+This specification is based on Unprotocols 2/COSS, used by the ZeromMQ project. It is equivalent except for some areas:
+ recommending the use of a permissive licenses, such as CC0 (with the exception of this document); miscellaneous metadata, editor, and format/link updates; more inheritance from the [IETF Standards Process][https://www." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/1/" /><meta property="article:section" content="docs" />
+
+
+
+<title>1/COSS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/"class=active>1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>1/COSS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#license">License</a></li>
+    <li><a href="#change-process">Change Process</a></li>
+    <li><a href="#language">Language</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#coss-lifecycle">COSS Lifecycle</a>
+      <ul>
+        <li><a href="#raw-specifications">Raw Specifications</a></li>
+        <li><a href="#draft-specifications">Draft Specifications</a></li>
+        <li><a href="#stable-specifications">Stable Specifications</a></li>
+        <li><a href="#deprecated-specifications">Deprecated Specifications</a></li>
+        <li><a href="#retired-specifications">Retired Specifications</a></li>
+        <li><a href="#deleted-specifications">Deleted Specifications</a></li>
+      </ul>
+    </li>
+    <li><a href="#editorial-control">Editorial control</a></li>
+    <li><a href="#branching-and-merging">Branching and Merging</a></li>
+    <li><a href="#conflict-resolution">Conflict resolution</a></li>
+    <li><a href="#specification-structure">Specification Structure</a>
+      <ul>
+        <li><a href="#meta-information">Meta Information</a></li>
+        <li><a href="#specification-template">Specification Template</a></li>
+      </ul>
+    </li>
+    <li><a href="#conventions">Conventions</a></li>
+    <li><a href="#appendix-a-color-coding">Appendix A. Color Coding</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="1coss">1/COSS</h1>
+
+  
+      <h1 id="consensus-oriented-specification-system">Consensus-Oriented Specification System</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Oskar Thoren <a href="mailto:oskar@status.im">oskar@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Pieter Hintjens <a href="mailto:ph@imatix.com">ph@imatix.com</a>
+          
+              ,
+              André Rebentisch <a href="mailto:andre@openstandards.de">andre@openstandards.de</a>
+          
+              ,
+              Alberto Barrionuevo <a href="mailto:abarrio@opentia.es">abarrio@opentia.es</a>
+          
+              ,
+              Chris Puttick <a href="mailto:chris.puttick@thehumanjourney.net">chris.puttick@thehumanjourney.net</a>
+          
+              ,
+              Yurii Rashkovskii <a href="mailto:yrashk@gmail.com">yrashk@gmail.com</a>
+          
+              ,
+              Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a>
+          
+      </li>
+      
+  </ul><p>This document describes a consensus-oriented specification system (COSS) for building interoperable technical specifications.
+COSS is based on a lightweight editorial process that seeks to engage the widest possible range of interested parties and move rapidly to consensus through working code.</p>
+<p>This specification is based on <a href="https://github.com/unprotocols/rfc/blob/master/2/README.md">Unprotocols 2/COSS</a>, used by the <a href="https://rfc.zeromq.org/">ZeromMQ</a> project.
+It is equivalent except for some areas:</p>
+<ul>
+<li>recommending the use of a permissive licenses, such as CC0 (with the exception of this document);</li>
+<li>miscellaneous metadata, editor, and format/link updates;</li>
+<li>more inheritance from the [IETF Standards Process][https://www.rfc-editor.org/rfc/rfc2026.txt],
+e.g. using RFC categories: Standards Track, Informational, and Best Common Practice;</li>
+<li>standards track specifications SHOULD follow a specific structure that both streamlines editing,
+and helps implementers to quickly comprehend the specification</li>
+<li>specifications MUST feature a header providing specific meta information</li>
+</ul>
+<h2 id="license">
+  License
+  <a class="anchor" href="#license">#</a>
+</h2>
+<p>Copyright (c) 2008-22 the Editor and Contributors.</p>
+<p>This Specification is free software;
+you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation;
+either version 3 of the License, or (at your option) any later version.</p>
+<p>This Specification is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with this program;
+if not, see <a href="http://www.gnu.org/licenses">http://www.gnu.org/licenses</a>.</p>
+<h2 id="change-process">
+  Change Process
+  <a class="anchor" href="#change-process">#</a>
+</h2>
+<p>This document is governed by the <a href="spec/1">1/COSS</a> (COSS).</p>
+<h2 id="language">
+  Language
+  <a class="anchor" href="#language">#</a>
+</h2>
+<p>The key words &ldquo;MUST&rdquo;, &ldquo;MUST NOT&rdquo;, &ldquo;REQUIRED&rdquo;, &ldquo;SHALL&rdquo;, &ldquo;SHALL NOT&rdquo;, &ldquo;SHOULD&rdquo;, &ldquo;SHOULD NOT&rdquo;, &ldquo;RECOMMENDED&rdquo;,  &ldquo;MAY&rdquo;, and &ldquo;OPTIONAL&rdquo; in this document are to be interpreted as described in
+<a href="http://tools.ietf.org/html/rfc2119">RFC 2119</a>.</p>
+<h2 id="goals">
+  Goals
+  <a class="anchor" href="#goals">#</a>
+</h2>
+<p>The primary goal of COSS is to facilitate the process of writing, proving, and improving new technical specifications.
+A &ldquo;technical specification&rdquo; defines a protocol, a process, an API, a use of language, a methodology,
+or any other aspect of a technical environment that can usefully be documented for the purposes of technical or social interoperability.</p>
+<p>COSS is intended to above all be economical and rapid, so that it is useful to small teams with little time to spend on more formal processes.</p>
+<p>Principles:</p>
+<ul>
+<li>We aim for rough consensus and running code; <a href="https://www.ietf.org/about/participate/tao/">inspired by the IETF Tao</a>.</li>
+<li>Specifications are small pieces, made by small teams.</li>
+<li>Specifications should have a clearly responsible editor.</li>
+<li>The process should be visible, objective, and accessible to anyone.</li>
+<li>The process should clearly separate experiments from solutions.</li>
+<li>The process should allow deprecation of old specifications.</li>
+</ul>
+<p>Specifications should take minutes to explain, hours to design, days to write, weeks to prove, months to become mature, and years to replace.</p>
+<p>Specifications have no special status except that accorded by the community.</p>
+<h2 id="architecture">
+  Architecture
+  <a class="anchor" href="#architecture">#</a>
+</h2>
+<p>COSS is designed around fast, easy to use communications tools.
+Primarily, COSS uses a wiki model for editing and publishing specifications texts.</p>
+<ul>
+<li>The <em>domain</em> is the conservancy for a set of specifications in a certain area.</li>
+<li>Each domain is implemented as an Internet domain, hosting a wiki and optionally other communications tools.</li>
+<li>Each specification is a set of wiki pages, together with comments, attached files, and other resources.</li>
+<li>Important specifications may also exist as subdomains, i.e. child wikis.</li>
+</ul>
+<p>Individuals can become members of the domain by completing the necessary legal clearance.
+The copyright, patent, and trademark policies of the domain must be clarified in an Intellectual Property policy that applies to the domain.</p>
+<p>Specifications exist as multiple pages, one page per version of the specification (see &ldquo;Branching and Merging&rdquo;, below), which may be assigned URIs that include an incremental number.
+Thus, we refer to a specification by specifying its domain, number, and short name.
+New versions of the same specification will have new numbers.
+The syntax for a specification reference is:</p>
+<pre><code>&lt;domain&gt;/spec/&lt;number&gt;/&lt;shortname&gt;
+</code></pre>
+<p>For example, this specification is <strong>rfc.vac.dev/spec/1/COSS</strong>.
+The short form <strong>1/COSS</strong> may be used when referring to the specification from other specifications in the same domain.</p>
+<p>Every specification (including branches) carries a different number.</p>
+<h2 id="coss-lifecycle">
+  COSS Lifecycle
+  <a class="anchor" href="#coss-lifecycle">#</a>
+</h2>
+<p>Every specification has an independent lifecycle that documents clearly its current status.</p>
+<p>A specification has six possible states that reflect its maturity and contractual weight:</p>
+<p><img src="../../../../rfcs/1/lifecycle.png" alt="Lifecycle diagram" /></p>
+<h3 id="raw-specifications">
+  Raw Specifications
+  <a class="anchor" href="#raw-specifications">#</a>
+</h3>
+<p>All new specifications are <strong>raw</strong> specifications.
+Changes to raw specifications can be unilateral and arbitrary.
+Those seeking to implement a raw specification should ask for it to be made a draft specification.
+Raw specifications have no contractual weight.</p>
+<h3 id="draft-specifications">
+  Draft Specifications
+  <a class="anchor" href="#draft-specifications">#</a>
+</h3>
+<p>When raw specifications can be demonstrated, they become <strong>draft</strong> specifications.
+Changes to draft specifications should be done in consultation with users.
+Draft specifications are contracts between the editors and implementers.</p>
+<h3 id="stable-specifications">
+  Stable Specifications
+  <a class="anchor" href="#stable-specifications">#</a>
+</h3>
+<p>When draft specifications are used by third parties, they become <strong>stable</strong> specifications.
+Changes to stable specifications should be restricted to cosmetic ones, errata and clarifications.
+Stable specifications are contracts between editors, implementers, and end-users.</p>
+<h3 id="deprecated-specifications">
+  Deprecated Specifications
+  <a class="anchor" href="#deprecated-specifications">#</a>
+</h3>
+<p>When stable specifications are replaced by newer draft specifications, they become <strong>deprecated</strong> specifications.
+Deprecated specifications should not be changed except to indicate their replacements, if any.
+Deprecated specifications are contracts between editors, implementers and end-users.</p>
+<h3 id="retired-specifications">
+  Retired Specifications
+  <a class="anchor" href="#retired-specifications">#</a>
+</h3>
+<p>When deprecated specifications are no longer used in products, they become <strong>retired</strong> specifications.
+Retired specifications are part of the historical record.
+They should not be changed except to indicate their replacements, if any.
+Retired specifications have no contractual weight.</p>
+<h3 id="deleted-specifications">
+  Deleted Specifications
+  <a class="anchor" href="#deleted-specifications">#</a>
+</h3>
+<p>Deleted specifications are those that have not reached maturity (stable) and were discarded.
+They should not be used and are only kept for their historical value.
+Only Raw and Draft specifications can be deleted.</p>
+<h2 id="editorial-control">
+  Editorial control
+  <a class="anchor" href="#editorial-control">#</a>
+</h2>
+<p>A specification MUST have a single responsible editor,
+the only person who SHALL change the status of the specification through the lifecycle stages.</p>
+<p>A specification MAY also have additional contributors who contribute changes to it.
+It is RECOMMENDED to use a process similar to <a href="https://github.com/unprotocols/rfc/blob/master/1/README.md">C4 process</a>
+to maximize the scale and diversity of contributions.</p>
+<p>Unlike the original C4 process however, it is RECOMMENDED to use CC0 as a more permissive license alternative.
+We SHOULD NOT use GPL or GPL-like license.
+One exception is this specification, as this was the original license for this specification.</p>
+<p>The editor is responsible for accurately maintaining the state of specifications and for handling all comments on the specification.</p>
+<h2 id="branching-and-merging">
+  Branching and Merging
+  <a class="anchor" href="#branching-and-merging">#</a>
+</h2>
+<p>Any member of the domain MAY branch a specification at any point.
+This is done by copying the existing text, and creating a new specification with the same name and content, but a new number.
+The ability to branch a specification is necessary in these circumstances:</p>
+<ul>
+<li>To change the responsible editor for a specification, with or without the cooperation of the current responsible editor.</li>
+<li>To rejuvenate a specification that is stable but needs functional changes.
+This is the proper way to make a new version of a specification that is in stable or deprecated status.</li>
+<li>To resolve disputes between different technical opinions.</li>
+</ul>
+<p>The responsible editor of a branched specification is the person who makes the branch.</p>
+<p>Branches, including added contributions, are derived works and thus licensed under the same terms as the original specification.
+This means that contributors are guaranteed the right to merge changes made in branches back into their original specifications.</p>
+<p>Technically speaking, a branch is a <em>different</em> specification, even if it carries the same name.
+Branches have no special status except that accorded by the community.</p>
+<h2 id="conflict-resolution">
+  Conflict resolution
+  <a class="anchor" href="#conflict-resolution">#</a>
+</h2>
+<p>COSS resolves natural conflicts between teams and vendors by allowing anyone to define a new specification.
+There is no editorial control process except that practised by the editor of a new specification.
+The administrators of a domain (moderators) may choose to interfere in editorial conflicts,
+and may suspend or ban individuals for behaviour they consider inappropriate.</p>
+<h2 id="specification-structure">
+  Specification Structure
+  <a class="anchor" href="#specification-structure">#</a>
+</h2>
+<h3 id="meta-information">
+  Meta Information
+  <a class="anchor" href="#meta-information">#</a>
+</h3>
+<p>Specifications MUST contain the following metadata.
+It is RECOMMENDED that specification metadata is specified as a YAML header (where possible).
+This will enable programmatic access to specification metadata.</p>
+<table>
+<thead>
+<tr>
+<th>Key</th>
+<th>Value</th>
+<th>Type</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>shortname</strong></td>
+<td>short name</td>
+<td>string</td>
+<td>1/COSS</td>
+</tr>
+<tr>
+<td><strong>title</strong></td>
+<td>full name</td>
+<td>string</td>
+<td>Consensus-Oriented Specification System</td>
+</tr>
+<tr>
+<td><strong>status</strong></td>
+<td>status</td>
+<td>string</td>
+<td>draft</td>
+</tr>
+<tr>
+<td><strong>category</strong></td>
+<td>category</td>
+<td>string</td>
+<td>Best Current Practice</td>
+</tr>
+<tr>
+<td><strong>tags</strong></td>
+<td>0 or several tags</td>
+<td>list</td>
+<td>waku-application, waku-core-protocol</td>
+</tr>
+<tr>
+<td><strong>editor</strong></td>
+<td>editor name/email</td>
+<td>string</td>
+<td>Oskar Thoren <a href="mailto:oskar@status.im">oskar@status.im</a></td>
+</tr>
+<tr>
+<td><strong>contributors</strong></td>
+<td>contributors</td>
+<td>list</td>
+<td>- Pieter Hintjens <a href="mailto:ph@imatix.com">ph@imatix.com</a><!-- raw HTML omitted --> - André Rebentisch <a href="mailto:andre@openstandards.de">andre@openstandards.de</a><!-- raw HTML omitted --> - Alberto Barrionuevo <a href="mailto:abarrio@opentia.es">abarrio@opentia.es</a><!-- raw HTML omitted --> - Chris Puttick <a href="mailto:chris.puttick@thehumanjourney.net">chris.puttick@thehumanjourney.net</a><!-- raw HTML omitted --> - Yurii Rashkovskii <a href="mailto:yrashk@gmail.com">yrashk@gmail.com</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="specification-template">
+  Specification Template
+  <a class="anchor" href="#specification-template">#</a>
+</h3>
+<p>Standards Track specifications SHOULD be based on the <a href="https://github.com/vacp2p/rfc/blob/master/content/docs/rfcs/template/README.md">Vac RFC template</a>.</p>
+<h2 id="conventions">
+  Conventions
+  <a class="anchor" href="#conventions">#</a>
+</h2>
+<p>Where possible editors and contributors are encouraged to:</p>
+<ul>
+<li>Refer to and build on existing work when possible, especially IETF specifications.</li>
+<li>Contribute to existing specifications rather than reinvent their own.</li>
+<li>Use collaborative branching and merging as a tool for experimentation.</li>
+<li>Use Semantic Line Breaks: <a href="https://sembr.org/">https://sembr.org/</a>.</li>
+</ul>
+<h2 id="appendix-a-color-coding">
+  Appendix A. Color Coding
+  <a class="anchor" href="#appendix-a-color-coding">#</a>
+</h2>
+<p>It is RECOMMENDED to use color coding to indicate specification&rsquo;s status. Color coded specifications SHOULD use the following color scheme:</p>
+<ul>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/raw.svg" alt="raw" /></li>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/draft.svg" alt="draft" /></li>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/stable.svg" alt="stable" /></li>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/deprecated.svg" alt="deprecated" /></li>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/retired.svg" alt="retired" /></li>
+<li><img src="https://raw.githubusercontent.com/unprotocols/rfc/master/2/deleted.svg" alt="deleted" /></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#license">License</a></li>
+    <li><a href="#change-process">Change Process</a></li>
+    <li><a href="#language">Language</a></li>
+    <li><a href="#goals">Goals</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#coss-lifecycle">COSS Lifecycle</a>
+      <ul>
+        <li><a href="#raw-specifications">Raw Specifications</a></li>
+        <li><a href="#draft-specifications">Draft Specifications</a></li>
+        <li><a href="#stable-specifications">Stable Specifications</a></li>
+        <li><a href="#deprecated-specifications">Deprecated Specifications</a></li>
+        <li><a href="#retired-specifications">Retired Specifications</a></li>
+        <li><a href="#deleted-specifications">Deleted Specifications</a></li>
+      </ul>
+    </li>
+    <li><a href="#editorial-control">Editorial control</a></li>
+    <li><a href="#branching-and-merging">Branching and Merging</a></li>
+    <li><a href="#conflict-resolution">Conflict resolution</a></li>
+    <li><a href="#specification-structure">Specification Structure</a>
+      <ul>
+        <li><a href="#meta-information">Meta Information</a></li>
+        <li><a href="#specification-template">Specification Template</a></li>
+      </ul>
+    </li>
+    <li><a href="#conventions">Conventions</a></li>
+    <li><a href="#appendix-a-color-coding">Appendix A. Color Coding</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

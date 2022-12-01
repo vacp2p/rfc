@@ -1,0 +1,20 @@
+# Alice and Bob: interactive data sync
+msc {
+  hscale="2", wordwraparcs=on;
+
+  alice [label="Alice"],
+  bob [label="Bob"];
+
+  --- [label="interactive data sync"];
+  alice => alice [label="add offers to payload state"];
+  alice >> bob [label="send payload with offers"];
+    
+  bob => bob [label="add requests to payload state"];
+  bob >> alice [label="send payload with requests"];
+  
+  alice => alice [label="add requested messages to state"];
+  alice >> bob [label="send payload with messages"];
+  
+  bob => bob [label="add acks to payload state"];
+  bob >> alice [label="send payload with acks"];
+}

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  This document specifies a simple request-response peer exchange protocol. Responders send information about a requested number of peers. The main purpose of this protocol is providing resource restricted devices with peers.
+Protocol identifier: /vac/waku/peer-exchange/2.0.0-alpha1
+Background and Motivation #  It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as 33/WAKU2-DISCV5. The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="34/WAKU2-PEER-EXCHANGE" />
+<meta property="og:description" content="Abstract #  This document specifies a simple request-response peer exchange protocol. Responders send information about a requested number of peers. The main purpose of this protocol is providing resource restricted devices with peers.
+Protocol identifier: /vac/waku/peer-exchange/2.0.0-alpha1
+Background and Motivation #  It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as 33/WAKU2-DISCV5. The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/34/" /><meta property="article:section" content="docs" />
+
+
+
+<title>34/WAKU2-PEER-EXCHANGE | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/"class=active>34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>34/WAKU2-PEER-EXCHANGE</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#discovery-interface">Discovery Interface</a></li>
+    <li><a href="#exchange-peer-cache-size">Exchange Peer Cache Size</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#requester">Requester</a></li>
+    <li><a href="#responder">Responder</a></li>
+    <li><a href="#further-considerations">Further Considerations</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="34waku2-peer-exchange">34/WAKU2-PEER-EXCHANGE</h1>
+
+  
+      <h1 id="waku-v2-peer-exchange">Waku v2 Peer Exchange</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document specifies a simple request-response peer exchange protocol.
+Responders send information about a requested number of peers.
+The main purpose of this protocol is providing resource restricted devices with peers.</p>
+<p><strong>Protocol identifier</strong>: /vac/waku/peer-exchange/2.0.0-alpha1</p>
+<h1 id="background-and-motivation">
+  Background and Motivation
+  <a class="anchor" href="#background-and-motivation">#</a>
+</h1>
+<p>It may not be feasible on resource restricted devices to take part in distributed random sampling ambient peer discovery protocols such as <a href="/spec/33/">33/WAKU2-DISCV5</a>.
+The Waku peer discovery protocol specified in this document allows resource restricted devices to request a list of peers from a service node.
+Network parameters necessary to connect to this service node COULD be learned from a static bootstrapping method or using <a href="https://eips.ethereum.org/EIPS/eip-1459">EIP-1459: Node Discovery via DNS</a>.
+The advantage of using Waku peer exchange to discover new peers over using a static peer list or DNS discovery is a more even load distribution.
+If a lot of (resource restricted) nodes would use the same service nodes as relay or store nodes, the load on these would be very high.
+Heavily used static nodes also add a centralized element. Downtime of such a node might significantly impact the network.</p>
+<p>However, the resource efficiency of this protocol comes at an anonymity cost, which is explained in the <a href="#securityprivacy-considerations">Security/Privacy Considerations</a> section.
+This protocol SHOULD only be used if <a href="/spec/33/">33/WAKU2-DISCV5</a> is infeasible.</p>
+<h1 id="theory-and-protocol-semantics">
+  Theory and Protocol Semantics
+  <a class="anchor" href="#theory-and-protocol-semantics">#</a>
+</h1>
+<p>The peer exchange protocol specified in this document is a simple request-response protocol.
+As Figure 1 illustrates, the requesting node sends a request to a peer, which acts as the responder.
+The responder replies with a list of ENRs as specified in <a href="/spec/31/">31/WAKU2-ENR</a>.
+The <a href="https://docs.libp2p.io/concepts/addressing/">multiaddresses</a> used to connect to the respective peers can be extracted from the ENRs.</p>
+<p><img src="/rfcs/34/protocol.svg" alt="Figure 1: The responder provides a list of ENRs to the requester. These ENRs contain the information necessary for connecting to the respective peers." /></p>
+<p>In order to protect its anonymity, the responder MUST NOT provide peers from its actively used peer list as this opens pathways to <em>Neighbourhood Surveillance</em> attacks, as described in the
+<a href="#securityprivacy-considerations">Security/Privacy Considerations Section</a>.
+The responder SHOULD provide a set of peers that has been retrieved using ambient peer discovery methods supporting random sampling, e.g. <a href="/spec/33/">33/WAKU2-DISCV5</a>.
+This both protects the responder&rsquo;s anonymity as well as helps distributing load.</p>
+<p>To allow for fast responses, responders SHOULD retrieve peers unsolicited (before receiving a query)
+and maintain a queue of peers for the purpose of providing them in peer exchange responses.
+To get the best anonymity properties with respect to response peer sets, responders SHOULD use each of these peers only once.</p>
+<p>To save bandwidth, and as a trade off to anonymity,
+responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
+The size of the cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
+The responder SHOULD periodically replace the oldest peers in the cache.
+This document provides recommended choices for the cache size in the <a href="#implementation-suggestions">Implementation Suggestions Section</a>.</p>
+<p>Requesters, in the context of the specified peer exchange protocol, SHOULD be resource restricted devices.
+While any node could technically act as a requester, using the peer exchange protocol comes with two drawbacks:</p>
+<ul>
+<li>reducing <a href="#securityprivacy-considerations">anonymity</a></li>
+<li>causing load on responder nodes</li>
+</ul>
+<h1 id="wire-format-specification">
+  Wire Format Specification
+  <a class="anchor" href="#wire-format-specification">#</a>
+</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-protobuf" data-lang="protobuf">syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PeerInfo</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bytes</span> ENR <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PeerExchangeQuery</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  int numPeers; <span style="color:#75715e">// number of peers requested
+</span><span style="color:#75715e"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PeerExchangeResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> PeerInfo peerInfos <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">PeerExchangeRPC</span> {<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  PeerExchangeQuery query <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>  PeerExchangeResponse response <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span><span style="color:#960050;background-color:#1e0010">
+</span></code></pre></div><p>The <code>ENR</code> field contains a Waku ENR as specified in <a href="/spec/31/">31/WAKU2-ENR</a>.</p>
+<p>Requesters send a <code>PeerExchangeQuery</code> to a peer.
+Responders SHOULD include a maximum of <code>numPeers</code> <code>PeerInfo</code> instances into a response.
+Responders send a <code>PeerExchangeResponse</code> to requesters containing a list of <code>PeerInfo</code> instances, which in turn hold an ENR.</p>
+<h1 id="implementation-suggestions">
+  Implementation Suggestions
+  <a class="anchor" href="#implementation-suggestions">#</a>
+</h1>
+<h2 id="discovery-interface">
+  Discovery Interface
+  <a class="anchor" href="#discovery-interface">#</a>
+</h2>
+<p>Implementations can implement the libp2p discovery interface (e.g. <a href="https://github.com/status-im/nim-libp2p/issues/140">nim</a>, <a href="https://github.com/libp2p/js-libp2p-interfaces/tree/master/packages/interface-peer-discovery">javascript</a>).</p>
+<h2 id="exchange-peer-cache-size">
+  Exchange Peer Cache Size
+  <a class="anchor" href="#exchange-peer-cache-size">#</a>
+</h2>
+<p>The size of the (optional) exchange peer cache discussed in <a href="#theory-and-protocol-semantics">Theory and Protocol Semantics</a>
+depends on the average number of requested peers, which is expected to be the outbound degree of the underlying
+<a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md">libp2p gossipsub</a> mesh network.
+The recommended value for this outbound degree is 6 (see parameter <code>D</code> in <a href="/spec/29/">29/WAKU2-CONFIG</a>).
+It is recommended for the cache to hold at least 10 times as many peers (60).</p>
+<p>The recommended cache size also depends on the number of requesters a responder is expected to serve within a <em>refresh cycle</em>.
+A refresh cycle is the time interval in which all peers in the cache are expected to be replaced.
+If the number of requests expected per refresh cycle exceeds 600 (10 times the above recommended 60),
+it is recommended to increase the cache size to at least a tenth of that number.</p>
+<p>We will investigate peer exchange cache sizes and refresh strategies,
+and provide suggestions based on that in future versions (draft, stable) of this document.</p>
+<h1 id="securityprivacyanonymity-considerations">
+  Security/Privacy/Anonymity Considerations
+  <a class="anchor" href="#securityprivacyanonymity-considerations">#</a>
+</h1>
+<p>The peer exchange protocol specified in this document comes with anonymity and security implications.
+We differentiate these implications into the requester and responder side, respectively.</p>
+<h2 id="requester">
+  Requester
+  <a class="anchor" href="#requester">#</a>
+</h2>
+<p>With a simple peer exchange protocol, the requester is inherently susceptible to both <em>neighbourhood surveillance</em> and <em>controlled neighbourhood</em> attacks.</p>
+<p>To mount a <em>neighbourhood surveillance</em> attack, an attacker has to connect to the peers of the victim node.
+The peer exchange protocol allows a malicious responder to easily get into this position.
+The responder connects to a set of peers and simply returns this set of peers to the requester.</p>
+<p>The peer exchange protocol also makes it much easier to get into the position required for the <em>controlled neighbourhood</em> attack:
+A malicious responder provides controlled peers in the response peer list.</p>
+<p>More on these attacks may be found in our <a href="https://vac.dev/wakuv2-relay-anon">research log article</a>.</p>
+<p>As a weak mitigation the requester MAY ask several peers and select a subset of the returned peers.</p>
+<h2 id="responder">
+  Responder
+  <a class="anchor" href="#responder">#</a>
+</h2>
+<p>Responders that answer with active mesh peers are more vulnerable to a <em>neighbourhood surveillance</em> attack.
+Responding with the set of active mesh peers allows a malicious requester to get into the required position more easily.
+It takes away the first hurdle of the <em>neighbourhood surveillance</em> attack: The attacker knows which peers to try to connect to.
+This increased vulnerability can be avoided by only responding with randomly sampled sets of peers, e.g. by requesting a random peer set via <a href="/spec/33/">33/WAKU2-DISCV5</a>.
+(As stated in the <a href="#theory-and-protocol-semantics">Theory and Protocol Semantics Section</a>,
+these peer sets SHOULD be retrieved unsolicitedly before receiving requests to achieve faster response times.)</p>
+<p>Responders are also susceptible to amplification DoS attacks.
+Requesters send a simple message request which causes responders to engage in ambient peer discovery to retrieve a new random peer set.
+As a mitigation, responders MAY feature a <code>seen cache</code> for requests and only answer once per time interval.
+The exchange-peer cache discussed in <a href="#theory-and-protocol-semantics">Theory and Protocol Semantics Section</a> also provides mitigation.
+Still, frequent queries can tigger the refresh cycle more often. The <code>seen cache</code> MAY be used in conjunction to provide additional mitigation.</p>
+<h2 id="further-considerations">
+  Further Considerations
+  <a class="anchor" href="#further-considerations">#</a>
+</h2>
+<p>The response field contains ENRs as specified in <a href="/spec/31/">31/WAKU2-ENR</a>.
+While ENRs contain signatures, they do not violate the <a href="/spec/11/#signature-policy">Waku relay no-sign policy</a>),
+because they are part of the discovery domain and are not propagated in the relay domain.
+However, there might still be some form of leakage:
+ENRs could be used to track peers and facilitate linking attacks.
+We will investigate this further in our Waku anonymity analysis.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="https://docs.libp2p.io/concepts/addressing/">multiaddress</a></li>
+<li><a href="https://github.com/status-im/nim-libp2p/issues/140">libp2p discovery interface</a></li>
+<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md">libp2p gossipsub</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="https://vac.dev/wakuv2-relay-anon">Waku relay anonymity</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#discovery-interface">Discovery Interface</a></li>
+    <li><a href="#exchange-peer-cache-size">Exchange Peer Cache Size</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#requester">Requester</a></li>
+    <li><a href="#responder">Responder</a></li>
+    <li><a href="#further-considerations">Further Considerations</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

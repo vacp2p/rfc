@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.92.2" />
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract #  This document specifies a deanonymization mitigation technique, based on Dandelion and Dandelion&#43;&#43;, for Waku Relay. It mitigates mass deanonymization in the multi-node (botnet) attacker model, even when the number of malicious nodes is linear in the number of total nodes in the network.
+Based on the insight that symmetric message propagation makes deanonymization easier, it introduces a probability for nodes to simply forward the message to one select relay node instead of disseminating messages as per usual relay operation.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="44/WAKU2-DANDELION" />
+<meta property="og:description" content="Abstract #  This document specifies a deanonymization mitigation technique, based on Dandelion and Dandelion&#43;&#43;, for Waku Relay. It mitigates mass deanonymization in the multi-node (botnet) attacker model, even when the number of malicious nodes is linear in the number of total nodes in the network.
+Based on the insight that symmetric message propagation makes deanonymization easier, it introduces a probability for nodes to simply forward the message to one select relay node instead of disseminating messages as per usual relay operation." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/44/" /><meta property="article:section" content="docs" />
+
+
+
+<title>44/WAKU2-DANDELION | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.91fd3c536519b740f8f116fe6c244859417e1f488c171b668524e0a9b063dff2.js" integrity="sha256-kf08U2UZt0D48Rb&#43;bCRIWUF&#43;H0iMFxtmhSTgqbBj3/I="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/"class=active>44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var a=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(b){localStorage.setItem("menu.scrollTop",a.scrollTop)}),a.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>44/WAKU2-DANDELION</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#choosing-the-state">Choosing the State</a></li>
+    <li><a href="#stem-state">Stem State</a>
+      <ul>
+        <li><a href="#fail-safe">Fail Safe</a></li>
+      </ul>
+    </li>
+    <li><a href="#fluff-state">Fluff State</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#denial-of-service-black-hole-attack">Denial of Service: Black Hole Attack</a></li>
+    <li><a href="#anonymity-considerations">Anonymity Considerations</a>
+      <ul>
+        <li><a href="#attacker-model-and-anonymity-goals">Attacker Model and Anonymity Goals</a></li>
+        <li><a href="#non-dandelion-peers">Non-Dandelion Peers</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-analysis">Future Analysis</a>
+      <ul>
+        <li><a href="#bound-stem-length">Bound Stem Length</a></li>
+        <li><a href="#stem-relay-selection">Stem Relay Selection</a></li>
+        <li><a href="#random-delay-in-fluff-phase">Random Delay in Fluff Phase</a></li>
+        <li><a href="#stem-flag">Stem Flag</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="44waku2-dandelion">44/WAKU2-DANDELION</h1>
+
+  
+      <h1 id="waku-v2-dandelion">Waku v2 Dandelion</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document specifies a deanonymization mitigation technique,
+based on <a href="https://arxiv.org/abs/1701.04439">Dandelion</a> and <a href="https://arxiv.org/abs/1805.11060">Dandelion++</a>,
+for Waku Relay.
+It mitigates mass deanonymization in the <a href="/spec/45/#multi-node">multi-node (botnet) attacker model</a>,
+even when the number of malicious nodes is linear in the number of total nodes in the network.</p>
+<p>Based on the insight that symmetric message propagation makes deanonymization easier,
+it introduces a probability for nodes to simply forward the message to one select relay node
+instead of disseminating messages as per usual relay operation.</p>
+<h1 id="background-and-motivation">
+  Background and Motivation
+  <a class="anchor" href="#background-and-motivation">#</a>
+</h1>
+<p><a href="/spec/11/">Waku Relay</a>, offers privacy, pseudonymity, and a first layer of anonymity protection by design.
+Being a modular protocol family <a href="/spec/10/">Waku v2</a>
+offers features that inherently carry trade-offs as separate building blocks.
+Anonymity protection is such a feature.
+The <a href="https://freedom.cs.purdue.edu/projects/trilemma.html">Anonymity Trilemma</a>
+states that an anonymous communication network can only have two out of
+low bandwidth consumption, low latency, and strong anonymity.
+Even when choosing low bandwidth and low latency, which is the trade-off that basic Waku Relay takes,
+better anonymity properties (even though not strong per definition) can be achieved by sacrificing some of the efficiency properties.
+44/WAKU2-DANDELION specifies one such technique, and aims at gaining the best &ldquo;bang for the buck&rdquo;
+in terms of efficiency paid for anonymity gain.
+44/WAKU2-DANDELION is based on <a href="https://arxiv.org/abs/1701.04439">Dandelion</a>
+and <a href="https://arxiv.org/abs/1805.11060">Dandelion++</a>.</p>
+<p>Dandelion is a message spreading method, which, compared to other methods,
+increases the uncertainty of an attacker when trying to link messages to senders.
+Libp2p gossipsub aims at spanning a <a href="https://en.wikipedia.org/wiki/Regular_graph">d-regular graph</a> topology, with d=6 as the <a href="/spec/29/#gossipsub-v10-parameters">default value</a>.
+Messages are forwarded within this (expected) symmetric topology,
+which reduces uncertainty when trying to link messages to senders.
+Dandelion breaks this symmetry by subdividing message spreading into a &ldquo;stem&rdquo; and a &ldquo;fluff&rdquo; phase.</p>
+<p>In the &ldquo;stem&rdquo; phase, the message is sent to a single select relay node.
+With a certain probability, this message is relayed further on the &ldquo;stem&rdquo;,
+or enters the fluff phase.
+On the stem, messages are relayed to single peers, respectively,
+while in fluff phase, messages are spread as per usual relay operation (optionally augmented by random delays to further reduce symmetry).
+The graph spanned by stem connections is referred to as the anonymity graph.</p>
+<p>Note: This is an early raw version of the specification.
+It does not strictly follow the formally evaluated Dandelion++ paper,
+as we want to experiment with relaxing (and strengthening) certain model properties.
+In specific, we aim at a version that has tighter latency bounds.
+<a href="https://arxiv.org/pdf/2201.11860.pdf">Further research</a> suggests that Dandelion++&rsquo;s design choices are not optimal,
+which further assures that tweaking design choices makes sense.
+We will refine design decisions in future versions of this specification.</p>
+<p>Further information on Waku anonymity may be found in our <a href="https://vac.dev/wakuv2-relay-anon">Waku Privacy and Anonymity Analysis</a>.</p>
+<h1 id="theory-and-functioning">
+  Theory and Functioning
+  <a class="anchor" href="#theory-and-functioning">#</a>
+</h1>
+<p>44/WAKU2-DANDELION can be seen as an anonymity enhancing add-on to <a href="https://rfc.vac.dev/spec/11/">Waku Relay</a> message dissemination,
+which is based on <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a>.
+44/WAKU2-DANDELION subdivides message dissemination into a &ldquo;stem&rdquo; and a &ldquo;fluff&rdquo; phase.
+This specification is mainly concerned with specifying the stem phase.
+The fluff phase corresponds to <a href="/spec/11/">Waku Relay</a>,
+with optional fluff phase augmentations such as random delays.
+Adding random delay in the fluff phase further reduces symmetry in dissemination patterns and
+introduces more uncertainty for the attacker.
+Specifying fluff phase augmentations is out of scope for this document.</p>
+<p><em>Note:
+We plan to add a separate specification for fluff phase augmentations.
+We envision stem and fluff phase as abstract concepts.
+The Dandelion stem and fluff phases instantiate these concepts.
+Future stem specifications might comprise: none (standard relay), Dandelion stem, Tor, and mix-net.
+As for future fluff specifications: none (standard relay), diffusion (random delays), and mix-net.</em></p>
+<p>Messages relayed by nodes supporting 44/WAKU2-DANDELION are either in stem phase or in fluff phase.
+We refer to the former as a stem message and to the latter as a fluff message.
+A message starts in stem phase, and at some point, transitions to fluff phase.
+Nodes, on the other hand, are in stem state or fluff state.
+Nodes in stem state relay stem messages to a single relay node, randomly selected per epoch for each incoming stem connection.
+Nodes in fluff state transition stem messages into fluff phase and relay them accordingly.
+Fluff messages are always disseminated via Waku Relay,
+by both nodes in stem state and nodes in fluff state.</p>
+<p>Messages originated in the node (i.e. messages coming from the application layer of our node),
+are always sent as stem messages.</p>
+<p>The stem phase can be seen as a different protocol, and messages are introduced into Waku Relay, and by extension gossipsub,
+once they arrive at a node in fluff state for the first time.
+44/WAKU2-DANDELION uses <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> as the protocol for relaying stem messages.</p>
+<p>There are no negative effects on gossipsub peer scoring,
+because Dandelion nodes in <em>stem state</em> still normally relay Waku Relay (gossipsub) messages.</p>
+<h1 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h1>
+<p>Nodes $v$ supporting 44/WAKU2-DANDELION MUST either be in stem state or in fluff state.
+This does not include relaying messages originated in $v$, for which $v$ SHOULD always be in stem state.</p>
+<h2 id="choosing-the-state">
+  Choosing the State
+  <a class="anchor" href="#choosing-the-state">#</a>
+</h2>
+<p>On startup and when a new epoch starts,
+node $v$ randomly selects a number $r$ between 0 and 1.
+If $r &lt; q$, for $q = 0.2$, the node enters fluff state, otherwise, it enters stem state.</p>
+<p>New epochs start when <code>unixtime</code> (in seconds) $\equiv 0 \mod 600$,
+corresponding to 10 minute epochs.</p>
+<h2 id="stem-state">
+  Stem State
+  <a class="anchor" href="#stem-state">#</a>
+</h2>
+<p>On entering stem state,
+nodes supporting 44/WAKU2-DANDELION MUST randomly select two nodes for each pubsub topic from the respective gossipsub mesh node set.
+These nodes are referred to as stem relays.
+Stem relays MUST support <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>.
+If a chosen peer does not support <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>,
+the node SHOULD switch to fluff state.
+(We may update this strategy in future versions of this document.)</p>
+<p>Further, the node establishes a map that maps each incoming stem connection
+to one of its stem relays chosen at random (but fixed per epoch).
+Incoming stem connections are identified by the <a href="https://docs.libp2p.io/concepts/peers/#peer-id/">Peer IDs</a>
+of peers the node receives <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> messages from.
+Incoming <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> connections from peers that do not support 44/WAKU2-DANDELION are identified and mapped in the same way.
+This makes the protocol simpler, increases the anonymity set, and offers Dandelion anonymity properties to such peers, too.</p>
+<p>The node itself is mapped in the same way, so that all messages originated by the node are relayed via a per-epoch-fixed Dandelion relay, too.</p>
+<p>While in stem state, nodes MUST relay stem messages to the respective stem relay.
+Received fluff messages MUST be relayed as specified in the fluff state section.</p>
+<p>The stem protocol (<a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>) is independent of the fluff protocol (<a href="/spec/11/">Waku Relay</a>).
+While in stem state, nodes MUST NOT gossip about stem messages,
+and MUST NOT send control messages related to stem messages.
+(An existing gossipsub implementation does <em>not</em> have to be adjusted to not send gossip about stem messages,
+because these messages are only handed to gossipsub once they enter fluff phase.)</p>
+<h3 id="fail-safe">
+  Fail Safe
+  <a class="anchor" href="#fail-safe">#</a>
+</h3>
+<p>Nodes $v$ in stem state SHOULD store messages attached with a random timer between $t_1 = 5 * 100ms$ and $t_2 = 2 * t_1$.
+This time interval is chosen because</p>
+<ul>
+<li>we assume $100,ms$ as an average per hop delay, and</li>
+<li>using $q=0.2$ will lead to an expected number of 5 stem hops per message.</li>
+</ul>
+<p>If $v$ does not receive a given message via Waku Relay (fluff) before the respective timer runs out,
+$v$ will disseminate the message via Waku Relay.</p>
+<h2 id="fluff-state">
+  Fluff State
+  <a class="anchor" href="#fluff-state">#</a>
+</h2>
+<p>In fluff state, nodes operate as usual Waku Relay nodes.
+The Waku Relay functionality might be augmented by a future specification, e.g. adding random delays.</p>
+<p>Note: The <a href="https://arxiv.org/abs/1701.04439">Dandelion</a> paper describes the fluff phase as regular forwarding.
+Since Dandelion is designed as an update to the Bitcoin network using diffusion spreading,
+this regular forwarding already comprises random delays.</p>
+<h1 id="implementation-notes">
+  Implementation Notes
+  <a class="anchor" href="#implementation-notes">#</a>
+</h1>
+<p>Handling of the 44/WAKU2-DANDELION stem phase can be implemented as an extension to an existing <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> implementation.</p>
+<p>Fluff phase augmentations might alter gossipsub message dissemination (e.g. adding random delays).
+If this is the case, they have to be implemented on the libp2p gossipsub layer.</p>
+<h1 id="securityprivacy-considerations">
+  Security/Privacy Considerations
+  <a class="anchor" href="#securityprivacy-considerations">#</a>
+</h1>
+<h2 id="denial-of-service-black-hole-attack">
+  Denial of Service: Black Hole Attack
+  <a class="anchor" href="#denial-of-service-black-hole-attack">#</a>
+</h2>
+<p>In a <a href="/spec/45/#black-hole-internal">black hole attack</a>, malicious nodes prevent messages from being spread,
+metaphorically not allowing messages to leave once they entered.
+This requires the attacker to control nodes on all dissemination paths.
+Since the number of dissemination paths is significantly reduced in the stem phase,
+Dandelion spreading reduces the requirements for a black hole attack.</p>
+<p>The fail-safe mechanism specified in this document (proposed in the Dandelion paper), mitigates this.</p>
+<h2 id="anonymity-considerations">
+  Anonymity Considerations
+  <a class="anchor" href="#anonymity-considerations">#</a>
+</h2>
+<h3 id="attacker-model-and-anonymity-goals">
+  Attacker Model and Anonymity Goals
+  <a class="anchor" href="#attacker-model-and-anonymity-goals">#</a>
+</h3>
+<p>44/WAKU2-DANDELION provides significant mitigation against mass deanonymization in the
+passive <a href="/spec/45/#scaling-multi-node">scaling multi node model</a>.
+in which the attacker controls a certain percentage of nodes in the network.
+44/WAKU2-DANDELION provides significant mitigation against mass deanonymization
+even if the attacker knows the network topology, i.e. the anonymity graph and the relay mesh graph.</p>
+<p>Mitigation in stronger models, including the <em>active scaling multi-node</em> model, is weak.
+We will elaborate on this in future versions of this document.</p>
+<p>44/WAKU2-DANDELION does not protect against targeted deanonymization attacks.</p>
+<h3 id="non-dandelion-peers">
+  Non-Dandelion Peers
+  <a class="anchor" href="#non-dandelion-peers">#</a>
+</h3>
+<p>Stem relays receiving messages can either be in stem state or in fluff state themselves.
+They might also not support 44/WAKU2-DANDELION,
+and interpret the message as classical <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>,
+which effectively makes them act as fluff state relays.
+While such peers lower the overall anonymity properties,
+the <a href="https://arxiv.org/abs/1805.11060">Dandelion++ paper</a>
+showed that including those peers yields more anonymity compared to excluding these peers.</p>
+<h2 id="future-analysis">
+  Future Analysis
+  <a class="anchor" href="#future-analysis">#</a>
+</h2>
+<p>The following discusses potential relaxations in favour of reduced latency,
+as well as their impact on anonymity.
+This is still work in progress and will be elaborated on in future versions of this document.</p>
+<p>Generally, there are several design choices to be made for the stem phase of a Dandelion-based specification:</p>
+<ol>
+<li>the probability of continuing the stem phase, which determines the expected stem lengh,</li>
+<li>the out degree in the stem phase, which set to 1 in this document (also in the Dandelion papers),</li>
+<li>the rate of re-selecting stem relays among all gossipsub mesh peers (for a given pubsub topic), and</li>
+<li>the mapping of incoming connections to outgoing connections.</li>
+</ol>
+<h3 id="bound-stem-length">
+  Bound Stem Length
+  <a class="anchor" href="#bound-stem-length">#</a>
+</h3>
+<p>Choosing $q = 0.2$, 44/WAKU2-DANDELION has an expected stem length of 5 hops,
+Assuming $100ms$ added delay per hop, the stem phase adds around 500ms delay on average.</p>
+<p>There is a possibility for the stem to grow longer,
+but some applications need tighter bounds on latency.</p>
+<p>While fixing the stem length would yield tighter latency bounds,
+it also reduces anonymity properties.
+A fixed stem length requires the message to carry information about the remaining stem length.
+This information reduces the uncertainty of attackers
+when calculating the probability distribution assigning each node a probability for having sent a specific message.
+We will quantify the resulting loss of anonymity in future versions of this document.</p>
+<h3 id="stem-relay-selection">
+  Stem Relay Selection
+  <a class="anchor" href="#stem-relay-selection">#</a>
+</h3>
+<p>In its current version, 44/WAKU2-DANDELION nodes default to fluff state
+if the random stem relay selection yields at least one peer that does not support <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> (which is the stem protocol used in 44/WAKU2-DANDELION).
+If nodes would reselect peers until they find peers supporting <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>,
+malicious nodes would get an advantage if a significant number of honest nodes would not support <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a>.
+Even though this causes messages to enter fluff phase earlier,
+we choose the trade-off in favour of protocol stability and sacrifice a bit of anonymity.
+(We will look into improving this in future versions of this document.)</p>
+<h3 id="random-delay-in-fluff-phase">
+  Random Delay in Fluff Phase
+  <a class="anchor" href="#random-delay-in-fluff-phase">#</a>
+</h3>
+<p><a href="https://arxiv.org/abs/1701.04439">Dandelion</a> and <a href="https://arxiv.org/abs/1805.11060">Dandelion++</a>
+assume adding random delays in the fluff phase as they build on Bitcoin diffusion.
+44/WAKU2-DANDELION (in its current state) allows for zero delay in the fluff phase and outsources fluff augmentations to dedicated specifications.
+While this lowers anonymity properties, it allows making Dandelion an opt-in solution in a given network.
+Nodes that do not want to use Dandelion do not experience any latency increase.
+We will quantify and analyse this in future versions of this specification.</p>
+<p>We plan to add a separate fluff augmentation specification that will introduce random delays.
+Optimal delay times depend on the message frequency and patterns.
+This delay fluff augmentation specification will be oblivious to the actual message content,
+because Waku Dandelion specifications add anonymity on the routing layer.
+Still, it is important to note that <a href="https://rfc.vac.dev/spec/14/#payloads">Waku2 messages</a> (in their current version) carry an originator timestamp,
+which works against fluff phase random delays.
+An analysis of the benefits of this timestamp versus anonymity risks is on our roadmap.</p>
+<p>By adding a delay, the fluff phase modifies the behaviour of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a>,
+which Waku Relay builds upon.</p>
+<p>Note: Introducing random delays can have a negative effect on
+<a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#peer-scoring">peer scoring</a>.</p>
+<h3 id="stem-flag">
+  Stem Flag
+  <a class="anchor" href="#stem-flag">#</a>
+</h3>
+<p>While 44/WAKU2-DANDELION without fluff augmentation does not effect Waku Relay nodes,
+messages sent by nodes that only support <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> might be routed through a Dandelion stem without them knowing.
+While this improves anonymity, as discussed above, it also introduces additional latency and lightpush nodes cannot opt out of this.</p>
+<p>In future versions of this specification we might</p>
+<ul>
+<li>add a flag to <a href="/spec/14/">14/WAKU2-MESSAGE</a> indicating a message should be routed over a Dandelion stem (opt-in), or</li>
+<li>add a flag to <a href="/spec/14/">14/WAKU2-MESSAGE</a> indicating a message should <em>not</em> be routed over a Dandelion stem (opt-out), or</li>
+<li>introducing a fork of <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> exclusively used for Dandelion stem.</li>
+</ul>
+<p>In the current version, we decided against these options in favour of a simpler protocol and an increased anonymity set.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="https://arxiv.org/abs/1701.04439">Dandelion</a></li>
+<li><a href="https://arxiv.org/abs/1805.11060">Dandelion++</a></li>
+<li><a href="https://rfc.vac.dev/spec/11/">Waku Relay</a></li>
+<li><a href="https://rfc.vac.dev/spec/10/">Waku v2</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Regular_graph">d-regular graph</a></li>
+<li><a href="https://freedom.cs.purdue.edu/projects/trilemma.html">Anonymity Trilemma</a></li>
+<li><a href="https://vac.dev/wakuv2-relay-anon">Waku Privacy and Anonymity Analysis</a>.</li>
+<li><a href="https://arxiv.org/pdf/2201.11860.pdf">On the Anonymity of Peer-To-Peer Network Anonymity Schemes Used by Cryptocurrencies</a></li>
+<li><a href="/spec/45/">Adversarial Models</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#choosing-the-state">Choosing the State</a></li>
+    <li><a href="#stem-state">Stem State</a>
+      <ul>
+        <li><a href="#fail-safe">Fail Safe</a></li>
+      </ul>
+    </li>
+    <li><a href="#fluff-state">Fluff State</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#denial-of-service-black-hole-attack">Denial of Service: Black Hole Attack</a></li>
+    <li><a href="#anonymity-considerations">Anonymity Considerations</a>
+      <ul>
+        <li><a href="#attacker-model-and-anonymity-goals">Attacker Model and Anonymity Goals</a></li>
+        <li><a href="#non-dandelion-peers">Non-Dandelion Peers</a></li>
+      </ul>
+    </li>
+    <li><a href="#future-analysis">Future Analysis</a>
+      <ul>
+        <li><a href="#bound-stem-length">Bound Stem Length</a></li>
+        <li><a href="#stem-relay-selection">Stem Relay Selection</a></li>
+        <li><a href="#random-delay-in-fluff-phase">Random Delay in Fluff Phase</a></li>
+        <li><a href="#stem-flag">Stem Flag</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
