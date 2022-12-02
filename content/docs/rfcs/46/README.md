@@ -105,7 +105,7 @@ Establishing connections, which in turn establishes the respective Tor circuits,
 Tor Push introduces epochs.
 The default epoch duration is 10 minutes.
 (We might adjust this default value based on experiments and evaluation in future versions of this document.
-It seems a good trad-off between traceablity and circuit building overhead.)
+It seems a good trade-off between traceablity and circuit building overhead.)
 
 For each epoch, the Tp-context SHOULD be refreshed, which includes
 
