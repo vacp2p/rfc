@@ -1,6 +1,6 @@
 ---
 slug: 26
-title: 26/WAKU-PAYLOAD
+title: 26/WAKU2-PAYLOAD
 name: Waku Message Payload Encryption
 status: draft
 editor: Oskar Thoren <oskar@status.im>
