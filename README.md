@@ -39,6 +39,10 @@ Once installed, the following command can be used to generate the sequence diagr
 More details on the installation and compilation are given in [mscgenjs repository](https://github.com/mscgenjs/mscgenjs-cli).
 You may try the online playground https://mscgen.js.org/ as well to get a sense of the output figures. 
 
+# Continuous Integration
+
+The `master` branch is built by [our Jenkins instance](https://ci.infra.status.im/job/website/job/rfc.vac.dev/) and deployed to https://rfc.vac.dev/.
+
 ## Acknowledgement
 
 Site layout and process inspired by https://rfc.zeromq.org/
