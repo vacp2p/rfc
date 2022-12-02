@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document extends the libp2p gossipsub specification specifying gossipsub Tor Push, a gossipsub-internal way of pushing messages into a gossipsub network via Tor. Tor Push adds sender identity protection to gossipsub.
+Protocol identifier: /meshsub/1.1.0
+Note: Gossipsub Tor Push does not have a dedicated protocol identifier. It uses the same identifier as gossipsub and works with all pubsub based protocols. This allows nodes that are oblivious to Tor Push to process messages received via Tor Push.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="46/GOSSIPSUB-TOR-PUSH" />
+<meta property="og:description" content="Abstract # This document extends the libp2p gossipsub specification specifying gossipsub Tor Push, a gossipsub-internal way of pushing messages into a gossipsub network via Tor. Tor Push adds sender identity protection to gossipsub.
+Protocol identifier: /meshsub/1.1.0
+Note: Gossipsub Tor Push does not have a dedicated protocol identifier. It uses the same identifier as gossipsub and works with all pubsub based protocols. This allows nodes that are oblivious to Tor Push to process messages received via Tor Push." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/46/" /><meta property="article:section" content="docs" />
+
+
+
+<title>46/GOSSIPSUB-TOR-PUSH | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.06839260bd3cd325ccc30b304a33015b3262511616f3b07ba00bf537143fcbfb.js" integrity="sha256-BoOSYL080yXMwwswSjMBWzJiURYW87B7oAv1NxQ/y/s="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/"class=active>46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>46/GOSSIPSUB-TOR-PUSH</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#wire-format">Wire Format</a></li>
+    <li><a href="#receiving-tor-push-messages">Receiving Tor Push Messages</a></li>
+    <li><a href="#sending-tor-push-messages">Sending Tor Push Messages</a>
+      <ul>
+        <li><a href="#connection-establishment">Connection Establishment</a></li>
+        <li><a href="#epochs">Epochs</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#fingerprinting-attacks">Fingerprinting Attacks</a></li>
+    <li><a href="#dos">DoS</a>
+      <ul>
+        <li><a href="#general-dos-against-tor">General DoS against Tor</a></li>
+        <li><a href="#targeting-the-guard">Targeting the Guard</a></li>
+        <li><a href="#targeting-the-gossipsub-network">Targeting the Gossipsub Network</a></li>
+        <li><a href="#peer-discovery">Peer Discovery</a></li>
+      </ul>
+    </li>
+    <li><a href="#roll-out-phase">Roll-out Phase</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="46gossipsub-tor-push">
+  46/GOSSIPSUB-TOR-PUSH
+  <a class="anchor" href="#46gossipsub-tor-push">#</a>
+</h1>
+
+  
+      <h1 id="gossipsub-tor-push">
+  Gossipsub Tor Push
+  <a class="anchor" href="#gossipsub-tor-push">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document extends the <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub specification</a>
+specifying gossipsub Tor Push,
+a gossipsub-internal way of pushing messages into a gossipsub network via Tor.
+Tor Push adds sender identity protection to gossipsub.</p>
+<p><strong>Protocol identifier</strong>: /meshsub/1.1.0</p>
+<p>Note: Gossipsub Tor Push does not have a dedicated protocol identifier.
+It uses the same identifier as gossipsub and works with all <a href="https://github.com/libp2p/specs/tree/master/pubsub">pubsub</a> based protocols.
+This allows nodes that are oblivious to Tor Push to process messages received via Tor Push.</p>
+<h1 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
+</h1>
+<p>Without extensions, <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a>
+does not protect sender identities.</p>
+<p>A possible design of an anonymity extension to gossipsub is pushing messages through an anonymization network before they enter the gossipsub network.
+<a href="https://www.torproject.org/">Tor</a> is currently the largest anonymization network.
+It is well researched and works reliably.
+Basing our solution on Tor both inherits existing security research, as well as allows for a quick deployment.</p>
+<p>Using the anonymization network approach, even the first gossipsub node that relays a given message cannot link the message to its sender (within a relatively strong adversarial model).
+Taking the low bandwidth overhead and the low latency overhead into consideration, Tor offers very good anonymity properties.</p>
+<h1 id="functional-operation">
+  Functional Operation
+  <a class="anchor" href="#functional-operation">#</a>
+</h1>
+<p>Tor Push allows nodes to push messages over Tor into the gossipsub network.
+The approach specified in this document is fully backwards compatible.
+Gossipsub nodes that do not support Tor Push can receive and relay Tor Push messages,
+because Tor Push uses the same Protocol ID as gossipsub.</p>
+<p>Messages are sent over Tor via <a href="https://www.rfc-editor.org/rfc/rfc1928">SOCKS5</a>.
+Tor Push uses a dedicated libp2p context to prevent information leakage.
+To significantly increase resilience and mitigate circuit failures,
+Tor Push establishes several connections, each to a different randomly selected gossipsub node.</p>
+<h1 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h1>
+<p>This section specifies the format of Tor Push messages, as well as how Tor Push messages are received and sent, respectively.</p>
+<h2 id="wire-format">
+  Wire Format
+  <a class="anchor" href="#wire-format">#</a>
+</h2>
+<p>The wire format of a Tor Push message corresponds verbatim to a typical <a href="https://github.com/libp2p/specs/tree/master/pubsub#the-message">libp2p pubsub message</a>.</p>
+<pre tabindex="0"><code>message Message {
+  optional string from = 1;
+  optional bytes data = 2;
+  optional bytes seqno = 3;
+  required string topic = 4;
+  optional bytes signature = 5;
+  optional bytes key = 6;
+}
+</code></pre><h2 id="receiving-tor-push-messages">
+  Receiving Tor Push Messages
+  <a class="anchor" href="#receiving-tor-push-messages">#</a>
+</h2>
+<p>Any node supporting a protocol with ID <code>/meshsub/1.1.0</code> (e.g. gossipsub), can receive Tor Push messages.
+Receiving nodes are oblivious to Tor Push and will process incoming messages according to the respective <code>meshsub/1.1.0</code> specification.</p>
+<h2 id="sending-tor-push-messages">
+  Sending Tor Push Messages
+  <a class="anchor" href="#sending-tor-push-messages">#</a>
+</h2>
+<p>In the following, we refer to nodes sending Tor Push messages as Tp-nodes (Tor Push nodes).</p>
+<p>Tp-nodes MUST setup a separate libp2p context, i.e. <a href="https://docs.libp2p.io/concepts/multiplex/switch/">libp2p switch</a>,
+which MUST NOT be used for any purpose other than Tor Push.
+We refer to this context as Tp-context.
+The Tp-context MUST NOT share any data, e.g. peer lists, with the default context.</p>
+<p>Tp-peers are peers a Tp-node plans to send Tp-messages to.
+Tp-peers MUST support <code>/meshsub/1.1.0</code>.
+For retrieving Tp-peers, Tp-nodes SHOULD use an ambient peer discovery method that retrieves a random peer sample (from the set of all peers), e.g. <a href="/spec/33/">33/WAKU2-DISCV5</a>.</p>
+<p>Tp-nodes MUST establish a connection as described in sub-section <a href="#connection-establishment">Tor Push Connection Establishment</a> to at least one Tp-peer.
+To significantly increase resilience, Tp-nodes SHOULD establish Tp-connections to <code>D</code> peers,
+where <code>D</code> is the <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md#parameters">desired gossipsub out-degree</a>,
+with a default value of <code>8</code>.</p>
+<p>Each Tp-message MUST be sent via the Tp-context over at least one Tp-connection.
+To increase resilience, Tp-messages SHOULD be sent via the Tp-context over all available Tp-connections.</p>
+<p>Control messages of any kind, e.g. gossipsub graft, MUST NOT be sent via Tor Push.</p>
+<h3 id="connection-establishment">
+  Connection Establishment
+  <a class="anchor" href="#connection-establishment">#</a>
+</h3>
+<p>Tp-nodes establish a <code>/meshsub/1.1.0</code> connection to tp-peers via <a href="https://www.rfc-editor.org/rfc/rfc1928">SOCKS5</a> over <a href="https://www.torproject.org/">Tor</a>.</p>
+<p>Establishing connections, which in turn establishes the respective Tor circuits, can be done ahead of time.</p>
+<h3 id="epochs">
+  Epochs
+  <a class="anchor" href="#epochs">#</a>
+</h3>
+<p>Tor Push introduces epochs.
+The default epoch duration is 10 minutes.
+(We might adjust this default value based on experiments and evaluation in future versions of this document.
+It seems a good trade-off between traceablity and circuit building overhead.)</p>
+<p>For each epoch, the Tp-context SHOULD be refreshed, which includes</p>
+<ul>
+<li>libp2p peer-ID</li>
+<li>Tp-peer list</li>
+<li>connections to Tp-peers</li>
+</ul>
+<p>Both Tp-peer selection for the next epoch and establishing connections to the newly selected peers SHOULD be done during the current epoch
+and be completed before the new epoch starts.
+This avoids adding latency to message transmission.</p>
+<h1 id="securityprivacy-considerations">
+  Security/Privacy Considerations
+  <a class="anchor" href="#securityprivacy-considerations">#</a>
+</h1>
+<h2 id="fingerprinting-attacks">
+  Fingerprinting Attacks
+  <a class="anchor" href="#fingerprinting-attacks">#</a>
+</h2>
+<p>Protocols that feature distinct patterns are prone to fingerprinting attacks when using them over Tor Push.
+Both malicious guards and exit nodes could detect these patterns
+and link the sender and receiver, respectively, to transmitted traffic.
+As a mitigation, such protocols can introduce dummy messages and/or padding to hide patterns.</p>
+<h2 id="dos">
+  DoS
+  <a class="anchor" href="#dos">#</a>
+</h2>
+<h3 id="general-dos-against-tor">
+  General DoS against Tor
+  <a class="anchor" href="#general-dos-against-tor">#</a>
+</h3>
+<p>Using untargeted DoS to prevent Tor Push messages from entering the gossipsub network would cost vast resources,
+because Tor Push transmits messages over several circuits and the Tor network is well established.</p>
+<h3 id="targeting-the-guard">
+  Targeting the Guard
+  <a class="anchor" href="#targeting-the-guard">#</a>
+</h3>
+<p>Denying the service of a specific guard node blocks Tp-nodes using the respective guard.
+Tor guard selection will replace this guard [TODO elaborate].
+Still, messages might be delayed during this window which might be critical to certain applications.</p>
+<h3 id="targeting-the-gossipsub-network">
+  Targeting the Gossipsub Network
+  <a class="anchor" href="#targeting-the-gossipsub-network">#</a>
+</h3>
+<p>Without sophisticated rate limiting (for example using <a href="/spec/17">17/WAKU2-RLN-RELAY</a>),
+attackers can spam the gossipsub network.
+It is not enough to just block peers that send too many messages,
+because these messages might actually come from a Tor exit node that many honest Tp-nodes use.
+Without Tor Push, protocols on top of gossipsub could block peers if they exceed a certain message rate.
+With Tor Push, this would allow the reputation-based DoS attack described in
+<a href="https://ieeexplore.ieee.org/abstract/document/7163022">Bitcoin over Tor isn&rsquo;t a Good Idea</a>.</p>
+<h3 id="peer-discovery">
+  Peer Discovery
+  <a class="anchor" href="#peer-discovery">#</a>
+</h3>
+<p>The discovery mechanism could be abused to link requesting nodes to their Tor connections to discovered nodes.
+An attacker that controls both the node that responds to a discovery query,
+and the node who’s ENR the response contains,
+can link the requester to a Tor connection that is expected to be opened to the node represented by the returned ENR soon after.</p>
+<p>Further, the discovery mechanism (e.g. discv5) could be abused to distribute disproportionately many malicious nodes.
+For instance if p% of the nodes in the network are malicious,
+an attacker could manipulate the discovery to return malicious nodes with 2p% probability.
+The discovery mechanism needs to be resilient against this attack.</p>
+<h2 id="roll-out-phase">
+  Roll-out Phase
+  <a class="anchor" href="#roll-out-phase">#</a>
+</h2>
+<p>During the roll-out phase of Tor Push, during which only a few nodes use Tor Push,
+attackers can narrow down the senders of Tor messages to the set of gossipsub nodes that do not originate messages.
+Nodes who want anonymity guarantees even during the roll-out phase can use separate network interfaces for their default context and Tp-context, respectively.
+For the best protection, these contexts should run on separate physical machines.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a></li>
+<li><a href="https://github.com/libp2p/specs/tree/master/pubsub">libp2p pubsub</a></li>
+<li><a href="https://github.com/libp2p/specs/tree/master/pubsub#the-message">libp2p pubsub message</a></li>
+<li><a href="https://docs.libp2p.io/concepts/multiplex/switch">libp2p switch</a></li>
+<li><a href="https://www.rfc-editor.org/rfc/rfc1928">SOCKS5</a></li>
+<li><a href="https://www.torproject.org/">Tor</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="https://ieeexplore.ieee.org/abstract/document/7163022">Bitcoin over Tor isn&rsquo;t a Good Idea</a></li>
+<li><a href="/spec/17">17/WAKU2-RLN-RELAY</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#wire-format">Wire Format</a></li>
+    <li><a href="#receiving-tor-push-messages">Receiving Tor Push Messages</a></li>
+    <li><a href="#sending-tor-push-messages">Sending Tor Push Messages</a>
+      <ul>
+        <li><a href="#connection-establishment">Connection Establishment</a></li>
+        <li><a href="#epochs">Epochs</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#fingerprinting-attacks">Fingerprinting Attacks</a></li>
+    <li><a href="#dos">DoS</a>
+      <ul>
+        <li><a href="#general-dos-against-tor">General DoS against Tor</a></li>
+        <li><a href="#targeting-the-guard">Targeting the Guard</a></li>
+        <li><a href="#targeting-the-gossipsub-network">Targeting the Gossipsub Network</a></li>
+        <li><a href="#peer-discovery">Peer Discovery</a></li>
+      </ul>
+    </li>
+    <li><a href="#roll-out-phase">Roll-out Phase</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

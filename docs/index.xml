@@ -205,7 +205,7 @@ This specification is largely based on EIP-1459, with the only deviation being t
     </item>
     
     <item>
-      <title>26/WAKU-PAYLOAD</title>
+      <title>26/WAKU2-PAYLOAD</title>
       <link>https://rfc.vac.dev/spec/26/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -387,6 +387,29 @@ Based on the insight that symmetric message propagation makes deanonymization ea
       <description>Abstract # This document lists adversarial models and attack-based threats relevant in the context of Waku v2.
 Motivation and Background # Future versions of this document will serve as a comprehensive list of adversarial models and attack based threats relevant for Waku v2. The main purpose of this document is being a linkable resource for specifications that address protection as well as mitigation mechanisms within the listed models.
 Discussing and introducing countermeasures to specific attacks in specific models is out of scope for this document.</description>
+    </item>
+    
+    <item>
+      <title>46/GOSSIPSUB-TOR-PUSH</title>
+      <link>https://rfc.vac.dev/spec/46/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/46/</guid>
+      <description>Abstract # This document extends the libp2p gossipsub specification specifying gossipsub Tor Push, a gossipsub-internal way of pushing messages into a gossipsub network via Tor. Tor Push adds sender identity protection to gossipsub.
+Protocol identifier: /meshsub/1.1.0
+Note: Gossipsub Tor Push does not have a dedicated protocol identifier. It uses the same identifier as gossipsub and works with all pubsub based protocols. This allows nodes that are oblivious to Tor Push to process messages received via Tor Push.</description>
+    </item>
+    
+    <item>
+      <title>47/WAKU2-TOR-PUSH</title>
+      <link>https://rfc.vac.dev/spec/47/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/47/</guid>
+      <description>Abstract # This document extends the 11/WAKU2-RELAY, specifying Waku Tor Push, which allows nodes to push messages via Tor into the Waku relay network.
+Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
+Protocol identifier: /vac/waku/relay/2.0.0
+Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.</description>
     </item>
     
     <item>
