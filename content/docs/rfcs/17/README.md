@@ -120,11 +120,15 @@ It can do so by maintaining a local set of valid Merkle roots, which consist of 
 These roots refer to the final state of the Merkle tree after a whole block consisting of group changes are processed.
 The Merkle roots are updated on a per-block instead of a per-event basis.
 This is done since a large number of group changes in a single block may fully replace the acceptable window of roots.
+
 Updating the whole window would lead to some peers sending invalid messages with a root that refers to the state of the Merkle tree at a previous block.
+
 For example, if the relaying peer has a window size of 5, and there are 10 registrations in the last block, this would lead to the acceptable window of roots to represent the last 5 registration events it has received.
 However, if it fails to process even one event in the block, this would lead to the whole window of acceptable roots being invalid.
 This would lead to the relayer invalidating all messages that it sees, and it would also not be able to broadcast valid messages.
+
 Atomic processing of the blocks are necessary so that even if the peer is unable to process one event, the previous roots remain valid, and can be used to generate valid RateLimitProof's.
+
 This also allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
 This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
 See [Recommended System Parameters](#recommended-system-parameters) on choosing an appropriate `acceptable_root_window_size`. 
