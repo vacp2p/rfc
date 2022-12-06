@@ -117,11 +117,10 @@ This is to prevent a newly registered peer from spamming the system by messaging
 ### Merkle Root Validation
 The routing peers MUST check whether the provided Merkle root in the `RateLimitProof` is valid.
 It can do so by maintaining a local set of valid Merkle roots, which consist of `acceptable_root_window_size` past roots.
-These roots refer to the final state of the Merkle tree after a whole block consisting of group changes are processed.
-The Merkle roots are updated on a per-block instead of a per-event basis.
-This is done since a large number of group changes in a single block may fully replace the acceptable window of roots.
-
-Updating the whole window would lead to some peers sending invalid messages with a root that refers to the state of the Merkle tree at a previous block.
+These roots refer to the final state of the Merkle tree after a whole block consisting of group changes is processed.
+The Merkle roots are updated on a per-block basis instead of a per-event basis.
+This is done because if Merkle roots are updated on a per-event basis, some peers could send messages with a root that refers to a Merkle tree state that might get invalidated while the message is still propagating in the network, due to many registrations happening during this time frame.
+By updating roots on a per-block basis instead, we will have only one root update per-block processed, regardless on how many registrations happened in a block, and peers will be able to successfully propagate messages in a time frame corresponding to roughly the size of the roots window times the block mining time. 
 
 For example, if the relaying peer has a window size of 5, and there are 10 registrations in the last block, this would lead to the acceptable window of roots to represent the last 5 registration events it has received.
 However, if it fails to process even one event in the block, this would lead to the whole window of acceptable roots being invalid.
