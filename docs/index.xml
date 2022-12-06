@@ -347,6 +347,15 @@ Preliminaries # We assume that two users, e.</description>
     </item>
     
     <item>
+      <title>38/CONSENSUS-CLARO</title>
+      <link>https://rfc.vac.dev/spec/38/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/38/</guid>
+      <description>Abstract # This document specifies Claro: a Byzantine, fault-tolerant, binary decision agreement algorithm that utilizes bounded memory for its execution. Claro is a novel variant of the Snow family providing a probabilistic leaderless BFT consensus algorithm that achieves metastablity via network sub-sampling. We present an application context of the use of Claro in an efficient, leaderless, probabilistic permission-less consensus mechanism. We outline a simple taxonomy of Byzantine adversaries, leaving explicit explorations of to subsequent publication.</description>
+    </item>
+    
+    <item>
       <title>4/MVDS-META</title>
       <link>https://rfc.vac.dev/spec/4/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

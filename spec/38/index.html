@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document specifies Claro: a Byzantine, fault-tolerant, binary decision agreement algorithm that utilizes bounded memory for its execution. Claro is a novel variant of the Snow family providing a probabilistic leaderless BFT consensus algorithm that achieves metastablity via network sub-sampling. We present an application context of the use of Claro in an efficient, leaderless, probabilistic permission-less consensus mechanism. We outline a simple taxonomy of Byzantine adversaries, leaving explicit explorations of to subsequent publication.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="38/CONSENSUS-CLARO" />
+<meta property="og:description" content="Abstract # This document specifies Claro: a Byzantine, fault-tolerant, binary decision agreement algorithm that utilizes bounded memory for its execution. Claro is a novel variant of the Snow family providing a probabilistic leaderless BFT consensus algorithm that achieves metastablity via network sub-sampling. We present an application context of the use of Claro in an efficient, leaderless, probabilistic permission-less consensus mechanism. We outline a simple taxonomy of Byzantine adversaries, leaving explicit explorations of to subsequent publication." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/38/" /><meta property="article:section" content="docs" />
+
+
+
+<title>38/CONSENSUS-CLARO | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.50c6545eacb7cfd6cb1fb78550739a6ab084c89e08d23bd48034480983850e45.js" integrity="sha256-UMZUXqy3z9bLH7eFUHOaarCEyJ4I0jvUgDRICYOFDkU="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/"class=active>38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>38/CONSENSUS-CLARO</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#background">Background</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#algorithmic-concept">Algorithmic concept</a>
+      <ul>
+        <li><a href="#initial-opinion">Initial opinion</a></li>
+        <li><a href="#setup-parameters">Setup Parameters</a></li>
+        <li><a href="#phase-one-query">Phase One: Query</a></li>
+        <li><a href="#phase-two-computation">Phase Two: Computation</a></li>
+        <li><a href="#phase-three-computation">Phase Three: Computation</a></li>
+        <li><a href="#decision">Decision</a></li>
+        <li><a href="#termination">Termination</a></li>
+      </ul>
+    </li>
+    <li><a href="#further-points">Further points</a>
+      <ul>
+        <li><a href="#node-receives-information-during-round">Node receives information during round</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#syntax">Syntax</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#security-with-respect-to-various-adversarial-models">Security with respect to various Adversarial Models</a>
+      <ul>
+        <li><a href="#local-strategies">Local Strategies</a></li>
+        <li><a href="#omniscient-adversaries">Omniscient Adversaries</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#normative-references">Normative References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="38consensus-claro">
+  38/CONSENSUS-CLARO
+  <a class="anchor" href="#38consensus-claro">#</a>
+</h1>
+
+  
+      <h1 id="claro-consensus-protocol">
+  Claro Consensus Protocol
+  <a class="anchor" href="#claro-consensus-protocol">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Corey Petty <a href="mailto:corey@status.im">corey@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Álvaro Castro-Castilla
+          
+              ,
+              Mark Evenson
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document specifies Claro: a Byzantine, fault-tolerant, binary decision
+agreement algorithm that utilizes bounded memory for its execution.
+Claro is a novel variant of the Snow family providing a probabilistic
+leaderless BFT consensus algorithm that achieves metastablity via
+network sub-sampling.  We present an application context of the use of
+Claro in an efficient, leaderless, probabilistic permission-less
+consensus mechanism.  We outline a simple taxonomy of Byzantine
+adversaries, leaving explicit explorations of to subsequent
+publication.</p>
+<p>NOTE: We have renamed this variant to <code>Claro</code> from <code>Glacier</code> in order to disambiguate from a previously released research endeavor by <a href="https://arxiv.org/pdf/2210.03423.pdf">Amores-Sesar, Cachin, and Tedeschi</a>. Their naming was coincidentally named the same as our work but is sufficiently differentiated from how ours works.</p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>This work is a part of a larger research endeavor to explore highly scalable Byzantine Fault Tolerant (BFT) consensus protocols. Consensus lies at the heart of many decentralized protocols, and thus its characteristics and properties are inherited by applications built on top. Thus, we seek to improve upon the current state of the art in two main directions: base-layer scalability and censorship resistance.</p>
+<p>Avalanche has shown to exibit the former in a production environment in a way that is differentiated from Nakamoto consensus and other Proof of Stake (PoS) protocols based in practical Byzantine Fault Tolerant (pBFT) methodologies. We aim to understand its limitations and improve upon them.</p>
+<h2 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
+</h2>
+<p>Our starting point is Avalanche’s Binary Byzantine Agreement algorithm, called Snowball. As long as modifications allow a DAG to be constructed later on, this simplifies the design significantly. The DAG stays the same in principle: it supports confidence, but the core algorithm can be modeled without.</p>
+<p>The concept of the Snowball algorithm is relatively simple. Following is a simplified description (lacking some details, but giving an overview). For further details, please refer to the <a href="https://assets.website-files.com/5d80307810123f5ffbb34d6e/6009805681b416f34dcae012_Avalanche%20Consensus%20Whitepaper.pdf">Avalanche paper</a>.</p>
+<ol>
+<li>The objective is to vote yes/no on a decision (this decision could be a single bit, or, in our DAG use case, whether a vertex should be included or not).</li>
+<li>Every node has an eventually-consistent complete view of the network. It will select at random k nodes, and will ask their opinion on the decision (yes/no).</li>
+<li>After this sampling is finished, if there is a vote that has more than an <code>alpha</code> threshold, it accumulates one count for this opinion, as well as changes its opinion to this one. But, if a different opinion is received, the counter is reset to 1. If no threshold <code>alpha</code> is reached, the counter is reset to 0 instead.</li>
+<li>After several iterations of this algorithm, we will reach a threshold <code>beta</code>, and decide on that as final.</li>
+</ol>
+<p>Next, we will proceed to describe our new algorithm, based on Snowball.</p>
+<p>We have identified a shortcoming of the Snowball algorithm that was a perfect starting point for devising improvements. The scenario is as follows:</p>
+<ul>
+<li>There is a powerful adversary in the network, that controls a large percentage of the node population: 10% to ~50%.</li>
+<li>This adversary follows a strategy that allows them to rapidly change the decision bit (possibly even in a coordinated way) so as to maximally confuse the honest nodes.</li>
+<li>Under normal conditions, honest nodes will accumulate supermajorities soon enough, and reach the <code>beta</code> threshold. However, when an honest node performs a query and does not reach the threshold <code>alpha</code> of responses, the counter will be set to 0.</li>
+<li>The highest threat to Snowball is an adversary that keeps it from reaching the <code>beta</code> threshold, managing to continuously reset the counter, and steering Snowball away from making a decision.</li>
+</ul>
+<p>This document only outlines the specification to Claro. Subsequent analysis work on Claro (both on its performance and how it differentiates with Snowball) will be published shortly and this document will be updated.</p>
+<h1 id="claro-algorithm-specification">
+  Claro Algorithm Specification
+  <a class="anchor" href="#claro-algorithm-specification">#</a>
+</h1>
+<p>The Claro consensus algorithm computes a boolean decision on a
+proposition via a set of distributed computational nodes.  Claro is
+a leaderless, probabilistic, binary consensus algorithm with fast
+finality that provides good reliability for network and Byzantine
+fault tolerance.</p>
+<h2 id="algorithmic-concept">
+  Algorithmic concept
+  <a class="anchor" href="#algorithmic-concept">#</a>
+</h2>
+<p>Claro is an evolution of the Snowball Byzantine Binary Agreement (BBA) algorithm, in which we tackle specifically the perceived weakness described above. The main focus is going to be the counter and the triggering of the reset. Following, we elaborate the different modifications and features that have been added to the reference algorithm:</p>
+<ol>
+<li>Instead of allowing the latest evidence to change the opinion completely, we take into account all accumulated evidence, to reduce the impact of high variability when there is already a large amount of evidence collected.</li>
+<li>Eliminate the counter and threshold scheme, and introduce instead two regimes of operation:
+<ul>
+<li>One focused on grabbing opinions and reacting as soon as possible. This part is somewhat closer conceptually to the reference algorithm.</li>
+<li>Another one focused on interpreting the accumulated data instead of reacting to the latest information gathered.</li>
+</ul>
+</li>
+<li>Finally, combine those two phases via a transition function. This avoids the creation of a step function, or a sudden change in behavior that could complicate analysis and understanding of the dynamics. Instead, we can have a single algorithm that transfers weight from one operation to the other as more evidence is gathered.</li>
+<li>Additionally, we introduce a function for weighted sampling. This will allow the combination of different forms of weighting:
+<ul>
+<li>Staking</li>
+<li>Heuristic reputation</li>
+<li>Manual reputation.</li>
+</ul>
+</li>
+</ol>
+<p>It’s worth delving a bit into the way the data is interpreted in order to reach a decision. Our approach is based conceptually on the paper <a href="https://cis.temple.edu/~pwang/Publication/confidence.pdf">Confidence as Higher-Order Uncertainty</a>, which describes a frequentist approach to decision certainty. The first-order certainty, measured by frequency, is caused by known positive evidence, and the higher-order certainty is caused by potential positive evidence. Because confidence is a relative measurement defined on evidence, it naturally follows comparing the amount of evidence the system knows with the amount that it will know in the near future (defining “near” as a constant).</p>
+<p>Intuitively, we are looking for a function of evidence, <strong><code>w</code></strong>, call it <strong><code>c</code></strong> for confidence, that satisfies the following conditions:</p>
+<ol>
+<li>Confidence <code>c</code> is a continuous and monotonically increasing function of <code>w</code>. (More evidence, higher confidence.)</li>
+<li>When <code>w = 0</code>, <code>c = 0</code>. (Without any evidence, confidence is minimum.)</li>
+<li>When <code>w</code> goes to infinity, <code>c</code> converges to 1. (With infinite evidence, confidence is maximum.)</li>
+</ol>
+<p>The paper describes also a set of operations for the evidence/confidence pairs, so that different sources of knowledge could be combined. However, we leave here the suggestion of a possible research line in the future combining an algebra of evidence/confidence pairs with swarm-propagation algorithm like the one described in <a href="http://replicated.cc/files/schmebulock.pdf">this paper</a>.</p>
+<h3 id="initial-opinion">
+  Initial opinion
+  <a class="anchor" href="#initial-opinion">#</a>
+</h3>
+<p>A proposal is formulated to which consensus of truth or falsity is
+desired.  Each node that participates starts the protocol with an
+opinion on the proposal, represented in the sequel as <code>NO</code>, <code>NONE</code>,
+and <code>YES</code>.</p>
+<p>A new proposition is discovered either by local creation or in
+response to a query, a node checks its local opinion.  If the node can
+compute a justification of the proposal, it sets its opinion to one of
+<code>YES</code> or <code>NO</code>.  If it cannot form an opinion, it leaves its opinion as
+<code>NONE</code>.</p>
+<p>For now, we will ignore the proposal dissemination process and assume all nodes participating have an initial opinion to respond to within a given request. Further research will relax this assumption and analyze timing attacks on proposal propagation through the network.</p>
+<p>The node then participates in a number of query rounds in which it
+solicits other node&rsquo;s opinion in query rounds.  Given a set of <code>N</code>
+leaderless computational nodes, a gossip-based protocol is presumed to
+exist which allows members to discover, join, and leave a weakly
+transitory maximally connected graph.  Joining this graph allows each
+node to view a possibly incomplete node membership list of all other
+nodes.  This view may change as the protocol advances, as nodes join
+and leave.  Under generalized Internet conditions, the membership of
+the graph would experience a churn rate varying across different
+time-scales, as the protocol rounds progress.  As such, a given node
+may not have a view on the complete members participating in the
+consensus on a proposal in a given round.</p>
+<p>The algorithm is divided into 4 phases:</p>
+<ol>
+<li>Querying</li>
+<li>Computing <code>confidence</code>, <code>evidence</code>, and <code>accumulated evidence</code></li>
+<li>Transition function</li>
+<li>Opinion and Decision</li>
+</ol>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="setup-parameters">
+  Setup Parameters
+  <a class="anchor" href="#setup-parameters">#</a>
+</h3>
+<p>The node initializes the following integer ratios as constants:</p>
+<pre tabindex="0"><code># The following values are constants chosen with justification from experiments
+# performed with the adversarial models
+
+# 
+confidence_threshold
+  &lt;-- 1   
+         
+# constant look ahead for number of rounds we expect to finalize a
+# decision.  Could be set dependent on number of nodes 
+# visible in the current gossip graph.
+look_ahead 
+  &lt;-- 19
+
+# the confidence weighting parameter (aka alpha_1)
+certainty 
+  &lt;-- 4 / 5  
+doubt ;; the lack of confidence weighting parameter (aka alpha_2)
+  &lt;-- 2 / 5 
+
+k_multiplier     ;; neighbor threshold multiplier
+  &lt;-- 2
+
+;;; maximal threshold multiplier, i.e. we will never exceed 
+;;; questioning k_initial * k_multiplier ^ max_k_multiplier_power peers
+max_k_multiplier_power 
+  &lt;-- 4
+    
+;;; Initial number of nodes queried in a round
+k_initial 
+  &lt;-- 7
+
+;;; maximum query rounds before termination
+max_rounds ;; placeholder for simulation work, no justification yet
+   &lt;-- 100 
+</code></pre><p>The following variables are needed to keep the state of Claro:</p>
+<pre tabindex="0"><code>;; current number of nodes to attempt to query in a round
+k 
+  &lt;-- k_original
+  
+;; total number of votes examined over all rounds
+total_votes 
+   &lt;-- 0 
+;; total number of YES (i.e. positive) votes for the truth of the proposal
+total_positive 
+   &lt;-- 0
+;; the current query round, an integer starting from zero
+round
+  &lt;-- 0
+</code></pre><h3 id="phase-one-query">
+  Phase One: Query
+  <a class="anchor" href="#phase-one-query">#</a>
+</h3>
+<p>A node selects <code>k</code> nodes randomly from the complete pool of peers in the
+network. This query is can optionally be weighted, so the probability
+of selecting nodes is proportional to their</p>
+<p>Node Weighting
+$$
+P(i) = \frac{w_i}{\sum_{j=0}^{j=N} w_j}
+$$</p>
+<p>where <code>w</code> is evidence. The list of nodes is maintained by a separate protocol (the network
+layer), and eventual consistency of this knowledge in the network
+suffices. Even if there are slight divergences in the network view
+from different nodes, the algorithm is resilient to those.</p>
+<p>A query is sent to each neighbor with the node&rsquo;s current <code>opinion</code> of
+the proposal.</p>
+<p>Each node replies with their current opinion on the proposal.</p>
+<p>See <a href="#wire-protocol">the wire protocol Interoperability section</a> for
+details on the semantics and syntax of the &ldquo;on the wire&rdquo;
+representation of this query.</p>
+<p><strong>Adaptive querying</strong>. An additional optimization in the query
+consists of adaptively growing the <em><code>k</code></em> constant in the event of
+<strong>high confusion</strong>. We define high confusion as the situation in
+which neither opinion is strongly held in a query (<em>i.e.</em> a
+threshold is not reached for either yes or no). For this, we will
+use the <em><code>alpha</code></em> threshold defined below. This adaptive growth of
+the query size is done as follows:</p>
+<p>Every time the threshold is not reached, we multiply <em><code>k</code></em> by a
+constant. In our experiments, we found that a constant of 2 works
+well, but what really matters is that it stays within that order of
+magnitude.</p>
+<p>The growth is capped at 4 times the initial <em><code>k</code></em> value. Again, this
+is an experimental value, and could potentially be increased. This
+depends mainly on complex factors such as the size of the query
+messages, which could saturate the node bandwidth if the number of
+nodes queried is too high.</p>
+<p>When the query finishes, the node now initializes the following two
+values:</p>
+<pre><code>new_votes 
+  &lt;-- |total vote replies received in this round to the current query|
+positive_votes 
+  &lt;-- |YES votes received from the query| 
+</code></pre>
+<h3 id="phase-two-computation">
+  Phase Two: Computation
+  <a class="anchor" href="#phase-two-computation">#</a>
+</h3>
+<p>When the query returns, three ratios are used later on to compute the
+transition function and the opinion forming. Confidence encapsulates
+the notion of how much we know (as a node) in relation to how much we
+will know in the near future (this being encoded in the look-ahead
+parameter <em><code>l</code></em>.) Evidence accumulated keeps the ratio of total positive
+votes vs the total votes received (positive and negative), whereas the
+evidence per round stores the ratio of the current round only.</p>
+<p>Parameters
+$$
+\begin{array}{lc}
+\text{Look-ahead parameter}      &amp; l = 20 \newline
+\text{First evidence parameter}  &amp; \alpha_1 = 0.8 \newline
+\text{Second evidence parameter} &amp; \alpha_2 = 0.5 \newline
+\end{array}
+$$</p>
+<p>Computation
+$$
+\begin{array}{lc}
+\text{Confidence}                &amp; c_{accum} \impliedby \frac{total\ votes}{total\ votes + l} \newline
+\text{Total accumulated evidence}&amp; e_{accum} \impliedby \frac{total\ positive\ votes}{total\ votes} \newline
+\text{Evidence per round}        &amp; e_{round} \impliedby \frac{round\ positive\ votes}{round\ votes} \newline
+\end{array}
+$$</p>
+<p>The node runs the <code>new_votes</code> and <code>positive_votes</code> parameters received
+in the query round through the following algorithm:</p>
+<pre><code>total_votes 
+  +== new_votes
+total_positive 
+  +== positive_votes
+confidence 
+  &lt;-- total_votes / (total_votes + look_ahead) 
+total_evidence 
+  &lt;-- total_positive / total_votes
+new_evidence 
+  &lt;-- positive_votes / new_votes
+evidence 
+  &lt;-- new_evidence * ( 1 - confidence ) + total_evidence * confidence 
+alpha 
+  &lt;-- doubt * ( 1 - confidence ) + certainty * confidence 
+</code></pre>
+<h3 id="phase-three-computation">
+  Phase Three: Computation
+  <a class="anchor" href="#phase-three-computation">#</a>
+</h3>
+<p>In order to eliminate the need for a step function (a conditional in
+the code), we introduce a transition function from one regime to the
+other. Our interest in removing the step function is twofold:</p>
+<ol>
+<li>
+<p>Simplify the algorithm. With this change the number of branches is
+reduced, and everything is expressed as a set of equations.</p>
+</li>
+<li>
+<p>The transition function makes the regime switch smooth,
+making it harder to potentially exploit the sudden regime change in
+some unforeseen manner. Such a swift change in operation mode could
+potentially result in a more complex behavior than initially
+understood, opening the door to elaborated attacks. The transition
+function proposed is linear with respect to the confidence.</p>
+</li>
+</ol>
+<p>Transition Function
+$$
+\begin{array}{cl}
+evidence &amp; \impliedby e_{round} (1 - c_{accum}) + e_{accum} c_{accum} \newline
+\alpha &amp;  \impliedby \alpha_1 (1 - c_{accum}) + \alpha_2 c_{accum} \newline
+\end{array}
+$$</p>
+<p>Since the confidence is modeled as a ratio that depends on the
+constant <em><code>l</code></em>, we can visualize the transition function at
+different values of <em><code>l</code></em>. Recall that this constant encapsulates
+the idea of “near future” in the frequentist certainty model: the
+higher it is, the more distant in time we consider the next
+valuable input of evidence to happen.</p>
+<p>We have observed via experiment that for a transition function to be
+useful, we need establish two requirements:</p>
+<ol>
+<li>
+<p>The change has to be balanced and smooth, giving an
+opportunity to the first regime to operate and not jump directly
+to the second regime.</p>
+</li>
+<li>
+<p>The convergence to 1.0 (fully operating in the second regime)
+should happen within a reasonable time-frame. We’ve set this
+time-frame experimentally at 1000 votes, which is in the order of
+~100 queries given a <em><code>k</code></em> of 9.</p>
+</li>
+</ol>
+<p>[[ Note: Avalanche uses k = 20, as an experimental result from their
+deployment. Due to the fundamental similarities between the
+algorithms, it’s a good start for us. ]]</p>
+<p>The node updates its local opinion on the consensus proposal by
+examining the relationship between the evidence accumulated for a
+proposal with the confidence encoded in the <code>alpha</code> parameter:</p>
+<pre><code>IF
+  evidence &gt; alpha
+THEN 
+  opinion &lt;-- YES
+ELSE IF       
+  evidence &lt; 1 - alpha
+THEN 
+  opinion &lt;-- NO
+</code></pre>
+<p>If the opinion of the node is <code>NONE</code> after evaluating the relation
+between <code>evidence</code> and <code>alpha</code>, adjust the number of uniform randomly
+queried nodes by multiplying the neighbors <code>k</code> by the <code>k_multiplier</code>
+up to the limit of <code>k_max_multiplier_power</code> query size increases.</p>
+<pre><code>;; possibly increase number nodes to uniformly randomly query in next round
+WHEN
+     opinion is NONE
+  AND 
+     k &lt; k_original * k_multiplier ^ max_k_multiplier_power
+THEN 
+   k &lt;-- k * k_multiplier
+</code></pre>
+<h3 id="decision">
+  Decision
+  <a class="anchor" href="#decision">#</a>
+</h3>
+<p>The next step is a simple one: change our opinion if the threshold
+<em><code>alpha</code></em> is reached. This needs to be done separately for the <code>YES/NO</code>
+decision, checking both boundaries. The last step is then to <em><code>decide</code></em>
+on the current opinion. For that, a confidence threshold is
+employed. This threshold is derived from the network size, and is
+directly related to the number of total votes received.</p>
+<p>Decision
+$$
+\begin{array}{cl}
+evidence &gt; \alpha &amp; \implies \text{opinion YES} \newline
+evidence &lt; 1 - \alpha &amp; \implies \text{opinion NO} \newline
+if\ \text{confidence} &gt; c_{target} &amp; THEN \ \text{finalize decision} \newline
+\end{array}
+$$</p>
+<p>After the <code>OPINION</code> phase is executed, the current value of <code>confidence</code>
+is considered: if <code>confidence</code> exceeds a threshold derived from the
+network size and directly related to the total votes received, an
+honest node marks the decision as final, and always returns this
+opinion is response to further queries from other nodes on the
+network.</p>
+<pre><code>IF 
+  confidence &gt; confidence_threshold
+OR 
+  round &gt; max_rounds
+THEN
+  finalized &lt;-- T
+  QUERY LOOP TERMINATES
+ELSE 
+  round +== 1
+  QUERY LOOP CONTINUES
+</code></pre>
+<p>Thus, after the decision phase, either a decision has been finalized
+and the local node becomes quiescent never initiating a new query, or
+it initiates a <a href="#query">new query</a>.</p>
+<h3 id="termination">
+  Termination
+  <a class="anchor" href="#termination">#</a>
+</h3>
+<p>A local round of Claro terminates in one of the following
+execution model considerations:</p>
+<ol>
+<li>
+<p>No queries are received for any newly initiated round for temporal
+periods observed via a locally computed passage of time.  See <a href="#clock">the
+following point on local time</a>.</p>
+</li>
+<li>
+<p>The <code>confidence</code> on the proposal exceeds our threshold for
+finalization.</p>
+</li>
+<li>
+<p>The number of <code>rounds</code> executed would be greater than
+<code>max_rounds</code>.</p>
+</li>
+</ol>
+<h4 id="quiescence">
+  Quiescence
+  <a class="anchor" href="#quiescence">#</a>
+</h4>
+<p>After a local node has finalized an <code>opinion</code> into a <code>decision</code>, it enters a quiescent
+state whereby it never solicits new votes on the proposal.  The local
+node MUST reply with the currently finalized <code>decision</code>.</p>
+<h4 id="clock">
+  Clock
+  <a class="anchor" href="#clock">#</a>
+</h4>
+<p>The algorithm only requires that nodes have computed the drift of
+observation of the passage of local time, not that that they have
+coordinated an absolute time with their peers.  For an implementation
+of a phase locked-loop feedback to measure local clock drift see
+<a href="https://www.rfc-editor.org/rfc/rfc5905.html">NTP</a>.</p>
+<h2 id="further-points">
+  Further points
+  <a class="anchor" href="#further-points">#</a>
+</h2>
+<h3 id="node-receives-information-during-round">
+  Node receives information during round
+  <a class="anchor" href="#node-receives-information-during-round">#</a>
+</h3>
+<p>In the query step, the node is envisioned as packing information into
+the query to cut down on the communication overhead a query to each of
+this <code>k</code> nodes containing the node&rsquo;s own current opinion on the
+proposal (<code>YES</code>, <code>NO</code>, or <code>NONE</code>).  The algorithm does not currently
+specify how a given node utilizes this incoming information.  A
+possible use may be to count unsolicited votes towards a currently
+active round, and discard the information if the node is in a
+quiescent state.</p>
+<h4 id="problems-with-weighting-node-value-of-opinions">
+  Problems with Weighting Node Value of Opinions
+  <a class="anchor" href="#problems-with-weighting-node-value-of-opinions">#</a>
+</h4>
+<p>If the view of other nodes is incomplete, then the sum of the optional
+weighting will not be a probability distribution normalized to 1.</p>
+<p>The current algorithm doesn&rsquo;t describe how the initial opinions are formed.</p>
+<h1 id="implementation-status">
+  Implementation status
+  <a class="anchor" href="#implementation-status">#</a>
+</h1>
+<p>The following implementations have been created for various testing and simulation purposes:</p>
+<ul>
+<li><a href="https://github.com/logos-co/consensus-research">Rust</a></li>
+<li><a href="">Python</a> - FILL THIS IN WITH NEWLY CREATED REPO</li>
+<li><a href="">Common Lisp</a> - FILL THIS IN WITH NEWLY CREATED REPO</li>
+</ul>
+<h1 id="wire-protocol">
+  Wire Protocol
+  <a class="anchor" href="#wire-protocol">#</a>
+</h1>
+<p>For interoperability we present a wire protocol semantics by requiring
+the validity of the following statements expressed in Notation3 (aka
+<code>n3</code>) about any query performed by a query node:</p>
+<pre tabindex="0"><code class="language-n3" data-lang="n3">@prefix rdf:         &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs:        &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd:         &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+@prefix Claro      &lt;https://rdf.logos.co/protocol/Claro#&gt; .
+
+Claro:query
+  :holds (
+    :_0 [ rdfs:label &#34;round&#34;;
+          a xsd:postitiveInteger; ],
+          rdfs:comment &#34;&#34;&#34;
+The current round of this query 
+
+A value of zero corresponds to the initial round.
+&#34;&#34;&#34; ;
+
+    :_1 [ rdfs:label &#34;uri&#34;;
+          rdfs:comment &#34;&#34;&#34;
+A unique URI for the proposal.
+
+It MAY be possible to examine the proposal by resolving this resource, 
+and its associated URIs.
+&#34;&#34;&#34; ;
+          a xsd:anyURI ],
+          
+    :_2 [ rdfs:label &#34;opinion&#34;;
+          rdfs:comment &#34;&#34;&#34;
+The opinion on the proposal
+
+One of the strings &#34;YES&#34; &#34;NO&#34; or &#34;NONE&#34;.
+&#34;&#34;&#34; ;
+          # TODO constrain as an enumeration on three values efficiently
+          a xsd:string ] 
+    ) .
+</code></pre><p>Nodes are advised to use Waku messages to include their own
+metadata in serializations as needed.</p>
+<h2 id="syntax">
+  Syntax
+  <a class="anchor" href="#syntax">#</a>
+</h2>
+<p>The semantic description presented above can be reliably round-tripped
+through a suitable serialization mechanism.  JSON-LD provides a
+canonical mapping to UTF-8 JSON.</p>
+<p>At their core, the query messages are a simple enumeration of the
+three possible values of the opinion:</p>
+<pre><code>{ NO, NONE, YES }
+</code></pre>
+<p>When represented via integers, such as choosing</p>
+<pre><code> { -1, 0, +1 }
+</code></pre>
+<p>the parity summations across network invariants often become easier to
+manipulate.</p>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<h2 id="privacy">
+  Privacy
+  <a class="anchor" href="#privacy">#</a>
+</h2>
+<p>In practice, each honest node gossips its current opinion which
+reduces the number of messages that need to be gossiped for a given
+proposal.  The resulting impact on the privacy of the node&rsquo;s opinion
+is not currently analyzed.</p>
+<h2 id="security-with-respect-to-various-adversarial-models">
+  Security with respect to various Adversarial Models
+  <a class="anchor" href="#security-with-respect-to-various-adversarial-models">#</a>
+</h2>
+<p>Adversarial models have been tested for which the values for current
+parameters of Claro have been tuned.  Exposition of the
+justification of this tuning need to be completed.</p>
+<h3 id="local-strategies">
+  Local Strategies
+  <a class="anchor" href="#local-strategies">#</a>
+</h3>
+<h4 id="random-adversaries">
+  Random Adversaries
+  <a class="anchor" href="#random-adversaries">#</a>
+</h4>
+<p>A random adversary optionally chooses to respond to all queries with a
+random decision.  Note that this adversary may be in some sense
+Byzantine but not malicious.  The random adversary also models some
+software defects involved in not &ldquo;understanding&rdquo; how to derive a truth
+value for a given proposition.</p>
+<h4 id="infantile-adversary">
+  Infantile Adversary
+  <a class="anchor" href="#infantile-adversary">#</a>
+</h4>
+<p>Like a petulant child, an infantile adversary responds with the
+opposite vote of the honest majority on an opinion.</p>
+<h3 id="omniscient-adversaries">
+  Omniscient Adversaries
+  <a class="anchor" href="#omniscient-adversaries">#</a>
+</h3>
+<p>Omniscient adversaries have somehow gained an &ldquo;unfair&rdquo; participation in
+consensus by being able to control <code>f</code> of <code>N</code> nodes with a out-of-band
+&ldquo;supra-liminal&rdquo; coordination mechanism.  Such adversaries use this
+coordinated behavior to delay or sway honest majority consensus.</p>
+<h4 id="passive-gossip-adversary">
+  Passive Gossip Adversary
+  <a class="anchor" href="#passive-gossip-adversary">#</a>
+</h4>
+<p>The passive network omniscient adversary is fully aware at all times
+of the network state. Such an adversary can always chose to vote in
+the most efficient way to block the distributed consensus from
+finalizing.</p>
+<h4 id="active-gossip-adversary">
+  Active Gossip Adversary
+  <a class="anchor" href="#active-gossip-adversary">#</a>
+</h4>
+<p>An omniscient gossip adversary somehow not only controls <code>f</code> of <code>N</code>
+nodes, but has also has corrupted communications between nodes such
+that she may inspect, delay, and drop arbitrary messages.  Such an
+adversary uses capability to corrupt consensus away from honest
+decisions to ones favorable to itself.  This adversary will, of
+course, choose to participate in an honest manner until defecting is
+most advantageous.</p>
+<h1 id="future-directions">
+  Future Directions
+  <a class="anchor" href="#future-directions">#</a>
+</h1>
+<p>Although we have proposed a normative description of the
+implementation of the underlying binary consensus algorithm (Claro),
+we believe we have prepared for analysis its adversarial performance
+in a manner that is amenable to replacement by another member of the
+<a href="#snow*">snow*</a> family.</p>
+<p>We have presumed the existence of a general family of algorithms that
+can be counted on to vote on nodes in the DAG in a fair manner.
+Avalanche provides an example of the construction of votes on UTXO
+transactions.  One can express all state machine, i.e. account-based
+models as checkpoints anchored in UTXO trust, so we believe that this
+presupposition has some justification.  We can envision a need for
+tooling abstraction that allow one to just program the DAG itself, as
+they should be of stable interest no matter if Claro isn&rsquo;t.</p>
+<h1 id="informative-references">
+  Informative References
+  <a class="anchor" href="#informative-references">#</a>
+</h1>
+<ol start="0">
+<li>
+<p><a href="https://logos.co/">Logos</a></p>
+</li>
+<li>
+<p><a href="https://dahliamalkhi.github.io/posts/2022/06/dag-bft/">On BFT Consensus Evolution: From Monolithic to
+DAG</a></p>
+</li>
+<li>
+<p><a href="https://ipfs.io/ipfs/QmUy4jh5mGNZvLkjies1RWM4YuvJh5o2FYopNPVYwrRVGV">snow-ipfs</a></p>
+</li>
+<li>
+<p><a href="https://www.avalabs.org/whitepapers">snow*</a> The Snow family of
+algorithms</p>
+</li>
+<li>
+<p><a href="https://cloud.google.com/composer/docs/how-to/using/writing-dags">Move</a>
+Move: a Language for Writing DAG Abstractions</p>
+</li>
+<li>
+<p><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#">rdf</a></p>
+</li>
+<li>
+<p><a href="http://www.w3.org/2000/01/rdf-schema#">rdfs</a></p>
+</li>
+<li>
+<p><a href="http://www.w3.org/2001/XMLSchema#">xsd</a></p>
+</li>
+<li>
+<p><a href="https://www.w3.org/TeamSubmission/n3/">n3-w3c-notes</a></p>
+</li>
+<li>
+<p><a href="https://www.ntp.org/downloads.html">ntp</a></p>
+</li>
+</ol>
+<h2 id="normative-references">
+  Normative References
+  <a class="anchor" href="#normative-references">#</a>
+</h2>
+<ol start="0">
+<li>
+<p><a href="https://rdf.logos.co/protocol/Claro/1/0/0/raw">Claro</a></p>
+</li>
+<li>
+<p><a href="https://www.w3.org/DesignIssues/Notation3.html">n3</a></p>
+</li>
+<li>
+<p><a href="https://json-ld.org/">json-ld</a></p>
+</li>
+</ol>
+<h2 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h2>
+<p>Copyright and related rights waived via
+<a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#background">Background</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#algorithmic-concept">Algorithmic concept</a>
+      <ul>
+        <li><a href="#initial-opinion">Initial opinion</a></li>
+        <li><a href="#setup-parameters">Setup Parameters</a></li>
+        <li><a href="#phase-one-query">Phase One: Query</a></li>
+        <li><a href="#phase-two-computation">Phase Two: Computation</a></li>
+        <li><a href="#phase-three-computation">Phase Three: Computation</a></li>
+        <li><a href="#decision">Decision</a></li>
+        <li><a href="#termination">Termination</a></li>
+      </ul>
+    </li>
+    <li><a href="#further-points">Further points</a>
+      <ul>
+        <li><a href="#node-receives-information-during-round">Node receives information during round</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#syntax">Syntax</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#privacy">Privacy</a></li>
+    <li><a href="#security-with-respect-to-various-adversarial-models">Security with respect to various Adversarial Models</a>
+      <ul>
+        <li><a href="#local-strategies">Local Strategies</a></li>
+        <li><a href="#omniscient-adversaries">Omniscient Adversaries</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#normative-references">Normative References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
