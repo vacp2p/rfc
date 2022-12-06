@@ -12,6 +12,7 @@ bookMenuLevels: 1
   - [34/WAKU2-PEER-EXCHANGE]({{< relref "/docs/rfcs/34/README.md" >}})
   - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
   - [37/WAKU2-NOISE-SESSIONS]({{< relref "/docs/rfcs/37/README.md" >}})
+  - [38/CONSENSUS-CLARO]({{< relref "/docs/rfcs/38/README.md" >}})
   - [43/WAKU2-NOISE-PAIRING]({{< relref "/docs/rfcs/43/README.md" >}})
   - [44/WAKU2-DANDELION]({{< relref "/docs/rfcs/44/README.md" >}})
   - [45/WAKU2-ADVERSARIAL-MODELS]({{< relref "/docs/rfcs/45/README.md" >}})
