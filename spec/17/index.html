@@ -21,7 +21,7 @@ Motivation # In open and anonymous p2p messaging networks, one big problem is sp
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.50c6545eacb7cfd6cb1fb78550739a6ab084c89e08d23bd48034480983850e45.js" integrity="sha256-UMZUXqy3z9bLH7eFUHOaarCEyJ4I0jvUgDRICYOFDkU="></script>
+<script defer src="/en.search.min.aa3278d1aeda578ff7108aa1b25e09f72893c3f391dc643c98382c7328f1faed.js" integrity="sha256-qjJ40a7aV4/3EIqhsl4J9yiTw/OR3GQ8mDgscyjx&#43;u0="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -170,7 +170,14 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#setup-and-registration">Setup and Registration</a></li>
     <li><a href="#publishing">Publishing</a></li>
     <li><a href="#group-synchronization">Group Synchronization</a></li>
-    <li><a href="#routing">Routing</a></li>
+    <li><a href="#routing">Routing</a>
+      <ul>
+        <li><a href="#epoch-validation">Epoch Validation</a></li>
+        <li><a href="#merkle-root-validation">Merkle Root Validation</a></li>
+        <li><a href="#proof-verification">Proof Verification</a></li>
+        <li><a href="#spam-detection">Spam detection</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
@@ -304,7 +311,9 @@ In <code>17/WAKU2-RLN-RELAY</code>, the message is the concatenation of <code>Wa
 Getting access to the Merkle tree can be done in various ways.
 One way is that all the peers construct the tree locally.
 This can be done by listening to the registration and deletion events emitted by the membership contract.
-Another approach for synchronizing the state of slashed <code>pk</code>s is to disseminate such information through a p2p GossipSub network to which all peers are subscribed.
+Peers MUST update the local Merkle tree on a per-block basis.
+This is discussed further in the <a href="#merkle-root-validation">Merkle Root Validation</a> section.</p>
+<p>Another approach for synchronizing the state of slashed <code>pk</code>s is to disseminate such information through a p2p GossipSub network to which all peers are subscribed.
 This is in addition to sending the deletion transaction to the membership contract.
 The benefit of an off-chain slashing is that it allows real-time removal of spammers as opposed to on-chain slashing in which peers get informed with a delay,
 where the delay is due to mining the slashing transaction.
@@ -316,22 +325,39 @@ The reason is that using an old root can allow inference about the index of the 
 </h2>
 <p>Upon the receipt of a PubSub message via <a href="/spec/11"><code>11/WAKU2-RELAY</code></a> protocol, the routing peer parses the <code>data</code> field as a <code>WakuMessage</code> and gets access to the <code>RateLimitProof</code> field.<br>
 The peer then validates the <code>RateLimitProof</code>  as explained next.</p>
-<p><strong>Epoch Validation</strong>
-If the <code>epoch</code> attached to the message is more than <code>max_epoch_gap</code> apart from the routing peer&rsquo;s current <code>epoch</code> then the message is discarded and considered invalid.
+<h3 id="epoch-validation">
+  Epoch Validation
+  <a class="anchor" href="#epoch-validation">#</a>
+</h3>
+<p>If the <code>epoch</code> attached to the message is more than <code>max_epoch_gap</code> apart from the routing peer&rsquo;s current <code>epoch</code> then the message is discarded and considered invalid.
 This is to prevent a newly registered peer from spamming the system by messaging for all the past epochs.
 <code>max_epoch_gap</code> is a system parameter for which we provide some recommendations in section <a href="#recommended-system-parameters">Recommended System Parameters</a>.</p>
-<p><strong>Merkle Root Validation</strong>
-The routing peers MUST check whether the provided Merkle root in the <code>RateLimitProof</code> is valid.
+<h3 id="merkle-root-validation">
+  Merkle Root Validation
+  <a class="anchor" href="#merkle-root-validation">#</a>
+</h3>
+<p>The routing peers MUST check whether the provided Merkle root in the <code>RateLimitProof</code> is valid.
 It can do so by maintaining a local set of valid Merkle roots, which consist of <code>acceptable_root_window_size</code> past roots.
-This allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
+These roots refer to the final state of the Merkle tree after a whole block consisting of group changes is processed.
+The Merkle roots are updated on a per-block basis instead of a per-event basis.
+This is done because if Merkle roots are updated on a per-event basis, some peers could send messages with a root that refers to a Merkle tree state that might get invalidated while the message is still propagating in the network, due to many registrations happening during this time frame.
+By updating roots on a per-block basis instead, we will have only one root update per-block processed, regardless on how many registrations happened in a block, and peers will be able to successfully propagate messages in a time frame corresponding to roughly the size of the roots window times the block mining time.</p>
+<p>Atomic processing of the blocks are necessary so that even if the peer is unable to process one event, the previous roots remain valid, and can be used to generate valid RateLimitProof&rsquo;s.</p>
+<p>This also allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
 This network delay is related to the nature of asynchronous network conditions, which means that peers see membership changes asynchronously, and therefore may have differing local Merkle trees.
 See <a href="#recommended-system-parameters">Recommended System Parameters</a> on choosing an appropriate <code>acceptable_root_window_size</code>.</p>
-<p><strong>Proof Verification</strong>
-The routing peers MUST check whether the zero-knowledge proof <code>proof</code> is valid.
+<h3 id="proof-verification">
+  Proof Verification
+  <a class="anchor" href="#proof-verification">#</a>
+</h3>
+<p>The routing peers MUST check whether the zero-knowledge proof <code>proof</code> is valid.
 It does so by running the zk verification algorithm as explained in <a href="/spec/32">RLN</a>.
 If <code>proof</code> is invalid then the message is discarded.</p>
-<p><strong>Spam detection</strong>
-To enable local spam detection and slashing, routing peers MUST record the <code>nullifier</code>, <code>share_x</code>, and <code>share_y</code> of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
+<h3 id="spam-detection">
+  Spam detection
+  <a class="anchor" href="#spam-detection">#</a>
+</h3>
+<p>To enable local spam detection and slashing, routing peers MUST record the <code>nullifier</code>, <code>share_x</code>, and <code>share_y</code> of incoming messages which are not discarded i.e., not found spam or with invalid proof or epoch.
 To spot spam messages, the peer checks whether a message with an identical <code>nullifier</code> has already been relayed.</p>
 <ol>
 <li>If such a message exists and its <code>share_x</code> and <code>share_y</code> components are different from the incoming message, then slashing takes place.
@@ -364,10 +390,11 @@ Nodes MAY extend the  <a href="/spec/14">14/WAKU2-MESSAGE</a> with a <code>rate_
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>message WakuMessage {
 </span></span><span style="display:flex;"><span>  bytes payload = 1;
-</span></span><span style="display:flex;"><span>  string contentTopic = 2;
-</span></span><span style="display:flex;"><span>  uint32 version = 3;
-</span></span><span style="display:flex;"><span>  double timestamp = 4;
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+ RateLimitProof rate_limit_proof = 21;
+</span></span><span style="display:flex;"><span>  string content_topic = 2;
+</span></span><span style="display:flex;"><span>  optional uint32 version = 3;
+</span></span><span style="display:flex;"><span>  optional sint64 timestamp = 10;
+</span></span><span style="display:flex;"><span>  optional bool ephemeral = 31;
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">+  optional bytes rate_limit_proof = 21;
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e"></span>}
 </span></span></code></pre></div><h2 id="wakumessage">
   WakuMessage
@@ -528,7 +555,14 @@ This formula represents a lower bound of the number of acceptable roots.</p>
     <li><a href="#setup-and-registration">Setup and Registration</a></li>
     <li><a href="#publishing">Publishing</a></li>
     <li><a href="#group-synchronization">Group Synchronization</a></li>
-    <li><a href="#routing">Routing</a></li>
+    <li><a href="#routing">Routing</a>
+      <ul>
+        <li><a href="#epoch-validation">Epoch Validation</a></li>
+        <li><a href="#merkle-root-validation">Merkle Root Validation</a></li>
+        <li><a href="#proof-verification">Proof Verification</a></li>
+        <li><a href="#spam-detection">Spam detection</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
