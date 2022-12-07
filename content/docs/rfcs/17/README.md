@@ -122,9 +122,6 @@ The Merkle roots are updated on a per-block basis instead of a per-event basis.
 This is done because if Merkle roots are updated on a per-event basis, some peers could send messages with a root that refers to a Merkle tree state that might get invalidated while the message is still propagating in the network, due to many registrations happening during this time frame.
 By updating roots on a per-block basis instead, we will have only one root update per-block processed, regardless on how many registrations happened in a block, and peers will be able to successfully propagate messages in a time frame corresponding to roughly the size of the roots window times the block mining time. 
 
-For example, if the relaying peer has a window size of 5, and there are 10 registrations in the last block, this would lead to the acceptable window of roots to represent the last 5 registration events it has received.
-This would lead to the relayer invalidating all messages with older roots.
-
 Atomic processing of the blocks are necessary so that even if the peer is unable to process one event, the previous roots remain valid, and can be used to generate valid RateLimitProof's.
 
 This also allows peers which are not well connected to the network to be able to send messages, accounting for network delay.
