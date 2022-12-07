@@ -123,8 +123,7 @@ This is done because if Merkle roots are updated on a per-event basis, some peer
 By updating roots on a per-block basis instead, we will have only one root update per-block processed, regardless on how many registrations happened in a block, and peers will be able to successfully propagate messages in a time frame corresponding to roughly the size of the roots window times the block mining time. 
 
 For example, if the relaying peer has a window size of 5, and there are 10 registrations in the last block, this would lead to the acceptable window of roots to represent the last 5 registration events it has received.
-However, if it fails to process even one event in the block, this would lead to the whole window of acceptable roots being invalid.
-This would lead to the relayer invalidating all messages that it sees, and it would also not be able to broadcast valid messages.
+This would lead to the relayer invalidating all messages with older roots.
 
 Atomic processing of the blocks are necessary so that even if the peer is unable to process one event, the previous roots remain valid, and can be used to generate valid RateLimitProof's.
 
