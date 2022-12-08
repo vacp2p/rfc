@@ -370,7 +370,7 @@ as implemented in the [circomlib library](https://github.com/iden3/circomlib/blo
 This Poseidon hash version (canonical implementation) uses the following parameters:
 
 | Hash inputs | `t` | `RF` | `RP`|
-|--------------|
+|---|---|---|---|
 |1 | 2 | 8 | 56|
 |2 | 3 | 8 | 57|
 |3 | 4 | 8 | 56|
