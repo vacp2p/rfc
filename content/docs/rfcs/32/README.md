@@ -649,6 +649,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - [7] https://docs.circom.io/
 - [8] https://eprint.iacr.org/2019/458.pdf
 - [9] https://github.com/appliedzkp/incrementalquintree
-- [10] https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-Merkle-trees-using-the-poseidon-hash-function/7446
+- [10] https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446
 - [11] https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing
 - [12] https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/
