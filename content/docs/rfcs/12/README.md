@@ -94,6 +94,7 @@ message FilterSubscribeResponse {
 // Protocol identifier: /vac/waku/filter-push/2.0.0-beta1
 message MessagePush {
   WakuMessage waku_message = 1;
+  optional string pubsub_topic = 2;
 }
 ```
 
@@ -202,6 +203,8 @@ We consider `1 minute` to be a reasonable default.
 
 Each message MUST be pushed in a `MessagePush` message.
 Each `MessagePush` MUST contain one (and only one) `waku_message`.
+If this message was received on a specific `pubsub_topic`,
+it SHOULD be included in the `MessagePush`.
 A filter client SHOULD NOT respond to a `MessagePush`.
 Since the filter protocol does not include caching or fault-tolerance,
 this is a best effort push service with no bundling or retransmission of messages.
