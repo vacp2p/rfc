@@ -149,7 +149,7 @@ the user need to submit the following fields to the circuit:
 The proof output is calculated locally,
 in order for the required fields for proof verification to be sent along with the proof.
 The proof output is composed of the `y` share of the secret equation and the `internal_nullifier`.
-The `internal_nullifier` represents an unique fingerprint for the user for the `epoch`.
+The `internal_nullifier` represents a unique fingerprint of a user for a given `epoch` and app.
 The following fields are needed for proof output calculation:
 
 ```
