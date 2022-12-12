@@ -16,9 +16,9 @@ contributors:
 
 # Content filtering
 
-**Protocol identifiers***:
-_filter-subscribe_: `/vac/waku/filter-subscribe/2.0.0-beta1`
-_filter-push_: `/vac/waku/filter-push/2.0.0-beta1`
+**Protocol identifiers**:
+- _filter-subscribe_: `/vac/waku/filter-subscribe/2.0.0-beta1`
+- _filter-push_: `/vac/waku/filter-push/2.0.0-beta1`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
