@@ -104,7 +104,6 @@ A filter service node MUST support the _filter-subscribe_ protocol
 to allow filter clients to subscribe, modify, refresh and unsubscribe a desired set of filter criteria.
 The combination of different filter criteria for a specific filter client node is termed a "subscription".
 A filter client is interested in receiving messages matching the filter criteria in its registered subscriptions.
-It is RECOMMENDED that filter service nodes allow only one subscription per client.
 
 Since a filter service node is consuming resources to provide this service,
 it MAY account for usage and adapt its service provision to certain clients.
