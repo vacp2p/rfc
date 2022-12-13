@@ -145,9 +145,10 @@ RPC call to query historical messages.
   This allows mitigation of long response time for `HistoryQuery`.
   In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). 
   Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
+
+#### Sorting Messages
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
 As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
-
 Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
 However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and consistent across all the nodes.
 This has the benefit of `cursor` reusability i.e., a `cursor` obtained from one node can be consistently used to query from another node.
@@ -158,10 +159,11 @@ However, this `cursor` reusability  does not hold when the `receiverTime` is uti
 RPC call to respond to a HistoryQuery call.
 - The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. 
-  The `pageSize` indicates the number of returned waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). 
+  The `pageSize` indicates the number of returned Waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). 
   The `direction` is the same direction as in the corresponding `HistoryQuery`. 
   In the forward pagination, the `cursor` holds the `Index` of the last message in the `HistoryResponse` `messages` (and the first message in the backward paging). 
-  The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the waku messages.  
+  Regardless of the paging direction, the retrieved `messages` are always sorted in ascending order based on their timestamp as explained in the [sorting messages](#sorting-messages) section, that is, from the oldest to the most recent.
+  The requester shall embed the returned  `cursor` inside its next `HistoryQuery` to retrieve the next page of the Waku messages.  
   The  `cursor` obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.
 - The `error` field contains information about any error that has occurred while processing the corresponding `HistoryQuery`.
   `NONE` stands for no error. This is also the default value.
