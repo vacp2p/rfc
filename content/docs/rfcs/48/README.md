@@ -11,7 +11,7 @@ contributors:
 
 # Abstract
 
-This spec integrates [Interep](https://interep.link) into the [RLN](https://rfc.vac.dev/spec/32/) spec. 
+This spec integrates [Interep](https://interep.link) into the [RLN](https://rlnp2p.vac.dev/) spec. 
 Interep is a group management protocol that allows for the creation of groups of users and the management of their membership. 
 It is used to manage the membership of the RLN group.
 
@@ -105,3 +105,4 @@ A proof of concept is available at [vacp2p/rln-interp-contract](https://github.c
 4. [Decentralized cloudflare using Interep](https://ethresear.ch/t/decentralised-cloudflare-using-rln-and-rich-user-identities/10774)
 5. [Interep contracts](https://github.com/interep-project/contracts)
 6. [RLN contract](https://github.com/vacp2p/rln-contract)
+7. [RLNP2P](https://rlnp2p.vac.dev/)
