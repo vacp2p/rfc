@@ -23,6 +23,8 @@ Therefore, a user with a "gold" reputation can signal their membership without r
 
 RLN is used for spam prevention, and Interep is used for group management.
 
+By using Interep with RLN, we allow users to join RLN membership groups without the need for on-chain financial stake.
+
 # Motivation
 
 To have Sybil-Resistant group management, there are [implementations](https://github.com/vacp2p/rln-contract) of RLN which make use of financial stake on-chain.
