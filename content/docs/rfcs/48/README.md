@@ -16,9 +16,9 @@ Interep is a group management protocol that allows for the creation of groups of
 It is used to manage the membership of the RLN group.
 
 Interep ties in web2 identities for reputation, and sorts the users into groups based on their reputation.
-For example, a Github user with over 100 followers is considered to be of "gold" reputation.
+For example, a GitHub user with over 100 followers is considered to have "gold" reputation.
 
-Interep uses [Semaphore](https://semaphore.appliedzkp.org/) under the hood which allows anonymous signaling of membership in a group.
+Interep uses [Semaphore](https://semaphore.appliedzkp.org/) under the hood to allow anonymous signaling of membership in a group.
 Therefore, a user with a "gold" reputation can signal their membership without revealing their identity.
 
 RLN is used for spam prevention, and Interep is used for group management.
@@ -30,7 +30,7 @@ By using Interep with RLN, we allow users to join RLN membership groups without 
 To have Sybil-Resistant group management, there are [implementations](https://github.com/vacp2p/rln-contract) of RLN which make use of financial stake on-chain.
 However, this is not ideal because it reduces the barrier of entry for honest participants.
 
-In this case, honest participants will most likely have a web2 reputation accessible to them, which can be used for membership into an Interep reputation group.
+In this case, honest participants will most likely have a web2 identity accessible to them, which can be used for joining an Interep reputation group.
 By modifying the RLN spec to use Interep, we can have Sybil-Resistant group management without the need for on-chain financial stake.
 
 Since RLN and Interep both use Semaphore-style credentials, it is possible to use the same set of credentials for both.
