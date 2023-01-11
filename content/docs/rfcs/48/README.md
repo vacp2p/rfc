@@ -15,7 +15,7 @@ This spec integrates [Interep](https://interep.link) into the [RLN](https://rlnp
 Interep is a group management protocol that allows for the creation of groups of users and the management of their membership. 
 It is used to manage the membership of the RLN group.
 
-Interep ties in web2 identities for reputation, and sorts the users into groups based on their reputation.
+Interep ties in web2 identities with reputation, and sorts the users into groups based on their reputation score.
 For example, a GitHub user with over 100 followers is considered to have "gold" reputation.
 
 Interep uses [Semaphore](https://semaphore.appliedzkp.org/) under the hood to allow anonymous signaling of membership in a group.
