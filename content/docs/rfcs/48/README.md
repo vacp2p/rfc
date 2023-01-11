@@ -96,6 +96,7 @@ A proof of concept is available at [vacp2p/rln-interp-contract](https://github.c
 1. As mentioned in [Slashing](#slashing), the slashing mechanism may not have the intended effect on the user.
 2. This spec inherits the security considerations of the [RLN spec](https://rfc.vac.dev/spec/32/#security-considerations).
 3. This spec inherits the security considerations of [Interep](https://docs.interep.link/).
+4. A user may make multiple registrations using the same Interep proofs but different identity commitments. The way to mitigate this is to check if the nullifier hash has been detected previously in proof verification.
 
 # References
 
