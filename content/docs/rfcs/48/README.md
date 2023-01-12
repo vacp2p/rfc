@@ -19,7 +19,7 @@ Interep ties in web2 identities with reputation, and sorts the users into groups
 For example, a GitHub user with over 100 followers is considered to have "gold" reputation.
 
 Interep uses [Semaphore](https://semaphore.appliedzkp.org/) under the hood to allow anonymous signaling of membership in a group.
-Therefore, a user with a "gold" reputation can signal their membership without revealing their identity.
+Therefore, a user with a "gold" reputation can prove the existence of their membership without revealing their identity.
 
 RLN is used for spam prevention, and Interep is used for group management.
 
