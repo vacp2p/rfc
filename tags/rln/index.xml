@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>rln on Vac RFC</title>
+    <link>https://rfc.vac.dev/tags/rln/</link>
+    <description>Recent content in rln on Vac RFC</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://rfc.vac.dev/tags/rln/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>48/RLN-INTEREP-SPEC</title>
+      <link>https://rfc.vac.dev/spec/48/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/48/</guid>
+      <description>Abstract # This spec integrates Interep into the RLN spec. Interep is a group management protocol that allows for the creation of groups of users and the management of their membership. It is used to manage the membership of the RLN group.
+Interep ties in web2 identities with reputation, and sorts the users into groups based on their reputation score. For example, a GitHub user with over 100 followers is considered to have &amp;ldquo;gold&amp;rdquo; reputation.</description>
+    </item>
+    
+  </channel>
+</rss>

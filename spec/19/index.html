@@ -6,14 +6,14 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
-Motivation and goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
+Motivation and Goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
 19/WAKU2-LIGHTPUSH is a request/response protocol for this.
-Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message relaying # Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic.">
+Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message Relaying # Nodes that respond to PushRequests MUST either relay the encapsulated message via 11/WAKU2-RELAY protocol on the specified pubsub_topic, or forward the PushRequest via 19/LIGHTPUSH on a 44/WAKU2-DANDELION stem.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="19/WAKU2-LIGHTPUSH" />
 <meta property="og:description" content="Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
-Motivation and goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
+Motivation and Goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least one node).
 19/WAKU2-LIGHTPUSH is a request/response protocol for this.
-Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message relaying # Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic." />
+Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message Relaying # Nodes that respond to PushRequests MUST either relay the encapsulated message via 11/WAKU2-RELAY protocol on the specified pubsub_topic, or forward the PushRequest via 19/LIGHTPUSH on a 44/WAKU2-DANDELION stem." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/19/" /><meta property="article:section" content="docs" />
 
@@ -23,7 +23,7 @@ Payloads # syntax = &#34;proto3&#34;; message PushRequest { string pubsub_topic 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.aa3278d1aeda578ff7108aa1b25e09f72893c3f391dc643c98382c7328f1faed.js" integrity="sha256-qjJ40a7aV4/3EIqhsl4J9yiTw/OR3GQ8mDgscyjx&#43;u0="></script>
+<script defer src="/en.search.min.c3345dbe9ab27222d9bec8c994b88adac9ffeef5220711ce595891190d2a8aea.js" integrity="sha256-wzRdvpqyciLZvsjJlLiK2sn/7vUiBxHOWViRGQ0qiuo="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -79,6 +79,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 <li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
 <li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
 </ul>
 </li>
 <li>Draft
@@ -169,8 +170,8 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#message-relaying">Message relaying</a></li>
-    <li><a href="#security-considerations">Security considerations</a></li>
+    <li><a href="#message-relaying">Message Relaying</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
   </ul>
 </nav>
 
@@ -209,15 +210,21 @@ https://github.com/alex-shpak/hugo-book
       <li>Status: draft</li>
       <li>Editor: Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a></li>
       
+      <li>Contributors:
+          
+              
+              Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a>
+          
+      </li>
+      
   </ul><p><strong>Protocol identifier</strong>: <code>/vac/waku/lightpush/2.0.0-beta1</code></p>
 <h1 id="motivation-and-goals">
-  Motivation and goals
+  Motivation and Goals
   <a class="anchor" href="#motivation-and-goals">#</a>
 </h1>
-<p>Light nodes with short connection windows and limited bandwidth wish to publish
-messages into the Waku network. Additionally, there is sometimes a need for
-confirmation that a message has been received &ldquo;by the network&rdquo; (here, at least
-one node).</p>
+<p>Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network.
+Additionally, there is sometimes a need for confirmation that a message has been received &ldquo;by the network&rdquo;
+(here, at least one node).</p>
 <p><code>19/WAKU2-LIGHTPUSH</code> is a request/response protocol for this.</p>
 <h1 id="payloads">
   Payloads
@@ -242,22 +249,33 @@ one node).</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    PushResponse response <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
 </span></span></span></code></pre></div><h2 id="message-relaying">
-  Message relaying
+  Message Relaying
   <a class="anchor" href="#message-relaying">#</a>
 </h2>
-<p>Nodes that respond to <code>PushRequests</code> MUST relay this via <a href="/spec/11">11/WAKU2-RELAY</a> protocol on the specified <code>pubsub_topic</code>.
+<p>Nodes that respond to <code>PushRequests</code> MUST either
+relay the encapsulated message via <a href="/spec/11">11/WAKU2-RELAY</a> protocol on the specified <code>pubsub_topic</code>,
+or forward the <code>PushRequest</code> via 19/LIGHTPUSH on a <a href="https://rfc.vac.dev/spec/44/">44/WAKU2-DANDELION</a> stem.
 If they are unable to do so for some reason, they SHOULD return an error code in <code>PushResponse</code>.</p>
 <h2 id="security-considerations">
-  Security considerations
+  Security Considerations
   <a class="anchor" href="#security-considerations">#</a>
 </h2>
-<p>Since this can introduce amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to extra precaution. This can be done by various forms of rate limiting, or by using <a href="/spec/18">18/WAKU2-SWAP</a> to account for the service provided.</p>
+<p>Since this can introduce an amplification factor, it is RECOMMENDED for the node relaying to the rest of the network to take extra precautions.
+This can be done by rate limiting via <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a>.</p>
 <p>Note that the above is currently not fully implemented.</p>
 <h1 id="copyright">
   Copyright
   <a class="anchor" href="#copyright">#</a>
 </h1>
 <p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="/spec/11">11/WAKU2-RELAY</a></li>
+<li><a href="https://rfc.vac.dev/spec/44/">44/WAKU2-DANDELION</a></li>
+</ul>
 </article>
  
       
@@ -294,8 +312,8 @@ If they are unable to do so for some reason, they SHOULD return an error code in
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#message-relaying">Message relaying</a></li>
-    <li><a href="#security-considerations">Security considerations</a></li>
+    <li><a href="#message-relaying">Message Relaying</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
   </ul>
 </nav>
 

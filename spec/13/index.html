@@ -21,7 +21,7 @@ Design Requirements # Nodes willing to provide storage service using 13/WAKU2-ST
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.aa3278d1aeda578ff7108aa1b25e09f72893c3f391dc643c98382c7328f1faed.js" integrity="sha256-qjJ40a7aV4/3EIqhsl4J9yiTw/OR3GQ8mDgscyjx&#43;u0="></script>
+<script defer src="/en.search.min.c3345dbe9ab27222d9bec8c994b88adac9ffeef5220711ce595891190d2a8aea.js" integrity="sha256-wzRdvpqyciLZvsjJlLiK2sn/7vUiBxHOWViRGQ0qiuo="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -77,6 +77,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 <li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
 <li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
 </ul>
 </li>
 <li>Draft
@@ -380,11 +381,15 @@ or if the <code>pageSize</code> exceeds the maximum page size,
 the queried node SHOULD auto-paginate the <code>HistoryResponse</code> to no more than the configured maximum page size.
 This allows mitigation of long response time for <code>HistoryQuery</code>.
 In the forward pagination request, the <code>messages</code> field of the <code>HistoryResponse</code> shall contain at maximum the <code>pageSize</code> amount of waku messages whose <code>Index</code> values are larger than the given <code>cursor</code> (and vise versa for the backward pagination).
-Note that the <code>cursor</code> of a <code>HistoryQuery</code> may be empty (e.g., for the initial query), as such, and depending on whether the  <code>direction</code> is <code>BACKWARD</code> or <code>FORWARD</code>  the last or the first <code>pageSize</code> waku messages shall be returned, respectively.
-The queried node MUST sort the <code>WakuMessage</code>s based on their <code>Index</code>, where the <code>senderTime</code> constitutes the most significant part and the <code>digest</code> comes next, and then perform pagination on the sorted result.
-As such, the retrieved page contains an ordered list of <code>WakuMessage</code>s from the oldest message to the most recent one.</li>
+Note that the <code>cursor</code> of a <code>HistoryQuery</code> may be empty (e.g., for the initial query), as such, and depending on whether the  <code>direction</code> is <code>BACKWARD</code> or <code>FORWARD</code>  the last or the first <code>pageSize</code> waku messages shall be returned, respectively.</li>
 </ul>
-<p>Alternatively, the <code>receiverTime</code> (instead of <code>senderTime</code> ) MAY be used to sort <code>WakuMessage</code>s during the paging process.
+<h4 id="sorting-messages">
+  Sorting Messages
+  <a class="anchor" href="#sorting-messages">#</a>
+</h4>
+<p>The queried node MUST sort the <code>WakuMessage</code>s based on their <code>Index</code>, where the <code>senderTime</code> constitutes the most significant part and the <code>digest</code> comes next, and then perform pagination on the sorted result.
+As such, the retrieved page contains an ordered list of <code>WakuMessage</code>s from the oldest message to the most recent one.
+Alternatively, the <code>receiverTime</code> (instead of <code>senderTime</code> ) MAY be used to sort <code>WakuMessage</code>s during the paging process.
 However, we RECOMMEND the use of the <code>senderTime</code> for sorting as it is invariant and consistent across all the nodes.
 This has the benefit of <code>cursor</code> reusability i.e., a <code>cursor</code> obtained from one node can be consistently used to query from another node.
 However, this <code>cursor</code> reusability  does not hold when the <code>receiverTime</code> is utilized as the receiver time is affected by the network delay and nodes&rsquo; clock asynchrony.</p>
@@ -396,10 +401,11 @@ However, this <code>cursor</code> reusability  does not hold when the <code>rece
 <ul>
 <li>The <code>messages</code> field MUST contain the messages found, these are [<code>WakuMessage</code>] types as defined in the corresponding <a href="./waku-message.md">specification</a>.</li>
 <li><code>PagingInfo</code>  holds the paging information based on which the querying node can resume its further history queries.
-The <code>pageSize</code> indicates the number of returned waku messages (i.e., the number of messages included in the <code>messages</code> field of <code>HistoryResponse</code>).
+The <code>pageSize</code> indicates the number of returned Waku messages (i.e., the number of messages included in the <code>messages</code> field of <code>HistoryResponse</code>).
 The <code>direction</code> is the same direction as in the corresponding <code>HistoryQuery</code>.
 In the forward pagination, the <code>cursor</code> holds the <code>Index</code> of the last message in the <code>HistoryResponse</code> <code>messages</code> (and the first message in the backward paging).
-The requester shall embed the returned  <code>cursor</code> inside its next <code>HistoryQuery</code> to retrieve the next page of the waku messages.<br>
+Regardless of the paging direction, the retrieved <code>messages</code> are always sorted in ascending order based on their timestamp as explained in the <a href="#sorting-messages">sorting messages</a> section, that is, from the oldest to the most recent.
+The requester shall embed the returned  <code>cursor</code> inside its next <code>HistoryQuery</code> to retrieve the next page of the Waku messages.<br>
 The  <code>cursor</code> obtained from one node SHOULD NOT be used in a request to another node because the result MAY be different.</li>
 <li>The <code>error</code> field contains information about any error that has occurred while processing the corresponding <code>HistoryQuery</code>.
 <code>NONE</code> stands for no error. This is also the default value.

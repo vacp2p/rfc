@@ -119,9 +119,9 @@ Motivation # The Waku network makes up a service network, and some nodes provide
       
       <guid>https://rfc.vac.dev/spec/19/</guid>
       <description>Protocol identifier: /vac/waku/lightpush/2.0.0-beta1
-Motivation and goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &amp;ldquo;by the network&amp;rdquo; (here, at least one node).
+Motivation and Goals # Light nodes with short connection windows and limited bandwidth wish to publish messages into the Waku network. Additionally, there is sometimes a need for confirmation that a message has been received &amp;ldquo;by the network&amp;rdquo; (here, at least one node).
 19/WAKU2-LIGHTPUSH is a request/response protocol for this.
-Payloads # syntax = &amp;#34;proto3&amp;#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message relaying # Nodes that respond to PushRequests MUST relay this via 11/WAKU2-RELAY protocol on the specified pubsub_topic.</description>
+Payloads # syntax = &amp;#34;proto3&amp;#34;; message PushRequest { string pubsub_topic = 1; WakuMessage message = 2; } message PushResponse { bool is_success = 1; // Error messages, etc string info = 2; } message PushRPC { string request_id = 1; PushRequest request = 2; PushResponse response = 3; } Message Relaying # Nodes that respond to PushRequests MUST either relay the encapsulated message via 11/WAKU2-RELAY protocol on the specified pubsub_topic, or forward the PushRequest via 19/LIGHTPUSH on a 44/WAKU2-DANDELION stem.</description>
     </item>
     
     <item>
@@ -419,6 +419,16 @@ Note: Gossipsub Tor Push does not have a dedicated protocol identifier. It uses 
 Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
 Protocol identifier: /vac/waku/relay/2.0.0
 Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.</description>
+    </item>
+    
+    <item>
+      <title>48/RLN-INTEREP-SPEC</title>
+      <link>https://rfc.vac.dev/spec/48/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/48/</guid>
+      <description>Abstract # This spec integrates Interep into the RLN spec. Interep is a group management protocol that allows for the creation of groups of users and the management of their membership. It is used to manage the membership of the RLN group.
+Interep ties in web2 identities with reputation, and sorts the users into groups based on their reputation score. For example, a GitHub user with over 100 followers is considered to have &amp;ldquo;gold&amp;rdquo; reputation.</description>
     </item>
     
     <item>
