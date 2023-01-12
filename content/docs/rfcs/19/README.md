@@ -4,7 +4,8 @@ title: 19/WAKU2-LIGHTPUSH
 name: Waku v2 Light Push
 status: draft
 editor: Oskar Thorén <oskar@status.im>
-contributors: Daniel Kaiser <danielkaiser@status.im>
+contributors: 
+  - Daniel Kaiser <danielkaiser@status.im>
 ---
 
 **Protocol identifier**: `/vac/waku/lightpush/2.0.0-beta1`
