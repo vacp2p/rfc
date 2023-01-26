@@ -194,6 +194,8 @@ These [`WakuMessage`s](./waku-message.md) are likely to come from [`11/WAKU2-REL
 but there MAY be other sources or protocols where this comes from.
 This is up to the consumer of the protocol.
 
+If a message push fails,
+the filter service node MAY consider the client node to be unreachable.
 If a specific filter client node is not reachable from the service node for a period of time,
 the filter service node MAY choose to stop pushing messages to the client and remove its subscription.
 This period is up to the service node implementation.
@@ -207,7 +209,8 @@ If this message was received on a specific `pubsub_topic`,
 it SHOULD be included in the `MessagePush`.
 A filter client SHOULD NOT respond to a `MessagePush`.
 Since the filter protocol does not include caching or fault-tolerance,
-this is a best effort push service with no bundling or retransmission of messages.
+this is a best effort push service with no bundling
+or guaranteed retransmission of messages.
 
 --- 
 # Future Work
