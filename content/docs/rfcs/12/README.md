@@ -149,6 +149,7 @@ requests that the service node SHOULD indicate if it has any active subscription
 The filter client SHOULD exclude any filter criteria from the request.
 The filter service node SHOULD respond with a success code if it has any active subscriptions for this client
 or an error code if not.
+The filter service node SHOULD ignore any filter criteria in the request.
 
 #### SUBSCRIBE
 
