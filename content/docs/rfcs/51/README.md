@@ -76,7 +76,7 @@ The global shard with index 0 and the "all app protocols" range are treated in t
 but choosing shards in the global cluster has a higher probability of sharing the shard with other apps.
 This offers k-anonymity and better connectivity, but comes at a higher bandwidth cost.
 
-The name of the pubsub topic corrsponding to a given static shard is specified as
+The name of the pubsub topic corresponding to a given static shard is specified as
 
 `/waku/2/static-rshard/<shard_cluster_index>/<shard_number>`,
 
