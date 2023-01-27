@@ -117,10 +117,10 @@ The representation corresponds to [Ethereum shard ENRs](https://github.com/ether
 
 Example
 
-| key              | value                |
-|---               |---                   |
-| `relay-shard-0`  | `0x0000100000000000` |
-| `relay-shard-16` | `0x0000100000003000` |
+| key         | value                |
+|---          |---                   |
+| `rshard-0`  | `0x0000100000000000` |
+| `rshard-16` | `0x0000100000003000` |
 
 This example node is part of 1 shard in the global shard cluster,
 and part of 3 shards in the Status main-net shard cluster.
@@ -132,9 +132,9 @@ It is feasible, assuming nodes are only part of a few apps using specific shard 
 
 Example
 
-| key              | value   |
-|---               |---      |
-| `relay-shards`   | `num_shards` &#124;  0u16 &#124;  `0x0000100000000000` &#124;  16u16 &#124; `0x0000100000003000` |
+| key         | value   |
+|---          |---      |
+| `rshards`   | `num_shards` &#124;  0u16 &#124;  `0x0000100000000000` &#124;  16u16 &#124; `0x0000100000003000` |
 
 Using network byte order.
 
