@@ -52,9 +52,16 @@ From an app protocol point of view, a subscription to a content topic `waku2/xxx
 
 # Static Sharding
 
-*Static sharding* offers an array of shard clusters.
-A shard cluster is a set of 64 shards, which is either globally available to all apps (like the default pubsub topic),
-specific for an app protocol, or reserved for automatic sharding (see next section).
+*Static sharding* offers a set of shards with fixed names.
+Assigning content topics to specific shards is up to app protocols,
+but the discovery of these shards is managed by Waku.
+
+These shards are managed in an array of $2^16$ shard clusters.
+A shard cluster, in turn, contains 64 shards.
+A shard cluster is either globally available to all apps (like the default pubsub topic),
+specific for an app protocol,
+or reserved for automatic sharding (see next section).
+In total, there are $2^16 * 64 = 4194304$ shards for which Waku manages discovery.
 
 App protocols can either choose to use global shards, or app specific shards.
 (In future versions of this document, automatic sharding, described in the next section, will become the default.)
