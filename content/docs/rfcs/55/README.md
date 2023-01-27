@@ -54,12 +54,6 @@ The following cryptographic primitives are used in the design -
     - The single ratchet is used to encrypt the messages sent to the Organization.
     - The single ratchet is re-keyed when a peer is added/removed from the Organization.
 
-The following cryptographic functions are used in the design -
-
-1. `ECDH-ES` - Elliptic Curve Diffie Hellman key exchange with Elliptic Curve Integrated Encryption Scheme.
-2. `AES-GCM` - AES Galois Counter Mode.
-
-
 ## Wire format
 
 <!--   
