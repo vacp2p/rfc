@@ -139,7 +139,7 @@ Example
 This example node is part of shard `45` in the global shard cluster,
 and part shards `13`, `14`, and `45` in the Status main-net shard cluster.
 
-This methods is easier to read.
+This method is easier to read.
 It is feasible, assuming nodes are only part of a few apps using specific shard clusters.
 
 ### Single Key
