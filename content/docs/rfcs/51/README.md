@@ -158,7 +158,7 @@ The two-byte index uses network byte order.
 This section merely serves as an outlook.
 A specification of topic shading will be added to this document in a future version.
 
-Topic sharding is a method for scaling Waku relay in the number of (smaller) content topics).
+Topic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
 It automatically maps Waku content topics to pubsub topics.
 Clients and protocols building on Waku relay only see content topics, while Waku relay internally manages the mapping.
 This provides both scaling as well as removes confusion about content and pubsub topics on the consumer side.
