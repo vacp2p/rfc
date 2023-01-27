@@ -161,11 +161,11 @@ The two-byte index uses network byte order.
 
 # Automatic Sharding
 
-> *Note:* Topic sharding is not yet part of this specification.
+> *Note:* Automatic sharding is not yet part of this specification.
 This section merely serves as an outlook.
-A specification of topic shading will be added to this document in a future version.
+A specification of automatic sharding will be added to this document in a future version.
 
-Topic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
+Automatic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
 It automatically maps Waku content topics to pubsub topics.
 Clients and protocols building on Waku relay only see content topics, while Waku relay internally manages the mapping.
 This provides both scaling as well as removes confusion about content and pubsub topics on the consumer side.
@@ -177,7 +177,7 @@ From an app point of view, a subscription to a content topic `waku2/xxx` using a
 The app is oblivious to the pubsub topic layer.
 (Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
 
-*The basic idea behind topic sharding*:
+*The basic idea behind automatic sharding*:
 Content topics are mapped using [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
 Like with DHTs, the hash space is split into parts,
 each covered by a Pubsub topic (mesh network) that carries content topics which are mapped into the respective part of the hash space.
