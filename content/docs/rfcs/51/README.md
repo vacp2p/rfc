@@ -76,6 +76,18 @@ The global shard with index 0 and the "all app protocols" range are treated in t
 but choosing shards in the global cluster has a higher probability of sharing the shard with other apps.
 This offers k-anonymity and better connectivity, but comes at a higher bandwidth cost.
 
+The name of the pubsub topic corrsponding to a given static shard is specified as
+
+`/waku/2/static-rshard/<shard_cluster_index>/<shard_number>`,
+
+an example for the 2nd shard in the global shard cluster:
+
+`/waku/2/static-rshard/0/2`.
+
+> *Note*: Because *all* shards distribute payload defined in [14/WAKU2-MESSAGE](spec/14/) via [protocol buffers](https://developers.google.com/protocol-buffers/),
+the pubsub topic name does not explicitly add `/proto` to indicate protocol buffer encoding.
+We use `rshard` to indicate it is a relay shards; further shard types might follow in the future.
+
 From an app point of view, a subscription to a content topic `waku2/xxx` on a static shard would look like:
 
 `subscribe("/waku2/xxx", 43)`
@@ -100,8 +112,10 @@ Each shard cluster is represented by a bit vector,
 which indicates which shards of the respective shard cluster the node is part of
 (see Ethereum ENR sharding bit vector [here](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
 and [here](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability)).
+The right-most bit in the bit vector represents shard `0`, the left-most bit represents shard `63`.
 
 > *Note*: We will update the [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once this RFC moves forward.)
+
 
 Having a static shard participation indication as part of the ENR allows nodes
 to discover peers that are part of shards via [33/WAKU2-DISCV5](/spec/33/) as well as via DNS.
@@ -122,8 +136,8 @@ Example
 | `rshard-0`  | `0x0000100000000000` |
 | `rshard-16` | `0x0000100000003000` |
 
-This example node is part of 1 shard in the global shard cluster,
-and part of 3 shards in the Status main-net shard cluster.
+This example node is part of shard `45` in the global shard cluster,
+and part shards `13`, `14`, and `45` in the Status main-net shard cluster.
 
 This methods is easier to read.
 It is feasible, assuming nodes are only part of a few apps using specific shard clusters.
@@ -136,7 +150,7 @@ Example
 |---          |---      |
 | `rshards`   | `num_shards` &#124;  0u16 &#124;  `0x0000100000000000` &#124;  16u16 &#124; `0x0000100000003000` |
 
-Using network byte order.
+The two-byte index uses network byte order.
 
 # Automatic Sharding
 
