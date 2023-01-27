@@ -106,7 +106,7 @@ And for shard 43 of the Status app (which has allocated index 16):
 
 ## Discovery
 
-Waku v2 supports the discovery of (peers within) static shards,
+Waku v2 supports the discovery of peers within static shards,
 so app protocols do not have to implement their own discovery method.
 To enable discovery of static shards,
 the array of shard clusters is added to [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
