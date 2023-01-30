@@ -32,7 +32,7 @@ indices `49152` to `65535` are reserved.
 # List of Static Shard Indices
 
 |    index | Protocol/App | Description                         |
-|    ---   | ---          |                                     |
+|    ---   | ---          | ---                                 |
 |      0   |   global     | global use                          |
 |      1   |   reserved   |                                     |
 |      2   |   reserved   |                                     |
