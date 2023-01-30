@@ -442,6 +442,28 @@ Motivation # Waku was created to incrementally improve in areas that Whisper is 
     </item>
     
     <item>
+      <title>51/WAKU2-RELAY-SHARDING</title>
+      <link>https://rfc.vac.dev/spec/51/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/51/</guid>
+      <description>Abstract # This document describes ways of sharding the Waku relay topic, allowing Waku networks to scale in the number of content topics.
+Note: Scaling in the size of a single content topic is out of scope for this document.
+Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network).</description>
+    </item>
+    
+    <item>
+      <title>52/WAKU2-RELAY-STATIC-SHARD-ALLOC</title>
+      <link>https://rfc.vac.dev/spec/52/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/52/</guid>
+      <description>Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
+Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
+The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved.</description>
+    </item>
+    
+    <item>
       <title>6/WAKU1</title>
       <link>https://rfc.vac.dev/spec/6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

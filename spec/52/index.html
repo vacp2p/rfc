@@ -5,21 +5,19 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract # This document extends the 11/WAKU2-RELAY, specifying Waku Tor Push, which allows nodes to push messages via Tor into the Waku relay network.
-Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
-Protocol identifier: /vac/waku/relay/2.0.0
-Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.">
-<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="47/WAKU2-TOR-PUSH" />
-<meta property="og:description" content="Abstract # This document extends the 11/WAKU2-RELAY, specifying Waku Tor Push, which allows nodes to push messages via Tor into the Waku relay network.
-Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
-Protocol identifier: /vac/waku/relay/2.0.0
-Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push." />
+<meta name="description" content="Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
+Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
+The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="52/WAKU2-RELAY-STATIC-SHARD-ALLOC" />
+<meta property="og:description" content="Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
+Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
+The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rfc.vac.dev/spec/47/" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/52/" /><meta property="article:section" content="docs" />
 
 
 
-<title>47/WAKU2-TOR-PUSH | Vac RFC</title>
+<title>52/WAKU2-RELAY-STATIC-SHARD-ALLOC | Vac RFC</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
@@ -78,10 +76,10 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
 <li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 <li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
-<li><a href="/spec/47/"class=active>47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
 <li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
 <li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
-<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/52/"class=active>52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
 </ul>
 </li>
 <li>Draft
@@ -156,7 +154,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>47/WAKU2-TOR-PUSH</strong>
+  <strong>52/WAKU2-RELAY-STATIC-SHARD-ALLOC</strong>
 
   <label for="toc-control">
     
@@ -182,15 +180,15 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="47waku2-tor-push">
-  47/WAKU2-TOR-PUSH
-  <a class="anchor" href="#47waku2-tor-push">#</a>
+  <h1 id="52waku2-relay-static-shard-alloc">
+  52/WAKU2-RELAY-STATIC-SHARD-ALLOC
+  <a class="anchor" href="#52waku2-relay-static-shard-alloc">#</a>
 </h1>
 
   
-      <h1 id="waku-v2-tor-push">
-  Waku v2 Tor Push
-  <a class="anchor" href="#waku-v2-tor-push">#</a>
+      <h1 id="waku-v2-relay-static-shard-allocation">
+  Waku v2 Relay Static Shard Allocation
+  <a class="anchor" href="#waku-v2-relay-static-shard-allocation">#</a>
 </h1>
 
   
@@ -211,25 +209,51 @@ https://github.com/alex-shpak/hugo-book
   Abstract
   <a class="anchor" href="#abstract">#</a>
 </h1>
-<p>This document extends the <a href="/spec/11/">11/WAKU2-RELAY</a>, specifying Waku Tor Push,
-which allows nodes to push messages via Tor into the Waku relay network.</p>
-<p>Waku Tor Push builds on <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a>.</p>
-<p><strong>Protocol identifier</strong>: /vac/waku/relay/2.0.0</p>
-<p>Note: Waku Tor Push does not have a dedicated protocol identifier.
-It uses the same identifier as Waku relay.
-This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.</p>
-<h1 id="functional-operation">
-  Functional Operation
-  <a class="anchor" href="#functional-operation">#</a>
+<p>This document lists static shard flag index assignments (see <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.</p>
+<h1 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
 </h1>
-<p>In its current version, Waku Tor Push corresponds to <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a>
-applied to <a href="/spec/11/">11/WAKU2-RELAY</a>,
-instead of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a>.</p>
-<h1 id="securityprivacy-considerations">
-  Security/Privacy Considerations
-  <a class="anchor" href="#securityprivacy-considerations">#</a>
+<p>Similar to the <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA port allocation</a>,
+this document lists static shard index assignments (see <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.</p>
+<p>The index ranges are as follows:
+index <code>0</code> represents the global shards,
+indices <code>1</code> to <code>15</code> are reserved,
+indices <code>16</code> to <code>1023</code> are reservable for apps,
+indices <code>1024</code> to <code>49151</code> are for open use by apps,
+indices <code>49152</code> to <code>65535</code> are reserved.</p>
+<h1 id="assingment-process">
+  Assingment Process
+  <a class="anchor" href="#assingment-process">#</a>
 </h1>
-<p>see <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a></p>
+<blockquote>
+<p><em>Note</em>: Future versions of this document will specify the assignment process.</p>
+</blockquote>
+<h1 id="list-of-static-shard-indices">
+  List of Static Shard Indices
+  <a class="anchor" href="#list-of-static-shard-indices">#</a>
+</h1>
+<p>|    index | Protocol/App | Description                         |
+|    &mdash;   | &mdash;          |                                     |
+|      0   |   global     | global use                          |
+|      1   |   reserved   |                                     |
+|      2   |   reserved   |                                     |
+|      3   |   reserved   |                                     |
+|      4   |   reserved   |                                     |
+|      5   |   reserved   |                                     |
+|      6   |   reserved   |                                     |
+|      7   |   reserved   |                                     |
+|      8   |   reserved   |                                     |
+|      9   |   reserved   |                                     |
+|     10   |   reserved   |                                     |
+|     11   |   reserved   |                                     |
+|     12   |   reserved   |                                     |
+|     13   |   reserved   |                                     |
+|     14   |   reserved   |                                     |
+|     15   |   reserved   |                                     |
+|     16   |   Status     |  Status main net                    |
+|     17   |   Status     |                                     |
+|     18   |   Status     |                                     |</p>
 <h1 id="copyright">
   Copyright
   <a class="anchor" href="#copyright">#</a>
@@ -240,10 +264,8 @@ instead of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub
   <a class="anchor" href="#references">#</a>
 </h1>
 <ul>
-<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
-<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a></li>
-<li><a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a></li>
-<li><a href="https://www.torproject.org/">Tor</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA port allocation</a></li>
 </ul>
 </article>
  
