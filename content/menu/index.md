@@ -19,6 +19,8 @@ bookMenuLevels: 1
   - [46/GOSSIPSUB-TOR-PUSH]({{< relref "/docs/rfcs/46/README.md" >}})
   - [47/WAKU2-TOR-PUSH]({{< relref "/docs/rfcs/47/README.md" >}})
   - [48/RLN-INTEREP-SPEC]({{< relref "/docs/rfcs/48/README.md" >}})
+  - [51/WAKU2-RELAY-SHARDING]({{< relref "/docs/rfcs/51/README.md" >}})
+  - [52/WAKU2-RELAY-STATIC-SHARD-ALLOC]({{< relref "/docs/rfcs/52/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
