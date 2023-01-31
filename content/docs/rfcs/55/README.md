@@ -1,7 +1,7 @@
 ---
 slug: 55
-title: 55/WAKU2-ORGANIZATION-CHATS
-name: Waku v2 Organization Chats
+title: 55/STATUS-COMMUNITIES
+name: Status Communities that run on Waku v2
 status: raw
 category: Standards Track
 tags: waku-application
@@ -11,12 +11,12 @@ contributors:
 
 # Abstract
 
-This document describes the design of organization chats for Waku v2, allowing for multiple users to communicate in a group chat. 
+This document describes the design of Status Communities for Waku v2, allowing for multiple users to communicate in a group chat. 
 This is a key feature for the Status messaging app. 
 
 # Background and Motivation
 
-Large group chats enable organizations to communicate.
+Large group chats enable communities to communicate.
 This would require channels, which are subject-based.
 The messages in a channel are broadcasted to all the users in the channel.
 
@@ -31,17 +31,17 @@ Additionally, if all the peers have a shared key, then the number of messages se
 
 # Design Requirements
 
-Due to the nature of organizations, the following requirements are necessary for the design of organization chats -
+Due to the nature of communities, the following requirements are necessary for the design of communities  -
 
-1. The Organization owner is trusted.
-2. The Organization owner can add or remove peers from the Organization.
-3. The Organization owner can add or remove channels.
-4. The peers in the Organization can send/receive messages to the channels which they have access to.
-5. Organizations may be encrypted or unencrypted (public).
-6. An Organization is uniquely identified by a public key.
-7. The public key of the Organization is shared out of band.
-8. The metadata of the Organization can be found by listening on a content topic derived from the public key of the Organization.
-9. Peers part of an Organization run their own infrastructure.
+1. The Community owner is trusted.
+2. The Community owner can add or remove peers from the Community.
+3. The Community owner can add or remove channels.
+4. The peers in the Community can send/receive messages to the channels which they have access to.
+5. Communitys may be encrypted or unencrypted (public).
+6. A Community is uniquely identified by a public key.
+7. The public key of the Community is shared out of band.
+8. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
+9. Peers part of a Community run their own infrastructure.
 
 # Design
 
@@ -51,16 +51,16 @@ The following cryptographic primitives are used in the design -
 
 - X3DH
 - Single Ratchet 
-    - The single ratchet is used to encrypt the messages sent to the Organization.
-    - The single ratchet is re-keyed when a peer is added/removed from the Organization.
+    - The single ratchet is used to encrypt the messages sent to the Community.
+    - The single ratchet is re-keyed when a peer is added/removed from the Community.
 
 ## Wire format
 
 <!--   
 The wire format is described first to give an overview of the protocol.
-It is referenced in the flow of organization creation and organization management.
+It is referenced in the flow of community creation and community management.
 More or less an intersection of https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md and https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/protobuf/communities.proto,
-but with changes to make it more generic.
+
 -->
 
 ```protobuf
@@ -93,7 +93,14 @@ message IdentityImage {
   }
 }
 
-// ChatIdentity represents identity of an organization/chat
+// SocialLinks represents social link assosiated with given chat identity (personal/community)
+message SocialLink {
+  // Type of the social link
+  string text = 1;
+  // URL of the social link
+  string url = 2;
+}
+// ChatIdentity represents identity of a community/chat
 message ChatIdentity {
   // Lamport timestamp of the message
   uint64 clock = 1;
@@ -105,11 +112,18 @@ message ChatIdentity {
   string display_name = 4;
   // description is the user set description
   string description = 5;
+  string color = 6;
+  string emoji = 7;
+  repeated SocialLink social_links = 8;
+  // first known message timestamp in seconds (valid only for community chats for now)
+  // 0 - unknown
+  // 1 - no messages
+  uint32 first_message_timestamp = 9;
 }
 
 message Grant {
-  // Organization ID (The public key of the organization)
-  bytes organization_id = 1;
+  // Community ID (The public key of the community)
+  bytes community_id = 1;
   // The member ID (The public key of the member)
   bytes member_id = 2;
   // The chat for which the grant is given
@@ -118,8 +132,8 @@ message Grant {
   uint64 clock = 4;
 }
 
-message OrganizationMember {
-  // The roles an organization member MAY have
+message CommunityMember {
+  // The roles a community member MAY have
   enum Roles {
     UNKNOWN_ROLE = 0;
     ROLE_ALL = 1;
@@ -129,8 +143,8 @@ message OrganizationMember {
   repeated Roles roles = 1;
 }
 
-message OrganizationPermissions {
-  // The type of access an organization MAY have
+message CommunityPermissions {
+  // The type of access a community MAY have
   enum Access {
     UNKNOWN_ACCESS = 0;
     NO_MEMBERSHIP = 1;
@@ -138,170 +152,176 @@ message OrganizationPermissions {
     ON_REQUEST = 3;
   }
 
-  // If the organization should be available only to ens users
+  // If the community should be available only to ens users
   bool ens_only = 1;
-  // If the organization is private
+  // If the community is private
   bool private = 2;
   Access access = 3;
 }
 
-message OrganizationAdminSettings {
-  // If the Organization admin may pin messages
+message CommunityAdminSettings {
+  // If the Community admin may pin messages
   bool pin_message_all_members_enabled = 1;
 }
 
-message OrganizationChat {
-  // A map of members in the organization to their roles in a chat
-  map<string,OrganizationMember> members = 1;
+message CommunityChat {
+  // A map of members in the community to their roles in a chat
+  map<string,CommunityMember> members = 1;
   // The permissions of the chat
-  OrganizationPermissions permissions = 2;
+  CommunityPermissions permissions = 2;
   // The metadata of the chat
   ChatIdentity identity = 3;
   // The category of the chat
   string category_id = 4;
+  // The position of chat in the display
+  int32 position = 5;
 }
 
-message OrganizationCategory {
+message CommunityCategory {
   // The category id 
   string category_id = 1;
   // The name of the category
   string name = 2;
+  // The position of the category in the display
+  int32 position = 3;
 }
 
-message OrganizationInvitation {
-  // Encrypted/unencrypted organization description
-  bytes organization_description = 1;
-  // The grant offered by the organization
+message CommunityInvitation {
+  // Encrypted/unencrypted community description
+  bytes community_description = 1;
+  // The grant offered by the community
   bytes grant = 2;
   // The chat id requested to join
   string chat_id = 3;
-  // The public key of the organization
+  // The public key of the community
   bytes public_key = 4;
 }
 
-message OrganizationRequestToJoin {
+message CommunityRequestToJoin {
   // The Lamport timestamp of the request  
   uint64 clock = 1;
   // The ENS name of the requester
   string ens_name = 2;
   // The chat id requested to join
   string chat_id = 3;
-  // The public key of the organization
-  bytes organization_id = 4;
+  // The public key of the community
+  bytes community_id = 4;
   // The display name of the requester
   string display_name = 5;
 }
 
-message OrganizationCancelRequestToJoin {
+message CommunityCancelRequestToJoin {
   // The Lamport timestamp of the request
   uint64 clock = 1;
   // The ENS name of the requester
   string ens_name = 2;
   // The chat id requested to join
   string chat_id = 3;
-  // The public key of the organization
-  bytes organization_id = 4;
+  // The public key of the community
+  bytes community_id = 4;
   // The display name of the requester
   string display_name = 5;
+  // Magnet uri for community history protocol
+  string magnet_uri = 6;
 }
 
-message OrganizationRequestToJoinResponse {
+message CommunityRequestToJoinResponse {
   // The Lamport timestamp of the request
   uint64 clock = 1;
-  // The organization description
-  OrganizationDescription organization = 2;
+  // The community description
+  CommunityDescription community = 2;
   // If the request was accepted
   bool accepted = 3;
-  // The grant offered by the organization
+  // The grant offered by the community
   bytes grant = 4;
-  // The organization public key
-  bytes organization_id = 5;
+  // The community public key
+  bytes community_id = 5;
 }
 
-message OrganizationRequestToLeave {
+message CommunityRequestToLeave {
   // The Lamport timestamp of the request
   uint64 clock = 1;
-  // The organization public key
-  bytes organization_id = 2;
+  // The community public key
+  bytes community_id = 2;
 }
 
-message OrganizationDescription {
+message CommunityDescription {
   // The Lamport timestamp of the message
   uint64 clock = 1;
-  // A mapping of members in the organization to their roles
-  map<string,OrganizationMember> members = 2;
-  // The permissions of the Organization
-  OrganizationPermissions permissions = 3;
-  // The metadata of the Organization
+  // A mapping of members in the community to their roles
+  map<string,CommunityMember> members = 2;
+  // The permissions of the Community
+  CommunityPermissions permissions = 3;
+  // The metadata of the Community
   ChatIdentity identity = 5;
   // A mapping of chats to their details
-  map<string,OrganizationChat> chats = 6;
+  map<string,CommunityChat> chats = 6;
   // A list of banned members
   repeated string ban_list = 7;
   // A mapping of categories to their details
-  map<string,OrganizationCategory> categories = 8;
-  // The admin settings of the Organization
-  OrganizationAdminSettings admin_settings = 10;
-  // If the organization is encrypted
+  map<string,CommunityCategory> categories = 8;
+  // The admin settings of the Community
+  CommunityAdminSettings admin_settings = 10;
+  // If the community is encrypted
   bool encrypted = 13;
   // The list of tags
   repeated string tags = 14;
 }
 ```
 
-## Organization Management
+## Community Management
 
-The flows for Organization management are as described below.
+The flows for Community management are as described below.
 
-### Organization Creation Flow
+### Community Creation Flow
 
-1. The Organization owner generates a public/private key pair.
-2. The Organization owner configures the Organization metadata, according to the wire format "OrganizationDescription".
-3. The Organization owner publishes the Organization metadata on a content topic derived from the public key of the Organization. 
-he Organization metadata SHOULD be encrypted with the public key of the Organization. <!-- TODO: Verify this-->
-The Organization metadata MAY be sent during fixed intervals, to ensure that the Organization metadata is available to peers.
-The Organization metadata SHOULD be sent every time the Organization metadata is updated.
-4. The Organization owner MAY advertise the Organization out of band, by sharing the public key of the Organization on other mediums of communication.
+1. The Community owner generates a public/private key pair.
+2. The Community owner configures the Community metadata, according to the wire format "CommunityDescription".
+3. The Community owner publishes the Community metadata on a content topic derived from the public key of the Community. 
+he Community metadata SHOULD be encrypted with the public key of the Community. <!-- TODO: Verify this-->
+The Community metadata MAY be sent during fixed intervals, to ensure that the Community metadata is available to peers.
+The Community metadata SHOULD be sent every time the Community metadata is updated.
+4. The Community owner MAY advertise the Community out of band, by sharing the public key of the Community on other mediums of communication.
 
-### Organization Join Flow (peer requests to join an Organization)
+### Community Join Flow (peer requests to join a Community)
 
 1. A peer generates a public/private key pair.
-2. The peer requests to join an Organization by sending a "OrganizationRequestToJoin" message to the Organization.
-At this point, the peer MAY send a "OrganizationCancelRequestToJoin" message to cancel the request.
-3. The Organization owner MAY accept or reject the request.
-4. If the request is accepted, the Organization owner sends a "OrganizationRequestToJoinResponse" message to the peer.
-5. The Organization owner then adds the member to the Organization metadata, and publishes the updated Organization metadata.
+2. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
+At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to cancel the request.
+3. The Community owner MAY accept or reject the request.
+4. If the request is accepted, the Community owner sends a "CommunityRequestToJoinResponse" message to the peer.
+5. The Community owner then adds the member to the Community metadata, and publishes the updated Community metadata.
 
-### Organization Join Flow (peer is invited to join an Organization)
+### Community Join Flow (peer is invited to join a Community)
 
-1. The peer is invited to join an Organization by the Organization owner, by sending a "OrganizationInvitation" message.
+1. The peer is invited to join a Community by the Community owner, by sending a "CommunityInvitation" message.
 2. A peer generates a public/private key pair.
-3. The peer decrypts the "OrganizationInvitation" message, and verifies the signature.
-4. The peer requests to join an Organization by sending a "OrganizationRequestToJoin" message to the Organization.
-5. The Organization owner MAY accept or reject the request.
-6. If the request is accepted, the Organization owner sends a "OrganizationRequestToJoinResponse" message to the peer.
-7. The Organization owner then adds the member to the Organization metadata, and publishes the updated Organization metadata.
+3. The peer decrypts the "CommunityInvitation" message, and verifies the signature.
+4. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
+5. The Community owner MAY accept or reject the request.
+6. If the request is accepted, the Community owner sends a "CommunityRequestToJoinResponse" message to the peer.
+7. The Community owner then adds the member to the Community metadata, and publishes the updated Community metadata.
 
-### Organization Leave Flow
+### Community Leave Flow
 
-1. A peer requests to leave an Organization by sending a "OrganizationRequestToLeave" message to the Organization.
-2. The Organization owner MAY accept or reject the request.
-3. If the request is accepted, the Organization owner removes the member from the Organization metadata, and publishes the updated Organization metadata.
+1. A peer requests to leave a Community by sending a "CommunityRequestToLeave" message to the Community.
+2. The Community owner MAY accept or reject the request.
+3. If the request is accepted, the Community owner removes the member from the Community metadata, and publishes the updated Community metadata.
 
-### Organization Ban Flow
+### Community Ban Flow
 
-1. The Organization owner adds a member to the ban list, revokes their grants, and publishes the updated Organization metadata.
+1. The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.
 
 
 ## Security Considerations
 
-1. The Organization owner is a single point of failure. If the Organization owner is compromised, the Organization is compromised.
+1. The Community owner is a single point of failure. If the Community owner is compromised, the Community is compromised.
 
 2. Follows the same security considerations as the [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) protocol.
 
 ## Future work
 
-1. To scale and optimize the Organization management, the Organization metadata should be stored on a decentralized storage system, and only the references to the Organization metadata should be broadcasted. The following document describes this method in more detail - [Optimizing the `OrganizationDescription` dissemination](https://hackmd.io/rD1OfIbJQieDe3GQdyCRTw)
+1. To scale and optimize the Community management, the Community metadata should be stored on a decentralized storage system, and only the references to the Community metadata should be broadcasted. The following document describes this method in more detail - [Optimizing the `CommunityDescription` dissemination](https://hackmd.io/rD1OfIbJQieDe3GQdyCRTw)
 
 ## References
 
