@@ -35,13 +35,15 @@ Due to the nature of communities, the following requirements are necessary for t
 
 1. The Community owner is trusted.
 2. The Community owner can add or remove peers from the Community.
-3. The Community owner can add or remove channels.
+This extends to banning and kicking peers.
+3. The Community owner can add, edit and remove channels.
 4. The peers in the Community can send/receive messages to the channels which they have access to.
-5. Communitys may be encrypted or unencrypted (public).
+5. Communities may be encrypted (private) or unencrypted (public).
 6. A Community is uniquely identified by a public key.
 7. The public key of the Community is shared out of band.
 8. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
-9. Peers part of a Community run their own infrastructure.
+9. Peers part of a Community run their own Waku nodes.
+Light peers may not be able to run their own Waku node.
 
 # Design
 
@@ -269,6 +271,8 @@ message CommunityDescription {
 }
 ```
 
+Note: The usage of the clock is described in the [Clock](#clock) section.
+
 ## Community Management
 
 The flows for Community management are as described below.
@@ -312,18 +316,43 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 1. The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.
 
+## Waku protocols 
 
-## Security Considerations
+The following Waku protocols SHOULD be used to implement Status Communities -
+
+1. [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) - To send and receive messages
+2. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) - To encrypt and decrypt messages
+3. [53/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/) - To handle session keys
+4. [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) - To wrap community messages in a Waku message
+
+The following Waku protocols MAY be used to implement Status Communities -
+
+1. [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) - Content filtering for resource restricted devices
+2. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) - To store and retrieve messages for offline devices
+
+## Backups
+
+<!--TODO -->
+
+## Clock
+
+The clock used in the wire format refers to the Lamport timestamp of the message.
+The Lamport timestamp is a logical clock that is used to determine the order of events in a distributed system.
+This allows ordering of messages in an asynchronous network where messages may be received out of order.
+
+# Security Considerations
 
 1. The Community owner is a single point of failure. If the Community owner is compromised, the Community is compromised.
 
 2. Follows the same security considerations as the [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) protocol.
 
-## Future work
+# Future work
 
 1. To scale and optimize the Community management, the Community metadata should be stored on a decentralized storage system, and only the references to the Community metadata should be broadcasted. The following document describes this method in more detail - [Optimizing the `CommunityDescription` dissemination](https://hackmd.io/rD1OfIbJQieDe3GQdyCRTw)
 
-## References
+2. Token gating for communities
+
+# References
 
 - [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
 - https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go
