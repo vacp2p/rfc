@@ -10,8 +10,8 @@ contributors:
 - Andrea Piana <andreap@status.im>
 - Pedro Pombeiro <pedro@status.im>
 - Corey Petty <corey@status.im>
-- Oskar Thorén oskar@status.im>
-- Dean Eigenmann dean@status.im>
+- Oskar Thorén <oskar@status.im>
+- Dean Eigenmann <dean@status.im>
 ---
 
 # Abstract

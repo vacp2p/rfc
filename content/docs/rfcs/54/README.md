@@ -1,6 +1,6 @@
 ---
-slug: 53
-title: 53/WAKU2-X3DH-SESSIONS
+slug: 54
+title: 54/WAKU2-X3DH-SESSIONS
 name: Session management for Waku X3DH 
 status: stable
 category: Standards Track
@@ -10,8 +10,8 @@ contributors:
 - Andrea Piana <andreap@status.im>
 - Pedro Pombeiro <pedro@status.im>
 - Corey Petty <corey@status.im>
-- Oskar Thorén oskar@status.im>
-- Dean Eigenmann dean@status.im>
+- Oskar Thorén <oskar@status.im>
+- Dean Eigenmann <dean@status.im>
 ---
 
 # Abstract
