@@ -324,11 +324,13 @@ The following Waku protocols SHOULD be used to implement Status Communities -
 2. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) - To encrypt and decrypt messages
 3. [53/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/) - To handle session keys
 4. [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) - To wrap community messages in a Waku message
+5. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) - To store and retrieve messages for offline devices
+
 
 The following Waku protocols MAY be used to implement Status Communities -
 
 1. [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) - Content filtering for resource restricted devices
-2. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) - To store and retrieve messages for offline devices
+2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/) - As a replacement to [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
 
 ## Backups
 
