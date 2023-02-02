@@ -50,6 +50,9 @@ bookMenuLevels: 1
   - [8/WAKU-MAIL]({{< relref "/docs/rfcs/8/README.md" >}})
   - [9/WAKU-RPC]({{< relref "/docs/rfcs/9/README.md" >}})
   - [11/WAKU2-RELAY]({{< relref "/docs/rfcs/11/README.md" >}})
+  - [53/WAKU2-X3DH]({{< relref "/docs/rfcs/53/README.md" >}})
+  - [54/WAKU2-X3DH-SESSIONS]({{< relref "/docs/rfcs/54/README.md" >}})
+  - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
 - Deprecated
   - [5/WAKU0]({{< relref "/docs/rfcs/5/README.md" >}})
 - Retired
