@@ -1,12 +1,13 @@
 ---
-slug: 55
-title: 55/STATUS-COMMUNITIES
+slug: 56
+title: 56/STATUS-COMMUNITIES
 name: Status Communities that run on Waku v2
 status: raw
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
+- Andrea Piana <andreap@status.im>
 ---
 
 # Abstract
@@ -21,7 +22,8 @@ This would require channels, which are subject-based.
 The messages in a channel are broadcasted to all the users in the channel.
 
 A regular group chat between two or more peers reduces to a 1:1 chat between each peer and the other peers.
-One mechanism for 1:1 chats is described in [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/).
+One mechanism for 1:1 chats is described in [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/).
+The key-exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/).
 However, this method does not scale as the number of peers increases, for the following reasons -
 1. The number of messages sent over the network increases as the number of peers increases.
 2. Handling the X3DH key exchange for each peer is computationally expensive.
@@ -353,6 +355,10 @@ This allows ordering of messages in an asynchronous network where messages may b
 1. To scale and optimize the Community management, the Community metadata should be stored on a decentralized storage system, and only the references to the Community metadata should be broadcasted. The following document describes this method in more detail - [Optimizing the `CommunityDescription` dissemination](https://hackmd.io/rD1OfIbJQieDe3GQdyCRTw)
 
 2. Token gating for communities
+
+# Copyright
+
+Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
 

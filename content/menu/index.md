@@ -41,6 +41,7 @@ bookMenuLevels: 1
   - [30/ADAPTIVE-NODES]({{< relref "/docs/rfcs/30/README.md" >}})
   - [33/WAKU2-DISCV5]({{< relref "/docs/rfcs/33/README.md" >}})
   - [36/WAKU2-BINDINGS-API]({{< relref "/docs/rfcs/36/README.md" >}})
+  - [56/STATUS-COMMUNITIES]({{< relref "/docs/rfcs/56/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
