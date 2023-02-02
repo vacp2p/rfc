@@ -173,7 +173,7 @@ message EncryptedMessageProtocol {
 Where:
 - `X3DH_header`: the `X3DHHeader` field in `DirectMessageProtocol` contains:
 
-    ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L47))
+    ([reference wire format](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L47))
     ``` protobuf
     message X3DHHeader {
       // Alice's ephemeral key `EK_A`
@@ -183,7 +183,7 @@ Where:
     }
     ```
 
-- `DR_header`: Double ratchet header ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L31)). Used when Bob's public bundle is available:
+- `DR_header`: Double ratchet header ([reference wire format](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L31)). Used when Bob's public bundle is available:
     ``` protobuf
     message DRHeader {
       // Alice's current ratchet public key (as mentioned in [DR spec section 2.2](https://signal.org/docs/specifications/doubleratchet/#symmetric-key-ratchet))
@@ -198,7 +198,7 @@ Where:
     ```
 
 - `DH_header`: Diffie-Helman header (used when Bob's bundle is not available):
-    ([protobuf](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L42))
+    ([reference wire format](https://github.com/status-im/status-go/blob/a904d9325e76f18f54d59efc099b63293d3dcad3/services/shhext/chat/encryption.proto#L42))
     ``` protobuf
     message DHHeader {
       // Alice's compressed ephemeral public key.
