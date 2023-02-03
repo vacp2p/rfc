@@ -21,9 +21,9 @@ It is transport-agnostic and works over asynchronous networks.
 
 It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications, with some adaptations to operate in a decentralized environment.
 
-# Background
+# Motivation
 
-This document describes how nodes establish a secure channel, and how various conversational security properties are achieved.
+Nodes on a network may want to communicate with each other in a secure manner, without other nodes network being able to read their messages.
 
 # Specification
 
