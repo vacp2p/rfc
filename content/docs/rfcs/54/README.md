@@ -2,7 +2,7 @@
 slug: 54
 title: 54/WAKU2-X3DH-SESSIONS
 name: Session management for Waku X3DH 
-status: stable
+status: raw
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>

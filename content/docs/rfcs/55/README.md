@@ -2,7 +2,7 @@
 slug: 55
 title: 55/STATUS-1TO1-CHAT
 name: Status 1-to-1 Chat
-status: stable
+status: raw
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>

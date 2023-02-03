@@ -21,6 +21,9 @@ bookMenuLevels: 1
   - [48/RLN-INTEREP-SPEC]({{< relref "/docs/rfcs/48/README.md" >}})
   - [51/WAKU2-RELAY-SHARDING]({{< relref "/docs/rfcs/51/README.md" >}})
   - [52/WAKU2-RELAY-STATIC-SHARD-ALLOC]({{< relref "/docs/rfcs/52/README.md" >}})
+  - [53/WAKU2-X3DH]({{< relref "/docs/rfcs/53/README.md" >}})
+  - [54/WAKU2-X3DH-SESSIONS]({{< relref "/docs/rfcs/54/README.md" >}})
+  - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
@@ -50,9 +53,6 @@ bookMenuLevels: 1
   - [8/WAKU-MAIL]({{< relref "/docs/rfcs/8/README.md" >}})
   - [9/WAKU-RPC]({{< relref "/docs/rfcs/9/README.md" >}})
   - [11/WAKU2-RELAY]({{< relref "/docs/rfcs/11/README.md" >}})
-  - [53/WAKU2-X3DH]({{< relref "/docs/rfcs/53/README.md" >}})
-  - [54/WAKU2-X3DH-SESSIONS]({{< relref "/docs/rfcs/54/README.md" >}})
-  - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
 - Deprecated
   - [5/WAKU0]({{< relref "/docs/rfcs/5/README.md" >}})
 - Retired
