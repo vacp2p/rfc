@@ -16,11 +16,11 @@ contributors:
 
 # Abstract
 
-In [53/WAKU2-X3DH](/spec/53) we specified the `X3DH` protocol for end-to-end encryption. 
+This document specifies how to manage sessions based on an X3DH key exchange.
+This includes how to establish new sessions, how to re-establish them, how to maintain them, and how to close them.
 
-Once two peers complete an X3DH handshake, an X3DH session would be established.
-
-This RFC describes how to manage these sessions, including how to establish new ones, how to re-establish them, how to maintain them, and how to close them.
+[53/WAKU2-X3DH](/spec/53) specifies the Waku `X3DH` protocol for end-to-end encryption. 
+Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session.
 
 # Session Establishment
 
@@ -43,7 +43,7 @@ On receiving a bundle from a given peer with a higher version, the old bundle SH
 
 Multi-device support is quite challenging as there is not a central place where information on which and how many devices (identified by their respective `installation-id`) a peer has, is stored.
 
-Furthermore, account recovery always needs to be taken into consideration, where a user wipes clean the whole device and the nodes loses all the information about any previous sessions.
+Furthermore, account recovery always needs to be taken into consideration, where a user wipes clean the whole device and the node loses all the information about any previous sessions.
 Taking these considerations into account, the way the network propagates multi-device information using X3DH bundles, which will contain information about paired devices as well as information about the sending device.
 This means that every time a new device is paired, the bundle needs to be updated and propagated with the new information, the user has the responsibility to make sure the pairing is successful.
 
