@@ -22,8 +22,8 @@ This would require channels, which are subject-based.
 The messages in a channel are broadcasted to all the users in the channel.
 
 A regular group chat between two or more peers reduces to a 1:1 chat between each peer and the other peers.
-One mechanism for 1:1 chats is described in [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/).
-The key-exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/).
+One mechanism for 1:1 chats is described in [55/STATUS-1TO1-CHAT](/spec/55/).
+The key-exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
 However, this method does not scale as the number of peers increases, for the following reasons -
 1. The number of messages sent over the network increases as the number of peers increases.
 2. Handling the X3DH key exchange for each peer is computationally expensive.
@@ -322,16 +322,16 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 The following Waku protocols SHOULD be used to implement Status Communities -
 
-1. [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) - To send and receive messages
-2. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) - To encrypt and decrypt messages
-3. [53/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/) - To handle session keys
-4. [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) - To wrap community messages in a Waku message
-5. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) - To store and retrieve messages for offline devices
+1. [11/WAKU2-RELAY](/spec/11/) - To send and receive messages
+2. [53/WAKU2-X3DH](/spec/53/) - To encrypt and decrypt messages
+3. [53/WAKU2-X3DH-SESSIONS](/spec/54/) - To handle session keys
+4. [14/WAKU2-MESSAGE](/spec/14/) - To wrap community messages in a Waku message
+5. [13/WAKU2-STORE](/spec/13/) - To store and retrieve messages for offline devices
 
 
 The following Waku protocols MAY be used to implement Status Communities -
 
-1. [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) - Content filtering for resource restricted devices
+1. [12/WAKU2-FILTER](/spec/12/) - Content filtering for resource restricted devices
 
 ## Backups
 
@@ -347,7 +347,7 @@ This allows ordering of messages in an asynchronous network where messages may b
 
 1. The Community owner is a single point of failure. If the Community owner is compromised, the Community is compromised.
 
-2. Follows the same security considerations as the [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) protocol.
+2. Follows the same security considerations as the [53/WAKU2-X3DH](/spec/53/) protocol.
 
 # Future work
 
@@ -361,6 +361,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-- [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+- [53/WAKU2-X3DH](/spec/53/)
 - https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go
 - https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md
