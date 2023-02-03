@@ -54,7 +54,7 @@ Types used in this specification are defined using the [Protobuf](https://develo
 
 End-to-end encryption (E2EE) takes place between two clients. 
 The main cryptographic protocol is a Double Ratchet protocol, which is derived from the [Off-the-Record protocol](https://otr.cypherpunks.ca/Protocol-v3-4.1.1.html), using a different ratchet. 
-[Waku](https://rfc.vac.dev/spec/10/) subsequently encrypts the message payload, using symmetric key encryption. 
+[The Waku v2 protocol](/spec/10/) subsequently encrypts the message payload, using symmetric key encryption. 
 Furthermore, the concept of prekeys (through the use of [X3DH](https://signal.org/docs/specifications/x3dh/)) is used to allow the protocol to operate in an asynchronous environment.
 It is not necessary for two parties to be online at the same time to initiate an encrypted conversation.
 
@@ -230,7 +230,7 @@ The message key MUST be used to encrypt the next message to be sent.
 
 1. Inherits the security considerations of [X3DH](https://signal.org/docs/specifications/x3dh/#security-considerations) and [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/#security-considerations).
 
-2. Inherits the security considerations of the [Waku v2 protocol](https://rfc.vac.dev/spec/10/).
+2. Inherits the security considerations of the [Waku v2 protocol](/spec/10/).
 
 3. The protocol is designed to be used in a decentralized manner, however, it is possible to use a centralized server to serve prekey bundles. In this case, the server is trusted.
 
@@ -245,7 +245,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 1. [5/SECURE-TRANSPORT](https://specs.status.im/spec/5)
-2. [10/WAKU2](https://rfc.vac.dev/spec/10/)
+2. [10/WAKU2](/spec/10/)
 3. [X3DH](https://signal.org/docs/specifications/x3dh/)
 4. [HKDF](https://www.rfc-editor.org/rfc/rfc5869)
 4. [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
