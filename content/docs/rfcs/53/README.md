@@ -2,7 +2,7 @@
 slug: 53
 title: 53/WAKU2-X3DH
 name: X3DH usage for Waku payload encryption
-status: stable
+status: raw
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>
@@ -16,7 +16,7 @@ contributors:
 
 # Abstract
 
-This document describes a method can be used to provide a secure channel between two peers, and thus provide confidentiality, integrity, authenticity and forward secrecy. 
+This document describes a method that can be used to provide a secure channel between two peers, and thus provide confidentiality, integrity, authenticity and forward secrecy. 
 It is transport-agnostic and works over asynchronous networks.
 
 It builds on the [X3DH](https://signal.org/docs/specifications/x3dh/) and [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) specifications, with some adaptations to operate in a decentralized environment.
@@ -32,15 +32,15 @@ This document describes how nodes establish a secure channel, and how various co
 - **Perfect Forward Secrecy** is a feature of specific key-agreement protocols which provide assurances that session keys will not be compromised even if the private keys of the participants are compromised. 
 Specifically, past messages cannot be decrypted by a third-party who manages to get a hold of a private key.
 
-- **Secret channel** describes a communication channel where Double Ratchet algorithm is in use.
+- **Secret channel** describes a communication channel where a Double Ratchet algorithm is in use.
 
 
 ## Design Requirements
 
 - **Confidentiality**: The adversary should not be able to learn what data is being exchanged between two Status clients.
-- **Authenticity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data from any third party as though it came from the other endpoint.
-- **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two Status clients if, at some later time, the adversary compromises one or both of the endpoint devices.
-- **Integrity**: The adversary should not be able to cause either endpoint of a Status 1:1 chat to accept data that has been tampered with.
+- **Authenticity**: The adversary should not be able to cause either endpoint to accept data from any third party as though it came from the other endpoint.
+- **Forward Secrecy**: The adversary should not be able to learn what data was exchanged between two clients if, at some later time, the adversary compromises one or both of the endpoints.
+- **Integrity**: The adversary should not be able to cause either endpoint to accept data that has been tampered with.
 
 All of these properties are ensured by the use of [Signal's Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
 
@@ -71,7 +71,7 @@ This protocol uses the following cryptographic primitives:
     - Elliptic curve Diffie-Hellman key exchange (Curve25519)
     - AES-256-CTR with HMAC-SHA-256 and IV derived alongside an encryption key
 
-    The node achieves key derivation using HKDF.
+    The node achieves key derivation using [HKDF](https://www.rfc-editor.org/rfc/rfc5869).
 
 ## Pre-keys
 
@@ -113,7 +113,7 @@ The key exchange can be summarized as follows:
 [Section 3 of the X3DH protocol](https://signal.org/docs/specifications/x3dh/#sending-the-initial-message) describes the initial key exchange flow, with some additional context:
 - The peers' identity keys `IK_A` and `IK_B` correspond to their public keys;
 - Since it is not possible to guarantee that a prekey will be used only once in a decentralized world, the one-time prekey `OPK_B` is not used in this scenario;
-- Nodes SHOULD not send Bundles to a centralized server, but instead served in a decentralized way as described in the [Pre-keys section](#pre-keys).
+- Nodes SHOULD not send Bundles to a centralized server, but instead provide them in a decentralized way as described in the [Pre-keys section](#pre-keys).
 
 Alice retrieves Bob's prekey bundle, however it is not specific to Alice. It contains:
 
@@ -247,4 +247,5 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 1. [5/SECURE-TRANSPORT](https://specs.status.im/spec/5)
 2. [10/WAKU2](https://rfc.vac.dev/spec/10/)
 3. [X3DH](https://signal.org/docs/specifications/x3dh/)
+4. [HKDF](https://www.rfc-editor.org/rfc/rfc5869)
 4. [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
