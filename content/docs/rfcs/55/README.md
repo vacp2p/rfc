@@ -29,8 +29,8 @@ This document describes how 2 peers communicate with each other to send messages
 
 This protocol MAY use any key-exchange mechanism previously discussed -
 
-1. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) 
-2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
+1. [53/WAKU2-X3DH](/spec/53/) 
+2. [35/WAKU2-NOISE](/spec/35/)
 
 This protocol can provide end-to-end encryption to give peers a strong degree of privacy and security. 
 Public chat messages are publicly readable by anyone since there's no permission model for who is participating in a public chat.
@@ -55,13 +55,13 @@ After the peers have shared their public key material, a 1:1 chat can be establi
 The 1:1 chat is made robust by having sessions between peers.
 It is handled by the key-exchange protocol used. For example,
 
-1. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/), the session management is described in [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+1. [53/WAKU2-X3DH](/spec/53/), the session management is described in [54/WAKU2-X3DH-SESSIONS](/spec/54/)
 
-2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/), the session management is described in [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/)
+2. [35/WAKU2-NOISE](/spec/35/), the session management is described in [37/WAKU2-NOISE-SESSIONS](/spec/37/)
 
 # Security Considerations
 
-1. Inherits the security considerations of the key-exchange mechanism used, e.g., [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) or [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
+1. Inherits the security considerations of the key-exchange mechanism used, e.g., [53/WAKU2-X3DH](/spec/53/) or [35/WAKU2-NOISE](/spec/35/)
 
 # Copyright
 
@@ -70,6 +70,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 
 1. [2/ACCOUNT](https://specs.status.im/spec/2)
-2. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
-3. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
-4. [10/WAKU2](https://rfc.vac.dev/spec/10/)
+2. [53/WAKU2-X3DH](/spec/53/)
+3. [35/WAKU2-NOISE](/spec/35/)
+4. [10/WAKU2](/spec/10/)
