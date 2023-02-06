@@ -335,7 +335,8 @@ The following Waku protocols MAY be used to implement Status Communities -
 
 ## Backups
 
-<!--TODO -->
+The peer MAY back up their chat history by periodically sending their chat history encrypted with their own public key.
+This feature relies on [13/WAKU2-STORE](/spec/13/) for storing and retrieving messages.
 
 ## Clock
 
