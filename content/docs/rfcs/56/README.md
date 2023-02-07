@@ -2,7 +2,7 @@
 slug: 56
 title: 56/STATUS-COMMUNITIES
 name: Status Communities that run on Waku v2
-status: raw
+status: draft
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>
@@ -274,6 +274,23 @@ message CommunityDescription {
 ```
 
 Note: The usage of the clock is described in the [Clock](#clock) section.
+
+## Content topic usage
+
+### Advertising a Community
+
+The content topic that the community is advertised on MUST be derived from the public key of the community.
+The public key MUST be compressed to 32 bytes and used as the content topic.
+
+### Community channels
+
+The content topic that Community channels/chats use MUST be derived from the public key of the community and the chat id.
+The community id and the chat id MUST be concatenated and the keccak-256 hash of the result MUST be used as the content topic.
+
+### Community event messages
+
+Requests to leave, join, kick and ban, as well as key exchange messages, MUST be sent to the content topic derived from the public key of the community.
+The public key MUST be hashed using keccak-256 and the result MUST be used as the content topic.
 
 ## Community Management
 
