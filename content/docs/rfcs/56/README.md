@@ -280,17 +280,30 @@ Note: The usage of the clock is described in the [Clock](#clock) section.
 ### Advertising a Community
 
 The content topic that the community is advertised on MUST be derived from the public key of the community.
-The public key MUST be compressed to 32 bytes and used as the content topic.
+The content topic MUST be the hex-encoded keccak-256 hash of the compressed (32 bytes) public key of the community.
+
+```
+contentTopic = hex(keccak256(compressedPublicKey))
+```
 
 ### Community channels
 
 The content topic that Community channels/chats use MUST be derived from the public key of the community and the chat id.
-The community id and the chat id MUST be concatenated and the keccak-256 hash of the result MUST be used as the content topic.
+The content topic MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.
+
+```
+contentTopic = hex(keccak256(compressedPublicKey + chatId))
+```
+
 
 ### Community event messages
 
 Requests to leave, join, kick and ban, as well as key exchange messages, MUST be sent to the content topic derived from the public key of the community.
-The public key MUST be hashed using keccak-256 and the result MUST be used as the content topic.
+The content topic MUST be the hex-encoded keccak-256 hash of the public key of the community.
+
+```
+contentTopic = hex(keccak256(publicKey))
+``` 
 
 ## Community Management
 
