@@ -2,7 +2,7 @@
 slug: 53
 title: 53/WAKU2-X3DH
 name: X3DH usage for Waku payload encryption
-status: raw
+status: draft
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>

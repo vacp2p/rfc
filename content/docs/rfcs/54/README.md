@@ -2,7 +2,7 @@
 slug: 54
 title: 54/WAKU2-X3DH-SESSIONS
 name: Session management for Waku X3DH 
-status: raw
+status: draft
 category: Standards Track
 tags: waku-application
 editor: Aaryamann Challani <aaryamann@status.im>
@@ -26,8 +26,13 @@ Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session
 
 A node identifies a peer by their `installation-id` which MAY be interpreted as a device identifier.
 
-## Initialization
+## Discovery of pre-key bundles
 
+The node's pre-key bundle SHOULD be broadcasted on a content topic derived from the node's public key.
+<!--- TODO: We need to move other specs from status to vac research, including STATUS-WAKU-USAGE -->
+The derivation is further described in [10/WAKU-USAGE](https://specs.status.im/spec/10#contact-code-topic)
+
+## Initialization
 A node initializes a new session once a successful X3DH exchange has taken place. 
 Subsequent messages will use the established session until re-keying is necessary.
 
