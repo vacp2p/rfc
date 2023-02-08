@@ -392,6 +392,8 @@ This allows ordering of messages in an asynchronous network where messages may b
 
 2. Token gating for communities
 
+3. Sharding the content topic used for [#Community Event Messages](#community-event-messages), since members of the community don't need to receive all the control messages.
+
 # Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
