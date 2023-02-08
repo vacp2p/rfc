@@ -290,8 +290,10 @@ The content topic MUST be the hex-encoded keccak-256 hash of the compressed (32 
 contentTopic = hex(keccak256(compressedPublicKey))
 ```
 
-### Community channels
+### Community channels/chats
 
+The unique identifier for a community channel/chat is the chat id.
+<!-- Don't enforce any constraints on the unique id generation -->
 The content topic that Community channels/chats use MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.
 
 ```
