@@ -279,6 +279,8 @@ Note: The usage of the clock is described in the [Clock](#clock) section.
 
 ## Content topic usage
 
+"Content topic" refers to the field in [14/WAKU2-MESSAGE](/spec/14/#message-attributes), further elaborated in [10/WAKU2](/spec/10/#overview-of-protocol-interaction).
+
 ### Advertising a Community
 
 The content topic that the community is advertised on MUST be derived from the public key of the community.
