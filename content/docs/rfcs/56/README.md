@@ -12,7 +12,7 @@ contributors:
 
 # Abstract
 
-This document describes the design of Status Communities for Waku v2, allowing for multiple users to communicate in a group chat. 
+This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. 
 This is a key feature for the Status messaging app. 
 
 # Background and Motivation
@@ -24,11 +24,11 @@ The messages in a channel are broadcasted to all the users in the channel.
 A regular group chat between two or more peers reduces to a 1:1 chat between each peer and the other peers.
 One mechanism for 1:1 chats is described in [55/STATUS-1TO1-CHAT](/spec/55/).
 The key-exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
-However, this method does not scale as the number of peers increases, for the following reasons -
+This method of building groups is not used for Communities, because it does not scale as the number of peers increases, for the following reasons
 1. The number of messages sent over the network increases as the number of peers increases.
 2. Handling the X3DH key exchange for each peer is computationally expensive.
 
-Having multicast channels reduces the overhead of a regular group chat.
+Having multicast channels reduces the overhead of a group chat based on 1:1 chat.
 Additionally, if all the peers have a shared key, then the number of messages sent over the network is reduced to one per message.
 
 # Design Requirements
@@ -288,8 +288,7 @@ contentTopic = hex(keccak256(compressedPublicKey))
 
 ### Community channels
 
-The content topic that Community channels/chats use MUST be derived from the public key of the community and the chat id.
-The content topic MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.
+The content topic that Community channels/chats use MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.
 
 ```
 contentTopic = hex(keccak256(compressedPublicKey + chatId))
@@ -314,7 +313,7 @@ The flows for Community management are as described below.
 1. The Community owner generates a public/private key pair.
 2. The Community owner configures the Community metadata, according to the wire format "CommunityDescription".
 3. The Community owner publishes the Community metadata on a content topic derived from the public key of the Community. 
-he Community metadata SHOULD be encrypted with the public key of the Community. <!-- TODO: Verify this-->
+the Community metadata SHOULD be encrypted with the public key of the Community. <!-- TODO: Verify this-->
 The Community metadata MAY be sent during fixed intervals, to ensure that the Community metadata is available to peers.
 The Community metadata SHOULD be sent every time the Community metadata is updated.
 4. The Community owner MAY advertise the Community out of band, by sharing the public key of the Community on other mediums of communication.
