@@ -1,7 +1,7 @@
 ---
 slug: 56
 title: 56/STATUS-COMMUNITIES
-name: Status Communities that run on Waku v2
+name: Status Communities that run over Waku v2
 status: draft
 category: Standards Track
 tags: waku-application
@@ -17,14 +17,15 @@ This is a key feature for the Status messaging app.
 
 # Background and Motivation
 
-Large group chats enable communities to communicate.
-This would require channels, which are subject-based.
-The messages in a channel are broadcasted to all the users in the channel.
+The purpose of Status communities, as specified in this document, is allowing for large group chats.
+Communities can have further substructure, e.g. specific channels.
 
-A regular group chat between two or more peers reduces to a 1:1 chat between each peer and the other peers.
-One mechanism for 1:1 chats is described in [55/STATUS-1TO1-CHAT](/spec/55/).
-The key-exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
-This method of building groups is not used for Communities, because it does not scale as the number of peers increases, for the following reasons
+Smaller group chats, on the other hand, are out of scope for this document and can be built over [55/STATUS-1TO1-CHAT](/spec/55). 
+We refer to these smaller group chats simply as "group chats", to differentiate them from Communities.
+
+For group chats based on [55/STATUS-1TO1-CHAT](/spec/55), the key exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
+
+However, this method does not scale as the number of peers increases, for the following reasons -
 1. The number of messages sent over the network increases as the number of peers increases.
 2. Handling the X3DH key exchange for each peer is computationally expensive.
 
