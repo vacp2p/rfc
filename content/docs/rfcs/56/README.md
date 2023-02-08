@@ -36,17 +36,18 @@ Additionally, if all the peers have a shared key, then the number of messages se
 
 Due to the nature of communities, the following requirements are necessary for the design of communities  -
 
-1. The Community owner is trusted.
-2. The Community owner can add or remove peers from the Community.
+1. The creator of the Community is the owner of the Community.
+2. The Community owner is trusted.
+3. The Community owner can add or remove peers from the Community.
 This extends to banning and kicking peers.
-3. The Community owner can add, edit and remove channels.
-4. The peers in the Community can send/receive messages to the channels which they have access to.
-5. Communities may be encrypted (private) or unencrypted (public).
-6. A Community is uniquely identified by a public key.
-7. The public key of the Community is shared out of band.
-8. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
-9. Peers part of a Community run their own Waku nodes.
-Light peers may not be able to run their own Waku node.
+4. The Community owner can add, edit and remove channels.
+5. The peers in the Community can send/receive messages to the channels which they have access to.
+6. Communities may be encrypted (private) or unencrypted (public).
+7. A Community is uniquely identified by a public key.
+8. The public key of the Community is shared out of band.
+9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
+10. Peers part of a Community run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
+Light nodes implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
 
