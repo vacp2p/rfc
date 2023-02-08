@@ -25,12 +25,19 @@ We refer to these smaller group chats simply as "group chats", to differentiate 
 
 For group chats based on [55/STATUS-1TO1-CHAT](/spec/55), the key exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
 
-However, this method does not scale as the number of peers increases, for the following reasons -
-1. The number of messages sent over the network increases as the number of peers increases.
-2. Handling the X3DH key exchange for each peer is computationally expensive.
+However, this method does not scale as the number of participants increases, for the following reasons -
+1. The number of messages sent over the network increases with the number of participants.
+2. Handling the X3DH key exchange for each participant is computationally expensive.
 
 Having multicast channels reduces the overhead of a group chat based on 1:1 chat.
-Additionally, if all the peers have a shared key, then the number of messages sent over the network is reduced to one per message.
+Additionally, if all the participants of the group chat have a shared key, then the number of messages sent over the network is reduced to one per message.
+
+# Terminology
+
+- **Community**: A group of peers that can communicate with each other.
+- **Member**: A peer that is part of a community.
+- **Admin**: A member that has administrative privileges. Used interchangeably with "owner".
+- **Channel**: A designated subtopic for a community. Used interchangeably with "chat".
 
 # Design Requirements
 
@@ -38,15 +45,15 @@ Due to the nature of communities, the following requirements are necessary for t
 
 1. The creator of the Community is the owner of the Community.
 2. The Community owner is trusted.
-3. The Community owner can add or remove peers from the Community.
-This extends to banning and kicking peers.
+3. The Community owner can add or remove members from the Community.
+This extends to banning and kicking members.
 4. The Community owner can add, edit and remove channels.
-5. The peers in the Community can send/receive messages to the channels which they have access to.
+5. Community members can send/receive messages to the channels which they have access to.
 6. Communities may be encrypted (private) or unencrypted (public).
 7. A Community is uniquely identified by a public key.
 8. The public key of the Community is shared out of band.
 9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
-10. Peers part of a Community run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
+10. Community members run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
 Light nodes implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
@@ -58,7 +65,7 @@ The following cryptographic primitives are used in the design -
 - X3DH
 - Single Ratchet 
     - The single ratchet is used to encrypt the messages sent to the Community.
-    - The single ratchet is re-keyed when a peer is added/removed from the Community.
+    - The single ratchet is re-keyed when a member is added/removed from the Community.
 
 ## Wire format
 
@@ -320,7 +327,7 @@ The flows for Community management are as described below.
 2. The Community owner configures the Community metadata, according to the wire format "CommunityDescription".
 3. The Community owner publishes the Community metadata on a content topic derived from the public key of the Community. 
 the Community metadata SHOULD be encrypted with the public key of the Community. <!-- TODO: Verify this-->
-The Community metadata MAY be sent during fixed intervals, to ensure that the Community metadata is available to peers.
+The Community metadata MAY be sent during fixed intervals, to ensure that the Community metadata is available to members.
 The Community metadata SHOULD be sent every time the Community metadata is updated.
 4. The Community owner MAY advertise the Community out of band, by sharing the public key of the Community on other mediums of communication.
 
@@ -345,7 +352,7 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 ### Community Leave Flow
 
-1. A peer requests to leave a Community by sending a "CommunityRequestToLeave" message to the Community.
+1. A member requests to leave a Community by sending a "CommunityRequestToLeave" message to the Community.
 2. The Community owner MAY accept or reject the request.
 3. If the request is accepted, the Community owner removes the member from the Community metadata, and publishes the updated Community metadata.
 
@@ -370,8 +377,8 @@ The following Waku protocols MAY be used to implement Status Communities -
 
 ## Backups
 
-The peer MAY back up their local settings, by encrypting it with their public key, and sending it to a given content topic.
-The peer MAY then rely on this backup to restore their local settings, in case of a data loss.
+The member MAY back up their local settings, by encrypting it with their public key, and sending it to a given content topic.
+The member MAY then rely on this backup to restore their local settings, in case of a data loss.
 This feature relies on [13/WAKU2-STORE](/spec/13/) for storing and retrieving messages.
 
 ## Clock
