@@ -21,7 +21,7 @@ Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.cdf12ccfb169f0b463d0ccace4e220cfbf3d182aaad1d492a53c8794c3d044f1.js" integrity="sha256-zfEsz7Fp8LRj0Mys5OIgz789GCqq0dSSpTyHlMPQRPE="></script>
+<script defer src="/en.search.min.0d833041d9e4f9e12bc184ad400f9838dbfe78c5545f6560a059ed8ee3588cf7.js" integrity="sha256-DYMwQdnk&#43;eErwYStQA&#43;YONv&#43;eMVUX2VgoFntjuNYjPc="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -190,11 +190,21 @@ https://github.com/alex-shpak/hugo-book
     </li>
     <li><a href="#relay-api">Relay API</a>
       <ul>
-        <li><a href="#types-2">Types</a></li>
         <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
         <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
         <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
         <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#relay-private-api">Relay Private API</a>
+      <ul>
+        <li><a href="#types-2">Types</a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
       </ul>
     </li>
     <li><a href="#store-api">Store API</a>
@@ -216,17 +226,6 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#types-5">Types</a></li>
         <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
         <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#private-api">Private API</a>
-      <ul>
-        <li><a href="#types-6">Types</a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
       </ul>
     </li>
   </ul>
@@ -351,7 +350,7 @@ https://github.com/alex-shpak/hugo-book
 <td style="text-align:right"><code>payload</code></td>
 <td style="text-align:center"><code>String</code></td>
 <td style="text-align:center">mandatory</td>
-<td>The message payload as a hex encoded data string</td>
+<td>The message payload as a <strong>base64</strong> encoded data string</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>contentTopic</code></td>
@@ -476,55 +475,6 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#relay-api">#</a>
 </h2>
 <p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md">Waku Relay specification</a> for more information on the relaying of messages.</p>
-<h3 id="types-2">
-  Types
-  <a class="anchor" href="#types-2">#</a>
-</h3>
-<p>The following structured types are defined for use on the Relay API:</p>
-<h4 id="wakurelaymessage">
-  WakuRelayMessage
-  <a class="anchor" href="#wakurelaymessage">#</a>
-</h4>
-<p><code>WakuRelayMessage</code> is an <code>Object</code> containing the following fields:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>payload</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The payload being relayed as a hex encoded data string</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>contentTopic</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">optional</td>
-<td>Message content topic for optional content-based filtering</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>timestamp</code></td>
-<td style="text-align:center"><code>Number</code></td>
-<td style="text-align:center">optional</td>
-<td>The time at which the message is generated by its sender. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>ephemeral</code></td>
-<td style="text-align:center"><code>Boolean</code></td>
-<td style="text-align:center">optional</td>
-<td>This flag indicates the transient nature of the message.</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p><strong><em>NOTE:</em></strong> <code>WakuRelayMessage</code> maps directly to a <a href="#wakumessage"><code>WakuMessage</code></a>, except that the latter contains an explicit message <code>version</code>. For <code>WakuRelay</code> purposes, the versioning is handled by the API.</p>
-</blockquote>
 <h3 id="post_waku_v2_relay_v1_message">
   <code>post_waku_v2_relay_v1_message</code>
   <a class="anchor" href="#post_waku_v2_relay_v1_message">#</a>
@@ -552,7 +502,7 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 <tr>
 <td style="text-align:right"><code>message</code></td>
-<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
+<td style="text-align:center"><a href="#wakumessage"><code>WakuMessage</code></a></td>
 <td style="text-align:center">mandatory</td>
 <td>The <code>message</code> being relayed</td>
 </tr>
@@ -666,6 +616,256 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </h4>
 <ul>
 <li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h2 id="relay-private-api">
+  Relay Private API
+  <a class="anchor" href="#relay-private-api">#</a>
+</h2>
+<p>The Private API provides functionality to encrypt/decrypt <code>WakuMessage</code> payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md">Waku v1 nodes</a>.
+It is the API client&rsquo;s responsibility to keep track of the keys used for encrypted communication. Since keys must be cached by the client and provided to the node to encrypt/decrypt payloads, a Private API SHOULD NOT be exposed on non-local or untrusted nodes.</p>
+<h3 id="types-2">
+  Types
+  <a class="anchor" href="#types-2">#</a>
+</h3>
+<p>The following structured types are defined for use on the Private API:</p>
+<h4 id="keypair">
+  KeyPair
+  <a class="anchor" href="#keypair">#</a>
+</h4>
+<p><code>KeyPair</code> is an <code>Object</code> containing the following fields:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>privateKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Private key as hex encoded data string</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>publicKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>Public key as hex encoded data string</td>
+</tr>
+</tbody>
+</table>
+<h3 id="get_waku_v2_private_v1_symmetric_key">
+  <code>get_waku_v2_private_v1_symmetric_key</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_key">#</a>
+</h3>
+<p>Generates and returns a symmetric key that can be used for message encryption and decryption.</p>
+<h4 id="parameters-6">
+  Parameters
+  <a class="anchor" href="#parameters-6">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-6">
+  Response
+  <a class="anchor" href="#response-6">#</a>
+</h4>
+<ul>
+<li><strong><code>String</code></strong> - A new symmetric key as hex encoded data string</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_asymmetric_keypair">
+  <code>get_waku_v2_private_v1_asymmetric_keypair</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_keypair">#</a>
+</h3>
+<p>Generates and returns a public/private key pair that can be used for asymmetric message encryption and decryption.</p>
+<h4 id="parameters-7">
+  Parameters
+  <a class="anchor" href="#parameters-7">#</a>
+</h4>
+<p>none</p>
+<h4 id="response-7">
+  Response
+  <a class="anchor" href="#response-7">#</a>
+</h4>
+<ul>
+<li><strong><a href="#KeyPair"><code>KeyPair</code></a></strong> - A new public/private key pair as hex encoded data strings</li>
+</ul>
+<h3 id="post_waku_v2_private_v1_symmetric_message">
+  <code>post_waku_v2_private_v1_symmetric_message</code>
+  <a class="anchor" href="#post_waku_v2_private_v1_symmetric_message">#</a>
+</h3>
+<p>The <code>post_waku_v2_private_v1_symmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>Before being relayed, the message payload is encrypted using the supplied symmetric key. The client MUST provide a symmetric key.</p>
+<h4 id="parameters-8">
+  Parameters
+  <a class="anchor" href="#parameters-8">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>message</code></td>
+<td style="text-align:center"><a href="#wakumessage"><code>WakuMessage</code></a></td>
+<td style="text-align:center">mandatory</td>
+<td>The (unencrypted) <code>message</code> being relayed</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>symkey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-8">
+  Response
+  <a class="anchor" href="#response-8">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="post_waku_v2_private_v1_asymmetric_message">
+  <code>post_waku_v2_private_v1_asymmetric_message</code>
+  <a class="anchor" href="#post_waku_v2_private_v1_asymmetric_message">#</a>
+</h3>
+<p>The <code>post_waku_v2_private_v1_asymmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>Before being relayed, the message payload is encrypted using the supplied public key. The client MUST provide a public key.</p>
+<h4 id="parameters-9">
+  Parameters
+  <a class="anchor" href="#parameters-9">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>message</code></td>
+<td style="text-align:center"><a href="#wakumessage"><code>WakuMessage</code></a></td>
+<td style="text-align:center">mandatory</td>
+<td>The (unencrypted) <code>message</code> being relayed</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>publicKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-9">
+  Response
+  <a class="anchor" href="#response-9">#</a>
+</h4>
+<ul>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_symmetric_messages">
+  <code>get_waku_v2_private_v1_symmetric_messages</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_private_v1_symmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
+<p>Before returning the messages, the server decrypts the message payloads using the supplied symmetric key. The client MUST provide a symmetric key.</p>
+<h4 id="parameters-10">
+  Parameters
+  <a class="anchor" href="#parameters-10">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>symkey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-10">
+  Response
+  <a class="anchor" href="#response-10">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+</ul>
+<h3 id="get_waku_v2_private_v1_asymmetric_messages">
+  <code>get_waku_v2_private_v1_asymmetric_messages</code>
+  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_messages">#</a>
+</h3>
+<p>The <code>get_waku_v2_private_v1_asymmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
+<p>Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide a private key.</p>
+<h4 id="parameters-11">
+  Parameters
+  <a class="anchor" href="#parameters-11">#</a>
+</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Field</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Inclusion</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right"><code>topic</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
+</tr>
+<tr>
+<td style="text-align:right"><code>privateKey</code></td>
+<td style="text-align:center"><code>String</code></td>
+<td style="text-align:center">mandatory</td>
+<td>The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected</td>
+</tr>
+</tbody>
+</table>
+<h4 id="response-11">
+  Response
+  <a class="anchor" href="#response-11">#</a>
+</h4>
+<ul>
+<li><strong><code>Array</code>[<a href="#wakuymessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
 </ul>
 <h2 id="store-api">
   Store API
@@ -798,9 +998,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#get_waku_v2_store_v1_messages">#</a>
 </h3>
 <p>The <code>get_waku_v2_store_v1_messages</code> method retrieves historical messages on specific content topics. This method MAY be called with <a href="#pagingoptions"><code>PagingOptions</code></a>, to retrieve historical messages on a per-page basis. If the request included <a href="#pagingoptions"><code>PagingOptions</code></a>, the node MUST return messages on a per-page basis and include <a href="#pagingoptions"><code>PagingOptions</code></a> in the response. These <a href="#pagingoptions"><code>PagingOptions</code></a> MUST contain a <code>cursor</code> pointing to the <a href="#Index"><code>Index</code></a> from which a new page can be requested.</p>
-<h4 id="parameters-6">
+<h4 id="parameters-12">
   Parameters
-  <a class="anchor" href="#parameters-6">#</a>
+  <a class="anchor" href="#parameters-12">#</a>
 </h4>
 <table>
 <thead>
@@ -844,9 +1044,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 </tbody>
 </table>
-<h4 id="response-6">
+<h4 id="response-12">
   Response
-  <a class="anchor" href="#response-6">#</a>
+  <a class="anchor" href="#response-12">#</a>
 </h4>
 <ul>
 <li><a href="#storeresponse"><strong><code>StoreResponse</code></strong></a> - the response to a <code>query</code> for historical messages.</li>
@@ -889,9 +1089,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#post_waku_v2_filter_v1_subscription">#</a>
 </h3>
 <p>The <code>post_waku_v2_filter_v1_subscription</code> method creates a subscription in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> for messages that matches a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
-<h4 id="parameters-7">
+<h4 id="parameters-13">
   Parameters
-  <a class="anchor" href="#parameters-7">#</a>
+  <a class="anchor" href="#parameters-13">#</a>
 </h4>
 <table>
 <thead>
@@ -917,9 +1117,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 </tbody>
 </table>
-<h4 id="response-7">
+<h4 id="response-13">
   Response
-  <a class="anchor" href="#response-7">#</a>
+  <a class="anchor" href="#response-13">#</a>
 </h4>
 <ul>
 <li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
@@ -929,9 +1129,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#delete_waku_v2_filter_v1_subscription">#</a>
 </h3>
 <p>The <code>delete_waku_v2_filter_v1_subscription</code> method removes subscriptions in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> matching a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
-<h4 id="parameters-8">
+<h4 id="parameters-14">
   Parameters
-  <a class="anchor" href="#parameters-8">#</a>
+  <a class="anchor" href="#parameters-14">#</a>
 </h4>
 <table>
 <thead>
@@ -957,9 +1157,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 </tbody>
 </table>
-<h4 id="response-8">
+<h4 id="response-14">
   Response
-  <a class="anchor" href="#response-8">#</a>
+  <a class="anchor" href="#response-14">#</a>
 </h4>
 <ul>
 <li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
@@ -969,9 +1169,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#get_waku_v2_filter_v1_messages">#</a>
 </h3>
 <p>The <code>get_waku_v2_filter_v1_messages</code> method returns a list of messages that were received on a subscribed content <code>topic</code> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled content <code>topic</code>. If no message has yet been received on the polled content <code>topic</code>, the server SHOULD respond with an empty list. This method can be used to poll a content <code>topic</code> for new messages.</p>
-<h4 id="parameters-9">
+<h4 id="parameters-15">
   Parameters
-  <a class="anchor" href="#parameters-9">#</a>
+  <a class="anchor" href="#parameters-15">#</a>
 </h4>
 <table>
 <thead>
@@ -991,9 +1191,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 </tbody>
 </table>
-<h4 id="response-9">
+<h4 id="response-15">
   Response
-  <a class="anchor" href="#response-9">#</a>
+  <a class="anchor" href="#response-15">#</a>
 </h4>
 <ul>
 <li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled content <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
@@ -1048,14 +1248,14 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#get_waku_v2_admin_v1_peers">#</a>
 </h3>
 <p>The <code>get_waku_v2_admin_v1_peers</code> method returns an array of peers registered on this node. Since a Waku v2 node may open either continuous or ad hoc connections, depending on the negotiated protocol, these peers may have different connected states. The same peer MAY appear twice in the returned array, if it is registered for more than one protocol.</p>
-<h4 id="parameters-10">
+<h4 id="parameters-16">
   Parameters
-  <a class="anchor" href="#parameters-10">#</a>
+  <a class="anchor" href="#parameters-16">#</a>
 </h4>
 <p>none</p>
-<h4 id="response-10">
+<h4 id="response-16">
   Response
-  <a class="anchor" href="#response-10">#</a>
+  <a class="anchor" href="#response-16">#</a>
 </h4>
 <ul>
 <li><strong><code>Array</code>[<a href="#WakuPeer"><code>WakuPeer</code></a>]</strong> - Array of peers registered on this node</li>
@@ -1065,9 +1265,9 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   <a class="anchor" href="#post_waku_v2_admin_v1_peers">#</a>
 </h3>
 <p>The <code>post_waku_v2_admin_v1_peers</code> method connects a node to a list of peers.</p>
-<h4 id="parameters-11">
+<h4 id="parameters-17">
   Parameters
-  <a class="anchor" href="#parameters-11">#</a>
+  <a class="anchor" href="#parameters-17">#</a>
 </h4>
 <table>
 <thead>
@@ -1087,262 +1287,12 @@ the retrieved version string MAY contain the git commit hash alone or in combina
 </tr>
 </tbody>
 </table>
-<h4 id="response-11">
-  Response
-  <a class="anchor" href="#response-11">#</a>
-</h4>
-<ul>
-<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
-</ul>
-<h2 id="private-api">
-  Private API
-  <a class="anchor" href="#private-api">#</a>
-</h2>
-<p>The Private API provides functionality to encrypt/decrypt <code>WakuMessage</code> payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md">Waku v1 nodes</a>.
-It is the API client&rsquo;s responsibility to keep track of the keys used for encrypted communication. Since keys must be cached by the client and provided to the node to encrypt/decrypt payloads, a Private API SHOULD NOT be exposed on non-local or untrusted nodes.</p>
-<h3 id="types-6">
-  Types
-  <a class="anchor" href="#types-6">#</a>
-</h3>
-<p>The following structured types are defined for use on the Private API:</p>
-<h4 id="keypair">
-  KeyPair
-  <a class="anchor" href="#keypair">#</a>
-</h4>
-<p><code>KeyPair</code> is an <code>Object</code> containing the following fields:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>privateKey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>Private key as hex encoded data string</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>publicKey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>Public key as hex encoded data string</td>
-</tr>
-</tbody>
-</table>
-<h3 id="get_waku_v2_private_v1_symmetric_key">
-  <code>get_waku_v2_private_v1_symmetric_key</code>
-  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_key">#</a>
-</h3>
-<p>Generates and returns a symmetric key that can be used for message encryption and decryption.</p>
-<h4 id="parameters-12">
-  Parameters
-  <a class="anchor" href="#parameters-12">#</a>
-</h4>
-<p>none</p>
-<h4 id="response-12">
-  Response
-  <a class="anchor" href="#response-12">#</a>
-</h4>
-<ul>
-<li><strong><code>String</code></strong> - A new symmetric key as hex encoded data string</li>
-</ul>
-<h3 id="get_waku_v2_private_v1_asymmetric_keypair">
-  <code>get_waku_v2_private_v1_asymmetric_keypair</code>
-  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_keypair">#</a>
-</h3>
-<p>Generates and returns a public/private key pair that can be used for asymmetric message encryption and decryption.</p>
-<h4 id="parameters-13">
-  Parameters
-  <a class="anchor" href="#parameters-13">#</a>
-</h4>
-<p>none</p>
-<h4 id="response-13">
-  Response
-  <a class="anchor" href="#response-13">#</a>
-</h4>
-<ul>
-<li><strong><a href="#KeyPair"><code>KeyPair</code></a></strong> - A new public/private key pair as hex encoded data strings</li>
-</ul>
-<h3 id="post_waku_v2_private_v1_symmetric_message">
-  <code>post_waku_v2_private_v1_symmetric_message</code>
-  <a class="anchor" href="#post_waku_v2_private_v1_symmetric_message">#</a>
-</h3>
-<p>The <code>post_waku_v2_private_v1_symmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
-<p>Before being relayed, the message payload is encrypted using the supplied symmetric key. The client MUST provide a symmetric key.</p>
-<h4 id="parameters-14">
-  Parameters
-  <a class="anchor" href="#parameters-14">#</a>
-</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>topic</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>message</code></td>
-<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
-<td style="text-align:center">mandatory</td>
-<td>The (unencrypted) <code>message</code> being relayed</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>symkey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The hex encoded symmetric key to use for payload encryption. This field MUST be included if symmetric key cryptography is selected</td>
-</tr>
-</tbody>
-</table>
-<h4 id="response-14">
-  Response
-  <a class="anchor" href="#response-14">#</a>
-</h4>
-<ul>
-<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
-</ul>
-<h3 id="post_waku_v2_private_v1_asymmetric_message">
-  <code>post_waku_v2_private_v1_asymmetric_message</code>
-  <a class="anchor" href="#post_waku_v2_private_v1_asymmetric_message">#</a>
-</h3>
-<p>The <code>post_waku_v2_private_v1_asymmetric_message</code> method publishes a message to be relayed on a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
-<p>Before being relayed, the message payload is encrypted using the supplied public key. The client MUST provide a public key.</p>
-<h4 id="parameters-15">
-  Parameters
-  <a class="anchor" href="#parameters-15">#</a>
-</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>topic</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> being published on</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>message</code></td>
-<td style="text-align:center"><a href="#wakurelaymessage"><code>WakuRelayMessage</code></a></td>
-<td style="text-align:center">mandatory</td>
-<td>The (unencrypted) <code>message</code> being relayed</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>publicKey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The hex encoded public key to use for payload encryption. This field MUST be included if asymmetric key cryptography is selected</td>
-</tr>
-</tbody>
-</table>
-<h4 id="response-15">
-  Response
-  <a class="anchor" href="#response-15">#</a>
-</h4>
-<ul>
-<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
-</ul>
-<h3 id="get_waku_v2_private_v1_symmetric_messages">
-  <code>get_waku_v2_private_v1_symmetric_messages</code>
-  <a class="anchor" href="#get_waku_v2_private_v1_symmetric_messages">#</a>
-</h3>
-<p>The <code>get_waku_v2_private_v1_symmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
-<p>Before returning the messages, the server decrypts the message payloads using the supplied symmetric key. The client MUST provide a symmetric key.</p>
-<h4 id="parameters-16">
-  Parameters
-  <a class="anchor" href="#parameters-16">#</a>
-</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>topic</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>symkey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The hex encoded symmetric key to use for payload decryption. This field MUST be included if symmetric key cryptography is selected</td>
-</tr>
-</tbody>
-</table>
-<h4 id="response-16">
-  Response
-  <a class="anchor" href="#response-16">#</a>
-</h4>
-<ul>
-<li><strong><code>Array</code>[<a href="#wakurelaymessage"><code>WakuRelayMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
-</ul>
-<h3 id="get_waku_v2_private_v1_asymmetric_messages">
-  <code>get_waku_v2_private_v1_asymmetric_messages</code>
-  <a class="anchor" href="#get_waku_v2_private_v1_asymmetric_messages">#</a>
-</h3>
-<p>The <code>get_waku_v2_private_v1_asymmetric_messages</code> method decrypts and returns a list of messages that were received on a subscribed <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> after the last time this method was called. The server MUST respond with an <a href="https://www.jsonrpc.org/specification#error_object">error</a> if no subscription exists for the polled <code>topic</code>. If no message has yet been received on the polled <code>topic</code>, the server SHOULD return an empty list. This method can be used to poll a <code>topic</code> for new messages.</p>
-<p>Before returning the messages, the server decrypts the message payloads using the supplied private key. The client MUST provide a private key.</p>
-<h4 id="parameters-17">
-  Parameters
-  <a class="anchor" href="#parameters-17">#</a>
-</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:right">Field</th>
-<th style="text-align:center">Type</th>
-<th style="text-align:center">Inclusion</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right"><code>topic</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a> to poll for the latest messages</td>
-</tr>
-<tr>
-<td style="text-align:right"><code>privateKey</code></td>
-<td style="text-align:center"><code>String</code></td>
-<td style="text-align:center">mandatory</td>
-<td>The hex encoded private key to use for payload decryption. This field MUST be included if asymmetric key cryptography is selected</td>
-</tr>
-</tbody>
-</table>
 <h4 id="response-17">
   Response
   <a class="anchor" href="#response-17">#</a>
 </h4>
 <ul>
-<li><strong><code>Array</code>[<a href="#wakurelaymessage"><code>WakuRelayMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+<li><strong><code>Bool</code></strong> - <code>true</code> on success or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
 </ul>
 <h1 id="example-usage">
   Example usage
@@ -1386,23 +1336,17 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   &#34;result&#34;: {
     &#34;messages&#34;: [
       {
-        &#34;payload&#34;: [
-          1
-        ],
+        &#34;payload&#34;: dGVzdDE,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
       },
       {
-        &#34;payload&#34;: [
-          2
-        ],
+        &#34;payload&#34;: dGVzdDI,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
       },
       {
-        &#34;payload&#34;: [
-          3
-        ],
+        &#34;payload&#34;: dGVzdDM,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
       }
@@ -1445,16 +1389,12 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   &#34;result&#34;: {
     &#34;messages&#34;: [
       {
-        &#34;payload&#34;: [
-          2
-        ],
+        &#34;payload&#34;: dGVzdDI,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
       },
       {
-        &#34;payload&#34;: [
-          3
-        ],
+        &#34;payload&#34;: dGVzdDM,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
       }
@@ -1508,12 +1448,10 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   &#34;result&#34;: {
     &#34;messages&#34;: [
       {
-        &#34;payload&#34;: [
-          1
-        ],
+        &#34;payload&#34;: dGVzdDE,
         &#34;contentTopic&#34;: &#34;/waku/2/default-content/proto&#34;,
         &#34;version&#34;: 0
-      }
+      },
     ],
     &#34;pagingInfo&#34;: {
       &#34;pageSize&#34;: 2,
@@ -1597,11 +1535,21 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
     </li>
     <li><a href="#relay-api">Relay API</a>
       <ul>
-        <li><a href="#types-2">Types</a></li>
         <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
         <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
         <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
         <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#relay-private-api">Relay Private API</a>
+      <ul>
+        <li><a href="#types-2">Types</a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
       </ul>
     </li>
     <li><a href="#store-api">Store API</a>
@@ -1623,17 +1571,6 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
         <li><a href="#types-5">Types</a></li>
         <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
         <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#private-api">Private API</a>
-      <ul>
-        <li><a href="#types-6">Types</a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
       </ul>
     </li>
   </ul>
