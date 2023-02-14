@@ -54,7 +54,7 @@ This extends to banning and kicking members.
 8. The public key of the Community is shared out of band.
 9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
 10. Community members run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
-Light nodes implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
+Light nodes solely implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
 
@@ -408,6 +408,7 @@ The following Waku protocols SHOULD be used to implement Status Communities -
 The following Waku protocols MAY be used to implement Status Communities -
 
 1. [12/WAKU2-FILTER](/spec/12/) - Content filtering for resource restricted devices
+2. [19/WAKU2-LIGHTPUSH](/spec/19) - Allows Light clients to participate in the network
 
 ## Backups
 
