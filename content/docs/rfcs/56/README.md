@@ -367,7 +367,7 @@ The Community metadata SHOULD be sent every time the Community metadata is updat
 
 ### Community Join Flow (peer requests to join a Community)
 
-1. A peer generates a public/private key pair.
+1. A peer and the Community owner establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](/spec/55/).
 2. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
 At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to cancel the request.
 3. The Community owner MAY accept or reject the request.
@@ -376,8 +376,8 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 ### Community Join Flow (peer is invited to join a Community)
 
-1. The peer is invited to join a Community by the Community owner, by sending a "CommunityInvitation" message.
-2. A peer generates a public/private key pair.
+1. The Community owner and peer establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](/spec/55/).
+2. The peer is invited to join a Community by the Community owner, by sending a "CommunityInvitation" message.
 3. The peer decrypts the "CommunityInvitation" message, and verifies the signature.
 4. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
 5. The Community owner MAY accept or reject the request.
