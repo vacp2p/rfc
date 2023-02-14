@@ -106,7 +106,7 @@ message IdentityImage {
   }
 }
 
-// SocialLinks represents social link assosiated with given chat identity (personal/community)
+// SocialLinks represents social link associated with given chat identity (personal/community)
 message SocialLink {
   // Type of the social link
   string text = 1;
@@ -291,10 +291,22 @@ Note: The usage of the clock is described in the [Clock](#clock) section.
 ### Advertising a Community
 
 The content topic that the community is advertised on MUST be derived from the public key of the community.
-The content topic MUST be the hex-encoded keccak-256 hash of the compressed (32 bytes) public key of the community.
+The content topic MUST be the first four bytes of the keccak-256 hash of the compressed (33 bytes) public key of the community encoded into a hex string.
 
 ```
-contentTopic = hex(keccak256(compressedPublicKey))
+hash = hex(keccak256(encodeToHex(compressedPublicKey)))
+
+topicLen = 4
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = "/waku/1/0x" + topic + "/rfc26"
 ```
 
 ### Community channels/chats
