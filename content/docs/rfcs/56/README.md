@@ -316,7 +316,18 @@ The unique identifier for a community channel/chat is the chat id.
 The content topic that Community channels/chats use MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.
 
 ```
-contentTopic = hex(keccak256(compressedPublicKey + chatId))
+hash = hex(keccak256(encodeToHex(compressedPublicKey + chatId)))
+
+topicLen = 4
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = "/waku/1/0x" + topic + "/rfc26"
 ```
 
 
@@ -326,7 +337,18 @@ Requests to leave, join, kick and ban, as well as key exchange messages, MUST be
 The content topic MUST be the hex-encoded keccak-256 hash of the public key of the community.
 
 ```
-contentTopic = hex(keccak256(publicKey))
+hash = hex(keccak256(encodeToHex(publicKey)))
+
+topicLen = 4
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = "/waku/1/0x" + topic + "/rfc26"
 ``` 
 
 ## Community Management
