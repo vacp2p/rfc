@@ -393,6 +393,7 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 ### Community Ban Flow
 
 1. The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.
+2. If the Community is Private, Re-keying is performed between the members of the Community, to ensure that the banned member is unable to decrypt any messages.
 
 ## Waku protocols 
 
