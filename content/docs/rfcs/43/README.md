@@ -78,7 +78,7 @@ d.   -> sA, sAeB, sAsB  {s}
 
 ### Protocol Flow
 
-1. The device `B` exposes through a QR code a Base64 serialization of:
+1. The device `B` exposes through a QR code a [base64 (url safe)](https://datatracker.ietf.org/doc/html/rfc4648#section-5) serialization of:
     - An ephemeral public key `eB`;
     - The content topic parameters `contentTopicParams = {application-name}, {application-version}, {shard-id}`.
     - A (randomly generated) 16-bytes long `messageNametag`.
@@ -357,3 +357,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - [26/WAKU2-PAYLOAD](https://rfc.vac.dev/spec/35/#abnf)
 - [The Double-Ratchet Algorithm](https://signal.org/docs/specifications/doubleratchet/)
 - [The Noise Protocol Framework specifications](http://www.noiseprotocol.org/noise.html)
+- [IETF RFC 4648 - The Base16, Base32, and Base64 Data Encodings](https://datatracker.ietf.org/doc/html/rfc4648)
