@@ -464,6 +464,39 @@ The index ranges are as follows: index 0 represents the global shards, indices 1
     </item>
     
     <item>
+      <title>53/WAKU2-X3DH</title>
+      <link>https://rfc.vac.dev/spec/53/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/53/</guid>
+      <description>Abstract # This document describes a method that can be used to provide a secure channel between two peers, and thus provide confidentiality, integrity, authenticity and forward secrecy. It is transport-agnostic and works over asynchronous networks.
+It builds on the X3DH and Double Ratchet specifications, with some adaptations to operate in a decentralized environment.
+Motivation # Nodes on a network may want to communicate with each other in a secure manner, without other nodes network being able to read their messages.</description>
+    </item>
+    
+    <item>
+      <title>54/WAKU2-X3DH-SESSIONS</title>
+      <link>https://rfc.vac.dev/spec/54/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/54/</guid>
+      <description>Abstract # This document specifies how to manage sessions based on an X3DH key exchange. This includes how to establish new sessions, how to re-establish them, how to maintain them, and how to close them.
+53/WAKU2-X3DH specifies the Waku X3DH protocol for end-to-end encryption. Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session.
+Session Establishment # A node identifies a peer by their installation-id which MAY be interpreted as a device identifier.</description>
+    </item>
+    
+    <item>
+      <title>55/STATUS-1TO1-CHAT</title>
+      <link>https://rfc.vac.dev/spec/55/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/55/</guid>
+      <description>Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
+Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
+Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -</description>
+    </item>
+    
+    <item>
       <title>6/WAKU1</title>
       <link>https://rfc.vac.dev/spec/6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

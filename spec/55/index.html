@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
+Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
+Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="55/STATUS-1TO1-CHAT" />
+<meta property="og:description" content="Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
+Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
+Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/55/" /><meta property="article:section" content="docs" />
+
+
+
+<title>55/STATUS-1TO1-CHAT | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.50a27d3939d9c7b10f8008446a60e87c503872a4a46200c44def6275f5ad1c76.js" integrity="sha256-UKJ9OTnZx7EPgAhEamDofFA4cqSkYgDETe9idfWtHHY="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/"class=active>55/STATUS-1TO1-CHAT</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>55/STATUS-1TO1-CHAT</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#flow">Flow</a>
+      <ul>
+        <li><a href="#negotiation-of-a-11-chat">Negotiation of a 1:1 chat</a></li>
+        <li><a href="#post-negotiation">Post Negotiation</a></li>
+        <li><a href="#session-management">Session management</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="55status-1to1-chat">
+  55/STATUS-1TO1-CHAT
+  <a class="anchor" href="#55status-1to1-chat">#</a>
+</h1>
+
+  
+      <h1 id="status-1-to-1-chat">
+  Status 1-to-1 Chat
+  <a class="anchor" href="#status-1-to-1-chat">#</a>
+</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Andrea Piana <a href="mailto:andreap@status.im">andreap@status.im</a>
+          
+              ,
+              Pedro Pombeiro <a href="mailto:pedro@status.im">pedro@status.im</a>
+          
+              ,
+              Corey Petty <a href="mailto:corey@status.im">corey@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol.
+This protocol can be used to send messages to a single recipient.</p>
+<h1 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
+</h1>
+<p>This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.</p>
+<h1 id="specification">
+  Specification
+  <a class="anchor" href="#specification">#</a>
+</h1>
+<h2 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h2>
+<p>This protocol MAY use any key-exchange mechanism previously discussed -</p>
+<ol>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+</ol>
+<p>This protocol can provide end-to-end encryption to give peers a strong degree of privacy and security.
+Public chat messages are publicly readable by anyone since there&rsquo;s no permission model for who is participating in a public chat.</p>
+<h2 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h2>
+<h3 id="negotiation-of-a-11-chat">
+  Negotiation of a 1:1 chat
+  <a class="anchor" href="#negotiation-of-a-11-chat">#</a>
+</h3>
+<p>There are two phases in the initial negotiation of a 1:1 chat:</p>
+<ol>
+<li><strong>Identity verification</strong> (e.g., face-to-face contact exchange through QR code, Identicon matching).
+A QR code serves two purposes simultaneously - identity verification and initial key material retrieval;</li>
+<li><strong>Asynchronous initial key exchange</strong></li>
+</ol>
+<p>For more information on account generation and trust establishment, see <a href="https://specs.status.im/spec/2">2/ACCOUNT</a></p>
+<h3 id="post-negotiation">
+  Post Negotiation
+  <a class="anchor" href="#post-negotiation">#</a>
+</h3>
+<p>After the peers have shared their public key material, a 1:1 chat can be established using the methods described in the key-exchange protocols mentioned above.</p>
+<h3 id="session-management">
+  Session management
+  <a class="anchor" href="#session-management">#</a>
+</h3>
+<p>The 1:1 chat is made robust by having sessions between peers.
+It is handled by the key-exchange protocol used. For example,</p>
+<ol>
+<li>
+<p><a href="/spec/53/">53/WAKU2-X3DH</a>, the session management is described in <a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></p>
+</li>
+<li>
+<p><a href="/spec/35/">35/WAKU2-NOISE</a>, the session management is described in <a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></p>
+</li>
+</ol>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<ol>
+<li>Inherits the security considerations of the key-exchange mechanism used, e.g., <a href="/spec/53/">53/WAKU2-X3DH</a> or <a href="/spec/35/">35/WAKU2-NOISE</a></li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="https://specs.status.im/spec/2">2/ACCOUNT</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#overview">Overview</a></li>
+    <li><a href="#flow">Flow</a>
+      <ul>
+        <li><a href="#negotiation-of-a-11-chat">Negotiation of a 1:1 chat</a></li>
+        <li><a href="#post-negotiation">Post Negotiation</a></li>
+        <li><a href="#session-management">Session management</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

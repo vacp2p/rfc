@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document specifies how to manage sessions based on an X3DH key exchange. This includes how to establish new sessions, how to re-establish them, how to maintain them, and how to close them.
+53/WAKU2-X3DH specifies the Waku X3DH protocol for end-to-end encryption. Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session.
+Session Establishment # A node identifies a peer by their installation-id which MAY be interpreted as a device identifier.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="54/WAKU2-X3DH-SESSIONS" />
+<meta property="og:description" content="Abstract # This document specifies how to manage sessions based on an X3DH key exchange. This includes how to establish new sessions, how to re-establish them, how to maintain them, and how to close them.
+53/WAKU2-X3DH specifies the Waku X3DH protocol for end-to-end encryption. Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session.
+Session Establishment # A node identifies a peer by their installation-id which MAY be interpreted as a device identifier." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/54/" /><meta property="article:section" content="docs" />
+
+
+
+<title>54/WAKU2-X3DH-SESSIONS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.50a27d3939d9c7b10f8008446a60e87c503872a4a46200c44def6275f5ad1c76.js" integrity="sha256-UKJ9OTnZx7EPgAhEamDofFA4cqSkYgDETe9idfWtHHY="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/"class=active>54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>54/WAKU2-X3DH-SESSIONS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#discovery-of-pre-key-bundles">Discovery of pre-key bundles</a></li>
+    <li><a href="#initialization">Initialization</a></li>
+    <li><a href="#concurrent-sessions">Concurrent sessions</a></li>
+    <li><a href="#re-keying">Re-keying</a></li>
+    <li><a href="#multi-device-support">Multi-device support</a></li>
+    <li><a href="#pairing">Pairing</a>
+      <ul>
+        <li><a href="#sending-messages-to-a-paired-group">Sending messages to a paired group</a></li>
+      </ul>
+    </li>
+    <li><a href="#account-recovery">Account recovery</a></li>
+    <li><a href="#partitioned-devices">Partitioned devices</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="54waku2-x3dh-sessions">
+  54/WAKU2-X3DH-SESSIONS
+  <a class="anchor" href="#54waku2-x3dh-sessions">#</a>
+</h1>
+
+  
+      <h1 id="session-management-for-waku-x3dh">
+  Session management for Waku X3DH
+  <a class="anchor" href="#session-management-for-waku-x3dh">#</a>
+</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Andrea Piana <a href="mailto:andreap@status.im">andreap@status.im</a>
+          
+              ,
+              Pedro Pombeiro <a href="mailto:pedro@status.im">pedro@status.im</a>
+          
+              ,
+              Corey Petty <a href="mailto:corey@status.im">corey@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Dean Eigenmann <a href="mailto:dean@status.im">dean@status.im</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document specifies how to manage sessions based on an X3DH key exchange.
+This includes how to establish new sessions, how to re-establish them, how to maintain them, and how to close them.</p>
+<p><a href="/spec/53">53/WAKU2-X3DH</a> specifies the Waku <code>X3DH</code> protocol for end-to-end encryption.
+Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session.</p>
+<h1 id="session-establishment">
+  Session Establishment
+  <a class="anchor" href="#session-establishment">#</a>
+</h1>
+<p>A node identifies a peer by their <code>installation-id</code> which MAY be interpreted as a device identifier.</p>
+<h2 id="discovery-of-pre-key-bundles">
+  Discovery of pre-key bundles
+  <a class="anchor" href="#discovery-of-pre-key-bundles">#</a>
+</h2>
+<p>The node&rsquo;s pre-key bundle SHOULD be broadcasted on a content topic derived from the node&rsquo;s public key.</p>
+<!-- raw HTML omitted -->
+<p>The derivation is further described in <a href="https://specs.status.im/spec/10#contact-code-topic">10/WAKU-USAGE</a></p>
+<h2 id="initialization">
+  Initialization
+  <a class="anchor" href="#initialization">#</a>
+</h2>
+<p>A node initializes a new session once a successful X3DH exchange has taken place.
+Subsequent messages will use the established session until re-keying is necessary.</p>
+<h2 id="concurrent-sessions">
+  Concurrent sessions
+  <a class="anchor" href="#concurrent-sessions">#</a>
+</h2>
+<p>If a node creates two sessions concurrently between two peers, the one with the symmetric key first in byte order SHOULD be used, this marks that the other has expired.</p>
+<h2 id="re-keying">
+  Re-keying
+  <a class="anchor" href="#re-keying">#</a>
+</h2>
+<p>On receiving a bundle from a given peer with a higher version, the old bundle SHOULD be marked as expired and a new session SHOULD be established on the next message sent.</p>
+<h2 id="multi-device-support">
+  Multi-device support
+  <a class="anchor" href="#multi-device-support">#</a>
+</h2>
+<p>Multi-device support is quite challenging as there is not a central place where information on which and how many devices (identified by their respective <code>installation-id</code>) a peer has, is stored.</p>
+<p>Furthermore, account recovery always needs to be taken into consideration, where a user wipes clean the whole device and the node loses all the information about any previous sessions.
+Taking these considerations into account, the way the network propagates multi-device information using X3DH bundles, which will contain information about paired devices as well as information about the sending device.
+This means that every time a new device is paired, the bundle needs to be updated and propagated with the new information, the user has the responsibility to make sure the pairing is successful.</p>
+<p>The method is loosely based on <a href="https://signal.org/docs/specifications/sesame/">Signal&rsquo;s Sesame Algorithm</a>.</p>
+<h2 id="pairing">
+  Pairing
+  <a class="anchor" href="#pairing">#</a>
+</h2>
+<p>A new <code>installation-id</code> MUST be generated on a per-device basis.
+The device should be paired as soon as possible if other devices are present.</p>
+<p>If a bundle is received, which has the same <code>IK</code> as the keypair present on the device, the devices MAY be paired.
+Once a user enables a new device, a new bundle MUST be generated which includes pairing information.</p>
+<p>The bundle MUST be propagated to contacts through the usual channels.</p>
+<p>Removal of paired devices is a manual step that needs to be applied on each device, and consist simply in disabling the device, at which point pairing information will not be propagated anymore.</p>
+<h3 id="sending-messages-to-a-paired-group">
+  Sending messages to a paired group
+  <a class="anchor" href="#sending-messages-to-a-paired-group">#</a>
+</h3>
+<p>When sending a message, the peer SHOULD send a message to other <code>installation-id</code> that they have seen.
+The node caps the number of devices to <code>n</code>, ordered by last activity.
+The node sends messages using pairwise encryption, including their own devices.</p>
+<p>Where <code>n</code> is the maximum number of devices that can be paired.</p>
+<h2 id="account-recovery">
+  Account recovery
+  <a class="anchor" href="#account-recovery">#</a>
+</h2>
+<p>Account recovery is the same as adding a new device, and it MUST be handled the same way.</p>
+<h2 id="partitioned-devices">
+  Partitioned devices
+  <a class="anchor" href="#partitioned-devices">#</a>
+</h2>
+<p>In some cases (i.e. account recovery when no other pairing device is available, device not paired), it is possible that a device will receive a message that is not targeted to its own <code>installation-id</code>.
+In this case an empty message containing bundle information MUST be sent back, which will notify the receiving end not to include the device in any further communication.</p>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<ol>
+<li>Inherits all security considerations from <a href="/spec/53">53/WAKU2-X3DH</a>.</li>
+</ol>
+<h1 id="recommendations">
+  Recommendations
+  <a class="anchor" href="#recommendations">#</a>
+</h1>
+<ol>
+<li>The value of <code>n</code> SHOULD be configured by the app-protocol.
+<ul>
+<li>The default value SHOULD be 3, since a larger number of devices will result in a larger bundle size, which may not be desirable in a peer-to-peer network.</li>
+</ul>
+</li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="/spec/53">53/WAKU2-X3DH</a></li>
+<li><a href="https://signal.org/docs/specifications/sesame/">Signal&rsquo;s Sesame Algorithm</a></li>
+<li><a href="https://specs.status.im/spec/5">5/SECURE-TRANSPORT</a></li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#discovery-of-pre-key-bundles">Discovery of pre-key bundles</a></li>
+    <li><a href="#initialization">Initialization</a></li>
+    <li><a href="#concurrent-sessions">Concurrent sessions</a></li>
+    <li><a href="#re-keying">Re-keying</a></li>
+    <li><a href="#multi-device-support">Multi-device support</a></li>
+    <li><a href="#pairing">Pairing</a>
+      <ul>
+        <li><a href="#sending-messages-to-a-paired-group">Sending messages to a paired group</a></li>
+      </ul>
+    </li>
+    <li><a href="#account-recovery">Account recovery</a></li>
+    <li><a href="#partitioned-devices">Partitioned devices</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
