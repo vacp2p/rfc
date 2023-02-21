@@ -65,15 +65,15 @@ While any node could technically act as a requester, using the peer exchange pro
 syntax = "proto3";
 
 message PeerInfo {
-  bytes ENR = 1;
+  bytes enr = 1;
 }
 
 message PeerExchangeQuery {
-  int numPeers; // number of peers requested
+  uint64 num_peers = 1;
 }
 
 message PeerExchangeResponse {
-  repeated PeerInfo peerInfos = 1;
+  repeated PeerInfo peer_infos = 1;
 }
 
 message PeerExchangeRPC {
@@ -83,10 +83,10 @@ message PeerExchangeRPC {
 
 ```
 
-The `ENR` field contains a Waku ENR as specified in [31/WAKU2-ENR](/spec/31/).
+The `enr` field contains a Waku ENR as specified in [31/WAKU2-ENR](/spec/31/).
 
 Requesters send a `PeerExchangeQuery` to a peer.
-Responders SHOULD include a maximum of `numPeers` `PeerInfo` instances into a response.
+Responders SHOULD include a maximum of `num_peers` `PeerInfo` instances into a response.
 Responders send a `PeerExchangeResponse` to requesters containing a list of `PeerInfo` instances, which in turn hold an ENR.
 
 # Implementation Suggestions
