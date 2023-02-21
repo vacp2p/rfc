@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app.
+Background and Motivation # The purpose of Status communities, as specified in this document, is allowing for large group chats. Communities can have further substructure, e.g. specific channels.
+Smaller group chats, on the other hand, are out of scope for this document and can be built over 55/STATUS-1TO1-CHAT.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="56/STATUS-COMMUNITIES" />
+<meta property="og:description" content="Abstract # This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app.
+Background and Motivation # The purpose of Status communities, as specified in this document, is allowing for large group chats. Communities can have further substructure, e.g. specific channels.
+Smaller group chats, on the other hand, are out of scope for this document and can be built over 55/STATUS-1TO1-CHAT." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/56/" /><meta property="article:section" content="docs" />
+
+
+
+<title>56/STATUS-COMMUNITIES | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.0d5eae6685decae7eac699d29e4f01993a929eeb3cdd97ac150269467f6c8db7.js" integrity="sha256-DV6uZoXeyufqxpnSnk8BmTqSnus83ZesFQJpRn9sjbc="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/"class=active>56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>56/STATUS-COMMUNITIES</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
+    <li><a href="#wire-format">Wire format</a></li>
+    <li><a href="#content-topic-usage">Content topic usage</a>
+      <ul>
+        <li><a href="#advertising-a-community">Advertising a Community</a></li>
+        <li><a href="#community-channelschats">Community channels/chats</a></li>
+        <li><a href="#community-event-messages">Community event messages</a></li>
+      </ul>
+    </li>
+    <li><a href="#community-management">Community Management</a>
+      <ul>
+        <li><a href="#community-creation-flow">Community Creation Flow</a></li>
+        <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
+        <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
+        <li><a href="#community-leave-flow">Community Leave Flow</a></li>
+        <li><a href="#community-ban-flow">Community Ban Flow</a></li>
+      </ul>
+    </li>
+    <li><a href="#waku-protocols">Waku protocols</a></li>
+    <li><a href="#backups">Backups</a></li>
+    <li><a href="#clock">Clock</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="56status-communities">
+  56/STATUS-COMMUNITIES
+  <a class="anchor" href="#56status-communities">#</a>
+</h1>
+
+  
+      <h1 id="status-communities-that-run-over-waku-v2">
+  Status Communities that run over Waku v2
+  <a class="anchor" href="#status-communities-that-run-over-waku-v2">#</a>
+</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Andrea Piana <a href="mailto:andreap@status.im">andreap@status.im</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat.
+This is a key feature for the Status messaging app.</p>
+<h1 id="background-and-motivation">
+  Background and Motivation
+  <a class="anchor" href="#background-and-motivation">#</a>
+</h1>
+<p>The purpose of Status communities, as specified in this document, is allowing for large group chats.
+Communities can have further substructure, e.g. specific channels.</p>
+<p>Smaller group chats, on the other hand, are out of scope for this document and can be built over <a href="/spec/55">55/STATUS-1TO1-CHAT</a>.
+We refer to these smaller group chats simply as &ldquo;group chats&rdquo;, to differentiate them from Communities.</p>
+<p>For group chats based on <a href="/spec/55">55/STATUS-1TO1-CHAT</a>, the key exchange mechanism MUST be X3DH, as described in <a href="/spec/53/">53/WAKU2-X3DH</a>.</p>
+<p>However, this method does not scale as the number of participants increases, for the following reasons -</p>
+<ol>
+<li>The number of messages sent over the network increases with the number of participants.</li>
+<li>Handling the X3DH key exchange for each participant is computationally expensive.</li>
+</ol>
+<p>Having multicast channels reduces the overhead of a group chat based on 1:1 chat.
+Additionally, if all the participants of the group chat have a shared key, then the number of messages sent over the network is reduced to one per message.</p>
+<h1 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h1>
+<ul>
+<li><strong>Community</strong>: A group of peers that can communicate with each other.</li>
+<li><strong>Member</strong>: A peer that is part of a community.</li>
+<li><strong>Admin</strong>: A member that has administrative privileges. Used interchangeably with &ldquo;owner&rdquo;.</li>
+<li><strong>Channel</strong>: A designated subtopic for a community. Used interchangeably with &ldquo;chat&rdquo;.</li>
+</ul>
+<h1 id="design-requirements">
+  Design Requirements
+  <a class="anchor" href="#design-requirements">#</a>
+</h1>
+<p>Due to the nature of communities, the following requirements are necessary for the design of communities  -</p>
+<ol>
+<li>The creator of the Community is the owner of the Community.</li>
+<li>The Community owner is trusted.</li>
+<li>The Community owner can add or remove members from the Community.
+This extends to banning and kicking members.</li>
+<li>The Community owner can add, edit and remove channels.</li>
+<li>Community members can send/receive messages to the channels which they have access to.</li>
+<li>Communities may be encrypted (private) or unencrypted (public).</li>
+<li>A Community is uniquely identified by a public key.</li>
+<li>The public key of the Community is shared out of band.</li>
+<li>The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.</li>
+<li>Community members run their own Waku nodes, with the configuration described in <a href="#Waku-Protocols">#Waku-Protocols</a>.
+Light nodes solely implementing <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> may not be able to run their own Waku node with the configuration described.</li>
+</ol>
+<h1 id="design">
+  Design
+  <a class="anchor" href="#design">#</a>
+</h1>
+<h2 id="cryptographic-primitives">
+  Cryptographic Primitives
+  <a class="anchor" href="#cryptographic-primitives">#</a>
+</h2>
+<p>The following cryptographic primitives are used in the design -</p>
+<ul>
+<li>X3DH</li>
+<li>Single Ratchet
+<ul>
+<li>The single ratchet is used to encrypt the messages sent to the Community.</li>
+<li>The single ratchet is re-keyed when a member is added/removed from the Community.</li>
+</ul>
+</li>
+</ul>
+<h2 id="wire-format">
+  Wire format
+  <a class="anchor" href="#wire-format">#</a>
+</h2>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span>syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">IdentityImage</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// payload is a context based payload for the profile image data,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// context is determined by the `source_type`
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> payload <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// source_type signals the image payload source
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  SourceType source_type <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// image_type signals the image type and method of parsing the payload
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ImageType image_type <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// encryption_keys is a list of encrypted keys that can be used to decrypt an encrypted payload
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> encryption_keys <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// encrypted signals the encryption state of the payload, default is false.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> encrypted <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// SourceType are the predefined types of image source allowed
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">enum</span> SourceType {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNKNOWN_SOURCE_TYPE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// RAW_PAYLOAD image byte data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    RAW_PAYLOAD <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// ENS_AVATAR uses the ENS record&#39;s resolver get-text-data.avatar data
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// The `payload` field will be ignored if ENS_AVATAR is selected
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// The application will read and parse the ENS avatar data as image payload data, URLs will be ignored
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// The parent `ChatMessageIdentity` must have a valid `ens_name` set
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ENS_AVATAR <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">// SocialLinks represents social link associated with given chat identity (personal/community)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">SocialLink</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Type of the social link
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> text <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// URL of the social link
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> url <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">// ChatIdentity represents identity of a community/chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">ChatIdentity</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Lamport timestamp of the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// ens_name is the valid ENS name associated with the chat key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> ens_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// images is a string indexed mapping of images associated with an identity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>, IdentityImage&gt; images <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// display name is the user set identity
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> display_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// description is the user set description
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> description <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> color <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> emoji <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> SocialLink social_links <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// first known message timestamp in seconds (valid only for community chats for now)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// 0 - unknown
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// 1 - no messages
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint32</span> first_message_timestamp <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">Grant</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Community ID (The public key of the community)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The member ID (The public key of the member)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> member_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The chat for which the grant is given
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> chat_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the grant
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityMember</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The roles a community member MAY have
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">enum</span> Roles {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNKNOWN_ROLE <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    ROLE_ALL <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    ROLE_MANAGE_USERS <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    ROLE_MODERATE_CONTENT <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> Roles roles <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityPermissions</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The type of access a community MAY have
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">enum</span> Access {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNKNOWN_ACCESS <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    NO_MEMBERSHIP <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    INVITATION_ONLY <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    ON_REQUEST <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the community should be available only to ens users
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> ens_only <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the community is private
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> private <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  Access access <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityAdminSettings</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the Community admin may pin messages
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> pin_message_all_members_enabled <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityChat</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A map of members in the community to their roles in a chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityMember&gt; members <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The permissions of the chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityPermissions permissions <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The metadata of the chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ChatIdentity identity <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The category of the chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> category_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The position of chat in the display
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int32</span> position <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityCategory</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The category id 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> category_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The name of the category
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The position of the category in the display
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int32</span> position <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityInvitation</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Encrypted/unencrypted community description
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_description <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The grant offered by the community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> grant <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The chat id requested to join
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> chat_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The public key of the community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> public_key <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityRequestToJoin</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the request  
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The ENS name of the requester
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> ens_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The chat id requested to join
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> chat_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The public key of the community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The display name of the requester
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> display_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityCancelRequestToJoin</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The ENS name of the requester
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> ens_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The chat id requested to join
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> chat_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The public key of the community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The display name of the requester
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> display_name <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Magnet uri for community history protocol
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> magnet_uri <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityRequestToJoinResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The community description
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityDescription community <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the request was accepted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> accepted <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The grant offered by the community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> grant <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The community public key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityRequestToLeave</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the request
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The community public key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> community_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityDescription</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of members in the community to their roles
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityMember&gt; members <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The permissions of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityPermissions permissions <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The metadata of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ChatIdentity identity <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of chats to their details
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityChat&gt; chats <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A list of banned members
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> ban_list <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of categories to their details
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityCategory&gt; categories <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The admin settings of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityAdminSettings admin_settings <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the community is encrypted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> encrypted <span style="color:#f92672">=</span> <span style="color:#ae81ff">13</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The list of tags
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> tags <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Note: The usage of the clock is described in the <a href="#clock">Clock</a> section.</p>
+<h2 id="content-topic-usage">
+  Content topic usage
+  <a class="anchor" href="#content-topic-usage">#</a>
+</h2>
+<p>&ldquo;Content topic&rdquo; refers to the field in <a href="/spec/14/#message-attributes">14/WAKU2-MESSAGE</a>, further elaborated in <a href="/spec/10/#overview-of-protocol-interaction">10/WAKU2</a>.</p>
+<h3 id="advertising-a-community">
+  Advertising a Community
+  <a class="anchor" href="#advertising-a-community">#</a>
+</h3>
+<p>The content topic that the community is advertised on MUST be derived from the public key of the community.
+The content topic MUST be the first four bytes of the keccak-256 hash of the compressed (33 bytes) public key of the community encoded into a hex string.</p>
+<pre tabindex="0"><code>hash = hex(keccak256(encodeToHex(compressedPublicKey)))
+
+topicLen = 4
+if len(hash) &lt; topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i &lt; topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = &#34;/waku/1/0x&#34; + topic + &#34;/rfc26&#34;
+</code></pre><h3 id="community-channelschats">
+  Community channels/chats
+  <a class="anchor" href="#community-channelschats">#</a>
+</h3>
+<p>The unique identifier for a community channel/chat is the chat id.</p>
+<!-- raw HTML omitted -->
+<p>The content topic that Community channels/chats use MUST be the hex-encoded keccak-256 hash of the public key of the community concatenated with the chat id.</p>
+<pre tabindex="0"><code>hash = hex(keccak256(encodeToHex(compressedPublicKey + chatId)))
+
+topicLen = 4
+if len(hash) &lt; topicLen {
+    topicLen = len(hash)
+}
+var topic [4]byte
+for i = 0; i &lt; topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = &#34;/waku/1/0x&#34; + topic + &#34;/rfc26&#34;
+</code></pre><h3 id="community-event-messages">
+  Community event messages
+  <a class="anchor" href="#community-event-messages">#</a>
+</h3>
+<p>Requests to leave, join, kick and ban, as well as key exchange messages, MUST be sent to the content topic derived from the public key of the community.
+The content topic MUST be the hex-encoded keccak-256 hash of the public key of the community.</p>
+<pre tabindex="0"><code>hash = hex(keccak256(encodeToHex(publicKey)))
+
+topicLen = 4
+if len(hash) &lt; topicLen {
+    topicLen = len(hash)
+}
+var topic [4]byte
+for i = 0; i &lt; topicLen; i++ {
+    topic[i] = hash[i]
+}
+
+contentTopic = &#34;/waku/1/0x&#34; + topic + &#34;/rfc26&#34;
+</code></pre><h2 id="community-management">
+  Community Management
+  <a class="anchor" href="#community-management">#</a>
+</h2>
+<p>The flows for Community management are as described below.</p>
+<h3 id="community-creation-flow">
+  Community Creation Flow
+  <a class="anchor" href="#community-creation-flow">#</a>
+</h3>
+<ol>
+<li>The Community owner generates a public/private key pair.</li>
+<li>The Community owner configures the Community metadata, according to the wire format &ldquo;CommunityDescription&rdquo;.</li>
+<li>The Community owner publishes the Community metadata on a content topic derived from the public key of the Community.
+the Community metadata SHOULD be encrypted with the public key of the Community. <!-- raw HTML omitted -->
+The Community metadata MAY be sent during fixed intervals, to ensure that the Community metadata is available to members.
+The Community metadata SHOULD be sent every time the Community metadata is updated.</li>
+<li>The Community owner MAY advertise the Community out of band, by sharing the public key of the Community on other mediums of communication.</li>
+</ol>
+<h3 id="community-join-flow-peer-requests-to-join-a-community">
+  Community Join Flow (peer requests to join a Community)
+  <a class="anchor" href="#community-join-flow-peer-requests-to-join-a-community">#</a>
+</h3>
+<ol>
+<li>A peer and the Community owner establish a 1:1 chat as described in <a href="/spec/55/">55/STATUS-1TO1-CHAT</a>.</li>
+<li>The peer requests to join a Community by sending a &ldquo;CommunityRequestToJoin&rdquo; message to the Community.
+At this point, the peer MAY send a &ldquo;CommunityCancelRequestToJoin&rdquo; message to cancel the request.</li>
+<li>The Community owner MAY accept or reject the request.</li>
+<li>If the request is accepted, the Community owner sends a &ldquo;CommunityRequestToJoinResponse&rdquo; message to the peer.</li>
+<li>The Community owner then adds the member to the Community metadata, and publishes the updated Community metadata.</li>
+</ol>
+<h3 id="community-join-flow-peer-is-invited-to-join-a-community">
+  Community Join Flow (peer is invited to join a Community)
+  <a class="anchor" href="#community-join-flow-peer-is-invited-to-join-a-community">#</a>
+</h3>
+<ol>
+<li>The Community owner and peer establish a 1:1 chat as described in <a href="/spec/55/">55/STATUS-1TO1-CHAT</a>.</li>
+<li>The peer is invited to join a Community by the Community owner, by sending a &ldquo;CommunityInvitation&rdquo; message.</li>
+<li>The peer decrypts the &ldquo;CommunityInvitation&rdquo; message, and verifies the signature.</li>
+<li>The peer requests to join a Community by sending a &ldquo;CommunityRequestToJoin&rdquo; message to the Community.</li>
+<li>The Community owner MAY accept or reject the request.</li>
+<li>If the request is accepted, the Community owner sends a &ldquo;CommunityRequestToJoinResponse&rdquo; message to the peer.</li>
+<li>The Community owner then adds the member to the Community metadata, and publishes the updated Community metadata.</li>
+</ol>
+<h3 id="community-leave-flow">
+  Community Leave Flow
+  <a class="anchor" href="#community-leave-flow">#</a>
+</h3>
+<ol>
+<li>A member requests to leave a Community by sending a &ldquo;CommunityRequestToLeave&rdquo; message to the Community.</li>
+<li>The Community owner MAY accept or reject the request.</li>
+<li>If the request is accepted, the Community owner removes the member from the Community metadata, and publishes the updated Community metadata.</li>
+</ol>
+<h3 id="community-ban-flow">
+  Community Ban Flow
+  <a class="anchor" href="#community-ban-flow">#</a>
+</h3>
+<ol>
+<li>The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.</li>
+<li>If the Community is Private, Re-keying is performed between the members of the Community, to ensure that the banned member is unable to decrypt any messages.</li>
+</ol>
+<h2 id="waku-protocols">
+  Waku protocols
+  <a class="anchor" href="#waku-protocols">#</a>
+</h2>
+<p>The following Waku protocols SHOULD be used to implement Status Communities -</p>
+<ol>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a> - To send and receive messages</li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a> - To encrypt and decrypt messages</li>
+<li><a href="/spec/54/">53/WAKU2-X3DH-SESSIONS</a> - To handle session keys</li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a> - To wrap community messages in a Waku message</li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a> - To store and retrieve messages for offline devices</li>
+</ol>
+<p>The following Waku protocols MAY be used to implement Status Communities -</p>
+<ol>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a> - Content filtering for resource restricted devices</li>
+<li><a href="/spec/19">19/WAKU2-LIGHTPUSH</a> - Allows Light clients to participate in the network</li>
+</ol>
+<h2 id="backups">
+  Backups
+  <a class="anchor" href="#backups">#</a>
+</h2>
+<p>The member MAY back up their local settings, by encrypting it with their public key, and sending it to a given content topic.
+The member MAY then rely on this backup to restore their local settings, in case of a data loss.
+This feature relies on <a href="/spec/13/">13/WAKU2-STORE</a> for storing and retrieving messages.</p>
+<h2 id="clock">
+  Clock
+  <a class="anchor" href="#clock">#</a>
+</h2>
+<p>The clock used in the wire format refers to the Lamport timestamp of the message.
+The Lamport timestamp is a logical clock that is used to determine the order of events in a distributed system.
+This allows ordering of messages in an asynchronous network where messages may be received out of order.</p>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<ol>
+<li>
+<p>The Community owner is a single point of failure. If the Community owner is compromised, the Community is compromised.</p>
+</li>
+<li>
+<p>Follows the same security considerations as the <a href="/spec/53/">53/WAKU2-X3DH</a> protocol.</p>
+</li>
+</ol>
+<h1 id="future-work">
+  Future work
+  <a class="anchor" href="#future-work">#</a>
+</h1>
+<ol>
+<li>
+<p>To scale and optimize the Community management, the Community metadata should be stored on a decentralized storage system, and only the references to the Community metadata should be broadcasted. The following document describes this method in more detail - <a href="https://hackmd.io/rD1OfIbJQieDe3GQdyCRTw">Optimizing the <code>CommunityDescription</code> dissemination</a></p>
+</li>
+<li>
+<p>Token gating for communities</p>
+</li>
+<li>
+<p>Sharding the content topic used for <a href="#community-event-messages">#Community Event Messages</a>, since members of the community don&rsquo;t need to receive all the control messages.</p>
+</li>
+</ol>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go">https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go</a></li>
+<li><a href="https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md">https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
+    <li><a href="#wire-format">Wire format</a></li>
+    <li><a href="#content-topic-usage">Content topic usage</a>
+      <ul>
+        <li><a href="#advertising-a-community">Advertising a Community</a></li>
+        <li><a href="#community-channelschats">Community channels/chats</a></li>
+        <li><a href="#community-event-messages">Community event messages</a></li>
+      </ul>
+    </li>
+    <li><a href="#community-management">Community Management</a>
+      <ul>
+        <li><a href="#community-creation-flow">Community Creation Flow</a></li>
+        <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
+        <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
+        <li><a href="#community-leave-flow">Community Leave Flow</a></li>
+        <li><a href="#community-ban-flow">Community Ban Flow</a></li>
+      </ul>
+    </li>
+    <li><a href="#waku-protocols">Waku protocols</a></li>
+    <li><a href="#backups">Backups</a></li>
+    <li><a href="#clock">Clock</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

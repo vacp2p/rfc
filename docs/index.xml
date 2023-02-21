@@ -497,6 +497,17 @@ Specification # Overview # This protocol MAY use any key-exchange mechanism prev
     </item>
     
     <item>
+      <title>56/STATUS-COMMUNITIES</title>
+      <link>https://rfc.vac.dev/spec/56/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/56/</guid>
+      <description>Abstract # This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app.
+Background and Motivation # The purpose of Status communities, as specified in this document, is allowing for large group chats. Communities can have further substructure, e.g. specific channels.
+Smaller group chats, on the other hand, are out of scope for this document and can be built over 55/STATUS-1TO1-CHAT.</description>
+    </item>
+    
+    <item>
       <title>6/WAKU1</title>
       <link>https://rfc.vac.dev/spec/6/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
