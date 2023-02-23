@@ -24,7 +24,7 @@ are more robust and resilient against DoS attacks compared to
 However, they do not scale to large traffic loads.
 A single [libp2p gossipsub mesh](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md#gossipsub-the-gossiping-mesh-router),
 which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network
-(gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network).
+(control messages go beyond these boundaries, but at its core, it is a separate P2P network).
 With this, the number of [Waku relay](/spec/11/) content topics that can be carried over a pubsub topic is limited.
 This prevents app protocols that aim to span many multicast groups (realized by content topics) from scaling.
 
@@ -56,12 +56,15 @@ From an app protocol point of view, a subscription to a content topic `waku2/xxx
 Assigning content topics to specific shards is up to app protocols,
 but the discovery of these shards is managed by Waku.
 
-These shards are managed in an array of $2^16$ shard clusters.
-A shard cluster, in turn, contains 64 shards.
-A shard cluster is either globally available to all apps (like the default pubsub topic),
+Static shards are managed in shard clusters of 1024 shards per cluster.
+Waku static sharding can manage $2^16$ shard clusters.
+Each shard cluster is identified by its index (between $0$ and $2^16-1$).
+
+A specific shard cluster is either globally available to all apps (like the default pubsub topic),
 specific for an app protocol,
 or reserved for automatic sharding (see next section).
-In total, there are $2^16 * 64 = 4194304$ shards for which Waku manages discovery.
+
+> *Note:* This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.
 
 App protocols can either choose to use global shards, or app specific shards.
 (In future versions of this document, automatic sharding, described in the next section, will become the default.)
@@ -74,7 +77,7 @@ shard clusters are divided into ranges:
 |             0 |   global                 |
 |        1 - 15 |   reserved               |
 |     16 - 1023 |   specific app protocols |
-|  1024 - 49125 |   all app protocols      |
+|  1024 - 49152 |   all app protocols      |
 | 49152 - 65535 |   automatic sharding     |
 
 The informational RFC [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52) lists the current index allocations.
@@ -93,7 +96,7 @@ an example for the 2nd shard in the global shard cluster:
 
 > *Note*: Because *all* shards distribute payload defined in [14/WAKU2-MESSAGE](spec/14/) via [protocol buffers](https://developers.google.com/protocol-buffers/),
 the pubsub topic name does not explicitly add `/proto` to indicate protocol buffer encoding.
-We use `rshard` to indicate it is a relay shards; further shard types might follow in the future.
+We use `rshard` (as well as `rs` as the ENR key) to indicate these are relay shard clusters; further shard types might follow in the future.
 
 From an app point of view, a subscription to a content topic `waku2/xxx` on a static shard would look like:
 
@@ -108,56 +111,41 @@ And for shard 43 of the Status app (which has allocated index 16):
 
 Waku v2 supports the discovery of peers within static shards,
 so app protocols do not have to implement their own discovery method.
-To enable discovery of static shards,
-the array of shard clusters is added to [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
-The representation is specified as follows.
 
-The array index is a 2 bytes field.
-As the array is expected to be sparse (and because ENRs do not feature an array/map type),
-the ENR contains a list of occupied array slots.
-Each shard cluster is represented by a bit vector,
-which indicates which shards of the respective shard cluster the node is part of
-(see Ethereum ENR sharding bit vector [here](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
-and [here](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability)).
-The right-most bit in the bit vector represents shard `0`, the left-most bit represents shard `63`.
-
-> *Note*: We will update the [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once this RFC moves forward.)
-
-
+Nodes add information about their shard participation in their [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/).
 Having a static shard participation indication as part of the ENR allows nodes
 to discover peers that are part of shards via [33/WAKU2-DISCV5](/spec/33/) as well as via DNS.
 
-In its current raw version, this document proposes two representations in the ENR.
-(Which one to choose is open for discussion in the raw phase of the document.
-Future versions will only specify a single representation.)
+> *Note:* In the current version of this document,
+sharding information is directly added to the ENR.
+(see Ethereum ENR sharding bit vector [here](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
+Static relay sharding supports 1024 shards per cluster, leading to a flag field of 128 bytes.
+This already takes half (including index and key) of the ENR space of 300 bytes.
+For this reason, the current specification only supports a single shard cluster per node.
+In future versions, we will add further (hierarchical) discovery methods.
+We will update [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once this RFC moves forward.
 
-### One key per Shard Cluster
+The representation in the ENR is specified as follows.
 
-For each shard cluster a node is part of, the node adds a separate key to its ENR.
-The representation corresponds to [Ethereum shard ENRs](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability)).
+| key    | value   |
+|---     |---      |
+| `rs`   | <2-byte index> &#124; <128-byte flag field>  |
 
-Example
+The ENR key is `rs`.
+The value is comprised of a two-byte shard cluster index in network byte order concatenated with a 128-byte wide bit vector.
+The bit vector indicates which shards of the respective shard cluster the node is part of.
+The right-most bit in the bit vector represents shard `0`, the left-most bit represents shard `1023`.
+The representation in the ENR is inspired by [Ethereum shard ENRs](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability)),
+and [this](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability)).
 
-| key         | value                |
-|---          |---                   |
-| `rshard-0`  | `0x0000100000000000` |
-| `rshard-16` | `0x0000100000003000` |
+Example:
 
-This example node is part of shard `45` in the global shard cluster,
-and part shards `13`, `14`, and `45` in the Status main-net shard cluster.
+| key    | value   |
+|---     |---      |
+| `rs`   | 16u16 &#124; `0x[...]0000100000003000` |
 
-This method is easier to read.
-It is feasible, assuming nodes are only part of a few apps using specific shard clusters.
-
-### Single Key
-
-Example
-
-| key         | value   |
-|---          |---      |
-| `rshards`   | `num_shards` &#124;  0u16 &#124;  `0x0000100000000000` &#124;  16u16 &#124; `0x0000100000003000` |
-
-The two-byte index uses network byte order.
+The `[...]` in the example indicates 120 `0` bytes.
+This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
 
 # Automatic Sharding
 
