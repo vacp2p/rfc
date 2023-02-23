@@ -7,11 +7,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Abstract # This document describes ways of sharding the Waku relay topic, allowing Waku networks to scale in the number of content topics.
 Note: Scaling in the size of a single content topic is out of scope for this document.
-Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network).">
+Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (control messages go beyond these boundaries, but at its core, it is a separate P2P network).">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="51/WAKU2-RELAY-SHARDING" />
 <meta property="og:description" content="Abstract # This document describes ways of sharding the Waku relay topic, allowing Waku networks to scale in the number of content topics.
 Note: Scaling in the size of a single content topic is out of scope for this document.
-Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network)." />
+Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (control messages go beyond these boundaries, but at its core, it is a separate P2P network)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/51/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +21,7 @@ Background and Motivation # Unstructured P2P networks are more robust and resili
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.5ee68d8cd44f898b32b1f50dd6c0ef4fa262a522003784780cf0d702daa2e4bc.js" integrity="sha256-XuaNjNRPiYsysfUN1sDvT6JipSIAN4R4DPDXAtqi5Lw="></script>
+<script defer src="/en.search.min.0b0ea2d9649fa2102b6bd6995a749fbda6e83298edb653705c0c83e1d46188b3.js" integrity="sha256-Cw6i2WSfohAra9aZWnSfvaboMpjttlNwXAyD4dRhiLM="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,12 +174,7 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#discovery">Discovery</a>
-      <ul>
-        <li><a href="#one-key-per-shard-cluster">One key per Shard Cluster</a></li>
-        <li><a href="#single-key">Single Key</a></li>
-      </ul>
-    </li>
+    <li><a href="#discovery">Discovery</a></li>
   </ul>
 
   <ul>
@@ -245,7 +240,7 @@ are more robust and resilient against DoS attacks compared to
 However, they do not scale to large traffic loads.
 A single <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.0.md#gossipsub-the-gossiping-mesh-router">libp2p gossipsub mesh</a>,
 which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network
-(gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network).
+(control messages go beyond these boundaries, but at its core, it is a separate P2P network).
 With this, the number of <a href="/spec/11/">Waku relay</a> content topics that can be carried over a pubsub topic is limited.
 This prevents app protocols that aim to span many multicast groups (realized by content topics) from scaling.</p>
 <p>This document specifies three pubsub topic sharding methods (with varying degrees of automation),
@@ -275,12 +270,15 @@ It might make sense to deprecate <a href="/spec/23/">23/WAKU2-TOPICS</a> as a se
 <p><em>Static sharding</em> offers a set of shards with fixed names.
 Assigning content topics to specific shards is up to app protocols,
 but the discovery of these shards is managed by Waku.</p>
-<p>These shards are managed in an array of $2^16$ shard clusters.
-A shard cluster, in turn, contains 64 shards.
-A shard cluster is either globally available to all apps (like the default pubsub topic),
+<p>Static shards are managed in shard clusters of 1024 shards per cluster.
+Waku static sharding can manage $2^16$ shard clusters.
+Each shard cluster is identified by its index (between $0$ and $2^16-1$).</p>
+<p>A specific shard cluster is either globally available to all apps (like the default pubsub topic),
 specific for an app protocol,
-or reserved for automatic sharding (see next section).
-In total, there are $2^16 * 64 = 4194304$ shards for which Waku manages discovery.</p>
+or reserved for automatic sharding (see next section).</p>
+<blockquote>
+<p><em>Note:</em> This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.</p>
+</blockquote>
 <p>App protocols can either choose to use global shards, or app specific shards.
 (In future versions of this document, automatic sharding, described in the next section, will become the default.)</p>
 <p>Like the <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA ports</a>,
@@ -306,7 +304,7 @@ shard clusters are divided into ranges:</p>
 <td>specific app protocols</td>
 </tr>
 <tr>
-<td>1024 - 49125</td>
+<td>1024 - 49152</td>
 <td>all app protocols</td>
 </tr>
 <tr>
@@ -326,7 +324,7 @@ This offers k-anonymity and better connectivity, but comes at a higher bandwidth
 <blockquote>
 <p><em>Note</em>: Because <em>all</em> shards distribute payload defined in <a href="spec/14/">14/WAKU2-MESSAGE</a> via <a href="https://developers.google.com/protocol-buffers/">protocol buffers</a>,
 the pubsub topic name does not explicitly add <code>/proto</code> to indicate protocol buffer encoding.
-We use <code>rshard</code> to indicate it is a relay shards; further shard types might follow in the future.</p>
+We use <code>rshard</code> (as well as <code>rs</code> as the ENR key) to indicate these are relay shard clusters; further shard types might follow in the future.</p>
 </blockquote>
 <p>From an app point of view, a subscription to a content topic <code>waku2/xxx</code> on a static shard would look like:</p>
 <p><code>subscribe(&quot;/waku2/xxx&quot;, 43)</code></p>
@@ -338,33 +336,21 @@ And for shard 43 of the Status app (which has allocated index 16):</p>
   <a class="anchor" href="#discovery">#</a>
 </h2>
 <p>Waku v2 supports the discovery of peers within static shards,
-so app protocols do not have to implement their own discovery method.
-To enable discovery of static shards,
-the array of shard clusters is added to <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a>.
-The representation is specified as follows.</p>
-<p>The array index is a 2 bytes field.
-As the array is expected to be sparse (and because ENRs do not feature an array/map type),
-the ENR contains a list of occupied array slots.
-Each shard cluster is represented by a bit vector,
-which indicates which shards of the respective shard cluster the node is part of
-(see Ethereum ENR sharding bit vector <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata">here</a>
-and <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability">here</a>).
-The right-most bit in the bit vector represents shard <code>0</code>, the left-most bit represents shard <code>63</code>.</p>
-<blockquote>
-<p><em>Note</em>: We will update the <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a> accordingly, once this RFC moves forward.)</p>
-</blockquote>
-<p>Having a static shard participation indication as part of the ENR allows nodes
+so app protocols do not have to implement their own discovery method.</p>
+<p>Nodes add information about their shard participation in their <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a>.
+Having a static shard participation indication as part of the ENR allows nodes
 to discover peers that are part of shards via <a href="/spec/33/">33/WAKU2-DISCV5</a> as well as via DNS.</p>
-<p>In its current raw version, this document proposes two representations in the ENR.
-(Which one to choose is open for discussion in the raw phase of the document.
-Future versions will only specify a single representation.)</p>
-<h3 id="one-key-per-shard-cluster">
-  One key per Shard Cluster
-  <a class="anchor" href="#one-key-per-shard-cluster">#</a>
-</h3>
-<p>For each shard cluster a node is part of, the node adds a separate key to its ENR.
-The representation corresponds to <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability">Ethereum shard ENRs</a>).</p>
-<p>Example</p>
+<blockquote>
+<p><em>Note:</em> In the current version of this document,
+sharding information is directly added to the ENR.
+(see Ethereum ENR sharding bit vector <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata">here</a>
+Static relay sharding supports 1024 shards per cluster, leading to a flag field of 128 bytes.
+This already takes half (including index and key) of the ENR space of 300 bytes.
+For this reason, the current specification only supports a single shard cluster per node.
+In future versions, we will add further (hierarchical) discovery methods.
+We will update <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a> accordingly, once this RFC moves forward.</p>
+</blockquote>
+<p>The representation in the ENR is specified as follows.</p>
 <table>
 <thead>
 <tr>
@@ -374,24 +360,18 @@ The representation corresponds to <a href="https://github.com/ethereum/consensus
 </thead>
 <tbody>
 <tr>
-<td><code>rshard-0</code></td>
-<td><code>0x0000100000000000</code></td>
-</tr>
-<tr>
-<td><code>rshard-16</code></td>
-<td><code>0x0000100000003000</code></td>
+<td><code>rs</code></td>
+<td>&lt;2-byte index&gt; | &lt;128-byte flag field&gt;</td>
 </tr>
 </tbody>
 </table>
-<p>This example node is part of shard <code>45</code> in the global shard cluster,
-and part shards <code>13</code>, <code>14</code>, and <code>45</code> in the Status main-net shard cluster.</p>
-<p>This method is easier to read.
-It is feasible, assuming nodes are only part of a few apps using specific shard clusters.</p>
-<h3 id="single-key">
-  Single Key
-  <a class="anchor" href="#single-key">#</a>
-</h3>
-<p>Example</p>
+<p>The ENR key is <code>rs</code>.
+The value is comprised of a two-byte shard cluster index in network byte order concatenated with a 128-byte wide bit vector.
+The bit vector indicates which shards of the respective shard cluster the node is part of.
+The right-most bit in the bit vector represents shard <code>0</code>, the left-most bit represents shard <code>1023</code>.
+The representation in the ENR is inspired by <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability">Ethereum shard ENRs</a>),
+and <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/validator.md#sync-committee-subnet-stability">this</a>).</p>
+<p>Example:</p>
 <table>
 <thead>
 <tr>
@@ -401,12 +381,13 @@ It is feasible, assuming nodes are only part of a few apps using specific shard 
 </thead>
 <tbody>
 <tr>
-<td><code>rshards</code></td>
-<td><code>num_shards</code> |  0u16 |  <code>0x0000100000000000</code> |  16u16 | <code>0x0000100000003000</code></td>
+<td><code>rs</code></td>
+<td>16u16 | <code>0x[...]0000100000003000</code></td>
 </tr>
 </tbody>
 </table>
-<p>The two-byte index uses network byte order.</p>
+<p>The <code>[...]</code> in the example indicates 120 <code>0</code> bytes.
+This example node is part of shards <code>13</code>, <code>14</code>, and <code>45</code> in the Status main-net shard cluster (index 16).</p>
 <h1 id="automatic-sharding">
   Automatic Sharding
   <a class="anchor" href="#automatic-sharding">#</a>
@@ -533,12 +514,7 @@ For <em>named</em> and <em>static</em> sharding this responsibility is at the ap
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#discovery">Discovery</a>
-      <ul>
-        <li><a href="#one-key-per-shard-cluster">One key per Shard Cluster</a></li>
-        <li><a href="#single-key">Single Key</a></li>
-      </ul>
-    </li>
+    <li><a href="#discovery">Discovery</a></li>
   </ul>
 
   <ul>

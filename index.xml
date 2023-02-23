@@ -449,7 +449,7 @@ Motivation # Waku was created to incrementally improve in areas that Whisper is 
       <guid>https://rfc.vac.dev/spec/51/</guid>
       <description>Abstract # This document describes ways of sharding the Waku relay topic, allowing Waku networks to scale in the number of content topics.
 Note: Scaling in the size of a single content topic is out of scope for this document.
-Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (gossip and control messages go beyond these boundaries, but at its core, it is a separate P2P network).</description>
+Background and Motivation # Unstructured P2P networks are more robust and resilient against DoS attacks compared to structured P2P networks). However, they do not scale to large traffic loads. A single libp2p gossipsub mesh, which carries messages associated with a single pubsub topic, can be seen as a separate unstructured P2P network (control messages go beyond these boundaries, but at its core, it is a separate P2P network).</description>
     </item>
     
     <item>
