@@ -21,7 +21,7 @@ Wire Protocol # Transport # Nodes SHOULD expose an accessible JSON-RPC API. The 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.0d5eae6685decae7eac699d29e4f01993a929eeb3cdd97ac150269467f6c8db7.js" integrity="sha256-DV6uZoXeyufqxpnSnk8BmTqSnus83ZesFQJpRn9sjbc="></script>
+<script defer src="/en.search.min.5ee68d8cd44f898b32b1f50dd6c0ef4fa262a522003784780cf0d702daa2e4bc.js" integrity="sha256-XuaNjNRPiYsysfUN1sDvT6JipSIAN4R4DPDXAtqi5Lw="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -354,7 +354,7 @@ https://github.com/alex-shpak/hugo-book
 <td style="text-align:right"><code>payload</code></td>
 <td style="text-align:center"><code>String</code></td>
 <td style="text-align:center">mandatory</td>
-<td>The message payload as a <strong>base64</strong> encoded data string</td>
+<td>The message payload as a <a href="https://datatracker.ietf.org/doc/html/rfc4648">base64 (with padding)</a> encoded data string</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>contentTopic</code></td>
@@ -1477,6 +1477,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 <li><a href="https://docs.libp2p.io/concepts/addressing/">LibP2P Addressing</a></li>
 <li><a href="https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor">LibP2P PubSub specification - topic descriptor</a></li>
 <li><a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md">Waku v2 specification</a></li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc4648">IETF RFC 4648 - The Base16, Base32, and Base64 Data Encodings</a></li>
 </ol>
 <h1 id="copyright">
   Copyright
