@@ -19,7 +19,7 @@ The present document specifies the Waku v2 message format, a way to encapsulate 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.0b0ea2d9649fa2102b6bd6995a749fbda6e83298edb653705c0c83e1d46188b3.js" integrity="sha256-Cw6i2WSfohAra9aZWnSfvaboMpjttlNwXAyD4dRhiLM="></script>
+<script defer src="/en.search.min.8c3081ca7fc45e9473a224e51ca8646d8e8c4e3eaff51d4e89f0712ca8b5e075.js" integrity="sha256-jDCByn/EXpRzoiTlHKhkbY6MTj6v9R1OifBxLKi14HU="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -277,6 +277,10 @@ The data payload is also treated as a Waku message attribute for convenience.</p
 <p>The <code>content_topic</code> attribute MUST specify a string identifier that can be used for content-based filtering.</p>
 </li>
 <li>
+<p>The <code>meta</code> attribute, if present, contains an arbitrary application-specific variable-length byte array with a maximum length limit of 32 bytes.
+This attribute can be utilized to convey supplementary details to various Waku protocols, thereby enabling customized processing based on its contents.</p>
+</li>
+<li>
 <p>The <code>version</code> attribute, if present, contains a version number to discriminate different types of payload encryption.
 If omitted, the value SHOULD be interpreted as version 0.</p>
 </li>
@@ -304,9 +308,11 @@ If, instead, the attribute is omitted or set to <code>false</code>, the message 
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> content_topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> version <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">sint64</span> timestamp <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bytes</span> meta <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">bool</span> ephemeral <span style="color:#f92672">=</span> <span style="color:#ae81ff">31</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span></span></span></code></pre></div><h1 id="payload-encryption">
+</span></span></span></code></pre></div><p>An example proto file following this specification can be found <a href="https://github.com/vacp2p/waku/blob/main/waku/message/v1/message.proto">here (vacp2p/waku)</a>.</p>
+<h1 id="payload-encryption">
   Payload encryption
   <a class="anchor" href="#payload-encryption">#</a>
 </h1>
@@ -343,6 +349,16 @@ And, in this case, the payload SHOULD be interpreted as unencrypted by the Waku 
 </ul>
 <p>Waku v2 implements a pub/sub messaging pattern over libp2p.
 This makes redundant some Whisper/Waku v1 envelope fields (e.g., <code>expiry</code>, <code>ttl</code>, <code>topic</code>, etc.), so they can be ignored.</p>
+<h1 id="deterministic-message-hashing">
+  Deterministic message hashing
+  <a class="anchor" href="#deterministic-message-hashing">#</a>
+</h1>
+<p>In Protocol Buffers v3, the deterministic serialization is not canonical across the different implementations and languages.
+It is also unstable across different builds with schema changes due to unknown fields.</p>
+<p>To overcome this interoperability limitation, a Waku v2 message&rsquo;s hash MUST be computed following this schema:</p>
+<pre tabindex="0"><code>message_hash = sha256(concat(pubsub_topic, message.payload, message.content_topic, message.meta))
+</code></pre><p>If an optional attribute, such as <code>meta</code>, is absent, the concatenation of attributes SHOULD exclude it. This recommendation is made to ensure that the concatenation process proceeds smoothly when certain attributes are missing and to maintain backward compatibility.</p>
+<p>This hashing schema is deemed appropriate for use cases where a cross-implementation deterministic hash is needed, such as message deduplication and integrity validation. The collision probability offered by this hashing schema can be considered negligible. This is due to the deterministic concatenation order of the message attributes, coupled with using a SHA-2 (256-bit) hashing algorithm.</p>
 <h1 id="security-considerations">
   Security Considerations
   <a class="anchor" href="#security-considerations">#</a>
