@@ -50,6 +50,9 @@ The data payload is also treated as a Waku message attribute for convenience.
 
 * The `content_topic` attribute MUST specify a string identifier that can be used for content-based filtering.
 
+* The `meta` attribute, if present, contains an arbitrary application-specific variable-length byte array with a maximum length limit of 32 bytes.
+This attribute can be utilized to convey supplementary details to various Waku protocols, thereby enabling customized processing based on its contents.
+
 * The `version` attribute, if present, contains a version number to discriminate different types of payload encryption.
 If omitted, the value SHOULD be interpreted as version 0.
 
@@ -74,9 +77,12 @@ message WakuMessage {
   string content_topic = 2;
   optional uint32 version = 3;
   optional sint64 timestamp = 10;
+  optional bytes meta = 11;
   optional bool ephemeral = 31;
 }
 ```
+
+An example proto file following this specification can be found [here (vacp2p/waku)](https://github.com/vacp2p/waku/blob/main/waku/message/v1/message.proto).
 
 
 # Payload encryption
@@ -111,6 +117,20 @@ Whisper/Waku v1 envelopes are compatible with Waku v2 messages format.
 Waku v2 implements a pub/sub messaging pattern over libp2p.
 This makes redundant some Whisper/Waku v1 envelope fields (e.g., `expiry`, `ttl`, `topic`, etc.), so they can be ignored.
 
+# Deterministic message hashing
+
+In Protocol Buffers v3, the deterministic serialization is not canonical across the different implementations and languages.
+It is also unstable across different builds with schema changes due to unknown fields. 
+
+To overcome this interoperability limitation, a Waku v2 message's hash MUST be computed following this schema:
+
+```
+message_hash = sha256(concat(pubsub_topic, message.payload, message.content_topic, message.meta))
+```
+
+If an optional attribute, such as `meta`, is absent, the concatenation of attributes SHOULD exclude it. This recommendation is made to ensure that the concatenation process proceeds smoothly when certain attributes are missing and to maintain backward compatibility.
+
+This hashing schema is deemed appropriate for use cases where a cross-implementation deterministic hash is needed, such as message deduplication and integrity validation. The collision probability offered by this hashing schema can be considered negligible. This is due to the deterministic concatenation order of the message attributes, coupled with using a SHA-2 (256-bit) hashing algorithm.
 
 # Security Considerations
 
