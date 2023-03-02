@@ -19,7 +19,7 @@ The present document specifies the Waku v2 message format, a way to encapsulate 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.00bc87162fcd90c33ff4ab3ef095f03ad0da1d37b21c48e4cd7d8666fc072186.js" integrity="sha256-ALyHFi/NkMM/9Ks&#43;8JXwOtDaHTeyHEjkzX2GZvwHIYY="></script>
+<script defer src="/en.search.min.6d779d147ed1ef6ff4ac5e760188eac0e3a849dcf129f62b9ec9adfe7faf381b.js" integrity="sha256-bXedFH7R72/0rF52AYjqwOOoSdzxKfYrnsmt/n&#43;vOBs="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,6 +174,10 @@ https://github.com/alex-shpak/hugo-book
   <ul>
     <li><a href="#waku-message">Waku Message</a></li>
     <li><a href="#message-attributes">Message Attributes</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#test-vectors">Test vectors</a></li>
   </ul>
 
   <ul>
@@ -359,7 +363,32 @@ It is also unstable across different builds with schema changes due to unknown f
 <pre tabindex="0"><code>message_hash = sha256(concat(pubsub_topic, message.payload, message.content_topic, message.meta))
 </code></pre><p>If an optional attribute, such as <code>meta</code>, is absent, the concatenation of attributes SHOULD exclude it. This recommendation is made to ensure that the concatenation process proceeds smoothly when certain attributes are missing and to maintain backward compatibility.</p>
 <p>This hashing schema is deemed appropriate for use cases where a cross-implementation deterministic hash is needed, such as message deduplication and integrity validation. The collision probability offered by this hashing schema can be considered negligible. This is due to the deterministic concatenation order of the message attributes, coupled with using a SHA-2 (256-bit) hashing algorithm.</p>
-<h1 id="security-considerations">
+<h2 id="test-vectors">
+  Test vectors
+  <a class="anchor" href="#test-vectors">#</a>
+</h2>
+<p>Waku message hash computation:</p>
+<pre tabindex="0"><code>pubsub_topic = &#34;/waku/2/default-waku/proto&#34; (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = 0x010203045445535405060708
+message.content_topic = &#34;/waku/2/default-content/proto&#34; (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = 0x73757065722d736563726574
+
+message_hash = 0x4fdde1099c9f77f6dae8147b6b3179aba1fc8e14a7bf35203fc253ee479f135f
+</code></pre><p>Waku message hash computation (<code>meta</code> attribute not present):</p>
+<pre tabindex="0"><code>pubsub_topic = &#34;/waku/2/default-waku/proto&#34; (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = 0x010203045445535405060708
+message.content_topic = &#34;/waku/2/default-content/proto&#34; (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = &lt;not-present&gt;
+
+message_hash = 0x87619d05e563521d9126749b45bd4cc2430df0607e77e23572d874ed9c1aaa62
+</code></pre><p>Waku message hash computation (<code>payload</code> length 0):</p>
+<pre tabindex="0"><code>pubsub_topic = &#34;/waku/2/default-waku/proto&#34; (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = []
+message.content_topic = &#34;/waku/2/default-content/proto&#34; (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = 0x73757065722d736563726574
+
+message_hash = 0xe1a9596237dbe2cc8aaf4b838c46a7052df6bc0d42ba214b998a8bfdbe8487d6
+</code></pre><h1 id="security-considerations">
   Security Considerations
   <a class="anchor" href="#security-considerations">#</a>
 </h1>
@@ -440,6 +469,10 @@ A malicious actor can tamper with the value of a Waku message’s <code>ephemera
   <ul>
     <li><a href="#waku-message">Waku Message</a></li>
     <li><a href="#message-attributes">Message Attributes</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#test-vectors">Test vectors</a></li>
   </ul>
 
   <ul>
