@@ -132,6 +132,38 @@ If an optional attribute, such as `meta`, is absent, the concatenation of attrib
 
 This hashing schema is deemed appropriate for use cases where a cross-implementation deterministic hash is needed, such as message deduplication and integrity validation. The collision probability offered by this hashing schema can be considered negligible. This is due to the deterministic concatenation order of the message attributes, coupled with using a SHA-2 (256-bit) hashing algorithm.
 
+## Test vectors
+
+Waku message hash computation:
+```
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = 0x010203045445535405060708
+message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = 0x73757065722d736563726574
+
+message_hash = 0x4fdde1099c9f77f6dae8147b6b3179aba1fc8e14a7bf35203fc253ee479f135f
+```
+
+Waku message hash computation (`meta` attribute not present):
+```
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = 0x010203045445535405060708
+message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = <not-present>
+
+message_hash = 0x87619d05e563521d9126749b45bd4cc2430df0607e77e23572d874ed9c1aaa62
+```
+
+Waku message hash computation (`payload` length 0):
+```
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = []
+message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = 0x73757065722d736563726574
+
+message_hash = 0xe1a9596237dbe2cc8aaf4b838c46a7052df6bc0d42ba214b998a8bfdbe8487d6
+```
+
 # Security Considerations
 
 ## Confidentiality, integrity, and authenticity
