@@ -101,7 +101,7 @@ waku/2/waku-9_shard-9/
 
 This indicates explicitly that the network traffic has been partitioned into 10 buckets.
 
-Besides named sharing, [51/WAKU2-RELAY-SHARDING](/spec/51) specifies two more sharing methods: static sharding and automatic sharding.
+Besides named sharding, [51/WAKU2-RELAY-SHARDING](/spec/51) specifies two more sharding methods: static sharding and automatic sharding.
 
 ## Content topics
 
