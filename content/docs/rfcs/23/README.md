@@ -91,7 +91,7 @@ This indicates that they are WakuMessages but for different domains completely.
 
 ### Topic sharding example
 
-The following is an example of named sharing, as specified in [51/WAKU2-RELAY-SHARDING](/spec/51).
+The following is an example of named sharding, as specified in [51/WAKU2-RELAY-SHARDING](/spec/51).
 
 ```
 waku/2/waku-9_shard-0/
