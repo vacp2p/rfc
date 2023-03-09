@@ -38,12 +38,9 @@ This document also covers discovery of topic shards.
 It is RECOMMENDED for App protocols to follow the naming structure detailed in [23/WAKU2-TOPICS](/spec/23/).
 With named sharding, managing discovery falls into the responsibility of apps.
 
-The default Waku pubsub topic `/waku/2/default-waku` can be seen as a named shard available to all app protocols.
+The default Waku pubsub topic `/waku/2/default-waku/proto` can be seen as a named shard available to all app protocols.
 
-> *Note*: Future versions of this document are planned to give more guidance with respect to discovery via
-[33/WAKU2-DISCV5](/spec/33/),
-[DNS discovery](https://eips.ethereum.org/EIPS/eip-1459),
-and inter-mesh discovery via gossipsub control messages (also using circuit relay).
+
 
 From an app protocol point of view, a subscription to a content topic `waku2/xxx` on a shard named /mesh/v1.1.1/xxx would look like:
 
@@ -216,6 +213,22 @@ We will add more on security considerations in future versions of this document.
 The strength of receiver anonymity, i.e. topic receiver unlinkablity,
 depends on the number of content topics (`k`) that get mapped onto a single pubsub topic (shard).
 For *named* and *static* sharding this responsibility is at the app protocol layer.
+
+## Default Topic
+
+Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason,
+e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).
+
+Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
+See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
+
+Using another pubsub topic might lead to
+
+- weaker metadata protection
+- connectivity problems if there are not enough nodes within the respective pubsub mesh
+- store nodes might not store messages for the chosen pubsub topic
+
+Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.
 
 # Copyright
 
