@@ -219,7 +219,7 @@ For *named* and *static* sharding this responsibility is at the app protocol lay
 Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
 e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).
 
-Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
+Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
 See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
 
 Using another pubsub topic might lead to
