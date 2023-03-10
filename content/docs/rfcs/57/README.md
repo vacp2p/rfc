@@ -4,7 +4,7 @@ title: 57/STATUS-Simple-Scaling
 name: Status Simple Scaling
 status: raw
 category: Informational
-tags: `waku/application`
+tags: waku/application
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
