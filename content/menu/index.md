@@ -8,7 +8,7 @@ bookMenuLevels: 1
   - [24/STATUS-CURATION]({{< relref "/docs/rfcs/24/README.md" >}})
   - [28/STATUS-FEATURING]({{< relref "/docs/rfcs/28/README.md" >}})
   - [31/WAKU2-ENR]({{< relref "/docs/rfcs/31/README.md" >}})
-  - [32/RLN-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
+  - [32/RLN-V1-SPEC]({{< relref "/docs/rfcs/32/README.md" >}})
   - [34/WAKU2-PEER-EXCHANGE]({{< relref "/docs/rfcs/34/README.md" >}})
   - [35/WAKU2-NOISE]({{< relref "/docs/rfcs/35/README.md" >}})
   - [37/WAKU2-NOISE-SESSIONS]({{< relref "/docs/rfcs/37/README.md" >}})
