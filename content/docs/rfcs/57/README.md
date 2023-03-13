@@ -268,6 +268,9 @@ Nodes can request history messages via the [13/WAKU2-STORE](/spec/13/).
 The store service is not limited to a Status fleet.
 Anybody can run a Waku Archive node in the Status shards.
 
+> *Note*: There is no specification for discovering archive nodes associated with specific shards yet.
+Nodes expect archive nodes to store all messages, regardless of shard association.
+
 The recommendation for the allocation of archive nodes to shards is similar to the
 allocation of infrastructure nodes to shards described above.
 In fact, the archive service can be offered by infrastructure nodes.
