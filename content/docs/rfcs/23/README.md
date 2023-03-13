@@ -3,94 +3,86 @@ slug: 23
 title: 23/WAKU2-TOPICS
 name: Waku v2 Topic Usage Recommendations
 status: draft
+category: Informational
 editor: Oskar Thoren <oskar@status.im>
 contributors:
   - Hanno Cornelius <hanno@status.im>
+  - Daniel Kaiser <danielkaiser@status.im>
 ---
 
-This document outlines recommended usage of topics in Waku v2.
+This document outlines recommended usage of topic names in Waku v2.
 In [10/WAKU2 spec](/spec/10) there are two types of topics:
 
-- PubSub topics, used for routing
+- pubsub topics, used for routing
 - Content topics, used for content-based filtering
 
-## PubSub topics
 
-PubSub topics are used for routing of messages, see [11/WAKU2-RELAY](/spec/11) spec for more details of how this routing works.
+## Pubsub Topics
 
-As written in [10/WAKU2 spec](/spec/10) there is a default PubSub topic:
+Pubsub topics are used for routing of messages (see [11/WAKU2-RELAY](/spec/11)),
+and can be named implicitly by Waku sharding (see [51/WAKU2-RELAY-SHARDING](/spec/51)).
+This document comprises recommendations for explicitly naming pubsub topics (e.g. when choosing *named sharding* as specified in [51/WAKU2-RELAY-SHARDING](/spec/51)).
+
+### Pubsub Topic Format
+
+Pubsub topics SHOULD follow the following structure:
+
+`/waku/2/{topic-name}`
+
+This namespaced structure makes compatibility, discoverability, and automatic handling of new topics easier.
+
+The first two parts indicate
+
+1) it relates to the Waku protocol domain, and
+2) the version is 2.
+
+If applicable, it is RECOMMENDED to structure `{topic-name}` in a hierarchical way as well.
+
+> *Note*: In previous versions of this document, the structure was `/waku/2/{topic-name}/{encoding}`.
+The now deprecated `/{encoding}` was always set to `/proto`,
+which indicated that the [data field](/spec/11/#protobuf-definition) in pubsub is serialized/encoded as protobuf.
+The inspiration for this format was taken from
+[Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages).
+However, because the payload of messages transmitted over [11/WAKU2-RELAY](/spec/11) must be a [14/WAKU2-MESSAGE](/spec/14),
+which specifies the wire format as protobuf,`/proto` is the only valid encoding.
+This makes the `/proto` indication obsolete.
+The encoding of the `payload` field of a Waku Message is indicated by the `/{encoding}` part of the content topic name.
+Specifying an encoding is only significant for the actual payload/data field.
+Waku preserves this option by allowing to specify an encoding for the WakuMessage payload field as part of the content topic name.
+
+### Default PubSub Topic
+
+The Waku v2 default pubsub topic is:
 
 `/waku/2/default-waku/proto`
 
-This indicates that
+The `{topic name}` part is `default-waku/proto`, which indicates it is default topic for exchanging WakuMessages;
+`/proto` remains for backwards compatibility.
 
-1) It relates to the Waku problem domain
-2) version is 2
-3) `default-waku` indicates that it is the default topic for exchanging WakuMessages
-4) that the [data field](/spec/11/#protobuf-definition) in PubSub is serialized/encoded as protobuf as determined by WakuMessage
+### Application Specific Names
 
-### PubSub topic format
-
-PubSub topics SHOULD follow the following structure:
-
-`/waku/2/{topic-name}/{encoding}`
-
-This namespaced structure makes things like compatibility and discoverability and automatic handling of new topics easier.
-For example, if the encoding of the payload is changed, compression is introduced, etc.
-
-For more on this format of PubSub topics, see [Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages) where inspiration for this format was taken from.
-
-### Default PubSub topic
-
-Unless there's a good reason, the default PubSub topic SHOULD be used for all protocols.
-However, in certain situations other topics MAY be used.
-
-Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
-See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
-
-If you use another PubSub topic, be aware that:
-
-- Metadata protection might be weakened
-- Nodes subscribing to other topics might not be connected to the rest of the network
-- Other nodes in the network might not subscribe and relay on your given PubSub topic
-- Store nodes might not store messages for your given PubSub topic
-
-This means you are likely to have to run your own full nodes which may make your application less robust.
-
-Below we outline some scenarios where this might apply.
-
-### Separation of two applications example
-
-Let's say we have two different topics that are both experience heavy traffic but are completely separate in terms of problem domain and infrastructure.
-This can be segregated into:
+Larger apps can segregate their pubsub meshes using topics named like:
 
 ```
-/waku/2/status/proto
-/waku/2/walletconnect/proto
+/waku/2/status/
+/waku/2/walletconnect/
 ```
 
-This indicates that they are WakuMessages but for different domains completely.
+This indicates that these networks carry WakuMessages, but for different domains completely.
 
-### Topic sharding example
+### Named Topic Sharding Example
 
-Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic.
-Here's an example of what this might look like:
+The following is an example of named sharding, as specified in [51/WAKU2-RELAY-SHARDING](/spec/51).
 
 ```
-waku/2/waku-9_shard-0/proto
+waku/2/waku-9_shard-0/
 ...
-waku/2/waku-9_shard-9/proto
+waku/2/waku-9_shard-9/
 ```
 
 This indicates explicitly that the network traffic has been partitioned into 10 buckets.
 
-### Compression example
-
-Not yet implemented, but would be easy to add with:
-
-`/waku/2/default-waku/proto_snappy`
-
-## Content topics
+## Content Topics
 
 The other type of topic that exists in Waku v2 is a content topic.
 This is used for content based filtering.
@@ -105,7 +97,7 @@ and only want to pull down messages that match this given content topic.
 Since all messages are relayed using the relay protocol regardless of content topic,
 you MAY use any content topic you wish without impacting how messages are relayed.
 
-### Content topic format
+### Content Topic Format
 
 The format for content topics is as follows:
 
@@ -116,21 +108,20 @@ As an example, here's the content topic used for an upcoming testnet:
 
 `/toychat/2/huilong/proto`
 
-## Using content topics for your application
+### Content Topic Naming Recommendations
 
-Make sure you have a unique application-name to avoid conflicting issues with other protocols.
-
-If you have different versions of your protocol, this can be specified in the version field.
-
-The name of the content topic is up to your application and depends on the problem domain, how you want to separate content, what the bandwidth and privacy guarantees are, etc.
-
+Application names should be unique to avoid conflicting issues with other protocols.
+Applications should specify their version (if applicable) in the version field.
+The `{content-topic-name}` portion of the content topic is up to the application,
+and depends on the problem domain.
+It can be hierarchical, for instance to separate content, or to indicate different bandwidth and privacy guarantees.
 The encoding field indicates the serialization/encoding scheme for the [WakuMessage payload](/spec/14/#payloads) field.
 
 ## Differences with Waku v1
 
 In [6/WAKU1](/spec/6) there is no actual routing.
 All messages are sent to all other nodes.
-This means that we are implicitly using the same PubSub topic that would be something like:
+This means that we are implicitly using the same pubsub topic that would be something like:
 
 ```
 /waku/1/default-waku/rlp
@@ -167,20 +158,13 @@ Copyright and related rights waived via
 
 # References
 
-1. [10/WAKU2 spec](/spec/10)
-
-2. [11/WAKU2-RELAY](/spec/11)
-
-3. [Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages)
-
-4. [14/WAKU2-MESSAGE spec](/spec/14)
-
-5. [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
-
-6. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
-
-7. [6/WAKU1](/spec/6)
-
-8. [15/WAKU-BRIDGE](/spec/15)
-
-9. [26/WAKU-PAYLOAD](/spec/26)
+* [10/WAKU2 spec](/spec/10)
+* [11/WAKU2-RELAY](/spec/11)
+* [51/WAKU2-RELAY-SHARDING](/spec/51)
+* [Ethereum 2 P2P spec](https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages)
+* [14/WAKU2-MESSAGE spec](/spec/14)
+* [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
+* [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+* [6/WAKU1](/spec/6)
+* [15/WAKU-BRIDGE](/spec/15)
+* [26/WAKU-PAYLOAD](/spec/26)
