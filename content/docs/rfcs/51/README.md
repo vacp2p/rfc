@@ -123,7 +123,7 @@ We will update [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once th
 
 This document specifies two ways of indicating shard cluster participation.
 The index list SHOULD be used for nodes that participante in fewer than 64 shards,
-the bit vector representation SHOULD be used for nodes participanting in 64 or more shards.
+the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
 
 ### Index List
 
