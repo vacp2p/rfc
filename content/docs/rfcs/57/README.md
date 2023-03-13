@@ -210,10 +210,14 @@ We could improve on this in the future, and research the applicability of PIR (p
 
 # Infrastructure Shards
 
+Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see [30/ADAPTIVE-NODES](/spec/30/)).
+To maximise scaling, relaying of specific message types can be dedicated to shards where only infrastructure nodes with very strong resource profiles relay messages.
+This comes as a trade-off to decentralization.
+
 ## Control Message Shards
 
 To get the maximum scaling for select large communities for the Status scaling MVP,
-control messages that cause significant load (at a high user number) SHOULD be moved to a separate control message shard.
+specific control messages that cause significant load (at a high user number) SHOULD be moved to a separate control message shard.
 These control messages comprise:
 
 * community description
@@ -237,8 +241,8 @@ The Status CC community uses shard `897` as its media shard.
 
 ## Infrastructure-focused Community
 
-Large communities MAY choose to mainly rely on infrastructure nodes for all message transfers (not limited to control, and media messages).
-Desktop clients of such communities should use light protocols as the default for media shards.
+Large communities MAY choose to mainly rely on infrastructure nodes for *all* message transfers (not limited to control, and media messages).
+Desktop clients of such communities should use light protocols as the default.
 Strong Desktop clients MAY opt in to support the relay network.
 
 > *Note*: This is not planned for the MVP.
