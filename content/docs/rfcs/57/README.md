@@ -244,12 +244,15 @@ Strong Desktop clients MAY opt in to support the relay network.
 > *Note*: This is not planned for the MVP.
 
 
-# Light Clients
+# Light Protocols
 
-Light clients can use the use light protocols to save bandwidth,
+Light protocols may be used to save bandwidth,
 at the (global) cost of not contributing to the network.
+Using light protocols is RECOMMENDED for resource restricted nodes,
+e.g. browsers,
+and devices that (temporarily) have a low bandwidth connection or a connection with usage-based billing.
 
-These light protocols are
+Light protocols comprise
 
 * [19/WAKU2-LIGHTPUSH](/spec/19/) for sending messages
 * [12/WAKU2-FILTER](/spec/12/) for requesting messages with specific attributes
