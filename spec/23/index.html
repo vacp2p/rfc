@@ -5,19 +5,11 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
-PubSub topics, used for routing Content topics, used for content-based filtering PubSub topics # PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
-As written in 10/WAKU2 spec there is a default PubSub topic:
-/waku/2/default-waku/proto
-This indicates that
-It relates to the Waku problem domain version is 2 default-waku indicates that it is the default topic for exchanging WakuMessages that the data field in PubSub is serialized/encoded as protobuf as determined by WakuMessage PubSub topic format # PubSub topics SHOULD follow the following structure:">
+<meta name="description" content="This document outlines recommended usage of topic names in Waku v2. In 10/WAKU2 spec there are two types of topics:
+pubsub topics, used for routing Content topics, used for content-based filtering Pubsub Topics # Pubsub topics are used for routing of messages (see 11/WAKU2-RELAY), and can be named implicitly by Waku sharding (see 51/WAKU2-RELAY-SHARDING). This document comprises recommendations for explicitly naming pubsub topics (e.g. when choosing named sharding as specified in 51/WAKU2-RELAY-SHARDING).">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="23/WAKU2-TOPICS" />
-<meta property="og:description" content="This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
-PubSub topics, used for routing Content topics, used for content-based filtering PubSub topics # PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
-As written in 10/WAKU2 spec there is a default PubSub topic:
-/waku/2/default-waku/proto
-This indicates that
-It relates to the Waku problem domain version is 2 default-waku indicates that it is the default topic for exchanging WakuMessages that the data field in PubSub is serialized/encoded as protobuf as determined by WakuMessage PubSub topic format # PubSub topics SHOULD follow the following structure:" />
+<meta property="og:description" content="This document outlines recommended usage of topic names in Waku v2. In 10/WAKU2 spec there are two types of topics:
+pubsub topics, used for routing Content topics, used for content-based filtering Pubsub Topics # Pubsub topics are used for routing of messages (see 11/WAKU2-RELAY), and can be named implicitly by Waku sharding (see 51/WAKU2-RELAY-SHARDING). This document comprises recommendations for explicitly naming pubsub topics (e.g. when choosing named sharding as specified in 51/WAKU2-RELAY-SHARDING)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/23/" /><meta property="article:section" content="docs" />
 
@@ -27,7 +19,7 @@ It relates to the Waku problem domain version is 2 default-waku indicates that i
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.6d779d147ed1ef6ff4ac5e760188eac0e3a849dcf129f62b9ec9adfe7faf381b.js" integrity="sha256-bXedFH7R72/0rF52AYjqwOOoSdzxKfYrnsmt/n&#43;vOBs="></script>
+<script defer src="/en.search.min.ece100610276d25d84a12b9e12616d52dbfce326dd8be197f66b39c186127da0.js" integrity="sha256-7OEAYQJ20l2EoSueEmFtUtv84ybdi&#43;GX9ms5wYYSfaA="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -180,21 +172,20 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#pubsub-topics">PubSub topics</a>
+    <li><a href="#pubsub-topics">Pubsub Topics</a>
       <ul>
-        <li><a href="#pubsub-topic-format">PubSub topic format</a></li>
-        <li><a href="#default-pubsub-topic">Default PubSub topic</a></li>
-        <li><a href="#separation-of-two-applications-example">Separation of two applications example</a></li>
-        <li><a href="#topic-sharding-example">Topic sharding example</a></li>
-        <li><a href="#compression-example">Compression example</a></li>
+        <li><a href="#pubsub-topic-format">Pubsub Topic Format</a></li>
+        <li><a href="#default-pubsub-topic">Default PubSub Topic</a></li>
+        <li><a href="#application-specific-names">Application Specific Names</a></li>
+        <li><a href="#named-topic-sharding-example">Named Topic Sharding Example</a></li>
       </ul>
     </li>
-    <li><a href="#content-topics">Content topics</a>
+    <li><a href="#content-topics">Content Topics</a>
       <ul>
-        <li><a href="#content-topic-format">Content topic format</a></li>
+        <li><a href="#content-topic-format">Content Topic Format</a></li>
+        <li><a href="#content-topic-naming-recommendations">Content Topic Naming Recommendations</a></li>
       </ul>
     </li>
-    <li><a href="#using-content-topics-for-your-application">Using content topics for your application</a></li>
     <li><a href="#differences-with-waku-v1">Differences with Waku v1</a>
       <ul>
         <li><a href="#bridging-waku-v1-and-waku-v2">Bridging Waku v1 and Waku v2</a></li>
@@ -243,81 +234,77 @@ https://github.com/alex-shpak/hugo-book
               
               Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a>
           
+              ,
+              Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a>
+          
       </li>
       
-  </ul><p>This document outlines recommended usage of topics in Waku v2.
+  </ul><p>This document outlines recommended usage of topic names in Waku v2.
 In <a href="/spec/10">10/WAKU2 spec</a> there are two types of topics:</p>
 <ul>
-<li>PubSub topics, used for routing</li>
+<li>pubsub topics, used for routing</li>
 <li>Content topics, used for content-based filtering</li>
 </ul>
 <h2 id="pubsub-topics">
-  PubSub topics
+  Pubsub Topics
   <a class="anchor" href="#pubsub-topics">#</a>
 </h2>
-<p>PubSub topics are used for routing of messages, see <a href="/spec/11">11/WAKU2-RELAY</a> spec for more details of how this routing works.</p>
-<p>As written in <a href="/spec/10">10/WAKU2 spec</a> there is a default PubSub topic:</p>
-<p><code>/waku/2/default-waku/proto</code></p>
-<p>This indicates that</p>
-<ol>
-<li>It relates to the Waku problem domain</li>
-<li>version is 2</li>
-<li><code>default-waku</code> indicates that it is the default topic for exchanging WakuMessages</li>
-<li>that the <a href="/spec/11/#protobuf-definition">data field</a> in PubSub is serialized/encoded as protobuf as determined by WakuMessage</li>
-</ol>
+<p>Pubsub topics are used for routing of messages (see <a href="/spec/11">11/WAKU2-RELAY</a>),
+and can be named implicitly by Waku sharding (see <a href="/spec/51">51/WAKU2-RELAY-SHARDING</a>).
+This document comprises recommendations for explicitly naming pubsub topics (e.g. when choosing <em>named sharding</em> as specified in <a href="/spec/51">51/WAKU2-RELAY-SHARDING</a>).</p>
 <h3 id="pubsub-topic-format">
-  PubSub topic format
+  Pubsub Topic Format
   <a class="anchor" href="#pubsub-topic-format">#</a>
 </h3>
-<p>PubSub topics SHOULD follow the following structure:</p>
-<p><code>/waku/2/{topic-name}/{encoding}</code></p>
-<p>This namespaced structure makes things like compatibility and discoverability and automatic handling of new topics easier.
-For example, if the encoding of the payload is changed, compression is introduced, etc.</p>
-<p>For more on this format of PubSub topics, see <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a> where inspiration for this format was taken from.</p>
+<p>Pubsub topics SHOULD follow the following structure:</p>
+<p><code>/waku/2/{topic-name}</code></p>
+<p>This namespaced structure makes compatibility, discoverability, and automatic handling of new topics easier.</p>
+<p>The first two parts indicate</p>
+<ol>
+<li>it relates to the Waku protocol domain, and</li>
+<li>the version is 2.</li>
+</ol>
+<p>If applicable, it is RECOMMENDED to structure <code>{topic-name}</code> in a hierarchical way as well.</p>
+<blockquote>
+<p><em>Note</em>: In previous versions of this document, the structure was <code>/waku/2/{topic-name}/{encoding}</code>.
+The now deprecated <code>/{encoding}</code> was always set to <code>/proto</code>,
+which indicated that the <a href="/spec/11/#protobuf-definition">data field</a> in pubsub is serialized/encoded as protobuf.
+The inspiration for this format was taken from
+<a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a>.
+However, because the payload of messages transmitted over <a href="/spec/11">11/WAKU2-RELAY</a> must be a <a href="/spec/14">14/WAKU2-MESSAGE</a>,
+which specifies the wire format as protobuf,<code>/proto</code> is the only valid encoding.
+This makes the <code>/proto</code> indication obsolete.
+The encoding of the <code>payload</code> field of a Waku Message is indicated by the <code>/{encoding}</code> part of the content topic name.
+Specifying an encoding is only significant for the actual payload/data field.
+Waku preserves this option by allowing to specify an encoding for the WakuMessage payload field as part of the content topic name.</p>
+</blockquote>
 <h3 id="default-pubsub-topic">
-  Default PubSub topic
+  Default PubSub Topic
   <a class="anchor" href="#default-pubsub-topic">#</a>
 </h3>
-<p>Unless there&rsquo;s a good reason, the default PubSub topic SHOULD be used for all protocols.
-However, in certain situations other topics MAY be used.</p>
-<p>Using a single PubSub topic ensures a connected network, as well some degree of metadata protection.
-See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkability</a>.</p>
-<p>If you use another PubSub topic, be aware that:</p>
-<ul>
-<li>Metadata protection might be weakened</li>
-<li>Nodes subscribing to other topics might not be connected to the rest of the network</li>
-<li>Other nodes in the network might not subscribe and relay on your given PubSub topic</li>
-<li>Store nodes might not store messages for your given PubSub topic</li>
-</ul>
-<p>This means you are likely to have to run your own full nodes which may make your application less robust.</p>
-<p>Below we outline some scenarios where this might apply.</p>
-<h3 id="separation-of-two-applications-example">
-  Separation of two applications example
-  <a class="anchor" href="#separation-of-two-applications-example">#</a>
+<p>The Waku v2 default pubsub topic is:</p>
+<p><code>/waku/2/default-waku/proto</code></p>
+<p>The <code>{topic name}</code> part is <code>default-waku/proto</code>, which indicates it is default topic for exchanging WakuMessages;
+<code>/proto</code> remains for backwards compatibility.</p>
+<h3 id="application-specific-names">
+  Application Specific Names
+  <a class="anchor" href="#application-specific-names">#</a>
 </h3>
-<p>Let&rsquo;s say we have two different topics that are both experience heavy traffic but are completely separate in terms of problem domain and infrastructure.
-This can be segregated into:</p>
-<pre tabindex="0"><code>/waku/2/status/proto
-/waku/2/walletconnect/proto
-</code></pre><p>This indicates that they are WakuMessages but for different domains completely.</p>
-<h3 id="topic-sharding-example">
-  Topic sharding example
-  <a class="anchor" href="#topic-sharding-example">#</a>
+<p>Larger apps can segregate their pubsub meshes using topics named like:</p>
+<pre tabindex="0"><code>/waku/2/status/
+/waku/2/walletconnect/
+</code></pre><p>This indicates that these networks carry WakuMessages, but for different domains completely.</p>
+<h3 id="named-topic-sharding-example">
+  Named Topic Sharding Example
+  <a class="anchor" href="#named-topic-sharding-example">#</a>
 </h3>
-<p>Topic sharding is currently not supported by default, but is planned for the future in order to deal with increased network traffic.
-Here&rsquo;s an example of what this might look like:</p>
-<pre tabindex="0"><code>waku/2/waku-9_shard-0/proto
+<p>The following is an example of named sharding, as specified in <a href="/spec/51">51/WAKU2-RELAY-SHARDING</a>.</p>
+<pre tabindex="0"><code>waku/2/waku-9_shard-0/
 ...
-waku/2/waku-9_shard-9/proto
+waku/2/waku-9_shard-9/
 </code></pre><p>This indicates explicitly that the network traffic has been partitioned into 10 buckets.</p>
-<h3 id="compression-example">
-  Compression example
-  <a class="anchor" href="#compression-example">#</a>
-</h3>
-<p>Not yet implemented, but would be easy to add with:</p>
-<p><code>/waku/2/default-waku/proto_snappy</code></p>
 <h2 id="content-topics">
-  Content topics
+  Content Topics
   <a class="anchor" href="#content-topics">#</a>
 </h2>
 <p>The other type of topic that exists in Waku v2 is a content topic.
@@ -331,7 +318,7 @@ and only want to pull down messages that match this given content topic.</p>
 <p>Since all messages are relayed using the relay protocol regardless of content topic,
 you MAY use any content topic you wish without impacting how messages are relayed.</p>
 <h3 id="content-topic-format">
-  Content topic format
+  Content Topic Format
   <a class="anchor" href="#content-topic-format">#</a>
 </h3>
 <p>The format for content topics is as follows:</p>
@@ -339,21 +326,23 @@ you MAY use any content topic you wish without impacting how messages are relaye
 <p>The name of a content topic is application-specific.
 As an example, here&rsquo;s the content topic used for an upcoming testnet:</p>
 <p><code>/toychat/2/huilong/proto</code></p>
-<h2 id="using-content-topics-for-your-application">
-  Using content topics for your application
-  <a class="anchor" href="#using-content-topics-for-your-application">#</a>
-</h2>
-<p>Make sure you have a unique application-name to avoid conflicting issues with other protocols.</p>
-<p>If you have different versions of your protocol, this can be specified in the version field.</p>
-<p>The name of the content topic is up to your application and depends on the problem domain, how you want to separate content, what the bandwidth and privacy guarantees are, etc.</p>
-<p>The encoding field indicates the serialization/encoding scheme for the <a href="/spec/14/#payloads">WakuMessage payload</a> field.</p>
+<h3 id="content-topic-naming-recommendations">
+  Content Topic Naming Recommendations
+  <a class="anchor" href="#content-topic-naming-recommendations">#</a>
+</h3>
+<p>Application names should be unique to avoid conflicting issues with other protocols.
+Applications should specify their version (if applicable) in the version field.
+The <code>{content-topic-name}</code> portion of the content topic is up to the application,
+and depends on the problem domain.
+It can be hierarchical, for instance to separate content, or to indicate different bandwidth and privacy guarantees.
+The encoding field indicates the serialization/encoding scheme for the <a href="/spec/14/#payloads">WakuMessage payload</a> field.</p>
 <h2 id="differences-with-waku-v1">
   Differences with Waku v1
   <a class="anchor" href="#differences-with-waku-v1">#</a>
 </h2>
 <p>In <a href="/spec/6">6/WAKU1</a> there is no actual routing.
 All messages are sent to all other nodes.
-This means that we are implicitly using the same PubSub topic that would be something like:</p>
+This means that we are implicitly using the same pubsub topic that would be something like:</p>
 <pre tabindex="0"><code>/waku/1/default-waku/rlp
 </code></pre><p>Topics in Waku v1 correspond to Content Topics in Waku v2.</p>
 <h3 id="bridging-waku-v1-and-waku-v2">
@@ -381,35 +370,18 @@ For example:</p>
   References
   <a class="anchor" href="#references">#</a>
 </h1>
-<ol>
-<li>
-<p><a href="/spec/10">10/WAKU2 spec</a></p>
-</li>
-<li>
-<p><a href="/spec/11">11/WAKU2-RELAY</a></p>
-</li>
-<li>
-<p><a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a></p>
-</li>
-<li>
-<p><a href="/spec/14">14/WAKU2-MESSAGE spec</a></p>
-</li>
-<li>
-<p><a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a></p>
-</li>
-<li>
-<p><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a></p>
-</li>
-<li>
-<p><a href="/spec/6">6/WAKU1</a></p>
-</li>
-<li>
-<p><a href="/spec/15">15/WAKU-BRIDGE</a></p>
-</li>
-<li>
-<p><a href="/spec/26">26/WAKU-PAYLOAD</a></p>
-</li>
-</ol>
+<ul>
+<li><a href="/spec/10">10/WAKU2 spec</a></li>
+<li><a href="/spec/11">11/WAKU2-RELAY</a></li>
+<li><a href="/spec/51">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/phase0/p2p-interface.md#topics-and-messages">Ethereum 2 P2P spec</a></li>
+<li><a href="/spec/14">14/WAKU2-MESSAGE spec</a></li>
+<li><a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/6">6/WAKU1</a></li>
+<li><a href="/spec/15">15/WAKU-BRIDGE</a></li>
+<li><a href="/spec/26">26/WAKU-PAYLOAD</a></li>
+</ul>
 </article>
  
       
@@ -446,21 +418,20 @@ For example:</p>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#pubsub-topics">PubSub topics</a>
+    <li><a href="#pubsub-topics">Pubsub Topics</a>
       <ul>
-        <li><a href="#pubsub-topic-format">PubSub topic format</a></li>
-        <li><a href="#default-pubsub-topic">Default PubSub topic</a></li>
-        <li><a href="#separation-of-two-applications-example">Separation of two applications example</a></li>
-        <li><a href="#topic-sharding-example">Topic sharding example</a></li>
-        <li><a href="#compression-example">Compression example</a></li>
+        <li><a href="#pubsub-topic-format">Pubsub Topic Format</a></li>
+        <li><a href="#default-pubsub-topic">Default PubSub Topic</a></li>
+        <li><a href="#application-specific-names">Application Specific Names</a></li>
+        <li><a href="#named-topic-sharding-example">Named Topic Sharding Example</a></li>
       </ul>
     </li>
-    <li><a href="#content-topics">Content topics</a>
+    <li><a href="#content-topics">Content Topics</a>
       <ul>
-        <li><a href="#content-topic-format">Content topic format</a></li>
+        <li><a href="#content-topic-format">Content Topic Format</a></li>
+        <li><a href="#content-topic-naming-recommendations">Content Topic Naming Recommendations</a></li>
       </ul>
     </li>
-    <li><a href="#using-content-topics-for-your-application">Using content topics for your application</a></li>
     <li><a href="#differences-with-waku-v1">Differences with Waku v1</a>
       <ul>
         <li><a href="#bridging-waku-v1-and-waku-v2">Bridging Waku v1 and Waku v2</a></li>

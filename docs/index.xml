@@ -174,12 +174,8 @@ Design # The chat protocol enables sending and receiving messages in a chat room
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/23/</guid>
-      <description>This document outlines recommended usage of topics in Waku v2. In 10/WAKU2 spec there are two types of topics:
-PubSub topics, used for routing Content topics, used for content-based filtering PubSub topics # PubSub topics are used for routing of messages, see 11/WAKU2-RELAY spec for more details of how this routing works.
-As written in 10/WAKU2 spec there is a default PubSub topic:
-/waku/2/default-waku/proto
-This indicates that
-It relates to the Waku problem domain version is 2 default-waku indicates that it is the default topic for exchanging WakuMessages that the data field in PubSub is serialized/encoded as protobuf as determined by WakuMessage PubSub topic format # PubSub topics SHOULD follow the following structure:</description>
+      <description>This document outlines recommended usage of topic names in Waku v2. In 10/WAKU2 spec there are two types of topics:
+pubsub topics, used for routing Content topics, used for content-based filtering Pubsub Topics # Pubsub topics are used for routing of messages (see 11/WAKU2-RELAY), and can be named implicitly by Waku sharding (see 51/WAKU2-RELAY-SHARDING). This document comprises recommendations for explicitly naming pubsub topics (e.g. when choosing named sharding as specified in 51/WAKU2-RELAY-SHARDING).</description>
     </item>
     
     <item>

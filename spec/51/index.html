@@ -21,7 +21,7 @@ Background and Motivation # Unstructured P2P networks are more robust and resili
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.6d779d147ed1ef6ff4ac5e760188eac0e3a849dcf129f62b9ec9adfe7faf381b.js" integrity="sha256-bXedFH7R72/0rF52AYjqwOOoSdzxKfYrnsmt/n&#43;vOBs="></script>
+<script defer src="/en.search.min.ece100610276d25d84a12b9e12616d52dbfce326dd8be197f66b39c186127da0.js" integrity="sha256-7OEAYQJ20l2EoSueEmFtUtv84ybdi&#43;GX9ms5wYYSfaA="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -183,6 +183,7 @@ https://github.com/alex-shpak/hugo-book
 
   <ul>
     <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+    <li><a href="#default-topic">Default Topic</a></li>
   </ul>
 </nav>
 
@@ -251,16 +252,9 @@ This document also covers discovery of topic shards.</p>
   <a class="anchor" href="#named-sharding">#</a>
 </h1>
 <p><em>Named sharding</em> offers apps to freely choose pubsub topic names.
-App protocols SHOULD follow the naming structure detailed in <a href="/spec/23/">23/WAKU2-TOPICS</a>.
+It is RECOMMENDED for App protocols to follow the naming structure detailed in <a href="/spec/23/">23/WAKU2-TOPICS</a>.
 With named sharding, managing discovery falls into the responsibility of apps.</p>
 <p>The default Waku pubsub topic <code>/waku/2/default-waku/proto</code> can be seen as a named shard available to all app protocols.</p>
-<blockquote>
-<p><em>Note</em>: Future versions of this document are planned to give more guidance with respect to discovery via
-<a href="/spec/33/">33/WAKU2-DISCV5</a>,
-<a href="https://eips.ethereum.org/EIPS/eip-1459">DNS discovery</a>,
-and inter-mesh discovery via gossipsub control messages (also using circuit relay).
-It might make sense to deprecate <a href="/spec/23/">23/WAKU2-TOPICS</a> as a separate spec and merge it here.</p>
-</blockquote>
 <p>From an app protocol point of view, a subscription to a content topic <code>waku2/xxx</code> on a shard named /mesh/v1.1.1/xxx would look like:</p>
 <p><code>subscribe(&quot;/waku2/xxx&quot;, &quot;/mesh/v1.1.1/xxx&quot;)</code></p>
 <h1 id="static-sharding">
@@ -318,13 +312,13 @@ shard clusters are divided into ranges:</p>
 but choosing shards in the global cluster has a higher probability of sharing the shard with other apps.
 This offers k-anonymity and better connectivity, but comes at a higher bandwidth cost.</p>
 <p>The name of the pubsub topic corresponding to a given static shard is specified as</p>
-<p><code>/waku/2/static-rshard/&lt;shard_cluster_index&gt;/&lt;shard_number&gt;</code>,</p>
+<p><code>/waku/2/rs/&lt;shard_cluster_index&gt;/&lt;shard_number&gt;</code>,</p>
 <p>an example for the 2nd shard in the global shard cluster:</p>
-<p><code>/waku/2/static-rshard/0/2</code>.</p>
+<p><code>/waku/2/rs/0/2</code>.</p>
 <blockquote>
 <p><em>Note</em>: Because <em>all</em> shards distribute payload defined in <a href="spec/14/">14/WAKU2-MESSAGE</a> via <a href="https://developers.google.com/protocol-buffers/">protocol buffers</a>,
 the pubsub topic name does not explicitly add <code>/proto</code> to indicate protocol buffer encoding.
-We use <code>rshard</code> (as well as <code>rs</code> as the ENR key) to indicate these are relay shard clusters; further shard types might follow in the future.</p>
+We use <code>rs</code> to indicate these are <em>relay shard</em> clusters; further shard types might follow in the future.</p>
 </blockquote>
 <p>From an app point of view, a subscription to a content topic <code>waku2/xxx</code> on a static shard would look like:</p>
 <p><code>subscribe(&quot;/waku2/xxx&quot;, 43)</code></p>
@@ -456,6 +450,21 @@ We will add more on security considerations in future versions of this document.
 <p>The strength of receiver anonymity, i.e. topic receiver unlinkablity,
 depends on the number of content topics (<code>k</code>) that get mapped onto a single pubsub topic (shard).
 For <em>named</em> and <em>static</em> sharding this responsibility is at the app protocol layer.</p>
+<h2 id="default-topic">
+  Default Topic
+  <a class="anchor" href="#default-topic">#</a>
+</h2>
+<p>Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
+e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).</p>
+<p>Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
+See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkability</a>.</p>
+<p>Using another pubsub topic might lead to</p>
+<ul>
+<li>weaker metadata protection</li>
+<li>connectivity problems if there are not enough nodes within the respective pubsub mesh</li>
+<li>store nodes might not store messages for the chosen pubsub topic</li>
+</ul>
+<p>Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.</p>
 <h1 id="copyright">
   Copyright
   <a class="anchor" href="#copyright">#</a>
@@ -523,6 +532,7 @@ For <em>named</em> and <em>static</em> sharding this responsibility is at the ap
 
   <ul>
     <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+    <li><a href="#default-topic">Default Topic</a></li>
   </ul>
 </nav>
 
