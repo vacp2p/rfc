@@ -223,7 +223,7 @@ These control messages comprise:
 * sync profile picture
 
 The relay functionality of control messages shards SHOULD be provided by infrastructure nodes.
-Desktop clients should use light protocols as the default for media shards.
+Desktop clients should use light protocols as the default for control message shards.
 Strong Desktop clients MAY opt in to support the relay network.
 
 Each large community (in the index range of `16 - 127`) can get its dedicated control message shard (in the index range `896 - 1023`) if deemed necessary.
