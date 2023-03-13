@@ -51,7 +51,7 @@ Content topics specified by application protocols can be distributed over these 
 The Status app protocols are assigned to shard cluster `16`,
 as defined in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/).
 
-[51/WAKU2-RELAY-SHARDING](/spec/51/) specifies three sharing methods.
+[51/WAKU2-RELAY-SHARDING](/spec/51/) specifies three sharding methods.
 This document uses *static sharding*, which leaves the distribution of content topics to application protocols,
 but takes care of shard discovery.
 
