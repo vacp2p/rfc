@@ -141,7 +141,7 @@ Example:
 
 | key    | value   |
 |---     |---      |
-| `rs`   | 16u16 &#124; 3u8 &#124; 13u16 &#124; 14u16 &#124; 45u16 &#124; |
+| `rs`   | 16u16 &#124; 3u8 &#124; 13u16 &#124; 14u16 &#124; 45u16 |
 
 This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
 
