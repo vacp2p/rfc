@@ -21,7 +21,7 @@ Background and Motivation # Unstructured P2P networks are more robust and resili
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.ece100610276d25d84a12b9e12616d52dbfce326dd8be197f66b39c186127da0.js" integrity="sha256-7OEAYQJ20l2EoSueEmFtUtv84ybdi&#43;GX9ms5wYYSfaA="></script>
+<script defer src="/en.search.min.a189a831bc3b976239ab9b51fefda6b6744ca39b38e61bfed42d8bb8a8927ec5.js" integrity="sha256-oYmoMbw7l2I5q5tR/v2mtnRMo5s45hv&#43;1C2LuKiSfsU="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -174,7 +174,12 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#discovery">Discovery</a></li>
+    <li><a href="#discovery">Discovery</a>
+      <ul>
+        <li><a href="#index-list">Index List</a></li>
+        <li><a href="#bit-vector">Bit Vector</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
@@ -344,7 +349,16 @@ For this reason, the current specification only supports a single shard cluster 
 In future versions, we will add further (hierarchical) discovery methods.
 We will update <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a> accordingly, once this RFC moves forward.</p>
 </blockquote>
-<p>The representation in the ENR is specified as follows.</p>
+<p>This document specifies two ways of indicating shard cluster participation.
+The index list SHOULD be used for nodes that participante in fewer than 64 shards,
+the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
+Nodes MUST NOT use both index list (<code>rs</code>) and bit vector (<code>rsv</code>) in a single ENR.
+ENRs with both <code>rs</code> and <code>rsv</code> keys SHOULD be ignored.
+Nodes MAY interprete <code>rs</code> in such ENRs, but MUST ignore <code>rsv</code>.</p>
+<h3 id="index-list">
+  Index List
+  <a class="anchor" href="#index-list">#</a>
+</h3>
 <table>
 <thead>
 <tr>
@@ -355,11 +369,52 @@ We will update <a href="https://rfc.vac.dev/spec/31/">31/WAKU2-ENR</a> according
 <tbody>
 <tr>
 <td><code>rs</code></td>
-<td>&lt;2-byte index&gt; | &lt;128-byte flag field&gt;</td>
+<td>&lt;2-byte shard cluster index&gt; | &lt;1-byte length&gt; |  &lt;2-byte shard index&gt;  | &hellip; | &lt;2-byte shard index&gt;</td>
 </tr>
 </tbody>
 </table>
 <p>The ENR key is <code>rs</code>.
+The value is comprised of</p>
+<ul>
+<li>a two-byte shard cluster index in network byte order, concatenated with</li>
+<li>a one-byte length field holding the number of shards in the given shard cluster, concatenated with</li>
+<li>two-byte shard indices in network byte order</li>
+</ul>
+<p>Example:</p>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rs</code></td>
+<td>16u16 | 3u8 | 13u16 | 14u16 | 45u16</td>
+</tr>
+</tbody>
+</table>
+<p>This example node is part of shards <code>13</code>, <code>14</code>, and <code>45</code> in the Status main-net shard cluster (index 16).</p>
+<h3 id="bit-vector">
+  Bit Vector
+  <a class="anchor" href="#bit-vector">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>key</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rsv</code></td>
+<td>&lt;2-byte shard cluster index&gt; | &lt;128-byte flag field&gt;</td>
+</tr>
+</tbody>
+</table>
+<p>The ENR key is <code>rsv</code>.
 The value is comprised of a two-byte shard cluster index in network byte order concatenated with a 128-byte wide bit vector.
 The bit vector indicates which shards of the respective shard cluster the node is part of.
 The right-most bit in the bit vector represents shard <code>0</code>, the left-most bit represents shard <code>1023</code>.
@@ -375,13 +430,14 @@ and <a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/v
 </thead>
 <tbody>
 <tr>
-<td><code>rs</code></td>
+<td><code>rsv</code></td>
 <td>16u16 | <code>0x[...]0000100000003000</code></td>
 </tr>
 </tbody>
 </table>
 <p>The <code>[...]</code> in the example indicates 120 <code>0</code> bytes.
-This example node is part of shards <code>13</code>, <code>14</code>, and <code>45</code> in the Status main-net shard cluster (index 16).</p>
+This example node is part of shards <code>13</code>, <code>14</code>, and <code>45</code> in the Status main-net shard cluster (index 16).
+(This is just for illustration purposes, a node that is only part of three shards should use the index list method specified above.)</p>
 <h1 id="automatic-sharding">
   Automatic Sharding
   <a class="anchor" href="#automatic-sharding">#</a>
@@ -523,7 +579,12 @@ See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkabil
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#discovery">Discovery</a></li>
+    <li><a href="#discovery">Discovery</a>
+      <ul>
+        <li><a href="#index-list">Index List</a></li>
+        <li><a href="#bit-vector">Bit Vector</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
