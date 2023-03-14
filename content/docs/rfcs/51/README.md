@@ -121,13 +121,40 @@ For this reason, the current specification only supports a single shard cluster 
 In future versions, we will add further (hierarchical) discovery methods.
 We will update [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once this RFC moves forward.
 
-The representation in the ENR is specified as follows.
+This document specifies two ways of indicating shard cluster participation.
+The index list SHOULD be used for nodes that participante in fewer than 64 shards,
+the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
+Nodes MUST NOT use both index list (`rs`) and bit vector (`rsv`) in a single ENR.
+ENRs with both `rs` and `rsv` keys SHOULD be ignored.
+Nodes MAY interprete `rs` in such ENRs, but MUST ignore `rsv`.
+
+### Index List
 
 | key    | value   |
 |---     |---      |
-| `rs`   | <2-byte index> &#124; <128-byte flag field>  |
+| `rs`   | <2-byte shard cluster index> &#124; <1-byte length> &#124;  <2-byte shard index>  &#124; ... &#124; <2-byte shard index>  |
 
 The ENR key is `rs`.
+The value is comprised of
+* a two-byte shard cluster index in network byte order, concatenated with
+* a one-byte length field holding the number of shards in the given shard cluster, concatenated with
+* two-byte shard indices in network byte order
+
+Example:
+
+| key    | value   |
+|---     |---      |
+| `rs`   | 16u16 &#124; 3u8 &#124; 13u16 &#124; 14u16 &#124; 45u16 |
+
+This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
+
+### Bit Vector
+
+| key    | value   |
+|---     |---      |
+| `rsv`   | <2-byte shard cluster index> &#124; <128-byte flag field>  |
+
+The ENR key is `rsv`.
 The value is comprised of a two-byte shard cluster index in network byte order concatenated with a 128-byte wide bit vector.
 The bit vector indicates which shards of the respective shard cluster the node is part of.
 The right-most bit in the bit vector represents shard `0`, the left-most bit represents shard `1023`.
@@ -138,10 +165,11 @@ Example:
 
 | key    | value   |
 |---     |---      |
-| `rs`   | 16u16 &#124; `0x[...]0000100000003000` |
+| `rsv`   | 16u16 &#124; `0x[...]0000100000003000` |
 
 The `[...]` in the example indicates 120 `0` bytes.
 This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
+(This is just for illustration purposes, a node that is only part of three shards should use the index list method specified above.)
 
 # Automatic Sharding
 
