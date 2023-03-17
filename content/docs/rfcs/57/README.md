@@ -1,4 +1,4 @@
----
+--
 slug: 57
 title: 57/STATUS-Simple-Scaling
 name: Status Simple Scaling
@@ -287,7 +287,9 @@ This allows the Status app to abstract from the discovery process and simply add
 
 # DoS Protection
 
-> *Note* : We will add more detail while this document is in PR state (before publishing the raw version).
+> *Note* :  DoS protection will be specified in a soon-to-follow update of this RFC (while in raw state).
+The following sketches basic approaches.
+DoS protection might move in a separate document and be referenced here.
 
 ## Statically-Mapped Communities
 
