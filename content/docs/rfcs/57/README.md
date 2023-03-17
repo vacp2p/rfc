@@ -98,7 +98,8 @@ which means: connect to the `"status/xyz"` content topic on shard `18` within th
 ## Status Communities
 
 In order to associate a community with a shard,
-the community description protobuf is extended as follows.
+the community description protobuf is extended by the field
+`uint16 relay_shard_index = 15`:
 
 ```protobuf
 
