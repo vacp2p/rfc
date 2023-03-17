@@ -94,6 +94,8 @@
   </url><url>
     <loc>https://rfc.vac.dev/spec/56/</loc>
   </url><url>
+    <loc>https://rfc.vac.dev/spec/57/</loc>
+  </url><url>
     <loc>https://rfc.vac.dev/spec/6/</loc>
   </url><url>
     <loc>https://rfc.vac.dev/spec/7/</loc>
@@ -123,6 +125,8 @@
     <loc>https://rfc.vac.dev/tags/waku-core-protocol/</loc>
   </url><url>
     <loc>https://rfc.vac.dev/tags/waku/anonymity/</loc>
+  </url><url>
+    <loc>https://rfc.vac.dev/tags/waku/application/</loc>
   </url><url>
     <loc>https://rfc.vac.dev/tags/waku/core-protocol/</loc>
   </url><url>

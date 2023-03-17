@@ -5,23 +5,18 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
-Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
-The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved.">
-<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="52/WAKU2-RELAY-STATIC-SHARD-ALLOC" />
-<meta property="og:description" content="Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
-Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
-The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://rfc.vac.dev/spec/52/" /><meta property="article:section" content="docs" />
+<meta name="description" content="">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="waku/application" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://rfc.vac.dev/tags/waku/application/" />
 
-
-
-<title>52/WAKU2-RELAY-STATIC-SHARD-ALLOC | Vac RFC</title>
+<title>waku/application | Vac RFC</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
 <script defer src="/en.search.min.569030df97a7a363e516338e1e5dd6d506564a23c5dfc6dc2d8153374fccde46.js" integrity="sha256-VpAw35eno2PlFjOOHl3W1QZWSiPF38bcLYFTN0/M3kY="></script>
+<link rel="alternate" type="application/rss+xml" href="https://rfc.vac.dev/tags/waku/application/index.xml" title="Vac RFC" />
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -79,7 +74,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
 <li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
 <li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
-<li><a href="/spec/52/"class=active>52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
 <li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
 </ul>
 </li>
@@ -159,7 +154,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>52/WAKU2-RELAY-STATIC-SHARD-ALLOC</strong>
+  <strong>waku/application</strong>
 
   <label for="toc-control">
     
@@ -172,9 +167,74 @@ https://github.com/alex-shpak/hugo-book
   
   <aside class="hidden clearfix">
     
+  <nav>
+  <ul>
   
-<nav id="TableOfContents"></nav>
-
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/an-optional-list-of-tags-not-standard/">an optional list of tags, not standard</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/logos/consensus/">logos/consensus</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/rln/">rln</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-application/">waku-application</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-core/">waku-core</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-core-protocol/">waku-core-protocol</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/anonymity/">waku/anonymity</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/application/">waku/application</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/core-protocol/">waku/core-protocol</a>
+          <span>3</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
 
 
   </aside>
@@ -184,180 +244,33 @@ https://github.com/alex-shpak/hugo-book
 
       
       
-<article class="markdown">
-  <h1 id="52waku2-relay-static-shard-alloc">
-  52/WAKU2-RELAY-STATIC-SHARD-ALLOC
-  <a class="anchor" href="#52waku2-relay-static-shard-alloc">#</a>
-</h1>
-
   
-      <h1 id="waku-v2-relay-static-shard-allocation">
-  Waku v2 Relay Static Shard Allocation
-  <a class="anchor" href="#waku-v2-relay-static-shard-allocation">#</a>
-</h1>
+  <article class="markdown book-post">
+    <h2>
+      <a href="/spec/57/">57/STATUS-Simple-Scaling</a>
+    </h2>
+    
+
 
   
 
   
-  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
-  
-  
-  
-  
+  <div>
+    
+      <a href="/tags/waku/application/">waku/application</a>
+  </div>
   
 
-  <ul>
-      <li>Status: raw</li>
-      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+
+    <p>Abstract # This document describes how to scale 56/STATUS-COMMUNITIES as well as 55/STATUS-1TO1-CHAT using existing Waku v2 protocols and components. It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
+Note: (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components in a way that aligns better with our principles of decentralization and protecting anonymity.
+        <a href="/spec/57/">...</a>
       
-  </ul><h1 id="abstract">
-  Abstract
-  <a class="anchor" href="#abstract">#</a>
-</h1>
-<p>This document lists static shard flag index assignments (see <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.</p>
-<h1 id="background">
-  Background
-  <a class="anchor" href="#background">#</a>
-</h1>
-<p>Similar to the <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA port allocation</a>,
-this document lists static shard index assignments (see <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.</p>
-<p>The index ranges are as follows:
-index <code>0</code> represents the global shards,
-indices <code>1</code> to <code>15</code> are reserved,
-indices <code>16</code> to <code>1023</code> are reservable for apps,
-indices <code>1024</code> to <code>49151</code> are for open use by apps,
-indices <code>49152</code> to <code>65535</code> are reserved.</p>
-<h1 id="assingment-process">
-  Assingment Process
-  <a class="anchor" href="#assingment-process">#</a>
-</h1>
-<blockquote>
-<p><em>Note</em>: Future versions of this document will specify the assignment process.</p>
-</blockquote>
-<h1 id="list-of-static-shard-indices">
-  List of Static Shard Indices
-  <a class="anchor" href="#list-of-static-shard-indices">#</a>
-</h1>
-<table>
-<thead>
-<tr>
-<th>index</th>
-<th>Protocol/App</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>global</td>
-<td>global use</td>
-</tr>
-<tr>
-<td>1</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>3</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>4</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>6</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>7</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>8</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>9</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>10</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>11</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>12</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>13</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>14</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>15</td>
-<td>reserved</td>
-<td></td>
-</tr>
-<tr>
-<td>16</td>
-<td>Status</td>
-<td>Status main net</td>
-</tr>
-<tr>
-<td>17</td>
-<td>Status</td>
-<td></td>
-</tr>
-<tr>
-<td>18</td>
-<td>Status</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-<h1 id="copyright">
-  Copyright
-  <a class="anchor" href="#copyright">#</a>
-</h1>
-<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
-<h1 id="references">
-  References
-  <a class="anchor" href="#references">#</a>
-</h1>
-<ul>
-<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
-<li><a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA port allocation</a></li>
-</ul>
-</article>
+    </p>
+  </article>
+  
+
+  
  
       
 
@@ -377,10 +290,6 @@ indices <code>49152</code> to <code>65535</code> are reserved.</p>
 
       
   
-  <div class="book-comments">
-
-</div>
-  
  
 
       <label for="menu-control" class="hidden book-menu-overlay"></label>
@@ -390,9 +299,74 @@ indices <code>49152</code> to <code>65535</code> are reserved.</p>
     <aside class="book-toc">
       <div class="book-toc-content">
         
+  <nav>
+  <ul>
   
-<nav id="TableOfContents"></nav>
-
+    
+    <li class="book-section-flat">
+      <strong>Categories</strong>
+      <ul>
+      
+      </ul>
+    </li>
+    
+  
+    
+    <li class="book-section-flat">
+      <strong>Tags</strong>
+      <ul>
+      
+        <li class="flex justify-between">
+          <a href="/tags/an-optional-list-of-tags-not-standard/">an optional list of tags, not standard</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/logos/consensus/">logos/consensus</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/rln/">rln</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-application/">waku-application</a>
+          <span>8</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-core/">waku-core</a>
+          <span>7</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku-core-protocol/">waku-core-protocol</a>
+          <span>3</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/anonymity/">waku/anonymity</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/application/">waku/application</a>
+          <span>1</span>
+        </li>
+      
+        <li class="flex justify-between">
+          <a href="/tags/waku/core-protocol/">waku/core-protocol</a>
+          <span>3</span>
+        </li>
+      
+      </ul>
+    </li>
+    
+  
+  </ul>
+</nav>
 
  
       </div>

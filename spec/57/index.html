@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document describes how to scale 56/STATUS-COMMUNITIES as well as 55/STATUS-1TO1-CHAT using existing Waku v2 protocols and components. It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
+Note: (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components in a way that aligns better with our principles of decentralization and protecting anonymity.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="57/STATUS-Simple-Scaling" />
+<meta property="og:description" content="Abstract # This document describes how to scale 56/STATUS-COMMUNITIES as well as 55/STATUS-1TO1-CHAT using existing Waku v2 protocols and components. It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
+Note: (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components in a way that aligns better with our principles of decentralization and protecting anonymity." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/57/" /><meta property="article:section" content="docs" />
+
+
+
+<title>57/STATUS-Simple-Scaling | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.569030df97a7a363e516338e1e5dd6d506564a23c5dfc6dc2d8153374fccde46.js" integrity="sha256-VpAw35eno2PlFjOOHl3W1QZWSiPF38bcLYFTN0/M3kY="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-SPEC</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/"class=active>57/STATUS-Simple-Scaling</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>57/STATUS-Simple-Scaling</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#shard-allocation">Shard Allocation</a>
+      <ul>
+        <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+      </ul>
+    </li>
+    <li><a href="#status-communities">Status Communities</a>
+      <ul>
+        <li><a href="#static-mapping">Static Mapping</a></li>
+        <li><a href="#owner-mapping">Owner Mapping</a></li>
+      </ul>
+    </li>
+    <li><a href="#11-chat">1:1 Chat</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
+    <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
+    <li><a href="#11-chat-1">1:1 chat</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#control-message-shards">Control Message Shards</a></li>
+    <li><a href="#media-shards">Media Shards</a></li>
+    <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#statically-mapped-communities-1">Statically-Mapped Communities</a></li>
+    <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
+    <li><a href="#11-chat-2">1:1 Chat</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="57status-simple-scaling">
+  57/STATUS-Simple-Scaling
+  <a class="anchor" href="#57status-simple-scaling">#</a>
+</h1>
+
+  
+      <h1 id="status-simple-scaling">
+  Status Simple Scaling
+  <a class="anchor" href="#status-simple-scaling">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document describes how to scale <a href="/spec/56/">56/STATUS-COMMUNITIES</a> as well as <a href="/spec/55/">55/STATUS-1TO1-CHAT</a>
+using existing Waku v2 protocols and components.
+It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.</p>
+<blockquote>
+<p><em>Note:</em> (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components
+in a way that aligns better with our principles of decentralization and protecting anonymity.
+This document informs about scaling at the current stage of research and shows it is practically possible.
+Practical feasibility is also a core goal for us.
+We believe in incremental improvement, i.e. having a working decentralized scaling solution with trade-offs is better than a fully centralized solution.</p>
+</blockquote>
+<h1 id="background-and-motivation">
+  Background and Motivation
+  <a class="anchor" href="#background-and-motivation">#</a>
+</h1>
+<p><a href="/spec/56/">56/STATUS-COMMUNITIES</a> as well as <a href="/spec/55/">55/STATUS-1TO1-CHAT</a> use Waku v2 protocols.
+Both use Waku content topics (see <a href="/spec/23/">23/WAKU2-TOPICS</a>) for content based filtering.</p>
+<p>Waku v2 currently has scaling limitations in two dimensions:</p>
+<ol>
+<li>
+<p>Messages that are part of a specific content topic have to be disseminated in a single mesh network (i.e. pubsub topic).
+This limits scaling the number of messages disseminated in a specific content topic,
+and by extension, the number of active nodes that are part of this content topic.</p>
+</li>
+<li>
+<p>Scaling a large set of content topics requires distributing these over several mesh networks (which this document refers to as pubsub topic shards).</p>
+</li>
+</ol>
+<p>This document focuses on the second scaling dimension.
+With the scaling solutions discussed in this document,
+each content topics can have a large set of active users, but still has to fit in a single pubsub mesh.</p>
+<blockquote>
+<p><em>Note:</em> While it is possible to use the same content topic name on several shards,
+each node that is interested in this content topic has to be subscribed to all respective shards, which does not scale.
+Splitting content topics in a more sophisticated and efficient way will be part of a future document.</p>
+</blockquote>
+<h1 id="relay-shards">
+  Relay Shards
+  <a class="anchor" href="#relay-shards">#</a>
+</h1>
+<p>Sharding the <a href="/spec/11/">Waku Relay</a> network is an integral part of scaling the Status app.</p>
+<p><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a> specifies shards clusters, which are sets of <code>1024</code> shards (separate pubsub mesh networks).
+Content topics specified by application protocols can be distributed over these shards.
+The Status app protocols are assigned to shard cluster <code>16</code>,
+as defined in <a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a>.</p>
+<p><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a> specifies three sharding methods.
+This document uses <em>static sharding</em>, which leaves the distribution of content topics to application protocols,
+but takes care of shard discovery.</p>
+<p>The 1024 shards within the main Status shard cluster are allocated as follows.</p>
+<h2 id="shard-allocation">
+  Shard Allocation
+  <a class="anchor" href="#shard-allocation">#</a>
+</h2>
+<table>
+<thead>
+<tr>
+<th>shard index</th>
+<th>usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 - 15</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>16 - 127</td>
+<td>specific (large) communities</td>
+</tr>
+<tr>
+<td>128 - 767</td>
+<td>communities</td>
+</tr>
+<tr>
+<td>768 - 895</td>
+<td>1:1 chat</td>
+</tr>
+<tr>
+<td>896 - 1023</td>
+<td>media and control msgs</td>
+</tr>
+</tbody>
+</table>
+<p>Shard indices are mapped to pubsub topic names as follows (specified in <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>).</p>
+<p><code>/waku/2/rs/&lt;shard_cluster_index&gt;/&lt;shard_number&gt;</code></p>
+<p>an example for the shard with index <code>18</code> in the Status shard cluster:</p>
+<p><code>/waku/2/rs/16/18</code></p>
+<p>In other words, the mesh network with the pubsub topic name <code>/waku/2/rs/16/18</code> carries messages associated with shard <code>18</code> in the Status shard cluster.</p>
+<h3 id="implementation-suggestion">
+  Implementation Suggestion
+  <a class="anchor" href="#implementation-suggestion">#</a>
+</h3>
+<p>The Waku implementation should offer an interface that allows Status nodes to subscribe to Status specific content topics like</p>
+<pre tabindex="0"><code>subscribe(&#34;/status/xyz&#34;, 16, 18)
+</code></pre><p>The shard cluster index <code>16</code> can be kept in the Status app configuration,
+so that Status nodes can simply use</p>
+<pre tabindex="0"><code>subscribe(&#34;/status/xyz&#34;, 18)
+</code></pre><p>which means: connect to the <code>&quot;status/xyz&quot;</code> content topic on shard <code>18</code> within the Status shard cluster.</p>
+<h2 id="status-communities">
+  Status Communities
+  <a class="anchor" href="#status-communities">#</a>
+</h2>
+<p>In order to associate a community with a shard,
+the community description protobuf is extended by the field
+<code>uint16 relay_shard_index = 15</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">CommunityDescription</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The Lamport timestamp of the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of members in the community to their roles
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityMember&gt; members <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The permissions of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityPermissions permissions <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The metadata of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  ChatIdentity identity <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of chats to their details
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityChat&gt; chats <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A list of banned members
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> ban_list <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A mapping of categories to their details
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  map&lt;<span style="color:#66d9ef">string</span>,CommunityCategory&gt; categories <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The admin settings of the Community
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CommunityAdminSettings admin_settings <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// If the community is encrypted
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bool</span> encrypted <span style="color:#f92672">=</span> <span style="color:#ae81ff">13</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The list of tags
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> tags <span style="color:#f92672">=</span> <span style="color:#ae81ff">14</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// index of the community&#39;s shard within the Status shard cluster
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  uint16 relay_shard_index <span style="color:#f92672">=</span> <span style="color:#ae81ff">15</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><blockquote>
+<p><em>Note</em>: Currently, Status app has allocated shared cluster <code>16</code> in <a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a>.
+Status app could allocate more shard clusters, for instance to establish a test net.
+We could add the shard cluster index to the community description as well.
+The recommendation for now is to keep it as a configuration option of the Status app.</p>
+</blockquote>
+<blockquote>
+<p><em>Note</em>: Once this RFC moves forward, the new community description protobuf fields should be mentioned in <a href="https://rfc.vac.dev/spec/56/">56/STATUS-COMMUNITIES</a>.</p>
+</blockquote>
+<p>Status communities can be mapped to shards in two ways: static, and owner-based.</p>
+<h3 id="static-mapping">
+  Static Mapping
+  <a class="anchor" href="#static-mapping">#</a>
+</h3>
+<p>With static mapping, communities are assigned a specific shard index within the Status shard cluster.
+This mapping is similar in nature to the shard cluster allocation in <a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a>.
+Shard indices allocated in that way are in the range <code>16 - 127</code>.
+The Status CC community uses index <code>16</code> (not to confuse with shard cluster index <code>16</code>, which is the Status shard cluster).</p>
+<h3 id="owner-mapping">
+  Owner Mapping
+  <a class="anchor" href="#owner-mapping">#</a>
+</h3>
+<blockquote>
+<p><em>Note</em>: This way of mapping will be specified post-MVP.</p>
+</blockquote>
+<p>Community owners can choose to map their communities to any shard within the index range <code>128 - 767</code>.</p>
+<h2 id="11-chat">
+  1:1 Chat
+  <a class="anchor" href="#11-chat">#</a>
+</h2>
+<p><a href="/spec/55">55/STATUS-1TO1-CHAT</a> uses partitioned topics to map 1:1 chats to a set of 5000 content topics.
+This document extends this mapping to 8192 content topics that are, in turn, mapped to 128 shards in the index range of <code>768 - 895</code>.</p>
+<pre tabindex="0"><code>contentPartitionsNum = 8192
+contentPartition = mod(publicKey, contentPartitionsNum)
+partitionContentTopic = &#34;contact-discovery-&#34; + contentPartition
+
+partitionContentTopic = keccak256(partitionContentTopic)
+
+shardNum = 128
+shardIndex = 768 + mod(publicKey, shardNum)
+</code></pre><h1 id="infrastructure-nodes">
+  Infrastructure Nodes
+  <a class="anchor" href="#infrastructure-nodes">#</a>
+</h1>
+<p>As described in <a href="/spec/30/">30/ADAPTIVE-NODES</a>,
+Waku supports a continuum of node types with respect to available resources.
+Infrastructure nodes are powerful nodes that have a high bandwidth connection and a high up-time.</p>
+<p>This document, which informs about simple ways of scaling Status over Waku,
+assumes the presence of a set of such infrastructure nodes in each shard.
+Infrastructure nodes are especially important for providing connectivity in the roll-out phase.</p>
+<p>Infrastructure nodes are not limited to Status fleets, or nodes run by community owners.
+Anybody can run infrastructure nodes.</p>
+<h2 id="statically-mapped-communities">
+  Statically-Mapped Communities
+  <a class="anchor" href="#statically-mapped-communities">#</a>
+</h2>
+<p>Infrastructure nodes are provided by the community owner, or by members of the respective community.</p>
+<h2 id="owner-mapped-communities">
+  Owner-Mapped Communities
+  <a class="anchor" href="#owner-mapped-communities">#</a>
+</h2>
+<p>Infrastructure nodes are part of a subset of the shards in the range <code>128 - 767</code>.
+Recommendations on choosing this subset will be added in a future version of this document.</p>
+<p>Status fleet nodes make up a part of these infrastructure nodes.</p>
+<h2 id="11-chat-1">
+  1:1 chat
+  <a class="anchor" href="#11-chat-1">#</a>
+</h2>
+<p>Infrastructure nodes are part of a subset of the shards in the range <code>768 - 985</code> (similar to owner-mapped communities).
+Recommendations on choosing this subset will be added in a future version of this document.</p>
+<p>Desktop clients can choose to only use filter and lightpush.</p>
+<blockquote>
+<p><em>Note</em>: Discussion: I&rsquo;d suggest to set this as the default for the MVP.
+The load on infrastructure nodes would not be higher, because they have to receive and relay each message anyways.
+This comes as a trade-off to anonymity and decentralization,
+but can significantly improve scaling.
+We still have k-anonymity because several chat pairs are mapped into one content topic.
+We could improve on this in the future, and research the applicability of PIR (private information retrieval) techniques in the future.</p>
+</blockquote>
+<h1 id="infrastructure-shards">
+  Infrastructure Shards
+  <a class="anchor" href="#infrastructure-shards">#</a>
+</h1>
+<p>Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see <a href="/spec/30/">30/ADAPTIVE-NODES</a>).
+To maximise scaling, relaying of specific message types can be dedicated to shards where only infrastructure nodes with very strong resource profiles relay messages.
+This comes as a trade-off to decentralization.</p>
+<h2 id="control-message-shards">
+  Control Message Shards
+  <a class="anchor" href="#control-message-shards">#</a>
+</h2>
+<p>To get the maximum scaling for select large communities for the Status scaling MVP,
+specific control messages that cause significant load (at a high user number) SHOULD be moved to a separate control message shard.
+These control messages comprise:</p>
+<ul>
+<li>community description</li>
+<li>membership update</li>
+<li>backup</li>
+<li>community request to join response</li>
+<li>sync profile picture</li>
+</ul>
+<p>The relay functionality of control messages shards SHOULD be provided by infrastructure nodes.
+Desktop clients should use light protocols as the default for control message shards.
+Strong Desktop clients MAY opt in to support the relay network.</p>
+<p>Each large community (in the index range of <code>16 - 127</code>) can get its dedicated control message shard (in the index range <code>896 - 1023</code>) if deemed necessary.
+The Status CC community uses shard <code>896</code> as its control message shard.
+This comes with trade-offs to decentralization and anonymity (see <em>Security Considerations</em> section).</p>
+<h2 id="media-shards">
+  Media Shards
+  <a class="anchor" href="#media-shards">#</a>
+</h2>
+<p>Similar to control messages, media-heavy communities should use separate media shards (in the index range <code>896 - 1023</code>) for disseminating messages with large media data.
+The Status CC community uses shard <code>897</code> as its media shard.</p>
+<h2 id="infrastructure-focused-community">
+  Infrastructure-focused Community
+  <a class="anchor" href="#infrastructure-focused-community">#</a>
+</h2>
+<p>Large communities MAY choose to mainly rely on infrastructure nodes for <em>all</em> message transfers (not limited to control, and media messages).
+Desktop clients of such communities should use light protocols as the default.
+Strong Desktop clients MAY opt in to support the relay network.</p>
+<blockquote>
+<p><em>Note</em>: This is not planned for the MVP.</p>
+</blockquote>
+<h1 id="light-protocols">
+  Light Protocols
+  <a class="anchor" href="#light-protocols">#</a>
+</h1>
+<p>Light protocols may be used to save bandwidth,
+at the (global) cost of not contributing to the network.
+Using light protocols is RECOMMENDED for resource restricted nodes,
+e.g. browsers,
+and devices that (temporarily) have a low bandwidth connection or a connection with usage-based billing.</p>
+<p>Light protocols comprise</p>
+<ul>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> for sending messages</li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a> for requesting messages with specific attributes</li>
+<li><a href="/spec/34">34/WAKU2-PEER-EXCHANGE</a> for discovering peers</li>
+</ul>
+<h1 id="waku-archive">
+  Waku Archive
+  <a class="anchor" href="#waku-archive">#</a>
+</h1>
+<p>Archive nodes are Waku nodes that offer the Waku archive service via the Waku store protocol (<a href="/spec/13/">13/WAKU2-STORE</a>).
+They are part of a set of shards and store all messages disseminated in these shards.
+Nodes can request history messages via the <a href="/spec/13/">13/WAKU2-STORE</a>.</p>
+<p>The store service is not limited to a Status fleet.
+Anybody can run a Waku Archive node in the Status shards.</p>
+<blockquote>
+<p><em>Note</em>: There is no specification for discovering archive nodes associated with specific shards yet.
+Nodes expect archive nodes to store all messages, regardless of shard association.</p>
+</blockquote>
+<p>The recommendation for the allocation of archive nodes to shards is similar to the
+allocation of infrastructure nodes to shards described above.
+In fact, the archive service can be offered by infrastructure nodes.</p>
+<h1 id="discovery">
+  Discovery
+  <a class="anchor" href="#discovery">#</a>
+</h1>
+<p>Shard discovery is covered by <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.
+This allows the Status app to abstract from the discovery process and simply address shards by their index.</p>
+<h1 id="dos-protection">
+  DoS Protection
+  <a class="anchor" href="#dos-protection">#</a>
+</h1>
+<blockquote>
+<p><em>Note</em> :  DoS protection will be specified in a soon-to-follow update of this RFC (while in raw state).
+The following sketches basic approaches.
+DoS protection might move in a separate document and be referenced here.</p>
+</blockquote>
+<h2 id="statically-mapped-communities-1">
+  Statically-Mapped Communities
+  <a class="anchor" href="#statically-mapped-communities-1">#</a>
+</h2>
+<p>Basic idea:
+Each <a href="/specs/14">Waku message</a> is signed with key material provided by the community owner.
+Relay nodes only relay messages that have the correct signature.
+Community infrastructure nodes are provided with the necessary key material, too.</p>
+<h2 id="owner-mapped-communities-1">
+  Owner-Mapped Communities
+  <a class="anchor" href="#owner-mapped-communities-1">#</a>
+</h2>
+<p>Basic idea:
+Tokenized load.</p>
+<h2 id="11-chat-2">
+  1:1 Chat
+  <a class="anchor" href="#11-chat-2">#</a>
+</h2>
+<p>An idea we plan to explore in the future:
+Map 1:1 chats to community shards, if both A and B are part of the respective community.
+This increases k-anonymity and benefits from community DoS protection.
+It could be rate-limited with RLN.</p>
+<h1 id="securityprivacy-considerations">
+  Security/Privacy Considerations
+  <a class="anchor" href="#securityprivacy-considerations">#</a>
+</h1>
+<p>This document makes several trade-offs to privacy and anonymity.
+Todo: elaborate.
+See <a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a> for information on Waku Anonymity.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="https://docs.libp2p.io/concepts/nat/circuit-relay/">Circuit Relay</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#shard-allocation">Shard Allocation</a>
+      <ul>
+        <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+      </ul>
+    </li>
+    <li><a href="#status-communities">Status Communities</a>
+      <ul>
+        <li><a href="#static-mapping">Static Mapping</a></li>
+        <li><a href="#owner-mapping">Owner Mapping</a></li>
+      </ul>
+    </li>
+    <li><a href="#11-chat">1:1 Chat</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
+    <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
+    <li><a href="#11-chat-1">1:1 chat</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#control-message-shards">Control Message Shards</a></li>
+    <li><a href="#media-shards">Media Shards</a></li>
+    <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#statically-mapped-communities-1">Statically-Mapped Communities</a></li>
+    <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
+    <li><a href="#11-chat-2">1:1 Chat</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
