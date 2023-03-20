@@ -77,7 +77,6 @@ an example for the shard with index `18` in the Status shard cluster:
 
 In other words, the mesh network with the pubsub topic name `/waku/2/rs/16/18` carries messages associated with shard `18` in the Status shard cluster.
 
-
 ### Implementation Suggestion
 
 The Waku implementation should offer an interface that allows Status nodes to subscribe to Status specific content topics like
@@ -208,7 +207,6 @@ but can significantly improve scaling.
 We still have k-anonymity because several chat pairs are mapped into one content topic.
 We could improve on this in the future, and research the applicability of PIR (private information retrieval) techniques in the future.
 
-
 # Infrastructure Shards
 
 Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see [30/ADAPTIVE-NODES](/spec/30/)).
@@ -248,7 +246,6 @@ Strong Desktop clients MAY opt in to support the relay network.
 
 > *Note*: This is not planned for the MVP.
 
-
 # Light Protocols
 
 Light protocols may be used to save bandwidth,
@@ -262,7 +259,6 @@ Light protocols comprise
 * [19/WAKU2-LIGHTPUSH](/spec/19/) for sending messages
 * [12/WAKU2-FILTER](/spec/12/) for requesting messages with specific attributes
 * [34/WAKU2-PEER-EXCHANGE](/spec/34) for discovering peers
-
 
 # Waku Archive
 
@@ -316,7 +312,6 @@ and the circuit-relay traffic is additional load.
 The approach recommended in this document does not introduce additional traffic (apart from a few control messages),
 because the relay node acts as a typical Waku relay.
 
-
 ### Announcing Shard Participation
 
 Registering a namespace via [lib-p2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md#interaction)
@@ -348,7 +343,6 @@ A discovery query for nodes that are part of this shard would look like
 DISCOVER{ns: 0x727300100002}
 ```
 
-
 # DoS Protection
 
 > *Note* :  DoS protection will be specified in a soon-to-follow update of this RFC (while in raw state).
@@ -373,7 +367,6 @@ An idea we plan to explore in the future:
 Map 1:1 chats to community shards, if both A and B are part of the respective community.
 This increases k-anonymity and benefits from community DoS protection.
 It could be rate-limited with RLN.
-
 
 # Security/Privacy Considerations
 
