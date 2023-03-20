@@ -130,13 +130,11 @@ In addition, the filter service node MAY choose to provide a more detailed statu
 In the description of each request type below,
 the term "filter criteria" refers to the combination of `pubsub_topic` and a set of `content_topics`.
 The request MAY include filter criteria, conditional to the selected `filter_subscribe_type`.
-The `pubsub_topic` is always optional in filter criteria.
+If the request contains filter criteria,
+it MUST contain a `pubsub_topic`
+and the `content_topics` set MUST NOT be empty.
 A `WakuMessage` matches filter criteria when its `content_topic` is in the `content_topics` set
-and, if included in the criteria, it was published on a matching `pubsub_topic`.
-If the `pubsub_topic` is set and not empty,
-a `WakuMessage` will only match the filter criteria if it has a matching `content_topic` and was published on _the same_ `pubsub_topic`.
-If the `pubsub_topic` is either empty or unset,
-a `WakuMessage` will match the filter criteria if it has a matching `content_topic` and was published on _any_ `pubsub_topic`.
+and it was published on a matching `pubsub_topic`.
 
 ### Filter Subscribe Types
 
@@ -162,6 +160,9 @@ A client MAY use this request type to _refresh_ an existing subscription
 by providing _the same_ filter criteria in a new request.
 The filter service node SHOULD respond with a success code if it successfully honored this request
 or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the subscribe request does not contain valid filter criteria,
+i.e. both a `pubsub_topic` _and_ a non-empty `content_topics` set.
 
 #### UNSUBSCRIBE
 
@@ -172,6 +173,9 @@ A client MAY use this request type to _modify_ an existing subscription
 by providing _a subset of_ the original filter criteria to unsubscribe from in a new request.
 The filter service node SHOULD respond with a success code if it successfully honored this request
 or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the unsubscribe request does not contain valid filter criteria,
+i.e. both a `pubsub_topic` _and_ a non-empty `content_topics` set.
 
 #### UNSUBSCRIBE_ALL
 
