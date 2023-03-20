@@ -285,6 +285,70 @@ In fact, the archive service can be offered by infrastructure nodes.
 Shard discovery is covered by [51/WAKU2-RELAY-SHARDING](/spec/51/).
 This allows the Status app to abstract from the discovery process and simply address shards by their index.
 
+## Libp2p Rendezvous
+
+This document suggests using
+[libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md)
+in addition to [33/WAKU2-DISCV5](/spec/33/) discovery which is offered by the Waku layer as specified in [51/WAKU2-RELAY-SHARDING](/spec/51/).
+The main reason is making nodes behind restrictive NAT discoverable.
+In addition, it helps increasing discoverability, and by extension connectivity, for nodes that are not behind restricted NAT.
+
+Nodes that do not take part in [33/WAKU2-DISCV5](/spec/33/) discovery,
+e.g., resource restricted devices, MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
+For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34) offer the same functionality,
+but return node sets sampled in different ways.
+Using both can help increasing connectivity.
+
+It is RECOMMENDED that nodes that are part of the relay network, also act as rendezvous points.
+This includes accepting register queries from peers, as well as answering rendezvous discover queries.
+Nodes MAY opt-out of the rendezvous functionality.
+
+To support the main purpose of rendezvous (for Waku),
+it is RECOMMENDED for nodes that act as a rendezvous point to also offer to act as a relay between the node that queried, and the discovered node.
+This allows nodes behind restrictive NATs to be part of the relay network.
+
+> *Note*: A specification of this process will follow in a future version of this document.
+
+While this process is similar to [libp2p circuit relay](https://docs.libp2p.io/concepts/nat/circuit-relay/),
+it is not the same.
+Circuit relay offers an encrypted end-to-end channel, which means the circuit relay node does *not* disseminate message via Waku relay,
+and the circuit-relay traffic is additional load.
+The approach recommended in this document does not introduce additional traffic (apart from a few control messages),
+because the relay node acts as a typical Waku relay.
+
+
+### Announcing Shard Participation
+
+Registering a namespace via [lib-p2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md#interaction)
+is done via a register query:
+
+```
+REGISTER{my-app, {QmA, AddrA}}
+```
+
+The app name, `my-app` is used to encode a single shard in the form:
+
+```
+<rs (utf8 encoded)> | <2-byte shard cluster index> | <2-byte shard index>
+```
+
+Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/h)),
+the register query would look like
+
+```
+REGISTER{0x727300100002, {QmA, AddrA}}
+```
+
+Participation in further shards is registered with further queries; one register query per shard.
+(0x7273 is the encoding of `rs`.)
+
+A discovery query for nodes that are part of this shard would look like
+
+```
+DISCOVER{ns: 0x727300100002}
+```
+
+
 # DoS Protection
 
 > *Note* :  DoS protection will be specified in a soon-to-follow update of this RFC (while in raw state).
