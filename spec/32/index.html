@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Abstract # The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
 Motivation # RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners.">
-<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="32/RLN" />
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="32/RLN-V1" />
 <meta property="og:description" content="Abstract # The following specification covers the RLN construct as well as some auxiliary libraries useful for interacting with it. Rate limiting nullifier (RLN) is a construct based on zero-knowledge proofs that provides an anonymous rate-limited signaling/messaging framework suitable for decentralized (and centralized) environments. Anonymity refers to the unlinkability of messages to their owner.
 Motivation # RLN guarantees a messaging rate is enforced cryptographically while preserving the anonymity of the message owners." />
 <meta property="og:type" content="article" />
@@ -15,11 +15,11 @@ Motivation # RLN guarantees a messaging rate is enforced cryptographically while
 
 
 
-<title>32/RLN | Vac RFC</title>
+<title>32/RLN-V1 | Vac RFC</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.569030df97a7a363e516338e1e5dd6d506564a23c5dfc6dc2d8153374fccde46.js" integrity="sha256-VpAw35eno2PlFjOOHl3W1QZWSiPF38bcLYFTN0/M3kY="></script>
+<script defer src="/en.search.min.ce9c36a332abd597f8248f84debec1c35bd2d7cd417b7cd4534d2d6139ae3c7d.js" integrity="sha256-zpw2ozKr1Zf4JI&#43;E3r7Bw1vS181Be3zUU00tYTmuPH0="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -65,7 +65,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/24/">24/STATUS-CURATION</a></li>
 <li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
 <li><a href="/spec/31/">31/WAKU2-ENR</a></li>
-<li><a href="/spec/32/"class=active>32/RLN-SPEC</a></li>
+<li><a href="/spec/32/"class=active>32/RLN-V1-SPEC</a></li>
 <li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
 <li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
 <li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
@@ -157,7 +157,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>32/RLN</strong>
+  <strong>32/RLN-V1</strong>
 
   <label for="toc-control">
     
@@ -212,6 +212,10 @@ https://github.com/alex-shpak/hugo-book
   </ul>
 
   <ul>
+    <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
+  </ul>
+
+  <ul>
     <li><a href="#creating-a-rln-object">Creating a RLN object</a></li>
     <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
     <li><a href="#adding-id-commitment-to-the-rln-merkle-tree">Adding ID commitment to the RLN Merkle tree</a></li>
@@ -231,9 +235,9 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="32rln">
-  32/RLN
-  <a class="anchor" href="#32rln">#</a>
+  <h1 id="32rln-v1">
+  32/RLN-V1
+  <a class="anchor" href="#32rln-v1">#</a>
 </h1>
 
   
@@ -254,7 +258,7 @@ https://github.com/alex-shpak/hugo-book
 
   <ul>
       <li>Status: raw</li>
-      <li>Editor: Blagoj Dimovski <a href="mailto:blagoj.dimovski@yandex.com">blagoj.dimovski@yandex.com</a></li>
+      <li>Editor: Rasul Ibragimov <a href="mailto:curryrasul@gmail.com">curryrasul@gmail.com</a></li>
       
       <li>Contributors:
           
@@ -269,6 +273,9 @@ https://github.com/alex-shpak/hugo-book
           
               ,
               Onur Kilic <a href="mailto:onurkilic1004@gmail.com">onurkilic1004@gmail.com</a>
+          
+              ,
+              Blagoj Dimovski <a href="mailto:blagoj.dimovski@yandex.com">blagoj.dimovski@yandex.com</a>
           
       </li>
       
@@ -378,9 +385,9 @@ By using the <a href="https://github.com/appliedzkp/incrementalquintree/blob/mas
 the Merkle can be obtained by providing the <code>leaf_index</code> of the <code>identity_commitment</code>.
 The proof (<code>Merkle_proof</code>) is composed of the following fields:</p>
 <pre tabindex="0"><code>{
-  root: bigint
-  indices: number[]
-  path_elements: bigint[][]
+    root: bigint
+    indices: number[]
+    path_elements: bigint[][]
 }
 </code></pre><ol>
 <li><strong>root</strong> - The root of membership group Merkle tree at the time of publishing the message</li>
@@ -393,14 +400,13 @@ The proof (<code>Merkle_proof</code>) is composed of the following fields:</p>
 </h4>
 <p>For proof generation,
 the user need to submit the following fields to the circuit:</p>
-<pre tabindex="0"><code>    {
-      identity_secret: identity_secret_hash,
-      path_elements: Merkle_proof.path_elements,
-      identity_path_index: Merkle_proof.indices,
-      x: signal_hash,
-      epoch: epoch,
-      rln_identifier: rln_identifier
-    }
+<pre tabindex="0"><code>{
+    identity_secret: identity_secret_hash,
+    path_elements: Merkle_proof.path_elements,
+    identity_path_index: Merkle_proof.indices,
+    x: signal_hash,
+    external_nullifier: external_nullifier
+}
 </code></pre><h4 id="calculating-output">
   Calculating output
   <a class="anchor" href="#calculating-output">#</a>
@@ -411,15 +417,12 @@ The proof output is composed of the <code>y</code> share of the secret equation 
 The <code>internal_nullifier</code> represents a unique fingerprint of a user for a given <code>epoch</code> and app.
 The following fields are needed for proof output calculation:</p>
 <pre tabindex="0"><code>{
-  identity_secret_hash: bigint, 
-  epoch: bigint, 
-  rln_identifier: bigint,
-  x: bigint, 
+    identity_secret_hash: bigint, 
+    external_nullifier: bigint,
+    x: bigint, 
 }
 </code></pre><p>The output <code>[y, internal_nullifier]</code> is calculated in the following way:</p>
-<pre tabindex="0"><code>external_nullifier = poseidonHash([epoch, rln_identifier])
-
-a_0 = identity_secret_hash
+<pre tabindex="0"><code>a_0 = identity_secret_hash
 a_1 = poseidonHash([a0, external_nullifier])
 
 y = a_0 + x * a_1
@@ -442,10 +445,10 @@ containing the signal should contain the following fields at minimum:</p>
 }
 </code></pre><p>Additionally depending on the application,
 the following fields might be required:</p>
-<pre tabindex="0"><code>  {
-      root: Merkle_proof.root,
-      epoch: epoch
-  }
+<pre tabindex="0"><code>{
+    root: Merkle_proof.root,
+    epoch: epoch
+}
 </code></pre><h2 id="verification-and-slashing">
   Verification and slashing
   <a class="anchor" href="#verification-and-slashing">#</a>
@@ -504,8 +507,7 @@ Duplicate messages are discarded.</p>
     Merkle_proof.root,
     internal_nullifier,
     x, # signal_hash
-    epoch,
-    rln_identifier
+    external_nullifier
 ]
 </code></pre><p>If the proof verification is correct,
 the verification continues, otherwise the message is discarded.</p>
@@ -650,7 +652,7 @@ using the <a href="https://docs.circom.io/">circomlib</a> library.</p>
   <a class="anchor" href="#system-parameters">#</a>
 </h3>
 <ul>
-<li><code>n_levels</code> - Merkle tree depth</li>
+<li><code>DEPTH</code> - Merkle tree depth</li>
 </ul>
 <h3 id="circuit-parameters">
   Circuit parameters
@@ -659,8 +661,7 @@ using the <a href="https://docs.circom.io/">circomlib</a> library.</p>
 <p><strong>Public Inputs</strong></p>
 <ul>
 <li><code>x</code></li>
-<li><code>epoch</code></li>
-<li><code>rln_identifier</code></li>
+<li><code>external_nullifier</code></li>
 </ul>
 <p><strong>Private Inputs</strong></p>
 <ul>
@@ -796,9 +797,9 @@ They are part of the identity membership Merkle tree if their <code>identity_com
   <a class="anchor" href="#identity_secret">#</a>
 </h3>
 <p>The <code>identity_secret</code> is generated in the following way:</p>
-<pre tabindex="0"><code>    identity_nullifier = random_32_byte_buffer
-    identity_trapdoor = random_32_byte_buffer
-    identity_secret = [identity_nullifier, identity_trapdoor]
+<pre tabindex="0"><code>identity_nullifier = random_32_byte_buffer
+identity_trapdoor = random_32_byte_buffer
+identity_secret = [identity_nullifier, identity_trapdoor]
 </code></pre><p>The same secret should not be used accross different protocols,
 because revealing the secret at one protocol could break privacy for the user in the other protocols.</p>
 <h3 id="identity_secret_hash">
@@ -806,7 +807,7 @@ because revealing the secret at one protocol could break privacy for the user in
   <a class="anchor" href="#identity_secret_hash">#</a>
 </h3>
 <p>The <code>identity_secret_hash</code> is generated by obtaining a Poseidon hash of the <code>identity_secret</code> array:</p>
-<pre tabindex="0"><code>    identity_secret_hash = poseidonHash(identity_secret)
+<pre tabindex="0"><code>identity_secret_hash = poseidonHash(identity_secret)
 </code></pre><h3 id="identity_commitment">
   <code>identity_commitment</code>
   <a class="anchor" href="#identity_commitment">#</a>
@@ -823,6 +824,19 @@ zk-SNARKS require a trusted setup for generating a prover and verifier keys.
 The standard for this is to use trusted <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">Multi-Party Computation (MPC)</a> ceremony,
 which requires two phases.
 Trusted MPC ceremony has not yet been performed for the RLN circuits.</p>
+<h2 id="sss-security-assumptions">
+  SSS security assumptions
+  <a class="anchor" href="#sss-security-assumptions">#</a>
+</h2>
+<p>Shamir-Secret Sharing requires polynomial coefficients to be independent of each other.
+However, <code>a_1</code> depends on <code>a_0</code> through the Poseidon hash algorithm.
+Due to the design of Poseidon, it is possible to <a href="https://github.com/Rate-Limiting-Nullifier/rln-circuits/pull/7#issuecomment-1416085627">attack</a> the protocol.<br>
+It was decided <em>not</em> to change the circuits design, since at the moment the attack is infeasible. Therefore, implementers must be aware that the current version provides approximately 160-bit security and not 254.
+Possible improvements:</p>
+<ul>
+<li><a href="https://github.com/Rate-Limiting-Nullifier/rln-circuits/pull/7#issuecomment-1416085627">change the circuit</a> to make coefficients independent;</li>
+<li>switch to other hash function (Keccak, SHA);</li>
+</ul>
 <h1 id="appendix-b-identity-scheme-choice">
   Appendix B: Identity scheme choice
   <a class="anchor" href="#appendix-b-identity-scheme-choice">#</a>
@@ -843,9 +857,9 @@ We don&rsquo;t want that, and we should keep user&rsquo;s app specific security 
 <p>To achieve the above interoperability UX while preventing the shared app security model
 (i.e slashing user on an RLN app having impact on Semaphore apps),
 we had to do the follow in regard the identity secret and identity commitment:</p>
-<pre tabindex="0"><code>    identity_secret = [identity_nullifier, identity_trapdoor]
-    identity_secret_hash = poseidonHash(identity_secret)
-    identity_commitment = poseidonHash([identity_secret_hash])
+<pre tabindex="0"><code>identity_secret = [identity_nullifier, identity_trapdoor]
+identity_secret_hash = poseidonHash(identity_secret)
+identity_commitment = poseidonHash([identity_secret_hash])
 </code></pre><p>Secret components for generating Semaphore proof:</p>
 <pre tabindex="0"><code>identity_nullifier
 identity_trapdoor
@@ -883,77 +897,68 @@ The examples are written in <a href="https://www.rust-lang.org/">rust</a>.</p>
   Creating a RLN object
   <a class="anchor" href="#creating-a-rln-object">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#66d9ef">use</span> rln::protocol::<span style="color:#f92672">*</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">use</span> rln::public::<span style="color:#f92672">*</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">use</span> std::io::Cursor;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We set the RLN parameters: 
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// - the tree height;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// - the circuit resource folder (requires a trailing &#34;/&#34;).
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> tree_height <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> resources <span style="color:#f92672">=</span> Cursor::new(<span style="color:#e6db74">&#34;../zerokit/rln/resources/tree_height_20/&#34;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We create a new RLN instance
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> rln <span style="color:#f92672">=</span> RLN::new(tree_height, resources);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#66d9ef">use</span> rln::protocol::<span style="color:#f92672">*</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> rln::public::<span style="color:#f92672">*</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">use</span> std::io::Cursor;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We set the RLN parameters: 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// - the tree height;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// - the circuit resource folder (requires a trailing &#34;/&#34;).
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> tree_height <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> resources <span style="color:#f92672">=</span> Cursor::new(<span style="color:#e6db74">&#34;../zerokit/rln/resources/tree_height_20/&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We create a new RLN instance
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> rln <span style="color:#f92672">=</span> RLN::new(tree_height, resources);
 </span></span></code></pre></div><h2 id="generating-identity-credentials">
   Generating identity credentials
   <a class="anchor" href="#generating-identity-credentials">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#75715e">// We generate an identity tuple
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buffer <span style="color:#f92672">=</span> Cursor::new(Vec::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>::new());
-</span></span><span style="display:flex;"><span>    rln.extended_key_gen(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buffer).unwrap();
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We deserialize the keygen output to obtain
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// the identiy_secret and id_commitment
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> (identity_trapdoor, identity_nullifier, identity_secret_hash, id_commitment) <span style="color:#f92672">=</span> deserialize_identity_tuple(buffer.into_inner());
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// We generate an identity tuple
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buffer <span style="color:#f92672">=</span> Cursor::new(Vec::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>::new());
+</span></span><span style="display:flex;"><span>rln.extended_key_gen(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buffer).unwrap();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We deserialize the keygen output to obtain
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// the identiy_secret and id_commitment
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> (identity_trapdoor, identity_nullifier, identity_secret_hash, id_commitment) <span style="color:#f92672">=</span> deserialize_identity_tuple(buffer.into_inner());
 </span></span></code></pre></div><h2 id="adding-id-commitment-to-the-rln-merkle-tree">
   Adding ID commitment to the RLN Merkle tree
   <a class="anchor" href="#adding-id-commitment-to-the-rln-merkle-tree">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#75715e">// We define the tree index where id_commitment will be added
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> id_index <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We serialize id_commitment and pass it to set_leaf
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buffer <span style="color:#f92672">=</span> Cursor::new(serialize_field_element(id_commitment));
-</span></span><span style="display:flex;"><span>    rln.set_leaf(id_index, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buffer).unwrap();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// We define the tree index where id_commitment will be added
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> id_index <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We serialize id_commitment and pass it to set_leaf
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> buffer <span style="color:#f92672">=</span> Cursor::new(serialize_field_element(id_commitment));
+</span></span><span style="display:flex;"><span>rln.set_leaf(id_index, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> buffer).unwrap();
 </span></span></code></pre></div><h2 id="setting-epoch-and-signal">
   Setting epoch and signal
   <a class="anchor" href="#setting-epoch-and-signal">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#75715e">// We generate epoch from a date seed and we ensure is
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// mapped to a field element by hashing-to-field its content
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> epoch <span style="color:#f92672">=</span> hash_to_field(<span style="color:#e6db74">b&#34;Today at noon, this year&#34;</span>);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We set our signal 
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> signal <span style="color:#f92672">=</span> <span style="color:#e6db74">b&#34;RLN is awesome&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// We generate epoch from a date seed and we ensure is
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// mapped to a field element by hashing-to-field its content
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> epoch <span style="color:#f92672">=</span> hash_to_field(<span style="color:#e6db74">b&#34;Today at noon, this year&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We set our signal 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> signal <span style="color:#f92672">=</span> <span style="color:#e6db74">b&#34;RLN is awesome&#34;</span>;
 </span></span></code></pre></div><h2 id="generating-proof-1">
   Generating proof
   <a class="anchor" href="#generating-proof-1">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#75715e">// We prepare input to the proof generation routine
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> proof_input <span style="color:#f92672">=</span> prepare_prove_input(identity_secret, id_index, epoch, signal);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We generate a RLN proof for proof_input
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> in_buffer <span style="color:#f92672">=</span> Cursor::new(proof_input);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> out_buffer <span style="color:#f92672">=</span> Cursor::new(Vec::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>::new());
-</span></span><span style="display:flex;"><span>    rln.generate_rln_proof(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> in_buffer, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> out_buffer)
-</span></span><span style="display:flex;"><span>        .unwrap();
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We get the public outputs returned by the circuit evaluation
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> proof_data <span style="color:#f92672">=</span> out_buffer.into_inner();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// We prepare input to the proof generation routine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> proof_input <span style="color:#f92672">=</span> prepare_prove_input(identity_secret, id_index, epoch, signal);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We generate a RLN proof for proof_input
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> in_buffer <span style="color:#f92672">=</span> Cursor::new(proof_input);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> out_buffer <span style="color:#f92672">=</span> Cursor::new(Vec::<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">u8</span><span style="color:#f92672">&gt;</span>::new());
+</span></span><span style="display:flex;"><span>rln.generate_rln_proof(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> in_buffer, <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> out_buffer)
+</span></span><span style="display:flex;"><span>    .unwrap();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We get the public outputs returned by the circuit evaluation
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> proof_data <span style="color:#f92672">=</span> out_buffer.into_inner();
 </span></span></code></pre></div><h2 id="verifiying-proof">
   Verifiying proof
   <a class="anchor" href="#verifiying-proof">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span>    <span style="color:#75715e">// We prepare input to the proof verification routine
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> verify_data <span style="color:#f92672">=</span> prepare_verify_input(proof_data, signal);
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We verify the zk-proof against the provided proof values
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> in_buffer <span style="color:#f92672">=</span> Cursor::new(verify_data);
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">let</span> verified <span style="color:#f92672">=</span> rln.verify(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> in_buffer).unwrap();
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// We ensure the proof is valid
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    assert!(verified);
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-rust" data-lang="rust"><span style="display:flex;"><span><span style="color:#75715e">// We prepare input to the proof verification routine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> verify_data <span style="color:#f92672">=</span> prepare_verify_input(proof_data, signal);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We verify the zk-proof against the provided proof values
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">let</span> <span style="color:#66d9ef">mut</span> in_buffer <span style="color:#f92672">=</span> Cursor::new(verify_data);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">let</span> verified <span style="color:#f92672">=</span> rln.verify(<span style="color:#f92672">&amp;</span><span style="color:#66d9ef">mut</span> in_buffer).unwrap();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// We ensure the proof is valid
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>assert!(verified);
 </span></span></code></pre></div><p>For more details please visit the <a href="https://github.com/vacp2p/zerokit"><code>zerokit</code></a> library.</p>
 <h1 id="copyright">
   Copyright
@@ -977,6 +982,8 @@ The examples are written in <a href="https://www.rust-lang.org/">rust</a>.</p>
 <li>[10] <a href="https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446">https://ethresear.ch/t/gas-and-circuit-constraint-benchmarks-of-binary-and-quinary-incremental-merkle-trees-using-the-poseidon-hash-function/7446</a></li>
 <li>[11] <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing</a></li>
 <li>[12] <a href="https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/">https://research.nccgroup.com/2020/06/24/security-considerations-of-zk-snark-parameter-multi-party-computation/</a></li>
+<li>[13] <a href="https://github.com/Rate-Limiting-Nullifier/rln-circuits/">https://github.com/Rate-Limiting-Nullifier/rln-circuits/</a></li>
+<li>[14] <a href="https://rate-limiting-nullifier.github.io/rln-docs/">https://rate-limiting-nullifier.github.io/rln-docs/</a></li>
 </ul>
 </article>
  
@@ -1050,6 +1057,10 @@ The examples are written in <a href="https://www.rust-lang.org/">rust</a>.</p>
         <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
       </ul>
     </li>
+  </ul>
+
+  <ul>
+    <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
   </ul>
 
   <ul>
