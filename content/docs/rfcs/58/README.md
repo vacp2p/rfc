@@ -10,7 +10,7 @@ contributors:
 
 # Abstract
 
-The described protocol is improvement of [32/RLN-V1](/spec/32), being more general construct, that allows to set various limits for an epoch (it's 1 message per epoch in [32/RLN-V1](/spec/32)) while remaining almost as simple as it predecessor. 
+The protocol specified in this document is an improvement of [32/RLN-V1](/spec/32), being more general construct, that allows to set various limits for an epoch (it's 1 message per epoch in [32/RLN-V1](/spec/32)) while remaining almost as simple as it predecessor. 
 Moreover, it allows to set different rate-limits for different RLN app users based on some public data, e.g. stake or reputation.
 
 # Motivation
@@ -20,7 +20,7 @@ There are two different subprotocols based on this protocol:
 * RLN-Same - RLN with the same rate-limit for all users;
 * RLN-Diff - RLN that allows to set different rate-limits for different users.
 
-It is important to note that by using large epoch limit value, users will be able to remain anonymous, because their `internal_nullifiers` will not be repeated until they exceed the limit.
+It is important to note that by using a large epoch limit value, users will be able to remain anonymous, because their `internal_nullifiers` will not be repeated until they exceed the limit.
 
 # Flow
 
@@ -127,7 +127,7 @@ The Output is calculated in the same way as the RLN-Same sub-protocol.
 ## Verification and slashing
 
 Verification and slashing in both subprotocols remain the same as in [32/RLN-V1](/spec/32).
-The only difference that may arise is the `message_limit` check in the RLN-Same, since it is now a public input of the Circuit.
+The only difference that may arise is the `message_limit` check in RLN-Same, since it is now a public input of the Circuit.
 
 ## ZK Circuits specification
 
