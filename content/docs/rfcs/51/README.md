@@ -35,16 +35,12 @@ This document also covers discovery of topic shards.
 # Named Sharding
 
 *Named sharding* offers apps to freely choose pubsub topic names.
-App protocols SHOULD follow the naming structure detailed in [23/WAKU2-TOPICS](/spec/23/).
+It is RECOMMENDED for App protocols to follow the naming structure detailed in [23/WAKU2-TOPICS](/spec/23/).
 With named sharding, managing discovery falls into the responsibility of apps.
 
 The default Waku pubsub topic `/waku/2/default-waku/proto` can be seen as a named shard available to all app protocols.
 
-> *Note*: Future versions of this document are planned to give more guidance with respect to discovery via
-[33/WAKU2-DISCV5](/spec/33/),
-[DNS discovery](https://eips.ethereum.org/EIPS/eip-1459),
-and inter-mesh discovery via gossipsub control messages (also using circuit relay).
-It might make sense to deprecate [23/WAKU2-TOPICS](/spec/23/) as a separate spec and merge it here.
+
 
 From an app protocol point of view, a subscription to a content topic `waku2/xxx` on a shard named /mesh/v1.1.1/xxx would look like:
 
@@ -88,15 +84,15 @@ This offers k-anonymity and better connectivity, but comes at a higher bandwidth
 
 The name of the pubsub topic corresponding to a given static shard is specified as
 
-`/waku/2/static-rshard/<shard_cluster_index>/<shard_number>`,
+`/waku/2/rs/<shard_cluster_index>/<shard_number>`,
 
 an example for the 2nd shard in the global shard cluster:
 
-`/waku/2/static-rshard/0/2`.
+`/waku/2/rs/0/2`.
 
 > *Note*: Because *all* shards distribute payload defined in [14/WAKU2-MESSAGE](spec/14/) via [protocol buffers](https://developers.google.com/protocol-buffers/),
 the pubsub topic name does not explicitly add `/proto` to indicate protocol buffer encoding.
-We use `rshard` (as well as `rs` as the ENR key) to indicate these are relay shard clusters; further shard types might follow in the future.
+We use `rs` to indicate these are *relay shard* clusters; further shard types might follow in the future.
 
 From an app point of view, a subscription to a content topic `waku2/xxx` on a static shard would look like:
 
@@ -125,13 +121,40 @@ For this reason, the current specification only supports a single shard cluster 
 In future versions, we will add further (hierarchical) discovery methods.
 We will update [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/) accordingly, once this RFC moves forward.
 
-The representation in the ENR is specified as follows.
+This document specifies two ways of indicating shard cluster participation.
+The index list SHOULD be used for nodes that participante in fewer than 64 shards,
+the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
+Nodes MUST NOT use both index list (`rs`) and bit vector (`rsv`) in a single ENR.
+ENRs with both `rs` and `rsv` keys SHOULD be ignored.
+Nodes MAY interprete `rs` in such ENRs, but MUST ignore `rsv`.
+
+### Index List
 
 | key    | value   |
 |---     |---      |
-| `rs`   | <2-byte index> &#124; <128-byte flag field>  |
+| `rs`   | <2-byte shard cluster index> &#124; <1-byte length> &#124;  <2-byte shard index>  &#124; ... &#124; <2-byte shard index>  |
 
 The ENR key is `rs`.
+The value is comprised of
+* a two-byte shard cluster index in network byte order, concatenated with
+* a one-byte length field holding the number of shards in the given shard cluster, concatenated with
+* two-byte shard indices in network byte order
+
+Example:
+
+| key    | value   |
+|---     |---      |
+| `rs`   | 16u16 &#124; 3u8 &#124; 13u16 &#124; 14u16 &#124; 45u16 |
+
+This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
+
+### Bit Vector
+
+| key    | value   |
+|---     |---      |
+| `rsv`   | <2-byte shard cluster index> &#124; <128-byte flag field>  |
+
+The ENR key is `rsv`.
 The value is comprised of a two-byte shard cluster index in network byte order concatenated with a 128-byte wide bit vector.
 The bit vector indicates which shards of the respective shard cluster the node is part of.
 The right-most bit in the bit vector represents shard `0`, the left-most bit represents shard `1023`.
@@ -142,10 +165,11 @@ Example:
 
 | key    | value   |
 |---     |---      |
-| `rs`   | 16u16 &#124; `0x[...]0000100000003000` |
+| `rsv`   | 16u16 &#124; `0x[...]0000100000003000` |
 
 The `[...]` in the example indicates 120 `0` bytes.
 This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
+(This is just for illustration purposes, a node that is only part of three shards should use the index list method specified above.)
 
 # Automatic Sharding
 
@@ -217,6 +241,22 @@ We will add more on security considerations in future versions of this document.
 The strength of receiver anonymity, i.e. topic receiver unlinkablity,
 depends on the number of content topics (`k`) that get mapped onto a single pubsub topic (shard).
 For *named* and *static* sharding this responsibility is at the app protocol layer.
+
+## Default Topic
+
+Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
+e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).
+
+Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
+See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
+
+Using another pubsub topic might lead to
+
+- weaker metadata protection
+- connectivity problems if there are not enough nodes within the respective pubsub mesh
+- store nodes might not store messages for the chosen pubsub topic
+
+Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.
 
 # Copyright
 
