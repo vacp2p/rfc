@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # The protocol specified in this document is an improvement of 32/RLN-V1, being more general construct, that allows to set various limits for an epoch (it&rsquo;s 1 message per epoch in 32/RLN-V1) while remaining almost as simple as it predecessor. Moreover, it allows to set different rate-limits for different RLN app users based on some public data, e.g. stake or reputation.
+Motivation # The main goal of this RFC is to generalize 32/RLN-V1 and expand its applications.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="58/RLN-V2" />
+<meta property="og:description" content="Abstract # The protocol specified in this document is an improvement of 32/RLN-V1, being more general construct, that allows to set various limits for an epoch (it&rsquo;s 1 message per epoch in 32/RLN-V1) while remaining almost as simple as it predecessor. Moreover, it allows to set different rate-limits for different RLN app users based on some public data, e.g. stake or reputation.
+Motivation # The main goal of this RFC is to generalize 32/RLN-V1 and expand its applications." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/58/" /><meta property="article:section" content="docs" />
+
+
+
+<title>58/RLN-V2 | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.e92c2c7376311bebd222cda24139ef90b532acee6745ecea9930b517a3a918cb.js" integrity="sha256-6Swsc3YxG&#43;vSIs2iQTnvkLUyrO5nRezqmTC1F6OpGMs="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/"class=active>58/RLN-V2</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>58/RLN-V2</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#important-note">Important note</a></li>
+    <li><a href="#rln-same-flow">RLN-Same flow</a>
+      <ul>
+        <li><a href="#registration">Registration</a></li>
+        <li><a href="#signalling">Signalling</a></li>
+      </ul>
+    </li>
+    <li><a href="#rln-diff-flow">RLN-Diff flow</a>
+      <ul>
+        <li><a href="#registration-1">Registration</a></li>
+        <li><a href="#signalling-1">Signalling</a></li>
+      </ul>
+    </li>
+    <li><a href="#verification-and-slashing">Verification and slashing</a></li>
+    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+      <ul>
+        <li><a href="#rln-same-circuit">RLN-Same circuit</a></li>
+        <li><a href="#rln-diff-circuit">RLN-Diff circuit</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="58rln-v2">
+  58/RLN-V2
+  <a class="anchor" href="#58rln-v2">#</a>
+</h1>
+
+  
+      <h1 id="rate-limit-nullifier-v2">
+  Rate Limit Nullifier V2
+  <a class="anchor" href="#rate-limit-nullifier-v2">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Rasul Ibragimov <a href="mailto:curryrasul@gmail.com">curryrasul@gmail.com</a></li>
+      
+      <li>Contributors:
+          
+              
+              Lev Soukhanov <a href="mailto:0xdeadfae@gmail.com">0xdeadfae@gmail.com</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>The protocol specified in this document is an improvement of <a href="/spec/32">32/RLN-V1</a>, being more general construct, that allows to set various limits for an epoch (it&rsquo;s 1 message per epoch in <a href="/spec/32">32/RLN-V1</a>) while remaining almost as simple as it predecessor.
+Moreover, it allows to set different rate-limits for different RLN app users based on some public data, e.g. stake or reputation.</p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>The main goal of this RFC is to generalize <a href="/spec/32">32/RLN-V1</a> and expand its applications.
+There are two different subprotocols based on this protocol:</p>
+<ul>
+<li>RLN-Same - RLN with the same rate-limit for all users;</li>
+<li>RLN-Diff - RLN that allows to set different rate-limits for different users.</li>
+</ul>
+<p>It is important to note that by using a large epoch limit value, users will be able to remain anonymous, because their <code>internal_nullifiers</code> will not be repeated until they exceed the limit.</p>
+<h1 id="flow">
+  Flow
+  <a class="anchor" href="#flow">#</a>
+</h1>
+<p>As in <a href="/spec/32">32/RLN-V1</a>, the general flow can be described by three steps:</p>
+<ol>
+<li>Registration</li>
+<li>Signaling</li>
+<li>Verification and slashing</li>
+</ol>
+<p>The two sub-protocols have different flows, and hence are defined separately.</p>
+<h2 id="important-note">
+  Important note
+  <a class="anchor" href="#important-note">#</a>
+</h2>
+<p>All terms and parameters used remain the same as in <a href="/spec/32">32/RLN-V1</a>, more details <a href="/spec/32/#technical-overview">here</a></p>
+<h2 id="rln-same-flow">
+  RLN-Same flow
+  <a class="anchor" href="#rln-same-flow">#</a>
+</h2>
+<h3 id="registration">
+  Registration
+  <a class="anchor" href="#registration">#</a>
+</h3>
+<p>The registration process in the RLN-Same subprotocol does not differ from <a href="/spec/32">32/RLN-V1</a>.</p>
+<h3 id="signalling">
+  Signalling
+  <a class="anchor" href="#signalling">#</a>
+</h3>
+<h4 id="proof-generation">
+  Proof generation
+  <a class="anchor" href="#proof-generation">#</a>
+</h4>
+<p>For proof generation, the user needs to submit the following fields to the circuit:</p>
+<pre tabindex="0"><code>{
+    identity_secret: identity_secret_hash,
+    path_elements: Merkle_proof.path_elements,
+    identity_path_index: Merkle_proof.indices,
+    x: signal_hash,
+    message_id: message_id,
+    external_nullifier: external_nullifier,
+    message_limit: message_limit
+}
+</code></pre><h4 id="calculating-output">
+  Calculating output
+  <a class="anchor" href="#calculating-output">#</a>
+</h4>
+<p>The following fields are needed for proof output calculation:</p>
+<pre tabindex="0"><code>{
+    identity_secret_hash: bigint, 
+    external_nullifier: bigint,
+    message_id: bigint,
+    x: bigint, 
+}
+</code></pre><p>The output <code>[y, internal_nullifier]</code> is calculated in the following way:</p>
+<pre tabindex="0"><code>a_0 = identity_secret_hash
+a_1 = poseidonHash([a0, external_nullifier, message_id])
+
+y = a_0 + x * a_1
+
+internal_nullifier = poseidonHash([a_1])
+</code></pre><h2 id="rln-diff-flow">
+  RLN-Diff flow
+  <a class="anchor" href="#rln-diff-flow">#</a>
+</h2>
+<h3 id="registration-1">
+  Registration
+  <a class="anchor" href="#registration-1">#</a>
+</h3>
+<p><strong>id_commitment</strong> in <a href="/spec/32">32/RLN-V1</a> is equal to <code>poseidonHash(identity_secret)</code>.
+The goal of RLN-Diff is to set different rate-limits for different users.
+It follows that <strong>id_commitment</strong> must somehow depend on the <code>user_message_limit</code> parameter, where 0 &lt;= <code>user_message_limit</code> &lt;= <code>message_limit</code>.
+There are few ways to do that:</p>
+<ol>
+<li>Sending <code>identity_secret_hash</code> = <code>poseidonHash(identity_secret, userMessageLimit)</code> and zk proof that <code>user_message_limit</code> is valid (is in the right range).
+This approach requires zkSNARK verification, which is an expensive operation on the blockchain.</li>
+<li>Sending the same <code>identity_secret_hash</code> as in <a href="/spec/32">32/RLN-V1</a> (<code>poseidonHash(identity_secret)</code>) and a user_message_limit publicly to a server or smart-contract where <code>rate_commitment</code> = <code>poseidonHash(identity_secret_hash, userMessageLimit)</code> is calculated.
+The leaves in the membership Merkle tree would be the rate_commitments of the users.
+This approach requires additional hashing in the Circuit, but it eliminates the need for zk proof verification for the registration.</li>
+</ol>
+<p>Both methods are correct, and the choice of the method is left to the implementer.
+It is recommended to use second method for the reasons already described.
+The following flow description will also be based on the second method.</p>
+<h3 id="signalling-1">
+  Signalling
+  <a class="anchor" href="#signalling-1">#</a>
+</h3>
+<h4 id="proof-generation-1">
+  Proof generation
+  <a class="anchor" href="#proof-generation-1">#</a>
+</h4>
+<p>For proof generation, the user need to submit the following fields to the circuit:</p>
+<pre tabindex="0"><code>{
+    identity_secret: identity_secret_hash,
+    path_elements: Merkle_proof.path_elements,
+    identity_path_index: Merkle_proof.indices,
+    x: signal_hash,
+    message_id: message_id,
+    external_nullifier: external_nullifier,
+    user_message_limit: message_limit
+}
+</code></pre><h4 id="calculating-output-1">
+  Calculating output
+  <a class="anchor" href="#calculating-output-1">#</a>
+</h4>
+<p>The Output is calculated in the same way as the RLN-Same sub-protocol.</p>
+<h2 id="verification-and-slashing">
+  Verification and slashing
+  <a class="anchor" href="#verification-and-slashing">#</a>
+</h2>
+<p>Verification and slashing in both subprotocols remain the same as in <a href="/spec/32">32/RLN-V1</a>.
+The only difference that may arise is the <code>message_limit</code> check in RLN-Same, since it is now a public input of the Circuit.</p>
+<h2 id="zk-circuits-specification">
+  ZK Circuits specification
+  <a class="anchor" href="#zk-circuits-specification">#</a>
+</h2>
+<p>The design of the <a href="/spec/32">32/RLN-V1</a> circuits is different from the circuits of this protocol.
+RLN-v2 requires additional algebraic constraints.
+The membership proof and Shamir&rsquo;s Secret Sharing constraints remain unchanged.</p>
+<p>The ZK Circuit is implemented using a <a href="https://eprint.iacr.org/2016/260.pdf">Groth-16 ZK-SNARK</a>,
+using the <a href="https://docs.circom.io/">circomlib</a> library.
+Both schemes contain compile-time constants/system parameters:</p>
+<ul>
+<li>DEPTH - depth of membership Merkle tree</li>
+<li>LIMIT_BIT_SIZE - bit size of <code>limit</code> numbers, e.g. for the 16 - maximum <code>limit</code> number is 65535.</li>
+</ul>
+<p>The main difference of the protocol is that instead of a new polynomial (a new value <code>a_1</code>) for a new epoch, a new polynomial is generated for each message.
+The user assigns an identifier to each message; the main requirement is that this identifier be in the range from 1 to <code>limit</code>.
+This is proven using range constraints.</p>
+<h3 id="rln-same-circuit">
+  RLN-Same circuit
+  <a class="anchor" href="#rln-same-circuit">#</a>
+</h3>
+<h4 id="circuit-parameters">
+  Circuit parameters
+  <a class="anchor" href="#circuit-parameters">#</a>
+</h4>
+<p><strong>Public Inputs</strong></p>
+<ul>
+<li><code>x</code></li>
+<li><code>external_nullifier</code></li>
+<li><code>message_limit</code> - limit per epoch</li>
+</ul>
+<p><strong>Private Inputs</strong></p>
+<ul>
+<li><code>identity_secret_hash</code></li>
+<li><code>path_elements</code></li>
+<li><code>identity_path_index</code></li>
+<li><code>message_id</code></li>
+</ul>
+<p><strong>Outputs</strong></p>
+<ul>
+<li><code>y</code></li>
+<li><code>root</code></li>
+<li><code>internal_nullifier</code></li>
+</ul>
+<h3 id="rln-diff-circuit">
+  RLN-Diff circuit
+  <a class="anchor" href="#rln-diff-circuit">#</a>
+</h3>
+<p>In the RLN-Diff scheme, instead of the public parameter <code>message_limit</code>, a parameter is used that is set for each user during registration (<code>user_message_limit</code>); the <code>message_id</code> value is compared to it in the same way as it is compared to <code>message_limit</code> in the case of RLN-Same.</p>
+<h4 id="circuit-parameters-1">
+  Circuit parameters
+  <a class="anchor" href="#circuit-parameters-1">#</a>
+</h4>
+<p><strong>Public Inputs</strong></p>
+<ul>
+<li><code>x</code></li>
+<li><code>external_nullifier</code></li>
+</ul>
+<p><strong>Private Inputs</strong></p>
+<ul>
+<li><code>identity_secret_hash</code></li>
+<li><code>path_elements</code></li>
+<li><code>identity_path_index</code></li>
+<li><code>message_id</code></li>
+<li><code>user_message_limit</code></li>
+</ul>
+<p><strong>Outputs</strong></p>
+<ul>
+<li><code>y</code></li>
+<li><code>root</code></li>
+<li><code>internal_nullifier</code></li>
+</ul>
+<h1 id="appendix-a-security-considerations">
+  Appendix A: Security considerations
+  <a class="anchor" href="#appendix-a-security-considerations">#</a>
+</h1>
+<p>Although there are changes in the circuits, this spec inherits all the security considerations of <a href="/spec/32">32/RLN-V1</a>.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li>[1] <a href="https://zkresear.ch/t/rate-limit-nullifier-v2-circuits/102">https://zkresear.ch/t/rate-limit-nullifier-v2-circuits/102</a></li>
+<li>[2] <a href="https://github.com/Rate-Limiting-Nullifier/rln-circuits-v2">https://github.com/Rate-Limiting-Nullifier/rln-circuits-v2</a></li>
+<li>[3] <a href="https://rfc.vac.dev/spec/32/#technical-overview">https://rfc.vac.dev/spec/32/#technical-overview</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#important-note">Important note</a></li>
+    <li><a href="#rln-same-flow">RLN-Same flow</a>
+      <ul>
+        <li><a href="#registration">Registration</a></li>
+        <li><a href="#signalling">Signalling</a></li>
+      </ul>
+    </li>
+    <li><a href="#rln-diff-flow">RLN-Diff flow</a>
+      <ul>
+        <li><a href="#registration-1">Registration</a></li>
+        <li><a href="#signalling-1">Signalling</a></li>
+      </ul>
+    </li>
+    <li><a href="#verification-and-slashing">Verification and slashing</a></li>
+    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+      <ul>
+        <li><a href="#rln-same-circuit">RLN-Same circuit</a></li>
+        <li><a href="#rln-diff-circuit">RLN-Diff circuit</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
