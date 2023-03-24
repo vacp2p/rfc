@@ -28,8 +28,7 @@ A node identifies a peer by their `installation-id` which MAY be interpreted as 
 
 ## Discovery of pre-key bundles
 
-The node's pre-key bundle SHOULD be broadcasted on a content topic derived from the node's public key.
-Peers MUST derive a topic from their public key to broadcast their pre-key bundles on, so that the first message may be PFS-encrypted.
+The node's pre-key bundle MUST be broadcast on a content topic derived from the node's public key, so that the first message may be PFS-encrypted.
 Each peer MUST publish periodically to this topic, otherwise they risk not being able to receive messages from the other peer.
 Each peer MAY publish to this topic when their metadata changes, so that the other peer can update their local record.
 
