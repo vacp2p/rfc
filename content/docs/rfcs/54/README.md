@@ -51,9 +51,9 @@ if len(hash) < topicLen {
     topicLen = len(hash)
 }
 
-var topic [4]byte
+var contactCodeTopic [4]byte
 for i = 0; i < topicLen; i++ {
-    topic[i] = hash[i]
+    contactCodeTopic[i] = hash[i]
 }
 ```
 
