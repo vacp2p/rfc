@@ -35,7 +35,7 @@ Each peer MAY publish to this topic when their metadata changes, so that the oth
 If peer A wants to send a message to peer B, it MUST derive the topic from peer B's public key, which has been shared out of band.
 Partitioned topics have been used to balance privacy and efficiency of broadcasting pre-key bundles.
 
-The number of partitions that MUST be used 5000.
+The number of partitions that MUST be used is 5000.
 
 The topic MUST be derived as follows:
 ```
