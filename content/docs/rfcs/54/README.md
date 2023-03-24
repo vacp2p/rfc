@@ -91,9 +91,10 @@ for i = 0; i < topicLen; i++ {
 
 To summarize, following is the process for peer B to establish a session with peer A:
 1. Listen to peer B's Contact Code Topic to retrieve their bundle information, including a list of active devices
-2. Send a message on peer B's partitioned topic
-3. Listen to the Negotiated Topic between peers A & B
-4. When peer A receives a message from peer B, the Negotiated Topic SHOULD be used
+2. Peer A sends their pre-key bundle on peer B's partitioned topic
+3. Peer A and peer B perform the key-exchange using the shared pre-key bundles
+3. The negotiated topic is derived from the shared secret
+4. Peers A & B exchange messages on the negotiated topic
 
 ## Concurrent sessions
 
