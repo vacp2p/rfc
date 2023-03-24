@@ -281,36 +281,38 @@ In fact, the archive service can be offered by infrastructure nodes.
 Shard discovery is covered by [51/WAKU2-RELAY-SHARDING](/spec/51/).
 This allows the Status app to abstract from the discovery process and simply address shards by their index.
 
-## Libp2p Rendezvous
+## Libp2p Rendezvous and Circuit-Relay
 
-This document suggests using
-[libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md)
-in addition to [33/WAKU2-DISCV5](/spec/33/) discovery which is offered by the Waku layer as specified in [51/WAKU2-RELAY-SHARDING](/spec/51/).
-The main reason is making nodes behind restrictive NAT discoverable.
-In addition, it helps increasing discoverability, and by extension connectivity, for nodes that are not behind restricted NAT.
+To make nodes behind restrictive NATs discoverable,
+this document suggests using [libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md).
+Nodes can check whether they are behind a restrictive NAT using the [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md).
 
-Nodes that do not take part in [33/WAKU2-DISCV5](/spec/33/) discovery,
-e.g., resource restricted devices, MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
+> *Note:* The following will move into [51/WAKU2-RELAY-SHARDING](/spec/51/), or [33/WAKU2-DISCV5](/spec/33/):
+Nodes behind restrictive NATs SHOULD not announce their publicly unreachable address via [33/WAKU2-DISCV5](/spec/33/) discovery.
+
+It is RECOMMENDED that nodes that are part of the relay network also act as rendezvous points.
+This includes accepting register queries from peers, as well as answering rendezvous discover queries.
+Nodes MAY opt-out of the rendezvous functionality.
+
+To allow nodes to initiate connections to peers behind restrictive NATs (after discovery via rendezvous),
+it is RECOMMENDED that nodes that are part of the Waku relay network also offer
+[libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md) functionality.
+
+To minimize the load circuit-relay nodes, nodes SHOULD
+
+1) make use of the [limiting](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation)
+functionality offered by the libp2p circuit relay protocols, and
+2) use [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md) to upgrade to a direct connection.
+
+Nodes that do not announce themselves at all and only plan to use light protocols,
+MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
 For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34) offer the same functionality,
 but return node sets sampled in different ways.
 Using both can help increasing connectivity.
 
-It is RECOMMENDED that nodes that are part of the relay network, also act as rendezvous points.
-This includes accepting register queries from peers, as well as answering rendezvous discover queries.
-Nodes MAY opt-out of the rendezvous functionality.
-
-To support the main purpose of rendezvous (for Waku),
-it is RECOMMENDED for nodes that act as a rendezvous point to also offer to act as a relay between the node that queried, and the discovered node.
-This allows nodes behind restrictive NATs to be part of the relay network.
-
-> *Note*: A specification of this process will follow in a future version of this document.
-
-While this process is similar to [libp2p circuit relay](https://docs.libp2p.io/concepts/nat/circuit-relay/),
-it is not the same.
-Circuit relay offers an encrypted end-to-end channel, which means the circuit relay node does *not* disseminate message via Waku relay,
-and the circuit-relay traffic is additional load.
-The approach recommended in this document does not introduce additional traffic (apart from a few control messages),
-because the relay node acts as a typical Waku relay.
+Nodes that are not behind restrictive NATs MAY register at rendezvous points, too;
+this helps increasing discoverability, and by extension connectivity.
+Such nodes SHOULD, however, not register at circuit relays.
 
 ### Announcing Shard Participation
 
@@ -389,6 +391,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [34/WAKU2-PEER-EXCHANGE](/spec/34/)
 * [33/WAKU2-DISCV5](/spec/33/)
 * [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
+* [libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md)
+* [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md)
 * [31/WAKU2-ENR](/spec/31/)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
 
