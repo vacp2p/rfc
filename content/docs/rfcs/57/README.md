@@ -287,9 +287,28 @@ This allows the Status app to abstract from the discovery process and simply add
 
 # DoS Protection
 
-> *Note* :  DoS protection will be specified in a soon-to-follow update of this RFC (while in raw state).
-The following sketches basic approaches.
-DoS protection might move in a separate document and be referenced here.
+Hereunder we describe the "opt-in message signing for DoS prevention" solution, designed *ad hod* for Status MVP.
+
+Since publishing messages to gossipsub topics has no limits, anyone can publish messages at a very high rate and DoS the network. This would elevate the bandwidth consumption of all nodes subscribed to said pubsub topic, making it prohibitive (in terms of bandwidth) to be subscribed to it. In order to scale, we need some mechanism to prevent this from happening, otherwise all scaling efforts will be in vain. Since RLN is not ready yet, hereunder we describe a simpler approach designed *ad hoc* for Status use case, feasible to implement for the MVP and that validates some of the ideas that will evolve to solutions such as RLN.
+
+With this approach, certain gossipsub topics can be optionally configured to only accept messages signed with a given key, that only trusted entities know. This key can be pre-shared among a set of participants, that are trusted to make fair usage of the network, publishing messages at a reasonable rate/size. Note that this key can be shared/reused among multiple participants. This is an opt-in solution that operators can choose to deploy in their topics, but it's not enforced in the default pubsub topic.
+
+Description of the solution:
+
+* Gossipsub topics shall be configured by the operator to use a given key for validating messages, with the tuple (`pubsub-topic-name`, `public-key-topic`), where `public-key-topic` specifies the public key that is used to validate the signatures of messages published in `pubsub-topic-name`. Note that different pubsub topics can have different keys, or none. For simplicity, there is just one key per topic. Since this approach has clear privacy implications, this configuration is not part of the waku protocol, but of the application.
+* A new field in `WakuMessage` is introduced, that contains the signature of the message hash, using an asymmetric secp256k1 keypair, containing 64 bytes.
+* Gossipsub message validators are used, to `Accept` or `Reject` messages. A message received in `pubsub-topic-name` will be accepted if and only if its hash was signed with the `public-key-topic` configured for that topic. If no signature was included or it was signed with a different public key, then the message is rejected and it is not further propagated in the network. This protects the network from DoS, since only valid messages are relayed.
+* To further strengthen DoS protection, gossipsub [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) can be used to trigger disconnections from peers sending multiple invalid messages. See `P4` penalty. This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.
+
+This solution introduces two roles. Note that waku protocol shall only implement the relayer, leaving the publisher to be implemented by applications running on top of waku.
+* Publisher: A node that knows the `private-key-topic` associated to `public-key-topic`, that can publish signed messages that are accepted and relayed by the nodes.
+* Relayer: A node that knows the `public-key-topic`, that can relay messages and distinguish valid from invalid ones.
+
+Required changes:
+* This solution is designed to be backward compatible so that nodes validating messages can coexist in the same topic with other nodes that don't perform validation. But note that only nodes that perform message validation will be protected against DoS.
+* Users of a given `pubsub-topic-name`, now require the `private-key-topic` of the configured `public-key-topic` to publish valid signed messages in said topic. It's left upon the application layer how to store, distribute and revoke access to the `private-key-topic`.
+* Operators wanting to leverage this DoS protection feature would need to redeploy including the desired tuple (`pubsub-topic-name`, `public-key-topic`).
+
 
 ## Statically-Mapped Communities
 
