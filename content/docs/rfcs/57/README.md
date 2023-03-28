@@ -298,7 +298,7 @@ To allow nodes to initiate connections to peers behind restrictive NATs (after d
 it is RECOMMENDED that nodes that are part of the Waku relay network also offer
 [libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md) functionality.
 
-To minimize the load circuit-relay nodes, nodes SHOULD
+To minimize the load on circuit-relay nodes, nodes SHOULD
 
 1) make use of the [limiting](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation)
 functionality offered by the libp2p circuit relay protocols, and
