@@ -19,7 +19,7 @@ Note: (Parts of) this RFC will be deprecated in the future as we continue resear
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.e92c2c7376311bebd222cda24139ef90b532acee6745ecea9930b517a3a918cb.js" integrity="sha256-6Swsc3YxG&#43;vSIs2iQTnvkLUyrO5nRezqmTC1F6OpGMs="></script>
+<script defer src="/en.search.min.d0db2715d1b3a9e7db2666f1159f9a8989f3bccf4ea5b7e6aacd1b7a3383556d.js" integrity="sha256-0NsnFdGzqefbJmbxFZ&#43;aiYnzvM9Opbfmqs0bejODVW0="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -198,6 +198,14 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#control-message-shards">Control Message Shards</a></li>
     <li><a href="#media-shards">Media Shards</a></li>
     <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+      <ul>
+        <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
@@ -536,7 +544,54 @@ In fact, the archive service can be offered by infrastructure nodes.</p>
 </h1>
 <p>Shard discovery is covered by <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>.
 This allows the Status app to abstract from the discovery process and simply address shards by their index.</p>
-<h1 id="dos-protection">
+<h2 id="libp2p-rendezvous-and-circuit-relay">
+  Libp2p Rendezvous and Circuit-Relay
+  <a class="anchor" href="#libp2p-rendezvous-and-circuit-relay">#</a>
+</h2>
+<p>To make nodes behind restrictive NATs discoverable,
+this document suggests using <a href="https://github.com/libp2p/specs/blob/master/rendezvous/README.md">libp2p rendezvous</a>.
+Nodes can check whether they are behind a restrictive NAT using the <a href="https://github.com/libp2p/specs/blob/master/autonat/README.md">libp2p AutoNAT protocol</a>.</p>
+<blockquote>
+<p><em>Note:</em> The following will move into <a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a>, or <a href="/spec/33/">33/WAKU2-DISCV5</a>:
+Nodes behind restrictive NATs SHOULD not announce their publicly unreachable address via <a href="/spec/33/">33/WAKU2-DISCV5</a> discovery.</p>
+</blockquote>
+<p>It is RECOMMENDED that nodes that are part of the relay network also act as rendezvous points.
+This includes accepting register queries from peers, as well as answering rendezvous discover queries.
+Nodes MAY opt-out of the rendezvous functionality.</p>
+<p>To allow nodes to initiate connections to peers behind restrictive NATs (after discovery via rendezvous),
+it is RECOMMENDED that nodes that are part of the Waku relay network also offer
+<a href="https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md">libp2p circuit relay</a> functionality.</p>
+<p>To minimize the load on circuit-relay nodes, nodes SHOULD</p>
+<ol>
+<li>make use of the <a href="https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation">limiting</a>
+functionality offered by the libp2p circuit relay protocols, and</li>
+<li>use <a href="https://github.com/libp2p/specs/blob/master/relay/DCUtR.md">DCUtR</a> to upgrade to a direct connection.</li>
+</ol>
+<p>Nodes that do not announce themselves at all and only plan to use light protocols,
+MAY use rendezvous discovery instead of or along-side <a href="/specs/34">34/WAKU2-PEER-EXCHANGE</a>.
+For these nodes, rendezvous and <a href="/specs/34">34/WAKU2-PEER-EXCHANGE</a> offer the same functionality,
+but return node sets sampled in different ways.
+Using both can help increasing connectivity.</p>
+<p>Nodes that are not behind restrictive NATs MAY register at rendezvous points, too;
+this helps increasing discoverability, and by extension connectivity.
+Such nodes SHOULD, however, not register at circuit relays.</p>
+<h3 id="announcing-shard-participation">
+  Announcing Shard Participation
+  <a class="anchor" href="#announcing-shard-participation">#</a>
+</h3>
+<p>Registering a namespace via <a href="https://github.com/libp2p/specs/blob/master/rendezvous/README.md#interaction">lib-p2p rendezvous</a>
+is done via a register query:</p>
+<pre tabindex="0"><code>REGISTER{my-app, {QmA, AddrA}}
+</code></pre><p>The app name, <code>my-app</code> is used to encode a single shard in the form:</p>
+<pre tabindex="0"><code>&lt;rs (utf8 encoded)&gt; | &lt;2-byte shard cluster index&gt; | &lt;2-byte shard index&gt;
+</code></pre><p>Registering shard 2 in the Status shard cluster (with shard cluster index 16, see <a href="/spec/52/h">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a>),
+the register query would look like</p>
+<pre tabindex="0"><code>REGISTER{0x727300100002, {QmA, AddrA}}
+</code></pre><p>Participation in further shards is registered with further queries; one register query per shard.
+(0x7273 is the encoding of <code>rs</code>.)</p>
+<p>A discovery query for nodes that are part of this shard would look like</p>
+<pre tabindex="0"><code>DISCOVER{ns: 0x727300100002}
+</code></pre><h1 id="dos-protection">
   DoS Protection
   <a class="anchor" href="#dos-protection">#</a>
 </h1>
@@ -593,6 +648,8 @@ See <a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a> for information on Waku A
 <li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
 <li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
 <li><a href="https://docs.libp2p.io/concepts/nat/circuit-relay/">Circuit Relay</a></li>
+<li><a href="https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md">libp2p circuit relay</a></li>
+<li><a href="https://github.com/libp2p/specs/blob/master/relay/DCUtR.md">DCUtR</a></li>
 <li><a href="/spec/31/">31/WAKU2-ENR</a></li>
 <li><a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 </ul>
@@ -656,6 +713,14 @@ See <a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a> for information on Waku A
     <li><a href="#control-message-shards">Control Message Shards</a></li>
     <li><a href="#media-shards">Media Shards</a></li>
     <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+      <ul>
+        <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+      </ul>
+    </li>
   </ul>
 
   <ul>
