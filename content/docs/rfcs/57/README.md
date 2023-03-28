@@ -77,7 +77,6 @@ an example for the shard with index `18` in the Status shard cluster:
 
 In other words, the mesh network with the pubsub topic name `/waku/2/rs/16/18` carries messages associated with shard `18` in the Status shard cluster.
 
-
 ### Implementation Suggestion
 
 The Waku implementation should offer an interface that allows Status nodes to subscribe to Status specific content topics like
@@ -208,7 +207,6 @@ but can significantly improve scaling.
 We still have k-anonymity because several chat pairs are mapped into one content topic.
 We could improve on this in the future, and research the applicability of PIR (private information retrieval) techniques in the future.
 
-
 # Infrastructure Shards
 
 Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see [30/ADAPTIVE-NODES](/spec/30/)).
@@ -248,7 +246,6 @@ Strong Desktop clients MAY opt in to support the relay network.
 
 > *Note*: This is not planned for the MVP.
 
-
 # Light Protocols
 
 Light protocols may be used to save bandwidth,
@@ -262,7 +259,6 @@ Light protocols comprise
 * [19/WAKU2-LIGHTPUSH](/spec/19/) for sending messages
 * [12/WAKU2-FILTER](/spec/12/) for requesting messages with specific attributes
 * [34/WAKU2-PEER-EXCHANGE](/spec/34) for discovering peers
-
 
 # Waku Archive
 
@@ -284,6 +280,70 @@ In fact, the archive service can be offered by infrastructure nodes.
 
 Shard discovery is covered by [51/WAKU2-RELAY-SHARDING](/spec/51/).
 This allows the Status app to abstract from the discovery process and simply address shards by their index.
+
+## Libp2p Rendezvous and Circuit-Relay
+
+To make nodes behind restrictive NATs discoverable,
+this document suggests using [libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md).
+Nodes can check whether they are behind a restrictive NAT using the [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md).
+
+> *Note:* The following will move into [51/WAKU2-RELAY-SHARDING](/spec/51/), or [33/WAKU2-DISCV5](/spec/33/):
+Nodes behind restrictive NATs SHOULD not announce their publicly unreachable address via [33/WAKU2-DISCV5](/spec/33/) discovery.
+
+It is RECOMMENDED that nodes that are part of the relay network also act as rendezvous points.
+This includes accepting register queries from peers, as well as answering rendezvous discover queries.
+Nodes MAY opt-out of the rendezvous functionality.
+
+To allow nodes to initiate connections to peers behind restrictive NATs (after discovery via rendezvous),
+it is RECOMMENDED that nodes that are part of the Waku relay network also offer
+[libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md) functionality.
+
+To minimize the load on circuit-relay nodes, nodes SHOULD
+
+1) make use of the [limiting](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation)
+functionality offered by the libp2p circuit relay protocols, and
+2) use [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md) to upgrade to a direct connection.
+
+Nodes that do not announce themselves at all and only plan to use light protocols,
+MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
+For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34) offer the same functionality,
+but return node sets sampled in different ways.
+Using both can help increasing connectivity.
+
+Nodes that are not behind restrictive NATs MAY register at rendezvous points, too;
+this helps increasing discoverability, and by extension connectivity.
+Such nodes SHOULD, however, not register at circuit relays.
+
+### Announcing Shard Participation
+
+Registering a namespace via [lib-p2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md#interaction)
+is done via a register query:
+
+```
+REGISTER{my-app, {QmA, AddrA}}
+```
+
+The app name, `my-app` is used to encode a single shard in the form:
+
+```
+<rs (utf8 encoded)> | <2-byte shard cluster index> | <2-byte shard index>
+```
+
+Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/h)),
+the register query would look like
+
+```
+REGISTER{0x727300100002, {QmA, AddrA}}
+```
+
+Participation in further shards is registered with further queries; one register query per shard.
+(0x7273 is the encoding of `rs`.)
+
+A discovery query for nodes that are part of this shard would look like
+
+```
+DISCOVER{ns: 0x727300100002}
+```
 
 # DoS Protection
 
@@ -310,7 +370,6 @@ Map 1:1 chats to community shards, if both A and B are part of the respective co
 This increases k-anonymity and benefits from community DoS protection.
 It could be rate-limited with RLN.
 
-
 # Security/Privacy Considerations
 
 This document makes several trade-offs to privacy and anonymity.
@@ -332,6 +391,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [34/WAKU2-PEER-EXCHANGE](/spec/34/)
 * [33/WAKU2-DISCV5](/spec/33/)
 * [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
+* [libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md)
+* [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md)
 * [31/WAKU2-ENR](/spec/31/)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
 

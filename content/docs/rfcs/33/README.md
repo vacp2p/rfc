@@ -75,6 +75,10 @@ As part of our [discv5 roadmap](https://forum.vac.dev/t/waku-v2-discv5-roadmap-d
 
 `33/WAKU2-DISCV5` fully inherits the [discv5 semantics](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md).
 
+Before announcing their address via Waku2 discv5, nodes SHOULD check if this address is publicly reachable.
+Nodes MAY use the [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md) to perform that check.
+Nodes SHOULD only announce publicly reachable addresses via Waku2 discv5,
+to avoid cluttering peer lists with nodes that are not reachable.
 
 # Wire Format Specification
 
@@ -159,6 +163,7 @@ Properly protecting against eclipse attacks is challenging and raises research q
 1. [`discv5` wire protocol](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-wire.md) 
 1. [`discv5` topic discovery](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md#topic-advertisement)
 1. [Waku DNS discovery](https://rfc.vac.dev/spec/10/#discovery-domain)
+1. [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md)
 1. [`EIP-1459`](https://eips.ethereum.org/EIPS/eip-1459)
 1. [`GossipSub`](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md)
 1. [Waku discv5 roadmap discussion](https://forum.vac.dev/t/waku-v2-discv5-roadmap-discussion/121)
