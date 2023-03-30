@@ -50,7 +50,7 @@ The data payload is also treated as a Waku message attribute for convenience.
 
 * The `content_topic` attribute MUST specify a string identifier that can be used for content-based filtering.
 
-* The `meta` attribute, if present, contains an arbitrary application-specific variable-length byte array with a maximum length limit of 32 bytes.
+* The `meta` attribute, if present, contains an arbitrary application-specific variable-length byte array with a maximum length limit of 64 bytes.
 This attribute can be utilized to convey supplementary details to various Waku protocols, thereby enabling customized processing based on its contents.
 
 * The `version` attribute, if present, contains a version number to discriminate different types of payload encryption.
@@ -134,7 +134,7 @@ This hashing schema is deemed appropriate for use cases where a cross-implementa
 
 ## Test vectors
 
-Waku message hash computation:
+Waku message hash computation (`meta` size of 12 bytes):
 ```
 pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
 message.payload = 0x010203045445535405060708
@@ -142,6 +142,17 @@ message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656
 message.meta = 0x73757065722d736563726574
 
 message_hash = 0x4fdde1099c9f77f6dae8147b6b3179aba1fc8e14a7bf35203fc253ee479f135f
+```
+
+Waku message hash computation (`meta` size of 64 bytes):
+
+```
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+message.payload = 0x010203045445535405060708
+message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+message.meta = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f
+
+message_hash = 0xc32ed3b51f0c432be1c7f50880110e1a1a60f6067cd8193ca946909efe1b26ad
 ```
 
 Waku message hash computation (`meta` attribute not present):
