@@ -287,27 +287,88 @@ This allows the Status app to abstract from the discovery process and simply add
 
 # DoS Protection
 
-Hereunder we describe the "opt-in message signing for DoS prevention" solution, designed *ad hod* for Status MVP.
+Hereunder we describe the "opt-in message signing for DoS prevention" solution, designed *ad hoc* for Status MVP.
 
-Since publishing messages to gossipsub topics has no limits, anyone can publish messages at a very high rate and DoS the network. This would elevate the bandwidth consumption of all nodes subscribed to said pubsub topic, making it prohibitive (in terms of bandwidth) to be subscribed to it. In order to scale, we need some mechanism to prevent this from happening, otherwise all scaling efforts will be in vain. Since RLN is not ready yet, hereunder we describe a simpler approach designed *ad hoc* for Status use case, feasible to implement for the MVP and that validates some of the ideas that will evolve to solutions such as RLN.
+Since publishing messages to gossipsub topics has no limits, anyone can publish messages at a very high rate and DoS the network.
+This would elevate the bandwidth consumption of all nodes subscribed to said pubsub topic, making it prohibitive (in terms of bandwidth) to be subscribed to it.
+In order to scale, we need some mechanism to prevent this from happening, otherwise all scaling efforts will be in vain.
+Since RLN is not ready yet, hereunder we describe a simpler approach designed *ad hoc* for Status use case, feasible to implement for the MVP and that validates some of the ideas that will evolve to solutions such as RLN.
 
-With this approach, certain gossipsub topics can be optionally configured to only accept messages signed with a given key, that only trusted entities know. This key can be pre-shared among a set of participants, that are trusted to make fair usage of the network, publishing messages at a reasonable rate/size. Note that this key can be shared/reused among multiple participants. This is an opt-in solution that operators can choose to deploy in their topics, but it's not enforced in the default pubsub topic.
+With this approach, certain gossipsub topics can be optionally configured to only accept messages signed with a given key, that only trusted entities know.
+This key can be pre-shared among a set of participants, that are trusted to make fair usage of the network, publishing messages at a reasonable rate/size.
+Note that this key can be shared/reused among multiple participants, and only one key is whitelisted per topic.
+This is an opt-in solution that operators can choose to deploy in their topics, but it's not enforced in the default pubsub topic.
+Operators can freely choose how they want to generate, and distribute the public keys. It's also their responsibility to handle the private key, sharing it with only trusted parties and keeping proper custody of it.
 
-Description of the solution:
+The following concepts are introduced:
+* `private-key-topic`: A private key of 32 bytes, that allows the holder to sign messages and it's mapped to a `protected-pubsub-topic`.
+* `app-message-hash`: Application `WakuMessage` hash, calculated as `sha256(concat(pubsubTopic, payload, contentTopic))` with all elements in bytes.
+* `message-signature`: ECDSA signature of `application-message-hash` using a given `private-key-topic`, 64 bytes.
+* `public-key-topic`: The equivalent public key of `private-key-topic`.
+* `protected-pubsub-topic`: Pubsub topic that only accepts messages that were signed with `private-key-topic`, where `verify(message-signature, app-message-hash, public-key-topic)` is only correct if the `message-signature` was produced by `private-key-topic`. See ECDSA signature verification algorithm.
 
-* Gossipsub topics shall be configured by the operator to use a given key for validating messages, with the tuple (`pubsub-topic-name`, `public-key-topic`), where `public-key-topic` specifies the public key that is used to validate the signatures of messages published in `pubsub-topic-name`. Note that different pubsub topics can have different keys, or none. For simplicity, there is just one key per topic. Since this approach has clear privacy implications, this configuration is not part of the waku protocol, but of the application.
-* A new field in `WakuMessage` is introduced, that contains the signature of the message hash, using an asymmetric secp256k1 keypair, containing 64 bytes.
-* Gossipsub message validators are used, to `Accept` or `Reject` messages. A message received in `pubsub-topic-name` will be accepted if and only if its hash was signed with the `public-key-topic` configured for that topic. If no signature was included or it was signed with a different public key, then the message is rejected and it is not further propagated in the network. This protects the network from DoS, since only valid messages are relayed.
-* To further strengthen DoS protection, gossipsub [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) can be used to trigger disconnections from peers sending multiple invalid messages. See `P4` penalty. This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.
+This solution introduces two roles:
+* Publisher: A node that knows the `private-key-topic` associated to `public-key-topic`, that can publish messages with a valid `message-signature` that are accepted and relayed by the nodes implementing this feature.
+* Relayer: A node that knows the `public-key-topic`, which can be used to verify if the messages were signed with the equivalent `private-key-topic`. It allows distinguishing valid from invalid messages which protect the node against DoS attacks, assuming that the users of the key send messages of a reasonable size and rate. Note that a node can validate messages and relay them or not without knowing the private key.
 
-This solution introduces two roles. Note that waku protocol shall only implement the relayer, leaving the publisher to be implemented by applications running on top of waku.
-* Publisher: A node that knows the `private-key-topic` associated to `public-key-topic`, that can publish signed messages that are accepted and relayed by the nodes.
-* Relayer: A node that knows the `public-key-topic`, that can relay messages and distinguish valid from invalid ones.
+## Design requirements (publisher)
 
-Required changes:
-* This solution is designed to be backward compatible so that nodes validating messages can coexist in the same topic with other nodes that don't perform validation. But note that only nodes that perform message validation will be protected against DoS.
-* Users of a given `pubsub-topic-name`, now require the `private-key-topic` of the configured `public-key-topic` to publish valid signed messages in said topic. It's left upon the application layer how to store, distribute and revoke access to the `private-key-topic`.
-* Operators wanting to leverage this DoS protection feature would need to redeploy including the desired tuple (`pubsub-topic-name`, `public-key-topic`).
+A publisher that wants to send messages that are relayed in the network for a given `protected-pubsub-topic` shall:
+* be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 64 bytes.
+* include the signature of the `app-message-hash` (`message-signature`) that wishes to send in the `WakuMessage` `meta` field.
+
+## Design requirements (relay)
+
+Requirements for the relay are listed below:
+
+* A valid `protected-pubsub-topic` shall be configured with a `public-key-topic`, (derived from a `private-key-topic`). Note that the relay does not need to know the private key.
+For simplicity, there is just one key per topic. Since this approach has clear privacy implications, this configuration is not part of the waku protocol, but of the application.
+* Relay nodes should leverage the existing gossipsub validators that allow to `Accept` or `Reject` messages.
+* Upon receiving a message, the node shall check the `meta` `WakuMessage` field. If empty, `Reject` the message.
+* If `meta` exists but its size is different than 64 bytes, `Reject` the message.
+* If `meta` exists and has a size of 64 bytes, assert that `message-signature` is verified according to the ECDSA signature verification algorithm using `public-key-topic` and `app-message-hash`.
+* If the signature does not verify correctly, `Reject` the message.
+* If and only if the signature is verified, `Accept` the message.
+* The node shall keep metrics on the messages validation output, `Accept` or `Reject`.
+* (Optional). To further strengthen DoS protection, gossipsub [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) can be used to trigger disconnections from peers sending multiple invalid messages. See `P4` penalty.
+This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.
+
+
+## Required changes
+
+This solution is designed to be backward compatible so that nodes validating messages can coexist in the same topic with other nodes that don't perform validation. But note that only nodes that perform message validation will be protected against DoS. Nodes wishing to opt-in this DoS protection feature shall:
+* Generate a `private-key-topic` and distribute it to a curated list of users, that are trusted to send messages at a reasonable rate.
+* Redeploy the nodes, adding a new configuration where a `protected-pubsub-topic` is configured with a `public-key-topic`, used to verify the messages being relayed.
+
+
+## Test vectors
+
+Relay nodes complying with this specification shall accept the following message in the configured pubsub topic.
+
+Given the following key pair:
+
+```
+private-key-topic = 0x049c5fac802da41e07e6cdf51c3b9a6351ad5e65921527f2df5b7d59fd9b56ab02bab736cdcfc37f25095e78127500da371947217a8cd5186ab890ea
+public-key-topic = 0x5526a8990317c9b7b58d07843d270f9cd1d9aaee129294c1c478abf7261dd9e6866211c3f6
+```
+
+
+And the following message to send:
+
+```
+protected-pubsub-topic = "some-spam-protected-topic"
+contentTopic = "my-content-topic"
+payload = 0x3af5c7a8d71498e82e1991089d8429448f3b78277fac141af9052e77fc003dfb
+```
+
+The message hash and signature are calculated as follows.
+
+```
+app-message-hash = 0xd0e3231ec48f9c0cf9306b7100c30b4e85c78854b67b41e4ee388fb4610f543d
+message.meta = 0x4d79cb46a26912bfb3914d9c4cf3c76165d968b9f83c08e0c2ecf86071f2fc0e560d6b9e33923b63d62e46cc709e0ae48a956d3b5e8145e15b8fb558d3bded9c
+```
+
+Using `message.meta`, the relay node shall calculate the `app-message-hash` of the received message using `public-key-topic`, and with the values above, the signature should be verified, making the node `Accept` the message and relaying it to other nodes in the network.
 
 
 ## Statically-Mapped Communities
