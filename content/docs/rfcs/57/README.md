@@ -6,7 +6,7 @@ status: raw
 category: Informational
 tags: waku/application
 editor: Daniel Kaiser <danielkaiser@status.im>
-contributors:
+contributors: Alvaro Revuelta <alrevuelta@status.im>
 ---
 
 # Abstract
@@ -289,15 +289,15 @@ This allows the Status app to abstract from the discovery process and simply add
 
 Hereunder we describe the "opt-in message signing for DoS prevention" solution, designed *ad hoc* for Status MVP.
 
-Since publishing messages to gossipsub topics has no limits, anyone can publish messages at a very high rate and DoS the network.
+Since publishing messages to pubsub topics has no limits, anyone can publish messages at a very high rate and DoS the network.
 This would elevate the bandwidth consumption of all nodes subscribed to said pubsub topic, making it prohibitive (in terms of bandwidth) to be subscribed to it.
 In order to scale, we need some mechanism to prevent this from happening, otherwise all scaling efforts will be in vain.
 Since RLN is not ready yet, hereunder we describe a simpler approach designed *ad hoc* for Status use case, feasible to implement for the MVP and that validates some of the ideas that will evolve to solutions such as RLN.
 
-With this approach, certain gossipsub topics can be optionally configured to only accept messages signed with a given key, that only trusted entities know.
+With this approach, certain pubsub topics can be optionally configured to only accept messages signed with a given key, that only trusted entities know.
 This key can be pre-shared among a set of participants, that are trusted to make fair usage of the network, publishing messages at a reasonable rate/size.
-Note that this key can be shared/reused among multiple participants, and only one key is whitelisted per topic.
-This is an opt-in solution that operators can choose to deploy in their topics, but it's not enforced in the default pubsub topic.
+Note that this key can be shared/reused among multiple participants, and only one key is whitelisted per pubsub topic.
+This is an opt-in solution that operators can choose to deploy in their shards (i.e. pubsub topics), but it's not enforced in the default one.
 Operators can freely choose how they want to generate, and distribute the public keys. It's also their responsibility to handle the private key, sharing it with only trusted parties and keeping proper custody of it.
 
 The following concepts are introduced:
@@ -369,14 +369,6 @@ message.meta = 0x4d79cb46a26912bfb3914d9c4cf3c76165d968b9f83c08e0c2ecf86071f2fc0
 ```
 
 Using `message.meta`, the relay node shall calculate the `app-message-hash` of the received message using `public-key-topic`, and with the values above, the signature should be verified, making the node `Accept` the message and relaying it to other nodes in the network.
-
-
-## Statically-Mapped Communities
-
-Basic idea:
-Each [Waku message](/specs/14) is signed with key material provided by the community owner.
-Relay nodes only relay messages that have the correct signature.
-Community infrastructure nodes are provided with the necessary key material, too.
 
 ## Owner-Mapped Communities
 
