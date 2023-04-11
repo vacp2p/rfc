@@ -191,3 +191,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 2. [53/WAKU2-X3DH](/spec/53/)
 3. [35/WAKU2-NOISE](/spec/35/)
 4. [10/WAKU2](/spec/10/)
+5. [7/GROUP-CHAT](https://specs.status.im/draft/7)
