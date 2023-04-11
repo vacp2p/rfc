@@ -19,6 +19,15 @@ contributors:
 This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. 
 This protocol can be used to send messages to a single recipient.
 
+# Terminology
+
+- **Participant**: A participant is a user that is able to send and receive messages.
+- **1-to-1 chat**: A chat between two participants.
+- **Public chat**: A chat where any participant can join and read messages.
+- **Private chat**: A chat where only invited participants can join and read messages.
+- **Group chat**: A chat where multiple participants can join and read messages.
+- **Admin**: A participant that is able to add/remove participants from a group chat.
+
 # Background
 
 This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
@@ -58,6 +67,115 @@ It is handled by the key-exchange protocol used. For example,
 1. [53/WAKU2-X3DH](/spec/53/), the session management is described in [54/WAKU2-X3DH-SESSIONS](/spec/54/)
 
 2. [35/WAKU2-NOISE](/spec/35/), the session management is described in [37/WAKU2-NOISE-SESSIONS](/spec/37/)
+
+## Negotiation of a 1:1 chat amongst multiple participants (group chat)
+
+A small, private group chat can be constructed by having multiple participants negotiate a 1:1 chat amongst each other.
+Each participant MUST maintain a session with all other participants in the group chat.
+This allows for a group chat to be created with a small number of participants.
+
+However, this method does not scale as the number of participants increases, for the following reasons -
+1. The number of messages sent over the network increases with the number of participants.
+2. Handling the X3DH key exchange for each participant is computationally expensive.
+
+The above issues are addressed in [56/STATUS-COMMUNITIES](/spec/56/).
+
+### Flow
+
+The following flow describes how a group chat is created and maintained.
+
+#### Membership Update Flow
+
+Each participant in the group chat MUST send membership updates in the following wire format:
+
+```protobuf
+message MembershipUpdateMessage {
+  // The chat id of the private group chat
+  // derived in the following way:
+  // chat_id = hex(chat_creator_public_key) + "-" + random_uuid
+  // This chat_id MUST be validated by all participants
+  string chat_id = 1;
+  // A list of events for this group chat, first 65 bytes are the signature, then is a 
+  // protobuf encoded MembershipUpdateEvent
+  repeated bytes events = 2;
+  // An optional chat message
+  ChatMessage message = 3;
+}
+```
+
+where `MembershipUpdateEvent` is defined as follows:
+
+```protobuf
+message MembershipUpdateEvent {
+  // Lamport timestamp of the event
+  uint64 clock = 1;
+  // Optional list of public keys of the targets of the action
+  repeated string members = 2;
+  // Name of the chat for the CHAT_CREATED/NAME_CHANGED event types
+  string name = 3;
+  // The type of the event
+  EventType type = 4;
+
+  enum EventType {
+    UNKNOWN = 0;
+    CHAT_CREATED = 1; // See [CHAT_CREATED](#chat-created)
+    NAME_CHANGED = 2; // See [NAME_CHANGED](#name-changed)
+    MEMBERS_ADDED = 3; // See [MEMBERS_ADDED](#members-added)
+    MEMBER_JOINED = 4; // See [MEMBER_JOINED](#member-joined)
+    MEMBER_REMOVED = 5; // See [MEMBER_REMOVED](#member-removed)
+    ADMINS_ADDED = 6; // See [ADMINS_ADDED](#admins-added)
+    ADMIN_REMOVED = 7; // See [ADMIN_REMOVED](#admin-removed)
+  }
+}
+```
+
+##### Chat Created
+
+This is the first event that MUST be sent. 
+Any event with a clock value lower than this MUST be discarded. 
+Upon receiving this event a client MUST validate the `chat_id` provided with the update and create a chat with identified by `chat_id`.
+
+By default, the creator of the group chat is the only admin of the chat.
+
+##### Name Changed
+
+Admins MUST use a `NAME_CHANGED` event to change the name of the group chat. 
+Upon receiving this event a client MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
+If the event is valid the chat name SHOULD be changed according to the provided message.
+
+##### Members Added
+
+Admins MUST use a `MEMBERS_ADDED` event to add members to the chat. 
+Upon receiving this event a participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
+If the event is valid, a participant MUST update the list of members of the chat who have not joined, adding the members received. 
+
+##### Member Joined
+
+New participants MUST use a `MEMBER_JOINED` event to signal that they want to start receiving messages from this chat. 
+Upon receiving this event a participant MUST validate the `chat_id` provided with the updates. 
+If the event is valid a participant MUST add the new participant to the list of participants stored locally. 
+Any message sent to the group chat MUST now include the new participant.
+
+##### Member Removed
+
+There are two ways in which a member MAY be removed from a group chat:
+- A member MAY leave the chat by sending a `MEMBER_REMOVED` event, with the `members` field containing their own public key.
+- An admin MAY remove a member by sending a `MEMBER_REMOVED` event, with the `members` field containing the public key of the member to be removed.
+
+Each participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the local list of members accordingly.
+
+##### Admins Added
+Admins MUST use an `ADMINS_ADDED` event to promote participants to admin. 
+Upon receiving this event, a participant MUST validate the `chat_id` provided with the updates, MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
+If the event is valid, a participant MUST update the list of admins of the chat accordingly.
+
+##### Admin Removed
+
+Admins MUST not be able to remove other admins.
+An admin MAY remove themselves by sending an `ADMIN_REMOVED` event, with the `members` field containing their own public key.
+Each participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the list of admins of the chat accordingly.
 
 # Security Considerations
 
