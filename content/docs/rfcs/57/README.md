@@ -6,7 +6,8 @@ status: raw
 category: Informational
 tags: waku/application
 editor: Daniel Kaiser <danielkaiser@status.im>
-contributors: Alvaro Revuelta <alrevuelta@status.im>
+contributors:
+- Alvaro Revuelta <alrevuelta@status.im>
 ---
 
 # Abstract
