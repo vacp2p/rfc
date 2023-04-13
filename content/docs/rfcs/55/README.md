@@ -78,7 +78,7 @@ However, this method does not scale as the number of participants increases, for
 1. The number of messages sent over the network increases with the number of participants.
 2. Handling the X3DH key exchange for each participant is computationally expensive.
 
-The above issues are addressed in [56/STATUS-COMMUNITIES](/spec/56/).
+The above issues are addressed in [56/STATUS-COMMUNITIES](/spec/56/), with other trade-offs.
 
 ### Flow
 
