@@ -86,7 +86,7 @@ The following flow describes how a group chat is created and maintained.
 
 #### Membership Update Flow
 
-Each participant in the group chat MUST send membership updates in the following wire format:
+Membership updates have the following wire format:
 
 ```protobuf
 message MembershipUpdateMessage {
@@ -98,8 +98,12 @@ message MembershipUpdateMessage {
   // A list of events for this group chat, first 65 bytes are the signature, then is a 
   // protobuf encoded MembershipUpdateEvent
   repeated bytes events = 2;
-  // An optional chat message
-  ChatMessage message = 3;
+  oneof chat_entity {
+    // An optional chat message
+    ChatMessage message = 3;
+    // An optional reaction to a message
+    EmojiReaction emoji_reaction = 4; 
+  }
 }
 ```
 
@@ -115,6 +119,10 @@ message MembershipUpdateEvent {
   string name = 3;
   // The type of the event
   EventType type = 4;
+  // Color of the chat for the CHAT_CREATED/COLOR_CHANGED event types
+  string color = 5;
+  // Chat image
+  bytes image = 6;
 
   enum EventType {
     UNKNOWN = 0;
@@ -125,9 +133,13 @@ message MembershipUpdateEvent {
     MEMBER_REMOVED = 5; // See [MEMBER_REMOVED](#member-removed)
     ADMINS_ADDED = 6; // See [ADMINS_ADDED](#admins-added)
     ADMIN_REMOVED = 7; // See [ADMIN_REMOVED](#admin-removed)
+    COLOR_CHANGED = 8; // See [COLOR_CHANGED](#color-changed)
+    IMAGE_CHANGED = 9; // See [IMAGE_CHANGED](#image-changed)
   }
 }
 ```
+<!-- Note: I don't like defining wire formats which are out of the scope of the rfc this way. Should explore alternatives -->
+Note that the definitions for `ChatMessage` and `EmojiReaction` can be found in [chat_message.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/chat_message.proto#L1) and [emoji_reaction.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/emoji_reaction.proto).
 
 ##### Chat Created
 
@@ -166,16 +178,25 @@ Each participant MUST validate the `chat_id` provided with the updates and MUST 
 If the event is valid, a participant MUST update the local list of members accordingly.
 
 ##### Admins Added
+
 To promote participants to group admin, group admins MUST use an `ADMINS_ADDED` event.
 Upon receiving this event, a participant MUST validate the `chat_id` provided with the updates, MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
 If the event is valid, a participant MUST update the list of admins of the chat accordingly.
 
 ##### Admin Removed
 
-Admins MUST NOT be able to remove other admins.
+Group admins MUST NOT be able to remove other group admins.
 An admin MAY remove themselves by sending an `ADMIN_REMOVED` event, with the `members` field containing their own public key.
 Each participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
 If the event is valid, a participant MUST update the list of admins of the chat accordingly.
+
+##### Color Changed
+
+To change the text color of the group chat name, group admins MUST use a `COLOR_CHANGED` event.
+
+##### Image Changed
+
+To change the display image of the group chat, group admins MUST use an `IMAGE_CHANGED` event.
 
 # Security Considerations
 
