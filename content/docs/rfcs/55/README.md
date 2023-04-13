@@ -25,8 +25,8 @@ This protocol can be used to send messages to a single recipient.
 - **1-to-1 chat**: A chat between two participants.
 - **Public chat**: A chat where any participant can join and read messages.
 - **Private chat**: A chat where only invited participants can join and read messages.
-- **Group chat**: A chat where multiple participants can join and read messages.
-- **Admin**: A participant that is able to add/remove participants from a group chat.
+- **Group chat**: A chat where multiple select participants can join and read messages.
+- **Group admin**: A participant that is able to add/remove participants from a group chat.
 
 # Background
 
@@ -131,27 +131,27 @@ message MembershipUpdateEvent {
 
 ##### Chat Created
 
-This is the first event that MUST be sent. 
+When creating a group chat, this is the first event that MUST be sent. 
 Any event with a clock value lower than this MUST be discarded. 
 Upon receiving this event a client MUST validate the `chat_id` provided with the update and create a chat with identified by `chat_id`.
 
-By default, the creator of the group chat is the only admin of the chat.
+By default, the creator of the group chat is the only group admin.
 
 ##### Name Changed
 
-Admins MUST use a `NAME_CHANGED` event to change the name of the group chat. 
+To change the name of the group chat, group admins MUST use a `NAME_CHANGED` event.
 Upon receiving this event a client MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
 If the event is valid the chat name SHOULD be changed according to the provided message.
 
 ##### Members Added
 
-Admins MUST use a `MEMBERS_ADDED` event to add members to the chat. 
+To add members to the chat, group admins MUST use a `MEMBERS_ADDED` event. 
 Upon receiving this event a participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
 If the event is valid, a participant MUST update the list of members of the chat who have not joined, adding the members received. 
 
 ##### Member Joined
 
-New participants MUST use a `MEMBER_JOINED` event to signal that they want to start receiving messages from this chat. 
+To signal the intent to start receiving messages from a given chat, new participants MUST use a `MEMBER_JOINED` event.
 Upon receiving this event a participant MUST validate the `chat_id` provided with the updates. 
 If the event is valid a participant MUST add the new participant to the list of participants stored locally. 
 Any message sent to the group chat MUST now include the new participant.
@@ -166,13 +166,13 @@ Each participant MUST validate the `chat_id` provided with the updates and MUST 
 If the event is valid, a participant MUST update the local list of members accordingly.
 
 ##### Admins Added
-Admins MUST use an `ADMINS_ADDED` event to promote participants to admin. 
+To promote participants to group admin, group admins MUST use an `ADMINS_ADDED` event.
 Upon receiving this event, a participant MUST validate the `chat_id` provided with the updates, MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored. 
 If the event is valid, a participant MUST update the list of admins of the chat accordingly.
 
 ##### Admin Removed
 
-Admins MUST not be able to remove other admins.
+Admins MUST NOT be able to remove other admins.
 An admin MAY remove themselves by sending an `ADMIN_REMOVED` event, with the `members` field containing their own public key.
 Each participant MUST validate the `chat_id` provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
 If the event is valid, a participant MUST update the list of admins of the chat accordingly.
