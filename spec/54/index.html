@@ -21,7 +21,7 @@ Session Establishment # A node identifies a peer by their installation-id which 
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.6c850667c4402a32dafd5e17531337dad3c49720ac8c3a8c62f49e96c5b524bd.js" integrity="sha256-bIUGZ8RAKjLa/V4XUxM32tPElyCsjDqMYvSelsW1JL0="></script>
+<script defer src="/en.search.min.a225dced0474ad9c4220270a0a13a95069e51a7997ea6dff0e95cd9ffc4a3cce.js" integrity="sha256-oiXc7QR0rZxCICcKChOpUGnlGnmX6m3/DpXNn/xKPM4="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -178,6 +178,7 @@ https://github.com/alex-shpak/hugo-book
   <ul>
     <li><a href="#discovery-of-pre-key-bundles">Discovery of pre-key bundles</a></li>
     <li><a href="#initialization">Initialization</a></li>
+    <li><a href="#negotiated-topic-to-be-used-for-the-session">Negotiated topic to be used for the session</a></li>
     <li><a href="#concurrent-sessions">Concurrent sessions</a></li>
     <li><a href="#re-keying">Re-keying</a></li>
     <li><a href="#multi-device-support">Multi-device support</a></li>
@@ -262,15 +263,69 @@ Once two peers complete an X3DH handshake, they SHOULD establish an X3DH session
   Discovery of pre-key bundles
   <a class="anchor" href="#discovery-of-pre-key-bundles">#</a>
 </h2>
-<p>The node&rsquo;s pre-key bundle SHOULD be broadcasted on a content topic derived from the node&rsquo;s public key.</p>
-<!-- raw HTML omitted -->
-<p>The derivation is further described in <a href="https://specs.status.im/spec/10#contact-code-topic">10/WAKU-USAGE</a></p>
-<h2 id="initialization">
+<p>The node&rsquo;s pre-key bundle MUST be broadcast on a content topic derived from the node&rsquo;s public key, so that the first message may be PFS-encrypted.
+Each peer MUST publish their pre-key bundle periodically to this topic, otherwise they risk not being able to perform key-exchanges with other peers.
+Each peer MAY publish to this topic when their metadata changes, so that the other peer can update their local record.</p>
+<p>If peer A wants to send a message to peer B, it MUST derive the topic from peer B&rsquo;s public key, which has been shared out of band.
+Partitioned topics have been used to balance privacy and efficiency of broadcasting pre-key bundles.</p>
+<p>The number of partitions that MUST be used is 5000.</p>
+<p>The topic MUST be derived as follows:</p>
+<pre tabindex="0"><code>var partitionsNum *big.Int = big.NewInt(5000)
+var partition *big.Int = big.NewInt(0).Mod(peerBPublicKey, partitionsNum)
+
+partitionTopic := &#34;contact-discovery-&#34; + strconv.FormatInt(partition.Int64(), 10)
+
+var hash []byte = keccak256(partitionTopic)
+var topicLen int = 4
+
+if len(hash) &lt; topicLen {
+    topicLen = len(hash)
+}
+
+var contactCodeTopic [4]byte
+for i = 0; i &lt; topicLen; i++ {
+    contactCodeTopic[i] = hash[i]
+}
+</code></pre><h2 id="initialization">
   Initialization
   <a class="anchor" href="#initialization">#</a>
 </h2>
 <p>A node initializes a new session once a successful X3DH exchange has taken place.
 Subsequent messages will use the established session until re-keying is necessary.</p>
+<h2 id="negotiated-topic-to-be-used-for-the-session">
+  Negotiated topic to be used for the session
+  <a class="anchor" href="#negotiated-topic-to-be-used-for-the-session">#</a>
+</h2>
+<p>After the peers have performed the initial key exchange, they MUST derive a topic from their shared secret to send messages on.
+To obtain this value, take the first four bytes of the keccak256 hash of the shared secret encoded in hexadecimal format.</p>
+<pre tabindex="0"><code>sharedKey, err := ecies.ImportECDSA(myPrivateKey).GenerateShared(
+      ecies.ImportECDSAPublic(theirPublicKey),
+      16,
+      16,
+)
+
+
+hexEncodedKey := hex.EncodeToString(sharedKey)
+
+var hash []byte = keccak256(hexEncodedKey)
+var topicLen int = 4
+
+if len(hash) &lt; topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i &lt; topicLen; i++ {
+    topic[i] = hash[i]
+}
+</code></pre><p>To summarize, following is the process for peer B to establish a session with peer A:</p>
+<ol>
+<li>Listen to peer B&rsquo;s Contact Code Topic to retrieve their bundle information, including a list of active devices</li>
+<li>Peer A sends their pre-key bundle on peer B&rsquo;s partitioned topic</li>
+<li>Peer A and peer B perform the key-exchange using the shared pre-key bundles</li>
+<li>The negotiated topic is derived from the shared secret</li>
+<li>Peers A &amp; B exchange messages on the negotiated topic</li>
+</ol>
 <h2 id="concurrent-sessions">
   Concurrent sessions
   <a class="anchor" href="#concurrent-sessions">#</a>
@@ -389,6 +444,7 @@ In this case an empty message containing bundle information MUST be sent back, w
   <ul>
     <li><a href="#discovery-of-pre-key-bundles">Discovery of pre-key bundles</a></li>
     <li><a href="#initialization">Initialization</a></li>
+    <li><a href="#negotiated-topic-to-be-used-for-the-session">Negotiated topic to be used for the session</a></li>
     <li><a href="#concurrent-sessions">Concurrent sessions</a></li>
     <li><a href="#re-keying">Re-keying</a></li>
     <li><a href="#multi-device-support">Multi-device support</a></li>
