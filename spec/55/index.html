@@ -19,7 +19,7 @@ Terminology # Participant: A participant is a user that is able to send and rece
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.a225dced0474ad9c4220270a0a13a95069e51a7997ea6dff0e95cd9ffc4a3cce.js" integrity="sha256-oiXc7QR0rZxCICcKChOpUGnlGnmX6m3/DpXNn/xKPM4="></script>
+<script defer src="/en.search.min.3cfd707d126e092c57dfba5eb87cbc07b1b01162bf42a2b41baed0d2c5c1e44c.js" integrity="sha256-PP1wfRJuCSxX37peuHy8B7GwEWK/QqK0G67Q0sXB5Ew="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -355,7 +355,8 @@ This allows for a group chat to be created with a small number of participants.<
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    EmojiReaction emoji_reaction <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span></span></span></code></pre></div><p>where <code>MembershipUpdateEvent</code> is defined as follows:</p>
+</span></span></span></code></pre></div><p>Note that in <code>events</code>, the first element is the signature, and all other elements after are encoded <code>MembershipUpdateEvent</code>&rsquo;s.</p>
+<p>where <code>MembershipUpdateEvent</code> is defined as follows:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MembershipUpdateEvent</span> {<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Lamport timestamp of the event
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
