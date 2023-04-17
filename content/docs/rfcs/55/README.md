@@ -107,6 +107,8 @@ message MembershipUpdateMessage {
 }
 ```
 
+Note that in `events`, the first element is the signature, and all other elements after are encoded `MembershipUpdateEvent`'s.
+
 where `MembershipUpdateEvent` is defined as follows:
 
 ```protobuf
