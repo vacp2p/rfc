@@ -28,13 +28,73 @@ A node identifies a peer by their `installation-id` which MAY be interpreted as 
 
 ## Discovery of pre-key bundles
 
-The node's pre-key bundle SHOULD be broadcasted on a content topic derived from the node's public key.
-<!--- TODO: We need to move other specs from status to vac research, including STATUS-WAKU-USAGE -->
-The derivation is further described in [10/WAKU-USAGE](https://specs.status.im/spec/10#contact-code-topic)
+The node's pre-key bundle MUST be broadcast on a content topic derived from the node's public key, so that the first message may be PFS-encrypted.
+Each peer MUST publish their pre-key bundle periodically to this topic, otherwise they risk not being able to perform key-exchanges with other peers.
+Each peer MAY publish to this topic when their metadata changes, so that the other peer can update their local record.
+
+If peer A wants to send a message to peer B, it MUST derive the topic from peer B's public key, which has been shared out of band.
+Partitioned topics have been used to balance privacy and efficiency of broadcasting pre-key bundles.
+
+The number of partitions that MUST be used is 5000.
+
+The topic MUST be derived as follows:
+```
+var partitionsNum *big.Int = big.NewInt(5000)
+var partition *big.Int = big.NewInt(0).Mod(peerBPublicKey, partitionsNum)
+
+partitionTopic := "contact-discovery-" + strconv.FormatInt(partition.Int64(), 10)
+
+var hash []byte = keccak256(partitionTopic)
+var topicLen int = 4
+
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+
+var contactCodeTopic [4]byte
+for i = 0; i < topicLen; i++ {
+    contactCodeTopic[i] = hash[i]
+}
+```
 
 ## Initialization
 A node initializes a new session once a successful X3DH exchange has taken place. 
 Subsequent messages will use the established session until re-keying is necessary.
+
+## Negotiated topic to be used for the session
+
+After the peers have performed the initial key exchange, they MUST derive a topic from their shared secret to send messages on.
+To obtain this value, take the first four bytes of the keccak256 hash of the shared secret encoded in hexadecimal format.
+
+```
+sharedKey, err := ecies.ImportECDSA(myPrivateKey).GenerateShared(
+      ecies.ImportECDSAPublic(theirPublicKey),
+      16,
+      16,
+)
+
+
+hexEncodedKey := hex.EncodeToString(sharedKey)
+
+var hash []byte = keccak256(hexEncodedKey)
+var topicLen int = 4
+
+if len(hash) < topicLen {
+    topicLen = len(hash)
+}
+
+var topic [4]byte
+for i = 0; i < topicLen; i++ {
+    topic[i] = hash[i]
+}
+```
+
+To summarize, following is the process for peer B to establish a session with peer A:
+1. Listen to peer B's Contact Code Topic to retrieve their bundle information, including a list of active devices
+2. Peer A sends their pre-key bundle on peer B's partitioned topic
+3. Peer A and peer B perform the key-exchange using the shared pre-key bundles
+3. The negotiated topic is derived from the shared secret
+4. Peers A & B exchange messages on the negotiated topic
 
 ## Concurrent sessions
 
