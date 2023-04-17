@@ -488,8 +488,7 @@ Session Establishment # A node identifies a peer by their installation-id which 
       
       <guid>https://rfc.vac.dev/spec/55/</guid>
       <description>Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
-Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
-Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -</description>
+Terminology # Participant: A participant is a user that is able to send and receive messages. 1-to-1 chat: A chat between two participants. Public chat: A chat where any participant can join and read messages. Private chat: A chat where only invited participants can join and read messages.</description>
     </item>
     
     <item>

@@ -6,12 +6,10 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
-Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
-Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -">
+Terminology # Participant: A participant is a user that is able to send and receive messages. 1-to-1 chat: A chat between two participants. Public chat: A chat where any participant can join and read messages. Private chat: A chat where only invited participants can join and read messages.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="55/STATUS-1TO1-CHAT" />
 <meta property="og:description" content="Abstract # This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. This protocol can be used to send messages to a single recipient.
-Background # This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
-Specification # Overview # This protocol MAY use any key-exchange mechanism previously discussed -" />
+Terminology # Participant: A participant is a user that is able to send and receive messages. 1-to-1 chat: A chat between two participants. Public chat: A chat where any participant can join and read messages. Private chat: A chat where only invited participants can join and read messages." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/55/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +19,7 @@ Specification # Overview # This protocol MAY use any key-exchange mechanism prev
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.d155bdcce811a62aabff33a71acbf51cd25d01df2dd3381e81b0fc5fb8c0bff9.js" integrity="sha256-0VW9zOgRpiqr/zOnGsv1HNJdAd8t0zgegbD8X7jAv/k="></script>
+<script defer src="/en.search.min.6c850667c4402a32dafd5e17531337dad3c49720ac8c3a8c62f49e96c5b524bd.js" integrity="sha256-bIUGZ8RAKjLa/V4XUxM32tPElyCsjDqMYvSelsW1JL0="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -184,6 +182,11 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#session-management">Session management</a></li>
       </ul>
     </li>
+    <li><a href="#negotiation-of-a-11-chat-amongst-multiple-participants-group-chat">Negotiation of a 1:1 chat amongst multiple participants (group chat)</a>
+      <ul>
+        <li><a href="#flow-1">Flow</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -247,6 +250,18 @@ https://github.com/alex-shpak/hugo-book
 </h1>
 <p>This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol.
 This protocol can be used to send messages to a single recipient.</p>
+<h1 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h1>
+<ul>
+<li><strong>Participant</strong>: A participant is a user that is able to send and receive messages.</li>
+<li><strong>1-to-1 chat</strong>: A chat between two participants.</li>
+<li><strong>Public chat</strong>: A chat where any participant can join and read messages.</li>
+<li><strong>Private chat</strong>: A chat where only invited participants can join and read messages.</li>
+<li><strong>Group chat</strong>: A chat where multiple select participants can join and read messages.</li>
+<li><strong>Group admin</strong>: A participant that is able to add/remove participants from a group chat.</li>
+</ul>
 <h1 id="background">
   Background
   <a class="anchor" href="#background">#</a>
@@ -301,6 +316,141 @@ It is handled by the key-exchange protocol used. For example,</p>
 <p><a href="/spec/35/">35/WAKU2-NOISE</a>, the session management is described in <a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></p>
 </li>
 </ol>
+<h2 id="negotiation-of-a-11-chat-amongst-multiple-participants-group-chat">
+  Negotiation of a 1:1 chat amongst multiple participants (group chat)
+  <a class="anchor" href="#negotiation-of-a-11-chat-amongst-multiple-participants-group-chat">#</a>
+</h2>
+<p>A small, private group chat can be constructed by having multiple participants negotiate a 1:1 chat amongst each other.
+Each participant MUST maintain a session with all other participants in the group chat.
+This allows for a group chat to be created with a small number of participants.</p>
+<p>However, this method does not scale as the number of participants increases, for the following reasons -</p>
+<ol>
+<li>The number of messages sent over the network increases with the number of participants.</li>
+<li>Handling the X3DH key exchange for each participant is computationally expensive.</li>
+</ol>
+<p>The above issues are addressed in <a href="/spec/56/">56/STATUS-COMMUNITIES</a>, with other trade-offs.</p>
+<h3 id="flow-1">
+  Flow
+  <a class="anchor" href="#flow-1">#</a>
+</h3>
+<p>The following flow describes how a group chat is created and maintained.</p>
+<h4 id="membership-update-flow">
+  Membership Update Flow
+  <a class="anchor" href="#membership-update-flow">#</a>
+</h4>
+<p>Membership updates have the following wire format:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MembershipUpdateMessage</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The chat id of the private group chat
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// derived in the following way:
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// chat_id = hex(chat_creator_public_key) + &#34;-&#34; + random_uuid
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// This chat_id MUST be validated by all participants
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> chat_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// A list of events for this group chat, first 65 bytes are the signature, then is a 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#75715e">// protobuf encoded MembershipUpdateEvent
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">bytes</span> events <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">oneof</span> chat_entity {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// An optional chat message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ChatMessage <span style="color:#66d9ef">message</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#75715e">// An optional reaction to a message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    EmojiReaction emoji_reaction <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>where <code>MembershipUpdateEvent</code> is defined as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MembershipUpdateEvent</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Lamport timestamp of the event
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Optional list of public keys of the targets of the action
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> members <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Name of the chat for the CHAT_CREATED/NAME_CHANGED event types
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// The type of the event
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  EventType type <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Color of the chat for the CHAT_CREATED/COLOR_CHANGED event types
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> color <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Chat image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">bytes</span> image <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">enum</span> EventType {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNKNOWN <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    CHAT_CREATED <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// See [CHAT_CREATED](#chat-created)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    NAME_CHANGED <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// See [NAME_CHANGED](#name-changed)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    MEMBERS_ADDED <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// See [MEMBERS_ADDED](#members-added)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    MEMBER_JOINED <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// See [MEMBER_JOINED](#member-joined)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    MEMBER_REMOVED <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>; <span style="color:#75715e">// See [MEMBER_REMOVED](#member-removed)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ADMINS_ADDED <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>; <span style="color:#75715e">// See [ADMINS_ADDED](#admins-added)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    ADMIN_REMOVED <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>; <span style="color:#75715e">// See [ADMIN_REMOVED](#admin-removed)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    COLOR_CHANGED <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>; <span style="color:#75715e">// See [COLOR_CHANGED](#color-changed)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    IMAGE_CHANGED <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>; <span style="color:#75715e">// See [IMAGE_CHANGED](#image-changed)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><!-- raw HTML omitted -->
+<p>Note that the definitions for <code>ChatMessage</code> and <code>EmojiReaction</code> can be found in <a href="https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/chat_message.proto#L1">chat_message.proto</a> and <a href="https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/emoji_reaction.proto">emoji_reaction.proto</a>.</p>
+<h5 id="chat-created">
+  Chat Created
+  <a class="anchor" href="#chat-created">#</a>
+</h5>
+<p>When creating a group chat, this is the first event that MUST be sent.
+Any event with a clock value lower than this MUST be discarded.
+Upon receiving this event a client MUST validate the <code>chat_id</code> provided with the update and create a chat with identified by <code>chat_id</code>.</p>
+<p>By default, the creator of the group chat is the only group admin.</p>
+<h5 id="name-changed">
+  Name Changed
+  <a class="anchor" href="#name-changed">#</a>
+</h5>
+<p>To change the name of the group chat, group admins MUST use a <code>NAME_CHANGED</code> event.
+Upon receiving this event a client MUST validate the <code>chat_id</code> provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid the chat name SHOULD be changed according to the provided message.</p>
+<h5 id="members-added">
+  Members Added
+  <a class="anchor" href="#members-added">#</a>
+</h5>
+<p>To add members to the chat, group admins MUST use a <code>MEMBERS_ADDED</code> event.
+Upon receiving this event a participant MUST validate the <code>chat_id</code> provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the list of members of the chat who have not joined, adding the members received.</p>
+<h5 id="member-joined">
+  Member Joined
+  <a class="anchor" href="#member-joined">#</a>
+</h5>
+<p>To signal the intent to start receiving messages from a given chat, new participants MUST use a <code>MEMBER_JOINED</code> event.
+Upon receiving this event a participant MUST validate the <code>chat_id</code> provided with the updates.
+If the event is valid a participant MUST add the new participant to the list of participants stored locally.
+Any message sent to the group chat MUST now include the new participant.</p>
+<h5 id="member-removed">
+  Member Removed
+  <a class="anchor" href="#member-removed">#</a>
+</h5>
+<p>There are two ways in which a member MAY be removed from a group chat:</p>
+<ul>
+<li>A member MAY leave the chat by sending a <code>MEMBER_REMOVED</code> event, with the <code>members</code> field containing their own public key.</li>
+<li>An admin MAY remove a member by sending a <code>MEMBER_REMOVED</code> event, with the <code>members</code> field containing the public key of the member to be removed.</li>
+</ul>
+<p>Each participant MUST validate the <code>chat_id</code> provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the local list of members accordingly.</p>
+<h5 id="admins-added">
+  Admins Added
+  <a class="anchor" href="#admins-added">#</a>
+</h5>
+<p>To promote participants to group admin, group admins MUST use an <code>ADMINS_ADDED</code> event.
+Upon receiving this event, a participant MUST validate the <code>chat_id</code> provided with the updates, MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the list of admins of the chat accordingly.</p>
+<h5 id="admin-removed">
+  Admin Removed
+  <a class="anchor" href="#admin-removed">#</a>
+</h5>
+<p>Group admins MUST NOT be able to remove other group admins.
+An admin MAY remove themselves by sending an <code>ADMIN_REMOVED</code> event, with the <code>members</code> field containing their own public key.
+Each participant MUST validate the <code>chat_id</code> provided with the updates and MUST ensure the author of the event is an admin of the chat, otherwise the event MUST be ignored.
+If the event is valid, a participant MUST update the list of admins of the chat accordingly.</p>
+<h5 id="color-changed">
+  Color Changed
+  <a class="anchor" href="#color-changed">#</a>
+</h5>
+<p>To change the text color of the group chat name, group admins MUST use a <code>COLOR_CHANGED</code> event.</p>
+<h5 id="image-changed">
+  Image Changed
+  <a class="anchor" href="#image-changed">#</a>
+</h5>
+<p>To change the display image of the group chat, group admins MUST use an <code>IMAGE_CHANGED</code> event.</p>
 <h1 id="security-considerations">
   Security Considerations
   <a class="anchor" href="#security-considerations">#</a>
@@ -322,6 +472,7 @@ It is handled by the key-exchange protocol used. For example,</p>
 <li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
 <li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
 <li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="https://specs.status.im/draft/7">7/GROUP-CHAT</a></li>
 </ol>
 </article>
  
@@ -365,6 +516,11 @@ It is handled by the key-exchange protocol used. For example,</p>
         <li><a href="#negotiation-of-a-11-chat">Negotiation of a 1:1 chat</a></li>
         <li><a href="#post-negotiation">Post Negotiation</a></li>
         <li><a href="#session-management">Session management</a></li>
+      </ul>
+    </li>
+    <li><a href="#negotiation-of-a-11-chat-amongst-multiple-participants-group-chat">Negotiation of a 1:1 chat amongst multiple participants (group chat)</a>
+      <ul>
+        <li><a href="#flow-1">Flow</a></li>
       </ul>
     </li>
   </ul>
