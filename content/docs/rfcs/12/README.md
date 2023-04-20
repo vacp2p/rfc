@@ -215,6 +215,9 @@ A filter client SHOULD NOT respond to a `MessagePush`.
 Since the filter protocol does not include caching or fault-tolerance,
 this is a best effort push service with no bundling
 or guaranteed retransmission of messages.
+A filter client SHOULD verify that each `MessagePush` it receives
+originated from a service node where the client has an active subscription
+and that it matches filter criteria belonging to that subscription.
 
 --- 
 # Future Work
