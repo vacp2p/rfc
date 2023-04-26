@@ -4,7 +4,7 @@ title: 12/WAKU2-FILTER
 name: Waku v2 Filter
 status: draft
 tags: waku-core
-versions: [00](/spec/12/previous-versions/00/), 01
+versions: [00](/spec/12/previous-versions/00/)
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
