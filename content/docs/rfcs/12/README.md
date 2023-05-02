@@ -4,6 +4,7 @@ title: 12/WAKU2-FILTER
 name: Waku v2 Filter
 status: draft
 tags: waku-core
+version: 01
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
@@ -12,11 +13,17 @@ contributors:
   - Ebube Ud <ebube@status.im>
 ---
 
+previous versions: [00](/spec/12/previous-versions/00/)
+
+---
+
 `WakuFilter` is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of `WakuRelay` specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
 
 # Content filtering
 
-**Protocol identifier***: `/vac/waku/filter/2.0.0-beta1`
+**Protocol identifiers**:
+- _filter-subscribe_: `/vac/waku/filter-subscribe/2.0.0-beta1`
+- _filter-push_: `/vac/waku/filter-push/2.0.0-beta1`
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
@@ -61,77 +68,161 @@ The following are not considered as part of the adversarial model:
 ## Protobuf
 
 ```protobuf
-message FilterRequest {
-  bool subscribe = 1;
-  string topic = 2;
-  repeated ContentFilter contentFilters = 3;
+syntax = "proto3";
 
-  message ContentFilter {
-    string contentTopic = 1;
+// 12/WAKU2-FILTER rfc: https://rfc.vac.dev/spec/12/
+package waku.filter.v2;
+
+// Protocol identifier: /vac/waku/filter-subscribe/2.0.0-beta1
+message FilterSubscribeRequest {
+  enum FilterSubscribeType {
+    SUBSCRIBER_PING = 0;
+    SUBSCRIBE = 1;
+    UNSUBSCRIBE = 2;
+    UNSUBSCRIBE_ALL = 3;
   }
+
+  string request_id = 1;
+  FilterSubscribeType filter_subscribe_type = 2;
+
+  // Filter criteria
+  optional string pubsub_topic = 10;
+  repeated string content_topics = 11;
 }
 
+message FilterSubscribeResponse {
+  string request_id = 1;
+  uint32 status_code = 10;
+  optional string status_desc = 11;
+}
+
+// Protocol identifier: /vac/waku/filter-push/2.0.0-beta1
 message MessagePush {
-  repeated WakuMessage messages = 1;
-}
-
-message FilterRPC {
-  string requestId = 1;
-  FilterRequest request = 2;
-  MessagePush push = 3;
+  WakuMessage waku_message = 1;
+  optional string pubsub_topic = 2;
 }
 ```
 
-#### FilterRPC
+## Filter-Subscribe
 
-A node MUST send all Filter messages (`FilterRequest`, `MessagePush`) wrapped inside a
-`FilterRPC` this allows the node handler to determine how to handle a message as the Waku
-Filter protocol is not a request response based protocol but instead a push based system.
+A filter service node MUST support the _filter-subscribe_ protocol
+to allow filter clients to subscribe, modify, refresh and unsubscribe a desired set of filter criteria.
+The combination of different filter criteria for a specific filter client node is termed a "subscription".
+A filter client is interested in receiving messages matching the filter criteria in its registered subscriptions.
 
-The `requestId` MUST be a uniquely generated string. When a `MessagePush` is sent
-the `requestId` MUST match the `requestId` of the subscribing `FilterRequest` whose filters
-matched the message causing it to be pushed.
+Since a filter service node is consuming resources to provide this service,
+it MAY account for usage and adapt its service provision to certain clients.
+An incentive mechanism is currently planned but underspecified.
 
-#### FilterRequest
+### Filter Subscribe Request
 
-A `FilterRequest` contains an optional topic, zero or more content filters and
-a boolean signifying whether to subscribe or unsubscribe to the given filters.
-True signifies 'subscribe' and false signifies 'unsubscribe'.
+A client node MUST send all filter requests in a `FilterSubscribeRequest` message.
+This request MUST contain a `request_id`.
+The `request_id` MUST be a uniquely generated string.
+Each request MUST include a `filter_subscribe_type`, indicating the type of request.
 
-A node that sends the RPC with a filter request and `subscribe` set to 'true' 
-requests that the filter node SHOULD notify the light requesting node of messages
-matching this filter.
+### Filter Subscribe Response
 
-A node that sends the RPC with a filter request and `subscribe` set to 'false'
-requests that the filter node SHOULD stop notifying the light requesting node
-of messages matching this filter if it is currently doing so.
+In return to any `FilterSubscribeRequest`,
+a filter service node SHOULD respond with a `FilterSubscribeResponse` with a `requestId` matching that of the request.
+This response MUST contain a `status_code` indicating if the request was successful or not.
+Successful status codes are in the `2xx` range.
+Client nodes SHOULD consider all other status codes as error codes and assume that the requested operation had failed.
+In addition, the filter service node MAY choose to provide a more detailed status description in the `status_desc` field.
 
-The filter matches when content filter and, optionally, a topic is matched.
-Content filter is matched when a `WakuMessage` `contentTopic` field is the same.
+### Filter matching
 
-A filter node SHOULD honor this request, though it MAY choose not to do so. If
-it chooses not to do so it MAY tell the light why. The mechanism for doing this
-is currently not specified. For notifying the light node a filter node sends a
-MessagePush message.
+In the description of each request type below,
+the term "filter criteria" refers to the combination of `pubsub_topic` and a set of `content_topics`.
+The request MAY include filter criteria, conditional to the selected `filter_subscribe_type`.
+If the request contains filter criteria,
+it MUST contain a `pubsub_topic`
+and the `content_topics` set MUST NOT be empty.
+A `WakuMessage` matches filter criteria when its `content_topic` is in the `content_topics` set
+and it was published on a matching `pubsub_topic`.
 
-Since such a filter node is doing extra work for a light node, it MAY also
-account for usage and be selective in how much service it provides. This
-mechanism is currently planned but underspecified.
+### Filter Subscribe Types
 
-#### MessagePush
+The following filter subscribe types are defined:
 
-A filter node that has received a filter request SHOULD push all messages that
-match this filter to a light node. These [`WakuMessage`'s](./waku-message.md) are likely to come from the
-`relay` protocol and be kept at the Node, but there MAY be other sources or
-protocols where this comes from. This is up to the consumer of the protocol.
+#### SUBSCRIBER_PING
 
-A filter node MUST NOT send a push message for messages that have not been
-requested via a FilterRequest.
+A filter client that sends a `FilterSubscribeRequest` with `filter_subscribe_type` set to `SUBSCRIBER_PING`
+requests that the service node SHOULD indicate if it has any active subscriptions for this client.
+The filter client SHOULD exclude any filter criteria from the request.
+The filter service node SHOULD respond with a success code if it has any active subscriptions for this client
+or an error code if not.
+The filter service node SHOULD ignore any filter criteria in the request.
 
-If a specific light node isn't connected to a filter node for some specific
-period of time (e.g. a TTL), then the filter node MAY choose to not push these
-messages to the node. This period is up to the consumer of the protocol and node
-implementation, though a reasonable default is one minute.
+#### SUBSCRIBE
+
+A filter client that sends a `FilterSubscribeRequest` with `filter_subscribe_type` set to `SUBSCRIBE`
+requests that the service node SHOULD push messages matching this filter to the client.
+The filter client MUST include the desired filter criteria in the request.
+A client MAY use this request type to _modify_ an existing subscription
+by providing _additional_ filter criteria in a new request.
+A client MAY use this request type to _refresh_ an existing subscription
+by providing _the same_ filter criteria in a new request.
+The filter service node SHOULD respond with a success code if it successfully honored this request
+or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the subscribe request does not contain valid filter criteria,
+i.e. both a `pubsub_topic` _and_ a non-empty `content_topics` set.
+
+#### UNSUBSCRIBE
+
+A filter client that sends a `FilterSubscribeRequest` with `filter_subscribe_type` set to `UNSUBSCRIBE`
+requests that the service node SHOULD _stop_ pushing messages matching this filter to the client.
+The filter client MUST include the filter criteria it desires to unsubscribe from in the request.
+A client MAY use this request type to _modify_ an existing subscription
+by providing _a subset of_ the original filter criteria to unsubscribe from in a new request.
+The filter service node SHOULD respond with a success code if it successfully honored this request
+or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the unsubscribe request does not contain valid filter criteria,
+i.e. both a `pubsub_topic` _and_ a non-empty `content_topics` set.
+
+#### UNSUBSCRIBE_ALL
+
+A filter client that sends a `FilterSubscribeRequest` with `filter_subscribe_type` set to `UNSUBSCRIBE_ALL`
+requests that the service node SHOULD _stop_ pushing messages matching _any_ filter to the client.
+The filter client SHOULD exclude any filter criteria from the request.
+The filter service node SHOULD remove any existing subscriptions for this client.
+It SHOULD respond with a success code if it successfully honored this request
+or an error code if not.
+
+## Filter-Push
+
+A filter client node MUST support the _filter-push_ protocol
+to allow filter service nodes to push messages matching registered subscriptions to this client.
+
+A filter service node SHOULD push all messages
+matching the filter criteria in a registered subscription
+to the subscribed filter client.
+These [`WakuMessage`s](./waku-message.md) are likely to come from [`11/WAKU2-RELAY`](https://rfc.vac.dev/spec/11/),
+but there MAY be other sources or protocols where this comes from.
+This is up to the consumer of the protocol.
+
+If a message push fails,
+the filter service node MAY consider the client node to be unreachable.
+If a specific filter client node is not reachable from the service node for a period of time,
+the filter service node MAY choose to stop pushing messages to the client and remove its subscription.
+This period is up to the service node implementation.
+We consider `1 minute` to be a reasonable default.
+
+### Message Push
+
+Each message MUST be pushed in a `MessagePush` message.
+Each `MessagePush` MUST contain one (and only one) `waku_message`.
+If this message was received on a specific `pubsub_topic`,
+it SHOULD be included in the `MessagePush`.
+A filter client SHOULD NOT respond to a `MessagePush`.
+Since the filter protocol does not include caching or fault-tolerance,
+this is a best effort push service with no bundling
+or guaranteed retransmission of messages.
+A filter client SHOULD verify that each `MessagePush` it receives
+originated from a service node where the client has an active subscription
+and that it matches filter criteria belonging to that subscription.
 
 --- 
 # Future Work
