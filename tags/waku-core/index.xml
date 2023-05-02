@@ -27,6 +27,18 @@ Content filtering is a way to do message-based filtering. Currently the only con
     </item>
     
     <item>
+      <title>12/WAKU2-FILTER</title>
+      <link>https://rfc.vac.dev/spec/12/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/12/</guid>
+      <description>previous versions: 00
+WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering # Protocol identifiers:
+filter-subscribe: /vac/waku/filter-subscribe/2.0.0-beta1 filter-push: /vac/waku/filter-push/2.0.0-beta1 Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.</description>
+    </item>
+    
+    <item>
       <title>13/WAKU2-STORE</title>
       <link>https://rfc.vac.dev/spec/13/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
