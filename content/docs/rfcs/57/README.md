@@ -378,7 +378,7 @@ A publisher that wants to send messages that are relayed in the network for a gi
 * be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 64 bytes.
 * include the signature of the `app-message-hash` (`message-signature`) that wishes to send in the `WakuMessage` `meta` field.
 
-## Design requirements (relay)
+## Design requirements (relay)
 
 Requirements for the relay are listed below:
 
@@ -409,24 +409,24 @@ Relay nodes complying with this specification shall accept the following message
 Given the following key pair:
 
 ```
-private-key-topic = 0x049c5fac802da41e07e6cdf51c3b9a6351ad5e65921527f2df5b7d59fd9b56ab02bab736cdcfc37f25095e78127500da371947217a8cd5186ab890ea
-public-key-topic = 0x5526a8990317c9b7b58d07843d270f9cd1d9aaee129294c1c478abf7261dd9e6866211c3f6
+private-key-topic = 5526a8990317c9b7b58d07843d270f9cd1d9aaee129294c1c478abf7261dd9e6
+public-key-topic = 049c5fac802da41e07e6cdf51c3b9a6351ad5e65921527f2df5b7d59fd9b56ab02bab736cdcfc37f25095e78127500da371947217a8cd5186ab890ea866211c3f6
 ```
 
 
 And the following message to send:
 
 ```
-protected-pubsub-topic = "some-spam-protected-topic"
-contentTopic = "my-content-topic"
-payload = 0x3af5c7a8d71498e82e1991089d8429448f3b78277fac141af9052e77fc003dfb
+protected-pubsub-topic = pubsub-topic
+contentTopic = content-topic
+payload = 1A12E077D0E89F9CAC11FBBB6A676C86120B5AD3E248B1F180E98F15EE43D2DFCF62F00C92737B2FF6F59B3ABA02773314B991C41DC19ADB0AD8C17C8E26757B
 ```
 
-The message hash and signature are calculated as follows.
+The message hash and meta (aka signature) are calculated as follows.
 
 ```
-app-message-hash = 0xd0e3231ec48f9c0cf9306b7100c30b4e85c78854b67b41e4ee388fb4610f543d
-message.meta = 0x4d79cb46a26912bfb3914d9c4cf3c76165d968b9f83c08e0c2ecf86071f2fc0e560d6b9e33923b63d62e46cc709e0ae48a956d3b5e8145e15b8fb558d3bded9c
+app-message-hash = 0914369D6D0C13783A8E86409FE42C68D8E8296456B9A9468C845006BCE5B9B2
+message.meta = B139487797A242291E0DD3F689777E559FB749D565D55FF202C18E24F21312A555043437B4F808BB0D21D542D703873DC712D76A3BAF1C5C8FF754210D894AD4
 ```
 
 Using `message.meta`, the relay node shall calculate the `app-message-hash` of the received message using `public-key-topic`, and with the values above, the signature should be verified, making the node `Accept` the message and relaying it to other nodes in the network.
