@@ -8,3 +8,6 @@ BookMenuBundle = "/menu"
 
 [permalinks]
   docs = "/spec/:slug"
+
+[markup.tableOfContents]
+  startLevel = 1
