@@ -433,13 +433,15 @@ And the following message to send:
 protected-pubsub-topic = pubsub-topic
 contentTopic = content-topic
 payload = 1A12E077D0E89F9CAC11FBBB6A676C86120B5AD3E248B1F180E98F15EE43D2DFCF62F00C92737B2FF6F59B3ABA02773314B991C41DC19ADB0AD8C17C8E26757B
+timestamp = 1683208172339052800
+ephemeral = true
 ```
 
 The message hash and meta (aka signature) are calculated as follows.
 
 ```
-app-message-hash = 0914369D6D0C13783A8E86409FE42C68D8E8296456B9A9468C845006BCE5B9B2
-message.meta = B139487797A242291E0DD3F689777E559FB749D565D55FF202C18E24F21312A555043437B4F808BB0D21D542D703873DC712D76A3BAF1C5C8FF754210D894AD4
+app-message-hash = 662F8C20A335F170BD60ABC1F02AD66F0C6A6EE285DA2A53C95259E7937C0AE9
+message.meta = 127FA211B2514F0E974A055392946DC1A14052182A6ABEFB8A6CD7C51DA1BF2E40595D28EF1A9488797C297EED3AAC45430005FB3A7F037BDD9FC4BD99F59E63
 ```
 
 Using `message.meta`, the relay node shall calculate the `app-message-hash` of the received message using `public-key-topic`, and with the values above, the signature should be verified, making the node `Accept` the message and relaying it to other nodes in the network.
