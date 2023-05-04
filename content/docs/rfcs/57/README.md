@@ -375,8 +375,16 @@ This solution introduces two roles:
 ## Design requirements (publisher)
 
 A publisher that wants to send messages that are relayed in the network for a given `protected-pubsub-topic` shall:
-* be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 64 bytes.
+* be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 64 bytes using deterministic signing complying with RFC 6979.
 * include the signature of the `app-message-hash` (`message-signature`) that wishes to send in the `WakuMessage` `meta` field.
+
+The `app-message-hash` of the message shall be calculated as the `sha256` hash of the following fields of the message:
+
+```
+sha256(concat(pubsubTopic, payload, contentTopic, timestamp, ephemeral))
+```
+
+Where fields are serialized into bytes using little-endian. Note that `ephemeral` is a boolean that is serialized to `0` if `false` and `1` if `true`.
 
 ## Design requirements (relay)
 
@@ -384,12 +392,17 @@ Requirements for the relay are listed below:
 
 * A valid `protected-pubsub-topic` shall be configured with a `public-key-topic`, (derived from a `private-key-topic`). Note that the relay does not need to know the private key.
 For simplicity, there is just one key per topic. Since this approach has clear privacy implications, this configuration is not part of the waku protocol, but of the application.
-* Relay nodes should leverage the existing gossipsub validators that allow to `Accept` or `Reject` messages.
-* Upon receiving a message, the node shall check the `meta` `WakuMessage` field. If empty, `Reject` the message.
+
+Requirements on the gossipsub validator:
+* Relay nodes should use the existing gossipsub validators that allow to `Accept` or `Reject` messages, according to the following criteria:
+* If `timestamp` is not set (equals to 0) then `Reject` the message.
+* If the `timestamp` is `abs(current_timestamp-timestamp) > MessageWindowInSec` then `Reject` the message.
+* If `meta` is empty, `Reject` the message.
 * If `meta` exists but its size is different than 64 bytes, `Reject` the message.
-* If `meta` exists and has a size of 64 bytes, assert that `message-signature` is verified according to the ECDSA signature verification algorithm using `public-key-topic` and `app-message-hash`.
-* If the signature does not verify correctly, `Reject` the message.
-* If and only if the signature is verified, `Accept` the message.
+* If `meta` does not successfully verifies according to the ECDSA signature verification algorithm using `public-key-topic` and `app-message-hash`, then `Reject` the message.
+* If and only if all above conditions are met then `Accept` the message.
+
+Other requirements:
 * The node shall keep metrics on the messages validation output, `Accept` or `Reject`.
 * (Optional). To further strengthen DoS protection, gossipsub [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) can be used to trigger disconnections from peers sending multiple invalid messages. See `P4` penalty.
 This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.
