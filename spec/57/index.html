@@ -19,7 +19,7 @@ Note: (Parts of) this RFC will be deprecated in the future as we continue resear
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.9332452670516db05dbb4efeb10551244d4f144cc86393ce2bf4b04b790a0af4.js" integrity="sha256-kzJFJnBRbbBdu07&#43;sQVRJE1PFEzIY5POK/SwS3kKCvQ="></script>
+<script defer src="/en.search.min.9abea09ce55c72bde78df1b2649402d67199114dce4bec38dfb0526b83bf7203.js" integrity="sha256-mr6gnOVccr3njfGyZJQC1nGZEU3OS&#43;w437BSa4O/cgM="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -634,9 +634,12 @@ Operators can freely choose how they want to generate, and distribute the public
 </h2>
 <p>A publisher that wants to send messages that are relayed in the network for a given <code>protected-pubsub-topic</code> shall:</p>
 <ul>
-<li>be able to sign messages with the <code>private-key-topic</code> configured for that topic, producing a ECDSA signature of 64 bytes.</li>
+<li>be able to sign messages with the <code>private-key-topic</code> configured for that topic, producing a ECDSA signature of 64 bytes using deterministic signing complying with RFC 6979.</li>
 <li>include the signature of the <code>app-message-hash</code> (<code>message-signature</code>) that wishes to send in the <code>WakuMessage</code> <code>meta</code> field.</li>
 </ul>
+<p>The <code>app-message-hash</code> of the message shall be calculated as the <code>sha256</code> hash of the following fields of the message:</p>
+<pre tabindex="0"><code>sha256(concat(pubsubTopic, payload, contentTopic, timestamp, ephemeral))
+</code></pre><p>Where fields are serialized into bytes using little-endian. Note that <code>ephemeral</code> is a boolean that is serialized to <code>0</code> if <code>false</code> and <code>1</code> if <code>true</code>.</p>
 <h2 id="design-requirements-relay">
   Design requirements (relay)
   <a class="anchor" href="#design-requirements-relay">#</a>
@@ -645,12 +648,19 @@ Operators can freely choose how they want to generate, and distribute the public
 <ul>
 <li>A valid <code>protected-pubsub-topic</code> shall be configured with a <code>public-key-topic</code>, (derived from a <code>private-key-topic</code>). Note that the relay does not need to know the private key.
 For simplicity, there is just one key per topic. Since this approach has clear privacy implications, this configuration is not part of the waku protocol, but of the application.</li>
-<li>Relay nodes should leverage the existing gossipsub validators that allow to <code>Accept</code> or <code>Reject</code> messages.</li>
-<li>Upon receiving a message, the node shall check the <code>meta</code> <code>WakuMessage</code> field. If empty, <code>Reject</code> the message.</li>
+</ul>
+<p>Requirements on the gossipsub validator:</p>
+<ul>
+<li>Relay nodes should use the existing gossipsub validators that allow to <code>Accept</code> or <code>Reject</code> messages, according to the following criteria:</li>
+<li>If <code>timestamp</code> is not set (equals to 0) then <code>Reject</code> the message.</li>
+<li>If the <code>timestamp</code> is <code>abs(current_timestamp-timestamp) &gt; MessageWindowInSec</code> then <code>Reject</code> the message.</li>
+<li>If <code>meta</code> is empty, <code>Reject</code> the message.</li>
 <li>If <code>meta</code> exists but its size is different than 64 bytes, <code>Reject</code> the message.</li>
-<li>If <code>meta</code> exists and has a size of 64 bytes, assert that <code>message-signature</code> is verified according to the ECDSA signature verification algorithm using <code>public-key-topic</code> and <code>app-message-hash</code>.</li>
-<li>If the signature does not verify correctly, <code>Reject</code> the message.</li>
-<li>If and only if the signature is verified, <code>Accept</code> the message.</li>
+<li>If <code>meta</code> does not successfully verifies according to the ECDSA signature verification algorithm using <code>public-key-topic</code> and <code>app-message-hash</code>, then <code>Reject</code> the message.</li>
+<li>If and only if all above conditions are met then <code>Accept</code> the message.</li>
+</ul>
+<p>Other requirements:</p>
+<ul>
 <li>The node shall keep metrics on the messages validation output, <code>Accept</code> or <code>Reject</code>.</li>
 <li>(Optional). To further strengthen DoS protection, gossipsub <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators">scoring</a> can be used to trigger disconnections from peers sending multiple invalid messages. See <code>P4</code> penalty.
 This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.</li>
@@ -676,9 +686,11 @@ public-key-topic = 049c5fac802da41e07e6cdf51c3b9a6351ad5e65921527f2df5b7d59fd9b5
 <pre tabindex="0"><code>protected-pubsub-topic = pubsub-topic
 contentTopic = content-topic
 payload = 1A12E077D0E89F9CAC11FBBB6A676C86120B5AD3E248B1F180E98F15EE43D2DFCF62F00C92737B2FF6F59B3ABA02773314B991C41DC19ADB0AD8C17C8E26757B
+timestamp = 1683208172339052800
+ephemeral = true
 </code></pre><p>The message hash and meta (aka signature) are calculated as follows.</p>
-<pre tabindex="0"><code>app-message-hash = 0914369D6D0C13783A8E86409FE42C68D8E8296456B9A9468C845006BCE5B9B2
-message.meta = B139487797A242291E0DD3F689777E559FB749D565D55FF202C18E24F21312A555043437B4F808BB0D21D542D703873DC712D76A3BAF1C5C8FF754210D894AD4
+<pre tabindex="0"><code>app-message-hash = 662F8C20A335F170BD60ABC1F02AD66F0C6A6EE285DA2A53C95259E7937C0AE9
+message.meta = 127FA211B2514F0E974A055392946DC1A14052182A6ABEFB8A6CD7C51DA1BF2E40595D28EF1A9488797C297EED3AAC45430005FB3A7F037BDD9FC4BD99F59E63
 </code></pre><p>Using <code>message.meta</code>, the relay node shall calculate the <code>app-message-hash</code> of the received message using <code>public-key-topic</code>, and with the values above, the signature should be verified, making the node <code>Accept</code> the message and relaying it to other nodes in the network.</p>
 <h2 id="owner-mapped-communities-1">
   Owner-Mapped Communities
