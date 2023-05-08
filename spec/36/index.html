@@ -23,7 +23,7 @@ Design requirements # The API should be generic enough, so:" />
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.9abea09ce55c72bde78df1b2649402d67199114dce4bec38dfb0526b83bf7203.js" integrity="sha256-mr6gnOVccr3njfGyZJQC1nGZEU3OS&#43;w437BSa4O/cgM="></script>
+<script defer src="/en.search.min.443e2790f0fa63c17b0b314c19d0a638e3792ec56488beabc36caa23fd27c1d1.js" integrity="sha256-RD4nkPD6Y8F7CzFMGdCmOON5LsVkiL6rw2yqI/0nwdE="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -201,6 +201,7 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#node-management">Node management</a>
       <ul>
         <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
+        <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
         <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
         <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
         <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
@@ -229,6 +230,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
         <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
         <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+        <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
       </ul>
     </li>
     <li><a href="#waku-filter">Waku Filter</a>
@@ -577,8 +579,17 @@ The function signature for the callback should be <code>void myCallback(char* js
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">nodeKey?</span>: <span style="color:#66d9ef">string</span>;
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">keepAliveInterval?</span>: <span style="color:#66d9ef">number</span>;
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">relay?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">relayTopics?</span>: <span style="color:#66d9ef">Array</span>&lt;<span style="color:#f92672">string</span>&gt;;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">gossipsubParameters?</span>: <span style="color:#66d9ef">GossipSubParameters</span>;
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">minPeersToPublish?</span>: <span style="color:#66d9ef">number</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">filter?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">discV5?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">discV5BootstrapNodes?</span>: <span style="color:#66d9ef">Array</span>&lt;<span style="color:#f92672">string</span>&gt;;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">discV5UDPPort?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">store?</span>: <span style="color:#66d9ef">boolean</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">databaseURL?</span>: <span style="color:#66d9ef">string</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">storeRetentionMaxMessages?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">storeRetentionTimeSeconds?</span>: <span style="color:#66d9ef">number</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Fields:</p>
 <p>All fields are optional.
@@ -599,12 +610,29 @@ Default random.</li>
 Default <code>20</code>.</li>
 <li><code>relay</code>: Enable relay protocol.
 Default <code>true</code>.</li>
+<li><code>relayTopics</code>:  Array of pubsub topics that WakuRelay will automatically subscribe to when the node
+starts
+Default <code>[]</code></li>
+<li><code>gossipSubParameters</code>: custom gossipsub parameters. See <code>GossipSubParameters</code> section for defaults</li>
 <li><code>minPeersToPublish</code>: The minimum number of peers required on a topic to allow broadcasting a message.
 Default <code>0</code>.</li>
 <li><code>filter</code>: Enable filter protocol.
 Default <code>false</code>.</li>
+<li><code>discV5</code>: Enable DiscoveryV5.
+Default <code>false</code></li>
+<li><code>discV5BootstrapNodes</code>: Array of bootstrap nodes ENR</li>
+<li><code>discV5UDPPort</code>: UDP port for DiscoveryV5
+Default <code>9000</code></li>
+<li><code>store</code>: Enable store protocol to persist message history
+Default <code>false</code></li>
+<li><code>databaseURL</code>: url connection string. Accepts SQLite and PostgreSQL connection strings
+Default: <code>sqlite3://store.db</code></li>
+<li><code>storeRetentionMaxMessages</code>: max number of messages to store in the database.
+Default <code>10000</code></li>
+<li><code>storeRetentionTimeSeconds</code>: max number of seconds that a message will be persisted in the database.
+Default <code>2592000</code> (30d)
+For example:</li>
 </ul>
-<p>For example:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;host&#34;</span>: <span style="color:#e6db74">&#34;0.0.0.0&#34;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;port&#34;</span>: <span style="color:#ae81ff">60000</span>,
@@ -614,7 +642,105 @@ Default <code>false</code>.</li>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;relay&#34;</span>: <span style="color:#66d9ef">true</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;minPeersToPublish&#34;</span>: <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_newchar-jsonconfig">
+</span></span></code></pre></div><h3 id="gossipsubparameters-type">
+  <code>GossipsubParameters</code> type
+  <a class="anchor" href="#gossipsubparameters-type">#</a>
+</h3>
+<p>Type holding custom gossipsub configuration:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span><span style="color:#66d9ef">interface</span> <span style="color:#a6e22e">GossipSubParameters</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D_low?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D_high?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D_score?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D_out?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">HistoryLength?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">HistoryGossip?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">D_lazy?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">GossipFactor?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">GossipRetransmission?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">HeartbeatInitialDelayMs?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">HeartbeatIntervalSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">SlowHeartbeatWarning?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">FanoutTTLSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">PrunePeers?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">PruneBackoffSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">UnsubscribeBackoffSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Connectors?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">MaxPendingConnections?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ConnectionTimeoutSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">DirectConnectTicks?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">DirectConnectInitialDelaySeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">OpportunisticGraftTicks?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">OpportunisticGraftPeers?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">GraftFloodThresholdSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">MaxIHaveLength?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">MaxIHaveMessages?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">IWantFollowupTimeSeconds?</span>: <span style="color:#66d9ef">number</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fields:</p>
+<p>All fields are optional.
+If a key is <code>undefined</code>, or <code>null</code>, a default value will be set.</p>
+<ul>
+<li><code>d</code>: optimal degree for a GossipSub topic mesh.
+Default <code>6</code></li>
+<li><code>dLow</code>: lower bound on the number of peers we keep in a GossipSub topic mesh
+Default <code>5</code></li>
+<li><code>dHigh</code>: upper bound on the number of peers we keep in a GossipSub topic mesh.
+Default <code>12</code></li>
+<li><code>dScore</code>: affects how peers are selected when pruning a mesh due to over subscription.
+Default <code>4</code></li>
+<li><code>dOut</code>: sets the quota for the number of outbound connections to maintain in a topic mesh.
+Default <code>2</code></li>
+<li><code>historyLength</code>: controls the size of the message cache used for gossip.
+Default <code>5</code></li>
+<li><code>historyGossip</code>: controls how many cached message ids we will advertise in IHAVE gossip messages.
+Default <code>3</code></li>
+<li><code>dLazy</code>: affects how many peers we will emit gossip to at each heartbeat.
+Default <code>6</code></li>
+<li><code>gossipFactor</code>: affects how many peers we will emit gossip to at each heartbeat.
+Default <code>0.25</code></li>
+<li><code>gossipRetransmission</code>: controls how many times we will allow a peer to request the same message id through IWANT gossip before we start ignoring them.
+Default <code>3</code></li>
+<li><code>heartbeatInitialDelayMs</code>: short delay in milliseconds before the heartbeat timer begins after the router is initialized.
+Default <code>100</code> milliseconds</li>
+<li><code>heartbeatIntervalSeconds</code>: controls the time between heartbeats.
+Default <code>1</code> second</li>
+<li><code>slowHeartbeatWarning</code>: duration threshold for heartbeat processing before emitting a warning.
+Default <code>0.1</code></li>
+<li><code>fanoutTTLSeconds</code>: controls how long we keep track of the fanout state.
+Default <code>60</code> seconds</li>
+<li><code>prunePeers</code>: controls the number of peers to include in prune Peer eXchange.
+Default <code>16</code></li>
+<li><code>pruneBackoffSeconds</code>: controls the backoff time for pruned peers.
+Default <code>60</code> seconds</li>
+<li><code>unsubscribeBackoffSeconds</code>: controls the backoff time to use when unsuscribing from a topic.
+Default <code>10</code> seconds</li>
+<li><code>connectors</code>: number of active connection attempts for peers obtained through PX.
+Default <code>8</code></li>
+<li><code>maxPendingConnections</code>: maximum number of pending connections for peers attempted through px.
+Default <code>128</code></li>
+<li><code>connectionTimeoutSeconds</code>: timeout in seconds for connection attempts.
+Default <code>30</code> seconds</li>
+<li><code>directConnectTicks</code>: the number of heartbeat ticks for attempting to reconnect direct peers that are not currently connected.
+Default <code>300</code></li>
+<li><code>directConnectInitialDelaySeconds</code>: initial delay before opening connections to direct peers.
+Default <code>1</code> second</li>
+<li><code>opportunisticGraftTicks</code>: number of heartbeat ticks for attempting to improve the mesh with opportunistic grafting.
+Default <code>60</code></li>
+<li><code>opportunisticGraftPeers</code>: the number of peers to opportunistically graft.
+Default <code>2</code></li>
+<li><code>graftFloodThresholdSeconds</code>: If a GRAFT comes before GraftFloodThresholdSeconds has elapsed since the last PRUNE, then there is an extra score penalty applied to the peer through P7.
+Default <code>10</code> seconds</li>
+<li><code>maxIHaveLength</code>: max number of messages to include in an IHAVE message, also controls the max number of IHAVE ids we will accept and request with IWANT from a peer within a heartbeat.
+Default <code>5000</code></li>
+<li><code>maxIHaveMessages</code>: max number of IHAVE messages to accept from a peer within a heartbeat.
+Default <code>10</code></li>
+<li><code>iWantFollowupTimeSeconds</code>: Time to wait for a message requested through IWANT following an IHAVE advertisement.
+Default <code>3</code> seconds</li>
+<li><code>seenMessagesTTLSeconds</code>: configures when a previously seen message ID can be forgotten about.
+Default <code>120</code> seconds</li>
+</ul>
+<h3 id="extern-char-waku_newchar-jsonconfig">
   <code>extern char* waku_new(char* jsonConfig)</code>
   <a class="anchor" href="#extern-char-waku_newchar-jsonconfig">#</a>
 </h3>
@@ -974,6 +1100,18 @@ If the execution is successful, the <code>result</code> field is set to <code>tr
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="extern-char-waku_relay_topics">
+  <code>extern char* waku_relay_topics()</code>
+  <a class="anchor" href="#extern-char-waku_relay_topics">#</a>
+</h3>
+<p>Get the list of subscribed pubsub topics in Waku Relay.</p>
+<p><strong>Returns</strong></p>
+<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
+If the execution is successful, the <code>result</code> field will contain an array of pubsub topics.</p>
+<p>For example:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: [<span style="color:#e6db74">&#34;pubsubTopic1&#34;</span>, <span style="color:#e6db74">&#34;pubsubTopic2&#34;</span>]
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h2 id="waku-filter">
   Waku Filter
   <a class="anchor" href="#waku-filter">#</a>
@@ -1323,6 +1461,7 @@ If the execution is successful, the <code>result</code> field contains the decod
     <li><a href="#node-management">Node management</a>
       <ul>
         <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
+        <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
         <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
         <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
         <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
@@ -1351,6 +1490,7 @@ If the execution is successful, the <code>result</code> field contains the decod
         <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
         <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
         <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+        <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
       </ul>
     </li>
     <li><a href="#waku-filter">Waku Filter</a>

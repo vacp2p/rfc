@@ -5,13 +5,15 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
-Content filtering # Protocol identifier*: /vac/waku/filter/2.0.0-beta1
-Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.">
+<meta name="description" content="previous versions: 00
+WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering # Protocol identifiers:
+filter-subscribe: /vac/waku/filter-subscribe/2.0.0-beta1 filter-push: /vac/waku/filter-push/2.0.0-beta1 Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="12/WAKU2-FILTER" />
-<meta property="og:description" content="WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
-Content filtering # Protocol identifier*: /vac/waku/filter/2.0.0-beta1
-Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic." />
+<meta property="og:description" content="previous versions: 00
+WakuFilter is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of WakuRelay specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.
+Content filtering # Protocol identifiers:
+filter-subscribe: /vac/waku/filter-subscribe/2.0.0-beta1 filter-push: /vac/waku/filter-push/2.0.0-beta1 Content filtering is a way to do message-based filtering. Currently the only content filter being applied is on contentTopic." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/12/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +23,7 @@ Content filtering is a way to do message-based filtering. Currently the only con
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.9abea09ce55c72bde78df1b2649402d67199114dce4bec38dfb0526b83bf7203.js" integrity="sha256-mr6gnOVccr3njfGyZJQC1nGZEU3OS&#43;w437BSa4O/cgM="></script>
+<script defer src="/en.search.min.443e2790f0fa63c17b0b314c19d0a638e3792ec56488beabc36caa23fd27c1d1.js" integrity="sha256-RD4nkPD6Y8F7CzFMGdCmOON5LsVkiL6rw2yqI/0nwdE="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -184,9 +186,18 @@ https://github.com/alex-shpak/hugo-book
   </ul>
 
   <ul>
-    <li><a href="#protobuf">Protobuf</a>
+    <li><a href="#protobuf">Protobuf</a></li>
+    <li><a href="#filter-subscribe">Filter-Subscribe</a>
       <ul>
-        <li></li>
+        <li><a href="#filter-subscribe-request">Filter Subscribe Request</a></li>
+        <li><a href="#filter-subscribe-response">Filter Subscribe Response</a></li>
+        <li><a href="#filter-matching">Filter matching</a></li>
+        <li><a href="#filter-subscribe-types">Filter Subscribe Types</a></li>
+      </ul>
+    </li>
+    <li><a href="#filter-push">Filter-Push</a>
+      <ul>
+        <li><a href="#message-push">Message Push</a></li>
       </ul>
     </li>
   </ul>
@@ -253,12 +264,18 @@ https://github.com/alex-shpak/hugo-book
           
       </li>
       
-  </ul><p><code>WakuFilter</code> is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of <code>WakuRelay</code> specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.</p>
+  </ul><p>previous versions: <a href="/spec/12/previous-versions/00/">00</a></p>
+<hr>
+<p><code>WakuFilter</code> is a protocol that enables subscribing to messages that a peer receives. This is a more lightweight version of <code>WakuRelay</code> specifically designed for bandwidth restricted devices. This is due to the fact that light nodes subscribe to full-nodes and only receive the messages they desire.</p>
 <h1 id="content-filtering">
   Content filtering
   <a class="anchor" href="#content-filtering">#</a>
 </h1>
-<p><strong>Protocol identifier</strong>*: <code>/vac/waku/filter/2.0.0-beta1</code></p>
+<p><strong>Protocol identifiers</strong>:</p>
+<ul>
+<li><em>filter-subscribe</em>: <code>/vac/waku/filter-subscribe/2.0.0-beta1</code></li>
+<li><em>filter-push</em>: <code>/vac/waku/filter-push/2.0.0-beta1</code></li>
+</ul>
 <p>Content filtering is a way to do <a href="https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering">message-based
 filtering</a>.
 Currently the only content filter being applied is on <code>contentTopic</code>. This
@@ -307,71 +324,168 @@ frequent polling.</p>
   Protobuf
   <a class="anchor" href="#protobuf">#</a>
 </h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterRequest</span> {<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">bool</span> subscribe <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> ContentFilter contentFilters <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-protobuf" data-lang="protobuf"><span style="display:flex;"><span>syntax <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;proto3&#34;</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">ContentFilter</span> {<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> contentTopic <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">// 12/WAKU2-FILTER rfc: https://rfc.vac.dev/spec/12/
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#f92672">package</span> waku<span style="color:#f92672">.</span>filter.v2;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">// Protocol identifier: /vac/waku/filter-subscribe/2.0.0-beta1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterSubscribeRequest</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">enum</span> FilterSubscribeType {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    SUBSCRIBER_PING <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    SUBSCRIBE <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNSUBSCRIBE <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    UNSUBSCRIBE_ALL <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> request_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  FilterSubscribeType filter_subscribe_type <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#75715e">// Filter criteria
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> pubsub_topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">string</span> content_topics <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MessagePush</span> {<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> WakuMessage messages <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterSubscribeResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> request_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">uint32</span> status_code <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> status_desc <span style="color:#f92672">=</span> <span style="color:#ae81ff">11</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">FilterRPC</span> {<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> requestId <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  FilterRequest request <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  MessagePush push <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">// Protocol identifier: /vac/waku/filter-push/2.0.0-beta1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MessagePush</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  WakuMessage waku_message <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">string</span> pubsub_topic <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
-</span></span></span></code></pre></div><h4 id="filterrpc">
-  FilterRPC
-  <a class="anchor" href="#filterrpc">#</a>
+</span></span></span></code></pre></div><h2 id="filter-subscribe">
+  Filter-Subscribe
+  <a class="anchor" href="#filter-subscribe">#</a>
+</h2>
+<p>A filter service node MUST support the <em>filter-subscribe</em> protocol
+to allow filter clients to subscribe, modify, refresh and unsubscribe a desired set of filter criteria.
+The combination of different filter criteria for a specific filter client node is termed a &ldquo;subscription&rdquo;.
+A filter client is interested in receiving messages matching the filter criteria in its registered subscriptions.</p>
+<p>Since a filter service node is consuming resources to provide this service,
+it MAY account for usage and adapt its service provision to certain clients.
+An incentive mechanism is currently planned but underspecified.</p>
+<h3 id="filter-subscribe-request">
+  Filter Subscribe Request
+  <a class="anchor" href="#filter-subscribe-request">#</a>
+</h3>
+<p>A client node MUST send all filter requests in a <code>FilterSubscribeRequest</code> message.
+This request MUST contain a <code>request_id</code>.
+The <code>request_id</code> MUST be a uniquely generated string.
+Each request MUST include a <code>filter_subscribe_type</code>, indicating the type of request.</p>
+<h3 id="filter-subscribe-response">
+  Filter Subscribe Response
+  <a class="anchor" href="#filter-subscribe-response">#</a>
+</h3>
+<p>In return to any <code>FilterSubscribeRequest</code>,
+a filter service node SHOULD respond with a <code>FilterSubscribeResponse</code> with a <code>requestId</code> matching that of the request.
+This response MUST contain a <code>status_code</code> indicating if the request was successful or not.
+Successful status codes are in the <code>2xx</code> range.
+Client nodes SHOULD consider all other status codes as error codes and assume that the requested operation had failed.
+In addition, the filter service node MAY choose to provide a more detailed status description in the <code>status_desc</code> field.</p>
+<h3 id="filter-matching">
+  Filter matching
+  <a class="anchor" href="#filter-matching">#</a>
+</h3>
+<p>In the description of each request type below,
+the term &ldquo;filter criteria&rdquo; refers to the combination of <code>pubsub_topic</code> and a set of <code>content_topics</code>.
+The request MAY include filter criteria, conditional to the selected <code>filter_subscribe_type</code>.
+If the request contains filter criteria,
+it MUST contain a <code>pubsub_topic</code>
+and the <code>content_topics</code> set MUST NOT be empty.
+A <code>WakuMessage</code> matches filter criteria when its <code>content_topic</code> is in the <code>content_topics</code> set
+and it was published on a matching <code>pubsub_topic</code>.</p>
+<h3 id="filter-subscribe-types">
+  Filter Subscribe Types
+  <a class="anchor" href="#filter-subscribe-types">#</a>
+</h3>
+<p>The following filter subscribe types are defined:</p>
+<h4 id="subscriber_ping">
+  SUBSCRIBER_PING
+  <a class="anchor" href="#subscriber_ping">#</a>
 </h4>
-<p>A node MUST send all Filter messages (<code>FilterRequest</code>, <code>MessagePush</code>) wrapped inside a
-<code>FilterRPC</code> this allows the node handler to determine how to handle a message as the Waku
-Filter protocol is not a request response based protocol but instead a push based system.</p>
-<p>The <code>requestId</code> MUST be a uniquely generated string. When a <code>MessagePush</code> is sent
-the <code>requestId</code> MUST match the <code>requestId</code> of the subscribing <code>FilterRequest</code> whose filters
-matched the message causing it to be pushed.</p>
-<h4 id="filterrequest">
-  FilterRequest
-  <a class="anchor" href="#filterrequest">#</a>
+<p>A filter client that sends a <code>FilterSubscribeRequest</code> with <code>filter_subscribe_type</code> set to <code>SUBSCRIBER_PING</code>
+requests that the service node SHOULD indicate if it has any active subscriptions for this client.
+The filter client SHOULD exclude any filter criteria from the request.
+The filter service node SHOULD respond with a success code if it has any active subscriptions for this client
+or an error code if not.
+The filter service node SHOULD ignore any filter criteria in the request.</p>
+<h4 id="subscribe">
+  SUBSCRIBE
+  <a class="anchor" href="#subscribe">#</a>
 </h4>
-<p>A <code>FilterRequest</code> contains an optional topic, zero or more content filters and
-a boolean signifying whether to subscribe or unsubscribe to the given filters.
-True signifies &lsquo;subscribe&rsquo; and false signifies &lsquo;unsubscribe&rsquo;.</p>
-<p>A node that sends the RPC with a filter request and <code>subscribe</code> set to &rsquo;true&rsquo;
-requests that the filter node SHOULD notify the light requesting node of messages
-matching this filter.</p>
-<p>A node that sends the RPC with a filter request and <code>subscribe</code> set to &lsquo;false&rsquo;
-requests that the filter node SHOULD stop notifying the light requesting node
-of messages matching this filter if it is currently doing so.</p>
-<p>The filter matches when content filter and, optionally, a topic is matched.
-Content filter is matched when a <code>WakuMessage</code> <code>contentTopic</code> field is the same.</p>
-<p>A filter node SHOULD honor this request, though it MAY choose not to do so. If
-it chooses not to do so it MAY tell the light why. The mechanism for doing this
-is currently not specified. For notifying the light node a filter node sends a
-MessagePush message.</p>
-<p>Since such a filter node is doing extra work for a light node, it MAY also
-account for usage and be selective in how much service it provides. This
-mechanism is currently planned but underspecified.</p>
-<h4 id="messagepush">
-  MessagePush
-  <a class="anchor" href="#messagepush">#</a>
+<p>A filter client that sends a <code>FilterSubscribeRequest</code> with <code>filter_subscribe_type</code> set to <code>SUBSCRIBE</code>
+requests that the service node SHOULD push messages matching this filter to the client.
+The filter client MUST include the desired filter criteria in the request.
+A client MAY use this request type to <em>modify</em> an existing subscription
+by providing <em>additional</em> filter criteria in a new request.
+A client MAY use this request type to <em>refresh</em> an existing subscription
+by providing <em>the same</em> filter criteria in a new request.
+The filter service node SHOULD respond with a success code if it successfully honored this request
+or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the subscribe request does not contain valid filter criteria,
+i.e. both a <code>pubsub_topic</code> <em>and</em> a non-empty <code>content_topics</code> set.</p>
+<h4 id="unsubscribe">
+  UNSUBSCRIBE
+  <a class="anchor" href="#unsubscribe">#</a>
 </h4>
-<p>A filter node that has received a filter request SHOULD push all messages that
-match this filter to a light node. These <a href="./waku-message.md"><code>WakuMessage</code>&rsquo;s</a> are likely to come from the
-<code>relay</code> protocol and be kept at the Node, but there MAY be other sources or
-protocols where this comes from. This is up to the consumer of the protocol.</p>
-<p>A filter node MUST NOT send a push message for messages that have not been
-requested via a FilterRequest.</p>
-<p>If a specific light node isn&rsquo;t connected to a filter node for some specific
-period of time (e.g. a TTL), then the filter node MAY choose to not push these
-messages to the node. This period is up to the consumer of the protocol and node
-implementation, though a reasonable default is one minute.</p>
+<p>A filter client that sends a <code>FilterSubscribeRequest</code> with <code>filter_subscribe_type</code> set to <code>UNSUBSCRIBE</code>
+requests that the service node SHOULD <em>stop</em> pushing messages matching this filter to the client.
+The filter client MUST include the filter criteria it desires to unsubscribe from in the request.
+A client MAY use this request type to <em>modify</em> an existing subscription
+by providing <em>a subset of</em> the original filter criteria to unsubscribe from in a new request.
+The filter service node SHOULD respond with a success code if it successfully honored this request
+or an error code if not.
+The filter service node SHOULD respond with an error code and discard the request
+if the unsubscribe request does not contain valid filter criteria,
+i.e. both a <code>pubsub_topic</code> <em>and</em> a non-empty <code>content_topics</code> set.</p>
+<h4 id="unsubscribe_all">
+  UNSUBSCRIBE_ALL
+  <a class="anchor" href="#unsubscribe_all">#</a>
+</h4>
+<p>A filter client that sends a <code>FilterSubscribeRequest</code> with <code>filter_subscribe_type</code> set to <code>UNSUBSCRIBE_ALL</code>
+requests that the service node SHOULD <em>stop</em> pushing messages matching <em>any</em> filter to the client.
+The filter client SHOULD exclude any filter criteria from the request.
+The filter service node SHOULD remove any existing subscriptions for this client.
+It SHOULD respond with a success code if it successfully honored this request
+or an error code if not.</p>
+<h2 id="filter-push">
+  Filter-Push
+  <a class="anchor" href="#filter-push">#</a>
+</h2>
+<p>A filter client node MUST support the <em>filter-push</em> protocol
+to allow filter service nodes to push messages matching registered subscriptions to this client.</p>
+<p>A filter service node SHOULD push all messages
+matching the filter criteria in a registered subscription
+to the subscribed filter client.
+These <a href="./waku-message.md"><code>WakuMessage</code>s</a> are likely to come from <a href="https://rfc.vac.dev/spec/11/"><code>11/WAKU2-RELAY</code></a>,
+but there MAY be other sources or protocols where this comes from.
+This is up to the consumer of the protocol.</p>
+<p>If a message push fails,
+the filter service node MAY consider the client node to be unreachable.
+If a specific filter client node is not reachable from the service node for a period of time,
+the filter service node MAY choose to stop pushing messages to the client and remove its subscription.
+This period is up to the service node implementation.
+We consider <code>1 minute</code> to be a reasonable default.</p>
+<h3 id="message-push">
+  Message Push
+  <a class="anchor" href="#message-push">#</a>
+</h3>
+<p>Each message MUST be pushed in a <code>MessagePush</code> message.
+Each <code>MessagePush</code> MUST contain one (and only one) <code>waku_message</code>.
+If this message was received on a specific <code>pubsub_topic</code>,
+it SHOULD be included in the <code>MessagePush</code>.
+A filter client SHOULD NOT respond to a <code>MessagePush</code>.
+Since the filter protocol does not include caching or fault-tolerance,
+this is a best effort push service with no bundling
+or guaranteed retransmission of messages.
+A filter client SHOULD verify that each <code>MessagePush</code> it receives
+originated from a service node where the client has an active subscription
+and that it matches filter criteria belonging to that subscription.</p>
 <hr>
 <h1 id="future-work">
   Future Work
@@ -471,9 +585,18 @@ Note that the current structure of filter requests i.e., <code>FilterRPC</code> 
   </ul>
 
   <ul>
-    <li><a href="#protobuf">Protobuf</a>
+    <li><a href="#protobuf">Protobuf</a></li>
+    <li><a href="#filter-subscribe">Filter-Subscribe</a>
       <ul>
-        <li></li>
+        <li><a href="#filter-subscribe-request">Filter Subscribe Request</a></li>
+        <li><a href="#filter-subscribe-response">Filter Subscribe Response</a></li>
+        <li><a href="#filter-matching">Filter matching</a></li>
+        <li><a href="#filter-subscribe-types">Filter Subscribe Types</a></li>
+      </ul>
+    </li>
+    <li><a href="#filter-push">Filter-Push</a>
+      <ul>
+        <li><a href="#message-push">Message Push</a></li>
       </ul>
     </li>
   </ul>
