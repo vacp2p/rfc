@@ -4,3 +4,4 @@ node_modules/
 *.log
 tmp/
 public
+.hugo_build.lock
