@@ -349,6 +349,7 @@ DISCOVER{ns: 0x727300100002}
 # DoS Protection
 
 Hereunder we describe the "opt-in message signing for DoS prevention" solution, designed *ad hoc* for Status MVP.
+This solution allows to protect a given gossipsub topic with a private key, where only signed messages are routed.
 
 Since publishing messages to pubsub topics has no limits, anyone can publish messages at a very high rate and DoS the network.
 This would elevate the bandwidth consumption of all nodes subscribed to said pubsub topic, making it prohibitive (in terms of bandwidth) to be subscribed to it.
@@ -364,18 +365,19 @@ Operators can freely choose how they want to generate, and distribute the public
 The following concepts are introduced:
 * `private-key-topic`: A private key of 32 bytes, that allows the holder to sign messages and it's mapped to a `protected-pubsub-topic`.
 * `app-message-hash`: Application `WakuMessage` hash, calculated as `sha256(concat(pubsubTopic, payload, contentTopic))` with all elements in bytes.
-* `message-signature`: ECDSA signature of `application-message-hash` using a given `private-key-topic`, 64 bytes.
-* `public-key-topic`: The equivalent public key of `private-key-topic`.
-* `protected-pubsub-topic`: Pubsub topic that only accepts messages that were signed with `private-key-topic`, where `verify(message-signature, app-message-hash, public-key-topic)` is only correct if the `message-signature` was produced by `private-key-topic`. See ECDSA signature verification algorithm.
+* `message-signature`: ECDSA **recoverable** signature of `application-message-hash` using a given `private-key-topic`, 65 bytes, where the first 64 bytes are the signature itself and the last one is used to recover the public key from it.
+* `public-key-topic`: The equivalent public key of `private-key-topic`. Note that this key is shown for completeness, but its not used by this feature.
+* `address-topic`: The Ethereum-like address derived from the `public-key-topic` with `0x` prefix and calculated as the last 20 bytes of the hashed public key with keccak256.
+* `protected-pubsub-topic`: Pubsub topic that only accepts messages that were signed with `private-key-topic`. See below its structure.
 
 This solution introduces two roles:
 * Publisher: A node that knows the `private-key-topic` associated to `public-key-topic`, that can publish messages with a valid `message-signature` that are accepted and relayed by the nodes implementing this feature.
-* Relayer: A node that knows the `public-key-topic`, which can be used to verify if the messages were signed with the equivalent `private-key-topic`. It allows distinguishing valid from invalid messages which protect the node against DoS attacks, assuming that the users of the key send messages of a reasonable size and rate. Note that a node can validate messages and relay them or not without knowing the private key.
+* Relayer: A node that doesn't know the `private-key-topic` to publish valid messages, but that can validate messages using the `address-topic` included in the topic. It allows distinguishing valid from invalid messages which protects the node against DoS attacks, assuming that the users of the key send messages of a reasonable size and rate. Note that a node can validate messages and relay them or not without knowing the private key.
 
 ## Design requirements (publisher)
 
 A publisher that wants to send messages that are relayed in the network for a given `protected-pubsub-topic` shall:
-* be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 64 bytes using deterministic signing complying with RFC 6979.
+* be able to sign messages with the `private-key-topic` configured for that topic, producing a ECDSA signature of 65 bytes using deterministic signing complying with RFC 6979.
 * include the signature of the `app-message-hash` (`message-signature`) that wishes to send in the `WakuMessage` `meta` field.
 
 The `app-message-hash` of the message shall be calculated as the `sha256` hash of the following fields of the message:
@@ -398,21 +400,34 @@ Requirements on the gossipsub validator:
 * If `timestamp` is not set (equals to 0) then `Reject` the message.
 * If the `timestamp` is `abs(current_timestamp-timestamp) > MessageWindowInSec` then `Reject` the message.
 * If `meta` is empty, `Reject` the message.
-* If `meta` exists but its size is different than 64 bytes, `Reject` the message.
-* If `meta` does not successfully verifies according to the ECDSA signature verification algorithm using `public-key-topic` and `app-message-hash`, then `Reject` the message.
-* If and only if all above conditions are met then `Accept` the message.
+* If `meta` exists but its size is different than 65 bytes, `Reject` the message.
+* If using `meta` and `app-message-hash` we recover a public key that when converted to an address does not match `address-topic`, then `Reject` the message.
+* If and only if all the above conditions are met then `Accept` the message.
 
 Other requirements:
 * The node shall keep metrics on the messages validation output, `Accept` or `Reject`.
 * (Optional). To further strengthen DoS protection, gossipsub [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) can be used to trigger disconnections from peers sending multiple invalid messages. See `P4` penalty.
 This protects each peer from DoS, since this score is used to trigger disconnections from nodes attempting to DoS them.
 
+## Topic format
+
+Protected topics compliant with this feature shall have the following structure. The topic name is prefixed with `signed`, indicating that in this topic nodes are expected to validate that the messages are signed according to this spec. The `{0xPrefixed_Address}` indicates which public address is used to validate the messages signatures. This address is calculated as the last 20 bytes of the `keccak256(public-key-topic)`.
+
+```
+/waku/2/signed:{0xPrefixed_Address}/proto
+```
+
+As an example:
+
+```
+/waku/2/signed:0x2ea1f2ec2da14e0e3118e6c5bdfa0631785c76cd/proto
+```
 
 ## Required changes
 
-This solution is designed to be backward compatible so that nodes validating messages can coexist in the same topic with other nodes that don't perform validation. But note that only nodes that perform message validation will be protected against DoS. Nodes wishing to opt-in this DoS protection feature shall:
+This solution is designed to be backward compatible so that nodes validating messages can coexist in the same topic with other nodes that don't perform validation. But note that only nodes that perform message validation will be protected against DoS. Nodes wishing to opt-in in this DoS protection feature shall:
 * Generate a `private-key-topic` and distribute it to a curated list of users, that are trusted to send messages at a reasonable rate.
-* Redeploy the nodes, adding a new configuration where a `protected-pubsub-topic` is configured with a `public-key-topic`, used to verify the messages being relayed.
+* Redeploy the nodes, adding a new configuration where a `protected-pubsub-topic` is configured with a `address-topic`, used to verify the messages being relayed.
 
 
 ## Test vectors
@@ -424,13 +439,14 @@ Given the following key pair:
 ```
 private-key-topic = 5526a8990317c9b7b58d07843d270f9cd1d9aaee129294c1c478abf7261dd9e6
 public-key-topic = 049c5fac802da41e07e6cdf51c3b9a6351ad5e65921527f2df5b7d59fd9b56ab02bab736cdcfc37f25095e78127500da371947217a8cd5186ab890ea866211c3f6
+address-topic = "0x2ea1f2ec2da14e0e3118e6c5bdfa0631785c76cd"
 ```
 
 
 And the following message to send:
 
 ```
-protected-pubsub-topic = pubsub-topic
+protected-pubsub-topic = /waku/2/signed:0x2ea1f2ec2da14e0e3118e6c5bdfa0631785c76cd/proto
 contentTopic = content-topic
 payload = 1A12E077D0E89F9CAC11FBBB6A676C86120B5AD3E248B1F180E98F15EE43D2DFCF62F00C92737B2FF6F59B3ABA02773314B991C41DC19ADB0AD8C17C8E26757B
 timestamp = 1683208172339052800
@@ -440,8 +456,8 @@ ephemeral = true
 The message hash and meta (aka signature) are calculated as follows.
 
 ```
-app-message-hash = 662F8C20A335F170BD60ABC1F02AD66F0C6A6EE285DA2A53C95259E7937C0AE9
-message.meta = 127FA211B2514F0E974A055392946DC1A14052182A6ABEFB8A6CD7C51DA1BF2E40595D28EF1A9488797C297EED3AAC45430005FB3A7F037BDD9FC4BD99F59E63
+app-message-hash = C3C74531E446CB5D0681A1919E643CCD304A7FA23A299691945BADA75A55C04C
+message.meta = 7FB40AB47AA92A6395137C4B477C2D028C6F0F0E7A712D993EDAC5021E5B285E16956E2FD2421261D718D5C945A92600E0F8140AB7ADCF988178BF1AE577FAD901
 ```
 
 Using `message.meta`, the relay node shall calculate the `app-message-hash` of the received message using `public-key-topic`, and with the values above, the signature should be verified, making the node `Accept` the message and relaying it to other nodes in the network.
