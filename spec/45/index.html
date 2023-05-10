@@ -176,59 +176,69 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#security">Security</a></li>
-    <li><a href="#privacy">Privacy</a></li>
-    <li><a href="#anonymity">Anonymity</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation-and-background">Motivation and Background</a></li>
+    <li><a href="#informal-definitions-security-privacy-and-anonymity">Informal Definitions: Security, Privacy, and Anonymity</a>
       <ul>
-        <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
-        <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#anonymity">Anonymity</a>
+          <ul>
+            <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+            <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+          </ul>
+        </li>
+        <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
+        <li><a href="#censorship-resistance">Censorship Resistance</a></li>
       </ul>
     </li>
-    <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
-    <li><a href="#censorship-resistance">Censorship Resistance</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#internal">Internal</a>
+    <li><a href="#adversarial-models">Adversarial Models</a>
       <ul>
-        <li><a href="#single-node">Single Node</a></li>
-        <li><a href="#multi-node">Multi Node</a></li>
-        <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+        <li><a href="#internal">Internal</a>
+          <ul>
+            <li><a href="#single-node">Single Node</a></li>
+            <li><a href="#multi-node">Multi Node</a></li>
+            <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+          </ul>
+        </li>
+        <li><a href="#external">External</a>
+          <ul>
+            <li><a href="#local">Local</a></li>
+            <li><a href="#as">AS</a></li>
+            <li><a href="#global-on-net">Global (On-Net)</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#external">External</a>
+    <li><a href="#attack-based-threats">Attack-based Threats</a>
       <ul>
-        <li><a href="#local">Local</a></li>
-        <li><a href="#as">AS</a></li>
-        <li><a href="#global-on-net">Global (On-Net)</a></li>
+        <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
+        <li><a href="#sender-deanonymization">Sender Deanonymization</a>
+          <ul>
+            <li><a href="#replay-attack">Replay Attack</a></li>
+            <li><a href="#observing-messages">Observing Messages</a></li>
+            <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
+            <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
+            <li><a href="#correlation">Correlation</a></li>
+          </ul>
+        </li>
+        <li><a href="#mass-deanonymization">Mass Deanonymization</a>
+          <ul>
+            <li><a href="#graph-learning">Graph Learning</a></li>
+            <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
+          </ul>
+        </li>
+        <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
+          <ul>
+            <li><a href="#flooding">Flooding</a></li>
+            <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
+            <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
-    <li><a href="#sender-deanonymization">Sender Deanonymization</a>
-      <ul>
-        <li><a href="#replay-attack">Replay Attack</a></li>
-        <li><a href="#observing-messages">Observing Messages</a></li>
-        <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
-        <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
-        <li><a href="#correlation">Correlation</a></li>
-      </ul>
-    </li>
-    <li><a href="#mass-deanonymization">Mass Deanonymization</a>
-      <ul>
-        <li><a href="#graph-learning">Graph Learning</a></li>
-        <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
-      </ul>
-    </li>
-    <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
-      <ul>
-        <li><a href="#flooding">Flooding</a></li>
-        <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
-        <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
-      </ul>
-    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
@@ -641,59 +651,69 @@ the former is internal while the latter is external.</p>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#security">Security</a></li>
-    <li><a href="#privacy">Privacy</a></li>
-    <li><a href="#anonymity">Anonymity</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation-and-background">Motivation and Background</a></li>
+    <li><a href="#informal-definitions-security-privacy-and-anonymity">Informal Definitions: Security, Privacy, and Anonymity</a>
       <ul>
-        <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
-        <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#anonymity">Anonymity</a>
+          <ul>
+            <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
+            <li><a href="#sender-anonymity">Sender Anonymity</a></li>
+          </ul>
+        </li>
+        <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
+        <li><a href="#censorship-resistance">Censorship Resistance</a></li>
       </ul>
     </li>
-    <li><a href="#anonymity-trilemma">Anonymity Trilemma</a></li>
-    <li><a href="#censorship-resistance">Censorship Resistance</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#internal">Internal</a>
+    <li><a href="#adversarial-models">Adversarial Models</a>
       <ul>
-        <li><a href="#single-node">Single Node</a></li>
-        <li><a href="#multi-node">Multi Node</a></li>
-        <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+        <li><a href="#internal">Internal</a>
+          <ul>
+            <li><a href="#single-node">Single Node</a></li>
+            <li><a href="#multi-node">Multi Node</a></li>
+            <li><a href="#scaling-multi-node">Scaling Multi Node</a></li>
+          </ul>
+        </li>
+        <li><a href="#external">External</a>
+          <ul>
+            <li><a href="#local">Local</a></li>
+            <li><a href="#as">AS</a></li>
+            <li><a href="#global-on-net">Global (On-Net)</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#external">External</a>
+    <li><a href="#attack-based-threats">Attack-based Threats</a>
       <ul>
-        <li><a href="#local">Local</a></li>
-        <li><a href="#as">AS</a></li>
-        <li><a href="#global-on-net">Global (On-Net)</a></li>
+        <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
+        <li><a href="#sender-deanonymization">Sender Deanonymization</a>
+          <ul>
+            <li><a href="#replay-attack">Replay Attack</a></li>
+            <li><a href="#observing-messages">Observing Messages</a></li>
+            <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
+            <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
+            <li><a href="#correlation">Correlation</a></li>
+          </ul>
+        </li>
+        <li><a href="#mass-deanonymization">Mass Deanonymization</a>
+          <ul>
+            <li><a href="#graph-learning">Graph Learning</a></li>
+            <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
+          </ul>
+        </li>
+        <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
+          <ul>
+            <li><a href="#flooding">Flooding</a></li>
+            <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
+            <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#prerequisite-get-a-specific-position-in-the-network">Prerequisite: Get a Specific Position in the Network</a></li>
-    <li><a href="#sender-deanonymization">Sender Deanonymization</a>
-      <ul>
-        <li><a href="#replay-attack">Replay Attack</a></li>
-        <li><a href="#observing-messages">Observing Messages</a></li>
-        <li><a href="#neighbourhood-surveillance">Neighbourhood Surveillance</a></li>
-        <li><a href="#controlled-neighbourhood">Controlled Neighbourhood</a></li>
-        <li><a href="#correlation">Correlation</a></li>
-      </ul>
-    </li>
-    <li><a href="#mass-deanonymization">Mass Deanonymization</a>
-      <ul>
-        <li><a href="#graph-learning">Graph Learning</a></li>
-        <li><a href="#bayesian-analysis">Bayesian Analysis</a></li>
-      </ul>
-    </li>
-    <li><a href="#denial-of-service-dos">Denial of Service (DoS)</a>
-      <ul>
-        <li><a href="#flooding">Flooding</a></li>
-        <li><a href="#black-hole-internal">Black Hole (internal)</a></li>
-        <li><a href="#traffic-filtering-external">Traffic Filtering (external)</a></li>
-      </ul>
-    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 

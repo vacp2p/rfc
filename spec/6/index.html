@@ -174,70 +174,74 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#motivation">Motivation</a></li>
-    <li><a href="#definitions">Definitions</a></li>
-    <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+    <li>
       <ul>
-        <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
-        <li><a href="#gossip-based-routing">Gossip based routing</a></li>
-        <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+        <li><a href="#motivation">Motivation</a></li>
+        <li><a href="#definitions">Definitions</a></li>
+        <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+          <ul>
+            <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
+            <li><a href="#gossip-based-routing">Gossip based routing</a></li>
+            <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+          </ul>
+        </li>
+        <li><a href="#wire-specification">Wire Specification</a>
+          <ul>
+            <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
+            <li><a href="#abnf-specification">ABNF specification</a></li>
+            <li><a href="#packet-codes">Packet Codes</a></li>
+            <li><a href="#packet-usage">Packet usage</a></li>
+            <li><a href="#payload-encryption">Payload Encryption</a></li>
+            <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
+          </ul>
+        </li>
+        <li><a href="#additional-capabilities">Additional capabilities</a>
+          <ul>
+            <li><a href="#light-node">Light node</a></li>
+            <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
+          </ul>
+        </li>
+        <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
+          <ul>
+            <li><a href="#general-principles-and-policy">General principles and policy</a></li>
+            <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
+            <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
+            <li><a href="#forward-compatibility">Forward Compatibility</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
+          <ul>
+            <li><a href="#scalability-and-ux">Scalability and UX</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#spam-resistance">Spam resistance</a></li>
+            <li><a href="#censorship-resistance">Censorship resistance</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
+          <ul>
+            <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+            <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+            <li><a href="#node-discovery">Node discovery</a></li>
+          </ul>
+        </li>
+        <li><a href="#changelog">Changelog</a>
+          <ul>
+            <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
+            <li><a href="#version-11">Version 1.1</a></li>
+            <li><a href="#version-10">Version 1.0</a></li>
+            <li><a href="#version-06">Version 0.6</a></li>
+            <li><a href="#version-05">Version 0.5</a></li>
+            <li><a href="#version-04">Version 0.4</a></li>
+            <li><a href="#version-03">Version 0.3</a></li>
+            <li><a href="#version-02">Version 0.2</a></li>
+            <li><a href="#version-01">Version 0.1</a></li>
+            <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
+          </ul>
+        </li>
+        <li><a href="#copyright">Copyright</a></li>
+        <li><a href="#footnotes">Footnotes</a></li>
       </ul>
     </li>
-    <li><a href="#wire-specification">Wire Specification</a>
-      <ul>
-        <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
-        <li><a href="#abnf-specification">ABNF specification</a></li>
-        <li><a href="#packet-codes">Packet Codes</a></li>
-        <li><a href="#packet-usage">Packet usage</a></li>
-        <li><a href="#payload-encryption">Payload Encryption</a></li>
-        <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
-      </ul>
-    </li>
-    <li><a href="#additional-capabilities">Additional capabilities</a>
-      <ul>
-        <li><a href="#light-node">Light node</a></li>
-        <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
-      </ul>
-    </li>
-    <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
-      <ul>
-        <li><a href="#general-principles-and-policy">General principles and policy</a></li>
-        <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
-        <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
-        <li><a href="#forward-compatibility">Forward Compatibility</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
-      <ul>
-        <li><a href="#scalability-and-ux">Scalability and UX</a></li>
-        <li><a href="#privacy">Privacy</a></li>
-        <li><a href="#spam-resistance">Spam resistance</a></li>
-        <li><a href="#censorship-resistance">Censorship resistance</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
-      <ul>
-        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
-        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
-        <li><a href="#node-discovery">Node discovery</a></li>
-      </ul>
-    </li>
-    <li><a href="#changelog">Changelog</a>
-      <ul>
-        <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
-        <li><a href="#version-11">Version 1.1</a></li>
-        <li><a href="#version-10">Version 1.0</a></li>
-        <li><a href="#version-06">Version 0.6</a></li>
-        <li><a href="#version-05">Version 0.5</a></li>
-        <li><a href="#version-04">Version 0.4</a></li>
-        <li><a href="#version-03">Version 0.3</a></li>
-        <li><a href="#version-02">Version 0.2</a></li>
-        <li><a href="#version-01">Version 0.1</a></li>
-        <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
-      </ul>
-    </li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#footnotes">Footnotes</a></li>
   </ul>
 </nav>
 
@@ -1094,70 +1098,74 @@ confirmations-enabled and rate-limits</li>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#motivation">Motivation</a></li>
-    <li><a href="#definitions">Definitions</a></li>
-    <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+    <li>
       <ul>
-        <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
-        <li><a href="#gossip-based-routing">Gossip based routing</a></li>
-        <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+        <li><a href="#motivation">Motivation</a></li>
+        <li><a href="#definitions">Definitions</a></li>
+        <li><a href="#underlying-transports-and-prerequisites">Underlying Transports and Prerequisites</a>
+          <ul>
+            <li><a href="#use-of-devp2p">Use of DevP2P</a></li>
+            <li><a href="#gossip-based-routing">Gossip based routing</a></li>
+            <li><a href="#maximum-packet-size">Maximum Packet Size</a></li>
+          </ul>
+        </li>
+        <li><a href="#wire-specification">Wire Specification</a>
+          <ul>
+            <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
+            <li><a href="#abnf-specification">ABNF specification</a></li>
+            <li><a href="#packet-codes">Packet Codes</a></li>
+            <li><a href="#packet-usage">Packet usage</a></li>
+            <li><a href="#payload-encryption">Payload Encryption</a></li>
+            <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
+          </ul>
+        </li>
+        <li><a href="#additional-capabilities">Additional capabilities</a>
+          <ul>
+            <li><a href="#light-node">Light node</a></li>
+            <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
+          </ul>
+        </li>
+        <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
+          <ul>
+            <li><a href="#general-principles-and-policy">General principles and policy</a></li>
+            <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
+            <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
+            <li><a href="#forward-compatibility">Forward Compatibility</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
+          <ul>
+            <li><a href="#scalability-and-ux">Scalability and UX</a></li>
+            <li><a href="#privacy">Privacy</a></li>
+            <li><a href="#spam-resistance">Spam resistance</a></li>
+            <li><a href="#censorship-resistance">Censorship resistance</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
+          <ul>
+            <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+            <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+            <li><a href="#node-discovery">Node discovery</a></li>
+          </ul>
+        </li>
+        <li><a href="#changelog">Changelog</a>
+          <ul>
+            <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
+            <li><a href="#version-11">Version 1.1</a></li>
+            <li><a href="#version-10">Version 1.0</a></li>
+            <li><a href="#version-06">Version 0.6</a></li>
+            <li><a href="#version-05">Version 0.5</a></li>
+            <li><a href="#version-04">Version 0.4</a></li>
+            <li><a href="#version-03">Version 0.3</a></li>
+            <li><a href="#version-02">Version 0.2</a></li>
+            <li><a href="#version-01">Version 0.1</a></li>
+            <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
+          </ul>
+        </li>
+        <li><a href="#copyright">Copyright</a></li>
+        <li><a href="#footnotes">Footnotes</a></li>
       </ul>
     </li>
-    <li><a href="#wire-specification">Wire Specification</a>
-      <ul>
-        <li><a href="#use-of-rlpx-transport-protocol">Use of RLPx transport protocol</a></li>
-        <li><a href="#abnf-specification">ABNF specification</a></li>
-        <li><a href="#packet-codes">Packet Codes</a></li>
-        <li><a href="#packet-usage">Packet usage</a></li>
-        <li><a href="#payload-encryption">Payload Encryption</a></li>
-        <li><a href="#packet-code-rationale">Packet code Rationale</a></li>
-      </ul>
-    </li>
-    <li><a href="#additional-capabilities">Additional capabilities</a>
-      <ul>
-        <li><a href="#light-node">Light node</a></li>
-        <li><a href="#accounting-for-resources-experimental">Accounting for resources (experimental)</a></li>
-      </ul>
-    </li>
-    <li><a href="#upgradability-and-compatibility">Upgradability and Compatibility</a>
-      <ul>
-        <li><a href="#general-principles-and-policy">General principles and policy</a></li>
-        <li><a href="#backwards-compatibility">Backwards Compatibility</a></li>
-        <li><a href="#waku-whisper-bridging">Waku-Whisper bridging</a></li>
-        <li><a href="#forward-compatibility">Forward Compatibility</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
-      <ul>
-        <li><a href="#scalability-and-ux">Scalability and UX</a></li>
-        <li><a href="#privacy">Privacy</a></li>
-        <li><a href="#spam-resistance">Spam resistance</a></li>
-        <li><a href="#censorship-resistance">Censorship resistance</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-b-implementation-notes">Appendix B: Implementation Notes</a>
-      <ul>
-        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
-        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
-        <li><a href="#node-discovery">Node discovery</a></li>
-      </ul>
-    </li>
-    <li><a href="#changelog">Changelog</a>
-      <ul>
-        <li><a href="#initial-releasehttpsgithubcomvacp2pspecscommitbc7e75ebb2e45d2cbf6ab27352c113e666df37c8"><a href="https://github.com/vacp2p/specs/commit/bc7e75ebb2e45d2cbf6ab27352c113e666df37c8">Initial Release</a></a></li>
-        <li><a href="#version-11">Version 1.1</a></li>
-        <li><a href="#version-10">Version 1.0</a></li>
-        <li><a href="#version-06">Version 0.6</a></li>
-        <li><a href="#version-05">Version 0.5</a></li>
-        <li><a href="#version-04">Version 0.4</a></li>
-        <li><a href="#version-03">Version 0.3</a></li>
-        <li><a href="#version-02">Version 0.2</a></li>
-        <li><a href="#version-01">Version 0.1</a></li>
-        <li><a href="#differences-between-shh6-and-waku1">Differences between shh/6 and waku/1</a></li>
-      </ul>
-    </li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#footnotes">Footnotes</a></li>
   </ul>
 </nav>
 

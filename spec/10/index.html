@@ -172,53 +172,59 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#motivation-and-goals">Motivation and goals</a></li>
-    <li><a href="#network-interaction-domains">Network interaction domains</a>
-      <ul>
-        <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
-        <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
-        <li><a href="#gossip-domain">Gossip domain</a></li>
-        <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
     <li>
       <ul>
-        <li><a href="#discovery-domain">Discovery domain</a></li>
-        <li><a href="#requestreply-domain">Request/Reply domain</a></li>
-        <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#motivation-and-goals">Motivation and goals</a></li>
+        <li><a href="#network-interaction-domains">Network interaction domains</a>
+          <ul>
+            <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
+            <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
+            <li><a href="#gossip-domain">Gossip domain</a></li>
+            <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+    <li><a href="#transports">Transports</a>
       <ul>
-        <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+        <li>
+          <ul>
+            <li><a href="#discovery-domain">Discovery domain</a></li>
+            <li><a href="#requestreply-domain">Request/Reply domain</a></li>
+            <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+          <ul>
+            <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
-    <li><a href="#security-features">Security Features</a>
+    <li><a href="#appendix-b-security">Appendix B: Security</a>
       <ul>
-        <li><a href="#pseudonymity">Pseudonymity</a></li>
-        <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
-        <li><a href="#spam-protection">Spam protection</a></li>
-        <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+        <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
+        <li><a href="#security-features">Security Features</a>
+          <ul>
+            <li><a href="#pseudonymity">Pseudonymity</a></li>
+            <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
+            <li><a href="#spam-protection">Spam protection</a></li>
+            <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+          </ul>
+        </li>
+        <li><a href="#security-considerations">Security Considerations</a></li>
+        <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
+          <ul>
+            <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+            <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
+        <li><a href="#copyright">Copyright</a></li>
+        <li><a href="#references">References</a></li>
       </ul>
     </li>
-    <li><a href="#security-considerations">Security Considerations</a></li>
-    <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
-      <ul>
-        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
-        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
@@ -904,53 +910,59 @@ See <a href="/spec/18">18/WAKU2-SWAP</a> for more details on this piece of work.
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#motivation-and-goals">Motivation and goals</a></li>
-    <li><a href="#network-interaction-domains">Network interaction domains</a>
-      <ul>
-        <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
-        <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
-        <li><a href="#gossip-domain">Gossip domain</a></li>
-        <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
     <li>
       <ul>
-        <li><a href="#discovery-domain">Discovery domain</a></li>
-        <li><a href="#requestreply-domain">Request/Reply domain</a></li>
-        <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#motivation-and-goals">Motivation and goals</a></li>
+        <li><a href="#network-interaction-domains">Network interaction domains</a>
+          <ul>
+            <li><a href="#protocols-and-identifiers">Protocols and identifiers</a></li>
+            <li><a href="#use-of-libp2p-and-protobuf">Use of libp2p and protobuf</a></li>
+            <li><a href="#gossip-domain">Gossip domain</a></li>
+            <li><a href="#direct-use-of-libp2p-protocols">Direct use of libp2p protocols</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+    <li><a href="#transports">Transports</a>
       <ul>
-        <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+        <li>
+          <ul>
+            <li><a href="#discovery-domain">Discovery domain</a></li>
+            <li><a href="#requestreply-domain">Request/Reply domain</a></li>
+            <li><a href="#overview-of-protocol-interaction">Overview of protocol interaction</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-a-upgradability-and-compatibility">Appendix A: Upgradability and Compatibility</a>
+          <ul>
+            <li><a href="#compatibility-with-waku-v1">Compatibility with Waku v1</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
-    <li><a href="#security-features">Security Features</a>
+    <li><a href="#appendix-b-security">Appendix B: Security</a>
       <ul>
-        <li><a href="#pseudonymity">Pseudonymity</a></li>
-        <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
-        <li><a href="#spam-protection">Spam protection</a></li>
-        <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+        <li><a href="#primary-adversarial-model">Primary Adversarial Model</a></li>
+        <li><a href="#security-features">Security Features</a>
+          <ul>
+            <li><a href="#pseudonymity">Pseudonymity</a></li>
+            <li><a href="#anonymity--unlinkability">Anonymity / Unlinkability</a></li>
+            <li><a href="#spam-protection">Spam protection</a></li>
+            <li><a href="#data-confidentiality-integrity-and-authenticity">Data confidentiality, Integrity, and Authenticity</a></li>
+          </ul>
+        </li>
+        <li><a href="#security-considerations">Security Considerations</a></li>
+        <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
+          <ul>
+            <li><a href="#implementation-matrix">Implementation Matrix</a></li>
+            <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
+          </ul>
+        </li>
+        <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
+        <li><a href="#copyright">Copyright</a></li>
+        <li><a href="#references">References</a></li>
       </ul>
     </li>
-    <li><a href="#security-considerations">Security Considerations</a></li>
-    <li><a href="#appendix-c-implementation-notes">Appendix C: Implementation Notes</a>
-      <ul>
-        <li><a href="#implementation-matrix">Implementation Matrix</a></li>
-        <li><a href="#recommendations-for-clients">Recommendations for clients</a></li>
-      </ul>
-    </li>
-    <li><a href="#appendix-d-future-work">Appendix D: Future work</a></li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 

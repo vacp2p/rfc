@@ -178,96 +178,103 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#general">General</a>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#the-api">The API</a>
       <ul>
-        <li><a href="#jsonresponse-type"><code>JsonResponse</code> type</a></li>
-        <li><a href="#jsonmessage-type"><code>JsonMessage</code> type</a></li>
-        <li><a href="#decodedpayload-type"><code>DecodedPayload</code> type</a></li>
-        <li><a href="#filtersubscription-type"><code>FilterSubscription</code> type</a></li>
-        <li><a href="#contentfilter-type"><code>ContentFilter</code> type</a></li>
-        <li><a href="#storequery-type"><code>StoreQuery</code> type</a></li>
-        <li><a href="#storeresponse-type"><code>StoreResponse</code> type</a></li>
-        <li><a href="#pagingoptions-type"><code>PagingOptions</code> type</a></li>
-        <li><a href="#index-type"><code>Index</code> type</a></li>
+        <li><a href="#general">General</a>
+          <ul>
+            <li><a href="#jsonresponse-type"><code>JsonResponse</code> type</a></li>
+            <li><a href="#jsonmessage-type"><code>JsonMessage</code> type</a></li>
+            <li><a href="#decodedpayload-type"><code>DecodedPayload</code> type</a></li>
+            <li><a href="#filtersubscription-type"><code>FilterSubscription</code> type</a></li>
+            <li><a href="#contentfilter-type"><code>ContentFilter</code> type</a></li>
+            <li><a href="#storequery-type"><code>StoreQuery</code> type</a></li>
+            <li><a href="#storeresponse-type"><code>StoreResponse</code> type</a></li>
+            <li><a href="#pagingoptions-type"><code>PagingOptions</code> type</a></li>
+            <li><a href="#index-type"><code>Index</code> type</a></li>
+          </ul>
+        </li>
+        <li><a href="#events">Events</a>
+          <ul>
+            <li><a href="#jsonsignal-type"><code>JsonSignal</code> type</a></li>
+            <li><a href="#jsonmessageevent-type"><code>JsonMessageEvent</code> type</a></li>
+            <li><a href="#extern-void-waku_set_event_callbackvoid-cb"><code>extern void waku_set_event_callback(void* cb)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#node-management">Node management</a>
+          <ul>
+            <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
+            <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
+            <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
+            <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
+            <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
+            <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
+            <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#connecting-to-peers">Connecting to peers</a>
+          <ul>
+            <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
+            <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
+            <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
+            <li><a href="#extern-char-waku_peers"><code>extern char* waku_peers()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-relay">Waku Relay</a>
+          <ul>
+            <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
+            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
+            <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
+            <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-filter">Waku Filter</a>
+          <ul>
+            <li><a href="#extern-char-waku_filter_subscribechar-filterjson-char-peerid-int-timeoutms"><code>extern char* waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms"><code>extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-lightpush">Waku Lightpush</a>
+          <ul>
+            <li><a href="#extern-char-waku_lightpush_publishchar-messagejson-char-topic-char-peerid-int-timeoutms"><code>extern char* waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_lightpush_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-peerid-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* peerID, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_lightpush_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-peerid-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* peerID, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-store">Waku Store</a>
+          <ul>
+            <li><a href="#extern-char-waku_store_querychar-queryjson-char-peerid-int-timeoutms"><code>extern char* waku_store_query(char* queryJSON, char* peerID, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#decrypting-messages">Decrypting messages</a>
+          <ul>
+            <li><a href="#extern-char-waku_decode_symmetricchar-messagejson-char-symmetrickey"><code>extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)</code></a></li>
+            <li><a href="#extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey"><code>extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#dns-discovery">DNS Discovery</a>
+          <ul>
+            <li><a href="#extern-char-waku_dns_discoverychar-url-char-nameserver-int-timeoutms"><code>extern char* waku_dns_discovery(char* url, char* nameserver, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#utils">Utils</a>
+          <ul>
+            <li><a href="#extern-char-waku_utils_base64_encodechar-data"><code>extern char* waku_utils_base64_encode(char* data)</code></a></li>
+            <li><a href="#extern-char-waku_utils_base64_decodechar-data"><code>extern char* waku_utils_base64_decode(char* data)</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#events">Events</a>
-      <ul>
-        <li><a href="#jsonsignal-type"><code>JsonSignal</code> type</a></li>
-        <li><a href="#jsonmessageevent-type"><code>JsonMessageEvent</code> type</a></li>
-        <li><a href="#extern-void-waku_set_event_callbackvoid-cb"><code>extern void waku_set_event_callback(void* cb)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#node-management">Node management</a>
-      <ul>
-        <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
-        <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
-        <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
-        <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
-        <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
-        <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
-        <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#connecting-to-peers">Connecting to peers</a>
-      <ul>
-        <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
-        <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
-        <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
-        <li><a href="#extern-char-waku_peers"><code>extern char* waku_peers()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-relay">Waku Relay</a>
-      <ul>
-        <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
-        <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
-        <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
-        <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-filter">Waku Filter</a>
-      <ul>
-        <li><a href="#extern-char-waku_filter_subscribechar-filterjson-char-peerid-int-timeoutms"><code>extern char* waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms"><code>extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-lightpush">Waku Lightpush</a>
-      <ul>
-        <li><a href="#extern-char-waku_lightpush_publishchar-messagejson-char-topic-char-peerid-int-timeoutms"><code>extern char* waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_lightpush_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-peerid-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* peerID, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_lightpush_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-peerid-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* peerID, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-store">Waku Store</a>
-      <ul>
-        <li><a href="#extern-char-waku_store_querychar-queryjson-char-peerid-int-timeoutms"><code>extern char* waku_store_query(char* queryJSON, char* peerID, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#decrypting-messages">Decrypting messages</a>
-      <ul>
-        <li><a href="#extern-char-waku_decode_symmetricchar-messagejson-char-symmetrickey"><code>extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)</code></a></li>
-        <li><a href="#extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey"><code>extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#dns-discovery">DNS Discovery</a>
-      <ul>
-        <li><a href="#extern-char-waku_dns_discoverychar-url-char-nameserver-int-timeoutms"><code>extern char* waku_dns_discovery(char* url, char* nameserver, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#utils">Utils</a>
-      <ul>
-        <li><a href="#extern-char-waku_utils_base64_encodechar-data"><code>extern char* waku_utils_base64_encode(char* data)</code></a></li>
-        <li><a href="#extern-char-waku_utils_base64_decodechar-data"><code>extern char* waku_utils_base64_decode(char* data)</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 
@@ -1438,96 +1445,103 @@ If the execution is successful, the <code>result</code> field contains the decod
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#general">General</a>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#design-requirements">Design requirements</a></li>
+    <li><a href="#the-api">The API</a>
       <ul>
-        <li><a href="#jsonresponse-type"><code>JsonResponse</code> type</a></li>
-        <li><a href="#jsonmessage-type"><code>JsonMessage</code> type</a></li>
-        <li><a href="#decodedpayload-type"><code>DecodedPayload</code> type</a></li>
-        <li><a href="#filtersubscription-type"><code>FilterSubscription</code> type</a></li>
-        <li><a href="#contentfilter-type"><code>ContentFilter</code> type</a></li>
-        <li><a href="#storequery-type"><code>StoreQuery</code> type</a></li>
-        <li><a href="#storeresponse-type"><code>StoreResponse</code> type</a></li>
-        <li><a href="#pagingoptions-type"><code>PagingOptions</code> type</a></li>
-        <li><a href="#index-type"><code>Index</code> type</a></li>
+        <li><a href="#general">General</a>
+          <ul>
+            <li><a href="#jsonresponse-type"><code>JsonResponse</code> type</a></li>
+            <li><a href="#jsonmessage-type"><code>JsonMessage</code> type</a></li>
+            <li><a href="#decodedpayload-type"><code>DecodedPayload</code> type</a></li>
+            <li><a href="#filtersubscription-type"><code>FilterSubscription</code> type</a></li>
+            <li><a href="#contentfilter-type"><code>ContentFilter</code> type</a></li>
+            <li><a href="#storequery-type"><code>StoreQuery</code> type</a></li>
+            <li><a href="#storeresponse-type"><code>StoreResponse</code> type</a></li>
+            <li><a href="#pagingoptions-type"><code>PagingOptions</code> type</a></li>
+            <li><a href="#index-type"><code>Index</code> type</a></li>
+          </ul>
+        </li>
+        <li><a href="#events">Events</a>
+          <ul>
+            <li><a href="#jsonsignal-type"><code>JsonSignal</code> type</a></li>
+            <li><a href="#jsonmessageevent-type"><code>JsonMessageEvent</code> type</a></li>
+            <li><a href="#extern-void-waku_set_event_callbackvoid-cb"><code>extern void waku_set_event_callback(void* cb)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#node-management">Node management</a>
+          <ul>
+            <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
+            <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
+            <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
+            <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
+            <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
+            <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
+            <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#connecting-to-peers">Connecting to peers</a>
+          <ul>
+            <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
+            <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
+            <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
+            <li><a href="#extern-char-waku_peers"><code>extern char* waku_peers()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-relay">Waku Relay</a>
+          <ul>
+            <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
+            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
+            <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
+            <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+            <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-filter">Waku Filter</a>
+          <ul>
+            <li><a href="#extern-char-waku_filter_subscribechar-filterjson-char-peerid-int-timeoutms"><code>extern char* waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms"><code>extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-lightpush">Waku Lightpush</a>
+          <ul>
+            <li><a href="#extern-char-waku_lightpush_publishchar-messagejson-char-topic-char-peerid-int-timeoutms"><code>extern char* waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_lightpush_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-peerid-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* peerID, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+            <li><a href="#extern-char-waku_lightpush_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-peerid-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* peerID, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-store">Waku Store</a>
+          <ul>
+            <li><a href="#extern-char-waku_store_querychar-queryjson-char-peerid-int-timeoutms"><code>extern char* waku_store_query(char* queryJSON, char* peerID, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#decrypting-messages">Decrypting messages</a>
+          <ul>
+            <li><a href="#extern-char-waku_decode_symmetricchar-messagejson-char-symmetrickey"><code>extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)</code></a></li>
+            <li><a href="#extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey"><code>extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#dns-discovery">DNS Discovery</a>
+          <ul>
+            <li><a href="#extern-char-waku_dns_discoverychar-url-char-nameserver-int-timeoutms"><code>extern char* waku_dns_discovery(char* url, char* nameserver, int timeoutMs)</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#utils">Utils</a>
+          <ul>
+            <li><a href="#extern-char-waku_utils_base64_encodechar-data"><code>extern char* waku_utils_base64_encode(char* data)</code></a></li>
+            <li><a href="#extern-char-waku_utils_base64_decodechar-data"><code>extern char* waku_utils_base64_decode(char* data)</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#events">Events</a>
-      <ul>
-        <li><a href="#jsonsignal-type"><code>JsonSignal</code> type</a></li>
-        <li><a href="#jsonmessageevent-type"><code>JsonMessageEvent</code> type</a></li>
-        <li><a href="#extern-void-waku_set_event_callbackvoid-cb"><code>extern void waku_set_event_callback(void* cb)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#node-management">Node management</a>
-      <ul>
-        <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
-        <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
-        <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
-        <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
-        <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
-        <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
-        <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#connecting-to-peers">Connecting to peers</a>
-      <ul>
-        <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
-        <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
-        <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
-        <li><a href="#extern-char-waku_peers"><code>extern char* waku_peers()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-relay">Waku Relay</a>
-      <ul>
-        <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
-        <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
-        <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
-        <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
-        <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-filter">Waku Filter</a>
-      <ul>
-        <li><a href="#extern-char-waku_filter_subscribechar-filterjson-char-peerid-int-timeoutms"><code>extern char* waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_filter_unsubscribechar-filterjson-int-timeoutms"><code>extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-lightpush">Waku Lightpush</a>
-      <ul>
-        <li><a href="#extern-char-waku_lightpush_publishchar-messagejson-char-topic-char-peerid-int-timeoutms"><code>extern char* waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_lightpush_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-peerid-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* peerID, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-        <li><a href="#extern-char-waku_lightpush_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-peerid-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_lightpush_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* peerID, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-store">Waku Store</a>
-      <ul>
-        <li><a href="#extern-char-waku_store_querychar-queryjson-char-peerid-int-timeoutms"><code>extern char* waku_store_query(char* queryJSON, char* peerID, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#decrypting-messages">Decrypting messages</a>
-      <ul>
-        <li><a href="#extern-char-waku_decode_symmetricchar-messagejson-char-symmetrickey"><code>extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)</code></a></li>
-        <li><a href="#extern-char-waku_decode_asymmetricchar-messagejson-char-privatekey"><code>extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#dns-discovery">DNS Discovery</a>
-      <ul>
-        <li><a href="#extern-char-waku_dns_discoverychar-url-char-nameserver-int-timeoutms"><code>extern char* waku_dns_discovery(char* url, char* nameserver, int timeoutMs)</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#utils">Utils</a>
-      <ul>
-        <li><a href="#extern-char-waku_utils_base64_encodechar-data"><code>extern char* waku_utils_base64_encode(char* data)</code></a></li>
-        <li><a href="#extern-char-waku_utils_base64_decodechar-data"><code>extern char* waku_utils_base64_decode(char* data)</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 

@@ -176,38 +176,50 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#device-pairing">Device Pairing</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background--rationale--motivation">Background / Rationale / Motivation</a></li>
+    <li><a href="#theory--semantics">Theory / Semantics</a>
       <ul>
-        <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
-        <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
-        <li><a href="#protocol-flow">Protocol Flow</a></li>
-        <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+        <li><a href="#device-pairing">Device Pairing</a>
+          <ul>
+            <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
+            <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
+            <li><a href="#protocol-flow">Protocol Flow</a></li>
+            <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
-    <li><a href="#randomized-rekey">Randomized Rekey</a></li>
-    <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#secure-transfer">Secure Transfer</a></li>
+    <li><a href="#implementation-suggestions">Implementation Suggestions</a>
       <ul>
-        <li><a href="#assumptions">Assumptions</a></li>
-        <li><a href="#rationale">Rationale</a></li>
+        <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
+        <li><a href="#randomized-rekey">Randomized Rekey</a></li>
+        <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#normative">Normative</a></li>
-    <li><a href="#informative">Informative</a></li>
+    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#assumptions">Assumptions</a></li>
+            <li><a href="#rationale">Rationale</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#application-to-noise-sessions">Application to Noise Sessions</a>
+      <ul>
+        <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">Normative</a></li>
+        <li><a href="#informative">Informative</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -703,38 +715,50 @@ she must securely transfer a copy of such data from one of her device <code>A</c
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#device-pairing">Device Pairing</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background--rationale--motivation">Background / Rationale / Motivation</a></li>
+    <li><a href="#theory--semantics">Theory / Semantics</a>
       <ul>
-        <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
-        <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
-        <li><a href="#protocol-flow">Protocol Flow</a></li>
-        <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+        <li><a href="#device-pairing">Device Pairing</a>
+          <ul>
+            <li><a href="#employed-cryptographic-primitives">Employed Cryptographic Primitives</a></li>
+            <li><a href="#the-wakupairing-noise-handshake">The <code>WakuPairing</code> Noise Handshake</a></li>
+            <li><a href="#protocol-flow">Protocol Flow</a></li>
+            <li><a href="#the-wakupairing-for-devices-without-a-camera">The <code>WakuPairing</code> for Devices without a Camera</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
-    <li><a href="#randomized-rekey">Randomized Rekey</a></li>
-    <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
-  </ul>
-
-  <ul>
-    <li>
+    <li><a href="#secure-transfer">Secure Transfer</a></li>
+    <li><a href="#implementation-suggestions">Implementation Suggestions</a>
       <ul>
-        <li><a href="#assumptions">Assumptions</a></li>
-        <li><a href="#rationale">Rationale</a></li>
+        <li><a href="#timebox-qr-exposure">Timebox QR exposure</a></li>
+        <li><a href="#randomized-rekey">Randomized Rekey</a></li>
+        <li><a href="#messages-nametag-derivation">Messages Nametag Derivation</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#normative">Normative</a></li>
-    <li><a href="#informative">Informative</a></li>
+    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#assumptions">Assumptions</a></li>
+            <li><a href="#rationale">Rationale</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#application-to-noise-sessions">Application to Noise Sessions</a>
+      <ul>
+        <li><a href="#the-n11m-session-management-mechanism">The N11M session management mechanism</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">Normative</a></li>
+        <li><a href="#informative">Informative</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 

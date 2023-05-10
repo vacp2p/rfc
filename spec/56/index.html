@@ -176,27 +176,39 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
-    <li><a href="#wire-format">Wire format</a></li>
-    <li><a href="#content-topic-usage">Content topic usage</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background-and-motivation">Background and Motivation</a></li>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#design-requirements">Design Requirements</a></li>
+    <li><a href="#design">Design</a>
       <ul>
-        <li><a href="#advertising-a-community">Advertising a Community</a></li>
-        <li><a href="#community-channelschats">Community channels/chats</a></li>
-        <li><a href="#community-event-messages">Community event messages</a></li>
+        <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
+        <li><a href="#wire-format">Wire format</a></li>
+        <li><a href="#content-topic-usage">Content topic usage</a>
+          <ul>
+            <li><a href="#advertising-a-community">Advertising a Community</a></li>
+            <li><a href="#community-channelschats">Community channels/chats</a></li>
+            <li><a href="#community-event-messages">Community event messages</a></li>
+          </ul>
+        </li>
+        <li><a href="#community-management">Community Management</a>
+          <ul>
+            <li><a href="#community-creation-flow">Community Creation Flow</a></li>
+            <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
+            <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
+            <li><a href="#community-leave-flow">Community Leave Flow</a></li>
+            <li><a href="#community-ban-flow">Community Ban Flow</a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-protocols">Waku protocols</a></li>
+        <li><a href="#backups">Backups</a></li>
+        <li><a href="#clock">Clock</a></li>
       </ul>
     </li>
-    <li><a href="#community-management">Community Management</a>
-      <ul>
-        <li><a href="#community-creation-flow">Community Creation Flow</a></li>
-        <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
-        <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
-        <li><a href="#community-leave-flow">Community Leave Flow</a></li>
-        <li><a href="#community-ban-flow">Community Ban Flow</a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-protocols">Waku protocols</a></li>
-    <li><a href="#backups">Backups</a></li>
-    <li><a href="#clock">Clock</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#future-work">Future work</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
@@ -750,27 +762,39 @@ This allows ordering of messages in an asynchronous network where messages may b
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
-    <li><a href="#wire-format">Wire format</a></li>
-    <li><a href="#content-topic-usage">Content topic usage</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background-and-motivation">Background and Motivation</a></li>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#design-requirements">Design Requirements</a></li>
+    <li><a href="#design">Design</a>
       <ul>
-        <li><a href="#advertising-a-community">Advertising a Community</a></li>
-        <li><a href="#community-channelschats">Community channels/chats</a></li>
-        <li><a href="#community-event-messages">Community event messages</a></li>
+        <li><a href="#cryptographic-primitives">Cryptographic Primitives</a></li>
+        <li><a href="#wire-format">Wire format</a></li>
+        <li><a href="#content-topic-usage">Content topic usage</a>
+          <ul>
+            <li><a href="#advertising-a-community">Advertising a Community</a></li>
+            <li><a href="#community-channelschats">Community channels/chats</a></li>
+            <li><a href="#community-event-messages">Community event messages</a></li>
+          </ul>
+        </li>
+        <li><a href="#community-management">Community Management</a>
+          <ul>
+            <li><a href="#community-creation-flow">Community Creation Flow</a></li>
+            <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
+            <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
+            <li><a href="#community-leave-flow">Community Leave Flow</a></li>
+            <li><a href="#community-ban-flow">Community Ban Flow</a></li>
+          </ul>
+        </li>
+        <li><a href="#waku-protocols">Waku protocols</a></li>
+        <li><a href="#backups">Backups</a></li>
+        <li><a href="#clock">Clock</a></li>
       </ul>
     </li>
-    <li><a href="#community-management">Community Management</a>
-      <ul>
-        <li><a href="#community-creation-flow">Community Creation Flow</a></li>
-        <li><a href="#community-join-flow-peer-requests-to-join-a-community">Community Join Flow (peer requests to join a Community)</a></li>
-        <li><a href="#community-join-flow-peer-is-invited-to-join-a-community">Community Join Flow (peer is invited to join a Community)</a></li>
-        <li><a href="#community-leave-flow">Community Leave Flow</a></li>
-        <li><a href="#community-ban-flow">Community Ban Flow</a></li>
-      </ul>
-    </li>
-    <li><a href="#waku-protocols">Waku protocols</a></li>
-    <li><a href="#backups">Backups</a></li>
-    <li><a href="#clock">Clock</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#future-work">Future work</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 

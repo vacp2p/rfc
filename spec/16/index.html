@@ -176,72 +176,80 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#transport">Transport</a>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
       <ul>
-        <li><a href="#fields">Fields</a></li>
+        <li><a href="#transport">Transport</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+          </ul>
+        </li>
+        <li><a href="#types">Types</a>
+          <ul>
+            <li><a href="#wakumessage">WakuMessage</a></li>
+          </ul>
+        </li>
+        <li><a href="#method-naming">Method naming</a></li>
+        <li><a href="#debug-api">Debug API</a>
+          <ul>
+            <li><a href="#types-1">Types</a></li>
+            <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
+            <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#relay-api">Relay API</a>
+          <ul>
+            <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
+            <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
+            <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
+            <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#relay-private-api">Relay Private API</a>
+          <ul>
+            <li><a href="#types-2">Types</a></li>
+            <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+            <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+            <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#store-api">Store API</a>
+          <ul>
+            <li><a href="#types-3">Types</a></li>
+            <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#filter-api">Filter API</a>
+          <ul>
+            <li><a href="#types-4">Types</a></li>
+            <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
+            <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
+            <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#admin-api">Admin API</a>
+          <ul>
+            <li><a href="#types-5">Types</a></li>
+            <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
+            <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#types">Types</a>
+    <li><a href="#example-usage">Example usage</a>
       <ul>
-        <li><a href="#wakumessage">WakuMessage</a></li>
+        <li><a href="#store-api-1">Store API</a>
+          <ul>
+            <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#method-naming">Method naming</a></li>
-    <li><a href="#debug-api">Debug API</a>
-      <ul>
-        <li><a href="#types-1">Types</a></li>
-        <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
-        <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#relay-api">Relay API</a>
-      <ul>
-        <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
-        <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
-        <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
-        <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#relay-private-api">Relay Private API</a>
-      <ul>
-        <li><a href="#types-2">Types</a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#store-api">Store API</a>
-      <ul>
-        <li><a href="#types-3">Types</a></li>
-        <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#filter-api">Filter API</a>
-      <ul>
-        <li><a href="#types-4">Types</a></li>
-        <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
-        <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
-        <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#admin-api">Admin API</a>
-      <ul>
-        <li><a href="#types-5">Types</a></li>
-        <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
-        <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#store-api-1">Store API</a>
-      <ul>
-        <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 
@@ -1522,72 +1530,80 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#transport">Transport</a>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#wire-protocol">Wire Protocol</a>
       <ul>
-        <li><a href="#fields">Fields</a></li>
+        <li><a href="#transport">Transport</a>
+          <ul>
+            <li><a href="#fields">Fields</a></li>
+          </ul>
+        </li>
+        <li><a href="#types">Types</a>
+          <ul>
+            <li><a href="#wakumessage">WakuMessage</a></li>
+          </ul>
+        </li>
+        <li><a href="#method-naming">Method naming</a></li>
+        <li><a href="#debug-api">Debug API</a>
+          <ul>
+            <li><a href="#types-1">Types</a></li>
+            <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
+            <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#relay-api">Relay API</a>
+          <ul>
+            <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
+            <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
+            <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
+            <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#relay-private-api">Relay Private API</a>
+          <ul>
+            <li><a href="#types-2">Types</a></li>
+            <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
+            <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
+            <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
+            <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#store-api">Store API</a>
+          <ul>
+            <li><a href="#types-3">Types</a></li>
+            <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#filter-api">Filter API</a>
+          <ul>
+            <li><a href="#types-4">Types</a></li>
+            <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
+            <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
+            <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
+          </ul>
+        </li>
+        <li><a href="#admin-api">Admin API</a>
+          <ul>
+            <li><a href="#types-5">Types</a></li>
+            <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
+            <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#types">Types</a>
+    <li><a href="#example-usage">Example usage</a>
       <ul>
-        <li><a href="#wakumessage">WakuMessage</a></li>
+        <li><a href="#store-api-1">Store API</a>
+          <ul>
+            <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#method-naming">Method naming</a></li>
-    <li><a href="#debug-api">Debug API</a>
-      <ul>
-        <li><a href="#types-1">Types</a></li>
-        <li><a href="#get_waku_v2_debug_v1_info"><code>get_waku_v2_debug_v1_info</code></a></li>
-        <li><a href="#get_waku_v2_debug_v1_version"><code>get_waku_v2_debug_v1_version</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#relay-api">Relay API</a>
-      <ul>
-        <li><a href="#post_waku_v2_relay_v1_message"><code>post_waku_v2_relay_v1_message</code></a></li>
-        <li><a href="#post_waku_v2_relay_v1_subscriptions"><code>post_waku_v2_relay_v1_subscriptions</code></a></li>
-        <li><a href="#delete_waku_v2_relay_v1_subscriptions"><code>delete_waku_v2_relay_v1_subscriptions</code></a></li>
-        <li><a href="#get_waku_v2_relay_v1_messages"><code>get_waku_v2_relay_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#relay-private-api">Relay Private API</a>
-      <ul>
-        <li><a href="#types-2">Types</a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_key"><code>get_waku_v2_private_v1_symmetric_key</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_keypair"><code>get_waku_v2_private_v1_asymmetric_keypair</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_symmetric_message"><code>post_waku_v2_private_v1_symmetric_message</code></a></li>
-        <li><a href="#post_waku_v2_private_v1_asymmetric_message"><code>post_waku_v2_private_v1_asymmetric_message</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_symmetric_messages"><code>get_waku_v2_private_v1_symmetric_messages</code></a></li>
-        <li><a href="#get_waku_v2_private_v1_asymmetric_messages"><code>get_waku_v2_private_v1_asymmetric_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#store-api">Store API</a>
-      <ul>
-        <li><a href="#types-3">Types</a></li>
-        <li><a href="#get_waku_v2_store_v1_messages"><code>get_waku_v2_store_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#filter-api">Filter API</a>
-      <ul>
-        <li><a href="#types-4">Types</a></li>
-        <li><a href="#post_waku_v2_filter_v1_subscription"><code>post_waku_v2_filter_v1_subscription</code></a></li>
-        <li><a href="#delete_waku_v2_filter_v1_subscription"><code>delete_waku_v2_filter_v1_subscription</code></a></li>
-        <li><a href="#get_waku_v2_filter_v1_messages"><code>get_waku_v2_filter_v1_messages</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#admin-api">Admin API</a>
-      <ul>
-        <li><a href="#types-5">Types</a></li>
-        <li><a href="#get_waku_v2_admin_v1_peers"><code>get_waku_v2_admin_v1_peers</code></a></li>
-        <li><a href="#post_waku_v2_admin_v1_peers"><code>post_waku_v2_admin_v1_peers</code></a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#store-api-1">Store API</a>
-      <ul>
-        <li><a href="#get_waku_v2_store_v1_messages-1"><code>get_waku_v2_store_v1_messages</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 

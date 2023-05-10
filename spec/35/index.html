@@ -176,32 +176,36 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#design-requirements">Design requirements</a></li>
-    <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+    <li>
       <ul>
-        <li><a href="#noise-protocols">Noise Protocols</a></li>
-        <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+        <li><a href="#design-requirements">Design requirements</a></li>
+        <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+          <ul>
+            <li><a href="#noise-protocols">Noise Protocols</a></li>
+            <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+          </ul>
+        </li>
+        <li><a href="#specification">Specification</a>
+          <ul>
+            <li><a href="#abnf">ABNF</a></li>
+            <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
+            <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
+            <li><a href="#padding">Padding</a></li>
+          </ul>
+        </li>
+        <li><a href="#after-handshake">After-handshake</a></li>
+        <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
+        <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
+          <ul>
+            <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
+            <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
+            <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
+          </ul>
+        </li>
+        <li><a href="#references">References</a></li>
+        <li><a href="#copyright">Copyright</a></li>
       </ul>
     </li>
-    <li><a href="#specification">Specification</a>
-      <ul>
-        <li><a href="#abnf">ABNF</a></li>
-        <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
-        <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
-        <li><a href="#padding">Padding</a></li>
-      </ul>
-    </li>
-    <li><a href="#after-handshake">After-handshake</a></li>
-    <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
-    <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
-      <ul>
-        <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
-        <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
-        <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
-      </ul>
-    </li>
-    <li><a href="#references">References</a></li>
-    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 
@@ -607,32 +611,36 @@ it SHOULD be decoded as the <code>data</code> field in <a href="/spec/26">26/WAK
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#design-requirements">Design requirements</a></li>
-    <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+    <li>
       <ul>
-        <li><a href="#noise-protocols">Noise Protocols</a></li>
-        <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+        <li><a href="#design-requirements">Design requirements</a></li>
+        <li><a href="#supported-cryptographic-protocols">Supported Cryptographic Protocols</a>
+          <ul>
+            <li><a href="#noise-protocols">Noise Protocols</a></li>
+            <li><a href="#encryption-primitives">Encryption Primitives</a></li>
+          </ul>
+        </li>
+        <li><a href="#specification">Specification</a>
+          <ul>
+            <li><a href="#abnf">ABNF</a></li>
+            <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
+            <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
+            <li><a href="#padding">Padding</a></li>
+          </ul>
+        </li>
+        <li><a href="#after-handshake">After-handshake</a></li>
+        <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
+        <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
+          <ul>
+            <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
+            <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
+            <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
+          </ul>
+        </li>
+        <li><a href="#references">References</a></li>
+        <li><a href="#copyright">Copyright</a></li>
       </ul>
     </li>
-    <li><a href="#specification">Specification</a>
-      <ul>
-        <li><a href="#abnf">ABNF</a></li>
-        <li><a href="#protocol-payload-format">Protocol Payload Format</a></li>
-        <li><a href="#public-keys-serialization">Public Keys Serialization</a></li>
-        <li><a href="#padding">Padding</a></li>
-      </ul>
-    </li>
-    <li><a href="#after-handshake">After-handshake</a></li>
-    <li><a href="#backward-support-for-symmetricasymmetric-encryption">Backward Support for Symmetric/Asymmetric Encryption</a></li>
-    <li><a href="#appendix-supported-handshakes-description">Appendix: Supported Handshakes Description</a>
-      <ul>
-        <li><a href="#the-k1k1-handshake">The <code>K1K1</code> Handshake</a></li>
-        <li><a href="#the-xk1-handshake">The <code>XK1</code> Handshake</a></li>
-        <li><a href="#the-xx-and-xxpsk0-handshakes">The <code>XX</code> and <code>XXpsk0</code> Handshakes</a></li>
-      </ul>
-    </li>
-    <li><a href="#references">References</a></li>
-    <li><a href="#copyright">Copyright</a></li>
   </ul>
 </nav>
 

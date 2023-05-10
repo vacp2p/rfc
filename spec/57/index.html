@@ -174,47 +174,62 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#shard-allocation">Shard Allocation</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background-and-motivation">Background and Motivation</a></li>
+    <li><a href="#relay-shards">Relay Shards</a>
       <ul>
-        <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+        <li><a href="#shard-allocation">Shard Allocation</a>
+          <ul>
+            <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+          </ul>
+        </li>
+        <li><a href="#status-communities">Status Communities</a>
+          <ul>
+            <li><a href="#static-mapping">Static Mapping</a></li>
+            <li><a href="#owner-mapping">Owner Mapping</a></li>
+          </ul>
+        </li>
+        <li><a href="#11-chat">1:1 Chat</a></li>
       </ul>
     </li>
-    <li><a href="#status-communities">Status Communities</a>
+    <li><a href="#infrastructure-nodes">Infrastructure Nodes</a>
       <ul>
-        <li><a href="#static-mapping">Static Mapping</a></li>
-        <li><a href="#owner-mapping">Owner Mapping</a></li>
+        <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
+        <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
+        <li><a href="#11-chat-1">1:1 chat</a></li>
       </ul>
     </li>
-    <li><a href="#11-chat">1:1 Chat</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
-    <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
-    <li><a href="#11-chat-1">1:1 chat</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#control-message-shards">Control Message Shards</a></li>
-    <li><a href="#media-shards">Media Shards</a></li>
-    <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+    <li><a href="#infrastructure-shards">Infrastructure Shards</a>
       <ul>
-        <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+        <li><a href="#control-message-shards">Control Message Shards</a></li>
+        <li><a href="#media-shards">Media Shards</a></li>
+        <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#design-requirements-publisher">Design requirements (publisher)</a></li>
-    <li><a href="#design-requirements-relay">Design requirements (relay)</a></li>
-    <li><a href="#required-changes">Required changes</a></li>
-    <li><a href="#test-vectors">Test vectors</a></li>
-    <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
-    <li><a href="#11-chat-2">1:1 Chat</a></li>
+    <li><a href="#light-protocols">Light Protocols</a></li>
+    <li><a href="#waku-archive">Waku Archive</a></li>
+    <li><a href="#discovery">Discovery</a>
+      <ul>
+        <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+          <ul>
+            <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#dos-protection">DoS Protection</a>
+      <ul>
+        <li><a href="#design-requirements-publisher">Design requirements (publisher)</a></li>
+        <li><a href="#design-requirements-relay">Design requirements (relay)</a></li>
+        <li><a href="#required-changes">Required changes</a></li>
+        <li><a href="#test-vectors">Test vectors</a></li>
+        <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
+        <li><a href="#11-chat-2">1:1 Chat</a></li>
+      </ul>
+    </li>
+    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
@@ -773,47 +788,62 @@ See <a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a> for information on Waku A
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#shard-allocation">Shard Allocation</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background-and-motivation">Background and Motivation</a></li>
+    <li><a href="#relay-shards">Relay Shards</a>
       <ul>
-        <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+        <li><a href="#shard-allocation">Shard Allocation</a>
+          <ul>
+            <li><a href="#implementation-suggestion">Implementation Suggestion</a></li>
+          </ul>
+        </li>
+        <li><a href="#status-communities">Status Communities</a>
+          <ul>
+            <li><a href="#static-mapping">Static Mapping</a></li>
+            <li><a href="#owner-mapping">Owner Mapping</a></li>
+          </ul>
+        </li>
+        <li><a href="#11-chat">1:1 Chat</a></li>
       </ul>
     </li>
-    <li><a href="#status-communities">Status Communities</a>
+    <li><a href="#infrastructure-nodes">Infrastructure Nodes</a>
       <ul>
-        <li><a href="#static-mapping">Static Mapping</a></li>
-        <li><a href="#owner-mapping">Owner Mapping</a></li>
+        <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
+        <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
+        <li><a href="#11-chat-1">1:1 chat</a></li>
       </ul>
     </li>
-    <li><a href="#11-chat">1:1 Chat</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#statically-mapped-communities">Statically-Mapped Communities</a></li>
-    <li><a href="#owner-mapped-communities">Owner-Mapped Communities</a></li>
-    <li><a href="#11-chat-1">1:1 chat</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#control-message-shards">Control Message Shards</a></li>
-    <li><a href="#media-shards">Media Shards</a></li>
-    <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+    <li><a href="#infrastructure-shards">Infrastructure Shards</a>
       <ul>
-        <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+        <li><a href="#control-message-shards">Control Message Shards</a></li>
+        <li><a href="#media-shards">Media Shards</a></li>
+        <li><a href="#infrastructure-focused-community">Infrastructure-focused Community</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#design-requirements-publisher">Design requirements (publisher)</a></li>
-    <li><a href="#design-requirements-relay">Design requirements (relay)</a></li>
-    <li><a href="#required-changes">Required changes</a></li>
-    <li><a href="#test-vectors">Test vectors</a></li>
-    <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
-    <li><a href="#11-chat-2">1:1 Chat</a></li>
+    <li><a href="#light-protocols">Light Protocols</a></li>
+    <li><a href="#waku-archive">Waku Archive</a></li>
+    <li><a href="#discovery">Discovery</a>
+      <ul>
+        <li><a href="#libp2p-rendezvous-and-circuit-relay">Libp2p Rendezvous and Circuit-Relay</a>
+          <ul>
+            <li><a href="#announcing-shard-participation">Announcing Shard Participation</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#dos-protection">DoS Protection</a>
+      <ul>
+        <li><a href="#design-requirements-publisher">Design requirements (publisher)</a></li>
+        <li><a href="#design-requirements-relay">Design requirements (relay)</a></li>
+        <li><a href="#required-changes">Required changes</a></li>
+        <li><a href="#test-vectors">Test vectors</a></li>
+        <li><a href="#owner-mapped-communities-1">Owner-Mapped Communities</a></li>
+        <li><a href="#11-chat-2">1:1 Chat</a></li>
+      </ul>
+    </li>
+    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 

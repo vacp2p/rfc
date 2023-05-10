@@ -174,55 +174,68 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#registration">Registration</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#flow">Flow</a>
       <ul>
-        <li><a href="#implementation-notes">Implementation notes</a></li>
+        <li><a href="#registration">Registration</a>
+          <ul>
+            <li><a href="#implementation-notes">Implementation notes</a></li>
+          </ul>
+        </li>
+        <li><a href="#signaling">Signaling</a>
+          <ul>
+            <li><a href="#implementation-notes-1">Implementation notes</a></li>
+          </ul>
+        </li>
+        <li><a href="#verification-and-slashing">Verification and slashing</a>
+          <ul>
+            <li><a href="#implementation-notes-2">Implementation notes</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#signaling">Signaling</a>
+    <li><a href="#technical-overview">Technical overview</a>
       <ul>
-        <li><a href="#implementation-notes-1">Implementation notes</a></li>
+        <li><a href="#terminology">Terminology</a></li>
+        <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
+        <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+          <ul>
+            <li><a href="#system-parameters">System parameters</a></li>
+            <li><a href="#circuit-parameters">Circuit parameters</a></li>
+            <li><a href="#hash-function">Hash function</a></li>
+            <li><a href="#membership-implementation">Membership implementation</a></li>
+            <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+          </ul>
+        </li>
+        <li><a href="#identity-credentials-generation">Identity credentials generation</a>
+          <ul>
+            <li><a href="#identity_secret"><code>identity_secret</code></a></li>
+            <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
+            <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#verification-and-slashing">Verification and slashing</a>
+    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
       <ul>
-        <li><a href="#implementation-notes-2">Implementation notes</a></li>
+        <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#terminology">Terminology</a></li>
-    <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
-    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+    <li><a href="#appendix-b-identity-scheme-choice">Appendix B: Identity scheme choice</a></li>
+    <li><a href="#appendix-c-auxiliary-tooling">Appendix C: Auxiliary tooling</a></li>
+    <li><a href="#appendix-d-example-usage">Appendix D: Example usage</a>
       <ul>
-        <li><a href="#system-parameters">System parameters</a></li>
-        <li><a href="#circuit-parameters">Circuit parameters</a></li>
-        <li><a href="#hash-function">Hash function</a></li>
-        <li><a href="#membership-implementation">Membership implementation</a></li>
-        <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+        <li><a href="#creating-a-rln-object">Creating a RLN object</a></li>
+        <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
+        <li><a href="#adding-id-commitment-to-the-rln-merkle-tree">Adding ID commitment to the RLN Merkle tree</a></li>
+        <li><a href="#setting-epoch-and-signal">Setting epoch and signal</a></li>
+        <li><a href="#generating-proof-1">Generating proof</a></li>
+        <li><a href="#verifiying-proof">Verifiying proof</a></li>
       </ul>
     </li>
-    <li><a href="#identity-credentials-generation">Identity credentials generation</a>
-      <ul>
-        <li><a href="#identity_secret"><code>identity_secret</code></a></li>
-        <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
-        <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#creating-a-rln-object">Creating a RLN object</a></li>
-    <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
-    <li><a href="#adding-id-commitment-to-the-rln-merkle-tree">Adding ID commitment to the RLN Merkle tree</a></li>
-    <li><a href="#setting-epoch-and-signal">Setting epoch and signal</a></li>
-    <li><a href="#generating-proof-1">Generating proof</a></li>
-    <li><a href="#verifiying-proof">Verifiying proof</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
@@ -1022,55 +1035,68 @@ The examples are written in <a href="https://www.rust-lang.org/">rust</a>.</p>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#registration">Registration</a>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#flow">Flow</a>
       <ul>
-        <li><a href="#implementation-notes">Implementation notes</a></li>
+        <li><a href="#registration">Registration</a>
+          <ul>
+            <li><a href="#implementation-notes">Implementation notes</a></li>
+          </ul>
+        </li>
+        <li><a href="#signaling">Signaling</a>
+          <ul>
+            <li><a href="#implementation-notes-1">Implementation notes</a></li>
+          </ul>
+        </li>
+        <li><a href="#verification-and-slashing">Verification and slashing</a>
+          <ul>
+            <li><a href="#implementation-notes-2">Implementation notes</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#signaling">Signaling</a>
+    <li><a href="#technical-overview">Technical overview</a>
       <ul>
-        <li><a href="#implementation-notes-1">Implementation notes</a></li>
+        <li><a href="#terminology">Terminology</a></li>
+        <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
+        <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+          <ul>
+            <li><a href="#system-parameters">System parameters</a></li>
+            <li><a href="#circuit-parameters">Circuit parameters</a></li>
+            <li><a href="#hash-function">Hash function</a></li>
+            <li><a href="#membership-implementation">Membership implementation</a></li>
+            <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+          </ul>
+        </li>
+        <li><a href="#identity-credentials-generation">Identity credentials generation</a>
+          <ul>
+            <li><a href="#identity_secret"><code>identity_secret</code></a></li>
+            <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
+            <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#verification-and-slashing">Verification and slashing</a>
+    <li><a href="#appendix-a-security-considerations">Appendix A: Security considerations</a>
       <ul>
-        <li><a href="#implementation-notes-2">Implementation notes</a></li>
+        <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#terminology">Terminology</a></li>
-    <li><a href="#rln-zk-circuit-specific-terms">RLN ZK-Circuit specific terms</a></li>
-    <li><a href="#zk-circuits-specification">ZK Circuits specification</a>
+    <li><a href="#appendix-b-identity-scheme-choice">Appendix B: Identity scheme choice</a></li>
+    <li><a href="#appendix-c-auxiliary-tooling">Appendix C: Auxiliary tooling</a></li>
+    <li><a href="#appendix-d-example-usage">Appendix D: Example usage</a>
       <ul>
-        <li><a href="#system-parameters">System parameters</a></li>
-        <li><a href="#circuit-parameters">Circuit parameters</a></li>
-        <li><a href="#hash-function">Hash function</a></li>
-        <li><a href="#membership-implementation">Membership implementation</a></li>
-        <li><a href="#slashing-and-shamirs-secret-sharing">Slashing and Shamir&rsquo;s Secret Sharing</a></li>
+        <li><a href="#creating-a-rln-object">Creating a RLN object</a></li>
+        <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
+        <li><a href="#adding-id-commitment-to-the-rln-merkle-tree">Adding ID commitment to the RLN Merkle tree</a></li>
+        <li><a href="#setting-epoch-and-signal">Setting epoch and signal</a></li>
+        <li><a href="#generating-proof-1">Generating proof</a></li>
+        <li><a href="#verifiying-proof">Verifiying proof</a></li>
       </ul>
     </li>
-    <li><a href="#identity-credentials-generation">Identity credentials generation</a>
-      <ul>
-        <li><a href="#identity_secret"><code>identity_secret</code></a></li>
-        <li><a href="#identity_secret_hash"><code>identity_secret_hash</code></a></li>
-        <li><a href="#identity_commitment"><code>identity_commitment</code></a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#sss-security-assumptions">SSS security assumptions</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#creating-a-rln-object">Creating a RLN object</a></li>
-    <li><a href="#generating-identity-credentials">Generating identity credentials</a></li>
-    <li><a href="#adding-id-commitment-to-the-rln-merkle-tree">Adding ID commitment to the RLN Merkle tree</a></li>
-    <li><a href="#setting-epoch-and-signal">Setting epoch and signal</a></li>
-    <li><a href="#generating-proof-1">Generating proof</a></li>
-    <li><a href="#verifiying-proof">Verifiying proof</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
   </ul>
 </nav>
 
