@@ -49,6 +49,7 @@ bookMenuLevels: 1
   - [54/WAKU2-X3DH-SESSIONS]({{< relref "/docs/rfcs/54/README.md" >}})
   - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
   - [56/STATUS-COMMUNITIES]({{< relref "/docs/rfcs/56/README.md" >}})
+  - [59/STATUS-URL-DATA]({{< relref "/docs/rfcs/59/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
