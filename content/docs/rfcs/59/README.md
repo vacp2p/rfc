@@ -140,9 +140,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-## Specs
-
-- <https://github.com/status-im/specs/pull/159> for URL scheme
+- [60/STATUS-URL-SCHEME](/spec/60/)
 
 <!-- ## informative
 
