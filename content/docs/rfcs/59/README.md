@@ -11,7 +11,9 @@ contributors:
 
 # Abstract
 
-This document describes serialization, compression and encoding of data within URLs, so the app links could carry enough information to help users with instant previewing and verifying even prior clicking or taking an action on the content.
+This document presents a comprehensive overview of the serialization, compression, and encoding techniques used to transmit data within URLs. 
+The primary objective is to enable app links to contain sufficient information, allowing users to conveniently preview and verify the content before taking any actions or clicking on the link. 
+By employing these methods, users can make informed decisions about engaging with the content, enhancing their overall browsing experience.
 
 # Background / Rationale / Motivation
 
@@ -19,11 +21,13 @@ This document describes serialization, compression and encoding of data within U
 
 ### Product
 
-- Encode data within URL until Waku response is instant and considered reliable enough for link previewing and visiting of the onboarding website. Or until a product roadmap for alternative decentralized storage is finalized.
-- A verify state while loading onboarding website until encoded data is matched against Waku response to mitigate identity attacks
-- Accept only `[A-Za-z0-9_-.\u0020]` character class for textual fields
-- Shortest result possible
+- The process of encoding data within URLs should continue until the Waku response becomes sufficiently instantaneous and reliable for link previewing and visiting the onboarding website. Alternatively, this process can be halted once a product roadmap for an alternative decentralized storage solution is finalized.
 
+- During the loading of the onboarding website, a verification state should be implemented to compare the encoded data against the Waku response. This measure aims to mitigate identity attacks and ensure the integrity of the data.
+
+- Only characters from the [A-Za-z0-9_-.\u0020] character class should be accepted for textual fields. This restriction promotes compatibility and security in the handling of textual data.
+
+- Strive for the shortest possible result, optimizing the encoding process to minimize the overall length of the encoded data while maintaining its intended functionality and integrity.
 ### Related scope
 
 #### Features
@@ -36,17 +40,9 @@ This document describes serialization, compression and encoding of data within U
 
 #### App entities
 
-- Community
-- Channel
-- User
-
-<!-- # Theory / Semantics
-
-A standard track RFC in `stable` status MUST feature this section.
-A standard track RFC in `raw` or `draft` status SHOULD feature this section.
-This section SHOULD explain in detail how the proposed protocol works.
-It may touch on the wire format where necessary for the explanation.
-This section MAY also specify endpoint behaviour when receiving specific messages, e.g. the behaviour of certain caches etc. -->
+- Community: Refer to [56/STATUS-COMMUNITIES](/spec/56)
+- Channel: Refer to terminology in [56/STATUS-COMMUNITIES](/spec/56)
+- User: Refer to terminology in [56/STATUS-COMMUNITIES](/spec/56)
 
 # Wire Format Specification / Syntax
 
@@ -113,11 +109,6 @@ message URLParams {
 
 <!-- # (Further Optional Sections) -->
 
-# Proposals
-
-- See <https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/edit?usp=sharing> for all
-- See <https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/edit#gid=1895477181> for final two
-
 # Discussions
 
 - See <https://github.com/status-im/status-web/issues/327>
@@ -140,7 +131,7 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-- [60/STATUS-URL-SCHEME](/spec/60/)
+- [Proposal Google Sheet](https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/edit?usp=sharing)
 
 <!-- ## informative
 
@@ -148,7 +139,14 @@ A list of additional references. -->
 
 # Footnotes
 
-- This specification prefers maintainability, extensibility, project familiarity and backward compatibility.
-- Implementation and proposals are most effective for mid to max field lengths, not min.
-- Mind that some social platforms or IMs visually trim the URLs, so they would actually not be displayed in full length. See <https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/edit#gid=1260088614>.
-- Without sharing public keys with hosting servers some data like profile photos or banners cannot be included in the previews
+- This specification prioritizes maintainability, extensibility, familiarity with existing projects, and backward compatibility. 
+These factors are considered essential for the long-term viability and success of the implementation.
+
+- When it comes to implementation and proposals, it is most effective to optimize for field lengths ranging from moderate to maximum. 
+Focusing on this range allows for better efficiency and effectiveness in handling the data, rather than solely optimizing for minimum field lengths.
+
+- It is important to keep in mind that certain social platforms or instant messaging services may visually trim URLs, resulting in the URLs not being displayed in their full length.
+For more information and specific examples, please refer to the following link: [URL Trimming Examples](https://docs.google.com/spreadsheets/d/1JD4kp0aUm90piUZ7FgM_c2NGe2PdN8BFB11wmt5UZIY/edit#gid=1260088614).
+
+- Note that without sharing public keys with hosting servers, it is not possible to include certain data, such as profile photos or banners, in the previews. 
+This limitation arises due to the need for authentication and secure access to the required data.
