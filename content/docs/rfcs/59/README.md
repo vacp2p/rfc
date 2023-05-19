@@ -53,35 +53,12 @@ By employing these methods, users can make informed decisions about engaging wit
 ```protobuf
 syntax = "proto3";
 
-message Community {
- string display_name = 1;
- string description = 2;
- uint32 members_count = 3;
- string color = 4;
- repeated uint32 tag_indices = 5;
-}
-
-message Channel {
- string display_name = 1;
- string description = 2;
- string emoji = 3;
- string color = 4;
- Community community = 5;
- string uuid = 6;
-}
-
-message User {
- string display_name = 1;
- string description = 2;
- string color = 3;
-}
-
 message URLData {
  // Community, Channel, or User
  bytes content = 1;
 }
 
-// Field on CommunityDescription, CommunityChat and ContactCodeAdvertisement
+// Field on CommunityDescription, CommunityChat and ContactCodeAdvertisement (described in 56/STATUS-COMMUNITIES)
 message URLParams {
  string encoded_url_data = 1;
  // Signature of encoded URL data
