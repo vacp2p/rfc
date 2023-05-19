@@ -2,7 +2,7 @@
 slug: 59
 title: 59/STATUS-URL-DATA
 name: Status URL Data
-status: draft
+status: raw
 category: Standards Track
 tags: waku-application
 editor: Felicio Mununga <felicio@status.im>
