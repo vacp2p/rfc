@@ -40,13 +40,13 @@ This document describes URL scheme for previewing and deep linking content as we
 
 | Name | Url | Description |
 | ----- | ---- | ---- |
-| User profile | `/u/<data>#<signature>` | Preview/Open user profile |
-| | `/u#<compressed_user_public_key>` | |
+| User profile | `/u/<encoded_data>#<encoded_signature_and_user_chat_key>` | Preview/Open user profile |
+| | `/u#<user_chat_key>` | |
 | | `/u#<ens_name>` | |
-| Community | `/c/<data>#<signature>` | Preview/Open community |
-| | `/c#<compressed_community_public_key>` | |
-| Community channel | `/cc/<data>#<signature>`| Preview/Open community channel |
-| | `/cc/<channel_uuid>#<compressed_community_public_key>` | |
+| Community | `/c/< encoded_data >#<encoded_signature_and_community_chat_key>` | Preview/Open community |
+| | `/c#<community_chat_key>` | |
+| Community channel | `/cc/< encoded_data >#< encoded_signature_and_community_chat_key >`| Preview/Open community channel |
+| | `/cc/<channel_uuid>#<community_chat_key>` | |
 
 <!-- # Security/Privacy Considerations
 
