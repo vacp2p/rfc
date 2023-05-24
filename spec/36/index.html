@@ -23,7 +23,7 @@ Design requirements # The API should be generic enough, so:" />
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.dd250e542dad6009c8cd25831f612d3e35e56b3cfd38b821f69592981ed79f5a.js" integrity="sha256-3SUOVC2tYAnIzSWDH2EtPjXlazz9OLgh9pWSmB7Xn1o="></script>
+<script defer src="/en.search.min.b9f0d158fe5a9a96737034a974bccc75d05cd14ab547b3c830085d0c4b875307.js" integrity="sha256-ufDRWP5ampZzcDSpdLzMddBc0Uq1R7PIMAhdDEuHUwc="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -206,9 +206,9 @@ https://github.com/alex-shpak/hugo-book
           <ul>
             <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
             <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
-            <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
-            <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
-            <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_newchar-jsonconfig-char-jsonresp"><code>extern unsigned int waku_new(char* jsonConfig, char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_startchar-jsonresp"><code>extern unsigned int waku_start(char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_stopchar-jsonresp"><code>extern unsigned int waku_stop(char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
             <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
           </ul>
@@ -216,7 +216,7 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#connecting-to-peers">Connecting to peers</a>
           <ul>
             <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
-            <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_connectchar-address-int-timeoutms-char-jsonresp"><code>extern unsigned int waku_connect(char* address, int timeoutMs, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
             <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
@@ -225,15 +225,15 @@ https://github.com/alex-shpak/hugo-book
         </li>
         <li><a href="#waku-relay">Waku Relay</a>
           <ul>
-            <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
-            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
-            <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
-            <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
+            <li><a href="#extern-void-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding-char-outcontenttopic"><code>extern void waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, char* outContentTopic)</code></a></li>
+            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding-char-outpubsubtopic"><code>extern char* waku_pubsub_topic(char* name, char* encoding, char* outPubsubTopic)</code></a></li>
+            <li><a href="#extern-void-waku_default_pubsub_topicchar-defaultpubsubtopic"><code>extern void waku_default_pubsub_topic(char* defaultPubsubTopic)</code></a></li>
+            <li><a href="#extern-unsinged-int-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms-char-jsonresp"><code>extern unsinged int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
-            <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
-            <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_relay_subscribechar-topic-char-jsonresp"><code>extern unsigned int waku_relay_subscribe(char* topic, char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_relay_unsubscribechar-topic-char-jsonresp"><code>extern unsigned int waku_relay_unsubscribe(char* topic, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
           </ul>
         </li>
@@ -353,8 +353,7 @@ structure, protobuf) if it brings limitations that need to be lifted.</p>
   <code>JsonResponse</code> type
   <a class="anchor" href="#jsonresponse-type">#</a>
 </h3>
-<p>All the API functions return a <code>JsonResponse</code> unless specified otherwise.
-<code>JsonResponse</code> is a <code>char *</code> whose format depends on whether the function was executed successfully or not.</p>
+<p>All the API functions return a <code>JsonResponse</code> unless specified otherwise. The returned <code>JsonResponse</code> is a <code>char *</code> whose format depends on whether the function was executed successfully or not. And it is important to notice that this returned <code>JsonReponse</code> is returned from the latest argument, instead of from the actual function&rsquo;s returned value.</p>
 <p>On failure:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ts" data-lang="ts"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">error</span>: <span style="color:#66d9ef">string</span>;
@@ -747,49 +746,79 @@ Default <code>3</code> seconds</li>
 <li><code>seenMessagesTTLSeconds</code>: configures when a previously seen message ID can be forgotten about.
 Default <code>120</code> seconds</li>
 </ul>
-<h3 id="extern-char-waku_newchar-jsonconfig">
-  <code>extern char* waku_new(char* jsonConfig)</code>
-  <a class="anchor" href="#extern-char-waku_newchar-jsonconfig">#</a>
+<h3 id="extern-unsigned-int-waku_newchar-jsonconfig-char-jsonresp">
+  <code>extern unsigned int waku_new(char* jsonConfig, char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_newchar-jsonconfig-char-jsonresp">#</a>
 </h3>
 <p>Instantiates a Waku node.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* jsonConfig</code>: JSON string containing the options used to initialize a go-waku node.
+<li>
+<p><strong>[input]</strong> <code>char* jsonConfig</code>: JSON string containing the options used to initialize a waku node.
 Type <a href="#jsonconfig-type"><code>JsonConfig</code></a>.
-It can be <code>NULL</code> to use defaults.</li>
+It can be <code>NULL</code> to use defaults.</p>
+</li>
+<li>
+<p><strong>[output]</strong> <code>char* jsonResp</code>: <a href="#jsonresponse-type"><code>JsonResponse</code></a>. Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.</p>
+<p>Ex1:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Ex2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;The node key is missing.&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
 </ol>
 <p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
-If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
-<p>For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_start">
-  <code>extern char* waku_start()</code>
-  <a class="anchor" href="#extern-char-waku_start">#</a>
+<p>Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<h3 id="extern-unsigned-int-waku_startchar-jsonresp">
+  <code>extern unsigned int waku_start(char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_startchar-jsonresp">#</a>
 </h3>
-<p>Start a Waku node mounting all the protocols that were enabled during the Waku node instantiation.</p>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
-If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
-<p>For example:</p>
+<p>Starts a Waku node mounting all the protocols that were enabled during the Waku node instantiation.</p>
+<p><strong>Parameters</strong></p>
+<ol>
+<li>
+<p><strong>[output]</strong> <code>char* jsonResp</code>: <a href="#jsonresponse-type"><code>JsonResponse</code></a>. Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.</p>
+<p>Ex:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_stop">
-  <code>extern char* waku_stop()</code>
-  <a class="anchor" href="#extern-char-waku_stop">#</a>
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>Returns</strong></p>
+<p>Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<h3 id="extern-unsigned-int-waku_stopchar-jsonresp">
+  <code>extern unsigned int waku_stop(char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_stopchar-jsonresp">#</a>
 </h3>
 <p>Stops a Waku node.</p>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
-If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
-<p>For example:</p>
+<p><strong>Parameters</strong></p>
+<ol>
+<li>
+<p><strong>[output]</strong> <code>char* jsonResp</code>: <a href="#jsonresponse-type"><code>JsonResponse</code></a>. Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.</p>
+<p>Ex:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_peerid">
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>Returns</strong></p>
+<p>Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<h3 id="extern-char-waku_peerid">
   <code>extern char* waku_peerid()</code>
   <a class="anchor" href="#extern-char-waku_peerid">#</a>
 </h3>
@@ -839,27 +868,42 @@ If the execution is successful, the <code>result</code> field contains the peer 
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#e6db74">&#34;QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP&#34;</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_connectchar-address-int-timeoutms">
-  <code>extern char* waku_connect(char* address, int timeoutMs)</code>
-  <a class="anchor" href="#extern-char-waku_connectchar-address-int-timeoutms">#</a>
+</span></span></code></pre></div><h3 id="extern-unsigned-int-waku_connectchar-address-int-timeoutms-char-jsonresp">
+  <code>extern unsigned int waku_connect(char* address, int timeoutMs, char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_connectchar-address-int-timeoutms-char-jsonresp">#</a>
 </h3>
 <p>Dial peer using a multiaddress.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* address</code>: A multiaddress to reach the peer being dialed.</li>
-<li><code>int timeoutMs</code>: Timeout value in milliseconds to execute the call.
+<li>
+<p><strong>[input]</strong> <code>char* address</code>: A multiaddress to reach the peer being dialed.</p>
+</li>
+<li>
+<p><strong>[input]</strong> <code>int timeoutMs</code>: Timeout value in milliseconds to execute the call.
 If the function execution takes longer than this value,
 the execution will be canceled and an error returned.
-Use <code>0</code> for no timeout.</li>
-</ol>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
+Use <code>0</code> for no timeout.</p>
+</li>
+<li>
+<p><strong>[output]</strong> <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
-<p>For example:</p>
+<p>Ex1:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_connect_peeridchar-peerid-int-timeoutms">
+</span></span></code></pre></div><p>Ex2:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;Timeout expired.&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>Returns</strong></p>
+<p>Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<h3 id="extern-char-waku_connect_peeridchar-peerid-int-timeoutms">
   <code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code>
   <a class="anchor" href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms">#</a>
 </h3>
@@ -936,61 +980,67 @@ The list of peers has this format:</p>
   Waku Relay
   <a class="anchor" href="#waku-relay">#</a>
 </h2>
-<h3 id="extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding">
-  <code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code>
-  <a class="anchor" href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding">#</a>
+<h3 id="extern-void-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding-char-outcontenttopic">
+  <code>extern void waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, char* outContentTopic)</code>
+  <a class="anchor" href="#extern-void-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding-char-outcontenttopic">#</a>
 </h3>
 <p>Create a content topic string according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* applicationName</code></li>
-<li><code>unsigned int applicationVersion</code></li>
-<li><code>char* contentTopicName</code></li>
-<li><code>char* encoding</code>: depending on the payload, use <code>proto</code>, <code>rlp</code> or <code>rfc26</code></li>
-</ol>
-<p><strong>Returns</strong></p>
-<p><code>char *</code> containing a content topic formatted according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.</p>
+<li><strong>[input]</strong> <code>char* applicationName</code></li>
+<li><strong>[input]</strong> <code>unsigned int applicationVersion</code></li>
+<li><strong>[input]</strong> <code>char* contentTopicName</code></li>
+<li><strong>[input]</strong> <code>char* encoding</code>: depending on the payload, use <code>proto</code>, <code>rlp</code> or <code>rfc26</code></li>
+<li><strong>[output]</strong> <code>char* outContentTopic</code>. Gets populated with a content topic formatted according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.
 <pre tabindex="0"><code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
-</code></pre><h3 id="extern-char-waku_pubsub_topicchar-name-char-encoding">
-  <code>extern char* waku_pubsub_topic(char* name, char* encoding)</code>
-  <a class="anchor" href="#extern-char-waku_pubsub_topicchar-name-char-encoding">#</a>
+</code></pre></li>
+</ol>
+<h3 id="extern-char-waku_pubsub_topicchar-name-char-encoding-char-outpubsubtopic">
+  <code>extern char* waku_pubsub_topic(char* name, char* encoding, char* outPubsubTopic)</code>
+  <a class="anchor" href="#extern-char-waku_pubsub_topicchar-name-char-encoding-char-outpubsubtopic">#</a>
 </h3>
 <p>Create a pubsub topic string according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* name</code></li>
-<li><code>char* encoding</code>: depending on the payload, use <code>proto</code>, <code>rlp</code> or <code>rfc26</code></li>
-</ol>
-<p><strong>Returns</strong></p>
-<p><code>char *</code> containing a content topic formatted according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.</p>
+<li><strong>[input]</strong> <code>char* name</code></li>
+<li><strong>[input]</strong> <code>char* encoding</code>: depending on the payload, use <code>proto</code>, <code>rlp</code> or <code>rfc26</code></li>
+<li><strong>[output]</strong> <code>char* outPubsubTopic</code>. Gets populated with a pubsub topic formatted according to <a href="https://rfc.vac.dev/spec/23/">RFC 23</a>.
 <pre tabindex="0"><code>/waku/2/{topic-name}/{encoding}
-</code></pre><h3 id="extern-char-waku_default_pubsub_topic">
-  <code>extern char* waku_default_pubsub_topic()</code>
-  <a class="anchor" href="#extern-char-waku_default_pubsub_topic">#</a>
+</code></pre></li>
+</ol>
+<h3 id="extern-void-waku_default_pubsub_topicchar-defaultpubsubtopic">
+  <code>extern void waku_default_pubsub_topic(char* defaultPubsubTopic)</code>
+  <a class="anchor" href="#extern-void-waku_default_pubsub_topicchar-defaultpubsubtopic">#</a>
 </h3>
 <p>Returns the default pubsub topic used for exchanging waku messages defined in <a href="https://rfc.vac.dev/spec/10/">RFC 10</a>.</p>
-<p><strong>Returns</strong></p>
-<p><code>char *</code> containing the default pubsub topic:</p>
-<pre tabindex="0"><code>/waku/2/default-waku/proto
-</code></pre><h3 id="extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms">
-  <code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code>
-  <a class="anchor" href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms">#</a>
+<p><strong>Parameters</strong></p>
+<ol>
+<li><strong>[output]</strong> <code>char* defaultPubsubTopic</code>. Gets populated with  <code>/waku/2/default-waku/proto</code></li>
+</ol>
+<h3 id="extern-unsinged-int-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms-char-jsonresp">
+  <code>extern unsinged int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsinged-int-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms-char-jsonresp">#</a>
 </h3>
 <p>Publish a message using Waku Relay.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* messageJson</code>: JSON string containing the <a href="https://rfc.vac.dev/spec/14/">Waku Message</a> as <a href="#jsonmessage-type"><code>JsonMessage</code></a>.</li>
-<li><code>char* pubsubTopic</code>: pubsub topic on which to publish the message.
+<li><strong>[input]</strong> <code>char* messageJson</code>: JSON string containing the <a href="https://rfc.vac.dev/spec/14/">Waku Message</a> as <a href="#jsonmessage-type"><code>JsonMessage</code></a>.</li>
+<li><strong>[input]</strong> <code>char* pubsubTopic</code>: pubsub topic on which to publish the message.
 If <code>NULL</code>, it uses the default pubsub topic.</li>
-<li><code>int timeoutMs</code>: Timeout value in milliseconds to execute the call.
+<li><strong>[input]</strong> <code>int timeoutMs</code>: Timeout value in milliseconds to execute the call.
 If the function execution takes longer than this value,
 the execution will be canceled and an error returned.
 Use <code>0</code> for no timeout.</li>
+<li><strong>[output]</strong>: A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
+If the execution is successful, the <code>result</code> field contains the message ID.</li>
 </ol>
 <p>Note: <code>messageJson.version</code> is overwritten to <code>0</code>.</p>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
-If the execution is successful, the <code>result</code> field contains the message ID.</p>
+<p><strong>Returns</strong>
+Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
 <h3 id="extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms">
   <code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code>
   <a class="anchor" href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms">#</a>
@@ -1054,24 +1104,36 @@ If the execution is successful, the <code>result</code> field contains a <code>b
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_relay_subscribechar-topic">
-  <code>extern char* waku_relay_subscribe(char* topic)</code>
-  <a class="anchor" href="#extern-char-waku_relay_subscribechar-topic">#</a>
+</span></span></code></pre></div><h3 id="extern-unsigned-int-waku_relay_subscribechar-topic-char-jsonresp">
+  <code>extern unsigned int waku_relay_subscribe(char* topic, char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_relay_subscribechar-topic-char-jsonresp">#</a>
 </h3>
 <p>Subscribe to a Waku Relay pubsub topic to receive messages.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* topic</code>: Pubsub topic to subscribe to.
-If <code>NULL</code>, it subscribes to the default pubsub topic.</li>
-</ol>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
+<li>
+<p><strong>[input]</strong> <code>char* topic</code>: Pubsub topic to subscribe to.
+If <code>NULL</code>, it subscribes to the default pubsub topic.</p>
+</li>
+<li>
+<p><strong>[output]</strong> <code>char* jsonResp</code>: A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
-<p>For example:</p>
+<p>Ex1:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><strong>Events</strong></p>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;error&#34;</span>: <span style="color:#e6db74">&#34;Cannot subscribe without Waku Relay enabled.&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>Returns</strong>
+Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<p><strong>Events</strong></p>
 <p>When a message is received, a ``&ldquo;message&rdquo;<code> event</code> is emitted containing the message, pubsub topic, and node ID in which
 the message was received.</p>
 <p>The <code>event</code> type is <a href="#jsonmessageevent-type"><code>JsonMessageEvent</code></a>.</p>
@@ -1089,25 +1151,34 @@ the message was received.</p>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_relay_unsubscribechar-topic">
-  <code>extern char* waku_relay_unsubscribe(char* topic)</code>
-  <a class="anchor" href="#extern-char-waku_relay_unsubscribechar-topic">#</a>
+</span></span></code></pre></div><h3 id="extern-unsigned-int-waku_relay_unsubscribechar-topic-char-jsonresp">
+  <code>extern unsigned int waku_relay_unsubscribe(char* topic, char* jsonResp)</code>
+  <a class="anchor" href="#extern-unsigned-int-waku_relay_unsubscribechar-topic-char-jsonresp">#</a>
 </h3>
 <p>Closes the pubsub subscription to a pubsub topic. No more messages will be received
 from this pubsub topic.</p>
 <p><strong>Parameters</strong></p>
 <ol>
-<li><code>char* pusubTopic</code>: Pubsub topic to unsubscribe from.
-If <code>NULL</code>, unsubscribes from the default pubsub topic.</li>
-</ol>
-<p><strong>Returns</strong></p>
-<p>A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
+<li>
+<p><strong>[input]</strong> <code>char* pusubTopic</code>: Pubsub topic to unsubscribe from.
+If <code>NULL</code>, unsubscribes from the default pubsub topic.</p>
+</li>
+<li>
+<p><strong>[output]</strong> A <a href="#jsonresponse-type"><code>JsonResponse</code></a>.
 If the execution is successful, the <code>result</code> field is set to <code>true</code>.</p>
 <p>For example:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>   <span style="color:#f92672">&#34;result&#34;</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="extern-char-waku_relay_topics">
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>Returns</strong>
+Unsigned int. Possible values:</p>
+<ul>
+<li>1 - The operation was completed successfuly.</li>
+<li>0 - The operation failed for any reason. It worth checking the value of <code>jsonResp</code> in this case.</li>
+</ul>
+<h3 id="extern-char-waku_relay_topics">
   <code>extern char* waku_relay_topics()</code>
   <a class="anchor" href="#extern-char-waku_relay_topics">#</a>
 </h3>
@@ -1478,9 +1549,9 @@ If the execution is successful, the <code>result</code> field contains the decod
           <ul>
             <li><a href="#jsonconfig-type"><code>JsonConfig</code> type</a></li>
             <li><a href="#gossipsubparameters-type"><code>GossipsubParameters</code> type</a></li>
-            <li><a href="#extern-char-waku_newchar-jsonconfig"><code>extern char* waku_new(char* jsonConfig)</code></a></li>
-            <li><a href="#extern-char-waku_start"><code>extern char* waku_start()</code></a></li>
-            <li><a href="#extern-char-waku_stop"><code>extern char* waku_stop()</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_newchar-jsonconfig-char-jsonresp"><code>extern unsigned int waku_new(char* jsonConfig, char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_startchar-jsonresp"><code>extern unsigned int waku_start(char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_stopchar-jsonresp"><code>extern unsigned int waku_stop(char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_peerid"><code>extern char* waku_peerid()</code></a></li>
             <li><a href="#extern-char-waku_listen_addresses"><code>extern char* waku_listen_addresses()</code></a></li>
           </ul>
@@ -1488,7 +1559,7 @@ If the execution is successful, the <code>result</code> field contains the decod
         <li><a href="#connecting-to-peers">Connecting to peers</a>
           <ul>
             <li><a href="#extern-char-waku_add_peerchar-address-char-protocolid"><code>extern char* waku_add_peer(char* address, char* protocolId)</code></a></li>
-            <li><a href="#extern-char-waku_connectchar-address-int-timeoutms"><code>extern char* waku_connect(char* address, int timeoutMs)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_connectchar-address-int-timeoutms-char-jsonresp"><code>extern unsigned int waku_connect(char* address, int timeoutMs, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_connect_peeridchar-peerid-int-timeoutms"><code>extern char* waku_connect_peerid(char* peerId, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_disconnectchar-peerid"><code>extern char* waku_disconnect(char* peerId)</code></a></li>
             <li><a href="#extern-char-waku_peer_count"><code>extern char* waku_peer_count()</code></a></li>
@@ -1497,15 +1568,15 @@ If the execution is successful, the <code>result</code> field contains the decod
         </li>
         <li><a href="#waku-relay">Waku Relay</a>
           <ul>
-            <li><a href="#extern-char-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding"><code>extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)</code></a></li>
-            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding"><code>extern char* waku_pubsub_topic(char* name, char* encoding)</code></a></li>
-            <li><a href="#extern-char-waku_default_pubsub_topic"><code>extern char* waku_default_pubsub_topic()</code></a></li>
-            <li><a href="#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms"><code>extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)</code></a></li>
+            <li><a href="#extern-void-waku_content_topicchar-applicationname-unsigned-int-applicationversion-char-contenttopicname-char-encoding-char-outcontenttopic"><code>extern void waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, char* outContentTopic)</code></a></li>
+            <li><a href="#extern-char-waku_pubsub_topicchar-name-char-encoding-char-outpubsubtopic"><code>extern char* waku_pubsub_topic(char* name, char* encoding, char* outPubsubTopic)</code></a></li>
+            <li><a href="#extern-void-waku_default_pubsub_topicchar-defaultpubsubtopic"><code>extern void waku_default_pubsub_topic(char* defaultPubsubTopic)</code></a></li>
+            <li><a href="#extern-unsinged-int-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms-char-jsonresp"><code>extern unsinged int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_relay_publish_enc_asymmetricchar-messagejson-char-pubsubtopic-char-publickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_relay_publish_enc_symmetricchar-messagejson-char-pubsubtopic-char-symmetrickey-char-optionalsigningkey-int-timeoutms"><code>extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)</code></a></li>
             <li><a href="#extern-char-waku_relay_enough_peerschar-pubsubtopic"><code>extern char* waku_relay_enough_peers(char* pubsubTopic)</code></a></li>
-            <li><a href="#extern-char-waku_relay_subscribechar-topic"><code>extern char* waku_relay_subscribe(char* topic)</code></a></li>
-            <li><a href="#extern-char-waku_relay_unsubscribechar-topic"><code>extern char* waku_relay_unsubscribe(char* topic)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_relay_subscribechar-topic-char-jsonresp"><code>extern unsigned int waku_relay_subscribe(char* topic, char* jsonResp)</code></a></li>
+            <li><a href="#extern-unsigned-int-waku_relay_unsubscribechar-topic-char-jsonresp"><code>extern unsigned int waku_relay_unsubscribe(char* topic, char* jsonResp)</code></a></li>
             <li><a href="#extern-char-waku_relay_topics"><code>extern char* waku_relay_topics()</code></a></li>
           </ul>
         </li>
