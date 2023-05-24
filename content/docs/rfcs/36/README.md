@@ -37,8 +37,7 @@ structure, protobuf) if it brings limitations that need to be lifted.
 
 ### `JsonResponse` type
 
-All the API functions return a `JsonResponse` unless specified otherwise.
-`JsonResponse` is a `char *` whose format depends on whether the function was executed successfully or not.
+All the API functions return a `JsonResponse` unless specified otherwise. The returned `JsonResponse` is a `char *` whose format depends on whether the function was executed successfully or not. And it is important to notice that this returned `JsonReponse` is returned from the latest argument, instead of from the actual function's returned value.
 
 On failure:
 
@@ -458,62 +457,81 @@ If a key is `undefined`, or `null`, a default value will be set.
 - `seenMessagesTTLSeconds`: configures when a previously seen message ID can be forgotten about.
   Default `120` seconds
 
-### `extern char* waku_new(char* jsonConfig)`
+### `extern unsigned int waku_new(char* jsonConfig, char* jsonResp)`
 
 Instantiates a Waku node.
 
 **Parameters**
 
-1. `char* jsonConfig`: JSON string containing the options used to initialize a go-waku node.
+1. **[input]** `char* jsonConfig`: JSON string containing the options used to initialize a waku node.
    Type [`JsonConfig`](#jsonconfig-type).
    It can be `NULL` to use defaults.
+2. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
+
+   Ex1:
+
+   ```json
+   {
+     "result": true
+   }
+   ```
+   Ex2:
+   ```json
+   {
+     "error": "The node key is missing."
+   }
+   ```
+
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
-For example:
 
-```json
-{
-  "result": true
-}
-```
 
-### `extern char* waku_start()`
+### `extern unsigned int waku_start(char* jsonResp)`
 
-Start a Waku node mounting all the protocols that were enabled during the Waku node instantiation.
+Starts a Waku node mounting all the protocols that were enabled during the Waku node instantiation.
+
+**Parameters**
+1. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
+
+   Ex:
+
+   ```json
+   {
+     "result": true
+   }
+   ```
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
-For example:
-
-```json
-{
-  "result": true
-}
-```
-
-### `extern char* waku_stop()`
+### `extern unsigned int waku_stop(char* jsonResp)`
 
 Stops a Waku node.
 
+**Parameters**
+1. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
+
+   Ex:
+
+   ```json
+   {
+     "result": true
+   }
+   ```
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-For example:
-
-```json
-{
-  "result": true
-}
-```
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
 ### `extern char* waku_peerid()`
 
@@ -578,30 +596,41 @@ For example:
 }
 ```
 
-### `extern char* waku_connect(char* address, int timeoutMs)`
+### `extern unsigned int waku_connect(char* address, int timeoutMs, char* jsonResp)`
 
 Dial peer using a multiaddress.
 
 **Parameters**
 
-1. `char* address`: A multiaddress to reach the peer being dialed.
-2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+1. **[input]** `char* address`: A multiaddress to reach the peer being dialed.
+2. **[input]** `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+3. **[output]** [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field is set to `true`.
+
+   Ex1:
+
+   ```json
+   {
+      "result": true
+   }
+   ```
+   Ex2:
+
+   ```json
+   {
+      "error": "Timeout expired."
+   }
+   ```
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
-For example:
-
-```json
-{
-   "result": true
-}
-```
 
 ### `extern char* waku_connect_peerid(char* peerId, int timeoutMs)`
 
@@ -699,74 +728,69 @@ The list of peers has this format:
 
 ## Waku Relay
 
-### `extern char* waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding)`
+### `extern void waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, char* outContentTopic)`
 
 Create a content topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
-1. `char* applicationName`
-2. `unsigned int applicationVersion`
-3. `char* contentTopicName`
-4. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+1. **[input]** `char* applicationName`
+2. **[input]** `unsigned int applicationVersion`
+3. **[input]** `char* contentTopicName`
+4. **[input]** `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+5. **[output]** `char* outContentTopic`. Gets populated with a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
+   ```
+   /{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
+   ```
 
-**Returns**
 
-`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
-```
-/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
-```
-
-### `extern char* waku_pubsub_topic(char* name, char* encoding)`
+### `extern char* waku_pubsub_topic(char* name, char* encoding, char* outPubsubTopic)`
 
 Create a pubsub topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
-1. `char* name`
-2. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+1. **[input]** `char* name`
+2. **[input]** `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+3. **[output]** `char* outPubsubTopic`. Gets populated with a pubsub topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
+   ```
+   /waku/2/{topic-name}/{encoding}
+   ```
 
-**Returns**
 
-`char *` containing a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
-
-```
-/waku/2/{topic-name}/{encoding}
-```
-
-### `extern char* waku_default_pubsub_topic()`
+### `extern void waku_default_pubsub_topic(char* defaultPubsubTopic)`
 
 Returns the default pubsub topic used for exchanging waku messages defined in [RFC 10](https://rfc.vac.dev/spec/10/).
 
-**Returns**
+**Parameters**
+1. **[output]** `char* defaultPubsubTopic`. Gets populated with  `/waku/2/default-waku/proto`
 
-`char *` containing the default pubsub topic:
 
-```
-/waku/2/default-waku/proto
-```
-
-### `extern char* waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs)`
+### `extern unsinged int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, char* jsonResp)`
 
 Publish a message using Waku Relay.
 
 **Parameters**
 
-1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-2. `char* pubsubTopic`: pubsub topic on which to publish the message.
+1. **[input]** `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. **[input]** `char* pubsubTopic`: pubsub topic on which to publish the message.
    If `NULL`, it uses the default pubsub topic.
-3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+3. **[input]** `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. **[output]**: A [`JsonResponse`](#jsonresponse-type).
+If the execution is successful, the `result` field contains the message ID.
 
 Note: `messageJson.version` is overwritten to `0`.
 
 **Returns**
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
+
 
 ### `extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)`
 
@@ -840,27 +864,35 @@ For example:
 }
 ```
 
-### `extern char* waku_relay_subscribe(char* topic)`
+### `extern unsigned int waku_relay_subscribe(char* topic, char* jsonResp)`
 
 Subscribe to a Waku Relay pubsub topic to receive messages.
 
 **Parameters**
 
-1. `char* topic`: Pubsub topic to subscribe to. 
+1. **[input]** `char* topic`: Pubsub topic to subscribe to.
    If `NULL`, it subscribes to the default pubsub topic.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
+2. **[output]** `char* jsonResp`: A [`JsonResponse`](#jsonresponse-type).
 If the execution is successful, the `result` field is set to `true`.
 
-For example:
+   Ex1:
 
-```json
-{
-  "result": true
-}
-```
+   ```json
+   {
+     "result": true
+   }
+   ```
+   ```json
+   {
+     "error": "Cannot subscribe without Waku Relay enabled."
+   }
+   ```
+
+**Returns**
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+
 
 **Events**
 
@@ -887,28 +919,31 @@ For Example:
 }
 ```
 
-### `extern char* waku_relay_unsubscribe(char* topic)`
+### `extern unsigned int waku_relay_unsubscribe(char* topic, char* jsonResp)`
 
 Closes the pubsub subscription to a pubsub topic. No more messages will be received
 from this pubsub topic.
 
 **Parameters**
 
-1. `char* pusubTopic`: Pubsub topic to unsubscribe from.
+1. **[input]** `char* pusubTopic`: Pubsub topic to unsubscribe from.
   If `NULL`, unsubscribes from the default pubsub topic.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
+2. **[output]** A [`JsonResponse`](#jsonresponse-type).
 If the execution is successful, the `result` field is set to `true`.
 
-For example:
+   For example:
 
-```json
-{
-   "result": true
-}
-```
+   ```json
+   {
+      "result": true
+   }
+   ```
+
+**Returns**
+Unsigned int. Possible values:
+   - 1 - The operation was completed successfuly.
+   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+
 
 ### `extern char* waku_relay_topics()`
 
