@@ -98,6 +98,60 @@ The data MUST be serialized, compressed, and encoded using the following standar
 
 - [Protocol buffers version 3](https://protobuf.dev/reference/protobuf/proto3-spec/)
 
+## Implementation Pseudocode
+
+### Encoding
+
+Encoding the URL MUST be done in the following order:
+
+```
+raw_data = {User | Channel | Community}
+serialized_data = protobuf_serialize(raw_data)
+compressed_data = brotli_compress(serialized_data)
+encoded_url_data = base64url_encode(compressed_data)
+```
+
+The `encoded_url_data` is then used to generate a signature using the private key.
+
+### Signature Generation
+
+Generation of the signature MUST be done by using the private key and url data:
+
+```
+signature = secp256k1_sign(encoded_url_data)
+encoded_signature = base64url_encode(signature)
+```
+
+After the signature is generated, the `encoded_url_data` and `encoded_signature` MUST be sent over the wire.
+
+### Decoding
+
+Decoding the URL MUST be done in the following order:
+
+```
+url_data = base64url_decode(encoded_url_data)
+signature = base64url_decode(encoded_signature)
+decompressed_data = brotli_decompress(url_data)
+deserialized_data = protobuf_deserialize(decompressed_data)
+raw_data = deserialized_data.content
+```
+
+The `raw_data` is then used to construct the appropriate data structure (User, Channel, or Community).
+
+### Signature Verification
+
+Verification of the public key MUST be done by using the deserialized signature and url data:
+
+```
+signature = base64url_decode(encoded_signature)
+url_data = base64url_decode(encoded_url_data)
+public_key = secp256k1_recover(signature, url_data)
+hash = keccak256(url_data)
+verified = secp256k1_verify(signature, hash, public_key)
+```
+
+The `verified` boolean denotes whether the signature is valid or not.
+
 ## Example
 
 - See <https://github.com/status-im/status-web/pull/345/files>
