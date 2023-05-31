@@ -113,7 +113,7 @@ The data MUST be serialized, compressed, and encoded using the following standar
 - See <https://github.com/felicio/status-web/blob/825262c4f07a68501478116c7382862607a5544e/packages/status-js/src/utils/encode-url-data.compare.test.ts#L4>
 
 # Security Considerations
-- There is currently no method to verify the validity of the encoded data. This limitation is acknowledged in the current implementation.
+- The integrity of the encoded data is ensured by the signature, however, the authenticity of the data is not guaranteed.
 
 # Copyright
 
