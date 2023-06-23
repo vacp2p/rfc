@@ -324,26 +324,30 @@ is done via a register query:
 REGISTER{my-app, {QmA, AddrA}}
 ```
 
-The app name, `my-app` is used to encode a single shard in the form:
+The app name, `my-app` contains the encoding of a single shard in string form:
 
 ```
-<rs (utf8 encoded)> | <2-byte shard cluster index> | <2-byte shard index>
+"rs/"| to_string(<2-byte shard cluster index>) | "/" | to_string(<2-byte shard index>)
 ```
+
+The string conversion SHOULD remove leading zeros.
+
+> *Note:* Since the [ns](https://github.com/libp2p/specs/blob/master/rendezvous/README.md#protobuf) field is of type string,
+a more efficient byte encoding is not utilized.
 
 Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/h)),
 the register query would look like
 
 ```
-REGISTER{0x727300100002, {QmA, AddrA}}
+REGISTER{"rs/16/2", {QmA, AddrA}}
 ```
 
 Participation in further shards is registered with further queries; one register query per shard.
-(0x7273 is the encoding of `rs`.)
 
 A discovery query for nodes that are part of this shard would look like
 
 ```
-DISCOVER{ns: 0x727300100002}
+DISCOVER{ns: "rs/16/2"}
 ```
 
 # DoS Protection
