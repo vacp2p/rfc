@@ -10,8 +10,7 @@ contributors:
 
 **Content Topics**:
 
-- Public Key Broadcast: `/eth-pm/1/public-key/proto`,
-- Private Message: `/eth-pm/1/private-message/proto`.
+- Public Key Broadcast: `/eth-pm/2/public-key/proto`,
 
 This specification explains the Toy Ethereum Private Message protocol
 which enables a peer to send an encrypted message to another peer
@@ -33,9 +32,10 @@ Alice only knows Bob's Ethereum Address.
 
 Here are the variables used in the protocol and their definition:
 
-- `B` is Bob's Ethereum address (or account),
-- `b` is the private key of `B`, and is only known by Bob.
-- `B'` is Bob's Encryption Public Key, for which `b'` is the private key.
+- `0xA` is Alice's Ethereum address (or account),
+- `0xB` is Bob's Ethereum address (or account),
+- `sA` is Bob's public static key,
+- `sB` is Bob's public static key,
 - `M` is the private message that Alice sends to Bob.
 
 # Design Requirements
@@ -49,46 +49,29 @@ The proposed protocol MUST adhere to the following design requirements:
 5. Bob SHOULD be able to get `M` using [10/WAKU2](/spec/13),
 6. Participants only have access to their Ethereum Wallet via the Web3 API,
 7. Carole MUST NOT be able to read `M`'s content even if she is storing it or relaying it,
-8. [Waku Message Version 1](/spec/26/) Asymmetric Encryption is used for encryption purposes.
+8. Noise Protocols for Waku Payload Encryption](/spec/35/) is used for key exchange and encryption purposes.
 
 ## Limitations
 
-Alice's details are not included in the message's structure,
-meaning that there is no programmatic way for Bob to reply to Alice
-or verify her identity.
-
-Private messages are sent on the same content topic for all users.
+(TODO: Check if still true) Private messages are sent on the same content topic for all users.
 As the recipient data is encrypted, all participants must decrypt all messages which can lead to scalability issues.
 
-This protocol does not guarantee Perfect Forward Secrecy nor Future Secrecy:
-If Bob's private key is compromised, past and future messages could be decrypted.
-A solution combining regular [X3DH](https://www.signal.org/docs/specifications/x3dh/)
-bundle broadcast with [Double Ratchet](https://signal.org/docs/specifications/doubleratchet/) encryption would remove these limitations;
-See the [Status secure transport spec](https://specs.status.im/spec/5) for an example of a protocol that achieves this in a peer-to-peer setting.
+TODO: Specify what is prrovided re forwarded seccrecy thanks to the noise protocol framework.
+
+TODO: highlight that contact attempt can be revealed if static key is compromised.
 
 Bob MUST decide to participate in the protocol before Alice can send him a message.
 This is discussed in more in details in [Consideration for a non-interactive/uncoordinated protocol](#consideration-for-a-non-interactiveuncoordinated-protocol)
 
 # The protocol
 
-## Generate Encryption KeyPair
+## 1. Generate Static Key Pair
 
-First, Bob needs to generate a keypair for Encryption purposes.
+All participants to the protocol need to generate a static key pair.
 
-Bob SHOULD get 32 bytes from a secure random source as Encryption Private Key, `b'`.
-Then Bob can compute the corresponding SECP-256k1 Public Key, `B'`.
+To reduce the likelihood of a user loosing their static key pair, the static key pair SHOULD be generated from the user's Web3 wallet.
 
-# Broadcast Encryption Public Key
-
-For Alice to encrypt messages for Bob,
-Bob SHOULD broadcast his Encryption Public Key `B'`.
-To prove that the Encryption Public Key `B'` is indeed owned by the owner of Bob's Ethereum Account `B`,
-Bob MUST sign `B'` using `B`.
-
-## Sign Encryption Public Key
-
-To prove ownership of the Encryption Public Key,
-Bob must sign it using [EIP-712](https://eips.ethereum.org/EIPS/eip-712) v3,
+For Bob to generate his static key pair, he SHOULD sign the data below using [EIP-712](https://eips.ethereum.org/EIPS/eip-712) v3,
 meaning calling `eth_signTypedData_v3` on his Wallet's API.
 
 Note: While v4 also exists,
@@ -96,57 +79,102 @@ it is not available on all wallets and the features brought by v4 is not needed 
 
 The `TypedData` to be passed to `eth_signTypedData_v3` MUST be as follows, where:
 
-- `encryptionPublicKey` is Bob's Encryption Public Key, `B'`, in hex format, **without** `0x` prefix.
-- `bobAddress` is Bob's Ethereum address, corresponding to `B`, in hex format, **with** `0x` prefix.
+- `dAppFqdn`: The FQDN of the dApp requesting the signature. 
+
+```js
+const typedData = {
+    domain: {
+        chainId: 1,
+        name: dAppFqdn,
+        version: '1',
+    },
+    message: {
+        disclaimer: "The signature will be used to generate your static encryption keys, do ensure the domain name in the signature matches the URL of this dApp",
+    },
+    primaryType: 'GenerateStaticKeyPair',
+    types: {
+        EIP712Domain: [
+            { name: 'name', type: 'string' },
+            { name: 'version', type: 'string' },
+            { name: 'chainId', type: 'uint256' },
+        ],
+        GenerateStaticKeyPair: [
+            { name: 'disclaimer', type: 'string' },
+        ],
+    },
+}
+```
+
+The resulting signature `sig` MUST then be hashed using `SHA-256` to generate Bob's static private key: `secretB = sha256(sig)`.
+Finally, Bob's static public key `sB` can be calculated from `secretB` using Curve25519 algorithm.
+
+## 2. Broadcast Static Public Key
+
+Participants MAY broadcast their static public key associated to their Ethereum address to be reachable.
+In the scenario covered by this RFC, Bob MUST broadcast their static public key `SB` to be reachable by Alice.
+
+### Sign Encryption Public Key
+
+To prove ownership of `sB`,
+Bob MUST sign it using [EIP-712](https://eips.ethereum.org/EIPS/eip-712) v3,
+meaning calling `eth_signTypedData_v3` on his Wallet's API.
+
+Note: While v4 also exists,
+it is not available on all wallets and the features brought by v4 is not needed for the current use case.
+
+The `TypedData` to be passed to `eth_signTypedData_v3` MUST be as follows, where:
+
+- `sB` is Bob's static public key, in hex format, **without** `0x` prefix.
+- `bobAddress` is Bob's Ethereum address, `0xB`, in hex format, **with** `0x` prefix.
+- `dAppFqdn`: The FQDN of the dApp requesting the signature.
 
 ```js
 const typedData = {
     domain: {
       chainId: 1,
-      name: 'Ethereum Private Message over Waku',
+      name: dAppFqdn,
       version: '1',
     },
     message: {
-      encryptionPublicKey: encryptionPublicKey,
+      staticPublicKey: sB,
       ownerAddress: bobAddress,
     },
-    primaryType: 'PublishEncryptionPublicKey',
+    primaryType: 'PublishStaticPublicKey',
     types: {
       EIP712Domain: [
         { name: 'name', type: 'string' },
         { name: 'version', type: 'string' },
         { name: 'chainId', type: 'uint256' },
       ],
-      PublishEncryptionPublicKey: [
-        { name: 'encryptionPublicKey', type: 'string' },
+        PublishStaticPublicKey: [
+        { name: 'staticPublicKey', type: 'string' },
         { name: 'ownerAddress', type: 'string' },
       ],
     },
   }
 ```
 
-## Public Key Message
+### Static Public Key Message
 
 The resulting signature is then included in a `PublicKeyMessage`, where
 
-- `encryption_public_key` is Bob's Encryption Public Key `B'`, not compressed,
-- `eth_address` is Bob's Ethereum Address `B`,
+- `static_public_key` is Bob's static public key `sB`, not compressed,
+- `eth_address` is Bob's Ethereum Address `0xB`,
 - `signature` is the EIP-712 as described above.
 
 ```protobuf
 syntax = "proto3";
 
 message PublicKeyMessage {
-   bytes encryption_public_key = 1;
+   bytes static_public_key = 1;
    bytes eth_address = 2;
    bytes signature = 3;
 }
 ```
 
 This MUST be wrapped in a Waku Message version 0, with the Public Key Broadcast content topic.
-Finally, Bob SHOULD publish the message on Waku v2. 
 
-## Consideration for a non-interactive/uncoordinated protocol
+### Consideration for a non-interactive/uncoordinated protocol
 
 Alice has to get Bob's public Key to send a message to Bob.
 Because an Ethereum Address is part of the hash of the public key's account,
@@ -155,13 +183,13 @@ it is not enough in itself to deduce Bob's Public Key.
 This is why the protocol dictates that Bob MUST send his Public Key first,
 and Alice MUST receive it before she can send him a message.
 
-Moreover, nim-waku, the reference implementation of [13/WAKU2-STORE](/spec/13/),
-stores messages for a maximum period of 30 days.
-This means that Bob would need to broadcast his public key at least every 30 days to be reachable.
+Moreover, WAKU STORE only stores messages for a limited period of time (as setup by the node's operator).
+This means that Bob would need to broadcast his public key on a regular basis to ensure Alice can access it by querying
+a store node.
 
 Below we are reviewing possible solutions to mitigate this "sign up" step.
 
-### Retrieve the public key from the blockchain
+#### Retrieve the Ethereum Public Key from The Blockchain
 
 If Bob has signed at least one transaction with his account then his Public Key can be extracted from the transaction's ECDSA signature.
 The challenge with this method is that standard Web3 Wallet API does not allow Alice to specifically retrieve all/any transaction sent by Bob.
@@ -189,25 +217,52 @@ This could make sense in an NFT offer scenario:
 Users send offers to any NFT owner,
 NFT owner may decide at some point to participate in the protocol and retrieve previous offers.
 
-### Publishing the public in long term storage
+#### Publishing the Public Key in Long Term Storage
 
 Another improvement would be for Bob not having to re-publish his public key every 30 days or less.
 Similarly to above, if Bob stops publishing his public key then it may be an indication that he does not participate in the protocol anymore.
 
 In any case, the protocol could be modified to store the Public Key in a more permanent storage, such as a dedicated smart contract on the blockchain.
 
-# Send Private Message
+## 3. `XK1` Handshake
 
-Alice MAY monitor the Waku v2 to collect Ethereum Address and Encryption Public Key tuples.
-Alice SHOULD verify that the `signature`s of `PublicKeyMessage`s she receives are valid as per EIP-712.
-She SHOULD drop any message without a signature or with an invalid signature.
+Alice initiates a `XK1` handshake.
 
-Using Bob's Encryption Public Key, retrieved via [10/WAKU2](/spec/13), Alice MAY now send an encrypted message to Bob.
+```
+ XK1:
+    <-  s (Bob Broadcast Static Public Key)
+       ...
+    ->  e
+    <-  e, ee, es
+    ->  s, se (Alice to include Public Key Message with signature)
+    
+(): comment
+```
 
-If she wishes to do so, Alice MUST encrypt her message `M` using Bob's Encryption Public Key `B'`,
-as per [26/WAKU-PAYLOAD Asymmetric Encryption specs](/spec/26/#asymmetric).
+TODO: describe the protocol
 
-Alice SHOULD now publish this message on the Private Message content topic.
+TODO: define content topic
+
+Once Bob has received Alice static key `sA` and her `PublicKeyMessage`,
+he MUST verify that `sA` received via the handshake is the same as `static_public_key` from `PublicKeyMessage`.
+
+Once verified, the application can show this information to the user as a contact request feature coming from Alice's
+Ethereum address `0xA`.
+
+Note: Both parties having to exchange their Ethereum addresses to communicate is a privacy compromise.
+55/STATUS-1TO1-CHAT SHOULD be preferred if the application does not want to force users to reveal their address.
+
+Note: The handshake must be completed before Bob can _block_ Alice based on her Ethereum address.
+To reduce potential unnecessary handshake runs, then Alice could share her `PublicKeyMessage` as a first step.
+However, to stop any other party to use `Alice`'s `PublicKeyMessage` to initiate a handshake with Bob,
+this message should include recipient's details (Bob's address) in the signed data.
+This would mean that Alice would need to sign a message with her wallet before a contact request, slightly worsening the UX.
+
+##  4. Send Private Message
+
+Using Bob's _ephemeral key_ received during the `XK1` handshake, Alice can now send an encrypted message to Bob  's Encryption Public Key, retrieved via [10/WAKU2](/spec/13), Alice MAY now send an encrypted message to Bob as defined in 35/WAKU2-NOISE.
+
+TODO: Define content topic
 
 # Copyright
 
