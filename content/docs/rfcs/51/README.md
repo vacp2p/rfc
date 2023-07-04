@@ -171,6 +171,32 @@ The `[...]` in the example indicates 120 `0` bytes.
 This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
 (This is just for illustration purposes, a node that is only part of three shards should use the index list method specified above.)
 
+## Epoch
+
+This section decribe a way to increase the number of static shards in use. It serves as a temporary solution before auto-sharding.
+
+Content topic must be prefixed with an epoch number. This number must start at 0.
+
+```epoch/0/my_content_topic```
+
+Refer to [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topics) on how to structure your content topics.
+
+To compute the shard index,
+hash the content topic with SHA2-256 omiting the prefix then
+sum all previous epoch numbers,
+skip this number of bits in the hash then
+use the current epoch number of bits as your shard index.
+Offset your shard index by 49151 plus 2 exponent sum of all previous epoch.
+
+Example:
+- epoch 0 would map ALL content topic to shard 49152
+- epoch 1 would map to shard 49153 or 49154 based on the first bit of the content topic hash
+- epoch 2 would map to 49155-49159 based on bits 2 & 3 of the hash
+- epoch 3 would map to 49160-49168 based on bits 4-6 of the hash
+
+The epoch should be increased when relaying more messages on the shards of the current epoch becomes detrimental.
+Increasing the epoch should require consensus by the Waku community.
+
 # Automatic Sharding
 
 > *Note:* Automatic sharding is not yet part of this specification.
