@@ -197,6 +197,30 @@ Example:
 The epoch should be increased when relaying more messages on the shards of the current epoch becomes detrimental.
 Increasing the epoch should require consensus by the Waku community.
 
+## Hashing Floor
+
+This section decribe a way to increase the number of static shards in use. It serves as a temporary solution before auto-sharding.
+
+To compute the shard to use,
+hash the content topic with Sha2-256,
+take the first 14 bits as the index,
+divide by 16384 which is the total range,
+divide again by the number of shards in use then
+floor the result and finally 
+multiply by 16384 divided by number of shards to get the shard index.
+
+Example:
+ - Content hash start with 1101001111110…
+ - The first 14 bits equals to 6782
+ - 16384 divided by 16 shards in use equals 1024
+ - The floor of 6782 divided by 1024 is 6
+ - 6 multiplied by 1024 is 6144, the shard index to use.
+
+To minimize the amount of shard switch when increasing the number, use power of 2 shards in use.
+
+The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
+Increasing the total shards should require consensus by the Waku community.
+
 # Automatic Sharding
 
 > *Note:* Automatic sharding is not yet part of this specification.
