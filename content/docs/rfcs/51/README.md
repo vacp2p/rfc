@@ -6,7 +6,7 @@ status: raw
 category: Standards Track
 tags:
 editor: Daniel Kaiser <danielkaiser@status.im>
-contributors:
+contributors: Simon-Pierre Vivier <simvivier@status.im>
 ---
 
 # Abstract
@@ -171,9 +171,23 @@ The `[...]` in the example indicates 120 `0` bytes.
 This example node is part of shards `13`, `14`, and `45` in the Status main-net shard cluster (index 16).
 (This is just for illustration purposes, a node that is only part of three shards should use the index list method specified above.)
 
-## Epoch
+# Automatic Sharding
 
-This section decribe a way to increase the number of static shards in use. It serves as a temporary solution before auto-sharding.
+Autosharding is a method for managing decisions related to shards for small or new apps automatically.
+By sharing shards with peers of other apps, the total set of peers increase which increase anonymity.
+On the other hand, sharing a shard with other apps increase the number of unrelated messages a peer has to relay. 
+Autosharding is the default behaviour but opting out is always possible for apps that want more control.
+
+From an app point of view, a subscription to a content topic `waku2/xxx` using autosharding would look like:
+
+`subscribe("/waku2/xxx", auto=true)`
+
+The app is oblivious to the pubsub topic layer.
+(Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
+
+The following is a list of possible candidate for autosharding v1
+
+## Epoch
 
 Content topic must be prefixed with an epoch number. This number must start at 0.
 
@@ -182,7 +196,7 @@ Content topic must be prefixed with an epoch number. This number must start at 0
 Refer to [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topics) on how to structure your content topics.
 
 To compute the shard index,
-hash the content topic with SHA2-256 omiting the prefix then
+hash the content topic omiting the prefix then
 sum all previous epoch numbers,
 skip this number of bits in the hash then
 use the current epoch number of bits as your shard index.
@@ -197,12 +211,12 @@ Example:
 The epoch should be increased when relaying more messages on the shards of the current epoch becomes detrimental.
 Increasing the epoch should require consensus by the Waku community.
 
-## Hashing Floor
+## Hash Buckets
 
-This section decribe a way to increase the number of static shards in use. It serves as a temporary solution before auto-sharding.
+The shard index range is divided in buckets that hold content topics.
 
 To compute the shard to use,
-hash the content topic with Sha2-256,
+hash the content topic,
 take the first 14 bits as the index,
 divide by 16384 which is the total range,
 divide again by the number of shards in use then
@@ -212,49 +226,76 @@ multiply by 16384 divided by number of shards to get the shard index.
 Example:
  - Content hash start with 1101001111110…
  - The first 14 bits equals to 6782
- - 16384 divided by 16 shards in use equals 1024
+ - 16384 divided by 16 total shards equals 1024
  - The floor of 6782 divided by 1024 is 6
  - 6 multiplied by 1024 is 6144, the shard index to use.
 
-To minimize the amount of shard switch when increasing the number, use power of 2 shards in use.
+To minimize the amount of shard switch when increasing the number, use power of 2.
 
 The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
 Increasing the total shards should require consensus by the Waku community.
 
-# Automatic Sharding
+## Jump Consistent Hash
 
-> *Note:* Automatic sharding is not yet part of this specification.
-This section merely serves as an outlook.
-A specification of automatic sharding will be added to this document in a future version.
+Use a random number generator seeded with the content topic to probabilisticaly choose a shard.
 
-Automatic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
-It automatically maps Waku content topics to pubsub topics.
-Clients and protocols building on Waku relay only see content topics, while Waku relay internally manages the mapping.
-This provides both scaling as well as removes confusion about content and pubsub topics on the consumer side.
+For each shard,
+generate a random number in range [0, 1],
+if it's smaller than 1 divided by total shards,
+this shard is your new best bet,
+finish computing each shard then
+your last best bet is the shard to use.
 
-From an app point of view, a subscription to a content topic `waku2/xxx` using automatic sharding would look like:
+Example: RNG is seeded with the content topic hash, total shard is 3
+ - The first random number is 0.653
+ - This number is bigger than 1 divided by 3
+ - Best bet is the default shard 0
+ - Next random number is .278
+ - This number is smaller than 1 divided by 3
+ - New best bet is shard 2
 
-`subscribe("/waku2/xxx", auto=true)`
+This algorithm simple but doesn't take any other parameter.
 
-The app is oblivious to the pubsub topic layer.
-(Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
+The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
+Increasing the total shards should require consensus by the Waku community.
 
-*The basic idea behind automatic sharding*:
-Content topics are mapped using [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
-Like with DHTs, the hash space is split into parts,
-each covered by a Pubsub topic (mesh network) that carries content topics which are mapped into the respective part of the hash space.
+See [reseach paper](https://arxiv.org/pdf/1406.2294.pdf) for more info.
 
-There are (at least) two issues that have to be solved: *Hot spots* and *Discovery* (see next subsection).
+## Rendezvous Hashing
 
-Hot spots occur (similar to DHTs), when a specific mesh network becomes responsible for (several) large multicast groups (content topics).
+Also known as the Highest Random Weight (HRW) method. Hash the content topic with every shard then pick the highest hash value.
+
+For each shard,
+hash the content topic with the shard then
+sort the hash values,
+pick the highest one.
+
+Example:
+ - Shard 0 and the content topic hashed is 0101011100101
+ - Shard 1 and the content topic hashed is 1010101010111
+ - Shard 2 and the content topic hashed is 1111100010111
+ - Sort the hash values; 0101011100101, 1010101010111, 1111100010111
+ - Shard 2 has the biggest hash value
+
+It's possible to pick the second highest value, if for some reason the first is unavailable or even more than one shards. Further more, a weight can be given to shards to modify their resulting hash values. 
+
+See [research paper](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf) for more.
+
+## Problems
+
+### Hotspots
+
+Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
-Our research goal here is finding efficient ways of distribution.
-We could get inspired by the DHT literature.
-We also have to consider:
+
 If a node is part of many content topics which are all spread over different shards,
 the node will potentially be exposed to a lot of network traffic.
 
-## Discovery
+None of the proposed autsharding methods can solve this problem.
+
+A new version of autosharding based on network traffic mesurements could be designed to migrate content topics from shards to shards but would require further research and development.
+
+### Discovery
 
 For the discovery of automatic shards this document specifies two methods (the second method will be detailed in a future version of this document).
 
@@ -322,7 +363,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [51/WAKU2-RELAY-SHARDING](/spec/51/)
 * [Ethereum ENR sharding bit vector](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
 * [Ethereum discv5 specification](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md)
-* [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
+* [Jump Consistent hashing](https://arxiv.org/pdf/1406.2294.pdf)
+* [Rendezvous Hashing](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf)
 * [Research log: Waku Discovery](https://vac.dev/wakuv2-apd)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
 
