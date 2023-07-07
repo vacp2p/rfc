@@ -173,7 +173,7 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-Autosharding is a method for managing decisions related to shards for small or new apps automatically.
+Autosharding is a method of managing decisions related to shards for small or new apps automatically.
 By sharing shards with peers of other apps, the total set of peers increase which increase anonymity.
 On the other hand, sharing a shard with other apps increase the number of unrelated messages a peer has to relay. 
 Autosharding is the default behaviour but opting out is always possible for apps that want more control.
@@ -185,13 +185,13 @@ From an app point of view, a subscription to a content topic `waku2/xxx` using a
 The app is oblivious to the pubsub topic layer.
 (Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
 
-The following is a list of possible candidate for autosharding v1
+The following is a list of candidate for autosharding v1
 
 ## Epoch
 
 Content topic must be prefixed with an epoch number. This number must start at 0.
 
-```epoch/0/my_content_topic```
+```/waku2/epoch/0/my_content_topic```
 
 Refer to [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topics) on how to structure your content topics.
 
@@ -230,7 +230,7 @@ Example:
  - The floor of 6782 divided by 1024 is 6
  - 6 multiplied by 1024 is 6144, the shard index to use.
 
-To minimize the amount of shard switch when increasing the number, use power of 2.
+To minimize the amount of shard switch when increasing total shards, use power of 2.
 
 The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
 Increasing the total shards should require consensus by the Waku community.
@@ -253,8 +253,9 @@ Example: RNG is seeded with the content topic hash, total shard is 3
  - Next random number is .278
  - This number is smaller than 1 divided by 3
  - New best bet is shard 2
+ - Iteration is done and shard 2 is choosen
 
-This algorithm simple but doesn't take any other parameter.
+This algorithm simple and doesn't take any other parameter.
 
 The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
 Increasing the total shards should require consensus by the Waku community.
@@ -277,7 +278,7 @@ Example:
  - Sort the hash values; 0101011100101, 1010101010111, 1111100010111
  - Shard 2 has the biggest hash value
 
-It's possible to pick the second highest value, if for some reason the first is unavailable or even more than one shards. Further more, a weight can be given to shards to modify their resulting hash values. 
+It's possible to pick the second highest value, if for some reason the first is unavailable or even more than one shards. Further more, a weight can be given to shards to modify their chances. 
 
 See [research paper](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf) for more.
 
@@ -287,9 +288,6 @@ See [research paper](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96
 
 Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
-
-If a node is part of many content topics which are all spread over different shards,
-the node will potentially be exposed to a lot of network traffic.
 
 None of the proposed autsharding methods can solve this problem.
 
@@ -330,7 +328,7 @@ We will add more on security considerations in future versions of this document.
 ## Receiver Anonymity
 
 The strength of receiver anonymity, i.e. topic receiver unlinkablity,
-depends on the number of content topics (`k`) that get mapped onto a single pubsub topic (shard).
+depends on the number of content topics (`k`), as a proxy for the number of peers and messages, that get mapped onto a single pubsub topic (shard).
 For *named* and *static* sharding this responsibility is at the app protocol layer.
 
 ## Default Topic
