@@ -6,7 +6,8 @@ status: raw
 category: Standards Track
 tags:
 editor: Daniel Kaiser <danielkaiser@status.im>
-contributors: Simon-Pierre Vivier <simvivier@status.im>
+contributors:
+- Simon-Pierre Vivier <simvivier@status.im>
 ---
 
 # Abstract
