@@ -7,7 +7,7 @@ category: Standards Track
 tags: waku-application
 editor: Felicio Mununga <felicio@status.im>
 contributors:
-- Aaryamann Challani <aaryamann@status.im>
+  - Aaryamann Challani <aaryamann@status.im>
 ---
 
 # Abstract
@@ -71,19 +71,11 @@ message URLData {
     // Community, Channel, or User
     bytes content = 1;
 }
-
-// Field on CommunityDescription, CommunityChat and ContactCodeAdvertisement (described in 56/STATUS-COMMUNITIES)
-message URLParams {
-    // Encoded URL data
-    string encoded_url_data = 1;
-    // Signature of encoded URL data, to ensure authenticity
-    string encoded_signature = 2;
-}
 ```
 
 # Implementation
 
-The above wire format describes the data encoded in the URL. 
+The above wire format describes the data encoded in the URL.
 The data MUST be serialized, compressed, and encoded using the following standards:
 
 ## Encoding
@@ -113,44 +105,18 @@ encoded_url_data = base64url_encode(compressed_data)
 
 The `encoded_url_data` is then used to generate a signature using the private key.
 
-### Signature Generation
-
-Generation of the signature MUST be done by using the private key and url data:
-
-```
-signature = secp256k1_sign(encoded_url_data)
-encoded_signature = base64url_encode(signature)
-```
-
-After the signature is generated, the `encoded_url_data` and `encoded_signature` MUST be sent over the wire.
-
 ### Decoding
 
 Decoding the URL MUST be done in the following order:
 
 ```
 url_data = base64url_decode(encoded_url_data)
-signature = base64url_decode(encoded_signature)
 decompressed_data = brotli_decompress(url_data)
 deserialized_data = protobuf_deserialize(decompressed_data)
 raw_data = deserialized_data.content
 ```
 
 The `raw_data` is then used to construct the appropriate data structure (User, Channel, or Community).
-
-### Signature Verification
-
-Verification of the public key MUST be done by using the deserialized signature and url data:
-
-```
-signature = base64url_decode(encoded_signature)
-url_data = base64url_decode(encoded_url_data)
-public_key = secp256k1_recover(signature, url_data)
-hash = keccak256(url_data)
-verified = secp256k1_verify(signature, hash, public_key)
-```
-
-The `verified` boolean denotes whether the signature is valid or not.
 
 ## Example
 
@@ -166,8 +132,7 @@ The `verified` boolean denotes whether the signature is valid or not.
 
 - See <https://github.com/felicio/status-web/blob/825262c4f07a68501478116c7382862607a5544e/packages/status-js/src/utils/encode-url-data.compare.test.ts#L4>
 
-# Security Considerations
-- The integrity of the encoded data is ensured by the signature, however, the authenticity of the data is not guaranteed.
+<!-- # Security Considerations -->
 
 # Copyright
 
