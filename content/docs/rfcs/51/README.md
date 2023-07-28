@@ -39,10 +39,6 @@ This document also covers discovery of topic shards.
 It is RECOMMENDED for App protocols to follow the naming structure detailed in [23/WAKU2-TOPICS](/spec/23/).
 With named sharding, managing discovery falls into the responsibility of apps.
 
-The default Waku pubsub topic `/waku/2/default-waku/proto` can be seen as a named shard available to all app protocols.
-
-
-
 From an app protocol point of view, a subscription to a content topic `waku2/xxx` on a shard named /mesh/v1.1.1/xxx would look like:
 
 `subscribe("/waku2/xxx", "/mesh/v1.1.1/xxx")`
@@ -64,7 +60,6 @@ or reserved for automatic sharding (see next section).
 > *Note:* This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.
 
 App protocols can either choose to use global shards, or app specific shards.
-(In future versions of this document, automatic sharding, described in the next section, will become the default.)
 
 Like the [IANA ports](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml),
 shard clusters are divided into ranges:
@@ -174,114 +169,45 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-Autosharding is a method of managing decisions related to shards for small or new apps automatically.
+Autosharding is a method of managing decisions related to shards automatically.
 By sharing shards with peers of other apps, the total set of peers increase which increase anonymity.
 On the other hand, sharing a shard with other apps increase the number of unrelated messages a peer has to relay. 
-Autosharding is the default behaviour but opting out is always possible for apps that want more control.
-
-From an app point of view, a subscription to a content topic `waku2/xxx` using autosharding would look like:
-
-`subscribe("/waku2/xxx", auto=true)`
-
-The app is oblivious to the pubsub topic layer.
-(Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
-
-The following is a list of candidate for autosharding v1
-
-## Epoch
-
-Content topic must be prefixed with an epoch number. This number must start at 0.
-
-```/waku2/epoch/0/my_content_topic```
-
-Refer to [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topics) on how to structure your content topics.
-
-To compute the shard index,
-hash the content topic omiting the prefix then
-sum all previous epoch numbers,
-skip this number of bits in the hash then
-use the current epoch number of bits as your shard index.
-Offset your shard index by 49151 plus 2 exponent sum of all previous epoch.
-
-Example:
-- epoch 0 would map ALL content topic to shard 49152
-- epoch 1 would map to shard 49153 or 49154 based on the first bit of the content topic hash
-- epoch 2 would map to 49155-49159 based on bits 2 & 3 of the hash
-- epoch 3 would map to 49160-49168 based on bits 4-6 of the hash
-
-The epoch should be increased when relaying more messages on the shards of the current epoch becomes detrimental.
-Increasing the epoch should require consensus by the Waku community.
-
-## Hash Buckets
-
-The shard index range is divided in buckets that hold content topics.
-
-To compute the shard to use,
-hash the content topic,
-take the first 14 bits as the index,
-divide by 16384 which is the total range,
-divide again by the number of shards in use then
-floor the result and finally 
-multiply by 16384 divided by number of shards to get the shard index.
-
-Example:
- - Content hash start with 1101001111110…
- - The first 14 bits equals to 6782
- - 16384 divided by 16 total shards equals 1024
- - The floor of 6782 divided by 1024 is 6
- - 6 multiplied by 1024 is 6144, the shard index to use.
-
-To minimize the amount of shard switch when increasing total shards, use power of 2.
-
-The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
-Increasing the total shards should require consensus by the Waku community.
-
-## Jump Consistent Hash
-
-Use a random number generator seeded with the content topic to probabilisticaly choose a shard.
-
-For each shard,
-generate a random number in range [0, 1],
-if it's smaller than 1 divided by total shards,
-this shard is your new best bet,
-finish computing each shard then
-your last best bet is the shard to use.
-
-Example: RNG is seeded with the content topic hash, total shard is 3
- - The first random number is 0.653
- - This number is bigger than 1 divided by 3
- - Best bet is the default shard 0
- - Next random number is .278
- - This number is smaller than 1 divided by 3
- - New best bet is shard 2
- - Iteration is done and shard 2 is choosen
-
-This algorithm simple and doesn't take any other parameter.
-
-The total shards count in use should be increased when relaying more messages on the current shards becomes detrimental.
-Increasing the total shards should require consensus by the Waku community.
-
-See [reseach paper](https://arxiv.org/pdf/1406.2294.pdf) for more info.
+Autosharding is the default behaviour for shard choice but opting out is always possible for apps that want more control.
 
 ## Rendezvous Hashing
 
-Also known as the Highest Random Weight (HRW) method. Hash the content topic with every shard then pick the highest hash value.
+Also known as the Highest Random Weight (HRW) method, has many properties useful for shard selection.
+- Distributed agreement. Local only computation without communication.
+- Load balancing. Content topics are spread as equally as possible to shards.
+- Minimal disruption. Content topics switch shards infrequently.
+- Low overhead. Easy to compute.
 
 For each shard,
-hash the content topic with the shard then
-sort the hash values,
-pick the highest one.
+hash using Sha2-256 the concatenation of the content topic application (N bytes), version (N bytes), the cluster index (2 bytes) and the shard index (2 bytes)
+take the first 64 bits of the hash,
+divide the hash value by 2^64,
+compute the natural logarithm of this number then
+take the negative of the weight (default 1.0) divided by it.
+Finally, sort the values and pick the shard with the highest one.
 
-Example:
- - Shard 0 and the content topic hashed is 0101011100101
- - Shard 1 and the content topic hashed is 1010101010111
- - Shard 2 and the content topic hashed is 1111100010111
- - Sort the hash values; 0101011100101, 1010101010111, 1111100010111
- - Shard 2 has the biggest hash value
+## Content Topic Prefixes
+So that apps can manipulate the shard selection, 2 prefixes CAN be added to content topics. Generation & bias. When omitted default values are used.
 
-It's possible to pick the second highest value, if for some reason the first is unavailable or even more than one shards. Further more, a weight can be given to shards to modify their chances. 
+- Short format `/application/version/subject/encoding`
+- Long format `/generation/bias/application/version/subject/encoding`
 
-See [research paper](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf) for more.
+### Generation
+This number indirectly refer to the total number of shards of the Waku network. It start at 0 and monotonously increase.
+The first generation (zero) use ?TODO? shards in total.
+
+Community consensus should be reach before increasing the generation and shards in the network as it would affect everyone.
+
+Default: `0`
+
+### Bias
+Bias is used to skew the priority of shards via weights. Unspecified for now but may be used in the future.
+
+Default: `unbiased`
 
 ## Problems
 
@@ -290,7 +216,7 @@ See [research paper](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96
 Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
 
-None of the proposed autsharding methods can solve this problem.
+The current autosharding methods cannot solve this problem.
 
 A new version of autosharding based on network traffic mesurements could be designed to migrate content topics from shards to shards but would require further research and development.
 
@@ -299,9 +225,8 @@ A new version of autosharding based on network traffic mesurements could be desi
 For the discovery of automatic shards this document specifies two methods (the second method will be detailed in a future version of this document).
 
 The first method uses the discovery introduced above in the context of static shards.
-The index range `49152 - 65535` is reserved for automatic sharding.
-Each index can be seen as a hash bucket.
-Consistent hashing maps content topics in one of these buckets.
+Each cluster index can be seen as a hash bucket.
+Rendezvous hashing maps content topics in one of these buckets.
 
 The second discovery method will be a successor to the first method,
 but is planned to preserve the index range allocation.
@@ -331,22 +256,6 @@ We will add more on security considerations in future versions of this document.
 The strength of receiver anonymity, i.e. topic receiver unlinkablity,
 depends on the number of content topics (`k`), as a proxy for the number of peers and messages, that get mapped onto a single pubsub topic (shard).
 For *named* and *static* sharding this responsibility is at the app protocol layer.
-
-## Default Topic
-
-Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
-e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).
-
-Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
-See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
-
-Using another pubsub topic might lead to
-
-- weaker metadata protection
-- connectivity problems if there are not enough nodes within the respective pubsub mesh
-- store nodes might not store messages for the chosen pubsub topic
-
-Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.
 
 # Copyright
 
