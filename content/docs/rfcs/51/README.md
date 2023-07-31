@@ -53,7 +53,7 @@ Static shards are managed in shard clusters of 1024 shards per cluster.
 Waku static sharding can manage $2^16$ shard clusters.
 Each shard cluster is identified by its index (between $0$ and $2^16-1$).
 
-A specific shard cluster is either globally available to all apps (like the default pubsub topic),
+A specific shard cluster is either globally available to all apps,
 specific for an app protocol,
 or reserved for automatic sharding (see next section).
 
@@ -169,10 +169,8 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-Autosharding is a method of managing decisions related to shards automatically.
-By sharing shards with peers of other apps, the total set of peers increase which increase anonymity.
-On the other hand, sharing a shard with other apps increase the number of unrelated messages a peer has to relay. 
-Autosharding is the default behaviour for shard choice but opting out is always possible for apps that want more control.
+Autosharding select shards automatically and is the default behaviour for shard choice but opting out is always possible.
+Shards (pubsub topics) not longer have to be chosen, they are instead computed from content topics with the procedure below.
 
 ## Rendezvous Hashing
 
@@ -182,10 +180,16 @@ Also known as the Highest Random Weight (HRW) method, has many properties useful
 - Minimal disruption. Content topics switch shards infrequently.
 - Low overhead. Easy to compute.
 
+### Algorithm
+
 For each shard,
-hash using Sha2-256 the concatenation of the content topic application (N bytes), version (N bytes), the cluster index (2 bytes) and the shard index (2 bytes)
+hash using Sha2-256 the concatenation of
+the content topic application field (N UTF-8 bytes),
+version (N UTF-8 bytes),
+the cluster index (2 bytes) and
+the shard index (2 bytes)
 take the first 64 bits of the hash,
-divide the hash value by 2^64,
+divided by 2^64,
 compute the natural logarithm of this number then
 take the negative of the weight (default 1.0) divided by it.
 Finally, sort the values and pick the shard with the highest one.
@@ -197,12 +201,13 @@ So that apps can manipulate the shard selection, 2 prefixes CAN be added to cont
 - Long format `/generation/bias/application/version/subject/encoding`
 
 ### Generation
-This number indirectly refer to the total number of shards of the Waku network. It start at 0 and monotonously increase.
-The first generation (zero) use ?TODO? shards in total.
-
-Community consensus should be reach before increasing the generation and shards in the network as it would affect everyone.
+Monotonously increase and indirectly refer to the total number of shards of the Waku network. 
 
 Default: `0`
+
+The first generation (zero) use ?TODO? shards in total. This document will be updated with future generation shard numbers.
+
+Community consensus should be reach before increasing the generation and shards in the network as it would affect everyone.
 
 ### Bias
 Bias is used to skew the priority of shards via weights. Unspecified for now but may be used in the future.
@@ -271,7 +276,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [51/WAKU2-RELAY-SHARDING](/spec/51/)
 * [Ethereum ENR sharding bit vector](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
 * [Ethereum discv5 specification](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md)
-* [Jump Consistent hashing](https://arxiv.org/pdf/1406.2294.pdf)
 * [Rendezvous Hashing](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf)
 * [Research log: Waku Discovery](https://vac.dev/wakuv2-apd)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
