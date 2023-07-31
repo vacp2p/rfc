@@ -184,8 +184,8 @@ Also known as the Highest Random Weight (HRW) method, has many properties useful
 
 For each shard,
 hash using Sha2-256 the concatenation of
-the content topic application field (N UTF-8 bytes),
-version (N UTF-8 bytes),
+the content topic `application` field (N UTF-8 bytes),
+`version` (N UTF-8 bytes),
 the cluster index (2 bytes) and
 the shard index (2 bytes)
 take the first 64 bits of the hash,
@@ -195,22 +195,33 @@ take the negative of the weight (default 1.0) divided by it.
 Finally, sort the values and pick the shard with the highest one.
 
 ## Content Topic Prefixes
-So that apps can manipulate the shard selection, 2 prefixes CAN be added to content topics. Generation & bias. When omitted default values are used.
+So that apps can manipulate the shard selection, 2 prefixes CAN be added to content topics.
+Generation & bias.
+When omitted default values are used.
 
 - Short format `/application/version/subject/encoding`
 - Long format `/generation/bias/application/version/subject/encoding`
+
+### Topic design
+Content topics have 2 purposes filtering and routing.
+Filtering is done by changing the `subject` field as this part is not hashed, it will not affect routing (shard selection).
+The `application` and `version` fields do affect routing.
+Application designer should understand that using different `application` field has a cost.
+It increase the traffic a node has to relay when subscribed to all topics but can benefit nodes that only use a subset of topics.
 
 ### Generation
 Monotonously increase and indirectly refer to the total number of shards of the Waku network. 
 
 Default: `0`
 
-The first generation (zero) use ?TODO? shards in total. This document will be updated with future generation shard numbers.
+The first generation (zero) use 8 shards in total.
+This document will be updated with future generation shard numbers.
 
 Community consensus should be reach before increasing the generation and shards in the network as it would affect everyone.
 
 ### Bias
-Bias is used to skew the priority of shards via weights. Unspecified for now but may be used in the future.
+Bias is used to skew the priority of shards via weights.
+Unspecified for now but may be used in the future.
 
 Default: `unbiased`
 
