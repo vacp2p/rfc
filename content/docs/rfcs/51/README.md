@@ -169,7 +169,7 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-Autosharding select shards automatically and is the default behaviour for shard choice.
+Autosharding selects shards automatically and is the default behaviour for shard choice.
 The other choices being static and named sharding as seen in previous sections.
 Shards (pubsub topics) MUST be computed from content topics with the procedure below.
 
@@ -211,7 +211,7 @@ The shard with the highest value MUST be used.
 - `-1` divided by `-0.01` equals ~`99.5`
 - Shard 6 has the priority value 99.5
 
-## Content Topics Format For Autosharding
+## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
 In addition, 2 prefixes MAY be added to content topics.
 Generation & bias.
@@ -224,7 +224,7 @@ Bias default value is `unbiased`.
 `/0/unbiased/myapp/1/mysub/cbor`
 
 ### Generation
-The generation number monotonously increase and indirectly refer to the total number of shards of the Waku network.
+The generation number monotonously increases and indirectly refers to the total number of shards of the Waku Network.
 
 The first generation (zero) MUST use 8 shards in total.
 The cluster index is 1 and the indices of each shards are numbered 0 to 7.
@@ -241,12 +241,12 @@ Filtering is done by changing the `subject` field.
 As this part is not hashed, it will not affect routing (shard selection).
 The `application` and `version` fields do affect routing.
 Using multiple content topics with different `application` field has advantages and disadvantages.
-It increase the traffic a relay node is subjected to when subscribed to all topics.
-It also allow relay and light nodes to subscribe to a subset of all topics.
+It increases the traffic a relay node is subjected to when subscribed to all topics.
+It also allows relay and light nodes to subscribe to a subset of all topics.
 
 ## Problems
 
-### Hotspots
+### Hot Spots
 
 Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
