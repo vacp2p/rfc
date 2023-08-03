@@ -1,4 +1,4 @@
----
+﻿---
 slug: 51
 title: 51/WAKU2-RELAY-SHARDING
 name: Waku v2 Relay Sharding
@@ -122,7 +122,7 @@ The index list SHOULD be used for nodes that participante in fewer than 64 shard
 the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
 Nodes MUST NOT use both index list (`rs`) and bit vector (`rsv`) in a single ENR.
 ENRs with both `rs` and `rsv` keys SHOULD be ignored.
-Nodes MAY interprete `rs` in such ENRs, but MUST ignore `rsv`.
+Nodes MAY interpret `rs` in such ENRs, but MUST ignore `rsv`.
 
 ### Index List
 
@@ -169,13 +169,13 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-Autosharding selects shards automatically and is the default behaviour for shard choice.
+Autosharding selects shards automatically and is the default behavior for shard choice.
 The other choices being static and named sharding as seen in previous sections.
-Shards (pubsub topics) MUST be computed from content topics with the procedure below.
+Shards (pubsub topics) SHOULD be computed from content topics with the procedure below.
 
 ## Rendezvous Hashing
 
-Also known as the Highest Random Weight (HRW) method, has many properties useful for shard selection.
+Also known as the Highest Random Weight (H.R.W.) method, has many properties useful for shard selection.
 - Distributed agreement. Local only computation without communication.
 - Load balancing. Content topics are spread as equally as possible to shards.
 - Minimal disruption. Content topics switch shards infrequently.
@@ -185,8 +185,8 @@ Also known as the Highest Random Weight (HRW) method, has many properties useful
 
 For each shard,
 hash using Sha2-256 the concatenation of
-the content topic `application` field (N UTF-8 bytes),
-`version` (N UTF-8 bytes),
+the content topic `application` field (N U.T.F.-8 bytes),
+`version` (N U.T.F.-8 bytes),
 the `cluster` index (2 bytes) and
 the `shard` index (2 bytes)
 take the first 64 bits of the hash,
@@ -195,7 +195,7 @@ compute the natural logarithm of this number then
 take the negative of the weight (default 1.0) divided by it.
 Finally, sort the shard value pairs.
 
-The shard with the highest value MUST be used.
+The shard with the highest value SHOULD be used.
 
 ### Example
 | Field | Value | Hex |
@@ -207,7 +207,7 @@ The shard with the highest value MUST be used.
 
 - SHA2-256 of `0x6d796170703100010006` is `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2`
 - The first 64 bits `0xfdac5fb315b791cc` divided by `0xffffffffffffffff` is ~`0.99`
-- The natual logarithm of `0.99` is ~`-0.01`
+- The natural logarithm of `0.99` is ~`-0.01`
 - `-1` divided by `-0.01` equals ~`99.5`
 - Shard 6 has the priority value 99.5
 
@@ -219,9 +219,13 @@ When omitted default values are used.
 Generation default value is `0`.
 Bias default value is `unbiased`.
 
+- The full length format is `{generation}/{bias}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+- The short length format is `/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+
 ### Example
 
-`/0/unbiased/myapp/1/mysub/cbor`
+- Full length `/0/unbiased/myapp/1/mytopic/cbor`
+- Short length `/myapp/1/mytopic/cbor`
 
 ### Generation
 The generation number monotonously increases and indirectly refers to the total number of shards of the Waku Network.
@@ -229,18 +233,18 @@ The generation number monotonously increases and indirectly refers to the total 
 The first generation (zero) MUST use 8 shards in total.
 The cluster index is 1 and the indices of each shards are numbered 0 to 7.
 
-This document will be updated for future generation.
+This document will be updated for future generations.
 
 ### Bias
 Bias is used to skew the priority of shards via weights.
 Other biases than `unbiased` are unspecified for now but may be used in the future.
 
 ### Topic Design
-Content topics have 2 purposes filtering and routing.
-Filtering is done by changing the `subject` field.
+Content topics have 2 purposes: filtering and routing.
+Filtering is done by changing the `{content-topic-name}` field.
 As this part is not hashed, it will not affect routing (shard selection).
-The `application` and `version` fields do affect routing.
-Using multiple content topics with different `application` field has advantages and disadvantages.
+The `{application-name}` and `{version-of-the-application}` fields do affect routing.
+Using multiple content topics with different `{application-name}` field has advantages and disadvantages.
 It increases the traffic a relay node is subjected to when subscribed to all topics.
 It also allows relay and light nodes to subscribe to a subset of all topics.
 
