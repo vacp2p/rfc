@@ -176,21 +176,21 @@ Shards (pubsub topics) SHOULD be computed from content topics with the procedure
 ## Rendezvous Hashing
 
 Also known as the Highest Random Weight (H.R.W.) method, has many properties useful for shard selection.
-- Distributed agreement. Local only computation without communication.
-- Load balancing. Content topics are spread as equally as possible to shards.
-- Minimal disruption. Content topics switch shards infrequently.
-- Low overhead. Easy to compute.
+- Local only computation without communication.
+- Content topics are spread as equally as possible to shards.
+- Content topics switch shards infrequently.
+- Easy to compute.
 
 ### Algorithm
 
 For each shard,
 hash using Sha2-256 the concatenation of
-the content topic `application` field (N U.T.F.-8 bytes),
-`version` (N U.T.F.-8 bytes),
+the content topic `application` field (UTF-8 string of N bytes),
+`version` (UTF-8 string of N bytes),
 the `cluster` index (2 bytes) and
 the `shard` index (2 bytes)
 take the first 64 bits of the hash,
-divided by 2^64,
+divided by 2^64-1,
 compute the natural logarithm of this number then
 take the negative of the weight (default 1.0) divided by it.
 Finally, sort the shard value pairs.
@@ -208,8 +208,10 @@ The shard with the highest value SHOULD be used.
 - SHA2-256 of `0x6d796170703100010006` is `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2`
 - The first 64 bits `0xfdac5fb315b791cc` divided by `0xffffffffffffffff` is ~`0.99`
 - The natural logarithm of `0.99` is ~`-0.01`
-- `-1` divided by `-0.01` equals ~`99.5`
-- Shard 6 has the priority value 99.5
+- `-1` divided by `-0.01` equals ~`100`
+- Shard 6 has the priority value 100
+
+For gen0, the shards have priority values; 0.57, -2.18, 1.51, 1.14, 0.65, 0.72, 100, 0.54, content topic `/myapp/1/myname/cbor` should use shard 6
 
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
@@ -219,7 +221,7 @@ When omitted default values are used.
 Generation default value is `0`.
 Bias default value is `unbiased`.
 
-- The full length format is `{generation}/{bias}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+- The full length format is `/{generation}/{bias}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 - The short length format is `/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 
 ### Example
@@ -255,17 +257,15 @@ It also allows relay and light nodes to subscribe to a subset of all topics.
 Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
 
-The current autosharding method cannot solve this problem.
+The current autosharding method does not solve this problem.
 
-A new version of autosharding based on network traffic measurements could be designed but would require further research and development.
+> *Note:* Automatic sharding based on network traffic measurements to avoid hot spots in not part of this specification.
 
 ### Discovery
 
 For the discovery of automatic shards this document specifies two methods (the second method will be detailed in a future version of this document).
 
 The first method uses the discovery introduced above in the context of static shards.
-Each cluster index can be seen as a hash bucket.
-Rendezvous hashing maps content topics in one of these buckets.
 
 The second discovery method will be a successor to the first method,
 but is planned to preserve the index range allocation.
