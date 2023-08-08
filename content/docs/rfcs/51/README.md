@@ -230,12 +230,7 @@ Generation default value is `0`.
 ### Generation
 The generation number monotonously increases and indirectly refers to the total number of shards of the Waku Network.
 
-The first generation (zero) MUST use 8 shards in total.
-The cluster index is 1 and the indices of each shards are numbered 0 to 7.
-
-This document will be updated for future generations.
-
-<!-- Create a new RFC for generations when this one reach draft or stable status -->
+<!-- Create a new RFC for each generation spec. -->
 
 ### Topic Design
 Content topics have 2 purposes: filtering and routing.
