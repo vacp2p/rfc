@@ -237,6 +237,8 @@ The cluster index is 1 and the indices of each shards are numbered 0 to 7.
 
 This document will be updated for future generations.
 
+<!-- Create a new RFC for generations when this one reach draft or stable status -->
+
 ### Bias
 Bias is used to skew the priority of shards via weights.
 Other biases than `unbiased` are unspecified for now but may be used in the future.
