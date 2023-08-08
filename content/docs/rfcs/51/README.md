@@ -215,18 +215,16 @@ For gen0, the shards have priority values; 0.57, -2.18, 1.51, 1.14, 0.65, 0.72, 
 
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
-In addition, 2 prefixes MAY be added to content topics.
-Generation & bias.
+In addition, a generation prefix MAY be added to content topics.
 When omitted default values are used.
 Generation default value is `0`.
-Bias default value is `unbiased`.
 
-- The full length format is `/{generation}/{bias}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+- The full length format is `/{generation}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 - The short length format is `/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 
 ### Example
 
-- Full length `/0/unbiased/myapp/1/mytopic/cbor`
+- Full length `/0/myapp/1/mytopic/cbor`
 - Short length `/myapp/1/mytopic/cbor`
 
 ### Generation
@@ -238,10 +236,6 @@ The cluster index is 1 and the indices of each shards are numbered 0 to 7.
 This document will be updated for future generations.
 
 <!-- Create a new RFC for generations when this one reach draft or stable status -->
-
-### Bias
-Bias is used to skew the priority of shards via weights.
-Other biases than `unbiased` are unspecified for now but may be used in the future.
 
 ### Topic Design
 Content topics have 2 purposes: filtering and routing.
