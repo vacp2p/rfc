@@ -176,24 +176,20 @@ Shards (pubsub topics) SHOULD be computed from content topics with the procedure
 ### Algorithm
 
 Hash using Sha2-256 the concatenation of
-the content topic `application` field (UTF-8 string of N bytes),
-`version` (UTF-8 string of N bytes),
-the `cluster` index (2 bytes) and
-the `shard` index (2 bytes)
-bitwise AND by the number of shards in the network minus 1,
+the content topic `application` field (UTF-8 string of N bytes) and
+the `version` (UTF-8 string of N bytes).
+The shard to use is the bitwise AND of the hash by the number of shards in the network minus 1,
 
 ### Example
 | Field           | Value  | Hex 
 |---              |---     |---          
 | `application`   | "myapp"| 0x6d79617070
 | `version`       | "1"    | 0x31
-| `cluster`       | 1      | 0x0001
-| `shard`         | 6      | 0x0006
-| `network shards`| 8      | 0x8
+| `network shards`| "8"    | 0x8
 
-- SHA2-256 of `0x6d796170703100010006` is `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2`
-- `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2` AND `7`(8-1) equals `2`
-- The shard to use has index 2
+- SHA2-256 of `0x6d7961707031` is `8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928`
+- `8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928` AND `7`(8-1) equals `0`
+- The shard to use has index 0
 
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
