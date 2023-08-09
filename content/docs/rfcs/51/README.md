@@ -211,7 +211,8 @@ The shard with the highest value SHOULD be used.
 - `-1` divided by `-0.01` equals ~`100`
 - Shard 6 has the priority value 100
 
-For gen0, the shards have priority values; 0.57, -2.18, 1.51, 1.14, 0.65, 0.72, 100, 0.54, content topic `/myapp/1/myname/cbor` should use shard 6
+With the same method, the other priority values would be; 0.57, -2.18, 1.51, 1.14, 0.65, 0.72, 0.54
+Content topic `/myapp/1/myname/cbor` should use shard 6 because it has the highest value.
 
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
