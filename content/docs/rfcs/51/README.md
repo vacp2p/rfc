@@ -173,46 +173,27 @@ Autosharding selects shards automatically and is the default behavior for shard 
 The other choices being static and named sharding as seen in previous sections.
 Shards (pubsub topics) SHOULD be computed from content topics with the procedure below.
 
-## Rendezvous Hashing
-
-Also known as the Highest Random Weight (H.R.W.) method, has many properties useful for shard selection.
-- Local only computation without communication.
-- Content topics are spread as equally as possible to shards.
-- Content topics switch shards infrequently.
-- Easy to compute.
-
 ### Algorithm
 
-For each shard,
-hash using Sha2-256 the concatenation of
+Hash using Sha2-256 the concatenation of
 the content topic `application` field (UTF-8 string of N bytes),
 `version` (UTF-8 string of N bytes),
 the `cluster` index (2 bytes) and
 the `shard` index (2 bytes)
-take the first 64 bits of the hash,
-divided by 2^64-1,
-compute the natural logarithm of this number then
-take the negative of the weight (default 1.0) divided by it.
-Finally, sort the shard value pairs.
-
-The shard with the highest value SHOULD be used.
+bitwise AND by the number of shards in the network minus 1,
 
 ### Example
-| Field | Value | Hex |
-|---    |---    |---  |
-| `application`| "myapp"| 0x6d79617070|
-| `version`    | "1"    | 0x31
-| `cluster`    | 1      | 0x0001
-| `shard`      | 6      | 0x0006
+| Field           | Value  | Hex 
+|---              |---     |---          
+| `application`   | "myapp"| 0x6d79617070
+| `version`       | "1"    | 0x31
+| `cluster`       | 1      | 0x0001
+| `shard`         | 6      | 0x0006
+| `network shards`| 8      | 0x8
 
 - SHA2-256 of `0x6d796170703100010006` is `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2`
-- The first 64 bits `0xfdac5fb315b791cc` divided by `0xffffffffffffffff` is ~`0.99`
-- The natural logarithm of `0.99` is ~`-0.01`
-- `-1` divided by `-0.01` equals ~`100`
-- Shard 6 has the priority value 100
-
-With the same method, the other priority values would be; 0.57, -2.18, 1.51, 1.14, 0.65, 0.72, 0.54
-Content topic `/myapp/1/myname/cbor` should use shard 6 because it has the highest value.
+- `0xfdac5fb315b791cca3ccde738ebb0b8d2742519fce1086f2a3d2409cb22a7dd2` AND `7`(8-1) equals `2`
+- The shard to use has index 2
 
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
