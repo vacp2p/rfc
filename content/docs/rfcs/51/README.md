@@ -178,17 +178,17 @@ Shards (pubsub topics) SHOULD be computed from content topics with the procedure
 Hash using Sha2-256 the concatenation of
 the content topic `application` field (UTF-8 string of N bytes) and
 the `version` (UTF-8 string of N bytes).
-The shard to use is the bitwise AND of the hash by the number of shards in the network minus 1,
+The shard to use is the modulo of the hash by the number of shards in the network.
 
 ### Example
 | Field           | Value  | Hex 
 |---              |---     |---          
 | `application`   | "myapp"| 0x6d79617070
 | `version`       | "1"    | 0x31
-| `network shards`| "8"    | 0x8
+| `network shards`|   8    | 0x8
 
-- SHA2-256 of `0x6d7961707031` is `8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928`
-- `8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928` AND `7`(8-1) equals `0`
+- SHA2-256 of `0x6d7961707031` is `0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928`
+- `0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928` MOD `8` equals `0`
 - The shard to use has index 0
 
 ## Content Topics Format for Autosharding
