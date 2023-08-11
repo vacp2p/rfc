@@ -35,35 +35,21 @@ structure, protobuf) if it brings limitations that need to be lifted.
 
 ## General
 
-### `JsonResponse` type
+### `WakuCallBack` type
 
-All the API functions return a `JsonResponse` unless specified otherwise. The returned `JsonResponse` is a `char *` whose format depends on whether the function was executed successfully or not. And it is important to notice that this returned `JsonReponse` is returned from the latest argument, instead of from the actual function's returned value.
-
-On failure:
-
-```ts
-{
-    error: string;
-}
+All the API functions require passing callbacks which will be executed depending on the result of the execution result.
+These callbacks are defined as
+```c
+typedef void (*WakuCallBack) (const char* msg, size_t len_0);
 ```
+With `msg` containing a `\0` terminated string, and `len_0` the length of this string. The format of the data sent to these callbacks
+will depend on the function being executed. The data can be characters, numeric or json.
 
-For example: 
-
-```json
-{
-  "error": "the error message"
-}
-```
-
-On success:
-
-```ts
-{
-    result: any
-}
-```
-
-The type of the `result` object depends on the function it was returned by. 
+### Status Codes
+The API functions return an integer with status codes depending on the execution result. The following status codes are defined:
+- `0` - Success
+- `1` - Error
+- `2` - Missing callback
 
 ### `JsonMessage` type
 
@@ -230,7 +216,6 @@ For example:
 {
   "type": "message",
   "event": {
-    "subscriptionId": 1,
     "pubsubTopic": "/waku/2/default-waku/proto",
     "messageId": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
     "wakuMessage": {
@@ -263,15 +248,14 @@ Type of `event` field for a `message` event:
 - `messageId`: The message id.
 - `wakuMessage`: The message in [`JsonMessage`](#jsonmessage-type) format.
 
-### `extern void waku_set_event_callback(void* cb)`
+### `extern void waku_set_event_callback(WakuCallBack cb)`
 
 Register callback to act as event handler and receive application signals,
 which are used to react to asynchronous events in Waku.
 
 **Parameters**
 
-1. `void* cb`: callback that will be executed when an async event is emitted.
-  The function signature for the callback should be `void myCallback(char* jsonSignal)`
+1. `WakuCallBack cb`: callback that will be executed when an async event is emitted.
 
 ## Node management
 
@@ -290,7 +274,7 @@ interface JsonConfig {
     relayTopics?: Array<string>;
     gossipsubParameters?: GossipSubParameters;
     minPeersToPublish?: number
-    filter?: boolean;
+    legacyFilter?: boolean;
     discV5?: boolean;
     discV5BootstrapNodes?: Array<string>;
     discV5UDPPort?: number;
@@ -298,6 +282,8 @@ interface JsonConfig {
     databaseURL?: string;
     storeRetentionMaxMessages?: number;
     storeRetentionTimeSeconds?: number;
+    websocket?: Websocket;
+    dns4DomainName?: string;
 }
 ```
 
@@ -327,7 +313,7 @@ If a key is `undefined`, or `null`, a default value will be set.
 - `gossipSubParameters`: custom gossipsub parameters. See `GossipSubParameters` section for defaults
 - `minPeersToPublish`: The minimum number of peers required on a topic to allow broadcasting a message.
   Default `0`.
-- `filter`: Enable filter protocol.
+- `legacyFilter`: Enable Legacy Filter protocol.
   Default `false`.
 - `discV5`: Enable DiscoveryV5.
   Default `false`
@@ -342,6 +328,9 @@ If a key is `undefined`, or `null`, a default value will be set.
   Default `10000`
 - `storeRetentionTimeSeconds`: max number of seconds that a message will be persisted in the database.
   Default `2592000` (30d)
+- `websocket`: custom websocket support parameters. See `Websocket` section for defaults
+- `dns4DomainName`: the domain name resolving to the node's public IPv4 address.
+
 For example:
 ```json
 {
@@ -457,124 +446,129 @@ If a key is `undefined`, or `null`, a default value will be set.
 - `seenMessagesTTLSeconds`: configures when a previously seen message ID can be forgotten about.
   Default `120` seconds
 
-### `extern unsigned int waku_new(char* jsonConfig, char* jsonResp)`
+
+### `Websocket` type
+
+Type holding custom websocket support configuration:
+
+```ts
+interface Websocket {
+    enabled?: bool;
+    host?: string;
+    port?: number;
+    secure?: bool;
+    certPath?: string;
+    keyPath?: string;
+}
+```
+
+Fields: 
+
+All fields are optional.
+If a key is `undefined`, or `null`, a default value will be set. If using `secure` websockets support, `certPath` and `keyPath` become mandatory attributes. Unless selfsigned certificates are used, it will probably make sense in the `JsonConfiguration` to specify the domain name used in the certificate in the `dns4DomainName` attribute.
+
+- `enabled`:  indicates if websockets support will be enabled 
+  Default `false`
+- `host`: listening address for websocket connections
+  Default `0.0.0.0`
+- `port`: TCP listening port for websocket connection (`0` for random, binding to `443` requires root access)
+  Default `60001`, if secure websockets support is enabled, the default is `6443“`
+- `secure`: enable secure websockets support
+  Default `false`
+- `certPath`: secure websocket certificate path
+- `keyPath`: secure websocket key path
+
+
+### `extern int waku_new(char* jsonConfig, WakuCallBack onErrCb)`
 
 Instantiates a Waku node.
 
 **Parameters**
 
-1. **[input]** `char* jsonConfig`: JSON string containing the options used to initialize a waku node.
+1. `char* jsonConfig`: JSON string containing the options used to initialize a waku node.
    Type [`JsonConfig`](#jsonconfig-type).
    It can be `NULL` to use defaults.
-2. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
-
-   Ex1:
-
-   ```json
-   {
-     "result": true
-   }
-   ```
-   Ex2:
-   ```json
-   {
-     "error": "The node key is missing."
-   }
-   ```
-
+2. `WakuCallBack onErrCb`: [`WakuCallBack`](#wakucallback-type). Callback to be executed if the function fails
 
 **Returns**
 
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-
-
-### `extern unsigned int waku_start(char* jsonResp)`
+### `extern int waku_start(WakuCallBack onErrCb)`
 
 Starts a Waku node mounting all the protocols that were enabled during the Waku node instantiation.
 
 **Parameters**
-1. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
-
-   Ex:
-
-   ```json
-   {
-     "result": true
-   }
-   ```
+1. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-### `extern unsigned int waku_stop(char* jsonResp)`
+### `extern int waku_stop(WakuCallBack onErrCb)`
 
 Stops a Waku node.
 
 **Parameters**
-1. **[output]** `char* jsonResp`: [`JsonResponse`](#jsonresponse-type). Provides information indicating whether the operation succeded or not. In case or error, it tries to give as much detail as possible.
-
-   Ex:
-
-   ```json
-   {
-     "result": true
-   }
-   ```
+1. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-### `extern char* waku_peerid()`
+### `extern int waku_peerid(WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Get the peer ID of the waku node.
 
+**Parameters**
+
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the peer ID as a `string` (base58 encoded).
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the base58 encoded peer ID, for example `QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP`
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-For example:
-
-```json
-{
-  "result": "QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP"
-}
-```
-
-### `extern char* waku_listen_addresses()`
+### `extern int waku_listen_addresses(WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Get the multiaddresses the Waku node is listening to.
 
+**Parameters**
+
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains an array of multiaddresses.
-The multiaddresses are `string`s.
-
-For example:
-
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a json array of multiaddresses.
+The multiaddresses are `string`s. For example:
 ```json
-{
-  "result": [
+[
     "/ip4/127.0.0.1/tcp/30303",
     "/ip4/1.2.3.4/tcp/30303",
     "/dns4/waku.node.example/tcp/8000/wss"
-  ]
-}
+]
 ```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` and `onErrCb` callback
+
 
 ## Connecting to peers
 
-### `extern char* waku_add_peer(char* address, char* protocolId)`
+### `extern int waku_add_peer(char* address, char* protocolId, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Add a node multiaddress and protocol to the waku node's peerstore.
 
@@ -582,63 +576,43 @@ Add a node multiaddress and protocol to the waku node's peerstore.
 
 1. `char* address`: A multiaddress (with peer id) to reach the peer being added.
 2. `char* protocolId`: A protocol we expect the peer to support.
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the peer ID as a base58 `string` of the peer that was added.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb`  will receive the base 58 peer ID of the peer that was added.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-For example:
-
-```json
-{
-  "result": "QmWjHKUrXDHPCwoWXpUZ77E8o6UbAoTTZwf1AD1tDC4KNP"
-}
-```
-
-### `extern unsigned int waku_connect(char* address, int timeoutMs, char* jsonResp)`
+### `extern int waku_connect(char* address, int timeoutMs, WakuCallBack onErrCb)`
 
 Dial peer using a multiaddress.
 
 **Parameters**
 
-1. **[input]** `char* address`: A multiaddress to reach the peer being dialed.
-2. **[input]** `int timeoutMs`: Timeout value in milliseconds to execute the call.
+1. `char* address`: A multiaddress to reach the peer being dialed.
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
-3. **[output]** [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-   Ex1:
-
-   ```json
-   {
-      "result": true
-   }
-   ```
-   Ex2:
-
-   ```json
-   {
-      "error": "Timeout expired."
-   }
-   ```
+3. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-
-### `extern char* waku_connect_peerid(char* peerId, int timeoutMs)`
+### `extern int waku_connect_peerid(char* peerId, int timeoutMs, WakuCallBack onErrCb)`
 
 Dial peer using its peer ID.
 
 **Parameters**
 
-1`char* peerID`: Peer ID to dial.
+1. `char* peerID`: Peer ID to dial.
    The peer must be already known.
    It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
    or previously dialed with [`waku_connect`](#extern-char-waku_connectchar-address-int-timeoutms).
@@ -646,203 +620,158 @@ Dial peer using its peer ID.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+3. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-For example:
-
-```json
-{
-   "result": true
-}
-```
-
-### `extern char* waku_disconnect(char* peerId)`
+### `extern int waku_disconnect(char* peerId, WakuCallBack onErrCb)`
 
 Disconnect a peer using its peerID
 
 **Parameters**
 
 1. `char* peerID`: Peer ID to disconnect.
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
-For example:
-
-```json
-{
-   "result": true
-}
-```
-
-### `extern char* waku_peer_count()`
+### `extern int waku_peer_cnt(WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Get number of connected peers.
 
+**Parameters**
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains an `integer` which represents the number of connected peers.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the number of connected peers.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-For example:
-
-```json
-{
-  "result": 0
-}
-```
-
-### `extern char* waku_peers()`
+### `extern int waku_peers(WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Retrieve the list of peers known by the Waku node.
 
+**Parameters**
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type) containing a list of peers.
-The list of peers has this format:
-
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a json array with the list of peers.
+This list has this format:
 ```json
-{
-  "result": [
-    {
-      "peerID": "16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47RedcBafeDCBA",
-      "protocols": [
-        "/ipfs/id/1.0.0",
-        "/vac/waku/relay/2.0.0",
-        "/ipfs/ping/1.0.0"
-      ],
-      "addrs": [
-        "/ip4/1.2.3.4/tcp/30303"
-      ],
-      "connected": true
-    }
-  ]
-}
+[
+  {
+    "peerID": "16Uiu2HAmJb2e28qLXxT5kZxVUUoJt72EMzNGXB47RedcBafeDCBA",
+    "protocols": [
+      "/ipfs/id/1.0.0",
+      "/vac/waku/relay/2.0.0",
+      "/ipfs/ping/1.0.0"
+    ],
+    "addrs": [
+      "/ip4/1.2.3.4/tcp/30303"
+    ],
+    "connected": true
+  }
+]
 ```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
 
 ## Waku Relay
 
-### `extern void waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, char* outContentTopic)`
+### `extern int waku_content_topic(char* applicationName, unsigned int applicationVersion, char* contentTopicName, char* encoding, WakuCallBack onOkCb)`
 
 Create a content topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
-1. **[input]** `char* applicationName`
-2. **[input]** `unsigned int applicationVersion`
-3. **[input]** `char* contentTopicName`
-4. **[input]** `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
-5. **[output]** `char* outContentTopic`. Gets populated with a content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
-   ```
-   /{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
-   ```
+1. `char* applicationName`
+2. `unsigned int applicationVersion`
+3. `char* contentTopicName`
+4. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+5. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the content topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/): `/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+   - 1 - The operation failed for any reason.
+   - 2 - The function is missing the `onOkCb` callback
 
 
-
-### `extern char* waku_pubsub_topic(char* name, char* encoding, char* outPubsubTopic)`
+### `extern int waku_pubsub_topic(char* name, char* encoding, WakuCallBack onOkCb)`
 
 Create a pubsub topic string according to [RFC 23](https://rfc.vac.dev/spec/23/).
 
 **Parameters**
 
-1. **[input]** `char* name`
-2. **[input]** `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
-3. **[output]** `char* outPubsubTopic`. Gets populated with a pubsub topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/).
-   ```
-   /waku/2/{topic-name}/{encoding}
-   ```
+1. `char* name`
+2. `char* encoding`: depending on the payload, use `proto`, `rlp` or `rfc26`
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
 
+**Returns**
 
-### `extern void waku_default_pubsub_topic(char* defaultPubsubTopic)`
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will get populated with a pubsub topic formatted according to [RFC 23](https://rfc.vac.dev/spec/23/): `/waku/2/{topic-name}/{encoding}`
+   - 1 - The operation failed for any reason.
+   - 2 - The function is missing the `onOkCb` callback
+
+### `extern int waku_default_pubsub_topic(WakuCallBack onOkCb)`
 
 Returns the default pubsub topic used for exchanging waku messages defined in [RFC 10](https://rfc.vac.dev/spec/10/).
 
 **Parameters**
-1. **[output]** `char* defaultPubsubTopic`. Gets populated with  `/waku/2/default-waku/proto`
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
 
+**Returns**
 
-### `extern unsinged int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, char* jsonResp)`
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will get populated with  `/waku/2/default-waku/proto`
+   - 1 - The operation failed for any reason.
+   - 2 - The function is missing the `onOkCb` callback
+
+### `extern int waku_relay_publish(char* messageJson, char* pubsubTopic, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Publish a message using Waku Relay.
 
 **Parameters**
 
-1. **[input]** `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-2. **[input]** `char* pubsubTopic`: pubsub topic on which to publish the message.
-   If `NULL`, it uses the default pubsub topic.
-3. **[input]** `int timeoutMs`: Timeout value in milliseconds to execute the call.
-   If the function execution takes longer than this value,
-   the execution will be canceled and an error returned.
-   Use `0` for no timeout.
-4. **[output]**: A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
-
-Note: `messageJson.version` is overwritten to `0`.
-
-**Returns**
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
-
-
-
-### `extern char* waku_relay_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* publicKey, char* optionalSigningKey, int timeoutMs)`
-
-Optionally sign,
-encrypt using asymmetric encryption
-and publish a message using Waku Relay.
-
-**Parameters**
-
 1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
 2. `char* pubsubTopic`: pubsub topic on which to publish the message.
    If `NULL`, it uses the default pubsub topic.
-3. `char* publicKey`: hex encoded public key to be used for encryption.
-4. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
-5. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
-Note: `messageJson.version` is overwritten to `1`.
+If the execution is successful, the `result` field contains the message ID.
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will get populated with the message ID
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-### `extern char* waku_relay_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* symmetricKey, char* optionalSigningKey, int timeoutMs)`
-
-Optionally sign,
-encrypt using symmetric encryption
-and publish a message using Waku Relay.
-
-**Parameters**
-
-1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-2. `char* pubsubTopic`: pubsub topic on which to publish the message.
-   If `NULL`, it uses the default pubsub topic.
-3. `char* symmetricKey`: hex encoded secret key to be used for encryption.
-4. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
-5. `int timeoutMs`: Timeout value in milliseconds to execute the call.
-   If the function execution takes longer than this value,
-   the execution will be canceled and an error returned.
-   Use `0` for no timeout.
-
-Note: `messageJson.version` is overwritten to `1`.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
-
-### `extern char* waku_relay_enough_peers(char* pubsubTopic)`
+### `extern int waku_relay_enough_peers(char* pubsubTopic, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Determine if there are enough peers to publish a message on a given pubsub topic.
 
@@ -850,49 +779,32 @@ Determine if there are enough peers to publish a message on a given pubsub topic
 
 1. `char* pubsubTopic`: Pubsub topic to verify.
    If `NULL`, it verifies the number of peers in the default pubsub topic.
+2. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+3. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains a `boolean` indicating whether there are enough peers.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a string `boolean` indicating whether there are enough peers, i.e. `true` or `false`
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-For example:
-
-```json
-{
-  "result": true
-}
-```
-
-### `extern unsigned int waku_relay_subscribe(char* topic, char* jsonResp)`
+### `extern int waku_relay_subscribe(char* topic, WakuCallBack onErrCb)`
 
 Subscribe to a Waku Relay pubsub topic to receive messages.
 
 **Parameters**
 
-1. **[input]** `char* topic`: Pubsub topic to subscribe to.
+1. `char* topic`: Pubsub topic to subscribe to.
    If `NULL`, it subscribes to the default pubsub topic.
-2. **[output]** `char* jsonResp`: A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-   Ex1:
-
-   ```json
-   {
-     "result": true
-   }
-   ```
-   ```json
-   {
-     "error": "Cannot subscribe without Waku Relay enabled."
-   }
-   ```
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
 **Events**
 
@@ -919,54 +831,46 @@ For Example:
 }
 ```
 
-### `extern unsigned int waku_relay_unsubscribe(char* topic, char* jsonResp)`
+### `extern int waku_relay_subscribe(char* topic, WakuCallBack onErrCb)`
 
 Closes the pubsub subscription to a pubsub topic. No more messages will be received
 from this pubsub topic.
 
 **Parameters**
 
-1. **[input]** `char* pusubTopic`: Pubsub topic to unsubscribe from.
+1. `char* pusubTopic`: Pubsub topic to unsubscribe from.
   If `NULL`, unsubscribes from the default pubsub topic.
-2. **[output]** A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-   For example:
-
-   ```json
-   {
-      "result": true
-   }
-   ```
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
-Unsigned int. Possible values:
-   - 1 - The operation was completed successfuly.
-   - 0 - The operation failed for any reason. It worth checking the value of `jsonResp` in this case.
 
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason.
+   - 2 - The function is missing the `onErrCb` callback
 
-### `extern char* waku_relay_topics()`
+### `extern int waku_relay_topics(WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Get the list of subscribed pubsub topics in Waku Relay.
 
+**Parameters**
+
+1. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field will contain an array of pubsub topics.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a json array of pubsub topics i.e `["pubsubTopic1", "pubsubTopic2"]`
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-For example:
-
-```json
-{
-  "result": ["pubsubTopic1", "pubsubTopic2"]
-}
-```
 
 ## Waku Filter
 
-### `extern char* waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs)`
+### `extern int waku_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
-Creates a subscription in a lightnode for messages that matches a content filter and optionally a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
+Creates a subscription to a filter full node matching a content filter..
 
 **Parameters**
 
@@ -980,19 +884,22 @@ Creates a subscription in a lightnode for messages that matches a content filter
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-For example:
-
-```json
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the subscription details, for example:
+```
 {
-  "result": true
+  "peerID": "....",
+  "pubsubTopic": "...",
+  "contentTopics": [...]
 }
 ```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
 **Events**
 
@@ -1019,34 +926,164 @@ For Example:
 }
 ```
 
-### `extern char* waku_filter_unsubscribe(char* filterJSON, int timeoutMs)`
+
+### `extern int waku_filter_ping(char* peerID, int timeoutMs, WakuCallBack onErrCb)`
+
+Used to know if a service node has an active subscription for this client
+
+**Parameters**
+
+1. `char* peerID`: Peer ID to check for an active subscription
+   The peer must be already known.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+3. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
+
+### `extern int waku_filter_unsubscribe(filterJSON *C.char, char* peerID, int timeoutMs, WakuCallBack onErrCb)`
+
+Sends a requests to a service node to stop pushing messages matching this filter to this client. It might be used to modify an existing subscription by providing a subset of the original filter criteria
+
+**Parameters**
+
+1. `char* filterJSON`: JSON string containing the [`FilterSubscription`](#filtersubscription-type) criteria to unsubscribe from
+2. `char* peerID`: Peer ID to unsubscribe from
+   The peer must be already known.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
+### `extern int waku_filter_unsubscribe_all(char* peerID, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
+
+Sends a requests to a service node (or all service nodes) to stop pushing messages
+
+**Parameters**
+
+1. `char* peerID`: Peer ID to unsubscribe from
+   The peer must be already known.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+   Use `NULL` to unsubscribe from all peers with active subscriptions
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive an array with information about the state of each unsubscription attempt (one per peer)
+```
+[
+  {
+    "peerID": ....,
+    "error": "" // Empty if succesful
+  },
+  ...
+]
+```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
+
+## Waku Legacy Filter
+
+### `extern int waku_legacy_filter_subscribe(char* filterJSON, char* peerID, int timeoutMs, WakuCallBack onErrCb)`
+
+Creates a subscription in a lightnode for messages that matches a content filter and optionally a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
+
+**Parameters**
+
+1. `char* filterJSON`: JSON string containing the [`LegacyFilterSubscription`](#legacyfiltersubscription-type) to subscribe to.
+2. `char* peerID`: Peer ID to subscribe to.
+   The peer must be already known.
+   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
+   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
+   Use `NULL` to automatically select a node.
+3. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
+
+**Events**
+
+When a message is received, a ``"message"` event` is emitted containing the message, pubsub topic, and node ID in which
+the message was received.
+
+The `event` type is [`JsonMessageEvent`](#jsonmessageevent-type).
+
+For Example:
+
+```json
+{
+  "type": "message",
+  "event": {
+    "pubsubTopic": "/waku/2/default-waku/proto",
+    "messageId": "0x6496491e40dbe0b6c3a2198c2426b16301688a2daebc4f57ad7706115eac3ad1",
+    "wakuMessage": {
+      "payload": "TODO",
+      "contentTopic": "/my-app/1/notification/proto",
+      "version": 1,
+      "timestamp": 1647826358000000000
+    }
+  }
+}
+```
+
+### `extern int waku_legacy_filter_unsubscribe(char* filterJSON, int timeoutMs, WakuCallBack onErrCb)`
 
 Removes subscriptions in a light node matching a content filter and, optionally, a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
 
 **Parameters**
 
-1. `char* filterJSON`: JSON string containing the [`FilterSubscription`](#filtersubscription-type).
+1. `char* filterJSON`: JSON string containing the [`LegacyFilterSubscription`](#filtersubscription-type).
 2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+3. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field is set to `true`.
-
-For example:
-
-```json
-{
-  "result": true
-}
-```
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
 
 ## Waku Lightpush
 
-### `extern char* waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs)`
+### `extern int waku_lightpush_publish(char* messageJSON, char* topic, char* peerID, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Publish a message using Waku Lightpush.
 
@@ -1064,75 +1101,22 @@ Publish a message using Waku Lightpush.
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 Note: `messageJson.version` is overwritten to `0`.
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the message ID
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-### `extern char* waku_lightpush_publish_enc_asymmetric(char* messageJson, char* pubsubTopic, char* peerID, char* publicKey, char* optionalSigningKey, int timeoutMs)`
-
-Optionally sign,
-encrypt using asymmetric encryption
-and publish a message using Waku Lightpush.
-
-**Parameters**
-
-1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-2. `char* pubsubTopic`: pubsub topic on which to publish the message.
-   If `NULL`, it uses the default pubsub topic.
-3. `char* peerID`: Peer ID supporting the lightpush protocol.
-   The peer must be already known.
-   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
-   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
-4. `char* publicKey`: hex encoded public key to be used for encryption.
-5. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
-6. `int timeoutMs`: Timeout value in milliseconds to execute the call.
-   If the function execution takes longer than this value,
-   the execution will be canceled and an error returned.
-   Use `0` for no timeout.
-
-Note: `messageJson.version` is overwritten to `1`.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
-
-### `extern char* waku_lightpush_publish_enc_symmetric(char* messageJson, char* pubsubTopic, char* peerID, char* symmetricKey, char* optionalSigningKey, int timeoutMs)`
-
-Optionally sign,
-encrypt using symmetric encryption
-and publish a message using Waku Lightpush.
-
-**Parameters**
-
-1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
-2. `char* pubsubTopic`: pubsub topic on which to publish the message.
-   If `NULL`, it uses the default pubsub topic.
-3. `char* peerID`: Peer ID supporting the lightpush protocol.
-   The peer must be already known.
-   It must have been added before with [`waku_add_peer`](#extern-char-waku_add_peerchar-address-char-protocolid)
-   or previously dialed with [`waku_connect_peer`](#extern-char-waku_connect_peerchar-address-int-timeoutms).
-4. `char* symmetricKey`: hex encoded secret key to be used for encryption.
-5. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
-6. `int timeoutMs`: Timeout value in milliseconds to execute the call.
-   If the function execution takes longer than this value,
-   the execution will be canceled and an error returned.
-   Use `0` for no timeout.
-
-Note: `messageJson.version` is overwritten to `1`.
-
-**Returns**
-
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the message ID.
 
 ## Waku Store
 
-### `extern char* waku_store_query(char* queryJSON, char* peerID, int timeoutMs)`
+### `extern int waku_store_query(char* queryJSON, char* peerID, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 
 Retrieves historical messages on specific content topics. This method may be called with [`PagingOptions`](#pagingoptions-type), 
 to retrieve historical messages on a per-page basis. If the request included [`PagingOptions`](#pagingoptions-type), the node 
@@ -1150,74 +1134,147 @@ must contain a cursor pointing to the Index from which a new page can be request
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains a [`StoreResponse`](#storeresponse-type)..
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a [`StoreResponse`](#storeresponse-type).
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
+### `extern int waku_store_local_query(char* queryJSON, WakuCallBack onOkCb, WakuCallBack onErrCb)`
+
+Retrieves locally stored historical messages on specific content topics. This method may be called with [`PagingOptions`](#pagingoptions-type), 
+to retrieve historical messages on a per-page basis. If the request included [`PagingOptions`](#pagingoptions-type), the node 
+must return messages on a per-page basis and include [`PagingOptions`](#pagingoptions-type) in the response. These [`PagingOptions`](#pagingoptions-type) 
+must contain a cursor pointing to the Index from which a new page can be requested.
+
+**Parameters**
+
+1. `char* queryJSON`: JSON string containing the [`StoreQuery`](#storequery-type).
+2. `int timeoutMs`: Timeout value in milliseconds to execute the call.
+   If the function execution takes longer than this value,
+   the execution will be canceled and an error returned.
+   Use `0` for no timeout.
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive a [`StoreResponse`](#storeresponse-type).
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
+
+## Encrypting messages
+
+### `extern int waku_encode_symmetric(char* messageJson, char* symmetricKey, char* optionalSigningKey, WakuCallBack onOkCb, WakuCallBack onErrCb)`
+
+Encrypt a message using symmetric encryption and optionally sign the message
+
+**Parameters**
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* symmetricKey`: hex encoded secret key to be used for encryption.
+3. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+Note: `messageJson.version` is overwritten to `1`.
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the encrypted waku message which can be broadcasted with relay or lightpush protocol publish functions.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
+
+### `extern int waku_encode_asymmetric(char* messageJson, char* publicKey, char* optionalSigningKey, WakuCallBack onOkCb, WakuCallBack onErrCb)`
+
+Encrypt a message using asymmetric encryption and optionally sign the message
+
+**Parameters**
+
+1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
+2. `char* publicKey`: hex encoded public key to be used for encryption.
+3. `char* optionalSigningKey`: hex encoded private key to be used to sign the message.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
+
+Note: `messageJson.version` is overwritten to `1`.
+
+**Returns**
+
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the encrypted waku message which can be broadcasted with relay or lightpush protocol publish functions.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
 
 ## Decrypting messages
 
-### `extern char* waku_decode_symmetric(char* messageJson, char* symmetricKey)`
+### `extern int waku_decode_symmetric(char* messageJson, char* symmetricKey, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 Decrypt a message using a symmetric key
 
 **Parameters**
 
 1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
 2. `char* symmetricKey`: 32 byte symmetric key hex encoded.
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 Note: `messageJson.version` is expected to be `1`.
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
-An `error` message otherwise.
-
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
 ```json
 {
-  "result": {
-    "pubkey": "0x......",
-    "signature": "0x....",
-    "data": "...",
-    "padding": "..."
-  }
+  "pubkey": "0x......",
+  "signature": "0x....",
+  "data": "...",
+  "padding": "..."
 }
 ```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
-### `extern char* waku_decode_asymmetric(char* messageJson, char* privateKey)`
+
+### `extern int waku_decode_asymmetric(char* messageJson, char* privateKey, WakuCallBack onOkCb, WakuCallBack onErrCb)`
 Decrypt a message using a secp256k1 private key 
 
 **Parameters**
 
 1. `char* messageJson`: JSON string containing the [Waku Message](https://rfc.vac.dev/spec/14/) as [`JsonMessage`](#jsonmessage-type).
 2. `char* privateKey`: secp256k1 private key hex encoded.
+3. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+4. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 Note: `messageJson.version` is expected to be `1`.
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
-An `error` message otherwise.
-
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive the decoded payload as a [`DecodedPayload`](#decodedpayload-type).
 ```json
 {
-  "result": {
-    "pubkey": "0x......",
-    "signature": "0x....",
-    "data": "...",
-    "padding": "..."
-  }
+  "pubkey": "0x......",
+  "signature": "0x....",
+  "data": "...",
+  "padding": "..."
 }
 ```
-
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
 ## DNS Discovery
 
-### `extern char* waku_dns_discovery(char* url, char* nameserver, int timeoutMs)`
-Returns a list of multiaddress given a url to a DNS discoverable ENR tree
+### `extern int waku_dns_discovery(char* url, char* nameserver, int timeoutMs, WakuCallBack onOkCb, WakuCallBack onErrCb)`
+Returns a list of multiaddress and enrs given a url to a DNS discoverable ENR tree
 
 **Parameters**
 
@@ -1228,16 +1285,15 @@ Returns a list of multiaddress given a url to a DNS discoverable ENR tree
    If the function execution takes longer than this value,
    the execution will be canceled and an error returned.
    Use `0` for no timeout.
+4. `WakuCallBack onOkCb`: callback to be executed if the function is succesful
+5. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains an array objects describing the multiaddresses, enr and peerID each node found.
-An `error` message otherwise.
-
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly. `onOkCb` will receive an array objects describing the multiaddresses, enr and peerID each node found.
 ```json
-{
-  "result":[
+[
     {
         "peerID":"16Uiu2HAmPLe7Mzm8TsYUubgCAW1aJoeFScxrLj8ppHFivPo97bUZ",
         "multiaddrs":[
@@ -1247,38 +1303,30 @@ An `error` message otherwise.
         "enr":"enr:-M-4QCtJKX2WDloRYDT4yjeMGKUCRRcMlsNiZP3cnPO0HZn6IdJ035RPCqsQ5NvTyjqHzKnTM6pc2LoKliV4CeV0WrgBgmlkgnY0gmlwhIbRi9KKbXVsdGlhZGRyc7EALzYobm9kZS0wMS5kby1hbXMzLndha3V2Mi50ZXN0LnN0YXR1c2ltLm5ldAYfQN4DiXNlY3AyNTZrMaEDnr03Tuo77930a7sYLikftxnuG3BbC3gCFhA4632ooDaDdGNwgnZfg3VkcIIjKIV3YWt1Mg8"
     },
     ...
-}
+]
 ```
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onOkCb` or `onErrCb` callback
 
 
+## DiscoveryV5
 
-## Utils
-
-### `extern char* waku_utils_base64_encode(char* data)`
-
-Encode a byte array to base64.
-Useful for creating the payload of a Waku Message in the format understood by [`waku_relay_publish`](#extern-char-waku_relay_publishchar-messagejson-char-pubsubtopic-int-timeoutms)
-
-**Parameters**
-
-1. `char* data`: Byte array to encode
-
-**Returns**
-
-A `char *` containing the base64 encoded byte array.
-
-### `extern char* waku_utils_base64_decode(char* data)`
-
-Decode a base64 string (useful for reading the payload from Waku Messages).
+### `extern int waku_discv5_update_bootnodes(char* bootnodes, WakuCallBack onErrCb)`
+Update the bootnode list used for discovering new peers via DiscoveryV5
 
 **Parameters**
 
-1. `char* data`: base64 encoded byte array to decode.
+1. `char* bootnodes`: JSON array containing the bootnode ENRs i.e. `["enr:...", "enr:..."]`
+2. `WakuCallBack onErrCb`: callback to be executed if the function fails
 
 **Returns**
 
-A [`JsonResponse`](#jsonresponse-type).
-If the execution is successful, the `result` field contains the decoded payload.
+`int` with a status code. Possible values:
+   - 0 - The operation was completed successfuly.
+   - 1 - The operation failed for any reason. `onErrCb` will be executed with the reason the function execution failed.
+   - 2 - The function is missing the `onErrCb` callback
+
+
 
 # Copyright
 
