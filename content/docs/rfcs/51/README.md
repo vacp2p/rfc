@@ -1,4 +1,4 @@
----
+﻿---
 slug: 51
 title: 51/WAKU2-RELAY-SHARDING
 name: Waku v2 Relay Sharding
@@ -7,6 +7,7 @@ category: Standards Track
 tags:
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
+- Simon-Pierre Vivier <simvivier@status.im>
 ---
 
 # Abstract
@@ -38,10 +39,6 @@ This document also covers discovery of topic shards.
 It is RECOMMENDED for App protocols to follow the naming structure detailed in [23/WAKU2-TOPICS](/spec/23/).
 With named sharding, managing discovery falls into the responsibility of apps.
 
-The default Waku pubsub topic `/waku/2/default-waku/proto` can be seen as a named shard available to all app protocols.
-
-
-
 From an app protocol point of view, a subscription to a content topic `waku2/xxx` on a shard named /mesh/v1.1.1/xxx would look like:
 
 `subscribe("/waku2/xxx", "/mesh/v1.1.1/xxx")`
@@ -56,14 +53,13 @@ Static shards are managed in shard clusters of 1024 shards per cluster.
 Waku static sharding can manage $2^16$ shard clusters.
 Each shard cluster is identified by its index (between $0$ and $2^16-1$).
 
-A specific shard cluster is either globally available to all apps (like the default pubsub topic),
+A specific shard cluster is either globally available to all apps,
 specific for an app protocol,
 or reserved for automatic sharding (see next section).
 
 > *Note:* This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.
 
 App protocols can either choose to use global shards, or app specific shards.
-(In future versions of this document, automatic sharding, described in the next section, will become the default.)
 
 Like the [IANA ports](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml),
 shard clusters are divided into ranges:
@@ -126,7 +122,7 @@ The index list SHOULD be used for nodes that participante in fewer than 64 shard
 the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
 Nodes MUST NOT use both index list (`rs`) and bit vector (`rsv`) in a single ENR.
 ENRs with both `rs` and `rsv` keys SHOULD be ignored.
-Nodes MAY interprete `rs` in such ENRs, but MUST ignore `rsv`.
+Nodes MAY interpret `rs` in such ENRs, but MUST ignore `rsv`.
 
 ### Index List
 
@@ -173,45 +169,72 @@ This example node is part of shards `13`, `14`, and `45` in the Status main-net 
 
 # Automatic Sharding
 
-> *Note:* Automatic sharding is not yet part of this specification.
-This section merely serves as an outlook.
-A specification of automatic sharding will be added to this document in a future version.
+Autosharding selects shards automatically and is the default behavior for shard choice.
+The other choices being static and named sharding as seen in previous sections.
+Shards (pubsub topics) SHOULD be computed from content topics with the procedure below.
 
-Automatic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
-It automatically maps Waku content topics to pubsub topics.
-Clients and protocols building on Waku relay only see content topics, while Waku relay internally manages the mapping.
-This provides both scaling as well as removes confusion about content and pubsub topics on the consumer side.
+### Algorithm
 
-From an app point of view, a subscription to a content topic `waku2/xxx` using automatic sharding would look like:
+Hash using Sha2-256 the concatenation of
+the content topic `application` field (UTF-8 string of N bytes) and
+the `version` (UTF-8 string of N bytes).
+The shard to use is the modulo of the hash by the number of shards in the network.
 
-`subscribe("/waku2/xxx", auto=true)`
+### Example
+| Field           | Value  | Hex 
+|---              |---     |---          
+| `application`   | "myapp"| 0x6d79617070
+| `version`       | "1"    | 0x31
+| `network shards`|   8    | 0x8
 
-The app is oblivious to the pubsub topic layer.
-(Future versions could deprecate the default pubsub topic and remove the necessity for `auto=true`.)
+- SHA2-256 of `0x6d7961707031` is `0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928`
+- `0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928` MOD `8` equals `0`
+- The shard to use has index 0
 
-*The basic idea behind automatic sharding*:
-Content topics are mapped using [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
-Like with DHTs, the hash space is split into parts,
-each covered by a Pubsub topic (mesh network) that carries content topics which are mapped into the respective part of the hash space.
+## Content Topics Format for Autosharding
+Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
+In addition, a generation prefix MAY be added to content topics.
+When omitted default values are used.
+Generation default value is `0`.
 
-There are (at least) two issues that have to be solved: *Hot spots* and *Discovery* (see next subsection).
+- The full length format is `/{generation}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+- The short length format is `/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
 
-Hot spots occur (similar to DHTs), when a specific mesh network becomes responsible for (several) large multicast groups (content topics).
+### Example
+
+- Full length `/0/myapp/1/mytopic/cbor`
+- Short length `/myapp/1/mytopic/cbor`
+
+### Generation
+The generation number monotonously increases and indirectly refers to the total number of shards of the Waku Network.
+
+<!-- Create a new RFC for each generation spec. -->
+
+### Topic Design
+Content topics have 2 purposes: filtering and routing.
+Filtering is done by changing the `{content-topic-name}` field.
+As this part is not hashed, it will not affect routing (shard selection).
+The `{application-name}` and `{version-of-the-application}` fields do affect routing.
+Using multiple content topics with different `{application-name}` field has advantages and disadvantages.
+It increases the traffic a relay node is subjected to when subscribed to all topics.
+It also allows relay and light nodes to subscribe to a subset of all topics.
+
+## Problems
+
+### Hot Spots
+
+Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
 The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
-Our research goal here is finding efficient ways of distribution.
-We could get inspired by the DHT literature.
-We also have to consider:
-If a node is part of many content topics which are all spread over different shards,
-the node will potentially be exposed to a lot of network traffic.
 
-## Discovery
+The current autosharding method does not solve this problem.
+
+> *Note:* Automatic sharding based on network traffic measurements to avoid hot spots in not part of this specification.
+
+### Discovery
 
 For the discovery of automatic shards this document specifies two methods (the second method will be detailed in a future version of this document).
 
 The first method uses the discovery introduced above in the context of static shards.
-The index range `49152 - 65535` is reserved for automatic sharding.
-Each index can be seen as a hash bucket.
-Consistent hashing maps content topics in one of these buckets.
 
 The second discovery method will be a successor to the first method,
 but is planned to preserve the index range allocation.
@@ -239,24 +262,8 @@ We will add more on security considerations in future versions of this document.
 ## Receiver Anonymity
 
 The strength of receiver anonymity, i.e. topic receiver unlinkablity,
-depends on the number of content topics (`k`) that get mapped onto a single pubsub topic (shard).
+depends on the number of content topics (`k`), as a proxy for the number of peers and messages, that get mapped onto a single pubsub topic (shard).
 For *named* and *static* sharding this responsibility is at the app protocol layer.
-
-## Default Topic
-
-Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
-e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).
-
-Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
-See [section on Anonymity/Unlinkability](/spec/10/#anonymity--unlinkability).
-
-Using another pubsub topic might lead to
-
-- weaker metadata protection
-- connectivity problems if there are not enough nodes within the respective pubsub mesh
-- store nodes might not store messages for the chosen pubsub topic
-
-Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.
 
 # Copyright
 
@@ -272,7 +279,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [51/WAKU2-RELAY-SHARDING](/spec/51/)
 * [Ethereum ENR sharding bit vector](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
 * [Ethereum discv5 specification](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md)
-* [consistent hashing](https://en.wikipedia.org/wiki/Consistent_hashing).
 * [Research log: Waku Discovery](https://vac.dev/wakuv2-apd)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
 
