@@ -279,7 +279,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [51/WAKU2-RELAY-SHARDING](/spec/51/)
 * [Ethereum ENR sharding bit vector](https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata)
 * [Ethereum discv5 specification](https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md)
-* [Rendezvous Hashing](https://www.eecs.umich.edu/techreports/cse/96/CSE-TR-316-96.pdf)
 * [Research log: Waku Discovery](https://vac.dev/wakuv2-apd)
 * [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
 
