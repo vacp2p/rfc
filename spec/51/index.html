@@ -21,7 +21,7 @@ Background and Motivation # Unstructured P2P networks are more robust and resili
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.b9f0d158fe5a9a96737034a974bccc75d05cd14ab547b3c830085d0c4b875307.js" integrity="sha256-ufDRWP5ampZzcDSpdLzMddBc0Uq1R7PIMAhdDEuHUwc="></script>
+<script defer src="/en.search.min.326d043fa8e332a51e3f9983730a7fd874d98704640c54917d58b785c9d774b9.js" integrity="sha256-Mm0EP6jjMqUeP5mDcwp/2HTZhwRkDFSRfVi3hcnXdLk="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -191,13 +191,30 @@ https://github.com/alex-shpak/hugo-book
     </li>
     <li><a href="#automatic-sharding">Automatic Sharding</a>
       <ul>
-        <li><a href="#discovery-1">Discovery</a></li>
+        <li>
+          <ul>
+            <li><a href="#algorithm">Algorithm</a></li>
+            <li><a href="#example">Example</a></li>
+          </ul>
+        </li>
+        <li><a href="#content-topics-format-for-autosharding">Content Topics Format for Autosharding</a>
+          <ul>
+            <li><a href="#example-1">Example</a></li>
+            <li><a href="#generation">Generation</a></li>
+            <li><a href="#topic-design">Topic Design</a></li>
+          </ul>
+        </li>
+        <li><a href="#problems">Problems</a>
+          <ul>
+            <li><a href="#hot-spots">Hot Spots</a></li>
+            <li><a href="#discovery-1">Discovery</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a>
       <ul>
         <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
-        <li><a href="#default-topic">Default Topic</a></li>
       </ul>
     </li>
     <li><a href="#copyright">Copyright</a></li>
@@ -240,6 +257,13 @@ https://github.com/alex-shpak/hugo-book
       <li>Status: raw</li>
       <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
       
+      <li>Contributors:
+          
+              
+              Simon-Pierre Vivier <a href="mailto:simvivier@status.im">simvivier@status.im</a>
+          
+      </li>
+      
   </ul><h1 id="abstract">
   Abstract
   <a class="anchor" href="#abstract">#</a>
@@ -272,7 +296,6 @@ This document also covers discovery of topic shards.</p>
 <p><em>Named sharding</em> offers apps to freely choose pubsub topic names.
 It is RECOMMENDED for App protocols to follow the naming structure detailed in <a href="/spec/23/">23/WAKU2-TOPICS</a>.
 With named sharding, managing discovery falls into the responsibility of apps.</p>
-<p>The default Waku pubsub topic <code>/waku/2/default-waku/proto</code> can be seen as a named shard available to all app protocols.</p>
 <p>From an app protocol point of view, a subscription to a content topic <code>waku2/xxx</code> on a shard named /mesh/v1.1.1/xxx would look like:</p>
 <p><code>subscribe(&quot;/waku2/xxx&quot;, &quot;/mesh/v1.1.1/xxx&quot;)</code></p>
 <h1 id="static-sharding">
@@ -285,14 +308,13 @@ but the discovery of these shards is managed by Waku.</p>
 <p>Static shards are managed in shard clusters of 1024 shards per cluster.
 Waku static sharding can manage $2^16$ shard clusters.
 Each shard cluster is identified by its index (between $0$ and $2^16-1$).</p>
-<p>A specific shard cluster is either globally available to all apps (like the default pubsub topic),
+<p>A specific shard cluster is either globally available to all apps,
 specific for an app protocol,
 or reserved for automatic sharding (see next section).</p>
 <blockquote>
 <p><em>Note:</em> This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.</p>
 </blockquote>
-<p>App protocols can either choose to use global shards, or app specific shards.
-(In future versions of this document, automatic sharding, described in the next section, will become the default.)</p>
+<p>App protocols can either choose to use global shards, or app specific shards.</p>
 <p>Like the <a href="https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml">IANA ports</a>,
 shard clusters are divided into ranges:</p>
 <table>
@@ -367,7 +389,7 @@ The index list SHOULD be used for nodes that participante in fewer than 64 shard
 the bit vector representation SHOULD be used for nodes participating in 64 or more shards.
 Nodes MUST NOT use both index list (<code>rs</code>) and bit vector (<code>rsv</code>) in a single ENR.
 ENRs with both <code>rs</code> and <code>rsv</code> keys SHOULD be ignored.
-Nodes MAY interprete <code>rs</code> in such ENRs, but MUST ignore <code>rsv</code>.</p>
+Nodes MAY interpret <code>rs</code> in such ENRs, but MUST ignore <code>rsv</code>.</p>
 <h3 id="index-list">
   Index List
   <a class="anchor" href="#index-list">#</a>
@@ -455,40 +477,109 @@ This example node is part of shards <code>13</code>, <code>14</code>, and <code>
   Automatic Sharding
   <a class="anchor" href="#automatic-sharding">#</a>
 </h1>
+<p>Autosharding selects shards automatically and is the default behavior for shard choice.
+The other choices being static and named sharding as seen in previous sections.
+Shards (pubsub topics) SHOULD be computed from content topics with the procedure below.</p>
+<h3 id="algorithm">
+  Algorithm
+  <a class="anchor" href="#algorithm">#</a>
+</h3>
+<p>Hash using Sha2-256 the concatenation of
+the content topic <code>application</code> field (UTF-8 string of N bytes) and
+the <code>version</code> (UTF-8 string of N bytes).
+The shard to use is the modulo of the hash by the number of shards in the network.</p>
+<h3 id="example">
+  Example
+  <a class="anchor" href="#example">#</a>
+</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+<th>Hex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>application</code></td>
+<td>&ldquo;myapp&rdquo;</td>
+<td>0x6d79617070</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>&ldquo;1&rdquo;</td>
+<td>0x31</td>
+</tr>
+<tr>
+<td><code>network shards</code></td>
+<td>8</td>
+<td>0x8</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>SHA2-256 of <code>0x6d7961707031</code> is <code>0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928</code></li>
+<li><code>0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928</code> MOD <code>8</code> equals <code>0</code></li>
+<li>The shard to use has index 0</li>
+</ul>
+<h2 id="content-topics-format-for-autosharding">
+  Content Topics Format for Autosharding
+  <a class="anchor" href="#content-topics-format-for-autosharding">#</a>
+</h2>
+<p>Content topics MUST follow the format in <a href="https://rfc.vac.dev/spec/23/#content-topic-format">23/WAKU2-TOPICS</a>.
+In addition, a generation prefix MAY be added to content topics.
+When omitted default values are used.
+Generation default value is <code>0</code>.</p>
+<ul>
+<li>The full length format is <code>/{generation}/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}</code></li>
+<li>The short length format is <code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}</code></li>
+</ul>
+<h3 id="example-1">
+  Example
+  <a class="anchor" href="#example-1">#</a>
+</h3>
+<ul>
+<li>Full length <code>/0/myapp/1/mytopic/cbor</code></li>
+<li>Short length <code>/myapp/1/mytopic/cbor</code></li>
+</ul>
+<h3 id="generation">
+  Generation
+  <a class="anchor" href="#generation">#</a>
+</h3>
+<p>The generation number monotonously increases and indirectly refers to the total number of shards of the Waku Network.</p>
+<!-- raw HTML omitted -->
+<h3 id="topic-design">
+  Topic Design
+  <a class="anchor" href="#topic-design">#</a>
+</h3>
+<p>Content topics have 2 purposes: filtering and routing.
+Filtering is done by changing the <code>{content-topic-name}</code> field.
+As this part is not hashed, it will not affect routing (shard selection).
+The <code>{application-name}</code> and <code>{version-of-the-application}</code> fields do affect routing.
+Using multiple content topics with different <code>{application-name}</code> field has advantages and disadvantages.
+It increases the traffic a relay node is subjected to when subscribed to all topics.
+It also allows relay and light nodes to subscribe to a subset of all topics.</p>
+<h2 id="problems">
+  Problems
+  <a class="anchor" href="#problems">#</a>
+</h2>
+<h3 id="hot-spots">
+  Hot Spots
+  <a class="anchor" href="#hot-spots">#</a>
+</h3>
+<p>Hot spots occur (similar to DHTs), when a specific mesh network (shard) becomes responsible for (several) large multicast groups (content topics).
+The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.</p>
+<p>The current autosharding method does not solve this problem.</p>
 <blockquote>
-<p><em>Note:</em> Automatic sharding is not yet part of this specification.
-This section merely serves as an outlook.
-A specification of automatic sharding will be added to this document in a future version.</p>
+<p><em>Note:</em> Automatic sharding based on network traffic measurements to avoid hot spots in not part of this specification.</p>
 </blockquote>
-<p>Automatic sharding is a method for scaling Waku relay in the number of (smaller) content topics.
-It automatically maps Waku content topics to pubsub topics.
-Clients and protocols building on Waku relay only see content topics, while Waku relay internally manages the mapping.
-This provides both scaling as well as removes confusion about content and pubsub topics on the consumer side.</p>
-<p>From an app point of view, a subscription to a content topic <code>waku2/xxx</code> using automatic sharding would look like:</p>
-<p><code>subscribe(&quot;/waku2/xxx&quot;, auto=true)</code></p>
-<p>The app is oblivious to the pubsub topic layer.
-(Future versions could deprecate the default pubsub topic and remove the necessity for <code>auto=true</code>.)</p>
-<p><em>The basic idea behind automatic sharding</em>:
-Content topics are mapped using <a href="https://en.wikipedia.org/wiki/Consistent_hashing">consistent hashing</a>.
-Like with DHTs, the hash space is split into parts,
-each covered by a Pubsub topic (mesh network) that carries content topics which are mapped into the respective part of the hash space.</p>
-<p>There are (at least) two issues that have to be solved: <em>Hot spots</em> and <em>Discovery</em> (see next subsection).</p>
-<p>Hot spots occur (similar to DHTs), when a specific mesh network becomes responsible for (several) large multicast groups (content topics).
-The opposite problem occurs when a mesh only carries multicast groups with very few participants: this might cause bad connectivity within the mesh.
-Our research goal here is finding efficient ways of distribution.
-We could get inspired by the DHT literature.
-We also have to consider:
-If a node is part of many content topics which are all spread over different shards,
-the node will potentially be exposed to a lot of network traffic.</p>
-<h2 id="discovery-1">
+<h3 id="discovery-1">
   Discovery
   <a class="anchor" href="#discovery-1">#</a>
-</h2>
+</h3>
 <p>For the discovery of automatic shards this document specifies two methods (the second method will be detailed in a future version of this document).</p>
-<p>The first method uses the discovery introduced above in the context of static shards.
-The index range <code>49152 - 65535</code> is reserved for automatic sharding.
-Each index can be seen as a hash bucket.
-Consistent hashing maps content topics in one of these buckets.</p>
+<p>The first method uses the discovery introduced above in the context of static shards.</p>
 <p>The second discovery method will be a successor to the first method,
 but is planned to preserve the index range allocation.
 Instead of adding the data to the ENR, it will treat each array index as a capability,
@@ -517,23 +608,8 @@ We will add more on security considerations in future versions of this document.
   <a class="anchor" href="#receiver-anonymity">#</a>
 </h2>
 <p>The strength of receiver anonymity, i.e. topic receiver unlinkablity,
-depends on the number of content topics (<code>k</code>) that get mapped onto a single pubsub topic (shard).
+depends on the number of content topics (<code>k</code>), as a proxy for the number of peers and messages, that get mapped onto a single pubsub topic (shard).
 For <em>named</em> and <em>static</em> sharding this responsibility is at the app protocol layer.</p>
-<h2 id="default-topic">
-  Default Topic
-  <a class="anchor" href="#default-topic">#</a>
-</h2>
-<p>Until automatic sharding is fully specified, (smaller) Apps SHOULD use the default PubSub topic unless there is a good reason not to,
-e.g. a requirement to scale to large user numbers (in a rollout phase, the default pubsub topic might still be the better option).</p>
-<p>Using a single PubSub topic ensures a connected network, as well as some degree of metadata protection.
-See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkability</a>.</p>
-<p>Using another pubsub topic might lead to</p>
-<ul>
-<li>weaker metadata protection</li>
-<li>connectivity problems if there are not enough nodes within the respective pubsub mesh</li>
-<li>store nodes might not store messages for the chosen pubsub topic</li>
-</ul>
-<p>Apps that use named (not the default) or static sharding likely have to setup their own infrastructure nodes which may render the application less robust.</p>
 <h1 id="copyright">
   Copyright
   <a class="anchor" href="#copyright">#</a>
@@ -552,7 +628,6 @@ See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkabil
 <li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
 <li><a href="https://github.com/ethereum/consensus-specs/blob/dev/specs/altair/p2p-interface.md#metadata">Ethereum ENR sharding bit vector</a></li>
 <li><a href="https://github.com/ethereum/devp2p/blob/master/discv5/discv5-theory.md">Ethereum discv5 specification</a></li>
-<li><a href="https://en.wikipedia.org/wiki/Consistent_hashing">consistent hashing</a>.</li>
 <li><a href="https://vac.dev/wakuv2-apd">Research log: Waku Discovery</a></li>
 <li><a href="/spec/45">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 </ul>
@@ -607,13 +682,30 @@ See <a href="/spec/10/#anonymity--unlinkability">section on Anonymity/Unlinkabil
     </li>
     <li><a href="#automatic-sharding">Automatic Sharding</a>
       <ul>
-        <li><a href="#discovery-1">Discovery</a></li>
+        <li>
+          <ul>
+            <li><a href="#algorithm">Algorithm</a></li>
+            <li><a href="#example">Example</a></li>
+          </ul>
+        </li>
+        <li><a href="#content-topics-format-for-autosharding">Content Topics Format for Autosharding</a>
+          <ul>
+            <li><a href="#example-1">Example</a></li>
+            <li><a href="#generation">Generation</a></li>
+            <li><a href="#topic-design">Topic Design</a></li>
+          </ul>
+        </li>
+        <li><a href="#problems">Problems</a>
+          <ul>
+            <li><a href="#hot-spots">Hot Spots</a></li>
+            <li><a href="#discovery-1">Discovery</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
     <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a>
       <ul>
         <li><a href="#receiver-anonymity">Receiver Anonymity</a></li>
-        <li><a href="#default-topic">Default Topic</a></li>
       </ul>
     </li>
     <li><a href="#copyright">Copyright</a></li>
