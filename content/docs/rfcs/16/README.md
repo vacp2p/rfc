@@ -115,7 +115,7 @@ none
 
 ## Relay API
 
-Refer to the [Waku Relay specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md) for more information on the relaying of messages.
+Refer to the [Waku Relay specification](/specs/11/) for more information on the relaying of messages.
 
 ### `post_waku_v2_relay_v1_message`
 
@@ -176,7 +176,7 @@ The `get_waku_v2_relay_v1_messages` method returns a list of messages that were 
 
 ## Relay Private API
 
-The Private API provides functionality to encrypt/decrypt `WakuMessage` payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with [Waku v1 nodes](https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md).
+The Private API provides functionality to encrypt/decrypt `WakuMessage` payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with [Waku v1 nodes](/specs/6/).
 It is the API client's responsibility to keep track of the keys used for encrypted communication. Since keys must be cached by the client and provided to the node to encrypt/decrypt payloads, a Private API SHOULD NOT be exposed on non-local or untrusted nodes.
 
 ### Types
@@ -212,7 +212,7 @@ Generates and returns a public/private key pair that can be used for asymmetric 
 none
 
 #### Response
-- **[`KeyPair`](#KeyPair)** - A new public/private key pair as hex encoded data strings
+- **[`KeyPair`](#keypair)** - A new public/private key pair as hex encoded data strings
 
 ### `post_waku_v2_private_v1_symmetric_message`
 
@@ -282,7 +282,7 @@ Before returning the messages, the server decrypts the message payloads using th
 
 #### Response
 
-- **`Array`[[`WakuMessage`](#wakuymessage)]** - the latest `messages` on the polled `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
+- **`Array`[[`WakuMessage`](#wakumessage)]** - the latest `messages` on the polled `topic` or an [error](https://www.jsonrpc.org/specification#error_object) on failure.
 
 
 ## Store API
@@ -307,20 +307,20 @@ The following structured types are defined for use on the Store API:
 
 `PagingOptions` is an `Object` containing the following fields:
 
-| Field | Type | Inclusion | Description |
-| ----: | :---: | :---: |----------- |
-| `pageSize` | `Number` | mandatory | Number of messages to retrieve per page |
-| `cursor` | [`Index`](#Index) | optional | Message [`Index`](#Index) from which to perform pagination. If not included and `forward` is set to `true`, paging will be performed from the beginning of the list. If not included and `forward` is set to `false`, paging will be performed from the end of the list.|
-| `forward` | `Bool` | mandatory | `true` if paging forward, `false` if paging backward |
+| Field |       Type        | Inclusion | Description                                                                                                                                                                                                                                                              |
+| ----: |:-----------------:| :---: |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `pageSize` |     `Number`      | mandatory | Number of messages to retrieve per page                                                                                                                                                                                                                                  |
+| `cursor` | [`Index`](#index) | optional | Message [`Index`](#index) from which to perform pagination. If not included and `forward` is set to `true`, paging will be performed from the beginning of the list. If not included and `forward` is set to `false`, paging will be performed from the end of the list. |
+| `forward` |      `Bool`       | mandatory | `true` if paging forward, `false` if paging backward                                                                                                                                                                                                                     |
 
 #### Index
 
 `Index` is an `Object` containing the following fields:
 
-| Field | Type | Inclusion | Description |
-| ----: | :---: | :---: |----------- |
-| `digest` | `String` | mandatory | A hash for the message at this [`Index`](#Index) |
-| `receivedTime` | `Number` | mandatory | UNIX timestamp in nanoseconds at which the message at this [`Index`](#Index) was received |
+| Field | Type | Inclusion | Description                                                                               |
+| ----: | :---: | :---: |-------------------------------------------------------------------------------------------|
+| `digest` | `String` | mandatory | A hash for the message at this [`Index`](#index)                                          |
+| `receivedTime` | `Number` | mandatory | UNIX timestamp in nanoseconds at which the message at this [`Index`](#index) was received |
 
 #### ContentFilter
 
@@ -332,7 +332,7 @@ The following structured types are defined for use on the Store API:
 
 ### `get_waku_v2_store_v1_messages`
 
-The `get_waku_v2_store_v1_messages` method retrieves historical messages on specific content topics. This method MAY be called with [`PagingOptions`](#pagingoptions), to retrieve historical messages on a per-page basis. If the request included [`PagingOptions`](#pagingoptions), the node MUST return messages on a per-page basis and include [`PagingOptions`](#pagingoptions) in the response. These [`PagingOptions`](#pagingoptions) MUST contain a `cursor` pointing to the [`Index`](#Index) from which a new page can be requested.
+The `get_waku_v2_store_v1_messages` method retrieves historical messages on specific content topics. This method MAY be called with [`PagingOptions`](#pagingoptions), to retrieve historical messages on a per-page basis. If the request included [`PagingOptions`](#pagingoptions), the node MUST return messages on a per-page basis and include [`PagingOptions`](#pagingoptions) in the response. These [`PagingOptions`](#pagingoptions) MUST contain a `cursor` pointing to the [`Index`](#index) from which a new page can be requested.
 
 #### Parameters
 
@@ -340,8 +340,8 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 | ----: | :---: | :---: |----------- |
 | `pubsubTopic` | `String` | optional | The pubsub topic on which a  [`WakuMessage`](#wakumessage) is published |
 | `contentFilters` | `Array`[[`ContentFilter`](#contentfilter)] | optional | Array of content filters to query for historical messages |
-| `startTime` | `Number`| optional | The inclusive lower bound on the [`timestamp`](/spec/14#Payloads) of queried [`WakuMessage`s](#wakumessage). This field holds the Unix epoch time in nanoseconds as a 64-bits integer value. |
-| `endTime` | `Number` | optional |  The inclusive upper bound on the [`timestamp`](/spec/14#Payloads) of queried [`WakuMessage`s](#wakumessage). This field holds the Unix epoch time in nanoseconds as a 64-bits integer value. |
+| `startTime` | `Number`| optional | The inclusive lower bound on the [`timestamp`](/spec/14#message-attributes) of queried [`WakuMessage`s](#wakumessage). This field holds the Unix epoch time in nanoseconds as a 64-bits integer value. |
+| `endTime` | `Number` | optional |  The inclusive upper bound on the [`timestamp`](/spec/14#message-attributes) of queried [`WakuMessage`s](#wakumessage). This field holds the Unix epoch time in nanoseconds as a 64-bits integer value. |
 | `pagingOptions` | [`PagingOptions`](#pagingoptions) | optional | Pagination information |
 
 #### Response
@@ -350,7 +350,7 @@ The `get_waku_v2_store_v1_messages` method retrieves historical messages on spec
 
 ## Filter API
 
-Refer to the [Waku Filter specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md) for more information on content filtering.
+Refer to the [Waku Filter specification](/specs/12/) for more information on content filtering.
 
 ### Types
 
@@ -366,7 +366,7 @@ The following structured types are defined for use on the Filter API:
 
 ### `post_waku_v2_filter_v1_subscription`
 
-The `post_waku_v2_filter_v1_subscription` method creates a subscription in a [light node](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale) for messages that matches a content filter and, optionally, a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
+The `post_waku_v2_filter_v1_subscription` method creates a subscription in a [light node](/spec/12/#rationale) for messages that matches a content filter and, optionally, a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
 
 #### Parameters
 
@@ -381,7 +381,7 @@ The `post_waku_v2_filter_v1_subscription` method creates a subscription in a [li
 
 ### `delete_waku_v2_filter_v1_subscription`
 
-The `delete_waku_v2_filter_v1_subscription` method removes subscriptions in a [light node](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale) matching a content filter and, optionally, a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
+The `delete_waku_v2_filter_v1_subscription` method removes subscriptions in a [light node](/spec/12/#rationale) matching a content filter and, optionally, a [PubSub `topic`](https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor).
 
 #### Parameters
 
@@ -435,7 +435,8 @@ The `get_waku_v2_admin_v1_peers` method returns an array of peers registered on 
 none
 
 #### Response
-- **`Array`[[`WakuPeer`](#WakuPeer)]** - Array of peers registered on this node
+
+- **`Array`[[`WakuPeer`](#wakupeer)]** - Array of peers registered on this node
 
 ### `post_waku_v2_admin_v1_peers`
 
@@ -630,7 +631,7 @@ This method is part of the `store` API and the specific resources to retrieve ar
 1. [JSON-RPC specification](https://www.jsonrpc.org/specification)
 1. [LibP2P Addressing](https://docs.libp2p.io/concepts/addressing/)
 1. [LibP2P PubSub specification - topic descriptor](https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor)
-1. [Waku v2 specification](https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md)
+1. [Waku v2 specification](/specs/10/)
 1. [IETF RFC 4648 - The Base16, Base32, and Base64 Data Encodings](https://datatracker.ietf.org/doc/html/rfc4648)
 
 # Copyright
