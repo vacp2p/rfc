@@ -24,6 +24,7 @@ To reduce reliance on external servers for providing appropriate link previews, 
 - Community: Refer to [56/STATUS-COMMUNITIES](/spec/56)
 - Channel: Refer to terminology in [56/STATUS-COMMUNITIES](/spec/56)
 - User: Refer to terminology in [56/STATUS-COMMUNITIES](/spec/56)
+- Shard Refer to terminology in [51/WAKU2-RELAY-SHARDING](/spec/51)
 
 # Wire Format
 
@@ -70,6 +71,8 @@ message User {
 message URLData {
     // Community, Channel, or User
     bytes content = 1;
+    uint32 shard_cluster = 2;
+    uint32 shard_index = 3;
 }
 ```
 
