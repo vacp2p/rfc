@@ -488,7 +488,7 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   Relay API
   <a class="anchor" href="#relay-api">#</a>
 </h2>
-<p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-relay.md">Waku Relay specification</a> for more information on the relaying of messages.</p>
+<p>Refer to the <a href="/specs/11/">Waku Relay specification</a> for more information on the relaying of messages.</p>
 <h3 id="post_waku_v2_relay_v1_message">
   <code>post_waku_v2_relay_v1_message</code>
   <a class="anchor" href="#post_waku_v2_relay_v1_message">#</a>
@@ -635,7 +635,7 @@ the retrieved version string MAY contain the git commit hash alone or in combina
   Relay Private API
   <a class="anchor" href="#relay-private-api">#</a>
 </h2>
-<p>The Private API provides functionality to encrypt/decrypt <code>WakuMessage</code> payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v1/waku-1.md">Waku v1 nodes</a>.
+<p>The Private API provides functionality to encrypt/decrypt <code>WakuMessage</code> payloads using either symmetric or asymmetric cryptography. This allows backwards compatibility with <a href="/specs/6/">Waku v1 nodes</a>.
 It is the API client&rsquo;s responsibility to keep track of the keys used for encrypted communication. Since keys must be cached by the client and provided to the node to encrypt/decrypt payloads, a Private API SHOULD NOT be exposed on non-local or untrusted nodes.</p>
 <h3 id="types-2">
   Types
@@ -703,7 +703,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-7">#</a>
 </h4>
 <ul>
-<li><strong><a href="#KeyPair"><code>KeyPair</code></a></strong> - A new public/private key pair as hex encoded data strings</li>
+<li><strong><a href="#keypair"><code>KeyPair</code></a></strong> - A new public/private key pair as hex encoded data strings</li>
 </ul>
 <h3 id="post_waku_v2_private_v1_symmetric_message">
   <code>post_waku_v2_private_v1_symmetric_message</code>
@@ -879,7 +879,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-11">#</a>
 </h4>
 <ul>
-<li><strong><code>Array</code>[<a href="#wakuymessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
+<li><strong><code>Array</code>[<a href="#wakumessage"><code>WakuMessage</code></a>]</strong> - the latest <code>messages</code> on the polled <code>topic</code> or an <a href="https://www.jsonrpc.org/specification#error_object">error</a> on failure.</li>
 </ul>
 <h2 id="store-api">
   Store API
@@ -943,9 +943,9 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 </tr>
 <tr>
 <td style="text-align:right"><code>cursor</code></td>
-<td style="text-align:center"><a href="#Index"><code>Index</code></a></td>
+<td style="text-align:center"><a href="#index"><code>Index</code></a></td>
 <td style="text-align:center">optional</td>
-<td>Message <a href="#Index"><code>Index</code></a> from which to perform pagination. If not included and <code>forward</code> is set to <code>true</code>, paging will be performed from the beginning of the list. If not included and <code>forward</code> is set to <code>false</code>, paging will be performed from the end of the list.</td>
+<td>Message <a href="#index"><code>Index</code></a> from which to perform pagination. If not included and <code>forward</code> is set to <code>true</code>, paging will be performed from the beginning of the list. If not included and <code>forward</code> is set to <code>false</code>, paging will be performed from the end of the list.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>forward</code></td>
@@ -974,13 +974,13 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 <td style="text-align:right"><code>digest</code></td>
 <td style="text-align:center"><code>String</code></td>
 <td style="text-align:center">mandatory</td>
-<td>A hash for the message at this <a href="#Index"><code>Index</code></a></td>
+<td>A hash for the message at this <a href="#index"><code>Index</code></a></td>
 </tr>
 <tr>
 <td style="text-align:right"><code>receivedTime</code></td>
 <td style="text-align:center"><code>Number</code></td>
 <td style="text-align:center">mandatory</td>
-<td>UNIX timestamp in nanoseconds at which the message at this <a href="#Index"><code>Index</code></a> was received</td>
+<td>UNIX timestamp in nanoseconds at which the message at this <a href="#index"><code>Index</code></a> was received</td>
 </tr>
 </tbody>
 </table>
@@ -1011,7 +1011,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <code>get_waku_v2_store_v1_messages</code>
   <a class="anchor" href="#get_waku_v2_store_v1_messages">#</a>
 </h3>
-<p>The <code>get_waku_v2_store_v1_messages</code> method retrieves historical messages on specific content topics. This method MAY be called with <a href="#pagingoptions"><code>PagingOptions</code></a>, to retrieve historical messages on a per-page basis. If the request included <a href="#pagingoptions"><code>PagingOptions</code></a>, the node MUST return messages on a per-page basis and include <a href="#pagingoptions"><code>PagingOptions</code></a> in the response. These <a href="#pagingoptions"><code>PagingOptions</code></a> MUST contain a <code>cursor</code> pointing to the <a href="#Index"><code>Index</code></a> from which a new page can be requested.</p>
+<p>The <code>get_waku_v2_store_v1_messages</code> method retrieves historical messages on specific content topics. This method MAY be called with <a href="#pagingoptions"><code>PagingOptions</code></a>, to retrieve historical messages on a per-page basis. If the request included <a href="#pagingoptions"><code>PagingOptions</code></a>, the node MUST return messages on a per-page basis and include <a href="#pagingoptions"><code>PagingOptions</code></a> in the response. These <a href="#pagingoptions"><code>PagingOptions</code></a> MUST contain a <code>cursor</code> pointing to the <a href="#index"><code>Index</code></a> from which a new page can be requested.</p>
 <h4 id="parameters-12">
   Parameters
   <a class="anchor" href="#parameters-12">#</a>
@@ -1042,13 +1042,13 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 <td style="text-align:right"><code>startTime</code></td>
 <td style="text-align:center"><code>Number</code></td>
 <td style="text-align:center">optional</td>
-<td>The inclusive lower bound on the <a href="/spec/14#Payloads"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+<td>The inclusive lower bound on the <a href="/spec/14#message-attributes"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>endTime</code></td>
 <td style="text-align:center"><code>Number</code></td>
 <td style="text-align:center">optional</td>
-<td>The inclusive upper bound on the <a href="/spec/14#Payloads"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
+<td>The inclusive upper bound on the <a href="/spec/14#message-attributes"><code>timestamp</code></a> of queried <a href="#wakumessage"><code>WakuMessage</code>s</a>. This field holds the Unix epoch time in nanoseconds as a 64-bits integer value.</td>
 </tr>
 <tr>
 <td style="text-align:right"><code>pagingOptions</code></td>
@@ -1069,7 +1069,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   Filter API
   <a class="anchor" href="#filter-api">#</a>
 </h2>
-<p>Refer to the <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md">Waku Filter specification</a> for more information on content filtering.</p>
+<p>Refer to the <a href="/specs/12/">Waku Filter specification</a> for more information on content filtering.</p>
 <h3 id="types-4">
   Types
   <a class="anchor" href="#types-4">#</a>
@@ -1102,7 +1102,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <code>post_waku_v2_filter_v1_subscription</code>
   <a class="anchor" href="#post_waku_v2_filter_v1_subscription">#</a>
 </h3>
-<p>The <code>post_waku_v2_filter_v1_subscription</code> method creates a subscription in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> for messages that matches a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>The <code>post_waku_v2_filter_v1_subscription</code> method creates a subscription in a <a href="/spec/12/#rationale">light node</a> for messages that matches a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
 <h4 id="parameters-13">
   Parameters
   <a class="anchor" href="#parameters-13">#</a>
@@ -1142,7 +1142,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <code>delete_waku_v2_filter_v1_subscription</code>
   <a class="anchor" href="#delete_waku_v2_filter_v1_subscription">#</a>
 </h3>
-<p>The <code>delete_waku_v2_filter_v1_subscription</code> method removes subscriptions in a <a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-filter.md#rationale">light node</a> matching a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
+<p>The <code>delete_waku_v2_filter_v1_subscription</code> method removes subscriptions in a <a href="/spec/12/#rationale">light node</a> matching a content filter and, optionally, a <a href="https://github.com/libp2p/specs/blob/master/pubsub/README.md#the-topic-descriptor">PubSub <code>topic</code></a>.</p>
 <h4 id="parameters-14">
   Parameters
   <a class="anchor" href="#parameters-14">#</a>
@@ -1272,7 +1272,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
   <a class="anchor" href="#response-16">#</a>
 </h4>
 <ul>
-<li><strong><code>Array</code>[<a href="#WakuPeer"><code>WakuPeer</code></a>]</strong> - Array of peers registered on this node</li>
+<li><strong><code>Array</code>[<a href="#wakupeer"><code>WakuPeer</code></a>]</strong> - Array of peers registered on this node</li>
 </ul>
 <h3 id="post_waku_v2_admin_v1_peers">
   <code>post_waku_v2_admin_v1_peers</code>
@@ -1486,7 +1486,7 @@ It is the API client&rsquo;s responsibility to keep track of the keys used for e
 <li><a href="https://www.jsonrpc.org/specification">JSON-RPC specification</a></li>
 <li><a href="https://docs.libp2p.io/concepts/addressing/">LibP2P Addressing</a></li>
 <li><a href="https://github.com/libp2p/specs/tree/master/pubsub#the-topic-descriptor">LibP2P PubSub specification - topic descriptor</a></li>
-<li><a href="https://github.com/vacp2p/specs/blob/master/specs/waku/v2/waku-v2.md">Waku v2 specification</a></li>
+<li><a href="/specs/10/">Waku v2 specification</a></li>
 <li><a href="https://datatracker.ietf.org/doc/html/rfc4648">IETF RFC 4648 - The Base16, Base32, and Base64 Data Encodings</a></li>
 </ol>
 <h1 id="copyright">
