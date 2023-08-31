@@ -545,6 +545,15 @@ Motivation # Waku was created to incrementally improve in areas that Whisper is 
     </item>
     
     <item>
+      <title>61/STATUS-Community-History-Archives</title>
+      <link>https://rfc.vac.dev/spec/61/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/61/</guid>
+      <description>Abstract # Messages are stored permanently by store nodes (13/WAKU2-STORE) for up to a certain configurable period of time, limited by the overall storage provided by a store node. Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels.</description>
+    </item>
+    
+    <item>
       <title>7/WAKU-DATA</title>
       <link>https://rfc.vac.dev/spec/7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

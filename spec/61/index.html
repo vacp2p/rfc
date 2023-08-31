@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # Messages are stored permanently by store nodes (13/WAKU2-STORE) for up to a certain configurable period of time, limited by the overall storage provided by a store node. Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="61/STATUS-Community-History-Archives" />
+<meta property="og:description" content="Abstract # Messages are stored permanently by store nodes (13/WAKU2-STORE) for up to a certain configurable period of time, limited by the overall storage provided by a store node. Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/61/" /><meta property="article:section" content="docs" />
+
+
+
+<title>61/STATUS-Community-History-Archives | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.c5d1bce82efdf18368df717201616946c115a4bae1b1e271bf9f2d1e7aeef92e.js" integrity="sha256-xdG86C798YNo33FyAWFpRsEVpLrhseJxv58tHnru&#43;S4="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/">58/RLN-V2</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>61/STATUS-Community-History-Archives</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#requirements--assumptions">Requirements / Assumptions</a></li>
+    <li><a href="#overview">Overview</a>
+      <ul>
+        <li><a href="#serving-community-history-archives">Serving community history archives</a></li>
+        <li><a href="#serving-archives-for-missed-messages">Serving archives for missed messages</a></li>
+        <li><a href="#receiving-community-history-archives">Receiving community history archives</a></li>
+      </ul>
+    </li>
+    <li><a href="#storing-live-messages">Storing live messages</a>
+      <ul>
+        <li><a href="#exporting-messages-for-bundling">Exporting messages for bundling</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-history-archives">Message history archives</a>
+      <ul>
+        <li><a href="#wakumessagehistoryarchive">WakuMessageHistoryArchive</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-history-archive-index">Message history archive index</a>
+      <ul>
+        <li><a href="#wakumessagearchiveindex">WakuMessageArchiveIndex</a></li>
+      </ul>
+    </li>
+    <li><a href="#creating-message-archive-torrents">Creating message archive torrents</a>
+      <ul>
+        <li><a href="#ensuring-reproducible-data-pieces">Ensuring reproducible data pieces</a>
+          <ul>
+            <li><a href="#example-without-padding"><strong>Example: Without padding</strong></a></li>
+            <li><a href="#example-with-padding"><strong>Example: With padding</strong></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#seeding-message-history-archives">Seeding message history archives</a></li>
+    <li><a href="#creating-magnet-links">Creating magnet links</a></li>
+    <li><a href="#message-archive-distribution">Message archive distribution</a></li>
+    <li><a href="#canonical-message-histories">Canonical message histories</a></li>
+    <li><a href="#fetching-message-history-archives">Fetching message history archives</a>
+      <ul>
+        <li><a href="#downloading-message-archives">Downloading message archives</a></li>
+      </ul>
+    </li>
+    <li><a href="#storing-historical-messages">Storing historical messages</a></li>
+    <li><a href="#considerations">Considerations</a>
+      <ul>
+        <li><a href="#control-node-honesty">Control node honesty</a></li>
+        <li><a href="#bandwidth-consumption">Bandwidth consumption</a></li>
+        <li><a href="#multiple-community-owners">Multiple community owners</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="61status-community-history-archives">
+  61/STATUS-Community-History-Archives
+  <a class="anchor" href="#61status-community-history-archives">#</a>
+</h1>
+
+  
+      <h1 id="status-community-history-archives">
+  Status Community History Archives
+  <a class="anchor" href="#status-community-history-archives">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: r4bbit <a href="mailto:r4bbit@status.im">r4bbit@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Sanaz Taheri <a href="mailto:sanaz@status.im">sanaz@status.im</a>
+          
+              ,
+              John Lea <a href="mailto:john@status.im">john@status.im</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>Messages are stored permanently by store nodes (<a href="/spec/13/">13/WAKU2-STORE</a>) for up to a certain configurable period of time, limited by the overall storage provided by a store node.
+Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range.
+This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels.</p>
+<p>This specification describes how <strong>Control Nodes</strong> (which are specific nodes in Status communities) archive historical message data of their communities, beyond the time range limit provided by Store Nodes using the <a href="https://bittorrent.org">BitTorrent</a> protocol.
+It also describes how the archives are distributed to community members via the Status network, so they can fetch them and gain access to a complete message history.</p>
+<h1 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h1>
+<p>The following terminology is used throughout this specification. Notice that some actors listed here are nodes that operate in Waku networks only, while others operate in the Status communities layer):</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>References</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Waku node</td>
+<td>An Waku node (<a href="/spec/10/">10/WAKU2</a>) that implements <a href="/spec/11/">11/WAKU2-RELAY</a></td>
+</tr>
+<tr>
+<td>Store node</td>
+<td>A Waku node that implements <a href="/spec/13/">13/WAKU2-STORE</a></td>
+</tr>
+<tr>
+<td>Waku network</td>
+<td>A group of Waku nodes forming a graph, connected via <a href="/spec/11/">11/WAKU2-RELAY</a></td>
+</tr>
+<tr>
+<td>Status user</td>
+<td>An Status account that is used in a Status consumer product, such as Status Mobile or Status Desktop</td>
+</tr>
+<tr>
+<td>Status node</td>
+<td>A Status client run by a Status application</td>
+</tr>
+<tr>
+<td>Control node</td>
+<td>A Status node that owns the private key for a Status community</td>
+</tr>
+<tr>
+<td>Community member</td>
+<td>A Status user that is part of a Status community, not owning the private key of the community</td>
+</tr>
+<tr>
+<td>Community member node</td>
+<td>A Status node with message archive capabilities enabled, run by a community member</td>
+</tr>
+<tr>
+<td>Live messages</td>
+<td>Waku messages received through the Waku network</td>
+</tr>
+<tr>
+<td>BitTorrent client</td>
+<td>A program implementing the <a href="https://bittorrent.org">BitTorrent</a> protocol</td>
+</tr>
+<tr>
+<td>Torrent/Torrent file</td>
+<td>A file containing metadata about data to be downloaded by BitTorrent clients</td>
+</tr>
+<tr>
+<td>Magnet link</td>
+<td>A link encoding the metadata provided by a torrent file (<a href="https://en.wikipedia.org/wiki/Magnet_URI_scheme">Magnet URI scheme</a>)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="requirements--assumptions">
+  Requirements / Assumptions
+  <a class="anchor" href="#requirements--assumptions">#</a>
+</h1>
+<p>This specification has the following assumptions:</p>
+<ul>
+<li>Store nodes(<a href="/spec/13/">13/WAKU2-STORE</a>) are available 24/7, ensuring constant live message availability.</li>
+<li>The storage time range limit is 30 days.</li>
+<li>Store nodes have enough storage to persist historical messages for up to 30 days.</li>
+<li>No store nodes have storage to persist historical messages older than 30 days.</li>
+<li>All nodes are honest.</li>
+<li>The network is reliable.</li>
+</ul>
+<p>Furthermore, it assumes that:</p>
+<ul>
+<li>Control nodes have enough storage to persist historical messages older than 30 days.</li>
+<li>Control nodes provide archives with historical messages <strong>at least</strong> every 30 days.</li>
+<li>Control nodes receive all community messages.</li>
+<li>Control nodes are honest.</li>
+<li>Control nodes know at least one store node from which it can query historical messages.</li>
+</ul>
+<p>These assumptions are less than ideal and will be enhanced in future work. This <a href="https://forum.vac.dev/t/status-communities-protocol-and-product-point-of-view/114">forum discussion</a> provides more details.</p>
+<h1 id="overview">
+  Overview
+  <a class="anchor" href="#overview">#</a>
+</h1>
+<p>The following is a high-level overview of the user flow and features this specification describes. For more detailed descriptions, read the dedicated sections in this specification.</p>
+<h2 id="serving-community-history-archives">
+  Serving community history archives
+  <a class="anchor" href="#serving-community-history-archives">#</a>
+</h2>
+<p>Control nodes go through the following (high level) process to provide community members with message histories:</p>
+<ol>
+<li>Community owner creates a Status community (previously known as <a href="https://github.com/status-im/specs/pull/151">org channels</a>) which makes its node a Control node.</li>
+<li>Community owner enables message archive capabilities (on by default but can be turned off as well - see <a href="https://github.com/status-im/feature-specs/pull/36">UI feature spec</a>).</li>
+<li>A special type of channel to exchange metadata about the archival data is created, this channel is not visible in the user interface.</li>
+<li>Community owner invites community members.</li>
+<li>Control node receives messages published in channels and stores them into a local database.</li>
+<li>After 7 days, the control node exports and compresses last 7 days worth of messages from database and bundles it together with a <a href="#waku-message-archive-index">message archive index</a> into a torrent, from which it then creates a magnet link (<a href="https://en.wikipedia.org/wiki/Magnet_URI_scheme">Magnet URI scheme</a>, <a href="https://www.bittorrent.org/beps/bep_0009.html">Extensions for Peers to Send Metadata Files</a>).</li>
+<li>Control node sends the magnet link created in step 6 to community members via special channel created in step 3 through the Waku network.</li>
+<li>Every subsequent 7 days, steps 6 and 7 are repeated and the new message archive data is appended to the previously created message archive data.</li>
+</ol>
+<h2 id="serving-archives-for-missed-messages">
+  Serving archives for missed messages
+  <a class="anchor" href="#serving-archives-for-missed-messages">#</a>
+</h2>
+<p>If the control node goes offline (where &ldquo;offline&rdquo; means, the control node&rsquo;s main process is no longer running), it MUST go through the following process:</p>
+<ol>
+<li>Control node restarts</li>
+<li>Control node requests messages from store nodes for the missed time range for all channels in their community</li>
+<li>All missed messages are stored into control node&rsquo;s local message database</li>
+<li>If 7 or more days have elapsed since the last message history torrent was created, the control node will perform step 6 and 7 of <a href="#serving-community-history-archives">Serving community history archives</a> for every 7 days worth of messages in the missed time range (e.g. if the node was offline for 30 days, it will create 4 message history archives)</li>
+</ol>
+<h2 id="receiving-community-history-archives">
+  Receiving community history archives
+  <a class="anchor" href="#receiving-community-history-archives">#</a>
+</h2>
+<p>Community member nodes go through the following (high level) process to fetch and restore community message histories:</p>
+<ol>
+<li>User joins community and becomes community member (see <a href="/spec/56/">org channels spec</a>)</li>
+<li>By joining a community, member nodes automatically subscribe to special channel for message archive metadata exchange provided by the community</li>
+<li>Member node requests live message history (last 30 days) of all the community channels including the special channel from store nodes</li>
+<li>Member node receives Waku message (<a href="https://rfc.vac.dev/spec/14/">14/WAKU2-MESSAGE</a>) that contains the metadata magnet link from the special channel</li>
+<li>Member node extracts the magnet link from the Waku message and passes it to torrent client</li>
+<li>Member node downloads <a href="#message-history-archive-index">message archive index</a> file and determines which message archives are not downloaded yet (all or some)</li>
+<li>Member node fetches missing message archive data via torrent</li>
+<li>Member node unpacks and decompresses message archive data to then hydrate its local database, deleting any messages for that community that the database previously stored in the same time range as covered by the message history archive</li>
+</ol>
+<h1 id="storing-live-messages">
+  Storing live messages
+  <a class="anchor" href="#storing-live-messages">#</a>
+</h1>
+<p>For archival data serving, the control node MUST store live messages as <a href="https://rfc.vac.dev/spec/14/">14/WAKU2-MESSAGE</a>.
+This is in addition to their database of application messages.
+This is required to provide confidentiality, authenticity, and integrity of message data distributed via the BitTorrent layer, and later validated by community members when they unpack message history archives.</p>
+<p>Control nodes SHOULD remove those messages from their local databases once they are older than 30 days and after they have been turned into message archives and distributed to the BitTorrent network.</p>
+<h2 id="exporting-messages-for-bundling">
+  Exporting messages for bundling
+  <a class="anchor" href="#exporting-messages-for-bundling">#</a>
+</h2>
+<p>Control nodes export Waku messages from their local database for creating and bundling history archives using the following criteria:</p>
+<ul>
+<li>Waku messages to be exported MUST have a <code>contentTopic</code> that match any of the topics of the community channels</li>
+<li>Waku messages to be exported MUST have a <code>timestamp</code> that lies within a time range of 7 days</li>
+</ul>
+<p>The <code>timestamp</code> is determined by the context in which the control node attempts to create a message history archives as described below:</p>
+<ol>
+<li>The control node attempts to create an archive periodically for the past seven days (including the current day). In this case, the <code>timestamp</code> has to lie within those 7 days.</li>
+<li>The control node has been offline (control node&rsquo;s main process has stopped and needs restart) and attempts to create archives for all the live messages it has missed since it went offline. In this case, the <code>timestamp</code> has to lie within the day the latest message was received and the current day.</li>
+</ol>
+<p>Exported messages MUST be restored as <a href="/spec/14/">14/WAKU2-MESSAGE</a> for bundling. Waku messages that are older than 30 days and have been exported for bundling can be removed from the control node&rsquo;s database (control nodes still maintain a database of application messages).</p>
+<h1 id="message-history-archives">
+  Message history archives
+  <a class="anchor" href="#message-history-archives">#</a>
+</h1>
+<p>Message history archives are represented as <code>WakuMessageArchive</code> and created from Waku messages exported from the local database.
+Message history archives are implemented using the following protocol buffer.</p>
+<h2 id="wakumessagehistoryarchive">
+  WakuMessageHistoryArchive
+  <a class="anchor" href="#wakumessagehistoryarchive">#</a>
+</h2>
+<p>The <code>from</code> field SHOULD contain a timestamp of the time range&rsquo;s lower bound.
+The type parallels the <code>timestamp</code> of <a href="/spec/14/#payloads">WakuMessage</a>.</p>
+<p>The <code>to</code> field SHOULD contain a timestamp of the time range&rsquo;s the higher bound.</p>
+<p>The <code>contentTopic</code> field MUST contain a list of all communiity channel topics.</p>
+<p>The <code>messages</code> field MUST contain all messages that belong into the archive given its <code>from</code>, <code>to</code> and <code>contentTopic</code> fields.</p>
+<p>The <code>padding</code> field MUST contain the amount of zero bytes needed so that the overall byte size of the protobuf encoded <code>WakuMessageArchive</code> is a multiple of the <code>pieceLength</code> used to divide the message archive data into pieces.
+This is needed for seamless encoding and decoding of archival data in interation with BitTorrent as explained in <a href="#creating-message-archive-torrents">creating message archive torrents</a>.</p>
+<pre tabindex="0"><code>syntax = &#34;proto3&#34;
+
+message WakuMessageArchiveMetadata {
+  uint8 version = 1
+  uint64 from = 2
+  uint64 to = 3
+  repeated string contentTopic = 4
+}
+
+message WakuMessageArchive {
+  uint8 version = 1
+  WakuMessageArchiveMetadata metadata = 2
+  repeated WakuMessage messages = 3 // `WakuMessage` is provided by 14/WAKU2-MESSAGE
+  bytes padding = 4
+}
+</code></pre><h1 id="message-history-archive-index">
+  Message history archive index
+  <a class="anchor" href="#message-history-archive-index">#</a>
+</h1>
+<p>Control nodes MUST provide message archives for the entire community history.
+The entirey history consists of a set of <code>WakuMessageArchive</code>&rsquo;s where each archive contains a subset of historical <code>WakuMessage</code>s for a time range of seven days.
+All the <code>WakuMessageArchive</code>s are concatenated into a single file as a byte string (see <a href="#ensuring-reproducible-data-pieces">Ensuring reproducible data pieces</a>).</p>
+<p>Control nodes MUST create a message history archive index (<code>WakuMessageArchiveIndex</code>) with metadata that allows receiving nodes to only fetch the message history archives they are interested in.</p>
+<h2 id="wakumessagearchiveindex">
+  WakuMessageArchiveIndex
+  <a class="anchor" href="#wakumessagearchiveindex">#</a>
+</h2>
+<p>A <code>WakuMessageArchiveIndex</code> is a map where the key is the KECCAK-256 hash of the <code>WakuMessageArchiveIndexMetadata</code> derived from a 7-day archive and the value is an instance of that <code>WakuMessageArchiveIndexMetadata</code> corresponding to that archive.</p>
+<p>The <code>offset</code> field MUST contain the position at which the message history archive starts in the byte string of the total message archive data. This MUST be the sum of the length of all previously created message archives in bytes (see <a href="#creating-message-archive-torrents">Creating message archive torrents</a>).</p>
+<pre tabindex="0"><code>syntax = &#34;proto3&#34;
+
+message WakuMessageArchiveIndexMetadata {
+  uint8 version = 1
+  WakuMessageArchiveMetadata metadata = 2
+  uint64 offset = 3
+  uint64 num_pieces = 4
+}
+
+message WakuMessageArchiveIndex {
+  map&lt;string, WakuMessageArchiveIndexMetadata&gt; archives = 1
+}
+</code></pre><p>The control node MUST update the <code>WakuMessageArchiveIndex</code> every time it creates one or more <code>WakuMessageArchive</code>s and bundle it into a new torrent.
+For every created <code>WakuMessageArchive</code>, there MUST be a <code>WakuMessageArchiveIndexMetadata</code> entry in the <code>archives</code> field <code>WakuMessageArchiveIndex</code>.</p>
+<h1 id="creating-message-archive-torrents">
+  Creating message archive torrents
+  <a class="anchor" href="#creating-message-archive-torrents">#</a>
+</h1>
+<p>Control nodes MUST create a torrent file (&ldquo;torrent&rdquo;) containing metadata to all message history archives.
+To create a torrent file, and later serve the message archive data in the BitTorrent network, control nodes MUST store the necessary data in dedicated files on the file system.</p>
+<p>A torrent&rsquo;s source folder MUST contain the following two files:</p>
+<ul>
+<li><code>data</code> - Contains all protobuf encoded <code>WakuMessageArchive</code>&rsquo;s (as bit strings) concatenated in ascending order based on their time</li>
+<li><code>index</code> - Contains the protobuf encoded <code>WakuMessageArchiveIndex</code></li>
+</ul>
+<p>Control nodes SHOULD store these files in a dedicated folder that is identifiable via the community id.</p>
+<h2 id="ensuring-reproducible-data-pieces">
+  Ensuring reproducible data pieces
+  <a class="anchor" href="#ensuring-reproducible-data-pieces">#</a>
+</h2>
+<p>The control node MUST ensure that the byte string resulting from the protobuf encoded <code>data</code> is equal to the byte string <code>data</code> from the previously generated message archive torrent, plus the data of the latest 7 days worth of messages encoded as <code>WakuMessageArchive</code>.
+Therefore, the size of <code>data</code> grows every seven days as it&rsquo;s append only.</p>
+<p>The control nodes also MUST ensure that the byte size of every individual <code>WakuMessageArchive</code> encoded protobuf is a multiple of <code>pieceLength: ???</code> (<strong>TODO</strong>) using the <code>padding</code> field.
+If the protobuf encoded &lsquo;WakuMessageArchive<code>is not a multiple of</code>pieceLength<code>, its </code>padding<code>field MUST be filled with zero bytes and the</code>WakuMessageArchive<code>MUST be re-encoded until its size becomes multiple of</code>pieceLength`.</p>
+<p>This is necessary because the content of the <code>data</code> file will be split into pieces of <code>pieceLength</code> when the torrent file is created, and the SHA1 hash of every piece is then stored in the torrent file and later used by other nodes to request the data for each individual data piece.</p>
+<p>By fitting message archives into a multiple of <code>pieceLength</code> and ensuring they fill possible remaining space with zero bytes, control nodes prevent the <strong>next</strong> message archive to occupy that remaining space of the last piece, which will result in a different SHA1 hash for that piece.</p>
+<h3 id="example-without-padding">
+  <strong>Example: Without padding</strong>
+  <a class="anchor" href="#example-without-padding">#</a>
+</h3>
+<p>Let <code>WakuMessageArchive</code> &ldquo;A1&rdquo; be of size 20 bytes:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99
+10 11 12 13 14 15 16 17 18 19 
+</code></pre><p>With a <code>pieceLength</code> of 10 bytes, A1 will fit into <code>20 / 10 = 2</code> pieces:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99 // piece[0] SHA1: 0x123
+10 11 12 13 14 15 16 17 18 19 // piece[1] SHA1: 0x456
+</code></pre><h3 id="example-with-padding">
+  <strong>Example: With padding</strong>
+  <a class="anchor" href="#example-with-padding">#</a>
+</h3>
+<p>Let <code>WakuMessageArchive</code> &ldquo;A2&rdquo; be of size 21 bytes:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99
+10 11 12 13 14 15 16 17 18 19
+20
+</code></pre><p>With a <code>pieceLength</code> of 10 bytes, A2 will fit into <code>21 / 10 = 2</code> pieces. The remainder will introduce a third piece:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99 // piece[0] SHA1: 0x123
+10 11 12 13 14 15 16 17 18 19 // piece[1] SHA1: 0x456
+20                            // piece[2] SHA1: 0x789
+</code></pre><p>The next <code>WakuMessageArchive</code> &ldquo;A3&rdquo; will be appended (&quot;#3&quot;) to the existing data and occupy the remaining space of the third data piece. The piece at index 2 will now produce a different SHA1 hash:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99 // piece[0] SHA1: 0x123
+10 11 12 13 14 15 16 17 18 19 // piece[1] SHA1: 0x456
+20 #3 #3 #3 #3 #3 #3 #3 #3 #3 // piece[2] SHA1: 0xeef
+#3 #3 #3 #3 #3 #3 #3 #3 #3 #3 // piece[3]
+</code></pre><p>By filling up the remaining space of the third piece with A2 using its <code>padding</code> field, it is guaranteed that its SHA1 will stay the same:</p>
+<pre tabindex="0"><code> 0 11 22 33 44 55 66 77 88 99 // piece[0] SHA1: 0x123
+10 11 12 13 14 15 16 17 18 19 // piece[1] SHA1: 0x456
+20  0  0  0  0  0  0  0  0  0 // piece[2] SHA1: 0x999
+#3 #3 #3 #3 #3 #3 #3 #3 #3 #3 // piece[3]
+#3 #3 #3 #3 #3 #3 #3 #3 #3 #3 // piece[4]
+</code></pre><h1 id="seeding-message-history-archives">
+  Seeding message history archives
+  <a class="anchor" href="#seeding-message-history-archives">#</a>
+</h1>
+<p>The control node MUST seed the <a href="#creating-message-archive-torrents">generated torrent</a> until a new <code>WakuMessageArchive</code> is created.</p>
+<p>The control node SHOULD NOT seed torrents for older message history archives. Only one torrent at a time should be seeded.</p>
+<h1 id="creating-magnet-links">
+  Creating magnet links
+  <a class="anchor" href="#creating-magnet-links">#</a>
+</h1>
+<p>Once a torrent file for all message archives is created, the control node MUST derive a magnet link following the <a href="https://en.wikipedia.org/wiki/Magnet_URI_scheme">Magnet URI scheme</a> using the underlying BitTorrent protocol client.</p>
+<h1 id="message-archive-distribution">
+  Message archive distribution
+  <a class="anchor" href="#message-archive-distribution">#</a>
+</h1>
+<p>Message archives are available via the BitTorrent network as they are being <a href="#seeding-message-history-archives">seeded by the control node</a>.
+Other community member nodes will download the message archives from the BitTorrent network once they receive a magnet link that contains a message archive index.</p>
+<p>The control node MUST send magnet links containing message archives and the message archive index to a special community channel.
+The topic of that special channel follows the following format:</p>
+<pre tabindex="0"><code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
+</code></pre><p>All messages sent with this topic MUST be instances of <code>ApplicationMetadataMessage</code> (<a href="/specs/6-payloads">6/PAYLOADS</a>) with a <code>payload</code> of <code>CommunityMessageArchiveIndex</code>.</p>
+<p>Only the control node MAY post to the special channel. Other messages on this specified channel MUST be ignored by clients.
+Community members MUST NOT have permission to send messages to the special channel.
+However, community member nodes MUST subscribe to special channel to receive Waku messages containing magnet links for message archives.</p>
+<h1 id="canonical-message-histories">
+  Canonical message histories
+  <a class="anchor" href="#canonical-message-histories">#</a>
+</h1>
+<p>Only control nodes are allowed to distribute messages with magnet links via the special channel for magnet link exchange.
+Community members MUST NOT be allowed to post any messages to the special channel.</p>
+<p>Status nodes MUST ensure that any message that isn&rsquo;t signed by the control node in the special channel is ignored.</p>
+<p>Since the magnet links are created from the control node&rsquo;s database (and previously distributed archives), the message history provided by the control node becomes the canonical message history and single source of truth for the community.</p>
+<p>Community member nodes MUST replace messages in their local databases with the messages extracted from archives within the same time range.
+Messages that the control node didn&rsquo;t receive  MUST be removed and are no longer part of the message history of interest, even if it already existed in a community member node&rsquo;s database.</p>
+<h1 id="fetching-message-history-archives">
+  Fetching message history archives
+  <a class="anchor" href="#fetching-message-history-archives">#</a>
+</h1>
+<p>Generally, fetching message history archives is a three step process:</p>
+<ol>
+<li>Receive <a href="#message-history-archive-index">message archive index</a> magnet link as described in [Message archive distribution], download <code>index</code> file from torrent, then determine which message archives to download</li>
+<li>Download individual archives</li>
+</ol>
+<p>Community member nodes subscribe to the special channel that control nodes publish magnet links for message history archives to.
+There are two scenarios in which member nodes can receive such a magnet link message from the special channel:</p>
+<ol>
+<li>The member node receives it via live messages, by listening to the special channel</li>
+<li>The member node requests messages for a time range of up to 30 days from store nodes (this is the case when a new community member joins a community)</li>
+</ol>
+<h2 id="downloading-message-archives">
+  Downloading message archives
+  <a class="anchor" href="#downloading-message-archives">#</a>
+</h2>
+<p>When member nodes receive a message with a <code>CommunityMessageHistoryArchive</code> (<a href="/spec/6#communitymessagearchive">6/PAYLOADS</a>) from the aforementioned channnel, they MUST extract the <code>magnet_uri</code> and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the <code>index</code> file of the torrent (see <a href="#creating-message-archive-torrents">Creating message archive torrents</a>).</p>
+<p>Due to the nature of distributed systems, there&rsquo;s no guarantee that a received message is the &ldquo;last&rdquo; message. This is especially true when member nodes request historical messages from store nodes.</p>
+<p>Therefore, member nodes MUST wait for 20 seconds after receiving the last <code>CommunityMessageArchive</code> before they start extracting the magnet link to fetch the latest archive index.</p>
+<p>Once a message history archive index is downloaded and parsed back into <code>WakuMessageArchiveIndex</code>, community member nodes use a local lookup table to determine which of the listed archives are missing using the KECCAK-256 hashes stored in the index.</p>
+<p>For this lookup to work, member nodes MUST store the KECCAK-256 hashes of the <code>WakuMessageArchiveIndexMetadata</code> provided by the <code>index</code> file for all of the message history archives that have been downlaoded in their local database.</p>
+<p>Given a <code>WakuMessageArchiveIndex</code>, member nodes can access individual <code>WakuMessageArchiveIndexMetadata</code> to download individual archives.</p>
+<p>Community member nodes MUST choose one of the following options:</p>
+<ol>
+<li><strong>Download all archives</strong> - Request and download all data pieces for <code>data</code> provided by the torrent (this is the case for new community member nodes that haven&rsquo;t downloaded any archives yet)</li>
+<li><strong>Download only the latest archive</strong> - Request and download all pieces starting at the <code>offset</code> of the latest <code>WakuMessageArchiveIndexMetadata</code> (this the case for any member node that already has downloaded all previous history and is now interested in only the latst archive)</li>
+<li><strong>Download specific archives</strong> - Look into <code>from</code> and <code>to</code> fields of every <code>WakuMessageArchiveIndexMetadata</code> and determine the pieces for archives of a specific time range (can be the case for member nodes that have recently joined the network and are only interested in a subset of the complete history)</li>
+</ol>
+<h1 id="storing-historical-messages">
+  Storing historical messages
+  <a class="anchor" href="#storing-historical-messages">#</a>
+</h1>
+<p>When message archives are fetched, community member nodes MUST unwrap the resulting <code>WakuMessage</code> instances into <code>ApplicationMetadataMessage</code> instances and store them in their local database.
+Community member nodes SHOULD NOT store the wrapped <code>WakuMessage</code> messages.</p>
+<p>All message within the same time range MUST be replaced with the messages provided by the message history archive.</p>
+<p>Community members nodes MUST ignore the expiration state of each archive message.</p>
+<h1 id="considerations">
+  Considerations
+  <a class="anchor" href="#considerations">#</a>
+</h1>
+<p>The following are things to cosider when implementing this specification.</p>
+<h2 id="control-node-honesty">
+  Control node honesty
+  <a class="anchor" href="#control-node-honesty">#</a>
+</h2>
+<p>This spec assumes that all control nodes are honest and behave according to the spec. Meaning they don&rsquo;t inject their own messages into, or remove any messages from historic archives.</p>
+<h2 id="bandwidth-consumption">
+  Bandwidth consumption
+  <a class="anchor" href="#bandwidth-consumption">#</a>
+</h2>
+<p>Community member nodes will download the latest archive they&rsquo;ve received from the archive index, which includes messages from the last seven days. Assuming that community members nodes were online for that time range, they have already downloaded that message data and will now download an archive that contains the same.</p>
+<p>This means there&rsquo;s a possibility member nodes will download the same data at least twice.</p>
+<h2 id="multiple-community-owners">
+  Multiple community owners
+  <a class="anchor" href="#multiple-community-owners">#</a>
+</h2>
+<p>It is possible for control nodes to export the private key of their owned community and pass it to other users so they become control nodes as well.
+This means, it&rsquo;s possible for multiple control nodes to exist.</p>
+<p>This might conflict with the assumption that the control node serves as a single source of thruth. Multiple control nodes can have different message histories.</p>
+<p>Not only will multiple control nodes multiply the amount of archive index messages being distributed to the network, they might also contain different sets of magnet links and their corresponding hashes.</p>
+<p>Even if just a single message is missing in one of the histories, the hashes presented in archive indices will look completely different, resulting in the community member node to download the corresponding archive (which might be identical to an archive that was already downloaded, except for that one message).</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#requirements--assumptions">Requirements / Assumptions</a></li>
+    <li><a href="#overview">Overview</a>
+      <ul>
+        <li><a href="#serving-community-history-archives">Serving community history archives</a></li>
+        <li><a href="#serving-archives-for-missed-messages">Serving archives for missed messages</a></li>
+        <li><a href="#receiving-community-history-archives">Receiving community history archives</a></li>
+      </ul>
+    </li>
+    <li><a href="#storing-live-messages">Storing live messages</a>
+      <ul>
+        <li><a href="#exporting-messages-for-bundling">Exporting messages for bundling</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-history-archives">Message history archives</a>
+      <ul>
+        <li><a href="#wakumessagehistoryarchive">WakuMessageHistoryArchive</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-history-archive-index">Message history archive index</a>
+      <ul>
+        <li><a href="#wakumessagearchiveindex">WakuMessageArchiveIndex</a></li>
+      </ul>
+    </li>
+    <li><a href="#creating-message-archive-torrents">Creating message archive torrents</a>
+      <ul>
+        <li><a href="#ensuring-reproducible-data-pieces">Ensuring reproducible data pieces</a>
+          <ul>
+            <li><a href="#example-without-padding"><strong>Example: Without padding</strong></a></li>
+            <li><a href="#example-with-padding"><strong>Example: With padding</strong></a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#seeding-message-history-archives">Seeding message history archives</a></li>
+    <li><a href="#creating-magnet-links">Creating magnet links</a></li>
+    <li><a href="#message-archive-distribution">Message archive distribution</a></li>
+    <li><a href="#canonical-message-histories">Canonical message histories</a></li>
+    <li><a href="#fetching-message-history-archives">Fetching message history archives</a>
+      <ul>
+        <li><a href="#downloading-message-archives">Downloading message archives</a></li>
+      </ul>
+    </li>
+    <li><a href="#storing-historical-messages">Storing historical messages</a></li>
+    <li><a href="#considerations">Considerations</a>
+      <ul>
+        <li><a href="#control-node-honesty">Control node honesty</a></li>
+        <li><a href="#bandwidth-consumption">Bandwidth consumption</a></li>
+        <li><a href="#multiple-community-owners">Multiple community owners</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
