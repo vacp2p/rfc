@@ -23,6 +23,7 @@ bookMenuLevels: 1
   - [52/WAKU2-RELAY-STATIC-SHARD-ALLOC]({{< relref "/docs/rfcs/52/README.md" >}})
   - [57/STATUS-Simple-Scaling]({{< relref "/docs/rfcs/57/README.md" >}})
   - [58/RLN-V2]({{< relref "/docs/rfcs/58/README.md" >}})
+  - [61/STATUS-Community-History-Archives]({{< relref "/docs/rfcs/61/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
