@@ -1,6 +1,6 @@
 ---
-slug: 62
-title: 62/WAKU2-NETWORK
+slug: 64
+title: 64/WAKU2-NETWORK
 name: Waku v2 Network
 status: raw
 category: Best Current Practice
