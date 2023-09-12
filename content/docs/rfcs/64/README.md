@@ -169,8 +169,8 @@ Relay nodes MUST apply [gossipsub v1.1 validation](https://github.com/libp2p/spe
 SHOULD apply all of the rules set out in the section below to determine the validity of a message.
 Validation has one of three outcomes,
 repeated here from the [gossipsub specification](https://github.com/libp2p/specs/blob/c96c9ec5909d64fe020d7630f3fd982bc18fd06a/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for ease of reference:
-1. Accept - the message is considered valid and it MUST be delivered and forwarded to the network
-2. Reject - the message is considered invalid, MUST be rejected and SHOULD trigger a gossipsub scoring penalty against the transmitting peer
+1. Accept - the message is considered valid and it MUST be delivered and forwarded to the network.
+2. Reject - the message is considered invalid, MUST be rejected and SHOULD trigger a gossipsub scoring penalty against the transmitting peer.
 3. Ignore - the message SHOULD NOT be delivered and forwarded to the network, but this MUST NOT trigger a gossipsub scoring penalty against the transmitting peer.
 
 The following validation rules are defined:
