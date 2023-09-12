@@ -76,7 +76,7 @@ it MAY choose to support some shards as a non-relay node.
 #### Bootstrapping and discovery
 
 Nodes MAY use any method to bootstrap connection to the network,
-but it is RECOMMENDED that each node retrieve a list of bootstrap peers to connect to using [EIP-1459 DNS-based discovery](https://eips.ethereum.org/EIPS/eip-1459).
+but it is RECOMMENDED that each node retrieves a list of bootstrap peers to connect to using [EIP-1459 DNS-based discovery](https://eips.ethereum.org/EIPS/eip-1459).
 Relay nodes SHOULD use [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/) to continually discover other peers in the network.
 Each relay node MUST encode its supported shards into its discoverable ENR
 as described in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/#discovery).
