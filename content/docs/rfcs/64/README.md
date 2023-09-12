@@ -54,11 +54,8 @@ There are two distinct roles evident in the network, those of:
 
 Nodes are the individual software units
 using [10/WAKU2](https://rfc.vac.dev/spec/10/) protocols to form a p2p messaging network.
-Nodes, in turn, can participate in a shard as full relayers
-or by running a combination of protocols suitable for resource-restricted environments.
-These will be referred to as _relay nodes_ and
-_non-relay nodes_
-in the rest of this document.
+Nodes, in turn, can participate in a shard as full relayers, i.e. _relay nodes_,
+or by running a combination of protocols suitable for resource-restricted environments, i.e. _non-relay nodes_.
 Nodes can also provide various services to the network,
 such as storing historical messages or protecting the network against spam.
 See the section on [default services](#default-services) for more.
@@ -79,7 +76,7 @@ it MAY choose to support some shards as a non-relay node.
 #### Bootstrapping and discovery
 
 Nodes MAY use any method to bootstrap connection to the network,
-but it is RECOMMENDED that each node retrieve a list of bootstrap peers to connect to using [EIP-1459 DNS-based discovery](https://eips.ethereum.org/EIPS/eip-1459).
+but it is RECOMMENDED that each node retrieves a list of bootstrap peers to connect to using [EIP-1459 DNS-based discovery](https://eips.ethereum.org/EIPS/eip-1459).
 Relay nodes SHOULD use [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/) to continually discover other peers in the network.
 Each relay node MUST encode its supported shards into its discoverable ENR
 as described in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/#discovery).
@@ -184,8 +181,8 @@ Relay nodes MUST apply [gossipsub v1.1 validation](https://github.com/libp2p/spe
 SHOULD apply all of the rules set out in the section below to determine the validity of a message.
 Validation has one of three outcomes,
 repeated here from the [gossipsub specification](https://github.com/libp2p/specs/blob/c96c9ec5909d64fe020d7630f3fd982bc18fd06a/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for ease of reference:
-1. Accept - the message is considered valid and it MUST be delivered and forwarded to the network
-2. Reject - the message is considered invalid, MUST be rejected and SHOULD trigger a gossipsub scoring penalty against the transmitting peer
+1. Accept - the message is considered valid and it MUST be delivered and forwarded to the network.
+2. Reject - the message is considered invalid, MUST be rejected and SHOULD trigger a gossipsub scoring penalty against the transmitting peer.
 3. Ignore - the message SHOULD NOT be delivered and forwarded to the network, but this MUST NOT trigger a gossipsub scoring penalty against the transmitting peer.
 
 The following validation rules are defined:
