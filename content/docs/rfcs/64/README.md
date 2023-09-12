@@ -54,11 +54,8 @@ There are two distinct roles evident in the network, those of:
 
 Nodes are the individual software units
 using [10/WAKU2](https://rfc.vac.dev/spec/10/) protocols to form a p2p messaging network.
-Nodes, in turn, can participate in a shard as full relayers
-or by running a combination of protocols suitable for resource-restricted environments.
-These will be referred to as _relay nodes_ and
-_non-relay nodes_
-in the rest of this document.
+Nodes, in turn, can participate in a shard as full relayers, i.e. _relay nodes_,
+or by running a combination of protocols suitable for resource-restricted environments, i.e. _non-relay nodes_.
 Nodes can also provide various services to the network,
 such as storing historical messages or protecting the network against spam.
 See the section on [default services](#default-services) for more.
