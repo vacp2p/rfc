@@ -120,6 +120,7 @@ to ensure that a pre-agreed rate limit is not exceeded by any publisher.
 While the network is under capacity,
 individual relayers MAY choose to freely route messages without RLN proofs
 up to a discretionary bandwidth limit after which messages without proofs MUST be discarded.
+This bandwidth limit SHOULD be enforced using [bandwidth validtion mechanism](#free-bandwidth-exceeded) separate from RLN rate-limiting.
 This implies that quality of service and reliability is significantly lower for messages without proofs
 and at times of high network utilization these messages may not be relayed at all.
 
@@ -137,12 +138,23 @@ thereby ensuring valid timestamps for proof generation and validation.
 ### Memberships
 
 Each publisher to the Waku Network SHOULD register an RLN membership
-with contract (TBD)[contract address]
-using the method described in (TBD)[how to register membership....]
+with one of the RLN storage contracts
+moderated in the Sepolia registry contract with address [0xF1935b338321013f11068abCafC548A7B0db732C](https://sepolia.etherscan.io/address/0xF1935b338321013f11068abCafC548A7B0db732C#code).
+Initial memberships are registered in the Sepolia RLN storage contract with address [0x58322513A35a8f747AF5A385bA14C2AbE602AA59](https://sepolia.etherscan.io/address/0x58322513A35a8f747AF5A385bA14C2AbE602AA59#code).
+RLN membership setup and registration MUST follow [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/#setup-and-registration),
+with the `staked_fund` set to `0`.
+In other words, the Waku Network does not use RLN staking. 
 
 ### RLN Proofs
 
-(TBD)
+Each RLN member MUST generate and attach an RLN proof to every published message
+as described in [17/WAKU-RLN-RELAY](https://rfc.vac.dev/spec/17/#publishing).
+Slashing is not implemented for the Waku Network.
+Instead, validators will penalise peers forwarding messages exceeding the rate limit
+as specified for [the rate-limiting validation mechanism](#rate-limit-exceeded).
+This incentivizes all nodes to validate RLN proofs
+and reject messages violating rate limits
+in order to continue participating in the network.
 
 ## Network traffic
 
