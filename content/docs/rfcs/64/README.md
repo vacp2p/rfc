@@ -117,7 +117,7 @@ to ensure that a pre-agreed rate limit is not exceeded by any publisher.
 While the network is under capacity,
 individual relayers MAY choose to freely route messages without RLN proofs
 up to a discretionary bandwidth limit after which messages without proofs MUST be discarded.
-This bandwidth limit SHOULD be enforced using [bandwidth validtion mechanism](#free-bandwidth-exceeded) separate from RLN rate-limiting.
+This bandwidth limit SHOULD be enforced using [bandwidth validation mechanism](#free-bandwidth-exceeded) separate from RLN rate-limiting.
 This implies that quality of service and reliability is significantly lower for messages without proofs
 and at times of high network utilization these messages may not be relayed at all.
 
@@ -127,7 +127,7 @@ For the Waku Network,
 the `epoch` is set to `1` second
 and the maximum number of messages published per `epoch` is limited to `1` per publisher.
 The `max_epoch_gap` is set to `20` seconds,
-meaning that validators MUST _ignore_ messages with an `epoch` more than 20 seconds into the past or future compared to the validator's own clock.
+meaning that validators MUST _reject_ messages with an `epoch` more than 20 seconds into the past or future compared to the validator's own clock.
 All nodes, validators and publishers,
 SHOULD use Network Time Protocol (NTP) to synchronize their own clocks,
 thereby ensuring valid timestamps for proof generation and validation.
@@ -198,7 +198,7 @@ This SHOULD trigger a penalty against the transmitting peer.
 If a message has a timestamp deviating by more than `20` seconds
 either into the past or the future
 when compared to the relay node's internal clock,
-the relay node MUST _ignore_ the message.
+the relay node MUST _reject_ the message.
 
 #### Free bandwidth exceeded
 
