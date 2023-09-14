@@ -554,6 +554,16 @@ Motivation # Waku was created to incrementally improve in areas that Whisper is 
     </item>
     
     <item>
+      <title>64/WAKU2-NETWORK</title>
+      <link>https://rfc.vac.dev/spec/64/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/64/</guid>
+      <description>Abstract # This RFC specifies an opinionated deployment of 10/WAKU2 protocols to form a coherent and shared decentralized messaging network that is open-access, useful for generalized messaging, privacy-preserving, scalable and accessible even to resource-restricted devices. We&amp;rsquo;ll refer to this opinionated deployment simply as the public Waku Network, the Waku Network or, if the context is clear, the network in the rest of this document.
+Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU2-RLN-RELAY routing protocol, which in turn is an extension of 11/WAKU2-RELAY with spam protection measures.</description>
+    </item>
+    
+    <item>
       <title>7/WAKU-DATA</title>
       <link>https://rfc.vac.dev/spec/7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

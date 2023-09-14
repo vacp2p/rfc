@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This RFC specifies an opinionated deployment of 10/WAKU2 protocols to form a coherent and shared decentralized messaging network that is open-access, useful for generalized messaging, privacy-preserving, scalable and accessible even to resource-restricted devices. We&rsquo;ll refer to this opinionated deployment simply as the public Waku Network, the Waku Network or, if the context is clear, the network in the rest of this document.
+Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU2-RLN-RELAY routing protocol, which in turn is an extension of 11/WAKU2-RELAY with spam protection measures.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="64/WAKU2-NETWORK" />
+<meta property="og:description" content="Abstract # This RFC specifies an opinionated deployment of 10/WAKU2 protocols to form a coherent and shared decentralized messaging network that is open-access, useful for generalized messaging, privacy-preserving, scalable and accessible even to resource-restricted devices. We&rsquo;ll refer to this opinionated deployment simply as the public Waku Network, the Waku Network or, if the context is clear, the network in the rest of this document.
+Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU2-RLN-RELAY routing protocol, which in turn is an extension of 11/WAKU2-RELAY with spam protection measures." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/64/" /><meta property="article:section" content="docs" />
+
+
+
+<title>64/WAKU2-NETWORK | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.aa0ef4a81b6a79f36a9bd120ff993585b5dfeb6cd8d4e3eaa82277b412033475.js" integrity="sha256-qg70qBtqefNqm9Eg/5k1hbXf62zY1OPqqCJ3tBIDNHU="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/">58/RLN-V2</a></li>
+<li><a href="/spec/61/">61/STATUS-Community-History-Archives</a></li>
+<li><a href="/spec/64/"class=active>64/WAKU2-NETWORK</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>64/WAKU2-NETWORK</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#theory--semantics">Theory / Semantics</a>
+      <ul>
+        <li><a href="#routing-protocol">Routing protocol</a></li>
+        <li><a href="#network-shards">Network shards</a></li>
+        <li><a href="#roles">Roles</a>
+          <ul>
+            <li><a href="#nodes">Nodes</a></li>
+            <li><a href="#applications">Applications</a></li>
+          </ul>
+        </li>
+        <li><a href="#rln-rate-limiting">RLN rate-limiting</a>
+          <ul>
+            <li><a href="#rln-parameters">RLN Parameters</a></li>
+            <li><a href="#memberships">Memberships</a></li>
+            <li><a href="#rln-proofs">RLN Proofs</a></li>
+          </ul>
+        </li>
+        <li><a href="#network-traffic">Network traffic</a>
+          <ul>
+            <li><a href="#message-attributes">Message Attributes</a></li>
+            <li><a href="#message-size">Message Size</a></li>
+            <li><a href="#message-validation">Message Validation</a></li>
+          </ul>
+        </li>
+        <li><a href="#autosharding">Autosharding</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">normative</a></li>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="64waku2-network">
+  64/WAKU2-NETWORK
+  <a class="anchor" href="#64waku2-network">#</a>
+</h1>
+
+  
+      <h1 id="waku-v2-network">
+  Waku v2 Network
+  <a class="anchor" href="#waku-v2-network">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Hanno Cornelius <a href="mailto:hanno@status.im">hanno@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This RFC specifies an opinionated deployment of <a href="https://rfc.vac.dev/spec/10/">10/WAKU2</a> protocols
+to form a coherent and shared decentralized messaging network
+that is open-access,
+useful for generalized messaging,
+privacy-preserving,
+scalable and
+accessible even to resource-restricted devices.
+We&rsquo;ll refer to this opinionated deployment simply as
+<em>the public Waku Network</em>, <em>the Waku Network</em> or, if the context is clear, <em>the network</em>
+in the rest of this document.</p>
+<h1 id="theory--semantics">
+  Theory / Semantics
+  <a class="anchor" href="#theory--semantics">#</a>
+</h1>
+<h2 id="routing-protocol">
+  Routing protocol
+  <a class="anchor" href="#routing-protocol">#</a>
+</h2>
+<p>The Waku Network is built on the <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a> routing protocol,
+which in turn is an extension of <a href="https://rfc.vac.dev/spec/11/">11/WAKU2-RELAY</a> with spam protection measures.</p>
+<h2 id="network-shards">
+  Network shards
+  <a class="anchor" href="#network-shards">#</a>
+</h2>
+<p>Traffic in the Waku Network is sharded into eight <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a> pubsub topics.
+Each pubsub topic is named according to the static shard naming format
+defined in <a href="https://rfc.vac.dev/spec/51/">51/WAKU2-RELAY-SHARDING</a>
+with <code>&lt;shard_cluster_index&gt;</code> set to <code>1</code> and
+<code>&lt;shard_number&gt;</code> occupying the range <code>0</code> to <code>7</code>.
+In other words, the Waku Network is a <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a> network
+routed on the combination of the eight pubsub topics:</p>
+<pre tabindex="0"><code>/waku/2/rs/1/0
+/waku/2/rs/1/1
+...
+/waku/2/rs/1/7
+</code></pre><h2 id="roles">
+  Roles
+  <a class="anchor" href="#roles">#</a>
+</h2>
+<p>There are two distinct roles evident in the network, those of:</p>
+<ol>
+<li>nodes, and</li>
+<li>applications.</li>
+</ol>
+<h3 id="nodes">
+  Nodes
+  <a class="anchor" href="#nodes">#</a>
+</h3>
+<p>Nodes are the individual software units
+using <a href="https://rfc.vac.dev/spec/10/">10/WAKU2</a> protocols to form a p2p messaging network.
+Nodes, in turn, can participate in a shard as full relayers, i.e. <em>relay nodes</em>,
+or by running a combination of protocols suitable for resource-restricted environments, i.e. <em>non-relay nodes</em>.
+Nodes can also provide various services to the network,
+such as storing historical messages or protecting the network against spam.
+See the section on <a href="#default-services">default services</a> for more.</p>
+<h4 id="relay-nodes">
+  Relay nodes
+  <a class="anchor" href="#relay-nodes">#</a>
+</h4>
+<p>Relay nodes MUST follow <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a>
+to route messages to other nodes in the network
+for any of the pubsub topics <a href="#network-shards">defined as the Waku Network shards</a>.
+Relay nodes MAY choose to subscribe to any of these shards,
+but MUST be subscribed to at least one defined shard.
+Each relay node SHOULD be subscribed to as many shards as it has resources to support.
+If a relay node supports an encapsulating application,
+it SHOULD be subscribed to all the shards servicing that application.
+If resource restrictions prevent a relay node from servicing all shards used by the encapsulating application,
+it MAY choose to support some shards as a non-relay node.</p>
+<h4 id="bootstrapping-and-discovery">
+  Bootstrapping and discovery
+  <a class="anchor" href="#bootstrapping-and-discovery">#</a>
+</h4>
+<p>Nodes MAY use any method to bootstrap connection to the network,
+but it is RECOMMENDED that each node retrieves a list of bootstrap peers to connect to using <a href="https://eips.ethereum.org/EIPS/eip-1459">EIP-1459 DNS-based discovery</a>.
+Relay nodes SHOULD use <a href="https://rfc.vac.dev/spec/33/">33/WAKU2-DISCV5</a> to continually discover other peers in the network.
+Each relay node MUST encode its supported shards into its discoverable ENR
+as described in <a href="https://rfc.vac.dev/spec/51/#discovery">51/WAKU2-RELAY-SHARDING</a>.
+The ENR MUST be updated if the set of supported shards change.
+A node MAY choose to ignore discovered peers that do not support any of the shards in its own subscribed set.</p>
+<h4 id="default-services">
+  Default services
+  <a class="anchor" href="#default-services">#</a>
+</h4>
+<p>For each supported shard,
+each relay node SHOULD enable and support the following protocols as a service node:</p>
+<ol>
+<li><a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a> to allow resource-restricted peers to subscribe to messages matching a specific content filter.</li>
+<li><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a> to allow other peers to request historical messages from this node. The store SHOULD be configured to retain at least <code>12</code> hours of messages per supported shard.</li>
+<li><a href="https://rfc.vac.dev/spec/19/">19/WAKU2-LIGHTPUSH</a> to allow resource-restricted peers to request publishing a message to the network on their behalf.</li>
+<li><a href="https://rfc.vac.dev/spec/34/">34/WAKU2-PEER-EXCHANGE</a> to allow resource-restricted peers to discover more peers in a resource efficient way.</li>
+</ol>
+<h4 id="non-relay-nodes">
+  Non-relay nodes
+  <a class="anchor" href="#non-relay-nodes">#</a>
+</h4>
+<p>Nodes MAY opt out of relay functionality on any network shard
+and instead request services from relay nodes as clients
+using any of the defined service protocols:</p>
+<ol>
+<li><a href="https://rfc.vac.dev/spec/12/">12/WAKU2-FILTER</a> to subscribe to messages matching a specific content filter.</li>
+<li><a href="https://rfc.vac.dev/spec/13/">13/WAKU2-STORE</a> to request historical messages matching a specific content filter.</li>
+<li><a href="https://rfc.vac.dev/spec/19/">19/WAKU2-LIGHTPUSH</a> to request publishing a message to the network.</li>
+<li><a href="https://rfc.vac.dev/spec/34/">34/WAKU2-PEER-EXCHANGE</a> to discover more peers in a resource efficient way.</li>
+</ol>
+<h3 id="applications">
+  Applications
+  <a class="anchor" href="#applications">#</a>
+</h3>
+<p>Applications are the higher-layer projects or platforms that make use of the generalized messaging capability of the network.
+In other words, an application defines a payload used in the various <a href="https://rfc.vac.dev/spec/10/">10/WAKU2</a> protocols.
+Any participant in an application SHOULD make use of an underlying node in order to communicate on the network.
+Applications SHOULD make use of an <a href="#autosharding">autosharding</a> API
+to allow the underlying node to automatically select the target shard on the Waku Network. See the section on <a href="#autosharding">autosharding</a> for more.</p>
+<h2 id="rln-rate-limiting">
+  RLN rate-limiting
+  <a class="anchor" href="#rln-rate-limiting">#</a>
+</h2>
+<p>The <a href="https://rfc.vac.dev/spec/17/">17/WAKU2-RLN-RELAY</a> network uses <a href="https://rfc.vac.dev/spec/32/">32/RLN-V1</a> proofs
+to ensure that a pre-agreed rate limit is not exceeded by any publisher.
+While the network is under capacity,
+individual relayers MAY choose to freely route messages without RLN proofs
+up to a discretionary bandwidth limit after which messages without proofs MUST be discarded.
+This bandwidth limit SHOULD be enforced using <a href="#free-bandwidth-exceeded">bandwidth validation mechanism</a> separate from RLN rate-limiting.
+This implies that quality of service and reliability is significantly lower for messages without proofs
+and at times of high network utilization these messages may not be relayed at all.</p>
+<h3 id="rln-parameters">
+  RLN Parameters
+  <a class="anchor" href="#rln-parameters">#</a>
+</h3>
+<p>For the Waku Network,
+the <code>epoch</code> is set to <code>1</code> second
+and the maximum number of messages published per <code>epoch</code> is limited to <code>1</code> per publisher.
+The <code>max_epoch_gap</code> is set to <code>20</code> seconds,
+meaning that validators MUST <em>reject</em> messages with an <code>epoch</code> more than 20 seconds into the past or future compared to the validator&rsquo;s own clock.
+All nodes, validators and publishers,
+SHOULD use Network Time Protocol (NTP) to synchronize their own clocks,
+thereby ensuring valid timestamps for proof generation and validation.</p>
+<h3 id="memberships">
+  Memberships
+  <a class="anchor" href="#memberships">#</a>
+</h3>
+<p>Each publisher to the Waku Network SHOULD register an RLN membership
+with one of the RLN storage contracts
+moderated in the Sepolia registry contract with address <a href="https://sepolia.etherscan.io/address/0xF1935b338321013f11068abCafC548A7B0db732C#code">0xF1935b338321013f11068abCafC548A7B0db732C</a>.
+Initial memberships are registered in the Sepolia RLN storage contract with address <a href="https://sepolia.etherscan.io/address/0x58322513A35a8f747AF5A385bA14C2AbE602AA59#code">0x58322513A35a8f747AF5A385bA14C2AbE602AA59</a>.
+RLN membership setup and registration MUST follow <a href="https://rfc.vac.dev/spec/17/#setup-and-registration">17/WAKU-RLN-RELAY</a>,
+with the <code>staked_fund</code> set to <code>0</code>.
+In other words, the Waku Network does not use RLN staking.</p>
+<h3 id="rln-proofs">
+  RLN Proofs
+  <a class="anchor" href="#rln-proofs">#</a>
+</h3>
+<p>Each RLN member MUST generate and attach an RLN proof to every published message
+as described in <a href="https://rfc.vac.dev/spec/17/#publishing">17/WAKU-RLN-RELAY</a>.
+Slashing is not implemented for the Waku Network.
+Instead, validators will penalise peers forwarding messages exceeding the rate limit
+as specified for <a href="#rate-limit-exceeded">the rate-limiting validation mechanism</a>.
+This incentivizes all nodes to validate RLN proofs
+and reject messages violating rate limits
+in order to continue participating in the network.</p>
+<h2 id="network-traffic">
+  Network traffic
+  <a class="anchor" href="#network-traffic">#</a>
+</h2>
+<p>All payload on the Waku Network MUST be encapsulated in a <a href="https://rfc.vac.dev/spec/14/">14/WAKU2-MESSAGE</a>
+with rate limit proof extensions defined for <a href="https://rfc.vac.dev/spec/17/#payloads">17/WAKU2-RLN-RELAY</a>.
+Each message on the Waku Network SHOULD be validated by each relayer,
+according to the rules discussed under <a href="#message-validation">message validation</a>.</p>
+<h3 id="message-attributes">
+  Message Attributes
+  <a class="anchor" href="#message-attributes">#</a>
+</h3>
+<ul>
+<li>The mandatory <code>payload</code> attribute MUST contain the message data payload as crafted by the application.</li>
+<li>The mandatory <code>content_topic</code> attribute MUST specify a string identifier that can be used for content-based filtering. This is also crafted by the application. See <a href="#autosharding">Autosharding</a> for more on the content topic format.</li>
+<li>The optional <code>meta</code> attribute MAY be omitted. If present this will form part of the message uniqueness vector described in <a href="https://rfc.vac.dev/spec/14/">14/WAKU2-MESSAGE</a>.</li>
+<li>The optional <code>version</code> attribute SHOULD be set to <code>0</code>. It MUST be interpreted as <code>0</code> if not present.</li>
+<li>The mandatory <code>timestamp</code> attribute MUST contain the Unix epoch time at which the message was generated by the application. The value MUST be in nanoseconds. It MAY contain a fudge factor of up to 1 seconds in either direction to improve resistance to timing attacks.</li>
+<li>The optional <code>ephemeral</code> attribute MUST be set to <code>true</code> if the message should not be persisted by the Waku Network.</li>
+<li>The optional <code>rate_limit_proof</code> attribute SHOULD be populated with the RLN proof as set out in <a href="#rln-proofs">RLN Proofs</a>. Messages with this field unpopulated MAY be discarded from the network by relayers.</li>
+</ul>
+<h3 id="message-size">
+  Message Size
+  <a class="anchor" href="#message-size">#</a>
+</h3>
+<p>Any Waku Message published to the network MUST NOT exceed an absolute maximum size of <code>150</code> kilobytes, attributes included.
+The average size of Waku Messages publised by each publisher SHOULD NOT exceed <code>4</code> kilobytes.</p>
+<h3 id="message-validation">
+  Message Validation
+  <a class="anchor" href="#message-validation">#</a>
+</h3>
+<p>Relay nodes MUST apply <a href="https://github.com/libp2p/specs/blob/c96c9ec5909d64fe020d7630f3fd982bc18fd06a/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators">gossipsub v1.1 validation</a> to each relayed message and
+SHOULD apply all of the rules set out in the section below to determine the validity of a message.
+Validation has one of three outcomes,
+repeated here from the <a href="https://github.com/libp2p/specs/blob/c96c9ec5909d64fe020d7630f3fd982bc18fd06a/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators">gossipsub specification</a> for ease of reference:</p>
+<ol>
+<li>Accept - the message is considered valid and it MUST be delivered and forwarded to the network.</li>
+<li>Reject - the message is considered invalid, MUST be rejected and SHOULD trigger a gossipsub scoring penalty against the transmitting peer.</li>
+<li>Ignore - the message SHOULD NOT be delivered and forwarded to the network, but this MUST NOT trigger a gossipsub scoring penalty against the transmitting peer.</li>
+</ol>
+<p>The following validation rules are defined:</p>
+<h4 id="decoding-failure">
+  Decoding failure
+  <a class="anchor" href="#decoding-failure">#</a>
+</h4>
+<p>If a message fails to decode as a valid <a href="https://rfc.vac.dev/spec/14/">14/WAKU2-MESSAGE</a>.
+the relay node MUST <em>reject</em> the message.
+This SHOULD trigger a penalty against the transmitting peer.</p>
+<h4 id="invalid-timestamp">
+  Invalid timestamp
+  <a class="anchor" href="#invalid-timestamp">#</a>
+</h4>
+<p>If a message has a timestamp deviating by more than <code>20</code> seconds
+either into the past or the future
+when compared to the relay node&rsquo;s internal clock,
+the relay node MUST <em>reject</em> the message.</p>
+<h4 id="free-bandwidth-exceeded">
+  Free bandwidth exceeded
+  <a class="anchor" href="#free-bandwidth-exceeded">#</a>
+</h4>
+<p>If a message contains no RLN proof
+and the current bandwidth utilization on the shard the message was published to
+equals or exceeds <code>1</code> Mbps,
+the relay node SHOULD <em>ignore</em> the message.</p>
+<h4 id="invalid-rln-epoch">
+  Invalid RLN epoch
+  <a class="anchor" href="#invalid-rln-epoch">#</a>
+</h4>
+<p>If a message contains an RLN proof
+and the <code>epoch</code> attached to the proof deviates by more than <code>20</code> seconds
+from the relay node&rsquo;s own <code>epoch</code>,
+the relay node MUST <em>reject</em> the message.</p>
+<h4 id="invalid-rln-proof">
+  Invalid RLN proof
+  <a class="anchor" href="#invalid-rln-proof">#</a>
+</h4>
+<p>If a message contains an RLN proof
+and the zero-knowledge proof is invalid
+according to the verification process described in <a href="https://rfc.vac.dev/spec/32/#verification">32/RLN-V1</a>,
+the relay node MUST <em>ignore</em> the message.</p>
+<h4 id="rate-limit-exceeded">
+  Rate limit exceeded
+  <a class="anchor" href="#rate-limit-exceeded">#</a>
+</h4>
+<p>If a message contains an RLN proof
+and the relay node detects double signaling
+according to the verification process described in <a href="https://rfc.vac.dev/spec/32/#verification">32/RLN-V1</a>,
+the relay node MUST <em>reject</em> the message
+for violating the agreed rate limit of <code>1</code>message every <code>1</code> second.
+This SHOULD trigger a penalty against the transmitting peer.</p>
+<h2 id="autosharding">
+  Autosharding
+  <a class="anchor" href="#autosharding">#</a>
+</h2>
+<p>Nodes in the Waku Network SHOULD allow encapsulating applications to use autosharding,
+as defined in <a href="https://rfc.vac.dev/spec/51/#automatic-sharding">51/WAKU2-RELAY-SHARDING</a>
+by automatically determining the appropriate pubsub topic
+from the list <a href="#network-shards">of defined Waku Network shards</a>.
+This allows the application to omit the target pubsub topic
+when invoking any Waku protocol function.
+Applications using autosharding MUST use content topics in the format
+defined in <a href="https://rfc.vac.dev/spec/51/#content-topics-format-for-autosharding">51/WAKU2-RELAY-SHARDING</a>
+and SHOULD use the short length format:</p>
+<pre tabindex="0"><code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}`
+</code></pre><p>When an encapsulating application makes use of autosharding
+the underlying node MUST determine the target pubsub topic(s)
+from the content topics provided by the application
+using the hashing mechanism defined in <a href="https://rfc.vac.dev/spec/51/#automatic-sharding">51/WAKU2-RELAY-SHARDING</a>.</p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<p>(TBD)</p>
+<h2 id="normative">
+  normative
+  <a class="anchor" href="#normative">#</a>
+</h2>
+<p>(TBD)
+A list of references that MUST be read to fully understand and/or implement this protocol.
+See <a href="https://datatracker.ietf.org/doc/html/rfc3967#section-1.1">RFC3967 Section 1.1</a>.</p>
+<h2 id="informative">
+  informative
+  <a class="anchor" href="#informative">#</a>
+</h2>
+<p>(TBD)
+A list of additional references.</p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#theory--semantics">Theory / Semantics</a>
+      <ul>
+        <li><a href="#routing-protocol">Routing protocol</a></li>
+        <li><a href="#network-shards">Network shards</a></li>
+        <li><a href="#roles">Roles</a>
+          <ul>
+            <li><a href="#nodes">Nodes</a></li>
+            <li><a href="#applications">Applications</a></li>
+          </ul>
+        </li>
+        <li><a href="#rln-rate-limiting">RLN rate-limiting</a>
+          <ul>
+            <li><a href="#rln-parameters">RLN Parameters</a></li>
+            <li><a href="#memberships">Memberships</a></li>
+            <li><a href="#rln-proofs">RLN Proofs</a></li>
+          </ul>
+        </li>
+        <li><a href="#network-traffic">Network traffic</a>
+          <ul>
+            <li><a href="#message-attributes">Message Attributes</a></li>
+            <li><a href="#message-size">Message Size</a></li>
+            <li><a href="#message-validation">Message Validation</a></li>
+          </ul>
+        </li>
+        <li><a href="#autosharding">Autosharding</a></li>
+      </ul>
+    </li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">normative</a></li>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
