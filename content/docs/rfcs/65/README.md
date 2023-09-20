@@ -23,7 +23,6 @@ The core concept of an account in Status is a set of cryptographic keypairs. Nam
 
 The Status node verifies or derives everything else associated with the contact from the above items, including:
 - Ethereum address (future verification, currently the same base keypair)
-- 3 word mnemonic name
 - identicon
 - message signatures
 
@@ -41,7 +40,7 @@ The Status node verifies or derives everything else associated with the contact 
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
 
 ## X3DH Prekey bundles
-- Refer to [53/WAKU2-X3DH](../53/README.md) for details on the X3DH prekey bundle broadcasting, as well as regeneration.
+- Refer to [53/WAKU2-X3DH](/spec/53) for details on the X3DH prekey bundle broadcasting, as well as regeneration.
 
 # Optional Account additions
 
@@ -103,9 +102,9 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## normative
 
-- [53/WAKU2-X3DH](../53/README.md)
-- [54/WAKU2-X3DH-SESSIONS](../54/README.md)
-- [55/STATUS-1TO1-CHAT](../55/README.md)
+- [53/WAKU2-X3DH](/spec/53)
+- [54/WAKU2-X3DH-SESSIONS](/spec/54)
+- [55/STATUS-1TO1-CHAT](/spec/55)
 
 ## informative
 
@@ -114,4 +113,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - [EIP1581](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md)
 - [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki)
 - [Ethereum Name System](https://ens.domains/)
-- [Status Multiaccount](../63/README.md)
+- [Status Multiaccount](/spec/63)
