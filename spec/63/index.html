@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Terminology # Account: A valid BIP-32 compliant key. Multiaccount: An account from which multiple Accounts can be derived. Abstract # This specification describes how an application can use the Status Keycard to -
+Create Multiaccounts Store Multiaccounts Use Multiaccounts for transaction or message signing Derive Accounts from Multiaccounts More documentation on the Status Keycard can be found here
+Motivation # The Status Keycard is a hardware wallet that can be used to store and sign transactions.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="63/STATUS-Keycard-Usage" />
+<meta property="og:description" content="Terminology # Account: A valid BIP-32 compliant key. Multiaccount: An account from which multiple Accounts can be derived. Abstract # This specification describes how an application can use the Status Keycard to -
+Create Multiaccounts Store Multiaccounts Use Multiaccounts for transaction or message signing Derive Accounts from Multiaccounts More documentation on the Status Keycard can be found here
+Motivation # The Status Keycard is a hardware wallet that can be used to store and sign transactions." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/63/" /><meta property="article:section" content="docs" />
+
+
+
+<title>63/STATUS-Keycard-Usage | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.f4f594e7e343e38ffa6ecd18b101d7523500ebcf0c7eb2a9b25dceabf3865173.js" integrity="sha256-9PWU5&#43;ND44/6bs0YsQHXUjUA688MfrKpsl3Oq/OGUXM="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/">58/RLN-V2</a></li>
+<li><a href="/spec/61/">61/STATUS-Community-History-Archives</a></li>
+<li><a href="/spec/63/"class=active>63/STATUS-Keycard-Usage</a></li>
+<li><a href="/spec/64/">64/WAKU2-NETWORK</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>63/STATUS-Keycard-Usage</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#endpoints">Endpoints</a>
+          <ul>
+            <li><a href="#1-initialize-keycard-init-keycard">1. Initialize Keycard (<code>/init-keycard</code>)</a></li>
+            <li><a href="#2-get-application-info-get-application-info">2. Get Application Info (<code>/get-application-info</code>)</a></li>
+            <li><a href="#3-pairing-the-keycard-to-the-client-device-pair">3. Pairing the Keycard to the Client device (<code>/pair</code>)</a></li>
+            <li><a href="#4-generate-a-new-set-of-keys-generate-and-load-keys">4. Generate a new set of keys (<code>/generate-and-load-keys</code>)</a></li>
+            <li><a href="#5-get-a-set-of-generated-keys-get-keys">5. Get a set of generated keys (<code>/get-keys</code>)</a></li>
+            <li><a href="#6-sign-a-transaction-sign">6. Sign a transaction (<code>/sign</code>)</a></li>
+            <li><a href="#7-export-a-key-export-key">7. Export a key (<code>/export-key</code>)</a></li>
+            <li><a href="#8-verify-a-pin-verify-pin">8. Verify a pin (<code>/verify-pin</code>)</a></li>
+            <li><a href="#9-change-the-pin-change-pin">9. Change the pin (<code>/change-pin</code>)</a></li>
+            <li><a href="#10-unblock-the-keycard-unblock-pin">10. Unblock the keycard (<code>/unblock-pin</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#flows">Flows</a>
+          <ul>
+            <li><a href="#1-a-new-user-wants-to-use-the-keycard-with-the-application">1. A new user wants to use the Keycard with the application</a></li>
+            <li><a href="#2-an-existing-user-wants-to-use-the-keycard-with-the-application">2. An existing user wants to use the Keycard with the application</a></li>
+            <li><a href="#3-an-existing-user-wants-to-use-the-keycard-with-a-new-client-device">3. An existing user wants to use the Keycard with a new client device</a></li>
+            <li><a href="#4-an-existing-user-wishes-to-verify-the-pin-of-the-keycard">4. An existing user wishes to verify the pin of the Keycard</a></li>
+            <li><a href="#5-an-existing-user-wishes-to-change-the-pin-of-the-keycard">5. An existing user wishes to change the pin of the Keycard</a></li>
+            <li><a href="#6-an-existing-user-wishes-to-unblock-the-keycard">6. An existing user wishes to unblock the Keycard</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#privacy-considerations">Privacy Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="63status-keycard-usage">
+  63/STATUS-Keycard-Usage
+  <a class="anchor" href="#63status-keycard-usage">#</a>
+</h1>
+
+  
+      <h1 id="status-keycard-usage">
+  Status Keycard Usage
+  <a class="anchor" href="#status-keycard-usage">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              ?
+          
+      </li>
+      
+  </ul><h1 id="terminology">
+  Terminology
+  <a class="anchor" href="#terminology">#</a>
+</h1>
+<ul>
+<li><strong>Account</strong>: A valid <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP-32</a> compliant key.</li>
+<li><strong>Multiaccount</strong>: An account from which multiple Accounts can be derived.</li>
+</ul>
+<h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This specification describes how an application can use the Status Keycard to -</p>
+<ol>
+<li>Create Multiaccounts</li>
+<li>Store Multiaccounts</li>
+<li>Use Multiaccounts for transaction or message signing</li>
+<li>Derive Accounts from Multiaccounts</li>
+</ol>
+<p>More documentation on the Status Keycard can be found <a href="https://keycard.tech/docs/">here</a></p>
+<h1 id="motivation">
+  Motivation
+  <a class="anchor" href="#motivation">#</a>
+</h1>
+<p>The Status Keycard is a hardware wallet that can be used to store and sign transactions.
+For the purpose of the Status App, this specification describes how the Keycard SHOULD be used to store and sign transactions.</p>
+<h1 id="usage">
+  Usage
+  <a class="anchor" href="#usage">#</a>
+</h1>
+<h2 id="endpoints">
+  Endpoints
+  <a class="anchor" href="#endpoints">#</a>
+</h2>
+<h3 id="1-initialize-keycard-init-keycard">
+  1. Initialize Keycard (<code>/init-keycard</code>)
+  <a class="anchor" href="#1-initialize-keycard-init-keycard">#</a>
+</h3>
+<p>To initialize the keycard for use with the application.
+The keycard is locked with a 6 digit pin.</p>
+<h4 id="request-wire-format">
+  Request wire format
+  <a class="anchor" href="#request-wire-format">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format">
+  Response wire format
+  <a class="anchor" href="#response-wire-format">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;password&#34;</span>: <span style="color:#960050;background-color:#1e0010">password_to_unlock_keycard</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;puk&#34;</span>: <span style="color:#ae81ff">12</span><span style="color:#960050;background-color:#1e0010">_digit_recovery_code</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#960050;background-color:#1e0010">provided_pin</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>The keycard MUST be initialized before it can be used with the application.
+The application SHOULD provide a way to recover the keycard in case the pin is forgotten.</p>
+<h3 id="2-get-application-info-get-application-info">
+  2. Get Application Info (<code>/get-application-info</code>)
+  <a class="anchor" href="#2-get-application-info-get-application-info">#</a>
+</h3>
+<p>To fetch if the keycard is ready to be used by the application.</p>
+<h4 id="request-wire-format-1">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-1">#</a>
+</h4>
+<p>The requester MAY add a <code>pairing</code> field to filter through the generated keys</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span> <span style="color:#960050;background-color:#1e0010">OR</span> <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-1">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-1">#</a>
+</h4>
+<h5 id="if-the-keycard-is-not-initialized-yet">
+  If the keycard is not initialized yet
+  <a class="anchor" href="#if-the-keycard-is-not-initialized-yet">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;initialized?&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h5 id="if-the-keycard-is-initialized">
+  If the keycard is initialized
+  <a class="anchor" href="#if-the-keycard-is-initialized">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;free-pairing-slots&#34;</span>: <span style="color:#960050;background-color:#1e0010">number</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;app-version&#34;</span>: <span style="color:#960050;background-color:#1e0010">major_version.minor_version</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;secure-channel-pub-key&#34;</span>: <span style="color:#960050;background-color:#1e0010">valid_bip</span><span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">_key</span>,<span style="color:#960050;background-color:#1e0010">,</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;key-uid&#34;</span>: <span style="color:#960050;background-color:#1e0010">unique_id_of_the_default_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;instance-uid&#34;</span>: <span style="color:#960050;background-color:#1e0010">unique_instance_id</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;paired?&#34;</span>: <span style="color:#960050;background-color:#1e0010">bool</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;has-master-key?&#34;</span>: <span style="color:#960050;background-color:#1e0010">bool</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;initialized?&#34;</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="3-pairing-the-keycard-to-the-client-device-pair">
+  3. Pairing the Keycard to the Client device (<code>/pair</code>)
+  <a class="anchor" href="#3-pairing-the-keycard-to-the-client-device-pair">#</a>
+</h3>
+<p>To establish a secure communication channel described <a href="https://keycard.tech/docs/apdu/opensecurechannel.html">here</a>, the keycard and the client device need to be paired.</p>
+<h4 id="request-wire-format-2">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-2">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;password&#34;</span>: <span style="color:#960050;background-color:#1e0010">password_to_unlock_keycard</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-2">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-2">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#e6db74">&#34;&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;256_bit_salt&gt;&#34;</span>
+</span></span></code></pre></div><h3 id="4-generate-a-new-set-of-keys-generate-and-load-keys">
+  4. Generate a new set of keys (<code>/generate-and-load-keys</code>)
+  <a class="anchor" href="#4-generate-a-new-set-of-keys-generate-and-load-keys">#</a>
+</h3>
+<p>To generate a new set of keys and load them onto the keycard.</p>
+<h4 id="request-wire-format-3">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-3">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;mnemonic&#34;</span>: <span style="color:#ae81ff">12</span><span style="color:#960050;background-color:#1e0010">_word_mnemonic</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-3">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-3">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_whisper_compatible_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-private-key&#34;</span>: <span style="color:#960050;background-color:#1e0010">whisper_private_key</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-root-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_wallet_root_public_key</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;encryption-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_encryption_public_key</span>,<span style="color:#960050;background-color:#1e0010">,</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-root-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_wallet_root_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_whisper_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_wallet_address</span>,<span style="color:#960050;background-color:#1e0010">,</span> 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;key-uid&#34;</span>: <span style="color:#ae81ff">64</span><span style="color:#960050;background-color:#1e0010">_byte_unique_key_id</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_wallet_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;instance-uid&#34;</span>: <span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">_byte_unique_instance_id</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="5-get-a-set-of-generated-keys-get-keys">
+  5. Get a set of generated keys (<code>/get-keys</code>)
+  <a class="anchor" href="#5-get-a-set-of-generated-keys-get-keys">#</a>
+</h3>
+<p>To fetch the keys that are currently loaded on the keycard.</p>
+<h4 id="request-wire-format-4">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-4">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-4">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-4">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_whisper_compatible_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-private-key&#34;</span>: <span style="color:#960050;background-color:#1e0010">whisper_private_key</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-root-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_wallet_root_public_key</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;encryption-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_encryption_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-root-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_wallet_root_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;whisper-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_whisper_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-address&#34;</span>: <span style="color:#ae81ff">20</span><span style="color:#960050;background-color:#1e0010">_byte_wallet_address</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;key-uid&#34;</span>: <span style="color:#ae81ff">64</span><span style="color:#960050;background-color:#1e0010">_byte_unique_key_id</span>, 
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;wallet-public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_wallet_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;public-key&#34;</span>: <span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_public_key</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;instance-uid&#34;</span>: <span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">_byte_unique_instance_id</span>,
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="6-sign-a-transaction-sign">
+  6. Sign a transaction (<code>/sign</code>)
+  <a class="anchor" href="#6-sign-a-transaction-sign">#</a>
+</h3>
+<p>To sign a transaction using the keycard, passing in the pairing information and the transaction to be signed.</p>
+<h4 id="request-wire-format-5">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-5">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;hash&#34;</span>: <span style="color:#ae81ff">64</span><span style="color:#960050;background-color:#1e0010">_byte_hash_of_the_transaction</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#960050;background-color:#1e0010">bip</span><span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">_path_to_the_key</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-5">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-5">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_signature&gt;</span>
+</span></span></code></pre></div><h3 id="7-export-a-key-export-key">
+  7. Export a key (<code>/export-key</code>)
+  <a class="anchor" href="#7-export-a-key-export-key">#</a>
+</h3>
+<p>To export a key from the keycard, passing in the pairing information and the path to the key to be exported.</p>
+<h4 id="request-wire-format-6">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-6">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;path&#34;</span>: <span style="color:#960050;background-color:#1e0010">bip</span><span style="color:#ae81ff">32</span><span style="color:#960050;background-color:#1e0010">_path_to_the_key</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-6">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-6">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_public_key&gt;</span>
+</span></span></code></pre></div><h3 id="8-verify-a-pin-verify-pin">
+  8. Verify a pin (<code>/verify-pin</code>)
+  <a class="anchor" href="#8-verify-a-pin-verify-pin">#</a>
+</h3>
+<p>To verify the pin of the keycard.</p>
+<h4 id="request-wire-format-7">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-7">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_pin</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-7">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-7">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#ae81ff">1</span><span style="color:#960050;background-color:#1e0010">_digit_status_code</span>
+</span></span></code></pre></div><p>Status code reference:</p>
+<ul>
+<li>3: PIN is valid</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3 id="9-change-the-pin-change-pin">
+  9. Change the pin (<code>/change-pin</code>)
+  <a class="anchor" href="#9-change-the-pin-change-pin">#</a>
+</h3>
+<p>To change the pin of the keycard.</p>
+<h4 id="request-wire-format-8">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-8">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;new-pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_new_pin</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;current-pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_new_pin</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-8">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-8">#</a>
+</h4>
+<h5 id="if-the-operation-was-successful">
+  If the operation was successful
+  <a class="anchor" href="#if-the-operation-was-successful">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><h5 id="if-the-operation-was-unsuccessful">
+  If the operation was unsuccessful
+  <a class="anchor" href="#if-the-operation-was-unsuccessful">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><h3 id="10-unblock-the-keycard-unblock-pin">
+  10. Unblock the keycard (<code>/unblock-pin</code>)
+  <a class="anchor" href="#10-unblock-the-keycard-unblock-pin">#</a>
+</h3>
+<p>If the Keycard is blocked due to too many incorrect pin attempts, it can be unblocked using the PUK.</p>
+<h4 id="request-wire-format-9">
+  Request wire format
+  <a class="anchor" href="#request-wire-format-9">#</a>
+</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;puk&#34;</span>: <span style="color:#ae81ff">12</span><span style="color:#960050;background-color:#1e0010">_digit_recovery_code</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;new-pin&#34;</span>: <span style="color:#ae81ff">6</span><span style="color:#960050;background-color:#1e0010">_digit_new_pin</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;pairing&#34;</span>: <span style="color:#960050;background-color:#1e0010">&lt;shared_secret&gt;/&lt;pairing_index&gt;/&lt;</span><span style="color:#ae81ff">256</span><span style="color:#960050;background-color:#1e0010">_bit_salt&gt;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="response-wire-format-9">
+  Response wire format
+  <a class="anchor" href="#response-wire-format-9">#</a>
+</h4>
+<h5 id="if-the-operation-was-successful-1">
+  If the operation was successful
+  <a class="anchor" href="#if-the-operation-was-successful-1">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#66d9ef">true</span>
+</span></span></code></pre></div><h5 id="if-the-operation-was-unsuccessful-1">
+  If the operation was unsuccessful
+  <a class="anchor" href="#if-the-operation-was-unsuccessful-1">#</a>
+</h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span><span style="color:#66d9ef">false</span>
+</span></span></code></pre></div><h2 id="flows">
+  Flows
+  <a class="anchor" href="#flows">#</a>
+</h2>
+<p>Any application that uses the Status Keycard MAY implement the following flows according to the actions listed above.</p>
+<h3 id="1-a-new-user-wants-to-use-the-keycard-with-the-application">
+  1. A new user wants to use the Keycard with the application
+  <a class="anchor" href="#1-a-new-user-wants-to-use-the-keycard-with-the-application">#</a>
+</h3>
+<ol>
+<li>The user initializes the Keycard using the <code>/init-keycard</code> endpoint.</li>
+<li>The user pairs the Keycard with the client device using the <code>/pair</code> endpoint.</li>
+<li>The user generates a new set of keys using the <code>/generate-and-load-keys</code> endpoint.</li>
+<li>The user can now use the Keycard to sign transactions using the <code>/sign</code> endpoint.</li>
+</ol>
+<h3 id="2-an-existing-user-wants-to-use-the-keycard-with-the-application">
+  2. An existing user wants to use the Keycard with the application
+  <a class="anchor" href="#2-an-existing-user-wants-to-use-the-keycard-with-the-application">#</a>
+</h3>
+<ol>
+<li>The user pairs the Keycard with the client device using the <code>/pair</code> endpoint.</li>
+<li>The user can now use the Keycard to sign transactions using the <code>/sign</code> endpoint.</li>
+</ol>
+<h3 id="3-an-existing-user-wants-to-use-the-keycard-with-a-new-client-device">
+  3. An existing user wants to use the Keycard with a new client device
+  <a class="anchor" href="#3-an-existing-user-wants-to-use-the-keycard-with-a-new-client-device">#</a>
+</h3>
+<ol>
+<li>The user pairs the Keycard with the new client device using the <code>/pair</code> endpoint.</li>
+<li>The user can now use the Keycard to sign transactions using the <code>/sign</code> endpoint.</li>
+</ol>
+<h3 id="4-an-existing-user-wishes-to-verify-the-pin-of-the-keycard">
+  4. An existing user wishes to verify the pin of the Keycard
+  <a class="anchor" href="#4-an-existing-user-wishes-to-verify-the-pin-of-the-keycard">#</a>
+</h3>
+<ol>
+<li>The user verifies the pin of the Keycard using the <code>/verify-pin</code> endpoint.</li>
+</ol>
+<h3 id="5-an-existing-user-wishes-to-change-the-pin-of-the-keycard">
+  5. An existing user wishes to change the pin of the Keycard
+  <a class="anchor" href="#5-an-existing-user-wishes-to-change-the-pin-of-the-keycard">#</a>
+</h3>
+<ol>
+<li>The user changes the pin of the Keycard using the <code>/change-pin</code> endpoint.</li>
+</ol>
+<h3 id="6-an-existing-user-wishes-to-unblock-the-keycard">
+  6. An existing user wishes to unblock the Keycard
+  <a class="anchor" href="#6-an-existing-user-wishes-to-unblock-the-keycard">#</a>
+</h3>
+<ol>
+<li>The user unblocks the Keycard using the <code>/unblock-pin</code> endpoint.</li>
+</ol>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<p>Inherits the security considerations of <a href="https://keycard.tech/docs/">Status Keycard</a></p>
+<h1 id="privacy-considerations">
+  Privacy Considerations
+  <a class="anchor" href="#privacy-considerations">#</a>
+</h1>
+<p>Inherits the privacy considerations of <a href="https://keycard.tech/docs/">Status Keycard</a></p>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ol>
+<li><a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki">BIP-32 specification</a></li>
+<li><a href="https://keycard.tech/docs/">Keycard documentation</a></li>
+<li><a href="https://specs.status.im/draft/16">16/Keycard-Usage</a></li>
+</ol>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#terminology">Terminology</a></li>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#motivation">Motivation</a></li>
+    <li><a href="#usage">Usage</a>
+      <ul>
+        <li><a href="#endpoints">Endpoints</a>
+          <ul>
+            <li><a href="#1-initialize-keycard-init-keycard">1. Initialize Keycard (<code>/init-keycard</code>)</a></li>
+            <li><a href="#2-get-application-info-get-application-info">2. Get Application Info (<code>/get-application-info</code>)</a></li>
+            <li><a href="#3-pairing-the-keycard-to-the-client-device-pair">3. Pairing the Keycard to the Client device (<code>/pair</code>)</a></li>
+            <li><a href="#4-generate-a-new-set-of-keys-generate-and-load-keys">4. Generate a new set of keys (<code>/generate-and-load-keys</code>)</a></li>
+            <li><a href="#5-get-a-set-of-generated-keys-get-keys">5. Get a set of generated keys (<code>/get-keys</code>)</a></li>
+            <li><a href="#6-sign-a-transaction-sign">6. Sign a transaction (<code>/sign</code>)</a></li>
+            <li><a href="#7-export-a-key-export-key">7. Export a key (<code>/export-key</code>)</a></li>
+            <li><a href="#8-verify-a-pin-verify-pin">8. Verify a pin (<code>/verify-pin</code>)</a></li>
+            <li><a href="#9-change-the-pin-change-pin">9. Change the pin (<code>/change-pin</code>)</a></li>
+            <li><a href="#10-unblock-the-keycard-unblock-pin">10. Unblock the keycard (<code>/unblock-pin</code>)</a></li>
+          </ul>
+        </li>
+        <li><a href="#flows">Flows</a>
+          <ul>
+            <li><a href="#1-a-new-user-wants-to-use-the-keycard-with-the-application">1. A new user wants to use the Keycard with the application</a></li>
+            <li><a href="#2-an-existing-user-wants-to-use-the-keycard-with-the-application">2. An existing user wants to use the Keycard with the application</a></li>
+            <li><a href="#3-an-existing-user-wants-to-use-the-keycard-with-a-new-client-device">3. An existing user wants to use the Keycard with a new client device</a></li>
+            <li><a href="#4-an-existing-user-wishes-to-verify-the-pin-of-the-keycard">4. An existing user wishes to verify the pin of the Keycard</a></li>
+            <li><a href="#5-an-existing-user-wishes-to-change-the-pin-of-the-keycard">5. An existing user wishes to change the pin of the Keycard</a></li>
+            <li><a href="#6-an-existing-user-wishes-to-unblock-the-keycard">6. An existing user wishes to unblock the Keycard</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#privacy-considerations">Privacy Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -554,6 +554,17 @@ Motivation # Waku was created to incrementally improve in areas that Whisper is 
     </item>
     
     <item>
+      <title>63/STATUS-Keycard-Usage</title>
+      <link>https://rfc.vac.dev/spec/63/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/63/</guid>
+      <description>Terminology # Account: A valid BIP-32 compliant key. Multiaccount: An account from which multiple Accounts can be derived. Abstract # This specification describes how an application can use the Status Keycard to -
+Create Multiaccounts Store Multiaccounts Use Multiaccounts for transaction or message signing Derive Accounts from Multiaccounts More documentation on the Status Keycard can be found here
+Motivation # The Status Keycard is a hardware wallet that can be used to store and sign transactions.</description>
+    </item>
+    
+    <item>
       <title>64/WAKU2-NETWORK</title>
       <link>https://rfc.vac.dev/spec/64/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
