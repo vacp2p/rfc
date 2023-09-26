@@ -9,27 +9,24 @@ contributors:
 
 # Metadata Protocol
 
-Waku specifies a req/resp protocol that provides information about the node medatadata.
+Waku specifies a req/resp protocol that provides information about the node's medatadata.
 
 
-## protocol id
+## Protocol id
 
 `/vac/waku/metadata/1.0.0`
 
-## request
+## Request
 
 ```proto
 message WakuMetadataRequest {
 }
 ```
 
-## response
+## Response
 
 ```proto
 message WakuMessageResponse {
   uint64 network_id = 1;
-  uint64 rln_tree_block = 2;
-  bytes rln_root = 3;
-  TODO: capabilities?
 }
 ```
