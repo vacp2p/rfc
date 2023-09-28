@@ -83,6 +83,14 @@ as described in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/#discovery
 The ENR MUST be updated if the set of supported shards change.
 A node MAY choose to ignore discovered peers that do not support any of the shards in its own subscribed set.
 
+#### Transports
+
+Relay nodes MUST follow [10/WAKU2](https://rfc.vac.dev/spec/10/) specifications with regards to supporting different transports.
+If TCP transport is available, each relay node MUST support it as transport for both dialing and listening.
+In addition, a relay node SHOULD support secure websockets for bidirectional communication streams,
+for example to allow connections from and to web browser-based clients.
+A relay node MAY support unsecure websockets if required by the application or running environment.
+
 #### Default services
 
 For each supported shard,
@@ -186,8 +194,9 @@ according to the rules discussed under [message validation](#message-validation)
 
 ### Message Size
 
-Any Waku Message published to the network MUST NOT exceed an absolute maximum size of `150` kilobytes, attributes included.
-The average size of Waku Messages publised by each publisher SHOULD NOT exceed `4` kilobytes.
+Any Waku Message published to the network MUST NOT exceed an absolute maximum size of `150` kilobytes.
+This limit applies to the entire message after protobuf serialization, including attributes.
+It is RECOMMENDED not to exceed an average size of `4` kilobytes for Waku Messages published to the network.
 
 ### Message Validation
 
@@ -213,6 +222,9 @@ If a message has a timestamp deviating by more than `20` seconds
 either into the past or the future
 when compared to the relay node's internal clock,
 the relay node MUST _reject_ the message.
+This allows for some deviation between internal clocks,
+network routing latency and
+an optional [fudge factor when timestamping new messages](#message-attributes).
 
 #### Free bandwidth exceeded
 
@@ -224,9 +236,10 @@ the relay node SHOULD _ignore_ the message.
 #### Invalid RLN epoch
 
 If a message contains an RLN proof
-and the `epoch` attached to the proof deviates by more than `20` seconds
+and the `epoch` attached to the proof deviates by more than `max_epoch_gap` seconds
 from the relay node's own `epoch`,
 the relay node MUST _reject_ the message.
+`max_epoch_gap` is [set to `20` seconds](#rln-parameters) for the Waku Network.
 
 #### Invalid RLN proof
 
@@ -241,7 +254,7 @@ If a message contains an RLN proof
 and the relay node detects double signaling
 according to the verification process described in [32/RLN-V1](https://rfc.vac.dev/spec/32/#verification),
 the relay node MUST _reject_ the message
-for violating the agreed rate limit of `1`message every `1` second.
+for violating the agreed rate limit of `1` message every `1` second.
 This SHOULD trigger a penalty against the transmitting peer.
 
 ## Autosharding
