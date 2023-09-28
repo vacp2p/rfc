@@ -19,7 +19,7 @@ Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.5ae14046c81918d2a9c50127aabc329f4f345e6c256f04e9ae05f6d48759463d.js" integrity="sha256-WuFARsgZGNKpxQEnqrwyn080XmwlbwTprgX21IdZRj0="></script>
+<script defer src="/en.search.min.07668e91447d4b5e23bc427fda23768cc7456c7564bfc4b25421bc181027a261.js" integrity="sha256-B2aOkUR9S14jvEJ/2iN2jMdFbHVkv8SyVCG8GBAnomE="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -334,6 +334,15 @@ Each relay node MUST encode its supported shards into its discoverable ENR
 as described in <a href="https://rfc.vac.dev/spec/51/#discovery">51/WAKU2-RELAY-SHARDING</a>.
 The ENR MUST be updated if the set of supported shards change.
 A node MAY choose to ignore discovered peers that do not support any of the shards in its own subscribed set.</p>
+<h4 id="transports">
+  Transports
+  <a class="anchor" href="#transports">#</a>
+</h4>
+<p>Relay nodes MUST follow <a href="https://rfc.vac.dev/spec/10/">10/WAKU2</a> specifications with regards to supporting different transports.
+If TCP transport is available, each relay node MUST support it as transport for both dialing and listening.
+In addition, a relay node SHOULD support secure websockets for bidirectional communication streams,
+for example to allow connections from and to web browser-based clients.
+A relay node MAY support unsecure websockets if required by the application or running environment.</p>
 <h4 id="default-services">
   Default services
   <a class="anchor" href="#default-services">#</a>
@@ -456,8 +465,9 @@ according to the rules discussed under <a href="#message-validation">message val
   Message Size
   <a class="anchor" href="#message-size">#</a>
 </h3>
-<p>Any Waku Message published to the network MUST NOT exceed an absolute maximum size of <code>150</code> kilobytes, attributes included.
-The average size of Waku Messages publised by each publisher SHOULD NOT exceed <code>4</code> kilobytes.</p>
+<p>Any Waku Message published to the network MUST NOT exceed an absolute maximum size of <code>150</code> kilobytes.
+This limit applies to the entire message after protobuf serialization, including attributes.
+It is RECOMMENDED not to exceed an average size of <code>4</code> kilobytes for Waku Messages published to the network.</p>
 <h3 id="message-validation">
   Message Validation
   <a class="anchor" href="#message-validation">#</a>
@@ -486,7 +496,10 @@ This SHOULD trigger a penalty against the transmitting peer.</p>
 <p>If a message has a timestamp deviating by more than <code>20</code> seconds
 either into the past or the future
 when compared to the relay node&rsquo;s internal clock,
-the relay node MUST <em>reject</em> the message.</p>
+the relay node MUST <em>reject</em> the message.
+This allows for some deviation between internal clocks,
+network routing latency and
+an optional <a href="#message-attributes">fudge factor when timestamping new messages</a>.</p>
 <h4 id="free-bandwidth-exceeded">
   Free bandwidth exceeded
   <a class="anchor" href="#free-bandwidth-exceeded">#</a>
@@ -500,9 +513,10 @@ the relay node SHOULD <em>ignore</em> the message.</p>
   <a class="anchor" href="#invalid-rln-epoch">#</a>
 </h4>
 <p>If a message contains an RLN proof
-and the <code>epoch</code> attached to the proof deviates by more than <code>20</code> seconds
+and the <code>epoch</code> attached to the proof deviates by more than <code>max_epoch_gap</code> seconds
 from the relay node&rsquo;s own <code>epoch</code>,
-the relay node MUST <em>reject</em> the message.</p>
+the relay node MUST <em>reject</em> the message.
+<code>max_epoch_gap</code> is <a href="#rln-parameters">set to <code>20</code> seconds</a> for the Waku Network.</p>
 <h4 id="invalid-rln-proof">
   Invalid RLN proof
   <a class="anchor" href="#invalid-rln-proof">#</a>
@@ -519,7 +533,7 @@ the relay node MUST <em>ignore</em> the message.</p>
 and the relay node detects double signaling
 according to the verification process described in <a href="https://rfc.vac.dev/spec/32/#verification">32/RLN-V1</a>,
 the relay node MUST <em>reject</em> the message
-for violating the agreed rate limit of <code>1</code>message every <code>1</code> second.
+for violating the agreed rate limit of <code>1</code> message every <code>1</code> second.
 This SHOULD trigger a penalty against the transmitting peer.</p>
 <h2 id="autosharding">
   Autosharding
