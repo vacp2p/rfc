@@ -22,7 +22,7 @@ this document lists static shard index assignments (see [51/WAKU2-RELAY-SHARDING
 
 > *Note*: Future versions of this document will specify the assignment process.
 
-# List of Static Shard Indices
+# List of Cluster Indices
 
 |    index | Protocol/App | Description                         |
 |    ---   | ---          | ---                                 |
