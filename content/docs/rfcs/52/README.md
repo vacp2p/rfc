@@ -18,13 +18,6 @@ This document lists static shard flag index assignments (see [51/WAKU2-RELAY-SHA
 Similar to the [IANA port allocation](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml),
 this document lists static shard index assignments (see [51/WAKU2-RELAY-SHARDING](/spec/51/).
 
-The index ranges are as follows:
-index `0` represents the global shards,
-indices `1` to `15` are reserved,
-indices `16` to `1023` are reservable for apps,
-indices `1024` to `49151` are for open use by apps,
-indices `49152` to `65535` are reserved.
-
 # Assingment Process
 
 > *Note*: Future versions of this document will specify the assignment process.
