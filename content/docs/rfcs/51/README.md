@@ -66,11 +66,8 @@ shard clusters are divided into ranges:
 
 | index (range) |    usage                 |
 |    ---        |    ---                   |
-|             0 |   global                 |
-|        1 - 15 |   reserved               |
-|     16 - 1023 |   specific app protocols |
-|  1024 - 49152 |   all app protocols      |
-| 49152 - 65535 |   automatic sharding     |
+|        0 - 15 |   reserved               |
+|     16 - 65535|   app-defined networks   |
 
 The informational RFC [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52) lists the current index allocations.
 
