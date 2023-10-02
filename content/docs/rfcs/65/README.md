@@ -91,8 +91,7 @@ The above payload is broadcasted when 2 devices that belong to a user need to be
 
 # Security Considerations
 
-- This specification does not cover the security of the underlying cryptographic primitives.
-  It is assumed that the primitives are secure.
+- This specification inherits security considerations of [53/WAKU2-X3DH](/spec/53) and [54/WAKU2-X3DH-SESSIONS](/spec/54).
 
 # Copyright
 
