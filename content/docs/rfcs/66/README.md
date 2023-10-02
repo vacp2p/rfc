@@ -24,8 +24,8 @@ so that the receiver is aware of it, without requiring an extra interaction. The
 
 ```proto
 message WakuMetadataRequest {
-  uint32 network_id = 1;
-  repeated unt32 shards = 2;
+  optional uint32 network_id = 1;
+  repeated uint32 shards = 2;
 }
 ```
 
@@ -33,7 +33,7 @@ message WakuMetadataRequest {
 
 ```proto
 message WakuMetadataResponse {
-  uint32 network_id = 1;
-  repeated unt32 shards = 2;
+  optional uint32 network_id = 1;
+  repeated uint32 shards = 2;
 }
 ```
