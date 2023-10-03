@@ -33,8 +33,9 @@ which in turn is an extension of [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) 
 Traffic in the Waku Network is sharded into eight [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/) pubsub topics.
 Each pubsub topic is named according to the static shard naming format
 defined in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
-with `<cluster_id>` set to `1` and
-`<shard_number>` occupying the range `0` to `7`.
+with:
+* `<cluster_id>` set to `1`
+* `<shard_number>` occupying the range `0` to `7`.
 In other words, the Waku Network is a [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/) network
 routed on the combination of the eight pubsub topics:
 ```
@@ -43,6 +44,12 @@ routed on the combination of the eight pubsub topics:
 ...
 /waku/2/rs/1/7
 ```
+
+A node MUST use [WAKU-METADATA](https://rfc.vac.dev/spec/66/) protocol to identify the `<cluster_id>` that every
+inbound/outbound peer that attempts to connect supports. In any of the following cases, the node MUST trigger a disconnection:
+* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) fial fails.
+* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports an empty `<cluster_id>`.
+* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports different `<cluster_id>` than the local one.
 
 ## Roles
 
