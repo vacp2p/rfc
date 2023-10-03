@@ -5,21 +5,17 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract # This document extends the 11/WAKU2-RELAY, specifying Waku Tor Push, which allows nodes to push messages via Tor into the Waku relay network.
-Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
-Protocol identifier: /vac/waku/relay/2.0.0
-Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.">
-<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="47/WAKU2-TOR-PUSH" />
-<meta property="og:description" content="Abstract # This document extends the 11/WAKU2-RELAY, specifying Waku Tor Push, which allows nodes to push messages via Tor into the Waku relay network.
-Waku Tor Push builds on 46/GOSSIPSUB-TOR-PUSH.
-Protocol identifier: /vac/waku/relay/2.0.0
-Note: Waku Tor Push does not have a dedicated protocol identifier. It uses the same identifier as Waku relay. This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push." />
+<meta name="description" content="Metadata Protocol # Waku specifies a req/resp protocol that provides information about the node&rsquo;s medatadata. Such metadata is meant to be used by the node to decide if a peer is worth connecting or not. The node that makes the request, includes its metadata so that the receiver is aware of it, without requiring an extra interaction. The parameters are the following:
+clusterId: Unique identifier of the cluster that the node is running in.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="66/WAKU2-METADATA" />
+<meta property="og:description" content="Metadata Protocol # Waku specifies a req/resp protocol that provides information about the node&rsquo;s medatadata. Such metadata is meant to be used by the node to decide if a peer is worth connecting or not. The node that makes the request, includes its metadata so that the receiver is aware of it, without requiring an extra interaction. The parameters are the following:
+clusterId: Unique identifier of the cluster that the node is running in." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://rfc.vac.dev/spec/47/" /><meta property="article:section" content="docs" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/66/" /><meta property="article:section" content="docs" />
 
 
 
-<title>47/WAKU2-TOR-PUSH | Vac RFC</title>
+<title>66/WAKU2-METADATA | Vac RFC</title>
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
@@ -78,7 +74,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
 <li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
 <li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
-<li><a href="/spec/47/"class=active>47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
 <li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
 <li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
 <li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
@@ -87,7 +83,7 @@ https://github.com/alex-shpak/hugo-book
 <li><a href="/spec/61/">61/STATUS-Community-History-Archives</a></li>
 <li><a href="/spec/63/">63/STATUS-Keycard-Usage</a></li>
 <li><a href="/spec/64/">64/WAKU2-NETWORK</a></li>
-<li><a href="/spec/66/">66/WAKU2-METADATA</a></li>
+<li><a href="/spec/66/"class=active>66/WAKU2-METADATA</a></li>
 </ul>
 </li>
 <li>Draft
@@ -166,7 +162,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <strong>47/WAKU2-TOR-PUSH</strong>
+  <strong>66/WAKU2-METADATA</strong>
 
   <label for="toc-control">
     
@@ -182,11 +178,13 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#functional-operation">Functional Operation</a></li>
-    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a></li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
+    <li><a href="#metadata-protocol">Metadata Protocol</a>
+      <ul>
+        <li><a href="#protocol-id">Protocol id</a></li>
+        <li><a href="#request">Request</a></li>
+        <li><a href="#response">Response</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -200,15 +198,15 @@ https://github.com/alex-shpak/hugo-book
       
       
 <article class="markdown">
-  <h1 id="47waku2-tor-push">
-  47/WAKU2-TOR-PUSH
-  <a class="anchor" href="#47waku2-tor-push">#</a>
+  <h1 id="66waku2-metadata">
+  66/WAKU2-METADATA
+  <a class="anchor" href="#66waku2-metadata">#</a>
 </h1>
 
   
-      <h1 id="waku-v2-tor-push">
-  Waku v2 Tor Push
-  <a class="anchor" href="#waku-v2-tor-push">#</a>
+      <h1 id="waku-metadata-protocol">
+  Waku Metadata Protocol
+  <a class="anchor" href="#waku-metadata-protocol">#</a>
 </h1>
 
   
@@ -223,47 +221,41 @@ https://github.com/alex-shpak/hugo-book
 
   <ul>
       <li>Status: raw</li>
-      <li>Editor: Daniel Kaiser <a href="mailto:danielkaiser@status.im">danielkaiser@status.im</a></li>
+      <li>Editor: Alvaro Revuelta <a href="mailto:alrevuelta@status.im">alrevuelta@status.im</a></li>
       
-  </ul><h1 id="abstract">
-  Abstract
-  <a class="anchor" href="#abstract">#</a>
+  </ul><h1 id="metadata-protocol">
+  Metadata Protocol
+  <a class="anchor" href="#metadata-protocol">#</a>
 </h1>
-<p>This document extends the <a href="/spec/11/">11/WAKU2-RELAY</a>, specifying Waku Tor Push,
-which allows nodes to push messages via Tor into the Waku relay network.</p>
-<p>Waku Tor Push builds on <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a>.</p>
-<p><strong>Protocol identifier</strong>: /vac/waku/relay/2.0.0</p>
-<p>Note: Waku Tor Push does not have a dedicated protocol identifier.
-It uses the same identifier as Waku relay.
-This allows Waku relay nodes that are oblivious to Tor Push to process messages received via Tor Push.</p>
-<h1 id="functional-operation">
-  Functional Operation
-  <a class="anchor" href="#functional-operation">#</a>
-</h1>
-<p>In its current version, Waku Tor Push corresponds to <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a>
-applied to <a href="/spec/11/">11/WAKU2-RELAY</a>,
-instead of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a>.</p>
-<h1 id="securityprivacy-considerations">
-  Security/Privacy Considerations
-  <a class="anchor" href="#securityprivacy-considerations">#</a>
-</h1>
-<p>see <a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a></p>
-<h1 id="copyright">
-  Copyright
-  <a class="anchor" href="#copyright">#</a>
-</h1>
-<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
-<h1 id="references">
-  References
-  <a class="anchor" href="#references">#</a>
-</h1>
+<p>Waku specifies a req/resp protocol that provides information about the node&rsquo;s medatadata. Such metadata is meant to be used
+by the node to decide if a peer is worth connecting or not. The node that makes the request, includes its metadata
+so that the receiver is aware of it, without requiring an extra interaction. The parameters are the following:</p>
 <ul>
-<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
-<li><a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/README.md">libp2p gossipsub</a></li>
-<li><a href="/spec/46">46/GOSSIPSUB-TOR-PUSH</a></li>
-<li><a href="https://www.torproject.org/">Tor</a></li>
+<li><code>clusterId</code>: Unique identifier of the cluster that the node is running in.</li>
+<li><code>shards</code>: Shard indexes that the node is subscribed to.</li>
 </ul>
-</article>
+<h2 id="protocol-id">
+  Protocol id
+  <a class="anchor" href="#protocol-id">#</a>
+</h2>
+<p><code>/vac/waku/metadata/1.0.0</code></p>
+<h2 id="request">
+  Request
+  <a class="anchor" href="#request">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">WakuMetadataRequest</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> cluster_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">uint32</span> shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h2 id="response">
+  Response
+  <a class="anchor" href="#response">#</a>
+</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">WakuMetadataResponse</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">optional</span> <span style="color:#66d9ef">uint32</span> cluster_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">uint32</span> shards <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div></article>
  
       
 
@@ -299,11 +291,13 @@ instead of <a href="https://github.com/libp2p/specs/blob/master/pubsub/gossipsub
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#abstract">Abstract</a></li>
-    <li><a href="#functional-operation">Functional Operation</a></li>
-    <li><a href="#securityprivacy-considerations">Security/Privacy Considerations</a></li>
-    <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
+    <li><a href="#metadata-protocol">Metadata Protocol</a>
+      <ul>
+        <li><a href="#protocol-id">Protocol id</a></li>
+        <li><a href="#request">Request</a></li>
+        <li><a href="#response">Response</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 

@@ -576,6 +576,16 @@ Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU
     </item>
     
     <item>
+      <title>66/WAKU2-METADATA</title>
+      <link>https://rfc.vac.dev/spec/66/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/66/</guid>
+      <description>Metadata Protocol # Waku specifies a req/resp protocol that provides information about the node&amp;rsquo;s medatadata. Such metadata is meant to be used by the node to decide if a peer is worth connecting or not. The node that makes the request, includes its metadata so that the receiver is aware of it, without requiring an extra interaction. The parameters are the following:
+clusterId: Unique identifier of the cluster that the node is running in.</description>
+    </item>
+    
+    <item>
       <title>7/WAKU-DATA</title>
       <link>https://rfc.vac.dev/spec/7/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
