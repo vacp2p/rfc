@@ -1492,7 +1492,7 @@ Like the IANA ports, shard clusters are divided into ranges:
 index (range) usage 0 - 15 reserved 16 - 65535 app-defined networks The informational RFC 52/WAKU2-RELAY-STATIC-SHARD-ALLOC lists the current index allocations.
 The global shard with index 0 and the \u0026ldquo;all app protocols\u0026rdquo; range are treated in the same way, but choosing shards in the global cluster has a higher probability of sharing the shard with other apps. This offers k-anonymity and better connectivity, but comes at a higher bandwidth cost.
 The name of the pubsub topic corresponding to a given static shard is specified as
-/waku/2/rs/\u0026lt;shard_cluster_index\u0026gt;/\u0026lt;shard_number\u0026gt;,
+/waku/2/rs/\u0026lt;cluster_id\u0026gt;/\u0026lt;shard_number\u0026gt;,
 an example for the 2nd shard in the global shard cluster:
 /waku/2/rs/0/2.
 Note: Because all shards distribute payload defined in 14/WAKU2-MESSAGE via protocol buffers, the pubsub topic name does not explicitly add /proto to indicate protocol buffer encoding. We use rs to indicate these are relay shard clusters; further shard types might follow in the future.
@@ -1665,7 +1665,7 @@ Relay Shards # Sharding the Waku Relay network is an integral part of scaling th
 51/WAKU2-RELAY-SHARDING specifies three sharding methods. This document uses static sharding, which leaves the distribution of content topics to application protocols, but takes care of shard discovery.
 The 1024 shards within the main Status shard cluster are allocated as follows.
 Shard Allocation # shard index usage 0 - 15 reserved 16 - 127 specific (large) communities 128 - 767 communities 768 - 895 1:1 chat 896 - 1023 media and control msgs Shard indices are mapped to pubsub topic names as follows (specified in 51/WAKU2-RELAY-SHARDING).
-/waku/2/rs/\u0026lt;shard_cluster_index\u0026gt;/\u0026lt;shard_number\u0026gt;
+/waku/2/rs/\u0026lt;cluster_id\u0026gt;/\u0026lt;shard_number\u0026gt;
 an example for the shard with index 18 in the Status shard cluster:
 /waku/2/rs/16/18
 In other words, the mesh network with the pubsub topic name /waku/2/rs/16/18 carries messages associated with shard 18 in the Status shard cluster.
@@ -1972,7 +1972,7 @@ Privacy Considerations # Inherits the privacy considerations of Status Keycard
 Copyright # Copyright and related rights waived via CC0.
 References # BIP-32 specification Keycard documentation 16/Keycard-Usage `}),e.add({id:52,href:"/spec/64/",title:"64/WAKU2-NETWORK",section:"Docs",content:` Abstract # This RFC specifies an opinionated deployment of 10/WAKU2 protocols to form a coherent and shared decentralized messaging network that is open-access, useful for generalized messaging, privacy-preserving, scalable and accessible even to resource-restricted devices. We\u0026rsquo;ll refer to this opinionated deployment simply as the public Waku Network, the Waku Network or, if the context is clear, the network in the rest of this document.
 Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU2-RLN-RELAY routing protocol, which in turn is an extension of 11/WAKU2-RELAY with spam protection measures.
-Network shards # Traffic in the Waku Network is sharded into eight 17/WAKU2-RLN-RELAY pubsub topics. Each pubsub topic is named according to the static shard naming format defined in 51/WAKU2-RELAY-SHARDING with \u0026lt;shard_cluster_index\u0026gt; set to 1 and \u0026lt;shard_number\u0026gt; occupying the range 0 to 7. In other words, the Waku Network is a 17/WAKU2-RLN-RELAY network routed on the combination of the eight pubsub topics:
+Network shards # Traffic in the Waku Network is sharded into eight 17/WAKU2-RLN-RELAY pubsub topics. Each pubsub topic is named according to the static shard naming format defined in 51/WAKU2-RELAY-SHARDING with \u0026lt;cluster_id\u0026gt; set to 1 and \u0026lt;shard_number\u0026gt; occupying the range 0 to 7. In other words, the Waku Network is a 17/WAKU2-RLN-RELAY network routed on the combination of the eight pubsub topics:
 /waku/2/rs/1/0 /waku/2/rs/1/1 ... /waku/2/rs/1/7 Roles # There are two distinct roles evident in the network, those of:
 nodes, and applications. Nodes # Nodes are the individual software units using 10/WAKU2 protocols to form a p2p messaging network. Nodes, in turn, can participate in a shard as full relayers, i.e. relay nodes, or by running a combination of protocols suitable for resource-restricted environments, i.e. non-relay nodes. Nodes can also provide various services to the network, such as storing historical messages or protecting the network against spam. See the section on default services for more.
 Relay nodes # Relay nodes MUST follow 17/WAKU2-RLN-RELAY to route messages to other nodes in the network for any of the pubsub topics defined as the Waku Network shards. Relay nodes MAY choose to subscribe to any of these shards, but MUST be subscribed to at least one defined shard. Each relay node SHOULD be subscribed to as many shards as it has resources to support. If a relay node supports an encapsulating application, it SHOULD be subscribed to all the shards servicing that application. If resource restrictions prevent a relay node from servicing all shards used by the encapsulating application, it MAY choose to support some shards as a non-relay node.
