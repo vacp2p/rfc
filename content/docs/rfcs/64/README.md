@@ -33,7 +33,7 @@ which in turn is an extension of [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) 
 Traffic in the Waku Network is sharded into eight [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/) pubsub topics.
 Each pubsub topic is named according to the static shard naming format
 defined in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
-with `<shard_cluster_index>` set to `1` and
+with `<cluster_id>` set to `1` and
 `<shard_number>` occupying the range `0` to `7`.
 In other words, the Waku Network is a [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/) network
 routed on the combination of the eight pubsub topics:
