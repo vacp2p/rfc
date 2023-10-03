@@ -77,7 +77,7 @@ This offers k-anonymity and better connectivity, but comes at a higher bandwidth
 
 The name of the pubsub topic corresponding to a given static shard is specified as
 
-`/waku/2/rs/<shard_cluster_index>/<shard_number>`,
+`/waku/2/rs/<cluster_id>/<shard_number>`,
 
 an example for the 2nd shard in the global shard cluster:
 
