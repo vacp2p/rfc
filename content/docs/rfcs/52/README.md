@@ -22,12 +22,12 @@ this document lists static shard index assignments (see [51/WAKU2-RELAY-SHARDING
 
 > *Note*: Future versions of this document will specify the assignment process.
 
-# List of Cluster Indices
+# List of Cluster Ids
 
 |    index | Protocol/App | Description                         |
 |    ---   | ---          | ---                                 |
 |      0   |   global     | global use                          |
-|      1   |   reserved   |                                     |
+|      1   |   reserved   | [The Waku Network](https://rfc.vac.dev/spec/64/#network-shards)                                     |
 |      2   |   reserved   |                                     |
 |      3   |   reserved   |                                     |
 |      4   |   reserved   |                                     |
