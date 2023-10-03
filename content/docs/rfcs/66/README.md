@@ -12,7 +12,7 @@ contributors:
 Waku specifies a req/resp protocol that provides information about the node's medatadata. Such metadata is meant to be used
 by the node to decide if a peer is worth connecting or not. The node that makes the request, includes its metadata
 so that the receiver is aware of it, without requiring an extra interaction. The parameters are the following:
-* `networkId`: Unique identifier of the network that the node is running in.
+* `clusterId`: Unique identifier of the network that the node is running in.
 * `shards`: Shard indexes that the node is subscribed to.
 
 
@@ -24,7 +24,7 @@ so that the receiver is aware of it, without requiring an extra interaction. The
 
 ```proto
 message WakuMetadataRequest {
-  optional uint32 network_id = 1;
+  optional uint32 cluster_id = 1;
   repeated uint32 shards = 2;
 }
 ```
@@ -33,7 +33,7 @@ message WakuMetadataRequest {
 
 ```proto
 message WakuMetadataResponse {
-  optional uint32 network_id = 1;
+  optional uint32 cluster_id = 1;
   repeated uint32 shards = 2;
 }
 ```
