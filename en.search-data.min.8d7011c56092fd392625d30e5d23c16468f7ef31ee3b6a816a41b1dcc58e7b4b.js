@@ -1489,7 +1489,7 @@ A specific shard cluster is either globally available to all apps, specific for 
 Note: This leads to $2^16 * 1024 = 2^26$ shards for which Waku manages discovery.
 App protocols can either choose to use global shards, or app specific shards.
 Like the IANA ports, shard clusters are divided into ranges:
-index (range) usage 0 global 1 - 15 reserved 16 - 1023 specific app protocols 1024 - 49152 all app protocols 49152 - 65535 automatic sharding The informational RFC 52/WAKU2-RELAY-STATIC-SHARD-ALLOC lists the current index allocations.
+index (range) usage 0 - 15 reserved 16 - 65535 app-defined networks The informational RFC 52/WAKU2-RELAY-STATIC-SHARD-ALLOC lists the current index allocations.
 The global shard with index 0 and the \u0026ldquo;all app protocols\u0026rdquo; range are treated in the same way, but choosing shards in the global cluster has a higher probability of sharing the shard with other apps. This offers k-anonymity and better connectivity, but comes at a higher bandwidth cost.
 The name of the pubsub topic corresponding to a given static shard is specified as
 /waku/2/rs/\u0026lt;shard_cluster_index\u0026gt;/\u0026lt;shard_number\u0026gt;,
@@ -1526,9 +1526,8 @@ Receiver Anonymity # The strength of receiver anonymity, i.e. topic receiver unl
 Copyright # Copyright and related rights waived via CC0.
 References # 11/WAKU2-RELAY Unstructured P2P network 33/WAKU2-DISCV5 31/WAKU2-ENR 23/WAKU2-TOPICS 51/WAKU2-RELAY-SHARDING Ethereum ENR sharding bit vector Ethereum discv5 specification Research log: Waku Discovery 45/WAKU2-ADVERSARIAL-MODELS `}),e.add({id:42,href:"/spec/52/",title:"52/WAKU2-RELAY-STATIC-SHARD-ALLOC",section:"Docs",content:` Abstract # This document lists static shard flag index assignments (see 51/WAKU2-RELAY-SHARDING.
 Background # Similar to the IANA port allocation, this document lists static shard index assignments (see 51/WAKU2-RELAY-SHARDING.
-The index ranges are as follows: index 0 represents the global shards, indices 1 to 15 are reserved, indices 16 to 1023 are reservable for apps, indices 1024 to 49151 are for open use by apps, indices 49152 to 65535 are reserved.
 Assingment Process # Note: Future versions of this document will specify the assignment process.
-List of Static Shard Indices # index Protocol/App Description 0 global global use 1 reserved 2 reserved 3 reserved 4 reserved 5 reserved 6 reserved 7 reserved 8 reserved 9 reserved 10 reserved 11 reserved 12 reserved 13 reserved 14 reserved 15 reserved 16 Status Status main net 17 Status 18 Status Copyright # Copyright and related rights waived via CC0.
+List of Cluster Ids # index Protocol/App Description 0 global global use 1 reserved The Waku Network 2 reserved 3 reserved 4 reserved 5 reserved 6 reserved 7 reserved 8 reserved 9 reserved 10 reserved 11 reserved 12 reserved 13 reserved 14 reserved 15 reserved 16 Status Status main net 17 Status 18 Status Copyright # Copyright and related rights waived via CC0.
 References # 51/WAKU2-RELAY-SHARDING IANA port allocation `}),e.add({id:43,href:"/spec/53/",title:"53/WAKU2-X3DH",section:"Docs",content:` Abstract # This document describes a method that can be used to provide a secure channel between two peers, and thus provide confidentiality, integrity, authenticity and forward secrecy. It is transport-agnostic and works over asynchronous networks.
 It builds on the X3DH and Double Ratchet specifications, with some adaptations to operate in a decentralized environment.
 Motivation # Nodes on a network may want to communicate with each other in a secure manner, without other nodes network being able to read their messages.
