@@ -70,7 +70,7 @@ The 1024 shards within the main Status shard cluster are allocated as follows.
 
 Shard indices are mapped to pubsub topic names as follows (specified in [51/WAKU2-RELAY-SHARDING](/spec/51/)).
 
-`/waku/2/rs/<shard_cluster_index>/<shard_number>`
+`/waku/2/rs/<cluster_id>/<shard_number>`
 
 an example for the shard with index `18` in the Status shard cluster:
 
