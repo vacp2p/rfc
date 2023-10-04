@@ -49,7 +49,7 @@ A node MUST use [WAKU-METADATA](https://rfc.vac.dev/spec/66/) protocol to identi
 inbound/outbound peer that attempts to connect supports. In any of the following cases, the node MUST trigger a disconnection:
 * [WAKU-METADATA](https://rfc.vac.dev/spec/66/) dial fails.
 * [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports an empty `<cluster_id>`.
-* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports different `<cluster_id>` than the local one.
+* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports a `<cluster_id>` different than `1`.
 
 ## Roles
 
