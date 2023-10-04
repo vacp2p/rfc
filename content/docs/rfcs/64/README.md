@@ -47,7 +47,7 @@ routed on the combination of the eight pubsub topics:
 
 A node MUST use [WAKU-METADATA](https://rfc.vac.dev/spec/66/) protocol to identify the `<cluster_id>` that every
 inbound/outbound peer that attempts to connect supports. In any of the following cases, the node MUST trigger a disconnection:
-* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) fial fails.
+* [WAKU-METADATA](https://rfc.vac.dev/spec/66/) dial fails.
 * [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports an empty `<cluster_id>`.
 * [WAKU-METADATA](https://rfc.vac.dev/spec/66/) reports different `<cluster_id>` than the local one.
 
