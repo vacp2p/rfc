@@ -576,6 +576,18 @@ Theory / Semantics # Routing protocol # The Waku Network is built on the 17/WAKU
     </item>
     
     <item>
+      <title>65/STATUS-ACCOUNTS</title>
+      <link>https://rfc.vac.dev/spec/65/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/65/</guid>
+      <description>Abstract # This specification explains what a Status account is, and how it is created and used.
+Background # The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
+a Waku chat identity keypair a set of cryptocurrency wallet keypairs The Status node verifies or derives everything else associated with the contact from the above items, including:
+Ethereum address (future verification, currently the same base keypair) identicon message signatures Initial Key Generation # Public/Private Keypairs # An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a BIP43 derived path from a BIP39 mnemonic seed phrase.</description>
+    </item>
+    
+    <item>
       <title>66/WAKU2-METADATA</title>
       <link>https://rfc.vac.dev/spec/66/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

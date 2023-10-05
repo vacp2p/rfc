@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This specification explains what a Status account is, and how it is created and used.
+Background # The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
+a Waku chat identity keypair a set of cryptocurrency wallet keypairs The Status node verifies or derives everything else associated with the contact from the above items, including:
+Ethereum address (future verification, currently the same base keypair) identicon message signatures Initial Key Generation # Public/Private Keypairs # An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a BIP43 derived path from a BIP39 mnemonic seed phrase.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="65/STATUS-ACCOUNTS" />
+<meta property="og:description" content="Abstract # This specification explains what a Status account is, and how it is created and used.
+Background # The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:
+a Waku chat identity keypair a set of cryptocurrency wallet keypairs The Status node verifies or derives everything else associated with the contact from the above items, including:
+Ethereum address (future verification, currently the same base keypair) identicon message signatures Initial Key Generation # Public/Private Keypairs # An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a BIP43 derived path from a BIP39 mnemonic seed phrase." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/65/" /><meta property="article:section" content="docs" />
+
+
+
+<title>65/STATUS-ACCOUNTS | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.63d0833c2423f05762cd743afc2b2d78c13d564374d961f99ba488bac6a2beef.js" integrity="sha256-Y9CDPCQj8FdizXQ6/CsteME9VkN02WH5m6SIusaivu8="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/">58/RLN-V2</a></li>
+<li><a href="/spec/61/">61/STATUS-Community-History-Archives</a></li>
+<li><a href="/spec/63/">63/STATUS-Keycard-Usage</a></li>
+<li><a href="/spec/64/">64/WAKU2-NETWORK</a></li>
+<li><a href="/spec/66/">66/WAKU2-METADATA</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+<li><a href="/spec/65/"class=active>65/STATUS-ACCOUNTS</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>65/STATUS-ACCOUNTS</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#initial-key-generation">Initial Key Generation</a>
+      <ul>
+        <li><a href="#publicprivate-keypairs">Public/Private Keypairs</a></li>
+      </ul>
+    </li>
+    <li><a href="#account-broadcasting">Account Broadcasting</a>
+      <ul>
+        <li><a href="#x3dh-prekey-bundles">X3DH Prekey bundles</a></li>
+      </ul>
+    </li>
+    <li><a href="#optional-account-additions">Optional Account additions</a>
+      <ul>
+        <li><a href="#ens-username">ENS Username</a></li>
+        <li><a href="#user-profile-picture">User Profile Picture</a></li>
+      </ul>
+    </li>
+    <li><a href="#wire-format">Wire Format</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">normative</a></li>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="65status-accounts">
+  65/STATUS-ACCOUNTS
+  <a class="anchor" href="#65status-accounts">#</a>
+</h1>
+
+  
+      <h1 id="status-accounts">
+  Status Accounts
+  <a class="anchor" href="#status-accounts">#</a>
+</h1>
+
+  
+
+  
+  
+  <img src="https://img.shields.io/badge/status-draft-blue?style=flat-square" />
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: draft</li>
+      <li>Editor: Aaryamann Challani <a href="mailto:aaryamann@status.im">aaryamann@status.im</a></li>
+      
+      <li>Contributors:
+          
+              
+              Corey Petty <a href="mailto:corey@status.im">corey@status.im</a>
+          
+              ,
+              Oskar Thorén <a href="mailto:oskar@status.im">oskar@status.im</a>
+          
+              ,
+              Samuel Hawksby-Robinson <a href="mailto:samuel@status.im">samuel@status.im</a>
+          
+      </li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This specification explains what a Status account is, and how it is created and used.</p>
+<h1 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
+</h1>
+<p>The core concept of an account in Status is a set of cryptographic keypairs. Namely, the combination of the following:</p>
+<ol>
+<li>a Waku chat identity keypair</li>
+<li>a set of cryptocurrency wallet keypairs</li>
+</ol>
+<p>The Status node verifies or derives everything else associated with the contact from the above items, including:</p>
+<ul>
+<li>Ethereum address (future verification, currently the same base keypair)</li>
+<li>identicon</li>
+<li>message signatures</li>
+</ul>
+<h1 id="initial-key-generation">
+  Initial Key Generation
+  <a class="anchor" href="#initial-key-generation">#</a>
+</h1>
+<h2 id="publicprivate-keypairs">
+  Public/Private Keypairs
+  <a class="anchor" href="#publicprivate-keypairs">#</a>
+</h2>
+<ul>
+<li>An ECDSA (secp256k1 curve) public/private keypair MUST be generated via a <a href="https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki">BIP43</a> derived path from a <a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">BIP39</a> mnemonic seed phrase.</li>
+<li>The default paths are defined as such:
+<ul>
+<li>Waku Chat Key (<code>IK</code>): <code>m/43'/60'/1581'/0'/0</code>  (post Multiaccount integration)
+<ul>
+<li>following <a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md">EIP1581</a></li>
+</ul>
+</li>
+<li>Status Wallet paths: <code>m/44'/60'/0'/0/i</code> starting at <code>i=0</code>
+<ul>
+<li>following <a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki">BIP44</a></li>
+<li>NOTE: this (<code>i=0</code>) is also the current (and only) path for Waku key before Multiaccount integration</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="account-broadcasting">
+  Account Broadcasting
+  <a class="anchor" href="#account-broadcasting">#</a>
+</h1>
+<ul>
+<li>A user is responsible for broadcasting certain information publicly so that others may contact them.</li>
+</ul>
+<h2 id="x3dh-prekey-bundles">
+  X3DH Prekey bundles
+  <a class="anchor" href="#x3dh-prekey-bundles">#</a>
+</h2>
+<ul>
+<li>Refer to <a href="/spec/53">53/WAKU2-X3DH</a> for details on the X3DH prekey bundle broadcasting, as well as regeneration.</li>
+</ul>
+<h1 id="optional-account-additions">
+  Optional Account additions
+  <a class="anchor" href="#optional-account-additions">#</a>
+</h1>
+<h2 id="ens-username">
+  ENS Username
+  <a class="anchor" href="#ens-username">#</a>
+</h2>
+<ul>
+<li>A user MAY register a public username on the Ethereum Name System (ENS).  This username is a user-chosen subdomain of the <code>stateofus.eth</code> ENS registration that maps to their Waku identity key (<code>IK</code>).</li>
+</ul>
+<h2 id="user-profile-picture">
+  User Profile Picture
+  <a class="anchor" href="#user-profile-picture">#</a>
+</h2>
+<ul>
+<li>An account MAY edit the <code>IK</code> generated identicon with a chosen picture.  This picture will become part of the publicly broadcasted profile of the account.</li>
+</ul>
+<!-- raw HTML omitted -->
+<h1 id="wire-format">
+  Wire Format
+  <a class="anchor" href="#wire-format">#</a>
+</h1>
+<p>Below is the wire format for the account information that is broadcasted publicly.
+An Account is referred to as a Multiaccount in the wire format.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-proto" data-lang="proto"><span style="display:flex;"><span><span style="color:#66d9ef">message</span> <span style="color:#a6e22e">MultiAccount</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// name of the account
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int64</span> timestamp <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// timestamp of the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> identicon <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// base64 encoded identicon
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> ColorHash color_hash <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// color hash of the identicon
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">int64</span> color_id <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>; <span style="color:#75715e">// color id of the identicon
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> keycard_pairing <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>; <span style="color:#75715e">// keycard pairing code
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> key_uid <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>; <span style="color:#75715e">// unique identifier of the account
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">repeated</span> IdentityImage images <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>; <span style="color:#75715e">// images associated with the account
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">string</span> customization_color <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>; <span style="color:#75715e">// color of the identicon
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">uint64</span> customization_color_clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>; <span style="color:#75715e">// clock of the identicon color, to track updates
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">ColorHash</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">repeated</span> <span style="color:#66d9ef">int64</span> index <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">message</span> <span style="color:#a6e22e">IdentityImage</span> {<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#66d9ef">string</span> key_uid <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// unique identifier of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">string</span> name <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>; <span style="color:#75715e">// name of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">bytes</span> payload <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>; <span style="color:#75715e">// payload of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int64</span> width <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>; <span style="color:#75715e">// width of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int64</span> height <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>; <span style="color:#75715e">// height of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int64</span> filesize <span style="color:#f92672">=</span> <span style="color:#ae81ff">6</span>; <span style="color:#75715e">// filesize of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int64</span> resize_target <span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span>; <span style="color:#75715e">// resize target of the image
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">uint64</span> clock <span style="color:#f92672">=</span> <span style="color:#ae81ff">8</span>; <span style="color:#75715e">// clock of the image, to track updates
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  }<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>The above payload is broadcasted when 2 devices that belong to a user need to be paired.</p>
+<h1 id="security-considerations">
+  Security Considerations
+  <a class="anchor" href="#security-considerations">#</a>
+</h1>
+<ul>
+<li>This specification inherits security considerations of <a href="/spec/53">53/WAKU2-X3DH</a> and <a href="/spec/54">54/WAKU2-X3DH-SESSIONS</a>.</li>
+</ul>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<h2 id="normative">
+  normative
+  <a class="anchor" href="#normative">#</a>
+</h2>
+<ul>
+<li><a href="/spec/53">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55">55/STATUS-1TO1-CHAT</a></li>
+</ul>
+<h2 id="informative">
+  informative
+  <a class="anchor" href="#informative">#</a>
+</h2>
+<ul>
+<li><a href="https://github.com/bitcoin/bips/blob/master/bip-0043.mediawiki">BIP43</a></li>
+<li><a href="https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki">BIP39</a></li>
+<li><a href="https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1581.md">EIP1581</a></li>
+<li><a href="https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki">BIP44</a></li>
+<li><a href="https://ens.domains/">Ethereum Name System</a></li>
+<li><a href="/spec/63">Status Multiaccount</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#initial-key-generation">Initial Key Generation</a>
+      <ul>
+        <li><a href="#publicprivate-keypairs">Public/Private Keypairs</a></li>
+      </ul>
+    </li>
+    <li><a href="#account-broadcasting">Account Broadcasting</a>
+      <ul>
+        <li><a href="#x3dh-prekey-bundles">X3DH Prekey bundles</a></li>
+      </ul>
+    </li>
+    <li><a href="#optional-account-additions">Optional Account additions</a>
+      <ul>
+        <li><a href="#ens-username">ENS Username</a></li>
+        <li><a href="#user-profile-picture">User Profile Picture</a></li>
+      </ul>
+    </li>
+    <li><a href="#wire-format">Wire Format</a></li>
+    <li><a href="#security-considerations">Security Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#normative">normative</a></li>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
