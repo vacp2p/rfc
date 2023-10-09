@@ -150,30 +150,31 @@ If `success` is `false`:
 ## Push Notification Server
 A node that handles receiving and sending push notifications for clients.
 
-### Query Topic
+### Query Topic:
 On successful registration the server MUST be listening to the topic derived from:
   > `0XHexEncode(Shake256(CompressedClientPublicKey))`
 
 Using the topic derivation algorithm described here and listen for client queries.
-### Server Grant
+
+### Server Grant:
 A client needs to authorize a push notification server to send them push notifications. This is done by building a grant which is specific to a given client-server pair. When receiving a grant, the server MUST validate that the signature matches the registering client. 
 
 The grant is built as:
  > `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
 
 
-### Unregistering with a Server
+### Unregistering with a Server:
 - To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
 - The server MUST remove all data about this user if `unregistering` is `true`, apart from the `hash` of the public key and the `version` of the last options, in order to make sure that old messages are not processed.
 - A client MAY unregister from a server on explicit logout if multiple chat keys are used on a single device.
 
-### Re-registering with a Server
+### Re-registering with a Server:
 - A client SHOULD re-register with the node if the APN or FIREBASE token changes.
 - When re-registering a client SHOULD ensure that it has the most up-to-date `PushNotificationRegistration` and increment `version` if necessary.
 - Once re-registered, a client SHOULD advertise the changes.
 Changing options is handled the same as re-registering.
 
-### Advertising a Server
+### Advertising a Server:
 Each user registered with one or more push notification servers SHOULD advertise periodically the push notification services that they have registered with for each device they own.
 
 ```protobuf
@@ -200,7 +201,7 @@ message ContactCodeAdvertisement {
 - Every time a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
-### Discovering a Server
+### Discovering a Server:
 To discover a push notification service for a given user, their [contact code topic](https://specs.status.im/spec/10#contact-code-topic) SHOULD be listened to. A mailserver can be queried for the specific topic to retrieve the most up-to-date contact code.
 
 ### Querying a Server:
@@ -215,7 +216,7 @@ message PushNotificationQuery {
 
 ```
 
-### Handle Query Message
+### Handle Query Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY`.
 - MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, as described above.
 - An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://specs.status.im/spec/5).
@@ -241,7 +242,7 @@ message PushNotificationQueryResponse {
 
 ```
 
-### Handle Query Response
+### Handle Query Response:
 - A `PushNotificationQueryResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
 Otherwise a response MUST NOT be sent.
 - If `allowed_key_list` is not set `access_token` MUST be set and `allowed_key_list` MUST NOT be set.
@@ -281,7 +282,7 @@ message PushNotificationRequest {
 }
 
 ```
-### Handle Notification Request
+### Handle Notification Request:
 - A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_REQUEST`.
 - Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`. `message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
 - If multiple server are available for a given push notification, only one notification MUST be sent.
@@ -337,7 +338,7 @@ message PushNotificationResponse {
 ```
 Where `message_id` is the `message_id` sent by the client.
 
-### Handle Notification Response
+### Handle Notification Response:
 - A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_RESPONSE`.
 -The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender and MUST not be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
@@ -346,38 +347,38 @@ Where `message_id` is the `message_id` sent by the client.
 
 ## Protobuf Description
 
-### PushNotificationRegistration
+### PushNotificationRegistration:
 `token_type`: the type of token. Currently supported is `APN_TOKEN` for Apple Push `device_token`: the actual push notification token sent by `Firebase` or `APN` and `FIREBASE_TOKEN` for firebase. `installation_id`: the `installation_id` of the device `access_token`: the access token that will be given to clients to send push notifications `enabled`: whether the device wants to be sent push notifications `version`: a monotonically increasing number identifying the current `PushNotificationRegistration`. Any time anything is changed in the record it MUST be increased by the client, otherwise the request will not be accepted. `allowed_key_list`: a list of `access_token` encrypted with the AES key generated by Diffie–Hellman between the publisher and the allowed contact. `blocked_chat_list`: a list of `SHA2-256` hashes of chat ids. Any chat id in this list will not trigger a notification. `unregister`: whether the account should be unregistered `grant`: the grant for this specific server `allow_from_contacts_only`: whether the client only wants push notifications from contacts `apn_topic`: the APN topic for the push notification `block_mentions`: whether the client does not want to be notified on mentions `allowed_mentions_chat_list`: a list of SHA2-256 hashes of chat ids where we want to receive mentions
 
 DATA DISCLOSED
 - Type of device owned by a given user.
 - The `FIREBASE` or `APN` push notification token,
 - Hash of the `chat_id` a user is not interested in for notifications,
-- The times a push notification record has been modified by the user,
+- The number of times a push notification record has been modified by the user,
 - The number of contacts a client has, in case `allowed_key_list` is set.
 
-### PushNotificationRegistrationResponse
+### PushNotificationRegistrationResponse:
 `success`: whether the registration was successful `error`: the error type, if any `request_id`: the `SHAKE-256` hash of the `signature` of the request `preferences`: the server stored preferences in case of an error.
 
-### ContactCodeAdvertisement
+### ContactCodeAdvertisement:
 `push_notification_info`: the information for each device advertised
 
 DATA DISCLOSED
 - The chat key of the sender
 
-### PushNotificationQuery 
+### PushNotificationQuery:
 `public_keys`: the `SHAKE-256` of the public keys the client is interested in
 
 DATA DISCLOSED
 - The hash of the public keys the client is interested in
 
-### PushNotificationQueryInfo
+### PushNotificationQueryInfo:
 `access_token`: the access token used to send a push notification `installation_id`: the `installation_id` of the device associated with the `access_token` `public_key`: the `SHAKE-256` of the public key associated with this `access_token` and `installation_id`. `allowed_key_list`: a list of encrypted access tokens to be returned to the client in case there’s any filtering on public keys in place. `grant`: the grant used to register with this server. `version`: the version of the registration on the server. `server_public_key`: the compressed public key of the server.
 
-### PushNotificationQueryResponse 
+### PushNotificationQueryResponse: 
 `info`: a list of `PushNotificationQueryInfo`. `message_id`: the message id of the `PushNotificationQueryInfo` the server is replying to. `success`: whether the query was successful.
 
-### PushNotification 
+### PushNotification: 
 `access_token`: the access token used to send a push notification. `chat_id`: the `SHAKE-256` of the `chat_id`. `public_key`: the `SHAKE-256` of the compressed public key of the receiving client. `installation_id`: the `installation_id` of the receiving client. `message`: the encrypted message that is being notified on. `type`: the type of the push notification, either `MESSAGE` or `MENTION` `author`: the `SHAKE-256` of the public key of the sender
 
 Data disclosed
@@ -386,19 +387,19 @@ Data disclosed
 - The `SHAKE-256` of the public key of the sender
 - The type of notification
 
-### PushNotificationRequest
+### PushNotificationRequest:
 `requests`: a list of PushNotification `message_id`: the [status message id](https://specs.status.im/spec/6)
 
 Data disclosed
 - The status `message_id` for which the notification is for
 
-### PushNotificationResponse 
+### PushNotificationResponse: 
 `message_id`: the `message_id` being notified on. `reports`: a list of `PushNotificationReport`.
 
-### PushNotificationReport
+### PushNotificationReport:
 `success`: whether the push notification was successful. `error`: the type of the error in case of failure. `public_key`: the public key of the user being notified. `installation_id`: the `installation_id` of the user being notified.
 
-## Anonymous Mode:
+## Anonymous Mode
 In order to preserve privacy, the client MAY provide anonymous mode of operations to propagate information about the user. A client in anonymous mode can register with the server using a key that is different from their chat key. This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
 
 - A client MAY advertise the access token on the [contact-code topic](https://specs.status.im/spec/6) of the key generated. 
@@ -407,7 +408,7 @@ In order to preserve privacy, the client MAY provide anonymous mode of operation
 
 The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
 
-# Security/Privacy Considerations:
+# Security/Privacy Considerations
 If no anonymous mode is used, when registering with a push notification service a client disclose:
 - The devices that will receive notifications.
 - The chat key.
