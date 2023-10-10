@@ -194,7 +194,7 @@ message ContactCodeAdvertisement {
 
 ```
 
-### Handle Advertisment Message:
+### Handle Advertisement Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement. Otherwise it SHOULD be left empty.
 - This SHOULD be advertised on the [contact code topic](https://specs.status.im/spec/10#contact-code-topic) and SHOULD be coupled with normal contact-code advertisement.
