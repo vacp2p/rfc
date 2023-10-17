@@ -23,7 +23,7 @@ EIP-778 specifies a number of pre-defined keys." />
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.63d0833c2423f05762cd743afc2b2d78c13d564374d961f99ba488bac6a2beef.js" integrity="sha256-Y9CDPCQj8FdizXQ6/CsteME9VkN02WH5m6SIusaivu8="></script>
+<script defer src="/en.search.min.989ed31b5022a622d14a484acf596ced46d0989e072ba4dcce65c6e63e697f85.js" integrity="sha256-mJ7TG1AipiLRSkhKz1ls7UbQmJ4HK6TczmXG5j5pf4U="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -300,7 +300,7 @@ No new RFC would be needed to support encoding other transport protocols in an E
 <li>The <code>secp256k1</code> value MUST be present on the record;
 <code>secp256k1</code> is defined in <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> and contains the compressed secp256k1 public key.</li>
 <li>The node&rsquo;s peer id SHOULD be deduced from the <code>secp256k1</code> value.</li>
-<li>The multiaddresses SHOULD NOT contain a peer id.</li>
+<li>The multiaddresses SHOULD NOT contain a peer id except for circuit relay addresses</li>
 <li>For raw TCP &amp; UDP connections details, <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> pre-defined keys SHOULD be used;
 The keys <code>tcp</code>, <code>udp</code>, <code>ip</code> (and <code>tcp6</code>, <code>udp6</code>, <code>ip6</code> for IPv6) are enough to convey all necessary information;</li>
 <li>To save space, <code>multiaddrs</code> key SHOULD only be used for connection details that cannot be represented using the <a href="https://eips.ethereum.org/EIPS/eip-778">EIP-778</a> pre-defined keys.</li>
@@ -323,6 +323,7 @@ In practice, it is possible to encode 3 multiaddresses in ENR, more or less coul
 <li>UDP 40404 on <code>1234:5600:101:1::142</code></li>
 <li>Secure Websocket on <code>wss://example.com:443/</code></li>
 <li>QUIC on <code>quic://quic.example.com:443/</code></li>
+<li>A circuit relay address <code>/ip4/1.2.3.4/tcp/55555/p2p/QmRelay/p2p-circuit/p2p/QmAlice</code></li>
 </ul>
 <p>Alice SHOULD structure the ENR for her node as follows:</p>
 <table>
@@ -363,7 +364,7 @@ In practice, it is possible to encode 3 multiaddresses in ENR, more or less coul
 </tr>
 <tr>
 <td><code>multiaddrs</code></td>
-<td><!-- raw HTML omitted -->len1 | /dns4/example.com/tcp/443/wss | len2 | /dns4/quic.examle.com/tcp/443/quic<!-- raw HTML omitted --></td>
+<td><!-- raw HTML omitted -->len1 | /dns4/example.com/tcp/443/wss | len2 | /dns4/quic.examle.com/tcp/443/quic  | len3 | /ip4/1.2.3.4/tcp/55555/p2p/QmRelay <!-- raw HTML omitted --></td>
 </tr>
 </tbody>
 </table>
@@ -372,6 +373,7 @@ In practice, it is possible to encode 3 multiaddresses in ENR, more or less coul
 <li><code>|</code> is the concatenation operator,</li>
 <li><code>len1</code> is the length of <code>/dns4/example.com/tcp/443/wss</code> byte representation,</li>
 <li><code>len2</code> is the length of <code>/dns4/quic.examle.com/tcp/443/quic</code> byte representation.</li>
+<li><code>len3</code> is the length of <code>/ip4/1.2.3.4/tcp/55555/p2p/QmRelay</code> byte representation. Notice that the <code>/p2p-circuit</code> component is not stored, but, since circuit relay addresses are the only one containing a <code>p2p</code> component, it&rsquo;s safe to assume that any address containing this component is a circuit relay address. Decoding this type of multiaddresses would require appending the <code>/p2p-circuit</code> component.</li>
 </ul>
 <h3 id="raw-tcp-only">
   Raw TCP only
