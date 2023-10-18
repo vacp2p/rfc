@@ -105,7 +105,8 @@ This corresponds to the Noise pattern  **IX**:
 → e, s \
 ← e, s, es, se, ee
 
-Concerning the double ratchet, one observes that the Diffie-Hellman ratchet begins with the first message, which includes the public key of the sender therefore one may consider the DH ratchet as a  **NN** pattern according to the Noise nomenclature:
+Concerning the double ratchet, one observes that the Diffie-Hellman ratchet begins with the first message,
+which includes the public key of the sender therefore one may consider the DH ratchet as a  **NN** pattern according to the Noise nomenclature:
 
 → e \
 ← e, ee
