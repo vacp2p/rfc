@@ -20,7 +20,7 @@ Alice wants to send an encrypted message to Bob.
 Here Bob is the only individual able to decrypt the message.
 Alice has access to Bob’s Ethereum address.
 
-# Theory / Semantics
+# Theory and Description of the Protocol
 
 The proposed protocol must adhere to the following design requirements:
 -   Alice knows Bob’s Ethereum address.
