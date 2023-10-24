@@ -17,7 +17,8 @@ amends the limitations of the latter concerning forward privacy and authenticati
 # Background / Rationale / Motivation
 
 Alice wants to send an encrypted message to Bob. 
-Here Bob is the only individual able to decrypt the message. Alice has access to Bob’s Ethereum address.
+Here Bob is the only individual able to decrypt the message.
+Alice has access to Bob’s Ethereum address.
 
 # Theory / Semantics
 
