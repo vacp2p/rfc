@@ -1,6 +1,6 @@
 ---
 slug: 70
-title: 70/WAKU2-ETHCHAT
+title: 70/ETH-SECPM
 name: Private 1:1 messages over Ethereum
 status: raw
 category: Standards Track
@@ -48,14 +48,14 @@ This protocol will consist of several stages:
 
 ## Considerations on the X3DH initialization
 This scheme requires working on specific elliptic curves which differ from those used by Ethereum. 
-To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. For the sake of simplicity we will assume the selected curve is X25519.
+To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. For security reasons one must work on the curve X448.
 
 Bob and Alice must define a key pair (ik, IK) where:
 -   The key ik must be kept secret,
 -   and the key IK is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore it will be required to generate new keys. 
-This can be done using the basepoint $G$ for X25519 and $ik \in \mathbb{Z}_p$ a random integer:
+This can be done using the basepoint $G$ for X448 and $ik \in \mathbb{Z}_p$ a random integer:
 
 $$ IK = ik \cdot G $$
 
@@ -76,13 +76,13 @@ A final step requires the definition of a  _prekey bundle_  given by the tuple
 
 $$ prekey\_bundle = (IK, SPK, SigSPK, \{OPK_i\}_i) $$
 
-Where the different one-time keys OPK are points in X25519 generated from a random integer $opk \in \mathbb{Z}_p$ and computed by performing
+Where the different one-time keys OPK are points in X448 generated from a random integer $opk \in \mathbb{Z}_p$ and computed by performing
 
 $$ OPK = opk\cdot G $$
 
 Before sending an initial message to Bob, Alice will generate an AD vector as described in the documentation:
 
-$$ AD = Encode(IK_A)\,||\,Encode(IK_B) $$
+$$ AD = Encode(IK_A)|| Encode(IK_B) $$
 
 Alice will also need to generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the produc
 
@@ -125,7 +125,7 @@ SHA256 for the KDF and AES256 for AEAD encryption.
 
 Therefore one may consider the double ratchet algorithm a sort of combination between the Noise protocol, which can be applied in the initialization phase and for the DH ratchet.
 
-Therefore, according to Noise specification, the X3DH algorithm is encoded as  **Noise_IX_25519_AES256GCM_SHA256**
+Therefore, according to Noise specification, the X3DH algorithm is encoded as  **Noise_IX_448_AES256GCM_SHA256**
 
 # Retrieving information
 
@@ -173,6 +173,7 @@ The shared key can be then used in any symmetric encryption scheme, such as AES2
 - The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, where at most $t$ nodes could be malicious. The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
 - The suggested ADKG makes assumes the existence of a PKI. In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
+- We force using the elliptic curve X448 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
 
 
