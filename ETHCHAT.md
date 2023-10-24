@@ -141,13 +141,19 @@ The fact of Bob not updating the ephemeral information can be understood as Bob 
 
 In order to extend the protocol to a group chat, one uses an ADKG to replace the X3DH step in the previous combination X3DH + Double Ratchet.
 
-Using an ADKG allows a set of users, which want to define a group chat, defining a common secret key which will be used as a root key for the double ratchet. Using an ADKG defines a room key, which essentially defines the group itself.
+Distributed Key Generation (DKG) is a method for initiating threshold cryptosystems in a decentralized manner, all without the need for a trusted third party. DKG serves as a fundamental component for numerous decentralized protocols, including systems like randomness beacons, threshold signatures, Byzantine consensus, and multiparty computation.
 
-Among the proposals for ADKG algorithms, there is a proposal by Kokoris-Kogias et al. ([https://eprint.iacr.org/2022/1389](https://eprint.iacr.org/2022/1389)). 
-It includes Python and Rust implementations ([https://github.com/sourav1547/htadkg](https://github.com/sourav1547/htadkg)).
+Most DKG protocols assume synchronous networks. Asynchronous DKG (ADKG) has been studied only recently and the state-of-the-art high-threshold ADKG protocols is very inefficient compared to its low-threshold counterpart. 
 
-Once the double ratchet is initialized, the communication in this group is 1-to-1, meaning that group member C cannot see the messages between group members A and B. 
-The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
+Here low-threshold means that the reconstruction threshold is set to be one higher than the number of corrupt nodes, whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
+
+Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. In this proposal we suggest using the scheme by Kokoris-Kogias et al. (https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
+
+This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. The proposal includes Python and Rust implementations (https://github.com/sourav1547/htadkg).
+
+One observes that using an ADKG allows a set of users, which want to define a group chat, defining a common secret key which will be used as a root key for the double ratchet. Using an ADKG defines a room key, which essentially defines the group itself.
+
+Once the double ratchet is initialized, the communication in this group is 1-to-1, meaning that group member C cannot see the messages between group members A and B. The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
 
 ## n-to-n version
 
@@ -156,6 +162,13 @@ Using the above approach leads to a situation where a group of users can set a g
 An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchornous ratcheting trees such ([https://eprint.iacr.org/2017/666](https://eprint.iacr.org/2017/666)) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
 The proposal suggested provides both forward secrecy and post-compromise security. 
 The shared key can be then used in any symmetric encryption scheme, such as AES256.
+
+#	Privacy and Security Considerations
+
+- The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, where at most $t$ nodes could be malicious. The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
+- The suggested ADKG makes assumes the existence of a PKI. In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
+- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
+
 
 
 # Implementation Suggestions
