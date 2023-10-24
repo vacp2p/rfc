@@ -14,7 +14,7 @@ This document specifies an Ethereum-based private messaging service.
 This proposal is built upon the model [https://rfc.vac.dev/spec/20/](https://rfc.vac.dev/spec/20/) and 
 amends the limitations of the latter concerning forward privacy and authentication.
 
-# Background / Rationale / Motivation
+# Background
 
 Alice wants to send an encrypted message to Bob. 
 Here Bob is the only individual able to decrypt the message.
