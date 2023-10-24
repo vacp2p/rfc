@@ -10,7 +10,7 @@ contributors:
 ---
 
 # Abstract
-This document contains a proposal for an Ethereum-based private messaging service. 
+This document specifies an Ethereum-based private messaging service. 
 This proposal is built upon the model [https://rfc.vac.dev/spec/20/](https://rfc.vac.dev/spec/20/) and 
 amends the limitations of the latter concerning forward privacy and authentication.
 
