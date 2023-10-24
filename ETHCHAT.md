@@ -112,7 +112,8 @@ which includes the public key of the sender therefore one may consider the DH ra
 → e \
 ← e, ee
 
-When it comes to the KDF ratchet, and the associated encryption process does not correspond exactly to any particular Noise pattern, but one observes that KDF and encryption/decryption functions considered by the double ratchet protocol are included in Noise: 
+When it comes to the KDF ratchet, and the associated encryption process does not correspond exactly to any particular Noise pattern,
+but one observes that KDF and encryption/decryption functions considered by the double ratchet protocol are included in Noise: 
 SHA256 for the KDF and AES256 for AEAD encryption.
 
 Therefore one may consider the double ratchet algorithm a sort of combination between the Noise protocol, which can be applied in the initialization phase and for the DH ratchet.
