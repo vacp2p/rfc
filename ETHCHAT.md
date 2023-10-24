@@ -63,6 +63,11 @@ The scheme X3DH will also require the generation of a public key SPK which will 
 
 $$ SPK = spk \cdot G $$
 
+SPK is a public key generated and stored at medium-term. It is called a signed prekey because Bob also needs to store a public key certificate of SPK using IK. 
+Both signed prekey and the certificate must undergo periodic replacement, a process that entails the generation of a fresh signed prekey. 
+After replacing the key, Bob keeps the old private key of SPK for a short time, in order to be able to decrypt delayed messages. 
+It is important that he deletes the old keys after that short period of time. This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
+
 It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEdDSA and define:
 
 $$ SigSPK = XEdDSA(ik, Encode(SPK)) $$
