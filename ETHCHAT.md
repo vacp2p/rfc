@@ -29,7 +29,6 @@ The proposed protocol must adhere to the following design requirements:
 -   Alice wants to send message M to Bob.
 -   An eavesdropper cannot read M’s content even if she is storing it or relaying it.
 
-# Protocol
 The proposal will use the double ratchet scheme combined with the X3DH algorithm, which will be used to initialize the former. 
 The X3DH algorithm provides both authentication and forward secrecy, as stated in  [https://signal.org/docs/specifications/x3dh/](https://signal.org/docs/specifications/x3dh/).
 
