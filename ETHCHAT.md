@@ -160,7 +160,9 @@ Here low-threshold means that the reconstruction threshold is set to be one high
 
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. In this proposal we suggest using the scheme by Kokoris-Kogias et al. (https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
 
-This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. The proposal includes Python and Rust implementations (https://github.com/sourav1547/htadkg).
+This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. 
+The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. 
+The proposal includes Python and Rust implementations (https://github.com/sourav1547/htadkg).
 
 One observes that using an ADKG allows a set of users, 
 which want to define a group chat, 
