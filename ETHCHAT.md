@@ -180,7 +180,9 @@ The shared key can be then used in any symmetric encryption scheme, such as AES2
 
 #	Privacy and Security Considerations
 
-- The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, where at most $t$ nodes could be malicious. The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
+- The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, 
+where at most $t$ nodes could be malicious. 
+The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
 - The suggested ADKG makes assumes the existence of a PKI. 
 In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
