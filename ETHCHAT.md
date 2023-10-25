@@ -168,7 +168,10 @@ defining a common secret key which will be used as a root key for the double rat
 Using an ADKG defines a room key, 
 which essentially defines the group itself.
 
-Once the double ratchet is initialized, the communication in this group is 1-to-1, meaning that group member C cannot see the messages between group members A and B. The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
+Once the double ratchet is initialized, 
+the communication in this group is 1-to-1, 
+meaning that group member C cannot see the messages between group members A and B. 
+The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
 
 ## n-to-n version
 
