@@ -68,9 +68,10 @@ It is called a signed prekey because Bob also needs to store a public key certif
 Both signed prekey and the certificate must undergo periodic replacement, 
 a process that entails the generation of a fresh signed prekey. 
 After replacing the key, 
-Bob keeps the old private key of SPK for a short time.
+Bob keeps the old private key of SPK for some interval, dependant on the implementation.
 This allows Bob to decrypt delayed messages. 
-It is important that he deletes the old keys after that short period of time. This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
+It is important that Bob does not reuse SPKs. 
+This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
 It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEdDSA and define:
 
