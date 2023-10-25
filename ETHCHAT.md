@@ -162,7 +162,11 @@ Existing ADKG constructions tend to become inefficient when the reconstruction t
 
 This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. The proposal includes Python and Rust implementations (https://github.com/sourav1547/htadkg).
 
-One observes that using an ADKG allows a set of users, which want to define a group chat, defining a common secret key which will be used as a root key for the double ratchet. Using an ADKG defines a room key, which essentially defines the group itself.
+One observes that using an ADKG allows a set of users, 
+which want to define a group chat, 
+defining a common secret key which will be used as a root key for the double ratchet. 
+Using an ADKG defines a room key, 
+which essentially defines the group itself.
 
 Once the double ratchet is initialized, the communication in this group is 1-to-1, meaning that group member C cannot see the messages between group members A and B. The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
 
