@@ -156,7 +156,8 @@ DKG serves as a fundamental component for numerous decentralized protocols, incl
 
 Most DKG protocols assume synchronous networks. Asynchronous DKG (ADKG) has been studied only recently and the state-of-the-art high-threshold ADKG protocols is very inefficient compared to its low-threshold counterpart. 
 
-Here low-threshold means that the reconstruction threshold is set to be one higher than the number of corrupt nodes, whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
+Here low-threshold means that the reconstruction threshold is set to be one higher than the number of corrupt nodes, 
+whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
 
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. 
 In this proposal we suggest using the scheme by Kokoris-Kogias et al. (https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
