@@ -154,7 +154,8 @@ In order to extend the protocol to a group chat, one uses an ADKG to replace the
 Distributed Key Generation (DKG) is a method for initiating threshold cryptosystems in a decentralized manner, all without the need for a trusted third party. 
 DKG serves as a fundamental component for numerous decentralized protocols, including systems like randomness beacons, threshold signatures, Byzantine consensus, and multiparty computation.
 
-Most DKG protocols assume synchronous networks. Asynchronous DKG (ADKG) has been studied only recently and the state-of-the-art high-threshold ADKG protocols is very inefficient compared to its low-threshold counterpart. 
+Most DKG protocols assume synchronous networks. 
+Asynchronous DKG (ADKG) has been studied only recently and the state-of-the-art high-threshold ADKG protocols is very inefficient compared to its low-threshold counterpart. 
 
 Here low-threshold means that the reconstruction threshold is set to be one higher than the number of corrupt nodes, 
 whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
