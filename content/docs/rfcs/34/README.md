@@ -44,12 +44,13 @@ The responder SHOULD provide a set of peers that has been retrieved using ambien
 This both protects the responder's anonymity as well as helps distributing load.
 
 To allow for fast responses, responders SHOULD retrieve peers unsolicited (before receiving a query)
-and maintain a queue of peers for the purpose of providing them in peer exchange responses.
+and maintain a queue of peers by their `cluster_id`/`shard`  for the purpose of providing them in peer exchange responses.
 To get the best anonymity properties with respect to response peer sets, responders SHOULD use each of these peers only once.
 
 To save bandwidth, and as a trade off to anonymity,
 responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
-The size of the cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
+This local cache SHOULD store peers by `cluster_id`/`shard` for faster retrieval. For peers without shard info, cache can maintain another list of peers.
+The size of each `cluster_id`/`shard` pair being maintained in cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
 The responder SHOULD periodically replace the oldest peers in the cache.
 This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implementation-suggestions).
 
@@ -70,6 +71,8 @@ message PeerInfo {
 
 message PeerExchangeQuery {
   uint64 num_peers = 1;
+  optional uint32 cluster_id = 2;
+  repeated uint32 shards = 3;
 }
 
 message PeerExchangeResponse {
@@ -86,6 +89,8 @@ message PeerExchangeRPC {
 The `enr` field contains a Waku ENR as specified in [31/WAKU2-ENR](/spec/31/).
 
 Requesters send a `PeerExchangeQuery` to a peer.
+When `cluster_id` is set and `shards` are specified, responder SHOULD provide peers belonging to cluster_id/shards pair.
+When no `shards` are specified, responder CAN provide mixed list of peers from any shard and non-shard speific peers. 
 Responders SHOULD include a maximum of `num_peers` `PeerInfo` instances into a response.
 Responders send a `PeerExchangeResponse` to requesters containing a list of `PeerInfo` instances, which in turn hold an ENR.
 
@@ -101,7 +106,7 @@ The size of the (optional) exchange peer cache discussed in [Theory and Protocol
 depends on the average number of requested peers, which is expected to be the outbound degree of the underlying
 [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md) mesh network.
 The recommended value for this outbound degree is 6 (see parameter `D` in [29/WAKU2-CONFIG](/spec/29/)).
-It is recommended for the cache to hold at least 10 times as many peers (60).
+It is recommended for the cache to hold at least 10 times as many peers (60) for each `cluster_id`/`shard` pair. Size of whole cache is bounded by `no of cluster_id/shard pair` * `D` * 10.
 
 The recommended cache size also depends on the number of requesters a responder is expected to serve within a *refresh cycle*.
 A refresh cycle is the time interval in which all peers in the cache are expected to be replaced.
