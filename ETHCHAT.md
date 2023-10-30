@@ -104,7 +104,7 @@ one can use the double ratchet in combination with X3DH using the following data
 
 Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.
 
-## Considerations with regards to the Noise protocol
+## Specification as a Noise protocol
 
 X3DH has three phases:
 
