@@ -195,7 +195,7 @@ The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
 - The suggested ADKG makes assumes the existence of a PKI. 
 In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
-- We force using the elliptic curve X448 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+- curve X448 MUST be chosen as the elicptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
 
 
