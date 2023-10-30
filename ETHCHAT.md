@@ -96,7 +96,7 @@ $$ EK = ek \cdot G $$
 ## Using X3DH in Double Ratchet
 
 According to [Signal specifications](https://signal.org/docs/specifications/doubleratchet/) 
-one can use the double ratchet in combination with X3DH using the following data as initialization for the former:
+this specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:
 
 -   The SK output from X3DH becomes the SK input of the double ratchet. See section 3.3 of [Signal Specification](https://signal.org/docs/specifications/doubleratchet/) for a detailed description.
 -   The AD output from X3DH becomes the AD input of the double ratchet. See sections 3.4 and 3.5 of  [Signal Specification](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
