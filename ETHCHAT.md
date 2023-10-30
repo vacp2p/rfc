@@ -32,7 +32,7 @@ The proposed protocol must adhere to the following design requirements:
 The specification is based on the noise protocol framework.
 It corresponds to the double ratchet scheme combined with the X3DH algorithm, which will be used to initialize the former. 
 We chose to express the protocol in noise to be be able to use the noise streamlined implementation and proving features.
-The X3DH algorithm provides both authentication and forward secrecy, as stated in  [https://signal.org/docs/specifications/x3dh/](https://signal.org/docs/specifications/x3dh/).
+The X3DH algorithm provides both authentication and forward secrecy, as stated in the [X3DH specification](https://signal.org/docs/specifications/x3dh/).
 
 ## High level description
 This protocol will consist of several stages:
@@ -95,11 +95,11 @@ $$ EK = ek \cdot G $$
 
 ## Using X3DH in Double Ratchet
 
-According to the specifications  [https://signal.org/docs/specifications/doubleratchet/](https://signal.org/docs/specifications/doubleratchet/) 
+According to [Signal specifications](https://signal.org/docs/specifications/doubleratchet/) 
 one can use the double ratchet in combination with X3DH using the following data as initialization for the former:
 
--   The SK output from X3DH becomes the SK input of the double ratchet. See section 3.3 of  [https://signal.org/docs/specifications/doubleratchet/](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
--   The AD output from X3DH becomes the AD input of the double ratchet. See sections 3.4 and 3.5 of  [https://signal.org/docs/specifications/doubleratchet/](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
+-   The SK output from X3DH becomes the SK input of the double ratchet. See section 3.3 of [Signal Specification](https://signal.org/docs/specifications/doubleratchet/) for a detailed description.
+-   The AD output from X3DH becomes the AD input of the double ratchet. See sections 3.4 and 3.5 of  [Signal Specification](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
 -   Bob’s signed prekey SigSPKB from X3DH is used as Bob’s initial ratchet public key of the double ratchet.
 
 Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.
@@ -143,7 +143,7 @@ Therefore the public keys IK can be stored in long-term storage solutions, such 
 ## Ephemeral data
 
 On the other hand, there is data which is ephemeral and needs to be replaced recurringly, namely Alice’s (ek, EK) or Bob’s (spk, SPK). 
-In this case one could explore storing such data in systems like Waku, as suggested in  [https://rfc.vac.dev/spec/20/](https://rfc.vac.dev/spec/20/). 
+In this case one could explore storing such data in systems like Waku, as suggested [here](https://rfc.vac.dev/spec/20/). 
 The fact of Bob not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
 
 # Extension to group chat
@@ -162,11 +162,11 @@ Here low-threshold means that the reconstruction threshold is set to be one high
 whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
 
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. 
-In this proposal we suggest using the scheme by Kokoris-Kogias et al. (https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
+In this proposal we suggest using the scheme by [Kokoris-Kogias et al.](https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
 
 This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. 
 The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. 
-The proposal includes Python and Rust implementations (https://github.com/sourav1547/htadkg).
+The proposal includes [Python and Rust implementations](https://github.com/sourav1547/htadkg).
 
 One observes that using an ADKG allows a set of users, 
 which want to define a group chat, 
@@ -183,7 +183,7 @@ The fact of defining a room key makes impossible for outsiders to communicate wi
 
 Using the above approach leads to a situation where a group of users can set a group for 1-to-1 messages, meaning that any group member external to a communication between any other two members will not be able to read the contents of the messages.
 
-An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchornous ratcheting trees such ([https://eprint.iacr.org/2017/666](https://eprint.iacr.org/2017/666)) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
+An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchornous ratcheting trees, as suggested in the proposal from [Cohn-Gordon et al.](https://eprint.iacr.org/2017/666) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
 The proposal suggested provides both forward secrecy and post-compromise security. 
 The shared key can be then used in any symmetric encryption scheme, such as AES256.
 
@@ -202,9 +202,9 @@ In case of requiring removing such assumption, one can replace the VSS scheme wi
 # Implementation Suggestions
 
 -   The ADKG mechanism suggested works in asynchronous networks of $n \geq 3t + 1$ nodes, where at most t nodes could be malicious. The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
--   The DKG suggested makes assumes the existence of a PKI. In case of requiring removing such assumption, one can replace the VSS scheme with the Alhaddad, Varia, and Zhang’s proposal ([https://eprint.iacr.org/2021/118](https://eprint.iacr.org/2021/118)) at the price of increasing the complexity.
+-   The DKG suggested makes assumes the existence of a PKI. In case of requiring removing such assumption, one can replace the VSS scheme with the [Alhaddad et al.](https://eprint.iacr.org/2021/118) at the price of increasing the complexity.
 -   The output of the DKG may be an integer (modulo a prime), meaning that one should apply a KDF to that output in order to obtain a result which could be used as an input for the double ratchet.
--   This approach share similarities with Farcaster’s point of view ([https://github.com/farcasterxyz/protocol/discussions/99](https://github.com/farcasterxyz/protocol/discussions/99)).
+-   This approach share similarities with the point of view of [Farcaster](https://github.com/farcasterxyz/protocol/discussions/99).
 
 # Copyright
 
