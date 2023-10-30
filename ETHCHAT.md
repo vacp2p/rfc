@@ -164,15 +164,25 @@ whereas high-threshold protocols admit reconstruction thresholds much higher tha
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. 
 In this proposal we suggest using the scheme by [Kokoris-Kogias et al.](https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
 
-This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold $l \geq t$. 
+This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold in $l \in [t, n-t-1]$. 
 The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. 
 The proposal includes [Python and Rust implementations](https://github.com/sourav1547/htadkg).
+
+The DKG suggested makes assumes the existence of a PKI. 
+In case of requiring removing such assumption, one can replace the VSS scheme with the [Alhaddad et al.](https://eprint.iacr.org/2021/118) at the price of increasing the complexity.
+
+The output of the DKG may be an integer (modulo a prime), 
+meaning that one should apply a KDF to that output 
+in order to obtain a result which could be used as an input for the double ratchet.
 
 One observes that using an ADKG allows a set of users, 
 which want to define a group chat, 
 defining a common secret key which will be used as a root key for the double ratchet. 
 Using an ADKG defines a room key, 
 which essentially defines the group itself.
+
+
+This approach share similarities with the point of view of [Farcaster](https://github.com/farcasterxyz/protocol/discussions/99).
 
 Once the double ratchet is initialized, 
 the communication in this group is 1-to-1, 
@@ -196,16 +206,7 @@ The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
 - The suggested ADKG makes assumes the existence of a PKI. 
 In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
-- curve X448 MUST be chosen as the elicptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
-
-
-
-# Implementation Suggestions
-
--   The ADKG mechanism suggested works in asynchronous networks of $n \geq 3t + 1$ nodes, where at most t nodes could be malicious. The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
--   The DKG suggested makes assumes the existence of a PKI. In case of requiring removing such assumption, one can replace the VSS scheme with the [Alhaddad et al.](https://eprint.iacr.org/2021/118) at the price of increasing the complexity.
--   The output of the DKG may be an integer (modulo a prime), meaning that one should apply a KDF to that output in order to obtain a result which could be used as an input for the double ratchet.
--   This approach share similarities with the point of view of [Farcaster](https://github.com/farcasterxyz/protocol/discussions/99).
+- The curve X448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
 # Copyright
 
