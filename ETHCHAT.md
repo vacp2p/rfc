@@ -188,7 +188,7 @@ An approach to generalize this situation to the setting of a group of users exch
 The proposal suggested provides both forward secrecy and post-compromise security. 
 The shared key can be then used in any symmetric encryption scheme, such as AES256.
 
-#	Privacy and Security Considerations
+# Privacy and Security Considerations
 
 - The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, 
 where at most $t$ nodes could be malicious. 
