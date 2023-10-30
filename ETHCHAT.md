@@ -150,7 +150,7 @@ The fact of Bob not updating the ephemeral information can be understood as Bob 
 
 ## 1-to-1 version
 
-In order to extend the protocol to a group chat, one uses an ADKG to replace the X3DH step in the previous combination X3DH + Double Ratchet.
+In order to extend the protocol to a group chat, this document specifies using an Asynchronous Distributed Key Generation  (ADKG) to replace the X3DH step in the previous combination X3DH + Double Ratchet.
 
 Distributed Key Generation (DKG) is a method for initiating threshold cryptosystems in a decentralized manner, all without the need for a trusted third party. 
 DKG serves as a fundamental component for numerous decentralized protocols, including systems like randomness beacons, threshold signatures, Byzantine consensus, and multiparty computation.
