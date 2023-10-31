@@ -1,10 +1,11 @@
 ---
-slug: XX
-title: 
-name: Status Push Notification Server
+slug: 71
+title: 71/STATUS-PUSH-NOTIFICATION-SERVER
+name: Push Notification Server
 status: raw
 category: Standards Track
-editor: Jimmy Debe
+editor: Jimmy Debe <jimmy@status.im>
+contributors: Andrea Maria Piana <andreap@status.im>
 ---
 
 
