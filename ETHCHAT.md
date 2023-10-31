@@ -118,20 +118,15 @@ This corresponds to the Noise pattern  **IX**:
 → e, s \
 ← e, s, es, se, ee
 
-Concerning the double ratchet, one observes that the Diffie-Hellman ratchet begins with the first message,
-which includes the public key of the sender therefore one may consider the DH ratchet as a  **NN** pattern according to the Noise nomenclature:
+The Diffie-Hellman ratchet is run using the valid private key of the receiver in combination with the valid public included in the message coming from the sender. 
+This process is encoded, in Noise terms, as the DH() function. 
+This function will have inputs the secret key of the user running the function, and the public key of the external user. 
+Receiver and sender MUST generate valid key pairs, i.e. points of the X448, using the Noise function GENERATE_KEYPAIR().
 
-→ e \
-← e, ee
-
-When it comes to the KDF ratchet, 
-and the associated encryption process does not correspond exactly to any particular Noise pattern,
-but one observes that KDF and encryption/decryption functions considered by the double ratchet protocol are included in Noise: 
+The KDF ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework: 
 SHA256 for the KDF and AES256 for AEAD encryption.
 
-Therefore one may consider the double ratchet algorithm a sort of combination between the Noise protocol, which can be applied in the initialization phase and for the DH ratchet.
-
-Therefore, according to Noise specification, the X3DH algorithm is encoded as  **Noise_IX_448_AES256GCM_SHA256**
+Consequently, according to the Noise framework specifications, the X3DH algorithm is encoded as  **Noise_IX_448_AES256GCM_SHA256**
 
 # Retrieving information
 
