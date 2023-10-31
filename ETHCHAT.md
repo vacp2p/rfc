@@ -141,6 +141,15 @@ On the other hand, there is data which is ephemeral and needs to be replaced rec
 In this case one could explore storing such data in systems like Waku, as suggested [here](https://rfc.vac.dev/spec/20/). 
 The fact of Bob not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
 
+## Interaction with Ethereum
+
+Storing static data is done using a dedicated smart contract *PublicKeyStorage* which associates the Ethereum wallet address of a user with his public key.
+This mapping is done by the PublicKeyStorage using a *publicKeys* function, or a *setPublicKey* function.
+This mapping is done if the user passed an authorization process.
+A user who wants to retrieve a public key associated with a specific walled address calls a function *getPublicKey*.
+The user provides the wallet address as the only input parameter for *getPublicKey*.
+The function outputs the associated public key from the smart contract.
+
 # Extension to group chat
 
 ## 1-to-1 version
@@ -195,13 +204,10 @@ The shared key can be then used in any symmetric encryption scheme, such as AES2
 
 # Privacy and Security Considerations
 
-- The ADKG mechanism suggested here works in asynchronous networks of $n \geq 3t + 1$ nodes, 
-where at most $t$ nodes could be malicious. 
-The protocol supports any reconstruction threshold in $l \in [t, n-t-1]$.
-- The suggested ADKG makes assumes the existence of a PKI. 
-In case of requiring removing such assumption, one can replace the VSS scheme with the **proposal (https://eprint.iacr.org/2021/118) from Alhaddad, Varia, and Zhang at the price of increasing the complexity.
-- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
+- For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
+- One SHOULD include event logs to track changes in public keys.
 - The curve X448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
 
 # Copyright
 
