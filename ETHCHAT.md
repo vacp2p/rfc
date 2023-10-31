@@ -137,9 +137,13 @@ Therefore the public keys IK can be stored in long-term storage solutions, such 
 
 ## Ephemeral data
 
-On the other hand, there is data which is ephemeral and needs to be replaced recurringly, namely Alice’s (ek, EK) or Bob’s (spk, SPK). 
-In this case one could explore storing such data in systems like Waku, as suggested [here](https://rfc.vac.dev/spec/20/). 
-The fact of Bob not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
+Storing ephemeral data on Ethereum can be done using a combination of on-chain and off-chain solutions. 
+This approach provides an efficient solution to the problem of storing updatable data in Ethereum.
+1. Ehtereum can store a reference or a hash that points to the off-chain data.
+2. Off-chain solutions can include systems like IPFS, tradition cloud storage solutions, or decentralized storage networks such as a [Swarm](https://www.ethswarm.org). 
+In any case, the user stores the associated IPFS hash, URL or reference in Ethereum.
+
+The fact of a user not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
 
 ## Interaction with Ethereum
 
