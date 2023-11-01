@@ -385,7 +385,7 @@ DATA DISCLOSED
 `access_token`: the access token used to send a push notification. `chat_id`: the `SHAKE-256` of the `chat_id`. `public_key`: the `SHAKE-256` of the compressed public key of the receiving client. `installation_id`: the `installation_id` of the receiving client. `message`: the encrypted message that is being notified on. `type`: the type of the push notification, either `MESSAGE` or `MENTION` `author`: the `SHAKE-256` of the public key of the sender
 
 Data disclosed
-- The `SHAKE-256` of the `chat_id` the notification is to be sent for
+- The `SHAKE-256` hash of the `chat_id` the notification is to be sent for
 - The cypher text of the message
 - The `SHAKE-256` of the public key of the sender
 - The type of notification
