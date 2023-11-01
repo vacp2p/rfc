@@ -25,7 +25,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 ### Definitions:
 
 client 
-> A node that implements the Status specification. 
+> A node that implements the [Status specification](https://specs.status.im/spec/1). 
 
 user
 > The owner of a device that runs a client.
