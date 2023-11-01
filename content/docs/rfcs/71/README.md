@@ -159,7 +159,7 @@ On successful registration the server MUST be listening to the topic derived fro
 Using the topic derivation algorithm described here and listen for client queries.
 
 ### Server Grant:
-A client needs to authorize a push notification server to send them push notifications. This is done by building a grant which is specific to a given client-server pair. When receiving a grant, the server MUST validate that the signature matches the registering client. 
+A client MUST authorize a push notification server to send them push notifications. This is done by building a grant which is specific to a given client-server pair. When receiving a grant, the server MUST validate that the signature matches the registering client. 
 
 The grant is built as:
  > `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
@@ -200,7 +200,7 @@ message ContactCodeAdvertisement {
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement. Otherwise it SHOULD be left empty.
 - This SHOULD be advertised on the [contact code topic](https://specs.status.im/spec/10#contact-code-topic) and SHOULD be coupled with normal contact-code advertisement.
-- Every time a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
+- When a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
 ### Discovering a Server:
@@ -220,7 +220,7 @@ message PushNotificationQuery {
 
 ### Handle Query Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY`.
-- MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, as described above.
+- it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, [as described above](###query-topic).
 - An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://specs.status.im/spec/5).
 
 If the server has information about the client a response MUST be sent:
@@ -311,7 +311,7 @@ On receiving the message, the push notification server MUST validate the access 
 
 ```
 
-Where platform is 1 for IOS and 2 for Firebase, according to the [gorush documentation](https://github.com/appleboy/gorush).
+Where platform is 1 for iOS and 2 for Firebase, according to the [gorush documentation](https://github.com/appleboy/gorush).
 
 A server MUST return a response message:
 
