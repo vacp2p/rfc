@@ -387,7 +387,7 @@ DATA DISCLOSED
 Data disclosed
 - The `SHAKE-256` hash of the `chat_id` the notification is to be sent for
 - The cypher text of the message
-- The `SHAKE-256` of the public key of the sender
+- The `SHAKE-256` hash of the public key of the sender
 - The type of notification
 
 ### PushNotificationRequest:
