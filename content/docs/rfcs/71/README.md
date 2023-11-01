@@ -146,7 +146,7 @@ If `success` is `false`:
 - If any other error occurs the `error` SHOULD be set to `INTERNAL_ERROR`.
 - If the response is successful `success` MUST be set to `true` otherwise a response MUST be sent with `success` set to `false`.
 - `request_id` SHOULD be set to the `SHAKE-256` of the encrypted payload.
-- The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
 - If no response is returned, the request SHOULD be considered failed and MAY be retried with the same server or a different one, but clients MUST exponentially backoff after each trial.
 
 ## Push Notification Server
@@ -342,7 +342,7 @@ Where `message_id` is the `message_id` sent by the client.
 
 ### Handle Notification Response:
 - A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_RESPONSE`.
--The response MUST be sent on the [partitioned topic][./10-waku-usage.md#partitioned-topic] of the sender and MUST not be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
+-The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
 - If `error` is `BAD_TOKEN` the client MAY query again the server for the token and retry the request.
 - If `error` is `INTERNAL_ERROR` the client MAY retry the request.
@@ -405,7 +405,7 @@ Data disclosed
 In order to preserve privacy, the client MAY provide anonymous mode of operations to propagate information about the user. A client in anonymous mode can register with the server using a key that is different from their chat key. This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
 
 - A client MAY advertise the access token on the [contact-code topic](https://specs.status.im/spec/6) of the key generated. 
-- A client MAY share their public key contact updates in the [protobuf record](). 
+- A client MAY share their public key contact updates in the [protobuf record](https://developers.google.com/protocol-buffers/). 
 - A client receiving a push notification public key SHOULD listen to the contact code topic of the push notification public key for updates.
 
 The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
