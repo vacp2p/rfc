@@ -9,18 +9,15 @@ contributors:
   - Andrea Maria Piana <andreap@status.im>
 ---
 
-
 # Abstract
 Push notification server implementation for Android and iOS devices. This specification provides a set of methods that allow clients to use push notification services in mobile environments.
 
 # Background
-
 Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), Apple Push Notification, service for iOS or [Firebase](https://firebase.google.com/) for Android. 
 
 For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. Apple iOS devices restrict notifications to a few internal functions that every application can not use. Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was closed with force quit. Requesting execution time is not responsive enough to implement a push notification system. Status provides a set of methods to acheive push notification services.
 
 Since this can not be safely implemented in a privacy-preserving manner, clients need to be given an option to opt-in to receive and send push notifications. They are disabled by default.
-
 
 # Specification
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
@@ -56,8 +53,6 @@ Sending Client
 Requirements:<br />
 The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).<br />
 
-
-
 ## Push Notification Server Flow
 ### Registration Process:
 
@@ -66,7 +61,6 @@ The party releasing the app MUST possess a certificate for the Apple Push Notifi
 ### Sending and Receiving Notification Process:
 
 ![image](https://github.com/jimstir/rfc/assets/91767824/b2c66ddf-d13a-4373-9e24-8ad2b5955b86)
-
 
 ## Registering Client
 
@@ -133,6 +127,7 @@ message PushNotificationRegistrationResponse {
 }
 
 ```
+
 A client SHOULD listen for a response sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) that the key used to register. If success is true the client has registered successfully.
 
 If `success` is `false`:
@@ -164,7 +159,6 @@ A client MUST authorize a push notification server to send them push notificatio
 
 The grant is built as:
  > `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
-
 
 ### Unregistering with a Server:
 - To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
@@ -339,6 +333,7 @@ message PushNotificationResponse {
 }
 
 ```
+
 Where `message_id` is the `message_id` sent by the client.
 
 ### Handle Notification Response:
@@ -431,6 +426,7 @@ When sending a push notification a client disclose:
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
+
 
 
 
