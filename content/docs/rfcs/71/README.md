@@ -16,7 +16,7 @@ Push notification server implementation for Android and iOS devices. This specif
 
 Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), Apple Push Notification, service for iOS or [Firebase](https://firebase.google.com/) for Android. 
 
-For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. Apple iOS devices restrict notifications to a few internal functions that every application can not use. Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was force quit. Requesting execution time is not responsive enough to implement a push notification system. Status provides a set of methods to acheive push notification services.
+For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. Apple iOS devices restrict notifications to a few internal functions that every application can not use. Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was closed with force quit. Requesting execution time is not responsive enough to implement a push notification system. Status provides a set of methods to acheive push notification services.
 
 Since this can not be safely implemented in a privacy-preserving manner, clients need to be given an option to opt-in to receive and send push notifications. They are disabled by default.
 
@@ -53,7 +53,7 @@ Sending Client
 > A client that wants to send push notifications.<br />
 
 Requirements:<br />
-The party releasing the app MUST possess a certificate for the Apple Push Notification service and its has to run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. The party releasing the app, Status in this case, needs to run its own [gorush](https://github.com/appleboy/gorush).<br />
+The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).<br />
 
 
 
