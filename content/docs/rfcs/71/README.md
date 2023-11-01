@@ -391,7 +391,7 @@ Data disclosed
 - The type of notification
 
 ### PushNotificationRequest:
-`requests`: a list of PushNotification `message_id`: the [status message id](https://specs.status.im/spec/6)
+`requests`: a list of PushNotification `message_id`: the [Status message id](https://specs.status.im/spec/6)
 
 Data disclosed
 - The status `message_id` for which the notification is for
