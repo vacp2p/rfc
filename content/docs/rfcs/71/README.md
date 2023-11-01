@@ -155,7 +155,7 @@ A node that handles receiving and sending push notifications for clients.
 
 ### Query Topic:
 On successful registration the server MUST be listening to the topic derived from:
-  > `0XHexEncode(Shake256(CompressedClientPublicKey))`
+  > `0x` + HexEncode(Shake256(CompressedClientPublicKey))
 
 Using the topic derivation algorithm described here and listen for client queries.
 
