@@ -5,7 +5,8 @@ name: Push Notification Server
 status: raw
 category: Standards Track
 editor: Jimmy Debe <jimmy@status.im>
-contributors: Andrea Maria Piana <andreap@status.im>
+contributors: 
+  - Andrea Maria Piana <andreap@status.im>
 ---
 
 
