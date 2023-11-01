@@ -412,7 +412,7 @@ In order to preserve privacy, the client MAY provide anonymous mode of operation
 The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
 
 # Security/Privacy Considerations
-If no anonymous mode is used, when registering with a push notification service a client disclose:
+If anonymous mode is not used, when registering with a push notification service a client discloses:
 - The devices that will receive notifications.
 - The chat key.
 
