@@ -143,7 +143,7 @@ Therefore the public keys IK can be stored in long-term storage solutions, such 
 
 Storing ephemeral data on Ethereum can be done using a combination of on-chain and off-chain solutions. 
 This approach provides an efficient solution to the problem of storing updatable data in Ethereum.
-1. Ehtereum can store a reference or a hash that points to the off-chain data.
+1. Ethereum can store a reference or a hash that points to the off-chain data.
 2. Off-chain solutions can include systems like IPFS, tradition cloud storage solutions, or decentralized storage networks such as a [Swarm](https://www.ethswarm.org). 
 In any case, the user stores the associated IPFS hash, URL or reference in Ethereum.
 
