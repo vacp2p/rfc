@@ -127,7 +127,7 @@ This process is encoded, in Noise terms, as the DH() function.
 This function will have inputs the secret key of the user running the function, and the public key of the external user. 
 Receiver and sender MUST generate valid key pairs, i.e. points of the X448, using the Noise function GENERATE_KEYPAIR().
 
-The KDF ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework: 
+The Key Derivation Function (KDF) ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework: 
 SHA256 for the KDF and AES256 for AEAD encryption.
 
 Consequently, according to the Noise framework specifications, the X3DH algorithm is encoded as  **Noise_IX_448_AES256GCM_SHA256**
