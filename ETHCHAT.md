@@ -206,7 +206,7 @@ The fact of defining a room key makes impossible for outsiders to communicate wi
 Using the above approach leads to a situation where a group of users can set a group for 1-to-1 messages,
 meaning that any group member external to a communication between any other two members will not be able to read the contents of the messages.
 
-An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchornous ratcheting trees, as suggested in the proposal from [Cohn-Gordon et al.](https://eprint.iacr.org/2017/666) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
+An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchronous ratcheting trees, as suggested in the proposal from [Cohn-Gordon et al.](https://eprint.iacr.org/2017/666) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
 The proposal suggested provides both forward secrecy and post-compromise security. 
 The shared key can be then used in any symmetric encryption scheme, such as AES256.
 
