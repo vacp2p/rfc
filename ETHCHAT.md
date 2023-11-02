@@ -89,9 +89,13 @@ Before sending an initial message to Bob, Alice will generate an AD vector as de
 
 $$ AD = Encode(IK_A)|| Encode(IK_B) $$
 
-Alice will also need to generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the produc
+Alice will also need to generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the product
 
 $$ EK = ek \cdot G $$
+
+The function Encode() transforms an X448 public key into a byte sequence. 
+The recommended encoding consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
+This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
 ## Using X3DH in Double Ratchet
 
