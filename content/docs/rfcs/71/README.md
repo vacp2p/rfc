@@ -4,7 +4,7 @@ title: 70/ETH-SECPM
 name: Private 1:1 messages over Ethereum
 status: raw
 category: Standards Track
-tags: wake-application
+tags:
 editor: Ramses Fernandez <ramses@status.im>
 contributors:
 ---
