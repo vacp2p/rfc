@@ -12,7 +12,9 @@ contributors:
 # Abstract
 This document specifies an Ethereum-based private messaging service. 
 This proposal is built upon this [model](https://rfc.vac.dev/spec/20/) and 
-amends the limitations of the latter concerning forward privacy and authentication.
+amends the limitations of the latter concerning forward privacy and authentication. 
+The document is still work in progress. 
+Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
 
 # Background
 
