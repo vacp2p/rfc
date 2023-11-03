@@ -90,7 +90,7 @@ message PeerExchangeRPC {
 The `enr` field contains a Waku ENR as specified in [31/WAKU2-ENR](/spec/31/).
 
 Requesters send a `PeerExchangeQuery` to a peer.
-When `cluster_id` is set and `shards` are specified, responder SHOULD provide peers belonging to cluster_id/shards pair.
+When `cluster_id` is set and `shards` are specified, responders SHOULD provide peers belonging to the specified cluster_id/shards pair.
 When no `shards` are specified, responders SHOULD provide a mixed list of peers from any shard and non-shard specific peers. 
 Responders SHOULD include a maximum of `num_peers` `PeerInfo` instances into a response.
 Responders send a `PeerExchangeResponse` to requesters containing a list of `PeerInfo` instances, which in turn hold an ENR.
