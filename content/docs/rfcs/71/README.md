@@ -44,9 +44,9 @@ This protocol will consist of several stages:
 3.  Execution of the Double Ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.
 
 ## Cryptographic functions required
--   XEdDSA for digital signatures involved in the X3DH key generation.
--   SHA256 for hashing and the generation of HMACs.
--   AES256-CBC for the encryption/decryption of messages.
+-   XEd448 for digital signatures involved in the X3DH key generation.
+-   SHA512 for hashing and the generation of HMACs.
+-   AES512-CBC for the encryption/decryption of messages.
 
 ## Considerations on the X3DH initialization
 This scheme requires working on specific elliptic curves which differ from those used by Ethereum. 
