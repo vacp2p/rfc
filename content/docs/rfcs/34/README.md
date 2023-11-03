@@ -107,7 +107,8 @@ The size of the (optional) exchange peer cache discussed in [Theory and Protocol
 depends on the average number of requested peers, which is expected to be the outbound degree of the underlying
 [libp2p gossipsub](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md) mesh network.
 The recommended value for this outbound degree is 6 (see parameter `D` in [29/WAKU2-CONFIG](/spec/29/)).
-It is recommended for the cache to hold at least 10 times as many peers (60) for each `cluster_id`/`shard` pair. Size of whole cache is bounded by `no of cluster_id/shard pair` * `D` * 10.
+It is recommended for the cache to hold at least 10 times as many peers (60) for each `cluster_id`/`shard` pair. 
+The size of the whole cache is bounded by `No. of cluster_id/shard pair` * `D` * 10.
 
 The recommended cache size also depends on the number of requesters a responder is expected to serve within a *refresh cycle*.
 A refresh cycle is the time interval in which all peers in the cache are expected to be replaced.
