@@ -75,9 +75,9 @@ This allows Bob to decrypt delayed messages.
 It is important that Bob does not reuse SPKs. 
 This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
-It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEdDSA and define:
+It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define:
 
-$$ SigSPK = XEdDSA(ik, Encode(SPK)) $$
+$$ SigSPK = XEd448(ik, Encode(SPK)) $$
 
 A final step requires the definition of a  _prekey bundle_  given by the tuple
 
