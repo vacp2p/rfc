@@ -51,7 +51,7 @@ To save bandwidth, and as a trade off to anonymity,
 responders MAY maintain a larger cache of exchange peers and randomly sample response sets from this local cache.
 This local cache SHOULD store peers by `cluster_id`/`shard` for faster retrieval.
 For peers without shard info, the cache can maintain a separate set of peers.
-The size of each `cluster_id`/`shard` pair being maintained in cache SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
+The size of the cache for each `cluster_id`/`shard` pair SHOULD be large enough to allow randomly sampling peer sets that (on average) do not overlap too much.
 The responder SHOULD periodically replace the oldest peers in the cache.
 This document provides recommended choices for the cache size in the [Implementation Suggestions Section](#implementation-suggestions).
 
