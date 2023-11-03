@@ -46,7 +46,7 @@ This protocol will consist of several stages:
 ## Cryptographic functions required
 -   XEd448 for digital signatures involved in the X3DH key generation.
 -   SHA512 for hashing and the generation of HMACs.
--   AES512-CBC for the encryption/decryption of messages.
+-   AES256-CBC for the encryption/decryption of messages.
 
 ## Considerations on the X3DH initialization
 This scheme requires working on specific elliptic curves which differ from those used by Ethereum. 
