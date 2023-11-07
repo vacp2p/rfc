@@ -15,7 +15,11 @@ Push notification server implementation for Android and iOS devices. This specif
 # Background
 Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), Apple Push Notification, service for iOS or [Firebase](https://firebase.google.com/) for Android. 
 
-For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. Apple iOS devices restrict notifications to a few internal functions that every application can not use. Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was closed with force quit. Requesting execution time is not responsive enough to implement a push notification system. Status provides a set of methods to acheive push notification services.
+For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. 
+Apple iOS devices restrict notifications to a few internal functions that every application can not use. 
+Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was closed with force quit. 
+Requesting execution time is not responsive enough to implement a push notification system. 
+Status provides a set of methods to acheive push notification services.
 
 Since this can not be safely implemented in a privacy-preserving manner, clients need to be given an option to opt-in to receive and send push notifications. They are disabled by default.
 
@@ -48,7 +52,8 @@ Sending Client
 > A client that wants to send push notifications.<br />
 
 Requirements:<br />
-The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).<br />
+The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. 
+The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).<br />
 
 ## Push Notification Server Flow
 ### Registration Process:
@@ -70,7 +75,8 @@ Registering a client with a push notification service.
 
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
 
-- The marshaled protobuf payload MUST also be encrypted with AES-GCM using the Diffie–Hellman key generated from the client and server identity. This is done in order to ensure that the extracted key from the signature will be considered invalid if it can’t decrypt the payload.
+- The marshaled protobuf payload MUST also be encrypted with AES-GCM using the Diffie–Hellman key generated from the client and server identity.
+This is done in order to ensure that the extracted key from the signature will be considered invalid if it can’t decrypt the payload.
 
 The content of the message MUST contain the following [protobuf record](https://developers.google.com/protocol-buffers/):
 
@@ -136,7 +142,8 @@ message PushNotificationRegistrationResponse {
 
 ```
 
-A client SHOULD listen for a response sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) that the key used to register. If success is true the client has registered successfully.
+A client SHOULD listen for a response sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) that the key used to register. 
+If success is true the client has registered successfully.
 
 If `success` is `false`:
 	> If `MALFORMED_MESSAGE` is returned, the request SHOULD NOT be retried without ensuring that it is correctly formed.
@@ -171,7 +178,9 @@ On successful registration the server MUST be listening to the topic derived fro
 Using the topic derivation algorithm described here and listen for client queries.
 
 ### Server Grant:
-A client MUST authorize a push notification server to send them push notifications. This is done by building a grant which is specific to a given client-server pair. When receiving a grant, the server MUST validate that the signature matches the registering client. 
+A client MUST authorize a push notification server to send them push notifications. 
+This is done by building a grant which is specific to a given client-server pair. 
+When receiving a grant, the server MUST validate that the signature matches the registering client. 
 
 The grant is built as:
  > `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
@@ -214,7 +223,8 @@ message ContactCodeAdvertisement {
 ### Handle Advertisement Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 
-- If no filtering is done based on public keys, the access token SHOULD be included in the advertisement. Otherwise it SHOULD be left empty.
+- If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
+  Otherwise it SHOULD be left empty.
 
 - This SHOULD be advertised on the [contact code topic](https://specs.status.im/spec/10#contact-code-topic) and SHOULD be coupled with normal contact-code advertisement.
 
@@ -273,7 +283,8 @@ Otherwise a response MUST NOT be sent.
 
 - If `access_token` is returned, the `access_token` SHOULD be used to send push notifications.
 
-- If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token. The token SHOULD be used to send push notifications.
+- If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
+The token SHOULD be used to send push notifications.
 
 - The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST NOT be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
 
@@ -448,7 +459,9 @@ Data disclosed
 `success`: whether the push notification was successful. `error`: the type of the error in case of failure. `public_key`: the public key of the user being notified. `installation_id`: the `installation_id` of the user being notified.
 
 ## Anonymous Mode
-In order to preserve privacy, the client MAY provide anonymous mode of operations to propagate information about the user. A client in anonymous mode can register with the server using a key that is different from their chat key. This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
+In order to preserve privacy, the client MAY provide anonymous mode of operations to propagate information about the user. 
+A client in anonymous mode can register with the server using a key that is different from their chat key. 
+This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
 
 - A client MAY advertise the access token on the [contact-code topic](https://specs.status.im/spec/6) of the key generated. 
 
@@ -456,7 +469,8 @@ In order to preserve privacy, the client MAY provide anonymous mode of operation
 
 - A client receiving a push notification public key SHOULD listen to the contact code topic of the push notification public key for updates.
 
-The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
+The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. 
+This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
 
 # Security/Privacy Considerations
 If anonymous mode is not used, when registering with a push notification service a client discloses:
