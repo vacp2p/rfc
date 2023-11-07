@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta name="generator" content="Hugo 0.106.0">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Abstract # This document specifies an Ethereum-based private messaging service. This proposal is built upon this model and amends the limitations of the latter concerning forward privacy and authentication. The document is still work in progress. Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
+Background # Alice wants to send an encrypted message to Bob. Here Bob is the only individual able to decrypt the message.">
+<meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="70/ETH-SECPM" />
+<meta property="og:description" content="Abstract # This document specifies an Ethereum-based private messaging service. This proposal is built upon this model and amends the limitations of the latter concerning forward privacy and authentication. The document is still work in progress. Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
+Background # Alice wants to send an encrypted message to Bob. Here Bob is the only individual able to decrypt the message." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://rfc.vac.dev/spec/70/" /><meta property="article:section" content="docs" />
+
+
+
+<title>70/ETH-SECPM | Vac RFC</title>
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
+<script defer src="/en.search.min.befc49f61f4fec6ff2f3dddf9cce8f3c2e4f09ba187ebb311edb5674ace3ee5b.js" integrity="sha256-vvxJ9h9P7G/y893fnM6PPC5PCboYfrsxHttWdKzj7ls="></script>
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+  
+</head>
+
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a href="/"><span>Vac RFC</span>
+  </a>
+</h2>
+
+
+<div class="book-search">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+  <ul>
+<li>Raw
+<ul>
+<li><a href="/spec/20/">20/TOY-ETH-PM</a></li>
+<li><a href="/spec/24/">24/STATUS-CURATION</a></li>
+<li><a href="/spec/28/">28/STATUS-FEATURING</a></li>
+<li><a href="/spec/31/">31/WAKU2-ENR</a></li>
+<li><a href="/spec/32/">32/RLN-V1</a></li>
+<li><a href="/spec/34/">34/WAKU2-PEER-EXCHANGE</a></li>
+<li><a href="/spec/35/">35/WAKU2-NOISE</a></li>
+<li><a href="/spec/37/">37/WAKU2-NOISE-SESSIONS</a></li>
+<li><a href="/spec/38/">38/CONSENSUS-CLARO</a></li>
+<li><a href="/spec/43/">43/WAKU2-NOISE-PAIRING</a></li>
+<li><a href="/spec/44/">44/WAKU2-DANDELION</a></li>
+<li><a href="/spec/45/">45/WAKU2-ADVERSARIAL-MODELS</a></li>
+<li><a href="/spec/46/">46/GOSSIPSUB-TOR-PUSH</a></li>
+<li><a href="/spec/47/">47/WAKU2-TOR-PUSH</a></li>
+<li><a href="/spec/48/">48/RLN-INTEREP-SPEC</a></li>
+<li><a href="/spec/51/">51/WAKU2-RELAY-SHARDING</a></li>
+<li><a href="/spec/52/">52/WAKU2-RELAY-STATIC-SHARD-ALLOC</a></li>
+<li><a href="/spec/57/">57/STATUS-Simple-Scaling</a></li>
+<li><a href="/spec/58/">58/RLN-V2</a></li>
+<li><a href="/spec/61/">61/STATUS-Community-History-Archives</a></li>
+<li><a href="/spec/63/">63/STATUS-Keycard-Usage</a></li>
+<li><a href="/spec/64/">64/WAKU2-NETWORK</a></li>
+<li><a href="/spec/66/">66/WAKU2-METADATA</a></li>
+<li><a href="/spec/70/"class=active>70/ETH-SECPM</a></li>
+</ul>
+</li>
+<li>Draft
+<ul>
+<li><a href="/spec/1/">1/COSS</a></li>
+<li><a href="/spec/3/">3/REMOTE-LOG</a></li>
+<li><a href="/spec/4/">4/MVDS-META</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/15/">15/WAKU2-BRIDGE</a></li>
+<li><a href="/spec/16/">16/WAKU2-RPC</a></li>
+<li><a href="/spec/17/">17/WAKU2-RLN-RELAY</a></li>
+<li><a href="/spec/18/">18/WAKU2-SWAP</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/21/">21/WAKU2-FTSTORE</a></li>
+<li><a href="/spec/22/">22/TOY-CHAT</a></li>
+<li><a href="/spec/23/">23/WAKU2-TOPICS</a></li>
+<li><a href="/spec/26/">26/WAKU2-PAYLOAD</a></li>
+<li><a href="/spec/27/">27/WAKU2-PEERS</a></li>
+<li><a href="/spec/29/">29/WAKU2-CONFIG</a></li>
+<li><a href="/spec/30/">30/ADAPTIVE-NODES</a></li>
+<li><a href="/spec/33/">33/WAKU2-DISCV5</a></li>
+<li><a href="/spec/36/">36/WAKU2-BINDINGS-API</a></li>
+<li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
+<li><a href="/spec/56/">56/STATUS-COMMUNITIES</a></li>
+<li><a href="/spec/65/">65/STATUS-ACCOUNTS</a></li>
+</ul>
+</li>
+<li>Stable
+<ul>
+<li><a href="/spec/2/">2/MVDS</a></li>
+<li><a href="/spec/6/">6/WAKU1</a></li>
+<li><a href="/spec/7/">7/WAKU-DATA</a></li>
+<li><a href="/spec/8/">8/WAKU-MAIL</a></li>
+<li><a href="/spec/9/">9/WAKU-RPC</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+</ul>
+</li>
+<li>Deprecated
+<ul>
+<li><a href="/spec/5/">5/WAKU0</a></li>
+</ul>
+</li>
+<li>Retired</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside.book-menu nav");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <strong>70/ETH-SECPM</strong>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#theory-and-description-of-the-protocol">Theory and Description of the Protocol</a>
+      <ul>
+        <li><a href="#high-level-description">High level description</a></li>
+        <li><a href="#cryptographic-functions-required">Cryptographic functions required</a></li>
+        <li><a href="#considerations-on-the-x3dh-initialization">Considerations on the X3DH initialization</a></li>
+        <li><a href="#using-x3dh-in-double-ratchet">Using X3DH in Double Ratchet</a></li>
+        <li><a href="#specification-as-a-noise-protocol">Specification as a Noise protocol</a></li>
+      </ul>
+    </li>
+    <li><a href="#retrieving-information">Retrieving information</a>
+      <ul>
+        <li><a href="#static-data">Static data</a></li>
+        <li><a href="#ephemeral-data">Ephemeral data</a></li>
+        <li><a href="#interaction-with-ethereum">Interaction with Ethereum</a></li>
+      </ul>
+    </li>
+    <li><a href="#extension-to-group-chat">Extension to group chat</a>
+      <ul>
+        <li><a href="#1-to-1-version">1-to-1 version</a></li>
+        <li><a href="#n-to-n-version">n-to-n version</a></li>
+      </ul>
+    </li>
+    <li><a href="#privacy-and-security-considerations">Privacy and Security Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown">
+  <h1 id="70eth-secpm">
+  70/ETH-SECPM
+  <a class="anchor" href="#70eth-secpm">#</a>
+</h1>
+
+  
+      <h1 id="private-11-messages-over-ethereum">
+  Private 1:1 messages over Ethereum
+  <a class="anchor" href="#private-11-messages-over-ethereum">#</a>
+</h1>
+
+  
+
+  
+  <img src="https://img.shields.io/badge/status-raw-lightgrey?style=flat-square" />
+  
+  
+  
+  
+  
+
+  <ul>
+      <li>Status: raw</li>
+      <li>Editor: Ramses Fernandez <a href="mailto:ramses@status.im">ramses@status.im</a></li>
+      
+  </ul><h1 id="abstract">
+  Abstract
+  <a class="anchor" href="#abstract">#</a>
+</h1>
+<p>This document specifies an Ethereum-based private messaging service.
+This proposal is built upon this <a href="https://rfc.vac.dev/spec/20/">model</a> and
+amends the limitations of the latter concerning forward privacy and authentication.
+The document is still work in progress.
+Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.</p>
+<h1 id="background">
+  Background
+  <a class="anchor" href="#background">#</a>
+</h1>
+<p>Alice wants to send an encrypted message to Bob.
+Here Bob is the only individual able to decrypt the message.
+Alice has access to Bob’s Ethereum address.</p>
+<h1 id="theory-and-description-of-the-protocol">
+  Theory and Description of the Protocol
+  <a class="anchor" href="#theory-and-description-of-the-protocol">#</a>
+</h1>
+<p>The proposed protocol must adhere to the following design requirements:</p>
+<ul>
+<li>Alice knows Bob’s Ethereum address.</li>
+<li>Bob is willing to participate in the protocol, and publishes his public key.</li>
+<li>Bob’s ownership of his public key is verifiable,</li>
+<li>Alice wants to send message M to Bob.</li>
+<li>An eavesdropper cannot read M’s content even if she is storing it or relaying it.</li>
+</ul>
+<p>The specification is based on the noise protocol framework.
+It corresponds to the double ratchet scheme combined with the X3DH algorithm, which will be used to initialize the former.
+We chose to express the protocol in noise to be be able to use the noise streamlined implementation and proving features.
+The X3DH algorithm provides both authentication and forward secrecy, as stated in the <a href="https://signal.org/docs/specifications/x3dh/">X3DH specification</a>.</p>
+<h2 id="high-level-description">
+  High level description
+  <a class="anchor" href="#high-level-description">#</a>
+</h2>
+<p>This protocol will consist of several stages:</p>
+<ol>
+<li>Key setting for X3DH: this step will produce prekey bundles for Bob which will be fed into X3DH. It will also allow Alice to generate the keys required to run the X3DH algorithm correctly.</li>
+<li>Execution of X3DH: This step will output a common secret key SK together with an additional data vector AD. Both will be used in the Double Ratchet algorithm initialization.</li>
+<li>Execution of the Double Ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.</li>
+</ol>
+<h2 id="cryptographic-functions-required">
+  Cryptographic functions required
+  <a class="anchor" href="#cryptographic-functions-required">#</a>
+</h2>
+<ul>
+<li>XEd448 for digital signatures involved in the X3DH key generation.</li>
+<li>SHA512 for hashing and the generation of HMACs.</li>
+<li>AES256-CBC for the encryption/decryption of messages.</li>
+</ul>
+<h2 id="considerations-on-the-x3dh-initialization">
+  Considerations on the X3DH initialization
+  <a class="anchor" href="#considerations-on-the-x3dh-initialization">#</a>
+</h2>
+<p>This scheme requires working on specific elliptic curves which differ from those used by Ethereum.
+To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. For security reasons one must work on the curve X448.</p>
+<p>Bob and Alice must define a key pair (ik, IK) where:</p>
+<ul>
+<li>The key ik must be kept secret,</li>
+<li>and the key IK is public.</li>
+</ul>
+<p>Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore it will be required to generate new keys.
+This can be done using the basepoint $G$ for X448 and $ik \in \mathbb{Z}_p$ a random integer:</p>
+<p>$$ IK = ik \cdot G $$</p>
+<p>The scheme X3DH will also require the generation of a public key SPK which will be generated repeating the above process: one takes $spk \in \mathbb{Z}_p$ a secret random integer and computes:</p>
+<p>$$ SPK = spk \cdot G $$</p>
+<p>SPK is a public key generated and stored at medium-term.
+It is called a signed prekey because Bob also needs to store a public key certificate of SPK using IK.
+Both signed prekey and the certificate must undergo periodic replacement,
+a process that entails the generation of a fresh signed prekey.
+After replacing the key,
+Bob keeps the old private key of SPK for some interval, dependant on the implementation.
+This allows Bob to decrypt delayed messages.
+It is important that Bob does not reuse SPKs.
+This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.</p>
+<p>It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define:</p>
+<p>$$ SigSPK = XEd448(ik, Encode(SPK)) $$</p>
+<p>A final step requires the definition of a  <em>prekey bundle</em>  given by the tuple</p>
+<p>$$ prekey_bundle = (IK, SPK, SigSPK, {OPK_i}_i) $$</p>
+<p>Where the different one-time keys OPK are points in X448 generated from a random integer $opk \in \mathbb{Z}_p$ and computed by performing</p>
+<p>$$ OPK = opk\cdot G $$</p>
+<p>Before sending an initial message to Bob, Alice will generate an AD vector as described in the documentation:</p>
+<p>$$ AD = Encode(IK_A)|| Encode(IK_B) $$</p>
+<p>Alice will also need to generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the product</p>
+<p>$$ EK = ek \cdot G $$</p>
+<p>The function Encode() transforms an X448 public key into a byte sequence.
+The recommended encoding consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate.
+This is specified in the <a href="http://www.ietf.org/rfc/rfc7748.txt">RFC 7748</a> on elliptic curves for security.</p>
+<h2 id="using-x3dh-in-double-ratchet">
+  Using X3DH in Double Ratchet
+  <a class="anchor" href="#using-x3dh-in-double-ratchet">#</a>
+</h2>
+<p>According to <a href="https://signal.org/docs/specifications/doubleratchet/">Signal specifications</a>
+this specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:</p>
+<ul>
+<li>The SK output from X3DH becomes the SK input of the double ratchet. See section 3.3 of <a href="https://signal.org/docs/specifications/doubleratchet/">Signal Specification</a> for a detailed description.</li>
+<li>The AD output from X3DH becomes the AD input of the double ratchet. See sections 3.4 and 3.5 of  <a href="https://signal.org/docs/specifications/doubleratchet/">Signal Specification</a>  for a detailed description.</li>
+<li>Bob’s signed prekey SigSPKB from X3DH is used as Bob’s initial ratchet public key of the double ratchet.</li>
+</ul>
+<p>Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.</p>
+<h2 id="specification-as-a-noise-protocol">
+  Specification as a Noise protocol
+  <a class="anchor" href="#specification-as-a-noise-protocol">#</a>
+</h2>
+<p>X3DH has three phases:</p>
+<ol>
+<li>Bob publishes his identity key and prekeys to a server, or dedicated smart contract.</li>
+<li>Alice fetches a &ldquo;prekey bundle&rdquo; from the server, and uses it to send an initial message to Bob.</li>
+<li>Bob receives and processes Alice&rsquo;s initial message.</li>
+</ol>
+<p>One observes that, at the beginning of the protocol, the receiver gets the public key through a server, a smart contract in our situation, together with an encrypted ephemeral key.
+This corresponds to the Noise pattern  <strong>IX</strong>:</p>
+<p>→ e, s <br>
+← e, s, es, se, ee</p>
+<p>The Diffie-Hellman ratchet is run using the valid private key of the receiver in combination with the valid public included in the message coming from the sender.
+This process is encoded, in Noise terms, as the DH() function.
+This function will have inputs the secret key of the user running the function, and the public key of the external user.
+Receiver and sender MUST generate valid key pairs, i.e. points of the X448, using the Noise function GENERATE_KEYPAIR().</p>
+<p>The Key Derivation Function (KDF) ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework:
+SHA256 for the KDF and AES256 for AEAD encryption.</p>
+<p>Consequently, according to the Noise framework specifications, the X3DH algorithm is encoded as  <strong>Noise_IX_448_AES256GCM_SHA256</strong></p>
+<h1 id="retrieving-information">
+  Retrieving information
+  <a class="anchor" href="#retrieving-information">#</a>
+</h1>
+<h2 id="static-data">
+  Static data
+  <a class="anchor" href="#static-data">#</a>
+</h2>
+<p>Some data, such as the key pairs (ik, IK) for Alice and Bob, do not need to be regenerated after a period of time.
+Therefore the public keys IK can be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.</p>
+<h2 id="ephemeral-data">
+  Ephemeral data
+  <a class="anchor" href="#ephemeral-data">#</a>
+</h2>
+<p>Storing ephemeral data on Ethereum can be done using a combination of on-chain and off-chain solutions.
+This approach provides an efficient solution to the problem of storing updatable data in Ethereum.</p>
+<ol>
+<li>Ethereum can store a reference or a hash that points to the off-chain data.</li>
+<li>Off-chain solutions can include systems like IPFS, traditional cloud storage solutions, or decentralized storage networks such as a <a href="https://www.ethswarm.org">Swarm</a>.
+In any case, the user stores the associated IPFS hash, URL or reference in Ethereum.</li>
+</ol>
+<p>The fact of a user not updating the ephemeral information can be understood as Bob not willing to participate in any communication.</p>
+<h2 id="interaction-with-ethereum">
+  Interaction with Ethereum
+  <a class="anchor" href="#interaction-with-ethereum">#</a>
+</h2>
+<p>Storing static data is done using a dedicated smart contract <em>PublicKeyStorage</em> which associates the Ethereum wallet address of a user with his public key.
+This mapping is done by PublicKeyStorage using a <em>publicKeys</em> function, or a <em>setPublicKey</em> function.
+This mapping is done if the user passed an authorization process.
+A user who wants to retrieve a public key associated with a specific wallet address calls a function <em>getPublicKey</em>.
+The user provides the wallet address as the only input parameter for <em>getPublicKey</em>.
+The function outputs the associated public key from the smart contract.</p>
+<h1 id="extension-to-group-chat">
+  Extension to group chat
+  <a class="anchor" href="#extension-to-group-chat">#</a>
+</h1>
+<h2 id="1-to-1-version">
+  1-to-1 version
+  <a class="anchor" href="#1-to-1-version">#</a>
+</h2>
+<p>In order to extend the protocol to a group chat, this document specifies using an Asynchronous Distributed Key Generation (ADKG) to replace the X3DH step in the previous combination X3DH + Double Ratchet.</p>
+<p>Distributed Key Generation (DKG) is a method for initiating threshold cryptosystems in a decentralized manner, all without the need for a trusted third party.
+DKG serves as a fundamental component for numerous decentralized protocols, including systems like randomness beacons, threshold signatures, Byzantine consensus, and multiparty computation.</p>
+<p>Most DKG protocols assume synchronous networks.
+Asynchronous DKG (ADKG) has been studied only recently and the state-of-the-art high-threshold ADKG protocols is very inefficient compared to its low-threshold counterpart.</p>
+<p>Here low-threshold means that the reconstruction threshold is set to be one higher than the number of corrupt nodes,
+whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.</p>
+<p>Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes.
+In this proposal we suggest using the scheme by <a href="https://eprint.iacr.org/2022/1389">Kokoris-Kogias et al.</a> which is designed for $n = 3t + 1$ nodes.</p>
+<p>This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold in $l \in [t, n-t-1]$.
+The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$.
+The proposal includes <a href="https://github.com/sourav1547/htadkg">Python and Rust implementations</a>.</p>
+<p>The DKG suggested makes assumes the existence of a PKI.
+In case of requiring removing such assumption, one can replace the VSS scheme with the <a href="https://eprint.iacr.org/2021/118">Alhaddad et al.</a> at the price of increasing the complexity.</p>
+<p>The output of the DKG may be an integer (modulo a prime),
+meaning that one should apply a KDF to that output
+in order to obtain a result which could be used as an input for the double ratchet.</p>
+<p>One observes that using an ADKG allows a set of users,
+which want to define a group chat,
+defining a common secret key which will be used as a root key for the double ratchet.
+Using an ADKG defines a room key,
+which essentially defines the group itself.</p>
+<p>This approach share similarities with the point of view of <a href="https://github.com/farcasterxyz/protocol/discussions/99">Farcaster</a>.</p>
+<p>Once the double ratchet is initialized,
+the communication in this group is 1-to-1,
+meaning that group member C cannot see the messages between group members A and B.
+The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.</p>
+<h2 id="n-to-n-version">
+  n-to-n version
+  <a class="anchor" href="#n-to-n-version">#</a>
+</h2>
+<p>Using the above approach leads to a situation where a group of users can set a group for 1-to-1 messages,
+meaning that any group member external to a communication between any other two members will not be able to read the contents of the messages.</p>
+<p>An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchronous ratcheting trees, as suggested in the proposal from <a href="https://eprint.iacr.org/2017/666">Cohn-Gordon et al.</a> where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time.
+The proposal suggested provides both forward secrecy and post-compromise security.
+The shared key can be then used in any symmetric encryption scheme, such as AES256.</p>
+<h1 id="privacy-and-security-considerations">
+  Privacy and Security Considerations
+  <a class="anchor" href="#privacy-and-security-considerations">#</a>
+</h1>
+<ul>
+<li>For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.</li>
+<li>One SHOULD include event logs to track changes in public keys.</li>
+<li>The curve X448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.</li>
+<li>Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.</li>
+</ul>
+<h1 id="copyright">
+  Copyright
+  <a class="anchor" href="#copyright">#</a>
+</h1>
+<p>Copyright and related rights waived via <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a>.</p>
+<h1 id="references">
+  References
+  <a class="anchor" href="#references">#</a>
+</h1>
+<ul>
+<li><a href="https://rfc.vac.dev/spec/20/">https://rfc.vac.dev/spec/20/</a></li>
+<li><a href="https://signal.org/docs/specifications/x3dh/">https://signal.org/docs/specifications/x3dh/</a></li>
+<li><a href="https://signal.org/docs/specifications/doubleratchet/">https://signal.org/docs/specifications/doubleratchet/</a></li>
+<li><a href="https://eprint.iacr.org/2022/1389">https://eprint.iacr.org/2022/1389</a></li>
+<li><a href="https://github.com/sourav1547/htadkg">https://github.com/sourav1547/htadkg</a></li>
+<li><a href="https://github.com/farcasterxyz/protocol/discussions/99">https://github.com/farcasterxyz/protocol/discussions/99</a></li>
+</ul>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#abstract">Abstract</a></li>
+    <li><a href="#background">Background</a></li>
+    <li><a href="#theory-and-description-of-the-protocol">Theory and Description of the Protocol</a>
+      <ul>
+        <li><a href="#high-level-description">High level description</a></li>
+        <li><a href="#cryptographic-functions-required">Cryptographic functions required</a></li>
+        <li><a href="#considerations-on-the-x3dh-initialization">Considerations on the X3DH initialization</a></li>
+        <li><a href="#using-x3dh-in-double-ratchet">Using X3DH in Double Ratchet</a></li>
+        <li><a href="#specification-as-a-noise-protocol">Specification as a Noise protocol</a></li>
+      </ul>
+    </li>
+    <li><a href="#retrieving-information">Retrieving information</a>
+      <ul>
+        <li><a href="#static-data">Static data</a></li>
+        <li><a href="#ephemeral-data">Ephemeral data</a></li>
+        <li><a href="#interaction-with-ethereum">Interaction with Ethereum</a></li>
+      </ul>
+    </li>
+    <li><a href="#extension-to-group-chat">Extension to group chat</a>
+      <ul>
+        <li><a href="#1-to-1-version">1-to-1 version</a></li>
+        <li><a href="#n-to-n-version">n-to-n version</a></li>
+      </ul>
+    </li>
+    <li><a href="#privacy-and-security-considerations">Privacy and Security Considerations</a></li>
+    <li><a href="#copyright">Copyright</a></li>
+    <li><a href="#references">References</a></li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

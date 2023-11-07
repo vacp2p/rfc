@@ -610,6 +610,16 @@ flags auxiliary field payload padding signature In case of symmetric encryption,
     </item>
     
     <item>
+      <title>70/ETH-SECPM</title>
+      <link>https://rfc.vac.dev/spec/70/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://rfc.vac.dev/spec/70/</guid>
+      <description>Abstract # This document specifies an Ethereum-based private messaging service. This proposal is built upon this model and amends the limitations of the latter concerning forward privacy and authentication. The document is still work in progress. Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
+Background # Alice wants to send an encrypted message to Bob. Here Bob is the only individual able to decrypt the message.</description>
+    </item>
+    
+    <item>
       <title>8/WAKU-MAIL</title>
       <link>https://rfc.vac.dev/spec/8/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
