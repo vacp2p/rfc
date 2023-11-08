@@ -52,7 +52,7 @@ This protocol will consist of several stages:
 This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve X448 MUST be chosen: 
 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
-Bob and Alice MUST define personal key pairs (ik, IK) where:
+Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ respectively where:
 -   The key ik must be kept secret,
 -   and the key IK is public.
 
