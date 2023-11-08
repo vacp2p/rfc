@@ -102,29 +102,32 @@ this specification uses the double ratchet in combination with X3DH using the fo
 
 Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.
 
-## Specification as a Noise protocol
-
 X3DH has three phases:
 
 1.  Bob publishes his identity key and prekeys to a server, a network, or dedicated smart contract.
 2.  Alice fetches a "prekey bundle" from the server, and uses it to send an initial message to Bob.
 3.  Bob receives and processes Alice's initial message.
 
-One observes that, at the beginning of the protocol, the receiver gets the public key through a server, a smart contract or a network, together with an encrypted ephemeral key. 
-This corresponds to the Noise pattern  **IX**:
+Alice MUST perform the following computations:
 
-→ e, s \
-← e, s, es, se, ee
+-  $dh1 = DH(IK_A, SPK_B, curve = X448)$
+-  $dh2 = DH(EK_A, IK_B, curve = X448)$
+-  $dh3 = DH(EK_A, SPK_B)$
+-  SK = KDF(dh1||dh2||dh3)
 
-The Diffie-Hellman ratchet is run using the valid private key of the receiver in combination with the valid public included in the message coming from the sender. 
-This process is encoded, in Noise terms, as the DH() function. 
-This function will have inputs the secret key of the user running the function, and the public key of the external user. 
-Receiver and sender MUST generate valid key pairs, i.e. points of the X448, using the Noise function GENERATE_KEYPAIR().
+Alice MUST send to Bob a message containing: 
+
+-  $IK_A, EK_A$.
+-  An identifier to the Bob's prekeys used.
+-  A message encrypted with AES256 using AD and SK.
 
 The Key Derivation Function (KDF) ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework: 
 SHA256 for the KDF and AES256 for AEAD encryption.
 
-Consequently, according to the Noise framework specifications, the X3DH algorithm is encoded as  **Noise_IX_448_AES256GCM_SHA256**
+Upon reception of the initial message, Bob MUST perform the same computations above with the DH() function.
+Bob derives SK and constructs AD.
+Bob decrypts the initial message encrypted with AES256.
+If decryption fails, Bob MUST abort the protocol.
 
 # Retrieving information
 
