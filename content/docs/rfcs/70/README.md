@@ -1,7 +1,7 @@
 ---
 slug: 70
 title: 70/ETH-SECPM
-name: Private 1:1 messages over Ethereum
+name: Secure channel setup using Ethereum accounts
 status: raw
 category: Standards Track
 tags:
