@@ -57,14 +57,9 @@ Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ r
 -   and the key IK is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
-This can be done using the basepoint $G$ for X448 and $ik \in \mathbb{Z}_p$ a random integer:
+Using the Noise framework notation, these key pairs MUST BE generated using $(ik_B, IK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
 
-$$ IK = ik \cdot G $$
-
-Bob MUST also generate a public key SPK. 
-The key SPK will be generated repeating the above process: one takes $spk \in \mathbb{Z}_p$ a secret random integer and computes:
-
-$$ SPK = spk \cdot G $$
+Bob MUST also generate a public key SPK using $(spk_B, SPK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
 
 SPK is a public key generated and stored at medium-term. 
 It is called a signed prekey because Bob MUST store a public key certificate of SPK using IK. 
@@ -82,22 +77,18 @@ $$ SigSPK = XEd448(ik, Encode(SPK)) $$
 
 A final step requires the definition of a  _prekey bundle_  given by the tuple
 
-$$ prekey\_bundle = (IK, SPK, SigSPK, \{OPK_i\}_i) $$
+$$ prekey-bundle = (IK, SPK, SigSPK, \{OPK_i\}_i) $$
 
-Where the different one-time keys OPK are points in X448 generated from a random integer $opk \in \mathbb{Z}_p$ and computed by performing
-
-$$ OPK = opk\cdot G $$
+Where the different one-time keys OPK are generated as $(opk_B, OPK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
 
 Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation:
 
-$$ AD = Encode(IK_A)|| Encode(IK_B) $$
+$$ AD = Encode(IK_A)||Encode(IK_B) $$
 
-Alice MUST generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the product
-
-$$ EK = ek \cdot G $$
+Alice MUST generate ephemeral key pairs $(ek, EK) = \text{GENERATE-KEYPAIR}(curve = X448)$.
 
 The function Encode() transforms an X448 public key into a byte sequence. 
-The recommended encoding consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
+It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
 ## Using X3DH in Double Ratchet
