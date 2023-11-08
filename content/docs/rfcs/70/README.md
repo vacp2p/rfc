@@ -49,34 +49,34 @@ This protocol will consist of several stages:
 -   AES256-CBC for the encryption/decryption of messages.
 
 ## Considerations on the X3DH initialization
-This scheme requires working on specific elliptic curves which differ from those used by Ethereum. 
-To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. The curve X448 MUST be chosen: 
+This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve X448 MUST be chosen: 
 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
-Bob and Alice MUST define a personal key pair (ik, IK) where:
+Bob and Alice MUST define personal key pairs (ik, IK) where:
 -   The key ik must be kept secret,
 -   and the key IK is public.
 
-Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore it will be required to generate new keys. 
+Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
 This can be done using the basepoint $G$ for X448 and $ik \in \mathbb{Z}_p$ a random integer:
 
 $$ IK = ik \cdot G $$
 
-The scheme X3DH will also require the generation of a public key SPK which will be generated repeating the above process: one takes $spk \in \mathbb{Z}_p$ a secret random integer and computes:
+Bob MUST also generate a public key SPK. 
+The key SPK will be generated repeating the above process: one takes $spk \in \mathbb{Z}_p$ a secret random integer and computes:
 
 $$ SPK = spk \cdot G $$
 
 SPK is a public key generated and stored at medium-term. 
-It is called a signed prekey because Bob also needs to store a public key certificate of SPK using IK. 
-Both signed prekey and the certificate must undergo periodic replacement, 
+It is called a signed prekey because Bob MUST store a public key certificate of SPK using IK. 
+Both signed prekey and the certificate MUST undergo periodic replacement, 
 a process that entails the generation of a fresh signed prekey. 
 After replacing the key, 
 Bob keeps the old private key of SPK for some interval, dependant on the implementation.
 This allows Bob to decrypt delayed messages. 
-It is important that Bob does not reuse SPKs. 
+It is important that Bob MUST NOT reuse SPKs. 
 This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
-It will be required to sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define:
+Bob MUST sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define:
 
 $$ SigSPK = XEd448(ik, Encode(SPK)) $$
 
@@ -88,11 +88,11 @@ Where the different one-time keys OPK are points in X448 generated from a random
 
 $$ OPK = opk\cdot G $$
 
-Before sending an initial message to Bob, Alice will generate an AD vector as described in the documentation:
+Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation:
 
 $$ AD = Encode(IK_A)|| Encode(IK_B) $$
 
-Alice will also need to generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the product
+Alice MUST generate ephemeral key pairs (ek, EK) following the above mechanisms, that is: ek is a random integer modulo p, and EK is the associated public key obtained from the product
 
 $$ EK = ek \cdot G $$
 
@@ -139,8 +139,8 @@ Consequently, according to the Noise framework specifications, the X3DH algorith
 
 ## Static data
 
-Some data, such as the key pairs (ik, IK) for Alice and Bob, do not need to be regenerated after a period of time. 
-Therefore the public keys IK can be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
+Some data, such as the key pairs (ik, IK) for Alice and Bob, MAY NOT be regenerated after a period of time. 
+Therefore the public keys IK MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
 
 ## Ephemeral data
 
@@ -186,7 +186,7 @@ The proposal includes [Python and Rust implementations](https://github.com/soura
 The DKG suggested makes assumes the existence of a PKI. 
 In case of requiring removing such assumption, one can replace the VSS scheme with the [Alhaddad et al.](https://eprint.iacr.org/2021/118) at the price of increasing the complexity.
 
-The output of the DKG may be an integer (modulo a prime), 
+The output of the DKG is an integer (modulo a prime), 
 meaning that one should apply a KDF to that output 
 in order to obtain a result which could be used as an input for the double ratchet.
 
@@ -195,7 +195,6 @@ which want to define a group chat,
 defining a common secret key which will be used as a root key for the double ratchet. 
 Using an ADKG defines a room key, 
 which essentially defines the group itself.
-
 
 This approach share similarities with the point of view of [Farcaster](https://github.com/farcasterxyz/protocol/discussions/99).
 
@@ -232,6 +231,3 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - https://eprint.iacr.org/2022/1389
 - https://github.com/sourav1547/htadkg
 - https://github.com/farcasterxyz/protocol/discussions/99
-
-
-
