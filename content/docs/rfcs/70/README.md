@@ -20,7 +20,7 @@ Next steps will include a description of how to implement the different function
 
 Alice wants to send an encrypted message to Bob. 
 Here Bob is the only individual able to decrypt the message.
-Alice has access to Bob’s Ethereum address.
+Alice knows Bob’s Ethereum address.
 
 # Theory and Description of the Protocol
 
@@ -50,9 +50,10 @@ This protocol will consist of several stages:
 
 ## Considerations on the X3DH initialization
 This scheme requires working on specific elliptic curves which differ from those used by Ethereum. 
-To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. For security reasons one must work on the curve X448.
+To be precise, Ethereum makes use of the curve secp256k1, whereas X3DH requires either X25519 or X448. The curve X448 MUST be chosen: 
+since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
-Bob and Alice must define a key pair (ik, IK) where:
+Bob and Alice MUST define a personal key pair (ik, IK) where:
 -   The key ik must be kept secret,
 -   and the key IK is public.
 
@@ -114,11 +115,11 @@ Once this initialization has been set, Alice and Bob can start exchanging messag
 
 X3DH has three phases:
 
-1.  Bob publishes his identity key and prekeys to a server, or dedicated smart contract.
+1.  Bob publishes his identity key and prekeys to a server, a network, or dedicated smart contract.
 2.  Alice fetches a "prekey bundle" from the server, and uses it to send an initial message to Bob.
 3.  Bob receives and processes Alice's initial message.
 
-One observes that, at the beginning of the protocol, the receiver gets the public key through a server, a smart contract in our situation, together with an encrypted ephemeral key. 
+One observes that, at the beginning of the protocol, the receiver gets the public key through a server, a smart contract or a network, together with an encrypted ephemeral key. 
 This corresponds to the Noise pattern  **IX**:
 
 → e, s \
