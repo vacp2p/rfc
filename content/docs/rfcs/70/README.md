@@ -113,7 +113,7 @@ Alice MUST perform the following computations:
 -  $dh1 = DH(IK_A, SPK_B, curve = X448)$
 -  $dh2 = DH(EK_A, IK_B, curve = X448)$
 -  $dh3 = DH(EK_A, SPK_B)$
--  SK = KDF(dh1||dh2||dh3)
+-  $SK = KDF(dh1 || dh2 || dh3)$
 
 Alice MUST send to Bob a message containing: 
 
@@ -134,7 +134,7 @@ If decryption fails, Bob MUST abort the protocol.
 ## Static data
 
 Some data, such as the key pairs (ik, IK) for Alice and Bob, MAY NOT be regenerated after a period of time. 
-Therefore the public keys IK MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
+Therefore the prekey bundle MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
 
 ## Ephemeral data
 
@@ -173,14 +173,14 @@ whereas high-threshold protocols admit reconstruction thresholds much higher tha
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. 
 In this proposal we suggest using the scheme by [Kokoris-Kogias et al.](https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
 
-This protocol can withstand the presence of up to t malicious nodes and can adapt to any reconstruction threshold in $l \in [t, n-t-1]$. 
+This protocol can withstand the presence of up to $t$ malicious nodes and can adapt to any reconstruction threshold in $l \in [t, n-t-1]$. 
 The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. 
 The proposal includes [Python and Rust implementations](https://github.com/sourav1547/htadkg).
 
-The DKG suggested makes assumes the existence of a PKI. 
+The suggested ADKG makes assumes the existence of a PKI. 
 In case of requiring removing such assumption, one can replace the VSS scheme with the [Alhaddad et al.](https://eprint.iacr.org/2021/118) at the price of increasing the complexity.
 
-The output of the DKG is an integer (modulo a prime), 
+The output of the ADKG is an integer (modulo a prime), 
 meaning that one should apply a KDF to that output 
 in order to obtain a result which could be used as an input for the double ratchet.
 
