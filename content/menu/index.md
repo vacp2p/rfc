@@ -54,6 +54,7 @@ bookMenuLevels: 1
   - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
   - [56/STATUS-COMMUNITIES]({{< relref "/docs/rfcs/56/README.md" >}})
   - [65/STATUS-ACCOUNTS]({{< relref "/docs/rfcs/65/README.md" >}})
+  - [71/STATUS-PUSH-NOTIFICATION-SERVER]({{< relref "/docs/rfcs/71/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
