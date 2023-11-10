@@ -12,11 +12,14 @@ contributors:
 Encrypted credentials in JSON format stored in a keystore to securely exchange credentials between peers.
 
 # Summary
-A keystore is a construct that store a peer’s keys. The keys will be encrypted and decrypted based on methods species in the keystore. This specification will introduce how a keystore is constructed.
+A keystore is a construct that store a peer’s keys. 
+The keys will be encrypted and decrypted based on methods species in the keystore. 
+This specification will introduce how a keystore is constructed.
 
 # Background
 Rate Limit Nullifiers, is a method that uses zero knowledge proofs for anonymous rate-limited for messaging/ signaling frameworks.
-The secure transfer of keys are important in peer to peer messaging applications. The Waku RLN keystore can be used by peers to store credentials securely and exchange credentials anonymously.
+The secure transfer of keys are important in peer to peer messaging applications. 
+The Waku RLN keystore can be used by peers to store credentials securely and exchange credentials anonymously.
 
 # Example of a Waku Keystore
 This is an example of a keystore that is used by a Waku RLN Relay.
