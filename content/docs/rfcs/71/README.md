@@ -182,8 +182,8 @@ A client MUST authorize a push notification server to send them push notificatio
 This is done by building a grant which is specific to a given client-server pair. 
 When receiving a grant, the server MUST validate that the signature matches the registering client. 
 
-The grant is built as:
- > `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
+The grant is built as:<br />
+`Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`<br />
 
 ### Unregistering with a Server:
 - To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
@@ -504,8 +504,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 7. "Protocol Buffers", <https://developers.google.com/protocol-buffers/>
 8. [5/SECURE-TRANSPORT] Andrea Piana, Pedro Pombeiro, Corey Petty, Oskar Thorén, Dean Eigenmann, "5/SECURE-TRANSPORT", May 22, 2020,<https://specs.status.im/spec/5>
 9. [1/CLIENT] Adam Babik, Andrea Maria Piana, Dean Eigenmann, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “1/CLIENT”, May 22, 2020, <https://specs.status.im/spec/1>
-10. 
-11. [62/PAYLOAD] Adam Babik, Andrea Maria Piana, Oskar Thorén, <https://rfc.vac.dev/spec/62>
+10. [62/PAYLOAD] Adam Babik, Andrea Maria Piana, Oskar Thorén, <https://rfc.vac.dev/spec/62>
+11. 
 
 
 
