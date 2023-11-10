@@ -100,6 +100,7 @@ EIP Keystore
 - stubPath
  
 KDF as Pbkdf2kdf
+```js
 	crypto: {
     		cipher: eipCrypto.cipher.function;
     		cipherparams: eipCrypto.cipher.params;
@@ -108,6 +109,8 @@ KDF as Pbkdf2kdf
     		kdfparams: eipkdf.params;
     		mac: checksum; located fromEipToCredential
 	}
+
+```
 	
 - cipherFunction = is poseidonHash implementation, Poseidon paper. 
 - nWaku uses Keccak256 for hash function
