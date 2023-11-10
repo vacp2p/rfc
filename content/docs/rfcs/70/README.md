@@ -49,7 +49,7 @@ This protocol will consist of several stages:
 -   AES256-CBC for the encryption/decryption of messages.
 
 ## Considerations on the X3DH initialization
-This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve X448 MUST be chosen: 
+This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve Curve448 MUST be chosen: 
 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 
 Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ respectively where:
@@ -57,9 +57,9 @@ Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ r
 -   and the key IK is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
-Using the Noise framework notation, these key pairs MUST BE generated using $(ik_B, IK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
+Using the Noise framework notation, these key pairs MUST BE generated using $(ik_B, IK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
 
-Bob MUST also generate a public key SPK using $(spk_B, SPK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
+Bob MUST also generate a public key SPK using $(spk_B, SPK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
 
 SPK is a public key generated and stored at medium-term. 
 It is called a signed prekey because Bob MUST store a public key certificate of SPK using IK. 
@@ -79,13 +79,13 @@ A final step requires the definition of a  _prekey bundle_  given by the tuple
 
 $$ prekey-bundle = (IK, SPK, SigSPK, \{OPK_i\}_i) $$
 
-Where the different one-time keys OPK are generated as $(opk_B, OPK_B) = \text{GENERATE-KEYPAIR}(curve = X448)$.
+Where the different one-time keys OPK are generated as $(opk_B, OPK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
 
 Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation:
 
 $$ AD = Encode(IK_A)||Encode(IK_B) $$
 
-Alice MUST generate ephemeral key pairs $(ek, EK) = \text{GENERATE-KEYPAIR}(curve = X448)$.
+Alice MUST generate ephemeral key pairs $(ek, EK) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
 
 The function Encode() transforms an X448 public key into a byte sequence. 
 It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
@@ -110,8 +110,8 @@ X3DH has three phases:
 
 Alice MUST perform the following computations:
 
--  $dh1 = DH(IK_A, SPK_B, curve = X448)$
--  $dh2 = DH(EK_A, IK_B, curve = X448)$
+-  $dh1 = DH(IK_A, SPK_B, curve = Curve448)$
+-  $dh2 = DH(EK_A, IK_B, curve = Curve448)$
 -  $dh3 = DH(EK_A, SPK_B)$
 -  $SK = KDF(dh1 || dh2 || dh3)$
 
@@ -210,7 +210,7 @@ The shared key can be then used in any symmetric encryption scheme, such as AES2
 
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
-- The curve X448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+- The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
 
 # Copyright
