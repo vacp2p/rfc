@@ -130,6 +130,89 @@ Bob derives SK and constructs AD.
 Bob decrypts the initial message encrypted with AES256.
 If decryption fails, Bob MUST abort the protocol.
 
+# The Double Ratchet
+
+## Initialization
+In this stage Bob and Alice have generated key pairs and agreed a shared secret SK using X3DH.
+
+Alice calls `RatchetInitAlice()` defined below:
+```
+RatchetInitAlice(SK, IK_B):
+    state.DHs = GENERATE_KEYPAIR(curve = curve448)
+    state.DHr = IK_B
+    state.RK, state.CKs = HKDF(SK, DH(state.DHs, state.DHr)) 
+    state.CKr = None
+    state.Ns, state.Nr, state.PN = 0
+    state.MKSKIPPED = {}
+```
+Similarly, Bob calls the function `RatchetInitBob()` defined below:
+```
+RatchetInitBob(SK, (ik_B,IK_B)):
+    state.DHs = (ik_B, IK_B)
+    state.Dhr = None
+    state.RK = SK
+    state.CKs, state.CKr = None
+    state.Ns, state.Nr, state.PN = 0
+    state.MKSKIPPED = {}
+```
+
+## Encryption
+This function performs the symmetric key ratchet.
+
+```
+RatchetEncrypt(state, plaintext, AD):
+    state.CKs, mk = HMAC-SHA512(state.CKs)
+    header = HEADER(state.DHs, state.PN, state.Ns)
+    state.Ns = state.Ns + 1
+	return header, AES256-GCM_Enc(mk, plaintext, AD || header)
+```
+
+## Decryption
+This function will decrypt incoming messages. One introduces auxiliary functions required.
+
+```
+DHRatchet(state, header):
+    state.PN = state.Ns
+    state.Ns = state.Nr = 0
+    state.DHr = header.dh
+    state.RK, state.CKr = HKDF(state.RK, DH(state.DHs, state.DHr))
+    state.DHs = GENERATE_KEYPAIR(curve = curve448)
+    state.RK, state.CKs = HKDF(state.RK, DH(state.DHs, state.DHr))
+```
+```
+SkipMessageKeys(state, until):
+    if state.NR + MAX_SKIP < until:
+        raise Error
+    if state.CKr != none:
+        while state.Nr < until:
+            state.CKr, mk = HMAC-SHA512(state.CKr)
+            state.MKSKIPPED[state.DHr, state.Nr] = mk
+            state.Nr = state.Nr + 1
+```
+```
+TrySkippedMessageKey(state, header, ciphertext, AD):
+    if (header.dh, header.n) in state.MKSKIPPED:
+        mk = state.MKSKIPPED[header.dh, header.n]
+        delete state.MKSKIPPED[header.dh, header.n]
+        return AES256-GCM_Dec(mk, ciphertext, AD || header)
+    else: return None
+```
+
+The main function of this section follows:
+```
+RatchetDecrypt(state, header, ciphertext, AD):
+    plaintext = TrySkippedMessageKeys(state, header, ciphertext, AD)
+    if plaintext != None:
+        return plaintext
+    if header.dh != state.DHr:
+        SkipMessageKeys(state, header.pn)
+        DHRatchet(state, header)
+    SkipMessageKeys(state, header.n)
+    state.CKr, mk = HMAC-SHA512(state.CKr)
+    state.Nr = State.Nr + 1
+    return AES256-GCM_Dec(mk, ciphertext, AD || header)
+```
+
 # Retrieving information
 
 ## Static data
