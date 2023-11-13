@@ -50,7 +50,8 @@ This protocol will consist of several stages:
 
 ## Considerations on the X3DH initialization
 This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve Curve448 MUST be chosen: 
-since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519. This document specifies X3DH in terms of the Noise Framework.
+The X3DH algorithm corresponds to the IX pattern in Noise.
 
 Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ respectively where:
 -   The key ik must be kept secret,
