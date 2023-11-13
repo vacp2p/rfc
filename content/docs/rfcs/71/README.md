@@ -495,17 +495,17 @@ When sending a push notification a client disclose:
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-1. [16/PUSH-NOTIFICATION-SERVER] Andrea Maria Piana, "16/PUSH-NOTIFICATION-SERVER", < https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md> 
-2. "Push Notification", Apple Developer <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1>
-3. "Firebase" Firebase <https://firebase.google.com/>
+1. [16/PUSH-NOTIFICATION-SERVER], Andrea Maria Piana, "16/PUSH-NOTIFICATION-SERVER", < https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md> 
+2. "Push Notification", Apple Developer,  <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1>
+3. "Firebase", Firebase, <https://firebase.google.com/>
 4. "gorush", Appleboy, <https://github.com/appleboy/gorush>
-5. [10/WAKU-USAGE] Adam Babik, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “10/WAKU-USAGE”, May 22, 2020, <https://specs.status.im/spec/10#partitioned-topic>
-6. [62/PAYLOAD] Adam Babik, Andrea Maria Piana, Oskar Thorén, "/spec/62/ <https://rfc.vac.dev/spec/62>
+5. [10/WAKU-USAGE], Adam Babik, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “10/WAKU-USAGE”, May 22, 2020, <https://specs.status.im/spec/10#partitioned-topic>
+6. [62/PAYLOAD], Adam Babik, Andrea Maria Piana, Oskar Thorén, "/spec/62/", <https://rfc.vac.dev/spec/62>
 7. "Protocol Buffers", <https://developers.google.com/protocol-buffers/>
-8. [5/SECURE-TRANSPORT] Andrea Piana, Pedro Pombeiro, Corey Petty, Oskar Thorén, Dean Eigenmann, "5/SECURE-TRANSPORT", May 22, 2020,<https://specs.status.im/spec/5>
-9. [1/CLIENT] Adam Babik, Andrea Maria Piana, Dean Eigenmann, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “1/CLIENT”, May 22, 2020, <https://specs.status.im/spec/1>
-10. [62/PAYLOAD] Adam Babik, Andrea Maria Piana, Oskar Thorén, <https://rfc.vac.dev/spec/62>
-11. 
+8. [5/SECURE-TRANSPORT], Andrea Piana, Pedro Pombeiro, Corey Petty, Oskar Thorén, Dean Eigenmann, "5/SECURE-TRANSPORT", May 22, 2020, <https://specs.status.im/spec/5>
+9. [1/CLIENT], Adam Babik, Andrea Maria Piana, Dean Eigenmann, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “1/CLIENT”, May 22, 2020, <https://specs.status.im/spec/1>
+10. [62/PAYLOAD], Adam Babik, Andrea Maria Piana, Oskar Thorén, <https://rfc.vac.dev/spec/62>
+
 
 
 
