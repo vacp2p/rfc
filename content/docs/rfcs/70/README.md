@@ -92,6 +92,35 @@ The function Encode() transforms an X448 public key into a byte sequence.
 It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
+The algorithm used for digital signatures MUST be XEd448 described below. 
+One MUST consider q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885 and Z a random 64-bytes sequence:
+```
+XEd448_sign((ik, IK), message):
+    Z = randbytes(64)  
+    r = SHA512(2^456 - 2 || ik || message || Z )
+    R = (r * convert_mont(5)) % q
+    h = SHA512(R || IK || M)
+    s = (r + h * ik) % q
+    return (R || s)
+```
+```
+XEd448_verify(u, message, (R || s)):
+    if (u >= p) or (R.y >= 2^448) or (s >= 2^446): return FALSE
+    h = (SHA512(R || 156326 || message)) % q
+    R_check = s * convert_mont(5) - h * 156326
+    if R == R_check: return TRUE
+    return FALSE 
+```
+The auxiliary function `convert_mont(u)` follows:
+```
+convert_mont(u):
+    u_masked = u % mod 2^448
+    inv = ((1 - u_masked)^(2^448 - 2^224 - 3)) % (2^448 - 2^224 - 1)
+    P.y = ((1 + u_masked) * inv)) % (2^448 - 2^224 - 1)
+    P.s = 0
+    return P
+```
+
 ## Using X3DH in Double Ratchet
 
 According to [Signal specifications](https://signal.org/docs/specifications/doubleratchet/) 
