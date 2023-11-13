@@ -53,14 +53,14 @@ This scheme MUST work on a specific elliptic curves which differ from those used
 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519. This document specifies X3DH in terms of the Noise Framework.
 The X3DH algorithm corresponds to the IX pattern in Noise.
 
-Bob and Alice MUST define personal key pairs $(ik_B, IK_B)$ and $(ik_A, IK_A)$ respectively where:
+Bob and Alice MUST define personal key pairs `(ik_B, IK_B)` and `(ik_A, IK_A)` respectively where:
 -   The key ik must be kept secret,
 -   and the key IK is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
-Using the Noise framework notation, these key pairs MUST BE generated using $(ik_B, IK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
+Using the Noise framework notation, these key pairs MUST BE generated using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
-Bob MUST also generate a public key SPK using $(spk_B, SPK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
+Bob MUST also generate a public key SPK using `(spk_B, SPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
 SPK is a public key generated and stored at medium-term. 
 It is called a signed prekey because Bob MUST store a public key certificate of SPK using IK. 
@@ -72,28 +72,22 @@ This allows Bob to decrypt delayed messages.
 It is important that Bob MUST NOT reuse SPKs. 
 This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
-Bob MUST sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define:
+Bob MUST sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define `SigSPK = XEd448(ik, Encode(SPK))`
 
-$$ SigSPK = XEd448(ik, Encode(SPK)) $$
+A final step requires the definition of a  _prekey bundle_  given by the tuple `prekey_bundle = (IK, SPK, SigSPK, OPK_i)`
 
-A final step requires the definition of a  _prekey bundle_  given by the tuple
+Where the different one-time keys OPK are generated as `(opk_B, OPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
-$$ prekey-bundle = (IK, SPK, SigSPK, \{OPK_i\}_i) $$
+Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation: `AD = Encode(IK_A) || Encode(IK_B)`.
 
-Where the different one-time keys OPK are generated as $(opk_B, OPK_B) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
-
-Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation:
-
-$$ AD = Encode(IK_A)||Encode(IK_B) $$
-
-Alice MUST generate ephemeral key pairs $(ek, EK) = \text{GENERATE-KEYPAIR}(curve = Curve448)$.
+Alice MUST generate ephemeral key pairs `(ek, EK) = GENERATE_KEYPAIR(curve = curve448)`.
 
 The function Encode() transforms an X448 public key into a byte sequence. 
 It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
 The algorithm used for digital signatures MUST be XEd448 described below. 
-One MUST consider q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885 and Z a random 64-bytes sequence:
+One MUST consider `q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885` and Z a random 64-bytes sequence:
 ```
 XEd448_sign((ik, IK), message):
     Z = randbytes(64)  
@@ -139,15 +133,15 @@ X3DH has three phases:
 3.  Bob receives and processes Alice's initial message.
 
 Alice MUST perform the following computations:
-
--  $dh1 = DH(IK_A, SPK_B, curve = Curve448)$
--  $dh2 = DH(EK_A, IK_B, curve = Curve448)$
--  $dh3 = DH(EK_A, SPK_B)$
--  $SK = KDF(dh1 || dh2 || dh3)$
-
+```
+dh1 = DH(IK_A, SPK_B, curve = curve448)
+dh2 = DH(EK_A, IK_B, curve = curve448)
+dh3 = DH(EK_A, SPK_B)
+SK = KDF(dh1 || dh2 || dh3)
+```
 Alice MUST send to Bob a message containing: 
 
--  $IK_A, EK_A$.
+-  `IK_A, EK_A`.
 -  An identifier to the Bob's prekeys used.
 -  A message encrypted with AES256 using AD and SK.
 
@@ -284,9 +278,9 @@ Here low-threshold means that the reconstruction threshold is set to be one high
 whereas high-threshold protocols admit reconstruction thresholds much higher than the number of malicious nodes.
 
 Existing ADKG constructions tend to become inefficient when the reconstruction threshold surpasses one-third of the total nodes. 
-In this proposal we suggest using the scheme by [Kokoris-Kogias et al.](https://eprint.iacr.org/2022/1389) which is designed for $n = 3t + 1$ nodes. 
+In this proposal we suggest using the scheme by [Kokoris-Kogias et al.](https://eprint.iacr.org/2022/1389) which is designed for `n = 3t + 1` nodes. 
 
-This protocol can withstand the presence of up to $t$ malicious nodes and can adapt to any reconstruction threshold in $l \in [t, n-t-1]$. 
+This protocol can withstand the presence of up to `t` malicious nodes and can adapt to any reconstruction threshold in `t <= l <= n - t - 1`. 
 The key point of the proposal is an asynchronous method for securely distributing a random polynomial of degree $l\geq t$. 
 The proposal includes [Python and Rust implementations](https://github.com/sourav1547/htadkg).
 
