@@ -29,7 +29,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 ### Definitions:
 
 client 
-> A node that implements the [Status specification](https://specs.status.im/spec/1). 
+> A node that implements the [Status specification](https://rfc.vac.dev/spec/6/). 
 
 user
 > The owner of a device that runs a client.
@@ -73,7 +73,7 @@ Registering a client with a push notification service.
 
 - A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) for the public key of the node, encrypted with this key.
 
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
 
 - The marshaled protobuf payload MUST also be encrypted with AES-GCM using the Diffie–Hellman key generated from the client and server identity.
 This is done in order to ensure that the extracted key from the signature will be considered invalid if it can’t decrypt the payload.
@@ -121,7 +121,7 @@ A push notification server will handle the message according to the following ru
 
 - it MUST verify that `apn_topic` is set if token_type is APN_TOKEN.
 
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_REGISTRATION_RESPONSE`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION_RESPONSE`.
 
 The payload of the response is:
 
@@ -221,7 +221,7 @@ message ContactCodeAdvertisement {
 ```
 
 ### Handle Advertisement Message:
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
   Otherwise it SHOULD be left empty.
@@ -248,9 +248,9 @@ message PushNotificationQuery {
 ```
 
 ### Handle Query Message:
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY`.
 - it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, [as described above](###query-topic).
-- An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://specs.status.im/spec/5).
+- An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/).
 
 If the server has information about the client a response MUST be sent:
 
@@ -274,7 +274,7 @@ message PushNotificationQueryResponse {
 ```
 
 ### Handle Query Response:
-- A `PushNotificationQueryResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
+- A `PushNotificationQueryResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
 Otherwise a response MUST NOT be sent.
 
 - If `allowed_key_list` is not set `access_token` MUST be set and `allowed_key_list` MUST NOT be set.
@@ -286,7 +286,7 @@ Otherwise a response MUST NOT be sent.
 - If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
 The token SHOULD be used to send push notifications.
 
-- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST NOT be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - On receiving a response a client MUST verify `grant` to ensure that the server has been authorized to send push notification to a given client.
 
@@ -326,7 +326,7 @@ message PushNotificationRequest {
 
 ```
 ### Handle Notification Request:
-- A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_REQUEST`.
+- A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
 
 - Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`. `message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
 
@@ -387,9 +387,9 @@ message PushNotificationResponse {
 Where `message_id` is the `message_id` sent by the client.
 
 ### Handle Notification Response:
-- A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://specs.status.im/spec/6) with type set to `PUSH_NOTIFICATION_RESPONSE`.
+- A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_RESPONSE`.
 
-- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the [secure transport](https://specs.status.im/spec/5) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
 
@@ -447,7 +447,7 @@ Data disclosed
 - The type of notification
 
 ### PushNotificationRequest:
-`requests`: a list of PushNotification `message_id`: the [Status message id](https://specs.status.im/spec/6)
+`requests`: a list of PushNotification `message_id`: the [Status message id](https://rfc.vac.dev/spec/62)
 
 Data disclosed
 - The status `message_id` for which the notification is for
@@ -463,14 +463,14 @@ In order to preserve privacy, the client MAY provide anonymous mode of operation
 A client in anonymous mode can register with the server using a key that is different from their chat key. 
 This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
 
-- A client MAY advertise the access token on the [contact-code topic](https://specs.status.im/spec/6) of the key generated. 
+- A client MAY advertise the access token on the [contact-code topic](https://rfc.vac.dev/spec/62) of the key generated. 
 
 - A client MAY share their public key contact updates in the [protobuf record](https://developers.google.com/protocol-buffers/). 
 
 - A client receiving a push notification public key SHOULD listen to the contact code topic of the push notification public key for updates.
 
 The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. 
-This can be mitigated by [device syncing](https://specs.status.im/spec/6), but not completely addressed.
+This can be mitigated by [device syncing](https://rfc.vac.dev/spec/62), but not completely addressed.
 
 # Security/Privacy Considerations
 If anonymous mode is not used, when registering with a push notification service a client discloses:
@@ -495,16 +495,17 @@ When sending a push notification a client disclose:
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-1. [16/PUSH-NOTIFICATION-SERVER], Andrea Maria Piana, "16/PUSH-NOTIFICATION-SERVER", <https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md> 
-2. "Push Notification", Apple Developer,  <https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1>
-3. "Firebase", Firebase, <https://firebase.google.com/>
-4. "gorush", Appleboy, <https://github.com/appleboy/gorush>
-5. [10/WAKU-USAGE], Adam Babik, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “10/WAKU-USAGE”, May 22, 2020, <https://specs.status.im/spec/10#partitioned-topic>
-6. [62/PAYLOAD], Adam Babik, Andrea Maria Piana, Oskar Thorén, "/spec/62/", <https://rfc.vac.dev/spec/62>
-7. "Protocol Buffers", <https://developers.google.com/protocol-buffers/>
-8. [5/SECURE-TRANSPORT], Andrea Piana, Pedro Pombeiro, Corey Petty, Oskar Thorén, Dean Eigenmann, "5/SECURE-TRANSPORT", May 22, 2020, <https://specs.status.im/spec/5>
-9. [1/CLIENT], Adam Babik, Andrea Maria Piana, Dean Eigenmann, Corey Petty, Oskar Thorén, Samuel Hawksby-Robinson, “1/CLIENT”, May 22, 2020, <https://specs.status.im/spec/1>
-10. [62/PAYLOAD], Adam Babik, Andrea Maria Piana, Oskar Thorén, <https://rfc.vac.dev/spec/62>
+1. [PUSH-NOTIFICATION-SERVER, previous specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
+2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
+3. [Firebase](https://firebase.google.com)
+4. [6/WAKU](https://rfc.vac.dev/spec/6/)
+5. [gorush](https://github.com/appleboy/gorush)
+6. [10/WAKU-USAGE](https://specs.status.im/spec/10#partitioned-topic)
+7. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
+8. [Protocol Buffers](https://developers.google.com/protocol-buffers)
+9. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+10. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
+
 
 
 
