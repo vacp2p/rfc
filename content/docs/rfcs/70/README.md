@@ -99,7 +99,7 @@ XEd448_sign((ik, IK), message):
 ```
 ```
 XEd448_verify(u, message, (R || s)):
-    if (u >= p) or (R.y >= 2^448) or (s >= 2^446): return FALSE
+    if (R.y >= 2^448) or (s >= 2^446): return FALSE
     h = (SHA512(R || 156326 || message)) % q
     R_check = s * convert_mont(5) - h * 156326
     if R == R_check: return TRUE
@@ -168,6 +168,9 @@ RatchetInitAlice(SK, IK_B):
     state.Ns, state.Nr, state.PN = 0
     state.MKSKIPPED = {}
 ```
+The HKDF function MUST be the proposal by [Krawczyk and Eronen](http://www.ietf.org/rfc/rfc5869.txt).
+In this proposal `chaining_key` and `input_key_material` MUST be replaced with `SK` and the output of `DH` (respectively).
+
 Similarly, Bob calls the function `RatchetInitBob()` defined below:
 ```
 RatchetInitBob(SK, (ik_B,IK_B)):
@@ -189,6 +192,11 @@ RatchetEncrypt(state, plaintext, AD):
     state.Ns = state.Ns + 1
 	return header, AES256-GCM_Enc(mk, plaintext, AD || header)
 ```
+The `HEADER` function creates a new message header containing the public key from the key pair output of the `DH`function.  
+It outputs the previous chain length `pn`, and the message number `n`. 
+The returned header object contains ratchet public key `dh` and integers `pn` and `n`.
+
+
 
 ## Decryption
 This function will decrypt incoming messages. One introduces auxiliary functions required.
@@ -232,7 +240,7 @@ RatchetDecrypt(state, header, ciphertext, AD):
         DHRatchet(state, header)
     SkipMessageKeys(state, header.n)
     state.CKr, mk = HMAC-SHA512(state.CKr)
-    state.Nr = State.Nr + 1
+    state.Nr = state.Nr + 1
     return AES256-GCM_Dec(mk, ciphertext, AD || header)
 ```
 
@@ -332,3 +340,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - https://eprint.iacr.org/2022/1389
 - https://github.com/sourav1547/htadkg
 - https://github.com/farcasterxyz/protocol/discussions/99
+- http://www.ietf.org/rfc/rfc5869.txt
