@@ -37,6 +37,10 @@ user
 server
 > A service that performs push notifications.
 
+Waku-Store  
+> A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [WAKU-STORE](https://rfc.vac.dev/spec/13/) specification
+
+
 ### Components:
 
 gorush Instance 
@@ -62,7 +66,8 @@ The party releasing the app MUST run its own [gorush](https://github.com/applebo
 
 ### Sending and Receiving Notification Process:
 
-![image](https://github.com/jimstir/rfc/assets/91767824/b2c66ddf-d13a-4373-9e24-8ad2b5955b86)
+![image](https://github.com/jimstir/rfc/assets/91767824/d7394646-85f7-4741-b777-25d047226d84)
+
 
 ## Registering Client
 Registering a client with a push notification service.
@@ -71,7 +76,7 @@ Registering a client with a push notification service.
 
 - A client SHOULD make sure that all the notification services they registered with have the same information about their tokens.
 
-- A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) for the public key of the node, encrypted with this key.
+- A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](https://rfc.vac.dev/spec/54/) for the public key of the node, encrypted with this key.
 
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
 
@@ -142,7 +147,7 @@ message PushNotificationRegistrationResponse {
 
 ```
 
-A client SHOULD listen for a response sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) that the key used to register. 
+A client SHOULD listen for a response sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) that the key used to register. 
 If success is true the client has registered successfully.
 
 If `success` is `false`:
@@ -164,7 +169,7 @@ If `success` is `false`:
 
 - `request_id` SHOULD be set to the `SHAKE-256` of the encrypted payload.
 
-- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
 
 - If no response is returned, the request SHOULD be considered failed and MAY be retried with the same server or a different one, but clients MUST exponentially backoff after each trial.
 
@@ -226,14 +231,14 @@ message ContactCodeAdvertisement {
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
   Otherwise it SHOULD be left empty.
 
-- This SHOULD be advertised on the [contact code topic](https://specs.status.im/spec/10#contact-code-topic) and SHOULD be coupled with normal contact-code advertisement.
+- This SHOULD be advertised on the [contact code topic](https://rfc.vac.dev/spec/53/) and SHOULD be coupled with normal contact-code advertisement.
 
 - When a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
 
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
 ### Discovering a Server:
-To discover a push notification service for a given user, their [contact code topic](https://specs.status.im/spec/10#contact-code-topic) SHOULD be listened to.
+To discover a push notification service for a given user, their [contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. A Waku-Store node can be queried for the specific topic to retrieve the most up-to-date contact code.
 
 ### Querying a Server:
 If a token is not present in the latest advertisement for a user, the server SHOULD be queried directly.
@@ -286,7 +291,7 @@ Otherwise a response MUST NOT be sent.
 - If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
 The token SHOULD be used to send push notifications.
 
-- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - On receiving a response a client MUST verify `grant` to ensure that the server has been authorized to send push notification to a given client.
 
@@ -389,7 +394,7 @@ Where `message_id` is the `message_id` sent by the client.
 ### Handle Notification Response:
 - A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_RESPONSE`.
 
-- The response MUST be sent on the [partitioned topic](https://specs.status.im/spec/10#partitioned-topic) of the sender and MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
 
@@ -463,7 +468,7 @@ In order to preserve privacy, the client MAY provide anonymous mode of operation
 A client in anonymous mode can register with the server using a key that is different from their chat key. 
 This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
 
-- A client MAY advertise the access token on the [contact-code topic](https://rfc.vac.dev/spec/62) of the key generated. 
+- A client MAY advertise the access token on the [contact-code topic](https://rfc.vac.dev/spec/53/) of the key generated. 
 
 - A client MAY share their public key contact updates in the [protobuf record](https://developers.google.com/protocol-buffers/). 
 
@@ -498,13 +503,12 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 1. [PUSH-NOTIFICATION-SERVER, previous specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
 2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
 3. [Firebase](https://firebase.google.com)
-4. [6/WAKU](https://rfc.vac.dev/spec/6/)
+4. [13/WAKU2-STOR](https://rfc.vac.dev/spec/13/)
 5. [gorush](https://github.com/appleboy/gorush)
-6. [10/WAKU-USAGE](https://specs.status.im/spec/10#partitioned-topic)
+6. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
 7. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
 8. [Protocol Buffers](https://developers.google.com/protocol-buffers)
 9. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
-10. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
 
 
 
