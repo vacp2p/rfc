@@ -40,8 +40,8 @@ The X3DH algorithm provides both authentication and forward secrecy, as stated i
 This protocol will consist of several stages:
 
 1.  Key setting for X3DH: this step will produce prekey bundles for Bob which will be fed into X3DH. It will also allow Alice to generate the keys required to run the X3DH algorithm correctly.
-2.  Execution of X3DH: This step will output a common secret key SK together with an additional data vector AD. Both will be used in the Double Ratchet algorithm initialization.
-3.  Execution of the Double Ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.
+2.  Execution of X3DH: This step will output a common secret key SK together with an additional data vector AD. Both will be used in the double ratchet algorithm initialization.
+3.  Execution of the double ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.
 
 ## Cryptographic functions required
 -   XEd448 for digital signatures involved in the X3DH key generation.
@@ -272,9 +272,9 @@ The function outputs the associated public key from the smart contract.
 
 # Extension to group chat
 
-## 1-to-1 version
+## 1-to-1 version: introduction
 
-In order to extend the protocol to a group chat, this document specifies using an Asynchronous Distributed Key Generation (ADKG) to replace the X3DH step in the previous combination X3DH + Double Ratchet.
+In order to extend the protocol to a group chat, this document specifies using an Asynchronous Distributed Key Generation (ADKG) to replace the X3DH step in the previous combination X3DH + double ratchet.
 
 Distributed Key Generation (DKG) is a method for initiating threshold cryptosystems in a decentralized manner, all without the need for a trusted third party. 
 DKG serves as a fundamental component for numerous decentralized protocols, including systems like randomness beacons, threshold signatures, Byzantine consensus, and multiparty computation.
@@ -311,6 +311,21 @@ Once the double ratchet is initialized,
 the communication in this group is 1-to-1, 
 meaning that group member C cannot see the messages between group members A and B. 
 The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
+
+## 1-to-1 version: integration
+This `ADKG` implementation requires some information that MUST be given by default. 
+In particular: the threshold reconstruction limit `l` is a parameter coming from the organization. Another paramater MUST be a group `G` together with generators `g, h`.
+
+Each node `i` of the prospective group calls the `ADKG` function by providing the secret key `ik_i` and the public keys `IK_j` of the other nodes of the group, for `1 <= j <= n`.
+The public keys MUST be obtained via Ethereum adresses as described in the section [Static data](#static-data).
+
+The output of the `ADKG` algorithm ia a collection `{z(i), g^z, {g^z(j)}_j}`. 
+Here `z(i)` is the `ADKG` secret-key share for node `i`, 
+g^z is the `ADKG` public key, 
+and `{g^z(j)}_j` are the `ADKG` public keys of the other nodes of the group.
+
+Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)` using Lagrange interpolation in the exponent.
+The key `z(0)` MUST be used as `SK` key for the initialization of the double ratchet.
 
 ## n-to-n version
 
