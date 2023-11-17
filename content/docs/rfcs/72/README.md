@@ -49,7 +49,7 @@ version: "0.2",
     }
 
 ```
-# Specification:
+# Specification
 - The keystore is constructed with generated cryptographic constructions with password verification and secret decryption.
 - - A keystore object contains a few modules including metadata, kdf, checksum, and cipher.
 - Each contruct MUST include a keypair in credentials.
@@ -61,7 +61,7 @@ nWakuCredential - follows EIP-2335
 The metadata of the keystore will consist of the declaration of `application`, `version`, and `appIdentifier` being used.
 
 `application` : string </br>
- `version` : string </br>
+`version` : string </br>
 `appIdentifier`: string </br >
 
 ## Credentials:
@@ -79,62 +79,53 @@ As described in 32/RLN-V1
 `identityCredential` : user’s commitments that are stored in a merkle tree.
 Consists of:
 `identity_secret`: `identity_nullifier` + `identity_trapdoor` 
-- identity_nullifier : Random 32 byte value used as component for identity_secret generation.
-- identity_trapdoor : Random 32 byte value used as component for identity_secret generation.
-This hash is created with the poseidonHash Function.
+- `identity_nullifier` : Random 32 byte value used for identity_secret generation.
+- `identity_trapdoor` : Random 32 byte value for identity_secret generation.
 
+`identity_secret_hash`: Created with `identity_secret` as parameter for hash function
+- Used to decrypt the identity commitment of the user, and as a private input for zero knowlegde proof generation.
+The secret hash should be kept private by the user.
 
-### Peer’s identity is composed of:
-identity_secret: identity_nullifier + identity_trapdoor 
-- This hash is created with the poseidonHash Function.
-It is used to obtain the identity commitment of a peer.
-Also used as input for zk proof generation.
-- identity_nullifier =  Random 32 byte value used as component for identity_secret generation.
-- identity_trapdoor = Random 32 byte value used as component for identity_secret generation.
+`identity_commitment`: Created with `identity_secret_hash` as parameter for hash function. 
+Used by users for registering protocol.
 
-identity_secret_hash: poseidonHash(identity_secret)
-- poseidonHash Function = hash function for Zero Knowledge proofs 
-identity_commitment: poseidonHash([identiy_secret_hash])
+### Waku Credential: 
+Waku credential is used for password verification
+nWakuCredential follows EIP-2335 
 
-### Waku IdentityCredential (nWakuCredential):
+- A Keystore credential object SHOULD include:
+- password: used to encrypt keystore, for decryption key
+- Secret: key to be encrypted
+- PubKey: public key
+- Path: HD path used to generate the secret
 
-nWakuCredential - follows EIP-2335 
-- checksum =  Keccak256Hash 
+- checksum: hashing function 
+- cipher: cipher function
 
-EIP Keystore
-- password
-- Secret
-- stubPubKey
-- stubPath
- 
-KDF as Pbkdf2kdf
+### KDF:
+The password based encryption SHOULD be KDF, key derivation function, produces a derived key from a password and other parameters.
+Keystore SHOULD use PBKDF2 password based encryption, as described in RFC 2898
+
 ```js
 	crypto: {
-    		cipher: eipCrypto.cipher.function;
-    		cipherparams: eipCrypto.cipher.params;
-    		ciphertext: eipCrypto.cipher.message;
-    		kdf: eipkdf.function;
-    		kdfparams: eipkdf.params;
-    		mac: checksum; located fromEipToCredential
+    		cipher: cipher.function,
+    		cipherparams: cipher.parameters,
+    		ciphertext: cipher.message,
+    		kdf: kdf.function,
+    		kdfparams: {
+		- param = salt value and iteration count)
+		- dklen= length in octets of derived key, MUST be positive integer
+		- c= iteration count, MUST be positive integer
+		- prf= Underlying pseudorandom function?
+		- salt= produces a large set of keys based on the password.
+		},
+    		mac: checksum
 	}
-
 ```
 	
-- cipherFunction = is poseidonHash implementation, Poseidon paper. 
-- nWaku uses Keccak256 for hash function
-
-## KDF: 
-- KDF, key derivation function, produces a derived key from a base key and other parameters.
-For this specification usesPBKDF2.
-RFC 2898 - Password-Based Cryptography
-- baseKey = password, 
-- param = salt value and iteration count) / is used by RLN to for peer encryption
-dklen= length in octets of derived key, MUST be positive integer
-c= iteration count, MUST be positive integer
-prf= Underlying pseudorandom function?
-salt= produces a large set of keys based on the password. Builds the derived key?
-
 ## Decryption: 
+To decrypt a merkle proof with password and merkle proof PBKDF2.
+Returns secert key.
 
 # Security Considerations:
 - Add a password to membership hash creation. Reason:
