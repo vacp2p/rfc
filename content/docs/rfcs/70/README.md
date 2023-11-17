@@ -324,7 +324,8 @@ The output of the `ADKG` algorithm is a collection `{z(i), g^z, {g^z(j)}_j}`, wh
 - `g^z` is the `ADKG` public key, and 
 - `{g^z(j)}_j` are the `ADKG` public keys of the other nodes of the group.
 
-Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)` using Lagrange interpolation in the exponent.
+Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)`.
+Using Lagrange interpolation in the exponent each user can find the polynomial `z(x)` and compute `z(0)`.
 The key `z(0)` MUST be used as `SK` key for the initialization of the double ratchet.
 
 ## n-to-n version
