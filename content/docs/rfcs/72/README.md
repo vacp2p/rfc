@@ -50,21 +50,21 @@ version: "0.2",
 
 ```
 # Specification:
-- The keystore MUST be in JSON format:
-- 
+- The keystore is constructed with generated cryptographic constructions with password verification and secret decryption.
+- Each module consists of keypair under credentials = key: [MembershipHash]: pair: [nWakuCredential]
+- A keystore object contains a few modules including metadata, kdf, checksum, and cipher.
+nWakuCredential - follows EIP-2335
 
- ## Header Options:
-- application: string;
-- version: string;
-- appIdentifier: string;
 
-## Credentials: 
-- [key: MembershipHash]: nWakuCredential
+## Metadata:
+The metadata of the keystore will consist of the declaration of `application`, `version`, and `appIdentifier` being used.
 
-MembershipHash : Compute MembershipHash
- - The hash SHOULD be created with three values `membershipContract`, `treeIndex`, `identityCredential`
+`application` : string
+`version` : string
+`appIdentifier`: string
+
+## Credentials:
  
- Encode
 - Tree Index = Merkle tree filled with identity commitments of peers.
   COULD be obtained with the leaf_index of identity_commitment.
   RLN membership tree filled with identity commitments of peers, a data structure that ensures peer registrations.
