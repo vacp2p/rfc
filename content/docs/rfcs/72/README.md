@@ -32,11 +32,11 @@ application: "waku-rln-relay",
 appIdentifier: "01234567890abcdef",
 version: "0.2",
   credentials: {
-    "9DB2B4718A97485B9F70F68D1CC19F4E10F0B4CE943418838E94956CB8E57548": {
+    [memeberHash | string]: {
       crypto: {
         cipher: "aes-128-ctr",
         cipherparams: { iv: “ “,  },
-        ciphertext: "",
+        ciphertext: "string",
         kdf: "pbkdf2",
         kdfparams: {
           dklen: interger,
@@ -44,7 +44,7 @@ version: "0.2",
           prf: "hmac-sha256",
           salt: "hash",
         },
-        mac: “Byte 256 Hash",
+        mac: “Byte256 Hash",
       },
     }
 
