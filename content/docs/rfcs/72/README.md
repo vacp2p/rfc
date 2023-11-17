@@ -123,9 +123,12 @@ Keystore SHOULD use PBKDF2 password based encryption, as described in RFC 2898
 	}
 ```
 	
-## Decryption: 
-To decrypt a merkle proof with password and merkle proof PBKDF2.
+### Decryption: 
+To decrypt a merkle proof with password and merkle proof PBKDF2.</br>
 Returns secert key.
+
+### Test Vector:
+Input:
 
 # Security Considerations:
 - Add a password to membership hash creation. Reason:
