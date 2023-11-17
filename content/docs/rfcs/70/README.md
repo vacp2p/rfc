@@ -316,13 +316,13 @@ The fact of defining a room key makes impossible for outsiders to communicate wi
 This `ADKG` implementation requires some information that MUST be given by default. 
 In particular: the threshold reconstruction limit `l` is a parameter coming from the organization. Another paramater MUST be a group `G` together with generators `g, h`.
 
-Each node `i` of the prospective group calls the `ADKG` function by providing the secret key `ik_i` and the public keys `IK_j` of the other nodes of the group, for `1 <= j <= n`.
-The public keys MUST be obtained via Ethereum adresses as described in the section [Static data](#static-data).
+Each node `i` of the prospective group MUST call the `ADKG` function by providing the secret key `ik_i` and the public keys `IK_j` of the other nodes of the group, for `1 <= j <= n`.
+The public keys `IK` MUST be obtained via Ethereum adresses as described in the section [Static data](#static-data).
 
-The output of the `ADKG` algorithm ia a collection `{z(i), g^z, {g^z(j)}_j}`. 
-Here `z(i)` is the `ADKG` secret-key share for node `i`, 
-g^z is the `ADKG` public key, 
-and `{g^z(j)}_j` are the `ADKG` public keys of the other nodes of the group.
+The output of the `ADKG` algorithm is a collection `{z(i), g^z, {g^z(j)}_j}`, where:
+- `z(i)` is the `ADKG` secret-key share for node `i`,
+- `g^z` is the `ADKG` public key, and 
+- `{g^z(j)}_j` are the `ADKG` public keys of the other nodes of the group.
 
 Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)` using Lagrange interpolation in the exponent.
 The key `z(0)` MUST be used as `SK` key for the initialization of the double ratchet.
