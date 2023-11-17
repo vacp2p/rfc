@@ -51,30 +51,38 @@ version: "0.2",
 ```
 # Specification:
 - The keystore is constructed with generated cryptographic constructions with password verification and secret decryption.
-- Each module consists of keypair under credentials = key: [MembershipHash]: pair: [nWakuCredential]
-- A keystore object contains a few modules including metadata, kdf, checksum, and cipher.
-nWakuCredential - follows EIP-2335
+- - A keystore object contains a few modules including metadata, kdf, checksum, and cipher.
+- Each contruct MUST include a keypair in credentials.
+> key: [MembershipHash]: pair: [nWakuCredential]
 
+nWakuCredential - follows EIP-2335
 
 ## Metadata:
 The metadata of the keystore will consist of the declaration of `application`, `version`, and `appIdentifier` being used.
 
-`application` : string
-`version` : string
-`appIdentifier`: string
+`application` : string </br>
+ `version` : string </br>
+`appIdentifier`: string </br >
 
 ## Credentials:
- 
-- Tree Index = Merkle tree filled with identity commitments of peers.
-  COULD be obtained with the leaf_index of identity_commitment.
-  RLN membership tree filled with identity commitments of peers, a data structure that ensures peer registrations.
-### Membership Hash Values
-- membershipContract = (contract - ChainId, contractAddress)
-Peer identity = required by RLN/V1, generate zero-knowlege proof
-- idCommitment: options.identity.IDCommitment
-- idNullifier: options.identity.IDNullifier
-- idSecretHash: options.identity.IDSecretHash
-- idTrapdoor: options.identity.IDTrapdoor
+The Waku RLN credentials consists of a `membershipHash` and `nWakuCredential`
+
+### membershipHash 
+- a 256 byte generated hash of `treeIndex`, `membershipContract`, and `identityCredential`
+
+`treeIndex` : is a Merkle tree filled with identity commitments of peers. 
+RLN membership tree, merkle tree data structure filled with identity commitments of users. 
+As described in 32/RLN-V1
+
+`membershipContract` : consist of a `contractId` and `contractAddress`
+
+`identityCredential` : user’s commitments that are stored in a merkle tree.
+Consists of:
+`identity_secret`: `identity_nullifier` + `identity_trapdoor` 
+- identity_nullifier : Random 32 byte value used as component for identity_secret generation.
+- identity_trapdoor : Random 32 byte value used as component for identity_secret generation.
+This hash is created with the poseidonHash Function.
+
 
 ### Peer’s identity is composed of:
 identity_secret: identity_nullifier + identity_trapdoor 
