@@ -9,7 +9,7 @@ contributors:
 ---
 
 # Abstract
-Encrypted credentials in JSON format stored in a keystore to securely exchange credentials between peers.
+Encrypted credentials stored in a JSON schema to securely exchange credentials between peers.
 
 # Summary
 A keystore is a construct to store a user’s keys. 
