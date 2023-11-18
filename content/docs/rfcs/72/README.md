@@ -94,9 +94,9 @@ nWakuCredential follows EIP-2335
 
 A nWakuCredential object SHOULD include:
 - password: used to encrypt keystore, for decryption key
-- Secret: key to be encrypted
-- PubKey: public key
-- Path: HD, hardened derivation, path used to generate the secret
+- secret: key to be encrypted
+- pubKey: public key
+- path: HD, hardened derivation, path used to generate the secret
 
 - checksum: hashing function 
 - cipher: cipher function
@@ -123,8 +123,12 @@ Keystore COULD use PBKDF2 password based encryption, as described in RFC 2898
 ```
 	
 ### Decryption: 
-The keystore decrypt a merkle proof with password and merkle proof PBKDF2.</br>
-Returns secert key.
+- The keystore decrypt a merkle proof with password and merkle proof PBKDF2.</br>
+- Returns secert key.
+To generate `decryptionKey`, MUST be contructed from password and KDF.
+- The cipher.function encrypts the secret key using the decryption key.
+The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the serect.
+If the `decryptionKey` is longer than the key size required by the cipher, it MUST be truncated to the correct number of bits.
 
 ## Test Vectors
 ### Input:
