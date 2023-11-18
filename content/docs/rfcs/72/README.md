@@ -28,6 +28,7 @@ It will ensure a message rate is being followed in the network while keeping the
 This is an example of a keystore that is used by a Waku RLN Relay.
 
 ```js
+
 application: "waku-rln-relay",
 appIdentifier: "string",
 version: "string",
@@ -49,6 +50,7 @@ version: "string",
     }
 
 ```
+
 # Specification
 The keystore MUST be generated with a cryptographic constructions for password verification and decryption.
 - Keystore modules SHOULD include metadata, key derivation function, checksum, and cipher.
@@ -106,20 +108,22 @@ The password based encryption SHOULD be KDF, key derivation function, which prod
 Keystore COULD use PBKDF2 password based encryption, as described in RFC 2898
 
 ```js
-	crypto: {
-    		cipher: cipher.function,
-    		cipherparams: cipher.parameters,
-    		ciphertext: cipher.message,
-    		kdf: kdf.function,
-    		kdfparams: {
+
+crypto: {
+	cipher: cipher.function,
+	cipherparams: cipher.parameters,
+	ciphertext: cipher.message,
+	kdf: kdf.function,
+	kdfparams: {
 		- param = salt value and iteration count)
 		- dklen= length in octets of derived key, MUST be positive integer
 		- c= iteration count, MUST be positive integer
 		- prf= Underlying pseudorandom function?
 		- salt= produces a large set of keys based on the password.
-		},
-    		mac: checksum
-	}
+	},
+	mac: checksum
+}
+
 ```
 	
 ### Decryption: 
@@ -132,7 +136,7 @@ If the `decryptionKey` is longer than the key size required by the cipher, it MU
 
 ## Test Vectors
 ### Input:
-Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)<br/ >
+Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)<br />
 `application`: "waku-rln-relay" <br />
 `appIdentifier`: "01234567890abcdef" <br />
 `version`: "0.2" <br />
