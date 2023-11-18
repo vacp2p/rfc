@@ -132,7 +132,7 @@ If the `decryptionKey` is longer than the key size required by the cipher, it MU
 
 ## Test Vectors
 ### Input:
-- hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
+Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)<br/ >
 `application`: "waku-rln-relay" <br />
 `appIdentifier`: "01234567890abcdef" <br />
 `version`: "0.2" <br />
