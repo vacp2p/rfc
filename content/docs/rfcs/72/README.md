@@ -14,7 +14,7 @@ Encrypted credentials stored in a JSON schema to securely exchange credentials b
 # Summary
 A keystore is a construct to store a user’s keys. 
 The keys will be encrypted and decrypted based on methods specified in the specification. 
-This keystore uses RLN, Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero knowledge proofs and storing proofs locally in the keystore.
+This keystore specification uses RLN, Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero knowledge proofs and storing the proofs locally in the keystore.
 
 # Background
 A Waku RLN Keystore uses RLN which is a method that uses zero knowledge proofs for anonymous rate-limiting for messaging frameworks.
@@ -71,7 +71,7 @@ MUST be a byte 256 hash generated with `treeIndex`, `membershipContract`, and `i
 
 `treeIndex` : is a Merkle tree filled with identity commitments of users. 
 RLN membership tree, merkle tree data structure filled with identity commitments of users. 
-As described in 32/RLN-V1
+As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
 
 `membershipContract` : MUST be a hash of a `contractId` and `contractAddress`
 
@@ -200,5 +200,8 @@ version: "0.2",
 
 # Security Considerations:
 - Add a password to membership hash creation. Reason:
+
+# References:
+
 
 
