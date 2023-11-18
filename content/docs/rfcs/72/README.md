@@ -67,9 +67,9 @@ Information about the keystore SHOULD be stored in the metadata.
 The Waku RLN credentials consists of a `membershipHash` and `nWakuCredential`
 
 ### membershipHash 
-- a 256 byte generated hash of `treeIndex`, `membershipContract`, and `identityCredential`
+MUST be a byte 256 hash generated with `treeIndex`, `membershipContract`, and `identityCredential`
 
-`treeIndex` : is a Merkle tree filled with identity commitments of peers. 
+`treeIndex` : is a Merkle tree filled with identity commitments of users. 
 RLN membership tree, merkle tree data structure filled with identity commitments of users. 
 As described in 32/RLN-V1
 
