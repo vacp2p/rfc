@@ -9,18 +9,18 @@ contributors:
 ---
 
 # Abstract
-Encrypted credentials stored in a JSON schema to securely exchange credentials between peers.
+Encrypted credentials are stored in a JSON schema to securely exchange credentials between peers.
 
 # Summary
 A keystore is a construct to store a user’s keys. 
 The keys will be encrypted and decrypted based on methods specified in the specification. 
-This keystore specification uses RLN, Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero knowledge proofs and storing the proofs locally in the keystore.
+This keystore specification uses RLN, Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
 
 # Background
-A Waku RLN Keystore uses RLN which is a method that uses zero knowledge proofs for anonymous rate-limiting for messaging frameworks.
-The secure transfer of keys are important in peer to peer messaging applications. 
-RLN help users receive and send messages from trusted parties.
-It will ensure a message rate is being followed in the network while keeping the anonymity of the message owner. 
+A Waku RLN Keystore uses RLN which is a method that uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks.
+The secure transfer of keys is important in peer-to-peer messaging applications. 
+RLN helps users receive and send messages from trusted parties.
+It will ensure a message rate is being followed in the network while keeping the anonymity of the message owner.  
 
 
 ## Example Waku RLN Keystore:
@@ -62,32 +62,33 @@ Information about the keystore SHOULD be stored in the metadata.
 - The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
 `application` : current application </br>
-`version` : string </br>
-`appIdentifier`: string </br >
+`version` : application version </br>
+`appIdentifier`: application identifier </br >
 
 ## Credentials:
-The Waku RLN credentials consists of a `membershipHash` and `nWakuCredential`
+The Waku RLN credentials consist of a `membershipHash` and `nWakuCredential`
 
 ### membershipHash 
-MUST be a byte 256 hash generated with `treeIndex`, `membershipContract`, and `identityCredential`
+MUST be a 256 byte hash generated with `treeIndex`, `membershipContract`, and `identityCredential`
 
 `treeIndex` : is a Merkle tree filled with identity commitments of users. 
-RLN membership tree, merkle tree data structure filled with identity commitments of users. 
+RLN membership tree, Merkle tree data structure filled with identity commitments of users. 
 As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
 
-`membershipContract` : MUST be a hash of a `contractId` and `contractAddress`
+`membershipContract` : MUST be a hash of a `contractId` and `contractAddress`<br />
 
-`identityCredential` : MUST be a hash of user’s commitments that are stored in a merkle tree.
+`identityCredential` : MUST be a hash of user’s commitments that are stored in a Merkle tree.<br />
+
 Consists of:
-`identity_secret`: `identity_nullifier` + `identity_trapdoor` 
+- `identity_secret`: `identity_nullifier` + `identity_trapdoor` 
 - `identity_nullifier` : Random 32 byte value used for identity_secret generation.
 - `identity_trapdoor` : Random 32 byte value for identity_secret generation.
 
-`identity_secret_hash`: Created with `identity_secret` as parameter for hash function
-- Used to decrypt the identity commitment of the user, and as a private input for zero knowlegde proof generation.
+`identity_secret_hash`: Created with `identity_secret` as the parameters for the hash function
+- Used to decrypt the identity commitment of the user, and as a private input for zero-knowledge proof generation.
 The secret hash should be kept private by the user.
 
-`identity_commitment`: Created with `identity_secret_hash` as parameter for hash function. 
+`identity_commitment`: Created with `identity_secret_hash` as a parameter for the hash function. 
 Used by users for registering protocol.
 
 ### Waku Credential: 
@@ -104,7 +105,7 @@ A nWakuCredential object SHOULD include:
 - cipher: cipher function
 
 ### KDF:
-The password based encryption SHOULD be KDF, key derivation function, which produces a derived key from a password and other parameters.
+The password-based encryption SHOULD be KDF, key derivation function, which produces a derived key from a password and other parameters.
 Keystore COULD use PBKDF2 password based encryption, as described in RFC 2898
 
 ```js
@@ -115,11 +116,11 @@ crypto: {
 	ciphertext: cipher.message,
 	kdf: kdf.function,
 	kdfparams: {
-		- param = salt value and iteration count)
-		- dklen= length in octets of derived key, MUST be positive integer
-		- c= iteration count, MUST be positive integer
-		- prf= Underlying pseudorandom function?
-		- salt= produces a large set of keys based on the password.
+		- param: salt value and iteration count
+		- dklen: length in octets of derived key, MUST be positive integer
+		- c: iteration count, MUST be positive integer
+		- prf: Underlying pseudorandom function
+		- salt: produces a large set of keys based on the password.
 	},
 	mac: checksum
 }
@@ -127,11 +128,11 @@ crypto: {
 ```
 	
 ### Decryption: 
-- The keystore decrypt a merkle proof with password and merkle proof PBKDF2.</br>
-- Returns secert key.
-To generate `decryptionKey`, MUST be contructed from password and KDF.
+- The keystore decrypts a keystore with a password and Merkle proof PBKDF2.</br>
+- Returns secret key.
+To generate `decryptionKey`, MUST be constructed from password and KDF.
 - The cipher.function encrypts the secret key using the decryption key.
-The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the serect.
+The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the secret.
 If the `decryptionKey` is longer than the key size required by the cipher, it MUST be truncated to the correct number of bits.
 
 ## Test Vectors
@@ -207,7 +208,11 @@ version: "0.2",
 ```
 
 # Security Considerations:
-- Add a password to membership hash creation. Reason:
+### Add a Password
+An attacker can regenerate a keystore based on a user who registers more than two keystores to the same `membershipContract`. 
+Add a password to the construction of `membershipHash` to prevent this attack. <br />
+Suggested Construct:
+- `membershipHash` = `treeIndex`, `membershipContract`, `identityCredential`, `membershipPassword`
 
 # References:
 
