@@ -312,6 +312,8 @@ the communication in this group is 1-to-1,
 meaning that group member C cannot see the messages between group members A and B. 
 The fact of defining a room key makes impossible for outsiders to communicate with group members if the latter are not willing to.
 
+![Idea_ADKG](https://github.com/vacp2p/rfc/assets/74050285/717fa758-098f-45cf-9300-2165fdf4d05f)
+
 ## 1-to-1 version: integration
 This `ADKG` implementation requires some information that MUST be given by default. 
 In particular: the threshold reconstruction limit `l` is a parameter coming from the organization. Another paramater MUST be a group `G` together with generators `g, h`.
@@ -324,9 +326,13 @@ The output of the `ADKG` algorithm is a collection `{z(i), g^z, {g^z(j)}_j}`, wh
 - `g^z` is the `ADKG` public key, and 
 - `{g^z(j)}_j` are the `ADKG` public keys of the other nodes of the group.
 
-Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)`.
-Using Lagrange interpolation in the exponent each user can find the polynomial `z(x)` and compute `z(0)`.
-The key `z(0)` MUST be used as `SK` key for the initialization of the double ratchet.
+Upon reception of `l + 1` valid messages, each node MUST compute the public key `g^z(0)` using Lagrange interpolation in the exponent.
+
+> Since `g^z(0)` and its shares are public, it may be required to add an encryption and decryption steps in the Key Derivation Phase of the ADKG. 
+In particular, step 52 would require sending an encrypted version of `g^z(i)` and `h^z(i)` to all usrs in the group (together with the pok without modification). 
+Step 55 will require a step 55bis for the decryption of the `KEY` message. 
+The rest of the Phase remains unchanged. 
+This modification is the less invasive with respect to the original proposal but will add more computations leading to a loss of efficiency.
 
 ## n-to-n version
 
@@ -346,7 +352,9 @@ The shared key can be then used in any symmetric encryption scheme, such as AES2
 > Although it is suggested using curve448 for security reasons, the ADKG relies in curve25519. 
 One may be tempted to consider modifying the implementation of the authors to use curve448, but they use the Ristretto algorithm (to avoid potential attacks). 
 Modifying the implementation would imply more problems since Ristretto cannot be applied to curve448. 
-Hence, we should use curve25519 instead of curve448 (it would imply minor changes in our proposal).
+Hence, we should use curve25519 instead of curve448 (it would imply minor changes in our proposal). 
+It will require using SHA256 instead of SHA512. 
+SHA3 is not supported neither by the Noise Framework nor by the digital signatures involved in the X3DH.
 
 # Copyright
 
