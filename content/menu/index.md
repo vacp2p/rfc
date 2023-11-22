@@ -27,6 +27,7 @@ bookMenuLevels: 1
   - [63/STATUS-Keycard-Usage]({{< relref "/docs/rfcs/63/README.md" >}})
   - [64/WAKU2-NETWORK]({{< relref "/docs/rfcs/64/README.md" >}})
   - [66/WAKU2-METADATA]({{< relref "/docs/rfcs/66/README.md" >}})
+  - [71/STATUS-PUSH-NOTIFICATION-SERVER]({{< relref "/docs/rfcs/71/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
@@ -54,7 +55,6 @@ bookMenuLevels: 1
   - [55/STATUS-1TO1-CHAT]({{< relref "/docs/rfcs/55/README.md" >}})
   - [56/STATUS-COMMUNITIES]({{< relref "/docs/rfcs/56/README.md" >}})
   - [65/STATUS-ACCOUNTS]({{< relref "/docs/rfcs/65/README.md" >}})
-  - [71/STATUS-PUSH-NOTIFICATION-SERVER]({{< relref "/docs/rfcs/71/README.md" >}})
 - Stable
   - [2/MVDS]({{< relref "/docs/rfcs/2/README.md" >}})
   - [6/WAKU1]({{< relref "/docs/rfcs/6/README.md" >}})
