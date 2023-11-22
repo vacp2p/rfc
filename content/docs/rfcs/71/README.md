@@ -26,36 +26,26 @@ Since this can not be safely implemented in a privacy-preserving manner, clients
 # Specification
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
 
-### Definitions:
+## Definitions
 
-client 
-> A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). 
+| Terminology  | |
+| --------------- | --------- |
+| client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
+| user | The owner of a device that runs a client. |
+| server | A service that performs push notifications. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
 
-user
-> The owner of a device that runs a client.
+### Server Components 
 
-server
-> A service that performs push notifications.
+| Components | |
+| --------------- | --------- |
+| gorush Instance | Only used by push notification servers and MUST be publicly available.|
+| Push Notification Server | Used by clients to register for receiving and sending notifications. |
+| Registering Client | A client that wants to receive push notifications. |
+| Sending Client | A client that wants to send push notifications. |
 
-Waku-Store  
-> A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [WAKU-STORE](https://rfc.vac.dev/spec/13/) specification
 
-
-### Components:
-
-gorush Instance 
-> Only used by push notification servers and MUST be publicly available.
-
-Push Notification Server
-> Used by clients to register for receiving and sending notifications.
-
-Registering Client
-> A client that wants to receive push notifications.
-
-Sending Client
-> A client that wants to send push notifications.
-
-Requirements:
+### Requirements:
 
 The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. 
 The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).
