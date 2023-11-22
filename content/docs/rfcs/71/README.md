@@ -14,7 +14,8 @@ Push notification server implementation for Android and iOS devices.
 This specification provides a set of methods that allow clients to use push notification services in mobile environments.
 
 # Background
-Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), 
+Push notification for iOS and Android devices can only be implemented by relying on 
+[APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), 
 Apple Push Notification, service for iOS or 
 [Firebase](https://firebase.google.com/) for Android. 
 
@@ -36,7 +37,9 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 | client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
-| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver 
+the messages to requesting clients. 
+Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
 
 ### Server Components 
 
@@ -50,7 +53,8 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 ### Requirements:
 
-The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. 
+The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a 
+[gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. 
 The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).
 
 ## Push Notification Server Flow
@@ -70,7 +74,8 @@ Registering a client with a push notification service.
 
 - A client SHOULD make sure that all the notification services they registered with have the same information about their tokens.
 
-- A `PNR message` (Push Notification Registration) MUST be sent to the [partitioned topic](https://rfc.vac.dev/spec/54/) for the public key of the node, encrypted with this key.
+- A `PNR message` (Push Notification Registration) MUST be sent to the
+[partitioned topic](https://rfc.vac.dev/spec/54/) for the public key of the node, encrypted with this key.
 
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
 
@@ -188,18 +193,22 @@ The grant is built as:<br />
 `Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
 
 ### Unregistering with a Server:
-- To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
-- The server MUST remove all data about this user if `unregistering` is `true`, apart from the `hash` of the public key and the `version` of the last options, in order to make sure that old messages are not processed.
+- To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set
+to `true`, or removing their device information.
+- The server MUST remove all data about this user if `unregistering` is `true`, apart from the `hash` of the public key and
+the `version` of the last options, in order to make sure that old messages are not processed.
 - A client MAY unregister from a server on explicit logout if multiple chat keys are used on a single device.
 
 ### Re-registering with a Server:
 - A client SHOULD re-register with the node if the APN or FIREBASE token changes.
-- When re-registering a client SHOULD ensure that it has the most up-to-date `PushNotificationRegistration` and increment `version` if necessary.
+- When re-registering a client SHOULD ensure that it has the most up-to-date `PushNotificationRegistration` and
+increment `version` if necessary.
 - Once re-registered, a client SHOULD advertise the changes.
 Changing options is handled the same as re-registering.
 
 ### Advertising a Server:
-Each user registered with one or more push notification servers SHOULD advertise periodically the push notification services that they have registered with for each device they own.
+Each user registered with one or more push notification servers 
+SHOULD advertise periodically the push notification services they have registered with for each device they own.
 
 ```protobuf
 message PushNotificationQueryInfo {
@@ -222,12 +231,14 @@ message ContactCodeAdvertisement {
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
   Otherwise it SHOULD be left empty.
-- This SHOULD be advertised on the [contact code topic](https://rfc.vac.dev/spec/53/) and SHOULD be coupled with normal contact-code advertisement.
+- This SHOULD be advertised on the [contact code topic](https://rfc.vac.dev/spec/53/) and
+SHOULD be coupled with normal contact-code advertisement.
 - When a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
 ### Discovering a Server:
-To discover a push notification service for a given user, their [contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. 
+To discover a push notification service for a given user, their 
+[contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. 
 A Waku-Store node can be queried for the specific topic to retrieve the most up-to-date contact code.
 
 ### Querying a Server:
@@ -270,7 +281,8 @@ message PushNotificationQueryResponse {
 ```
 
 ### Handle Query Response:
-- A `PushNotificationQueryResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
+- A `PushNotificationQueryResponse` message MUST be wrapped in a
+[`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
 Otherwise a response MUST NOT be sent.
 
 - If `allowed_key_list` is not set `access_token` MUST be set and `allowed_key_list` MUST NOT be set.
@@ -326,7 +338,8 @@ message PushNotificationRequest {
 
 ```
 ### Handle Notification Request:
-- A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
+- A `PushNotificationRequest` message MUST be wrapped in a
+[`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
 
 - Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`.
 `message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
@@ -339,7 +352,8 @@ after which the request MAY be retried against a different server.
 - This message SHOULD be sent using an ephemeral key.
 
 On receiving the message, the push notification server MUST validate the access token.
-If the access token is valid, a notification MUST be sent to the [gorush](https://github.com/appleboy/gorush) instance with the following data:
+If the access token is valid, a notification MUST be sent to the 
+[gorush](https://github.com/appleboy/gorush) instance with the following data:
 
 ```yaml
 {
@@ -392,7 +406,8 @@ Where `message_id` is the `message_id` sent by the client.
 ### Handle Notification Response:
 - A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_RESPONSE`.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
+MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
 
@@ -408,8 +423,10 @@ Where `message_id` is the `message_id` sent by the client.
 `installation_id`: the `installation_id` of the device.<br />
 `access_token`: the access token that will be given to clients to send push notifications.<br />
 `enabled`: whether the device wants to be sent push notifications.<br />
-`version`: a monotonically increasing number identifying the current `PushNotificationRegistration`. Any time anything is changed in the record it MUST be increased by the client, otherwise the request will not be accepted.<br />
-`allowed_key_list`: a list of `access_token` encrypted with the AES key generated by Diffie–Hellman between the publisher and the allowed contact.<br />
+`version`: a monotonically increasing number identifying the current `PushNotificationRegistration`. 
+Any time anything is changed in the record it MUST be increased by the client, otherwise the request will not be accepted.<br />
+`allowed_key_list`: a list of `access_token` encrypted with the AES key generated by Diffie–Hellman between the publisher and the 
+allowed contact.<br />
 `blocked_chat_list`: a list of `SHA2-256` hashes of chat ids. Any chat id in this list will not trigger a notification.<br />
 `unregister`: whether the account should be unregistered.<br />
 `grant`: the grant for this specific server.<br />
