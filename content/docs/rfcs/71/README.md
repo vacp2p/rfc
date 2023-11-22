@@ -29,7 +29,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 ### Definitions:
 
 client 
-> A node that implements the [Status specification](https://rfc.vac.dev/spec/6/). 
+> A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). 
 
 user
 > The owner of a device that runs a client.
@@ -44,20 +44,21 @@ Waku-Store
 ### Components:
 
 gorush Instance 
-> Only used by push notification servers and MUST be publicly available.<br />
+> Only used by push notification servers and MUST be publicly available.
 
 Push Notification Server
-> Used by clients to register for receiving and sending notifications.<br />
+> Used by clients to register for receiving and sending notifications.
 
 Registering Client
-> A client that wants to receive push notifications.<br />
+> A client that wants to receive push notifications.
 
 Sending Client
-> A client that wants to send push notifications.<br />
+> A client that wants to send push notifications.
 
-Requirements:<br />
+Requirements:
+
 The party releasing the app MUST possess a certificate for the Apple Push Notification service and it MUST run a [gorush](https://github.com/appleboy/gorush) publicly accessible server for sending the actual notification. 
-The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).<br />
+The party releasing the app MUST run its own [gorush](https://github.com/appleboy/gorush).
 
 ## Push Notification Server Flow
 ### Registration Process:
@@ -188,7 +189,7 @@ This is done by building a grant which is specific to a given client-server pair
 When receiving a grant, the server MUST validate that the signature matches the registering client. 
 
 The grant is built as:<br />
-`Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`<br />
+`Signature(Keccak256(CompressedPublicKeyOfClient . CompressedPublicKeyOfServer . AccessToken), PrivateKeyOfClient)`
 
 ### Unregistering with a Server:
 - To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
@@ -254,7 +255,7 @@ message PushNotificationQuery {
 
 ### Handle Query Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY`.
-- it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, [as described above](###query-topic).
+- it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, [as described above](#query-topic).
 - An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/).
 
 If the server has information about the client a response MUST be sent:
@@ -490,7 +491,7 @@ Data disclosed
 
 ### PushNotificationResponse: 
 `message_id`: the `message_id` being notified on.<br />
-`reports`: a list of `PushNotificationReport`.
+`reports`: a list of `PushNotificationReport`
 
 ### PushNotificationReport:
 `success`: whether the push notification was successful.<br />
@@ -535,15 +536,16 @@ When sending a push notification a client disclose:
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-1. [PUSH-NOTIFICATION-SERVER, previous specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
+1. [PUSH-NOTIFICATION-SERVER, Initial Specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
 2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
 3. [Firebase](https://firebase.google.com)
-4. [13/WAKU2-STOR](https://rfc.vac.dev/spec/13/)
-5. [gorush](https://github.com/appleboy/gorush)
-6. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
-7. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
-8. [Protocol Buffers](https://developers.google.com/protocol-buffers)
-9. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+4. [Status Specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md)
+5. [13/WAKU2-STOR](https://rfc.vac.dev/spec/13/)
+6. [gorush](https://github.com/appleboy/gorush)
+7. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+8. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
+9. [Protocol Buffers](https://developers.google.com/protocol-buffers)
+10. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
 
 
 
