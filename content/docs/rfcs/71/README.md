@@ -28,7 +28,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 ## Definitions
 
-| Terminology  | |
+| Terminology  | Description |
 | --------------- | --------- |
 | client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
 | user | The owner of a device that runs a client. |
@@ -37,7 +37,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 ### Server Components 
 
-| Components | |
+| Components | Description |
 | --------------- | --------- |
 | gorush Instance | Only used by push notification servers and MUST be publicly available.|
 | Push Notification Server | Used by clients to register for receiving and sending notifications. |
@@ -158,7 +158,7 @@ If `success` is `false`:
 
 - If the response is successful `success` MUST be set to `true` otherwise a response MUST be sent with `success` set to `false`.
 
-- `request_id` SHOULD be set to the `SHAKE-256` of the encrypted payload.
+- `request_id` SHOULD be set to the [`SHAKE-256`](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf) of the encrypted payload.
 
 - The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
 
@@ -530,12 +530,13 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
 3. [Firebase](https://firebase.google.com)
 4. [Status Specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md)
-5. [13/WAKU2-STOR](https://rfc.vac.dev/spec/13/)
+5. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
 6. [gorush](https://github.com/appleboy/gorush)
 7. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
 8. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
-9. [Protocol Buffers](https://developers.google.com/protocol-buffers)
-10. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+9. [SHAKE-256](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf)
+10. [Protocol Buffers](https://developers.google.com/protocol-buffers)
+11. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
 
 
 
