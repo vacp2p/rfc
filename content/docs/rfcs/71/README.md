@@ -10,10 +10,13 @@ contributors:
 ---
 
 # Abstract
-Push notification server implementation for Android and iOS devices. This specification provides a set of methods that allow clients to use push notification services in mobile environments.
+Push notification server implementation for Android and iOS devices. 
+This specification provides a set of methods that allow clients to use push notification services in mobile environments.
 
 # Background
-Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), Apple Push Notification, service for iOS or [Firebase](https://firebase.google.com/) for Android. 
+Push notification for iOS and Android devices can only be implemented by relying on [APN](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1), 
+Apple Push Notification, service for iOS or 
+[Firebase](https://firebase.google.com/) for Android. 
 
 For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. 
 Apple iOS devices restrict notifications to a few internal functions that every application can not use. 
@@ -33,7 +36,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 | client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
-| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
 
 ### Server Components 
 
@@ -160,9 +163,12 @@ If `success` is `false`:
 
 - `request_id` SHOULD be set to the [`SHAKE-256`](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf) of the encrypted payload.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
+MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
 
-- If no response is returned, the request SHOULD be considered failed and MAY be retried with the same server or a different one, but clients MUST exponentially backoff after each trial.
+- If no response is returned, the request SHOULD be considered failed and
+MAY be retried with the same server or a different one, but clients
+MUST exponentially backoff after each trial.
 
 ## Push Notification Server
 A node that handles receiving and sending push notifications for clients.
@@ -183,16 +189,12 @@ The grant is built as:<br />
 
 ### Unregistering with a Server:
 - To unregister a client MUST send a `PushNotificationRegistration` request as described above with `unregister` set to `true`, or removing their device information.
-
 - The server MUST remove all data about this user if `unregistering` is `true`, apart from the `hash` of the public key and the `version` of the last options, in order to make sure that old messages are not processed.
-
 - A client MAY unregister from a server on explicit logout if multiple chat keys are used on a single device.
 
 ### Re-registering with a Server:
 - A client SHOULD re-register with the node if the APN or FIREBASE token changes.
-
 - When re-registering a client SHOULD ensure that it has the most up-to-date `PushNotificationRegistration` and increment `version` if necessary.
-
 - Once re-registered, a client SHOULD advertise the changes.
 Changing options is handled the same as re-registering.
 
@@ -218,18 +220,15 @@ message ContactCodeAdvertisement {
 
 ### Handle Advertisement Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
-
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
   Otherwise it SHOULD be left empty.
-
 - This SHOULD be advertised on the [contact code topic](https://rfc.vac.dev/spec/53/) and SHOULD be coupled with normal contact-code advertisement.
-
 - When a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
-
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
 ### Discovering a Server:
-To discover a push notification service for a given user, their [contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. A Waku-Store node can be queried for the specific topic to retrieve the most up-to-date contact code.
+To discover a push notification service for a given user, their [contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. 
+A Waku-Store node can be queried for the specific topic to retrieve the most up-to-date contact code.
 
 ### Querying a Server:
 If a token is not present in the latest advertisement for a user, the server SHOULD be queried directly.
@@ -245,7 +244,8 @@ message PushNotificationQuery {
 
 ### Handle Query Message:
 - The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY`.
-- it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying, [as described above](#query-topic).
+- it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying,
+[as described above](#query-topic).
 - An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/).
 
 If the server has information about the client a response MUST be sent:
@@ -279,10 +279,12 @@ Otherwise a response MUST NOT be sent.
 
 - If `access_token` is returned, the `access_token` SHOULD be used to send push notifications.
 
-- If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
+- If `allowed_key_list` are returned, the client SHOULD decrypt each token by generating an `AES-GCM` symmetric key from the Diffie–Hellman between the target client and itself.
+If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
 The token SHOULD be used to send push notifications.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
+MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
 
 - On receiving a response a client MUST verify `grant` to ensure that the server has been authorized to send push notification to a given client.
 
@@ -297,7 +299,9 @@ Sending a push notification
 
 - At least 3 devices SHOULD be targeted, ordered by last activity.
 
-- For any device that a token is available, or that a token is successfully queried, a push notification message SHOULD be sent to the corresponding push notification server.
+- For any device that a token is available, or that
+a token is successfully queried,
+a push notification message SHOULD be sent to the corresponding push notification server.
 
 ```protobuf
 message PushNotification {
@@ -324,15 +328,18 @@ message PushNotificationRequest {
 ### Handle Notification Request:
 - A `PushNotificationRequest` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
 
-- Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`. `message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
+- Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`.
+`message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
 
 - If multiple server are available for a given push notification, only one notification MUST be sent.
 
-- If no response is received a client SHOULD wait at least 3 seconds, after which the request MAY be retried against a different server.
+- If no response is received a client SHOULD wait at least 3 seconds,
+after which the request MAY be retried against a different server.
 
 - This message SHOULD be sent using an ephemeral key.
 
-On receiving the message, the push notification server MUST validate the access token. If the access token is valid, a notification MUST be sent to the [gorush](https://github.com/appleboy/gorush) instance with the following data:
+On receiving the message, the push notification server MUST validate the access token.
+If the access token is valid, a notification MUST be sent to the [gorush](https://github.com/appleboy/gorush) instance with the following data:
 
 ```yaml
 {
@@ -492,7 +499,8 @@ Data disclosed
 ## Anonymous Mode
 In order to preserve privacy, the client MAY provide anonymous mode of operations to propagate information about the user. 
 A client in anonymous mode can register with the server using a key that is different from their chat key. 
-This will hide their real chat key. This public key is effectively a secret and SHOULD only be disclosed to clients approved to notify a user. 
+This will hide their real chat key. This public key is effectively a secret and 
+SHOULD only be disclosed to clients approved to notify a user. 
 
 - A client MAY advertise the access token on the [contact-code topic](https://rfc.vac.dev/spec/53/) of the key generated. 
 
@@ -500,7 +508,8 @@ This will hide their real chat key. This public key is effectively a secret and 
 
 - A client receiving a push notification public key SHOULD listen to the contact code topic of the push notification public key for updates.
 
-The method described above effectively does not share the identity of the sender nor the receiver to the server, but MAY result in missing push notifications as the propagation of the secret is left to the client. 
+The method described above effectively does not share the identity of the sender nor the receiver to the server, but 
+MAY result in missing push notifications as the propagation of the secret is left to the client. 
 This can be mitigated by [device syncing](https://rfc.vac.dev/spec/62), but not completely addressed.
 
 # Security/Privacy Considerations
@@ -516,7 +525,8 @@ A client MAY disclose:
 When running in anonymous mode, the client’s chat key is not disclosed. 
 
 When querying a push notification server a client will disclose:
-- That it is interested in sending push notification to another client, but querying client’s chat key is not disclosed.
+- That it is interested in sending push notification to another client, but
+querying client’s chat key is not disclosed.
 When sending a push notification a client disclose:
 
 - The `shake-256` of the `chat_id`.
