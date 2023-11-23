@@ -14,18 +14,17 @@ Encrypted credentials are stored in a JSON schema to securely exchange credentia
 # Summary
 A keystore is a construct to store a user’s keys. 
 The keys will be encrypted and decrypted based on methods specified in the specification. 
-This keystore specification uses RLN, Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
+This keystore specification uses [58/RLN-V2](https://rfc.vac.dev/spec/58/), Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
 
 # Background
-A Waku RLN Keystore uses RLN which is a method that uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks.
-The secure transfer of keys is important in peer-to-peer messaging applications. 
-RLN helps users receive and send messages from trusted parties.
-It will ensure a message rate is being followed in the network while keeping the anonymity of the message owner.  
-
+The secure transfer of keys is important in peer-to-peer messaging applications.
+A Waku RLN Keystore uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks. 
+Generated credentials by a user are encrypted and stored in the keystore to be retrieved over a network.
+With RLN, sending and receiving messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
 
 ## Example Waku RLN Keystore:
 
-This is an example of a keystore that is used by a Waku RLN Relay.
+This is an example of a keystore used by a [17/WAKU2-RLN-Relay](https://rfc.vac.dev/spec/17/).
 
 ```js
 
@@ -52,27 +51,33 @@ version: "string",
 ```
 
 # Specification
-The keystore MUST be generated with a cryptographic constructions for password verification and decryption.
-- Keystore modules SHOULD include metadata, key derivation function, checksum, and cipher.
-- Each contruct MUST include a keypair:
-> key: [MembershipHash]: pair: [nWakuCredential]
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) and [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174).
+#
+
+The keystore MUST be generated with a cryptographic construction for password verification and decryption.
+- Keystore modules MUST include metadata, key derivation function, checksum, cipher, and a membership hash.
+
 
 ## Metadata:
 Information about the keystore SHOULD be stored in the metadata. 
 - The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
-`application` : current application </br>
-`version` : application version </br>
-`appIdentifier`: application identifier </br >
+`application` : current application
+
+`version` : application version
+
+`appIdentifier`: application identifier
 
 ## Credentials:
-The Waku RLN credentials consist of a `membershipHash` and `nWakuCredential`
+The Waku RLN credentials MUST consist of a `membershipHash` and `nWakuCredential`
+- Each contruct MUST include the keypair:
+> key: [MembershipHash]: pair: [nWakuCredential]
 
 ### membershipHash 
 MUST be a 256 byte hash generated with `treeIndex`, `membershipContract`, and `identityCredential`
 
 `treeIndex` : is a Merkle tree filled with identity commitments of users. 
-RLN membership tree, Merkle tree data structure filled with identity commitments of users. 
+RLN membership tree is a merkle tree data structure filled with identity_commitments of users. 
 As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
 
 `membershipContract` : MUST be a hash of a `contractId` and `contractAddress`<br />
@@ -207,14 +212,21 @@ version: "0.2",
 
 ```
 
-# Security Considerations:
+# Security Considerations
 ### Add a Password
 An attacker can regenerate a keystore based on a user who registers more than two keystores to the same `membershipContract`. 
 Add a password to the construction of `membershipHash` to prevent this attack. <br />
 Suggested Construct:
 - `membershipHash` = `treeIndex`, `membershipContract`, `identityCredential`, `membershipPassword`
 
-# References:
+# Copyright
+Copyright and related rights waived via CC0.
+
+# References
+1. [58/RLN-V2](https://rfc.vac.dev/spec/58/)
+2. [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/)
+3. [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
+4. [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)
 
 
 
