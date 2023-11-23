@@ -27,6 +27,7 @@ bookMenuLevels: 1
   - [63/STATUS-Keycard-Usage]({{< relref "/docs/rfcs/63/README.md" >}})
   - [64/WAKU2-NETWORK]({{< relref "/docs/rfcs/64/README.md" >}})
   - [66/WAKU2-METADATA]({{< relref "/docs/rfcs/66/README.md" >}})
+  - [72/WAKU-RLN-KEYSTORE]({{< relref "/docs/rfcs/72/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
   - [3/REMOTE-LOG]({{< relref "/docs/rfcs/3/README.md" >}})
