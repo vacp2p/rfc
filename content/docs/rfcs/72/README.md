@@ -72,7 +72,7 @@ Keystore modules MUST include metadata, key derivation function, checksum, ciphe
 ## Credentials:
 The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`
 - Each contruct MUST include the keypair:
-> key: [MembershipHash]: pair: [WakuCredential]
+> key: [membershipHash]: pair: [WakuCredential]
 
 ### membershipHash 
 - MUST be a 256 byte hash.
@@ -122,13 +122,14 @@ Keystore COULD use PBKDF2 password based encryption,
 as described in [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt).
 
 A `WakuCredential` object MUST include:
-- password: used to encrypt keystore and decryption key
-- secret: key to be encrypted
-- pubKey: public key
-- path: HD, hardened derivation, path used to generate the secret
-
-- checksum: hashing function 
-- cipher: cipher function
+| Name | Description  |
+|----|-----|
+| password | used to encrypt keystore and decryption key |
+| secret | key to be encrypted |
+| pubKey | public key |
+| path | HD, hardened derivation, path used to generate the secret |
+| checksum | hashing function | 
+| cipher | cipher function |
 
 ```js
 
