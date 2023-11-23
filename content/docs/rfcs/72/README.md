@@ -14,13 +14,13 @@ Encrypted credentials are stored in a JSON schema to securely exchange credentia
 # Summary
 A keystore is a construct to store a user’s keys. 
 The keys will be encrypted and decrypted based on methods specified in the specification. 
-This keystore specification uses [58/RLN-V2](https://rfc.vac.dev/spec/58/), Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
+This keystore specification uses [32/RLN-V1](https://rfc.vac.dev/spec/32/), Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
 
 # Background
 The secure transfer of keys is important in peer-to-peer messaging applications.
 A Waku RLN Keystore uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks. 
 Generated credentials by a user are encrypted and stored in the keystore to be retrieved over a network.
-With RLN, sending and receiving messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
+With [32/RLN-V1](https://rfc.vac.dev/spec/32/), sending and receiving messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
 
 ## Example Waku RLN Keystore:
 
@@ -32,19 +32,19 @@ application: "waku-rln-relay",
 appIdentifier: "string",
 version: "string",
   credentials: {
-    [memeberHash | string]: {
+    ["memberHash | string"]: {
       crypto: {
         cipher: "string",
-        cipherparams: { object  },
+        cipherparams: { object },
         ciphertext: "string",
-        kdf: "pbkdf2",
+        kdf: "pbkdf2 | string",
         kdfparams: {
           dklen: interger,
           c: interger,
           prf: "string",
           salt: "string",
         },
-        mac: “string",
+        mac: “SHA 256 Hash | string",
       },
     }
 
@@ -55,11 +55,12 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 #
 
 The keystore MUST be generated with a cryptographic construction for password verification and decryption.
-- Keystore modules MUST include metadata, key derivation function, checksum, cipher, and a membership hash.
+
+Keystore modules MUST include metadata, key derivation function, checksum, cipher, and a membership hash.
 
 
 ## Metadata:
-Information about the keystore SHOULD be stored in the metadata. 
+- Information about the keystore SHOULD be stored in the metadata. 
 - The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
 `application` : current application
@@ -69,49 +70,65 @@ Information about the keystore SHOULD be stored in the metadata.
 `appIdentifier`: application identifier
 
 ## Credentials:
-The Waku RLN credentials MUST consist of a `membershipHash` and `nWakuCredential`
+The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`
 - Each contruct MUST include the keypair:
-> key: [MembershipHash]: pair: [nWakuCredential]
+> key: [MembershipHash]: pair: [WakuCredential]
 
 ### membershipHash 
-MUST be a 256 byte hash generated with `treeIndex`, `membershipContract`, and `identityCredential`
+- MUST be a 256 byte hash.
+- SHOULD be generated with `treeIndex`, `membershipContract`, and `identityCredential`.
+- MUST not already exist in the keystore.
 
-`treeIndex` : is a Merkle tree filled with identity commitments of users. 
-RLN membership tree is a merkle tree data structure filled with identity_commitments of users. 
+`treeIndex` : 
+- it MUST be a RLN membership tree index in a merkle tree data structure filled with `identity_commitment` from user registrations.
 As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
+- MUST be integer
 
-`membershipContract` : MUST be a hash of a `contractId` and `contractAddress`<br />
+`membershipContract` : 
+- it MUST be a hash of a `contractId` and `contractAddress`
+- `contractId` MUST be an integer.
+- `contractAddess` MUST be a string.
 
-`identityCredential` : MUST be a hash of user’s commitments that are stored in a Merkle tree.<br />
+`identityCredential` : 
+- it MUST be a hash of `identity_commitment` stored in a Merkle tree.
+- MUST be a string.
 
-Consists of:
+it MUST Consists of:
 - `identity_secret`: `identity_nullifier` + `identity_trapdoor` 
-- `identity_nullifier` : Random 32 byte value used for identity_secret generation.
-- `identity_trapdoor` : Random 32 byte value for identity_secret generation.
+  - `identity_nullifier` : Random 32 byte value used for `identity_secret` generation.
+  - `identity_trapdoor` : Random 32 byte value for `identity_secret` generation.
 
-`identity_secret_hash`: Created with `identity_secret` as the parameters for the hash function
-- Used to decrypt the identity commitment of the user, and as a private input for zero-knowledge proof generation.
-The secret hash should be kept private by the user.
+`identity_secret_hash`: 
+- it MUST be created with `identity_secret` as a parameter for the hash function.
+- Used to decrypt the `identity_commitment` of the user, and as
+a private input for zero-knowledge proof generation.
+- The secret hash SHOULD be kept private by the user.
 
-`identity_commitment`: Created with `identity_secret_hash` as a parameter for the hash function. 
-Used by users for registering protocol.
+`identity_commitment`: 
+- it MUST be created with `identity_secret_hash` for hash creation. 
+- MUST be used by a user for contract registering.
 
 ### Waku Credential: 
-nWakuCredential MUST be used for password verification
-nWakuCredential follows EIP-2335 
+`WakuCredential` MUST be used for password verification.
 
-A nWakuCredential object SHOULD include:
-- password: used to encrypt keystore, for decryption key
+`WakuCredential` follows [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335) 
+
+
+### KDF:
+
+The password-based encryption SHOULD be KDF, key derivation function, 
+to produce a derived key from a password and other parameters.
+Keystore COULD use PBKDF2 password based encryption, 
+as described in [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt).
+
+A `WakuCredential` object MUST include:
+- password: used to encrypt keystore and decryption key
 - secret: key to be encrypted
 - pubKey: public key
 - path: HD, hardened derivation, path used to generate the secret
 
 - checksum: hashing function 
 - cipher: cipher function
-
-### KDF:
-The password-based encryption SHOULD be KDF, key derivation function, which produces a derived key from a password and other parameters.
-Keystore COULD use PBKDF2 password based encryption, as described in RFC 2898
 
 ```js
 
@@ -133,16 +150,18 @@ crypto: {
 ```
 	
 ### Decryption: 
-- The keystore decrypts a keystore with a password and Merkle proof PBKDF2.</br>
+- The keystore decrypts a keystore with a password and Merkle proof with PBKDF2.</br>
 - Returns secret key.
 To generate `decryptionKey`, MUST be constructed from password and KDF.
 - The cipher.function encrypts the secret key using the decryption key.
-The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the secret.
-If the `decryptionKey` is longer than the key size required by the cipher, it MUST be truncated to the correct number of bits.
+- The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the secret.
+- If the `decryptionKey` is longer than the key size required by the cipher,
+it MUST be truncated to the correct number of bits.
 
 ## Test Vectors
 ### Input:
-Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)<br />
+Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
+
 `application`: "waku-rln-relay" <br />
 `appIdentifier`: "01234567890abcdef" <br />
 `version`: "0.2" <br />
@@ -213,11 +232,14 @@ version: "0.2",
 ```
 
 # Security Considerations
-### Add a Password
-An attacker can regenerate a keystore based on a user who registers more than two keystores to the same `membershipContract`. 
-Add a password to the construction of `membershipHash` to prevent this attack. <br />
+### 1.) Add a Password
+
+An attacker can regenerate a keystore based on a user who registers to more than one keystore on the same `membershipContract`. 
+Suggest Solution : Add a password to the construction of `membershipHash` to prevent this attack.
+
 Suggested Construct:
-- `membershipHash` = `treeIndex`, `membershipContract`, `identityCredential`, `membershipPassword`
+- `membershipHash` SHOULD be contructed with `treeIndex`, `membershipContract`, `identityCredential`, `membershipPassword`
+	- `membershipPassword` = a new password created and stored privately by the user.
 
 # Copyright
 Copyright and related rights waived via CC0.
@@ -227,6 +249,8 @@ Copyright and related rights waived via CC0.
 2. [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/)
 3. [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
 4. [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)
+5. [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335)
+6. [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt)
 
 
 
