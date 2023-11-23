@@ -530,8 +530,7 @@ MAY result in missing push notifications as the propagation of the secret is lef
 This can be mitigated by [device syncing](https://rfc.vac.dev/spec/62), but not completely addressed.
 
 # Security/Privacy Considerations
-If anonymous mode is not used, when registering with a push notification service a client discloses:
-
+If anonymous mode is not used, when registering with a push notification service a client will disclose:
 - The devices that will receive notifications.
 
 - The chat key.
@@ -544,8 +543,8 @@ When running in anonymous mode, the client’s chat key is not disclosed.
 When querying a push notification server a client will disclose:
 - That it is interested in sending push notification to another client, but
 querying client’s chat key is not disclosed.
-When sending a push notification a client disclose:
 
+When sending a push notification a client will disclose:
 - The `shake-256` of the `chat_id`.
 
 # Copyright
