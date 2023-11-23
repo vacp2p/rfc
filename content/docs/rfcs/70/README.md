@@ -339,9 +339,43 @@ This modification is the less invasive with respect to the original proposal but
 Using the above approach leads to a situation where a group of users can set a group for 1-to-1 messages,
 meaning that any group member external to a communication between any other two members will not be able to read the contents of the messages.
 
-An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using asynchronous ratcheting trees, as suggested in the proposal from [Cohn-Gordon et al.](https://eprint.iacr.org/2017/666) where a group of people can derive a shared secret key even in the event of if no two users are ever online at the same time. 
-The proposal suggested provides both forward secrecy and post-compromise security. 
-The shared key can be then used in any symmetric encryption scheme, such as AES256.
+An approach to generalize this situation to the setting of a group of users exchanging messages without any kind of restriction is using the protocol TreeKEM.
+TreeKEM is a cryptographic protocol designed for securely managing and distributing symmetric keys within a group. 
+It is particularly useful in scenarios where one has a hierarchical group structure, such as in group messaging or access control systems.
+The protocol operates by constructing a tree-like structure where each user holds a keypair together with a symmetric secret. 
+This tree structure facilitates efficient key distribution and independent updates within the group. 
+It is based on the concept of a key encapsulation mechanism, allowing for secure key exchange and encryption among group members while ensuring forward secrecy and scalability.
+The protocol provides both forward-secrecy and post-compromise security.
+
+![treeKEM](https://github.com/vacp2p/rfc/assets/74050285/64f685ad-fdf1-4ec2-8558-04357b3baddd)
+
+In the above figure the symmetric group key is `sG`.
+The keys `sE` and `sF` are secret and unknown to users B and D respectively.
+
+TreeKEM allows users to update their key pairs.
+We show this in the following example, using the above figure as a guide. The user C wants to update his keys. 
+To do so C computes a new key pair `pk'_C; sk'_C` and derives a symmetric secret `s'_C = KDF(sk'_C)`. 
+User C is also required to update nodes from his leaf to the root: 
+- `s'_F = KDF(s'_C)`
+- `s'_G = KDF(s'_F)`
+
+The KDF function MUST be SHA256.
+
+User C needs to compute the following encryptions and provide other users with them:
+- `c_A = Enc(pk_D, s'_G)`
+- `c_B = Enc(pk_B, s'_G)`
+- `c_D = Enc(pk_A, s'_F)`
+
+The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of the group.
+The symmetric algorithm MUST be `AES256-CBC`.
+
+> One observes that the solution based on TreeKEM makes the combination ADKG + DR obsolete.
+> TreeKEM can manage the situation of a user associated to several devices. 
+There are two approaches:
+> - Providing each device with a set of keys and including it in the tree as separate leaf.
+This corresponds to session `NM` [here](https://rfc.vac.dev/spec/37/).
+> - Allowing a synchronization of keys so all devices appear as a single leaf.
+This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
 
 # Privacy and Security Considerations
 
