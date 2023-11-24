@@ -344,17 +344,21 @@ TreeKEM is a cryptographic protocol designed for securely managing and distribut
 It is particularly useful in scenarios where one has a hierarchical group structure, such as in group messaging or access control systems.
 The protocol operates by constructing a tree-like structure where each user holds a keypair together with a symmetric secret. 
 This tree structure facilitates efficient key distribution and independent updates within the group. 
-It is based on the concept of a key encapsulation mechanism, allowing for secure key exchange and encryption among group members while ensuring forward secrecy and scalability.
-The protocol provides both forward-secrecy and post-compromise security.
+It is based on the concept of a key encapsulation mechanism, allowing for secure key exchange and encryption among group members.
 
 ![treeKEM](https://github.com/vacp2p/rfc/assets/74050285/64f685ad-fdf1-4ec2-8558-04357b3baddd)
 
 In the above figure the symmetric group key is `sG`.
 The keys `sE` and `sF` are secret and unknown to users B and D respectively.
 
-TreeKEM allows users to update their key pairs.
-We show this in the following example, using the above figure as a guide. The user C wants to update his keys. 
-To do so C computes a new key pair `pk'_C; sk'_C` and derives a symmetric secret `s'_C = KDF(sk'_C)`. 
+TreeKEM allows the following operations:
+- Key updating.
+- User addition and removal.
+- Concurrent operations.
+
+We show how keys updating works in the following example, using the above figure as a guide. 
+User C wants to update his keys, 
+so computes a new key pair `pk'_C; sk'_C` and derives a symmetric secret `s'_C = KDF(sk'_C)`. 
 User C is also required to update nodes from his leaf to the root: 
 - `s'_F = KDF(s'_C)`
 - `s'_G = KDF(s'_F)`
@@ -362,9 +366,9 @@ User C is also required to update nodes from his leaf to the root:
 The KDF function MUST be SHA256.
 
 User C needs to compute the following encryptions and provide other users with them:
-- `c_A = Enc(pk_D, s'_G)`
+- `c_A = Enc(pk_A, s'_G)`
 - `c_B = Enc(pk_B, s'_G)`
-- `c_D = Enc(pk_A, s'_F)`
+- `c_D = Enc(pk_D, s'_F)`
 
 The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of the group.
 The symmetric algorithm MUST be `AES256-CBC`.
@@ -374,7 +378,7 @@ The symmetric algorithm MUST be `AES256-CBC`.
 There are two approaches:
 > - Providing each device with a set of keys and including it in the tree as separate leaf.
 This corresponds to session `NM` [here](https://rfc.vac.dev/spec/37/).
-> - Allowing a synchronization of keys so all devices appear as a single leaf.
+> - Allowing the synchronization of keys so all devices appear as a single leaf.
 This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
 
 # Privacy and Security Considerations
@@ -383,6 +387,12 @@ This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
 - One SHOULD include event logs to track changes in public keys.
 - The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
+- In order to avoid forward-secrecy related issues in TreeKEM users MUST upgrade keypairs frequently.
+
+> Need to define the concept "frequent".
+
+> Another approach for treeKEM could be using updatable public-key encryption.
+
 > Although it is suggested using curve448 for security reasons, the ADKG relies in curve25519. 
 One may be tempted to consider modifying the implementation of the authors to use curve448, but they use the Ristretto algorithm (to avoid potential attacks). 
 Modifying the implementation would imply more problems since Ristretto cannot be applied to curve448. 
