@@ -37,9 +37,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 | client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
-| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver 
-the messages to requesting clients. 
-Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
 
 ### Server Components 
 
@@ -60,11 +58,11 @@ The party releasing the app MUST run its own [gorush](https://github.com/applebo
 ## Push Notification Server Flow
 ### Registration Process:
 
-![image](https://github.com/jimstir/rfc/assets/91767824/00cae4bf-6eb5-4e7b-9377-3a5d01b041a1)
+![registration](../../../../static/rfcs/71/registration.png)
 
 ### Sending and Receiving Notification Process:
 
-![image](https://github.com/jimstir/rfc/assets/91767824/d7394646-85f7-4741-b777-25d047226d84)
+![notification](../../../../static/rfcs/71/notification.png)
 
 
 ## Registering Client
