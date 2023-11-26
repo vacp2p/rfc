@@ -135,15 +135,17 @@ A `WakuCredential` object MUST include:
 
 crypto: {
 	cipher: cipher.function,
-	cipherparams: cipher.parameters,
+	cipherparams: {
+		- cipher.parameters
+	}
 	ciphertext: cipher.message,
 	kdf: kdf.function,
 	kdfparams: {
-		- param: salt value and iteration count
-		- dklen: length in octets of derived key, MUST be positive integer
-		- c: iteration count, MUST be positive integer
-		- prf: Underlying pseudorandom function
-		- salt: produces a large set of keys based on the password.
+		param: salt value and iteration count,
+		dklen: length in octets of derived key, MUST be positive integer,
+		c: iteration count, MUST be positive integer,
+		prf: Underlying pseudorandom function,
+		salt: produces a large set of keys based on the password
 	},
 	mac: checksum
 }
