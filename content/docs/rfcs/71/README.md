@@ -34,7 +34,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 | Terminology  | Description |
 | --------------- | --------- |
-| client | A node that implements the [Status specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md). |
+| client | A node that implements the Status specifications. |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
 | Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
@@ -553,14 +553,13 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 1. [PUSH-NOTIFICATION-SERVER, Initial Specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
 2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
 3. [Firebase](https://firebase.google.com)
-4. [Status Specification](https://github.com/status-im/specs/blob/master/docs/spec/1-client.md)
-5. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
-6. [gorush](https://github.com/appleboy/gorush)
-7. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
-8. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
-9. [SHAKE-256](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf)
-10. [Protocol Buffers](https://developers.google.com/protocol-buffers)
-11. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+4. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+5. [gorush](https://github.com/appleboy/gorush)
+6. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+7. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
+8. [SHAKE-256](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf)
+9. [Protocol Buffers](https://developers.google.com/protocol-buffers)
+10. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
 
 
 
