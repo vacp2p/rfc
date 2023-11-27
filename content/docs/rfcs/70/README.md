@@ -348,7 +348,7 @@ It is based on the concept of a key encapsulation mechanism, allowing for secure
 
 ![treeKEM](https://github.com/vacp2p/rfc/assets/74050285/64f685ad-fdf1-4ec2-8558-04357b3baddd)
 
-In the above figure the symmetric group key is `sG`.
+In the above figure the group symmetric key is `sG`.
 The keys `sE` and `sF` are secret and unknown to users B and D respectively.
 
 TreeKEM allows the following operations:
@@ -360,10 +360,8 @@ We show how keys updating works in the following example, using the above figure
 User C wants to update his keys, 
 so computes a new key pair `pk'_C; sk'_C` and derives a symmetric secret `s'_C = KDF(sk'_C)`. 
 User C is also required to update nodes from his leaf to the root: 
-- `s'_F = KDF(s'_C)`
-- `s'_G = KDF(s'_F)`
-
-The KDF function MUST be SHA256.
+- `s'_F = SHA256(s'_C)`
+- `s'_G = SHA256(s'_F)`
 
 User C needs to compute the following encryptions and provide other users with them:
 - `c_A = Enc(pk_A, s'_G)`
@@ -386,19 +384,14 @@ This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
 - The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
-- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
-- In order to avoid forward-secrecy related issues in TreeKEM users MUST upgrade keypairs frequently.
-
-> Need to define the concept "frequent".
-
-> Another approach for treeKEM could be using updatable public-key encryption.
-
 > Although it is suggested using curve448 for security reasons, the ADKG relies in curve25519. 
 One may be tempted to consider modifying the implementation of the authors to use curve448, but they use the Ristretto algorithm (to avoid potential attacks). 
 Modifying the implementation would imply more problems since Ristretto cannot be applied to curve448. 
 Hence, we should use curve25519 instead of curve448 (it would imply minor changes in our proposal). 
 It will require using SHA256 instead of SHA512. 
 SHA3 is not supported neither by the Noise Framework nor by the digital signatures involved in the X3DH.
+- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
+- In order to improve forward-secrecy in TreeKEM users MUST use an updatable public-key encryption scheme.
 
 # Copyright
 
@@ -413,3 +406,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - https://github.com/sourav1547/htadkg
 - https://github.com/farcasterxyz/protocol/discussions/99
 - http://www.ietf.org/rfc/rfc5869.txt
+- https://eprint.iacr.org/2022/1389
+- https://inria.hal.science/hal-02425247/file/treekem%20(1).pdf
+- https://eprint.iacr.org/2019/1189.pdf
