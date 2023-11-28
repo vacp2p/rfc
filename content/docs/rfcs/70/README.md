@@ -334,6 +334,34 @@ Step 55 will require a step 55bis for the decryption of the `KEY` message.
 The rest of the Phase remains unchanged. 
 This modification is the less invasive with respect to the original proposal but will add more computations leading to a loss of efficiency.
 
+## Updatable public-key encryption
+
+An updatable public-key encryption (UPKE) is given by set of three algorithms:
+- `PKEG`: it receives a secret key `sk_0` and outputs a fresh initial public key `pk_0`.
+- `Enc`: it receives a message to encrypt `m` together with a public key `pk` and outputs a ciphertext `c` together with a new public key `pk'`
+- `Dec`: it receives a secret key `sk` and a ciphertext `c` and outputs a message m and a new secret key `sk′`.
+
+Below follows a construction introduced in the paper by [Alwen et al.](https://eprint.iacr.org/2019/1189).
+We adapt the notation to the Noise framework:
+
+```
+PKEG():
+sk = random(q)
+return pk = g^sk
+```
+```
+Enc(pk, m):
+(r, delta) = random(q)
+ciphertext = (g^r, SHA256(pk^r) xor concatenate(m, delta))
+return (ciphertext, pk * g^delta)
+```
+```
+Dec(sk, (c_1, c_2)):
+concatenate(m, delta) = SHA256(c_1^sk) xor c_2
+sk' = (sk + delta) % q
+return (m, sk')
+```
+
 ## n-to-n version
 
 Using the above approach leads to a situation where a group of users can set a group for 1-to-1 messages,
@@ -364,9 +392,9 @@ User C is also required to update nodes from his leaf to the root:
 - `s'_G = SHA256(s'_F)`
 
 User C needs to compute the following encryptions and provide other users with them:
-- `c_A = Enc(pk_A, s'_G)`
-- `c_B = Enc(pk_B, s'_G)`
-- `c_D = Enc(pk_D, s'_F)`
+- `c_A = UPEK(pk_A, s'_G)`
+- `c_B = UPEK(pk_B, s'_G)`
+- `c_D = UPEK(pk_D, s'_F)`
 
 The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of the group.
 The symmetric algorithm MUST be `AES256-CBC`.
@@ -391,7 +419,7 @@ Hence, we should use curve25519 instead of curve448 (it would imply minor change
 It will require using SHA256 instead of SHA512. 
 SHA3 is not supported neither by the Noise Framework nor by the digital signatures involved in the X3DH.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
-- In order to improve forward-secrecy in TreeKEM users MUST use an updatable public-key encryption scheme.
+- In order to improve forward-secrecy in TreeKEM users MUST use a UPKE scheme.
 
 # Copyright
 
