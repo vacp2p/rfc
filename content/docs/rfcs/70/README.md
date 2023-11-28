@@ -341,26 +341,28 @@ An updatable public-key encryption (UPKE) is given by set of three algorithms:
 - `Enc`: it receives a message to encrypt `m` together with a public key `pk` and outputs a ciphertext `c` together with a new public key `pk'`
 - `Dec`: it receives a secret key `sk` and a ciphertext `c` and outputs a message m and a new secret key `sk′`.
 
-Below follows a construction introduced in the paper by [Alwen et al.](https://eprint.iacr.org/2019/1189).
+Below follows a construction introduced in the paper by [Alwen et al](https://eprint.iacr.org/2019/1189).
+Here `g` is a generator of a group `G` of prime order `q`.
 We adapt the notation to the Noise framework:
 
 ```
 PKEG():
-sk = random(q)
-return pk = g^sk
+(pk, sk) = GENERATE_KEYPAIR(curve = curve25519)
+return (pk, sk)
 ```
 ```
 Enc(pk, m):
 (r, delta) = random(q)
-ciphertext = (g^r, SHA256(pk^r) xor concatenate(m, delta))
-return (ciphertext, pk * g^delta)
+ciphertext = (g * r, SHA256(pk * r) xor (m || delta))
+return (ciphertext, pk + g * delta)
 ```
 ```
 Dec(sk, (c_1, c_2)):
-concatenate(m, delta) = SHA256(c_1^sk) xor c_2
+m || delta = SHA256(c_1 * sk) xor c_2
 sk' = (sk + delta) % q
 return (m, sk')
 ```
+> We are adapting the proposal from [Alwen et al](https://eprint.iacr.org/2019/1189) to the setting of elliptic curves. 
 
 ## n-to-n version
 
@@ -392,9 +394,9 @@ User C is also required to update nodes from his leaf to the root:
 - `s'_G = SHA256(s'_F)`
 
 User C needs to compute the following encryptions and provide other users with them:
-- `c_A = UPEK(pk_A, s'_G)`
-- `c_B = UPEK(pk_B, s'_G)`
-- `c_D = UPEK(pk_D, s'_F)`
+- `c_A = UPKE(pk_A, s'_G)`
+- `c_B = UPKE(pk_B, s'_G)`
+- `c_D = UPKE(pk_D, s'_F)`
 
 The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of the group.
 The symmetric algorithm MUST be `AES256-CBC`.
