@@ -4,12 +4,16 @@ title: 28/STATUS-FEATURING
 name: Status community featuring using waku v2
 status: raw
 tags: waku-application
-editor: Szymon Szlachtowicz <szymon.s@ethworks.io>
+editor: Jimmy Debe <jimmy@status.im>
+contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
-This spec is a proposition of voting on community featuring over waku v2.
+# Abstract
 
-# Overview
+To gain new members, 
+current users can vote to feature an active Status community to the larger Status audience.
+
+# Background
 
 When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience.
 Status community curation DApp should provide such a tool.
