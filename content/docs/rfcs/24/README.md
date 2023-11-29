@@ -10,7 +10,7 @@ contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 
 # Abstract
 A voting protocol for peers to submit votes to a smart contract. 
-Completed voting will be immutable avoiding sabotage from malicious peers.
+Voting is immutable, which helps avoid sabotage from malicious peers.
 
 # Motivation
 
