@@ -10,7 +10,6 @@ contributors:
 ---
 
 # Abstract
-Push notification server implementation for Android and iOS devices. 
 This specification provides a set of methods that allow clients to use push notification services in mobile environments.
 
 # Background
