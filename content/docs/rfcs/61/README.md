@@ -4,13 +4,17 @@ title: 61/STATUS-Community-History-Archives
 name: Status Community History Archives
 status: raw
 category: Standards Track
-editor: r4bbit <r4bbit@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - John Lea <john@status.im>
+  - r4bbit <r4bbit@status.im>
 ---
 
 # Abstract
+Describes how new members of a Status community can request historical messages from nodes that archive old data specifically for communities.
+
+# Background
 
 Messages are stored permanently by store nodes ([13/WAKU2-STORE](/spec/13/)) for up to a certain configurable period of time, limited by the overall storage provided by a store node.
 Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. 
