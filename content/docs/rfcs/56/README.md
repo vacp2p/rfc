@@ -12,8 +12,7 @@ contributors:
 
 # Abstract
 
-This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. 
-This is a key feature for the Status messaging app. 
+Describes how Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application. 
 
 # Background and Motivation
 
