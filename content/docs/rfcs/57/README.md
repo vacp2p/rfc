@@ -5,24 +5,24 @@ name: Status Simple Scaling
 status: raw
 category: Informational
 tags: waku/application
-editor: Daniel Kaiser <danielkaiser@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Alvaro Revuelta <alrevuelta@status.im>
+- Daniel Kaiser <danielkaiser@status.im>
 ---
 
 # Abstract
 
 This document describes how to scale [56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/)
 using existing Waku v2 protocols and components.
-It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
+
+# Background and Motivation
 
 > *Note:* (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components
 in a way that aligns better with our principles of decentralization and protecting anonymity.
 This document informs about scaling at the current stage of research and shows it is practically possible.
 Practical feasibility is also a core goal for us.
 We believe in incremental improvement, i.e. having a working decentralized scaling solution with trade-offs is better than a fully centralized solution.
-
-# Background and Motivation
 
 [56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/) use Waku v2 protocols.
 Both use Waku content topics (see [23/WAKU2-TOPICS](/spec/23/)) for content based filtering.
