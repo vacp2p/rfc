@@ -5,19 +5,23 @@ name: Status 1-to-1 Chat
 status: draft
 category: Standards Track
 tags: waku-application
-editor: Aaryamann Challani <aaryamann@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
 - Pedro Pombeiro <pedro@status.im>
 - Corey Petty <corey@status.im>
 - Oskar Thorén <oskar@status.im>
 - Dean Eigenmann <dean@status.im>
+- Aaryamann Challani <aaryamann@status.im>
 ---
 
 # Abstract
 
-This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. 
-This protocol can be used to send messages to a single recipient.
+Describes a Status 1-to-1 chat protocol that can be used to send private or public messages to a single recipient.
+
+# Background
+
+This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
 
 # Terminology
 
@@ -28,9 +32,6 @@ This protocol can be used to send messages to a single recipient.
 - **Group chat**: A chat where multiple select participants can join and read messages.
 - **Group admin**: A participant that is able to add/remove participants from a group chat.
 
-# Background
-
-This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
 
 # Specification
 
