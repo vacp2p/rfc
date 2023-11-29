@@ -4,19 +4,24 @@ title: 63/STATUS-Keycard-Usage
 name: Status Keycard Usage
 status: raw
 category: Standards Track
-editor: Aaryamann Challani <aaryamann@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
-  - "?"
+  - Aaryamann Challani <aaryamann@status.im>
 ---
+
+
+# Abstract
+
+This specification describes how an application can use the Status Keycard to create, store, and transact with different accounts.
 
 # Terminology
 
 - **Account**: A valid [BIP-32](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki) compliant key.
 - **Multiaccount**: An account from which multiple Accounts can be derived.
 
-# Abstract
+# Background
 
-This specification describes how an application can use the Status Keycard to -
+Can use the Status Keycard to -
 
 1. Create Multiaccounts
 2. Store Multiaccounts
@@ -29,6 +34,7 @@ More documentation on the Status Keycard can be found [here](https://keycard.tec
 
 The Status Keycard is a hardware wallet that can be used to store and sign transactions.
 For the purpose of the Status App, this specification describes how the Keycard SHOULD be used to store and sign transactions.
+
 
 # Usage
 
