@@ -335,14 +335,13 @@ The rest of the Phase remains unchanged.
 This modification is the less invasive with respect to the original proposal but will add more computations leading to a loss of efficiency.
 
 ## Updatable public-key encryption
-
 An updatable public-key encryption (UPKE) is given by set of three algorithms:
 - `PKEG`: it receives a secret key `sk_0` and outputs a fresh initial public key `pk_0`.
 - `Enc`: it receives a message to encrypt `m` together with a public key `pk` and outputs a ciphertext `c` together with a new public key `pk'`
 - `Dec`: it receives a secret key `sk` and a ciphertext `c` and outputs a message m and a new secret key `sk′`.
 
 Below follows a construction introduced in the paper by [Alwen et al](https://eprint.iacr.org/2019/1189).
-Here `g` is a generator of a group `G` of prime order `q`.
+Here `B` is a point of an elliptic curve `E` of prime order `q`.
 We adapt the notation to the Noise framework:
 
 ```
@@ -353,8 +352,8 @@ return (pk, sk)
 ```
 Enc(pk, m):
 (r, delta) = random(q)
-ciphertext = (g * r, SHA256(pk * r) xor (m || delta))
-return (ciphertext, pk + g * delta)
+ciphertext = (B * r, SHA256(pk * r) xor (m || delta))
+return (ciphertext, pk + B * delta)
 ```
 ```
 Dec(sk, (c_1, c_2)):
