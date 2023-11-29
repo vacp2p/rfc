@@ -4,10 +4,13 @@ title: 24/STATUS-CURATION
 name: Status Community Directory Curation Voting using Waku v2
 status: raw
 tags: waku-application
-editor: Szymon Szlachtowicz <szymon.s@ethworks.io>
+editor: Jimmy Debe <jimmy@status.im>
+contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
-This spec is a proposition for a voting protocol over Waku V2.
+# Abstract
+A voting protocol for peers to submit votes to a smart contract. 
+Completed voting will be immutable avoiding sabotage from malicious peers.
 
 # Motivation
 
