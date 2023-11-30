@@ -187,7 +187,7 @@ This function performs the symmetric key ratchet.
 
 ```
 RatchetEncrypt(state, plaintext, AD):
-    state.CKs, mk = HMAC-SHA512(state.CKs)
+    state.CKs, mk = HMAC-SHA256(state.CKs)
     header = HEADER(state.DHs, state.PN, state.Ns)
     state.Ns = state.Ns + 1
 	return header, AES256-GCM_Enc(mk, plaintext, AD || header)
@@ -216,7 +216,7 @@ SkipMessageKeys(state, until):
         raise Error
     if state.CKr != none:
         while state.Nr < until:
-            state.CKr, mk = HMAC-SHA512(state.CKr)
+            state.CKr, mk = HMAC-SHA256(state.CKr)
             state.MKSKIPPED[state.DHr, state.Nr] = mk
             state.Nr = state.Nr + 1
 ```
@@ -239,7 +239,7 @@ RatchetDecrypt(state, header, ciphertext, AD):
         SkipMessageKeys(state, header.pn)
         DHRatchet(state, header)
     SkipMessageKeys(state, header.n)
-    state.CKr, mk = HMAC-SHA512(state.CKr)
+    state.CKr, mk = HMAC-SHA256(state.CKr)
     state.Nr = state.Nr + 1
     return AES256-GCM_Dec(mk, ciphertext, AD || header)
 ```
