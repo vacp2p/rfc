@@ -12,7 +12,7 @@ contributors:
 ---
 
 # Abstract
-Describes how new members of a Status community can request historical messages from nodes that archive old data specifically for communities.
+Explains how new members of a Status community can request historical messages from nodes archiving old data.
 
 # Background
 
