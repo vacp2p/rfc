@@ -4,16 +4,17 @@ title: 65/STATUS-ACCOUNTS
 name: Status Accounts
 status: draft
 category: Standards Track
-editor: Aaryamann Challani <aaryamann@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Corey Petty <corey@status.im>
 - Oskar Thorén <oskar@status.im>
 - Samuel Hawksby-Robinson <samuel@status.im>
+- Aaryamann Challani <aaryamann@status.im>
 ---
 
 # Abstract
 
-This specification explains what a Status account is, and how it is created and used.
+This specification explains what a Status account is, and how it is created with cryptographic keypairs and used.
 
 # Background
 
