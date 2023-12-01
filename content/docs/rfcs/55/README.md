@@ -5,6 +5,7 @@ name: Status 1-to-1 Chat
 status: draft
 category: Standards Track
 tags: waku-application
+description: A Status 1-to-1 chat protocol that can be used to send private or public messages to a single recipient.
 editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
@@ -17,11 +18,8 @@ contributors:
 
 # Abstract
 
-Describes a Status 1-to-1 chat protocol that can be used to send private or public messages to a single recipient.
-
-# Background
-
-This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
+This specification describes how the Status 1-to-1 chat protocol is implemented on top of the Waku v2 protocol. 
+This protocol can be used to send messages to a single recipient.
 
 # Terminology
 
@@ -32,6 +30,10 @@ This document describes how 2 peers communicate with each other to send messages
 - **Group chat**: A chat where multiple select participants can join and read messages.
 - **Group admin**: A participant that is able to add/remove participants from a group chat.
 
+# Background
+
+This document describes how 2 peers communicate with each other to send messages in a 1-to-1 chat, with privacy and authenticity guarantees.
+
 
 # Specification
 
@@ -39,8 +41,8 @@ This document describes how 2 peers communicate with each other to send messages
 
 This protocol MAY use any key-exchange mechanism previously discussed -
 
-1. [53/WAKU2-X3DH](/spec/53/) 
-2. [35/WAKU2-NOISE](/spec/35/)
+1. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) 
+2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
 
 This protocol can provide end-to-end encryption to give peers a strong degree of privacy and security. 
 Public chat messages are publicly readable by anyone since there's no permission model for who is participating in a public chat.
@@ -54,7 +56,7 @@ There are two phases in the initial negotiation of a 1:1 chat:
 A QR code serves two purposes simultaneously - identity verification and initial key material retrieval;
 1. **Asynchronous initial key exchange**
 
-For more information on account generation and trust establishment, see [2/ACCOUNT](https://specs.status.im/spec/2)
+For more information on account generation and trust establishment, see [65/STATUS-ACCOUNT](https://rfc.vac.dev/spec/65/)
 
 ### Post Negotiation
 
@@ -65,9 +67,9 @@ After the peers have shared their public key material, a 1:1 chat can be establi
 The 1:1 chat is made robust by having sessions between peers.
 It is handled by the key-exchange protocol used. For example,
 
-1. [53/WAKU2-X3DH](/spec/53/), the session management is described in [54/WAKU2-X3DH-SESSIONS](/spec/54/)
+1. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/), the session management is described in [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
 
-2. [35/WAKU2-NOISE](/spec/35/), the session management is described in [37/WAKU2-NOISE-SESSIONS](/spec/37/)
+2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/), the session management is described in [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/)
 
 ## Negotiation of a 1:1 chat amongst multiple participants (group chat)
 
@@ -79,7 +81,7 @@ However, this method does not scale as the number of participants increases, for
 1. The number of messages sent over the network increases with the number of participants.
 2. Handling the X3DH key exchange for each participant is computationally expensive.
 
-The above issues are addressed in [56/STATUS-COMMUNITIES](/spec/56/), with other trade-offs.
+The above issues are addressed in [56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/), with other trade-offs.
 
 ### Flow
 
@@ -203,7 +205,7 @@ To change the display image of the group chat, group admins MUST use an `IMAGE_C
 
 # Security Considerations
 
-1. Inherits the security considerations of the key-exchange mechanism used, e.g., [53/WAKU2-X3DH](/spec/53/) or [35/WAKU2-NOISE](/spec/35/)
+1. Inherits the security considerations of the key-exchange mechanism used, e.g., [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) or [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
 
 # Copyright
 
@@ -211,8 +213,11 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-1. [2/ACCOUNT](https://specs.status.im/spec/2)
-2. [53/WAKU2-X3DH](/spec/53/)
-3. [35/WAKU2-NOISE](/spec/35/)
-4. [10/WAKU2](/spec/10/)
-5. [7/GROUP-CHAT](https://specs.status.im/draft/7)
+1. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+2. [35/WAKU2-NOISE](https://rfc.vac.dev/spec/35/)
+3. [65/STATUS-ACCOUNT](https://rfc.vac.dev/spec/65/)
+4. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+5. [37/WAKU2-NOISE-SESSIONS](https://rfc.vac.dev/spec/37/)
+6. [56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/)
+7. [chat_message.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/chat_message.proto#L1)
+8. [emoji_reaction.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/emoji_reaction.proto)
