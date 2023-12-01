@@ -5,6 +5,7 @@ name: Status Simple Scaling
 status: raw
 category: Informational
 tags: waku/application
+description: Describes how to scale Status Communities and Status 1-to-1 Chat using existing Waku v2 protocols and components.
 editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Alvaro Revuelta <alrevuelta@status.im>
@@ -13,10 +14,7 @@ contributors:
 
 # Abstract
 
-This document describes how to scale [56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/)
-using existing Waku v2 protocols and components.
-
-# Background and Motivation
+This document describes how to scale [56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/) as well as [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/) using existing Waku v2 protocols and components. It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
 
 > *Note:* (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components
 in a way that aligns better with our principles of decentralization and protecting anonymity.
@@ -24,8 +22,11 @@ This document informs about scaling at the current stage of research and shows i
 Practical feasibility is also a core goal for us.
 We believe in incremental improvement, i.e. having a working decentralized scaling solution with trade-offs is better than a fully centralized solution.
 
-[56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/) use Waku v2 protocols.
-Both use Waku content topics (see [23/WAKU2-TOPICS](/spec/23/)) for content based filtering.
+# Background and Motivation
+
+
+[56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/) as well as [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/) use Waku v2 protocols.
+Both use Waku content topics (see [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/)) for content based filtering.
 
 Waku v2 currently has scaling limitations in two dimensions:
 
@@ -45,14 +46,14 @@ Splitting content topics in a more sophisticated and efficient way will be part 
 
 # Relay Shards
 
-Sharding the [Waku Relay](/spec/11/) network is an integral part of scaling the Status app.
+Sharding the [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) network is an integral part of scaling the Status app.
 
-[51/WAKU2-RELAY-SHARDING](/spec/51/) specifies shards clusters, which are sets of `1024` shards (separate pubsub mesh networks).
+[51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/) specifies shards clusters, which are sets of `1024` shards (separate pubsub mesh networks).
 Content topics specified by application protocols can be distributed over these shards.
 The Status app protocols are assigned to shard cluster `16`,
-as defined in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/).
+as defined in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](https://rfc.vac.dev/spec/52/).
 
-[51/WAKU2-RELAY-SHARDING](/spec/51/) specifies three sharding methods.
+[51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/) specifies three sharding methods.
 This document uses *static sharding*, which leaves the distribution of content topics to application protocols,
 but takes care of shard discovery.
 
@@ -68,7 +69,7 @@ The 1024 shards within the main Status shard cluster are allocated as follows.
 |    768 - 895  |   1:1 chat                       |
 |   896 - 1023  |   media and control msgs         |
 
-Shard indices are mapped to pubsub topic names as follows (specified in [51/WAKU2-RELAY-SHARDING](/spec/51/)).
+Shard indices are mapped to pubsub topic names as follows (specified in [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)).
 
 `/waku/2/rs/<cluster_id>/<shard_number>`
 
@@ -131,7 +132,7 @@ message CommunityDescription {
 }
 ```
 
-> *Note*: Currently, Status app has allocated shared cluster `16` in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/).
+> *Note*: Currently, Status app has allocated shared cluster `16` in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](https://rfc.vac.dev/spec/52/).
 Status app could allocate more shard clusters, for instance to establish a test net.
 We could add the shard cluster index to the community description as well.
 The recommendation for now is to keep it as a configuration option of the Status app.
@@ -143,7 +144,7 @@ Status communities can be mapped to shards in two ways: static, and owner-based.
 ### Static Mapping
 
 With static mapping, communities are assigned a specific shard index within the Status shard cluster.
-This mapping is similar in nature to the shard cluster allocation in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/).
+This mapping is similar in nature to the shard cluster allocation in [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](https://rfc.vac.dev/spec/52/).
 Shard indices allocated in that way are in the range `16 - 127`.
 The Status CC community uses index `16` (not to confuse with shard cluster index `16`, which is the Status shard cluster).
 
@@ -155,7 +156,7 @@ Community owners can choose to map their communities to any shard within the ind
 
 ## 1:1 Chat
 
-[55/STATUS-1TO1-CHAT](/spec/55) uses partitioned topics to map 1:1 chats to a set of 5000 content topics.
+[55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/) uses partitioned topics to map 1:1 chats to a set of 5000 content topics.
 This document extends this mapping to 8192 content topics that are, in turn, mapped to 128 shards in the index range of `768 - 895`.
 
 ```
@@ -172,7 +173,7 @@ shardIndex = 768 + mod(publicKey, shardNum)
 
 # Infrastructure Nodes
 
-As described in [30/ADAPTIVE-NODES](/spec/30/),
+As described in [30/ADAPTIVE-NODES](https://rfc.vac.dev/spec/30/),
 Waku supports a continuum of node types with respect to available resources.
 Infrastructure nodes are powerful nodes that have a high bandwidth connection and a high up-time.
 
@@ -210,7 +211,7 @@ We could improve on this in the future, and research the applicability of PIR (p
 
 # Infrastructure Shards
 
-Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see [30/ADAPTIVE-NODES](/spec/30/)).
+Waku messages are typically relayed in larger mesh networks comprised of nodes with varying resource profiles (see [30/ADAPTIVE-NODES](https://rfc.vac.dev/spec/30/)).
 To maximise scaling, relaying of specific message types can be dedicated to shards where only infrastructure nodes with very strong resource profiles relay messages.
 This comes as a trade-off to decentralization.
 
@@ -257,15 +258,15 @@ and devices that (temporarily) have a low bandwidth connection or a connection w
 
 Light protocols comprise
 
-* [19/WAKU2-LIGHTPUSH](/spec/19/) for sending messages
-* [12/WAKU2-FILTER](/spec/12/) for requesting messages with specific attributes
-* [34/WAKU2-PEER-EXCHANGE](/spec/34) for discovering peers
+* [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/) for sending messages
+* [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) for requesting messages with specific attributes
+* [34/WAKU2-PEER-EXCHANGE](https://rfc.vac.dev/spec/34/) for discovering peers
 
 # Waku Archive
 
-Archive nodes are Waku nodes that offer the Waku archive service via the Waku store protocol ([13/WAKU2-STORE](/spec/13/)).
+Archive nodes are Waku nodes that offer the Waku archive service via the Waku store protocol ([13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)).
 They are part of a set of shards and store all messages disseminated in these shards.
-Nodes can request history messages via the [13/WAKU2-STORE](/spec/13/).
+Nodes can request history messages via the [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/).
 
 The store service is not limited to a Status fleet.
 Anybody can run a Waku Archive node in the Status shards.
@@ -279,7 +280,7 @@ In fact, the archive service can be offered by infrastructure nodes.
 
 # Discovery
 
-Shard discovery is covered by [51/WAKU2-RELAY-SHARDING](/spec/51/).
+Shard discovery is covered by [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/).
 This allows the Status app to abstract from the discovery process and simply address shards by their index.
 
 ## Libp2p Rendezvous and Circuit-Relay
@@ -288,8 +289,8 @@ To make nodes behind restrictive NATs discoverable,
 this document suggests using [libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md).
 Nodes can check whether they are behind a restrictive NAT using the [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md).
 
-> *Note:* The following will move into [51/WAKU2-RELAY-SHARDING](/spec/51/), or [33/WAKU2-DISCV5](/spec/33/):
-Nodes behind restrictive NATs SHOULD not announce their publicly unreachable address via [33/WAKU2-DISCV5](/spec/33/) discovery.
+> *Note:* The following will move into [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/), or [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/):
+Nodes behind restrictive NATs SHOULD not announce their publicly unreachable address via [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/) discovery.
 
 It is RECOMMENDED that nodes that are part of the relay network also act as rendezvous points.
 This includes accepting register queries from peers, as well as answering rendezvous discover queries.
@@ -306,8 +307,8 @@ functionality offered by the libp2p circuit relay protocols, and
 2) use [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md) to upgrade to a direct connection.
 
 Nodes that do not announce themselves at all and only plan to use light protocols,
-MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
-For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34) offer the same functionality,
+MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](https://rfc.vac.dev/spec/34/).
+For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](https://rfc.vac.dev/spec/34/) offer the same functionality,
 but return node sets sampled in different ways.
 Using both can help increasing connectivity.
 
@@ -330,7 +331,7 @@ The app name, `my-app` is used to encode a single shard in the form:
 <rs (utf8 encoded)> | <2-byte shard cluster index> | <2-byte shard index>
 ```
 
-Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/h)),
+Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](https://rfc.vac.dev/spec/52/)),
 the register query would look like
 
 ```
@@ -462,7 +463,7 @@ It could be rate-limited with RLN.
 
 This document makes several trade-offs to privacy and anonymity.
 Todo: elaborate.
-See [45/WAKU2-ADVERSARIAL-MODELS](/spec/45) for information on Waku Anonymity.
+See [45/WAKU2-ADVERSARIAL-MODELS](https://rfc.vac.dev/spec/45/) for information on Waku Anonymity.
 
 # Copyright
 
@@ -470,18 +471,28 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-* [11/WAKU2-RELAY](/spec/11/)
-* [51/WAKU2-RELAY-SHARDING](/spec/51/)
-* [33/WAKU2-DISCV5](/spec/33/)
-* [13/WAKU2-STORE](/spec/13/)
-* [19/WAKU2-LIGHTPUSH](/spec/19/)
-* [12/WAKU2-FILTER](/spec/12/)
-* [34/WAKU2-PEER-EXCHANGE](/spec/34/)
-* [33/WAKU2-DISCV5](/spec/33/)
-* [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
+* [56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/)
+* [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/)
+* [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/)
+* [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+* [51/WAKU2-RELAY-SHARDING](https://rfc.vac.dev/spec/51/)
+* [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](https://rfc.vac.dev/spec/52/)
+* [30/ADAPTIVE-NODES](https://rfc.vac.dev/spec/30/)
+* [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/)
+* [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
+* [34/WAKU2-PEER-EXCHANGE](https://rfc.vac.dev/spec/34/)
+* [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+* [libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md)
+* [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md)
+* [33/WAKU2-DISCV5](https://rfc.vac.dev/spec/33/)
 * [libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md)
+* [limiting](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation)
 * [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md)
-* [31/WAKU2-ENR](/spec/31/)
-* [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
+* [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators)
+* [45/WAKU2-ADVERSARIAL-MODELS](https://rfc.vac.dev/spec/45/)
+
+## Informative
+* [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
+* [31/WAKU2-ENR](https://rfc.vac.dev/spec/31/)
 
 
