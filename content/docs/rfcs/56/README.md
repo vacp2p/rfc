@@ -5,24 +5,26 @@ name: Status Communities that run over Waku v2
 status: draft
 category: Standards Track
 tags: waku-application
-editor: Aaryamann Challani <aaryamann@status.im>
+description: Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application. 
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
+- Aaryamann Challani <aaryamann@status.im>
 ---
 
 # Abstract
 
-Describes how Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application. 
+This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app. 
 
 # Background and Motivation
 
 The purpose of Status communities, as specified in this document, is allowing for large group chats.
 Communities can have further substructure, e.g. specific channels.
 
-Smaller group chats, on the other hand, are out of scope for this document and can be built over [55/STATUS-1TO1-CHAT](/spec/55). 
+Smaller group chats, on the other hand, are out of scope for this document and can be built over [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/). 
 We refer to these smaller group chats simply as "group chats", to differentiate them from Communities.
 
-For group chats based on [55/STATUS-1TO1-CHAT](/spec/55), the key exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](/spec/53/).
+For group chats based on [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/), the key exchange mechanism MUST be X3DH, as described in [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/).
 
 However, this method does not scale as the number of participants increases, for the following reasons -
 1. The number of messages sent over the network increases with the number of participants.
@@ -53,7 +55,7 @@ This extends to banning and kicking members.
 8. The public key of the Community is shared out of band.
 9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
 10. Community members run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
-Light nodes solely implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
+Light nodes solely implementing [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
 
@@ -285,7 +287,7 @@ Note: The usage of the clock is described in the [Clock](#clock) section.
 
 ## Content topic usage
 
-"Content topic" refers to the field in [14/WAKU2-MESSAGE](/spec/14/#message-attributes), further elaborated in [10/WAKU2](/spec/10/#overview-of-protocol-interaction).
+"Content topic" refers to the field in [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/#message-attributes), further elaborated in [10/WAKU2](https://rfc.vac.dev/spec/10/#overview-of-protocol-interaction).
 
 ### Advertising a Community
 
@@ -366,7 +368,7 @@ The Community metadata SHOULD be sent every time the Community metadata is updat
 
 ### Community Join Flow (peer requests to join a Community)
 
-1. A peer and the Community owner establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](/spec/55/).
+1. A peer and the Community owner establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/).
 2. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
 At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to cancel the request.
 3. The Community owner MAY accept or reject the request.
@@ -375,7 +377,7 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 ### Community Join Flow (peer is invited to join a Community)
 
-1. The Community owner and peer establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](/spec/55/).
+1. The Community owner and peer establish a 1:1 chat as described in [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/).
 2. The peer is invited to join a Community by the Community owner, by sending a "CommunityInvitation" message.
 3. The peer decrypts the "CommunityInvitation" message, and verifies the signature.
 4. The peer requests to join a Community by sending a "CommunityRequestToJoin" message to the Community.
@@ -398,23 +400,23 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 
 The following Waku protocols SHOULD be used to implement Status Communities -
 
-1. [11/WAKU2-RELAY](/spec/11/) - To send and receive messages
-2. [53/WAKU2-X3DH](/spec/53/) - To encrypt and decrypt messages
-3. [53/WAKU2-X3DH-SESSIONS](/spec/54/) - To handle session keys
-4. [14/WAKU2-MESSAGE](/spec/14/) - To wrap community messages in a Waku message
-5. [13/WAKU2-STORE](/spec/13/) - To store and retrieve messages for offline devices
+1. [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) - To send and receive messages
+2. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) - To encrypt and decrypt messages
+3. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/) - To handle session keys
+4. [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) - To wrap community messages in a Waku message
+5. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) - To store and retrieve messages for offline devices
 
 
 The following Waku protocols MAY be used to implement Status Communities -
 
-1. [12/WAKU2-FILTER](/spec/12/) - Content filtering for resource restricted devices
-2. [19/WAKU2-LIGHTPUSH](/spec/19) - Allows Light clients to participate in the network
+1. [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/) - Content filtering for resource restricted devices
+2. [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/) - Allows Light clients to participate in the network
 
 ## Backups
 
 The member MAY back up their local settings, by encrypting it with their public key, and sending it to a given content topic.
 The member MAY then rely on this backup to restore their local settings, in case of a data loss.
-This feature relies on [13/WAKU2-STORE](/spec/13/) for storing and retrieving messages.
+This feature relies on [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) for storing and retrieving messages.
 
 ## Clock
 
@@ -426,7 +428,7 @@ This allows ordering of messages in an asynchronous network where messages may b
 
 1. The Community owner is a single point of failure. If the Community owner is compromised, the Community is compromised.
 
-2. Follows the same security considerations as the [53/WAKU2-X3DH](/spec/53/) protocol.
+2. Follows the same security considerations as the [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) protocol.
 
 # Future work
 
@@ -442,6 +444,17 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-- [53/WAKU2-X3DH](/spec/53/)
-- https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go
-- https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md
+- [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/)
+- [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/)
+- [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/)
+- [10/WAKU2](https://rfc.vac.dev/spec/10/)
+- [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+- [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+- [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+- [12/WAKU2-FILTER](https://rfc.vac.dev/spec/12/)
+- [19/WAKU2-LIGHTPUSH](https://rfc.vac.dev/spec/19/)
+
+## informative
+- [community.go](https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go)
+- [organisation-channels.md](https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md)
