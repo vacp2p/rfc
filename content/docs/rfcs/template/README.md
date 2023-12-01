@@ -5,18 +5,19 @@ name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
 category: (Standards Track|Informational|Best Current Practice)
 tags: an optional list of tags, not standard
+description: an optional short summary
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
 
-# (Info, remove this section)
+## (Info, remove this section)
 
 This section contains meta info about writing RFCs.
 This section (including its subsections) MUST be removed.
 
 [COSS](https://rfc.vac.dev/spec/1/) explains the Vac RFC process.
 
-## Tags
+### Tags
 
 The `tags` metadata SHOULD contain a list of tags if applicable.
 
@@ -26,14 +27,18 @@ Currently identified tags comprise
 * `waku/application` for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),
 
 
-# Abstract
+## Abstract
 
 
-# Background / Rationale / Motivation
+## Background / Rationale / Motivation
 
 This section serves as an introduction providing background information and a motivation/rationale for why the specified protocol is useful.
 
-# Theory / Semantics
+### Terminology
+
+Define terms from the document that MAY be diffcult for the reader to understand at first read.
+
+## Theory / Semantics
 
 A standard track RFC in `stable` status MUST feature this section.
 A standard track RFC in `raw` or `draft` status SHOULD feature this section.
@@ -41,7 +46,7 @@ This section SHOULD explain in detail how the proposed protocol works.
 It may touch on the wire format where necessary for the explanation.
 This section MAY also specify endpoint behaviour when receiving specific messages, e.g. the behaviour of certain caches etc.
 
-# Wire Format Specification / Syntax
+## Wire Format Specification / Syntax
 
 A standard track RFC in `stable` status MUST feature this section.
 A standard track RFC in `raw` or `draft` status SHOULD feature this section.
@@ -52,13 +57,13 @@ The purpose of this section is having a concise definition of what an implementa
 Parts that are not specified here are considered implementation details. Implementors are free to decide on how to implement these details.
 An optional *implementation suggestions* section may provide suggestions on how to approach implementation details, and, if available, point to existing implementations for reference.
 
-# Implementation Suggestions (optional)
+## Implementation Suggestions (optional)
 
 
-# (Further Optional Sections)
+## (Further Optional Sections)
 
 
-# Security/Privacy Considerations
+## Security/Privacy Considerations
 
 A standard track RFC in `stable` status MUST feature this section.
 A standard track RFC in `raw` or `draft` status SHOULD feature this section.
@@ -66,18 +71,18 @@ Informational RFCs (in any state) may feature this section.
 If there are none, this section MUST explicitly state that fact.
 This section MAY contain additional relevant information, e.g. an explanation as to why there are no security consideration for the respective document.
 
-# Copyright
+## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-# References
+## References
 
 References MAY be subdivided into normative and informative.
 
-## normative
+### normative
 A list of references that MUST be read to fully understand and/or implement this protocol.
 See [RFC3967 Section 1.1](https://datatracker.ietf.org/doc/html/rfc3967#section-1.1).
 
-## informative
+### informative
 A list of additional references.
 
