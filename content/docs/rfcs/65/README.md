@@ -4,6 +4,7 @@ title: 65/STATUS-ACCOUNTS
 name: Status Accounts
 status: draft
 category: Standards Track
+description: Details of what a Status account is, how accounts are created, and how accounts are used.
 editor: Jimmy Debe <jimmy@status.im>
 contributors:
 - Corey Petty <corey@status.im>
@@ -14,7 +15,7 @@ contributors:
 
 # Abstract
 
-This specification explains what a Status account is, and how it is created with cryptographic keypairs and used.
+This specification explains what a Status account is, and how it is created and used.
 
 # Background
 
@@ -41,7 +42,7 @@ The Status node verifies or derives everything else associated with the contact 
 - A user is responsible for broadcasting certain information publicly so that others may contact them.
 
 ## X3DH Prekey bundles
-- Refer to [53/WAKU2-X3DH](/spec/53) for details on the X3DH prekey bundle broadcasting, as well as regeneration.
+- Refer to [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) for details on the X3DH prekey bundle broadcasting, as well as regeneration.
 
 # Optional Account additions
 
@@ -92,7 +93,7 @@ The above payload is broadcasted when 2 devices that belong to a user need to be
 
 # Security Considerations
 
-- This specification inherits security considerations of [53/WAKU2-X3DH](/spec/53) and [54/WAKU2-X3DH-SESSIONS](/spec/54).
+- This specification inherits security considerations of [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/) and [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/).
 
 # Copyright
 
@@ -102,9 +103,9 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## normative
 
-- [53/WAKU2-X3DH](/spec/53)
-- [54/WAKU2-X3DH-SESSIONS](/spec/54)
-- [55/STATUS-1TO1-CHAT](/spec/55)
+- [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+- [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
+- [55/STATUS-1TO1-CHAT](https://rfc.vac.dev/spec/55/)
 
 ## informative
 
