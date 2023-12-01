@@ -4,7 +4,7 @@ title: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
 category: Best Current Practice
-editor: Oskar Thoren <oskar@status.im>
+editor: Jimmy Debe <jimmy@status.im>
 contributors:
   - Pieter Hintjens <ph@imatix.com>
   - André Rebentisch <andre@openstandards.de>
@@ -22,7 +22,7 @@ It is equivalent except for some areas:
 
 - recommending the use of a permissive licenses, such as CC0 (with the exception of this document);
 - miscellaneous metadata, editor, and format/link updates;
-- more inheritance from the [IETF Standards Process][https://www.rfc-editor.org/rfc/rfc2026.txt],
+- more inheritance from the [IETF Standards Process](https://www.rfc-editor.org/rfc/rfc2026.txt),
   e.g. using RFC categories: Standards Track, Informational, and Best Common Practice;
 - standards track specifications SHOULD follow a specific structure that both streamlines editing,
   and helps implementers to quickly comprehend the specification
@@ -104,7 +104,7 @@ Every specification has an independent lifecycle that documents clearly its curr
 
 A specification has six possible states that reflect its maturity and contractual weight:
 
-![Lifecycle diagram](../../../../rfcs/1/lifecycle.png)
+![Lifecycle diagram](../../../../static/rfcs/1/lifecycle.png)
 
 ### Raw Specifications
 
@@ -148,6 +148,8 @@ Only Raw and Draft specifications can be deleted.
 
 A specification MUST have a single responsible editor,
 the only person who SHALL change the status of the specification through the lifecycle stages.
+
+The responsible editor SHOULD have approval from contributors to change the status of a specification.
 
 A specification MAY also have additional contributors who contribute changes to it.
 It is RECOMMENDED to use a process similar to [C4 process](https://github.com/unprotocols/rfc/blob/master/1/README.md)
@@ -226,5 +228,3 @@ It is RECOMMENDED to use color coding to indicate specification's status. Color 
 * ![deprecated](https://raw.githubusercontent.com/unprotocols/rfc/master/2/deprecated.svg)
 * ![retired](https://raw.githubusercontent.com/unprotocols/rfc/master/2/retired.svg)
 * ![deleted](https://raw.githubusercontent.com/unprotocols/rfc/master/2/deleted.svg)
-
-
