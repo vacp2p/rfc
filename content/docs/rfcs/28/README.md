@@ -4,14 +4,12 @@ title: 28/STATUS-FEATURING
 name: Status community featuring using waku v2
 status: raw
 tags: waku-application
+description: To gain new members, current users can vote to feature an active Status community to the larger Status audience.
 editor: Jimmy Debe <jimmy@status.im>
 contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
-# Abstract
-
-To gain new members, 
-current users can vote to feature an active Status community to the larger Status audience.
+This spec is a proposition of voting on community featuring over waku v2.
 
 # Background
 
