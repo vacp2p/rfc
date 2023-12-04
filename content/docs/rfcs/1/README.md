@@ -151,6 +151,8 @@ the only person who SHALL change the status of the specification through the lif
 
 A specification MAY also have additional contributors who contribute changes to it.
 
+If the resposible editor is no longer active, the editor MUST be replaced by an new editor.
+
 It is RECOMMENDED to use a process similar to [C4 process](https://github.com/unprotocols/rfc/blob/master/1/README.md)
 to maximize the scale and diversity of contributions.
 
