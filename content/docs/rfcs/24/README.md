@@ -9,7 +9,9 @@ editor: Jimmy Debe <jimmy@status.im>
 contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
-This spec is a proposition for a voting protocol over Waku V2.
+# Abstract
+A voting protocol for peers to submit votes to a smart contract. Voting is immutable, 
+which helps avoid sabotage from malicious peers.
 
 # Motivation
 
