@@ -4,7 +4,7 @@ title: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
 category: Best Current Practice
-editor: Jimmy Debe <jimmy@status.im>
+editor: Oskar Thoren <oskar@status.im>
 contributors:
   - Pieter Hintjens <ph@imatix.com>
   - André Rebentisch <andre@openstandards.de>
@@ -12,7 +12,6 @@ contributors:
   - Chris Puttick <chris.puttick@thehumanjourney.net>
   - Yurii Rashkovskii <yrashk@gmail.com>
   - Daniel Kaiser <danielkaiser@status.im>
-  - Oskar Thoren <oskar@status.im>
 ---
 
 This document describes a consensus-oriented specification system (COSS) for building interoperable technical specifications.
@@ -151,8 +150,6 @@ A specification MUST have a single responsible editor,
 the only person who SHALL change the status of the specification through the lifecycle stages.
 
 A specification MAY also have additional contributors who contribute changes to it.
-
-It is RECOOMENED the resposibile editor have consensus from contributors to change the status of a specification.
 
 It is RECOMMENDED to use a process similar to [C4 process](https://github.com/unprotocols/rfc/blob/master/1/README.md)
 to maximize the scale and diversity of contributions.
