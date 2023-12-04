@@ -196,10 +196,9 @@ pubsub topics, used for routing Content topics, used for content-based filtering
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/24/</guid>
-      <description>This spec is a proposition for a voting protocol over Waku V2.
+      <description>Abstract # This specification is a voting protocol for peers to submit votes to a smart contract. Voting is immutable, this will help avoid sabotage from malicious peers.
 Motivation # In open p2p protocol there is an issue with voting off-chain as there is much room for malicious peers to only include votes that support their case when submitting votes to chain.
-Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&amp;rsquo;t already submitted.
-Smart contract # Voting should be finalized on chain so that the finished vote is immutable.</description>
+Proposed solution is to aggregate votes over waku and allow users to submit votes to smart contract that aren&amp;rsquo;t already submitted.</description>
     </item>
     
     <item>
