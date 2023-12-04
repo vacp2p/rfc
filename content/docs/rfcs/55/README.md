@@ -5,6 +5,7 @@ name: Status 1-to-1 Chat
 status: draft
 category: Standards Track
 tags: waku-application
+description: A chat protocol to send public and private messages to a single recipient by the Status app.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
@@ -210,8 +211,11 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
-1. [2/ACCOUNT](https://specs.status.im/spec/2)
-2. [53/WAKU2-X3DH](/spec/53/)
-3. [35/WAKU2-NOISE](/spec/35/)
-4. [10/WAKU2](/spec/10/)
-5. [7/GROUP-CHAT](https://specs.status.im/draft/7)
+1. [53/WAKU2-X3DH](/spec/53/)
+2. [35/WAKU2-NOISE](/spec/35/)
+3. [65/STATUS-ACCOUNT](/spec/65/)
+4. [54/WAKU2-X3DH-SESSIONS](/spec/54/)
+5. [37/WAKU2-NOISE-SESSIONS](/spec/37/)
+6. [56/STATUS-COMMUNITIES](/spec/56/)
+7. [chat_message.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/chat_message.proto#L1)
+8. [emoji_reaction.proto](https://github.com/status-im/status-go/blob/5fd9e93e9c298ed087e6716d857a3951dbfb3c1e/protocol/protobuf/emoji_reaction.proto)
