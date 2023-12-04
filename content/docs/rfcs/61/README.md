@@ -4,17 +4,16 @@ title: 61/STATUS-Community-History-Archives
 name: Status Community History Archives
 status: raw
 category: Standards Track
-description: Explains how new members of a Status community can request historical messages from nodes archiving old data.
-editor: Jimmy Debe <jimmy@status.im>
+description: Explains how new members of a Status community can request historical messages from archive nodes.
+editor: r4bbit <r4bbit@status.im>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - John Lea <john@status.im>
-  - r4bbit <r4bbit@status.im>
 ---
 
 # Abstract
 
-Messages are stored permanently by store nodes ([13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)) for up to a certain configurable period of time, limited by the overall storage provided by a store node.
+Messages are stored permanently by store nodes ([13/WAKU2-STORE](/spec/13/)) for up to a certain configurable period of time, limited by the overall storage provided by a store node.
 Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. 
 This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels.
 
@@ -27,9 +26,9 @@ The following terminology is used throughout this specification. Notice that som
 
 | Name                 | References |
 | -------------------- | --- |
-| Waku node            | An Waku node ([10/WAKU2](https://rfc.vac.dev/spec/10/)) that implements [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)|
-| Store node           | A Waku node that implements [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/) |
-| Waku network         | A group of Waku nodes forming a graph, connected via [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) |
+| Waku node            | An Waku node ([10/WAKU2](/spec/10/)) that implements [11/WAKU2-RELAY](/spec/11/)|
+| Store node           | A Waku node that implements [13/WAKU2-STORE](/spec/13/) |
+| Waku network         | A group of Waku nodes forming a graph, connected via [11/WAKU2-RELAY](/spec/11/) |
 | Status user          | An Status account that is used in a Status consumer product, such as Status Mobile or Status Desktop |
 | Status node          | A Status client run by a Status application |
 | Control node      | A Status node that owns the private key for a Status community |
@@ -44,7 +43,7 @@ The following terminology is used throughout this specification. Notice that som
 
 This specification has the following assumptions:
 
-- Store nodes([13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)) are available 24/7, ensuring constant live message availability.
+- Store nodes([13/WAKU2-STORE](/spec/13/)) are available 24/7, ensuring constant live message availability.
 - The storage time range limit is 30 days.
 - Store nodes have enough storage to persist historical messages for up to 30 days.
 - No store nodes have storage to persist historical messages older than 30 days.
@@ -91,7 +90,7 @@ If the control node goes offline (where "offline" means, the control node's main
 
 Community member nodes go through the following (high level) process to fetch and restore community message histories:
 
-1. User joins community and becomes community member (see [org channels spec](https://rfc.vac.dev/spec/56/))
+1. User joins community and becomes community member (see [org channels spec](/spec/56/))
 2. By joining a community, member nodes automatically subscribe to special channel for message archive metadata exchange provided by the community
 3. Member node requests live message history (last 30 days) of all the community channels including the special channel from store nodes
 4. Member node receives Waku message ([14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/)) that contains the metadata magnet link from the special channel
@@ -120,7 +119,7 @@ The `timestamp` is determined by the context in which the control node attempts 
 1. The control node attempts to create an archive periodically for the past seven days (including the current day). In this case, the `timestamp` has to lie within those 7 days.
 2. The control node has been offline (control node's main process has stopped and needs restart) and attempts to create archives for all the live messages it has missed since it went offline. In this case, the `timestamp` has to lie within the day the latest message was received and the current day.
 
-Exported messages MUST be restored as [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) for bundling. Waku messages that are older than 30 days and have been exported for bundling can be removed from the control node's database (control nodes still maintain a database of application messages).
+Exported messages MUST be restored as [14/WAKU2-MESSAGE](/spec/14/) for bundling. Waku messages that are older than 30 days and have been exported for bundling can be removed from the control node's database (control nodes still maintain a database of application messages).
 
 # Message history archives
 
@@ -130,7 +129,7 @@ Message history archives are implemented using the following protocol buffer.
 ## WakuMessageHistoryArchive
 
 The `from` field SHOULD contain a timestamp of the time range's lower bound.
-The type parallels the `timestamp` of [WakuMessage](https://rfc.vac.dev/spec/14/#payload-encryption).
+The type parallels the `timestamp` of [WakuMessage](/spec/14/#payloads).
 
 The `to` field SHOULD contain a timestamp of the time range's the higher bound.
 
@@ -290,7 +289,7 @@ The topic of that special channel follows the following format:
 /{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
 ```
 
-All messages sent with this topic MUST be instances of `ApplicationMetadataMessage` ([62/PAYLOAD](https://rfc.vac.dev/spec/62)) with a `payload` of `CommunityMessageArchiveIndex`.
+All messages sent with this topic MUST be instances of `ApplicationMetadataMessage` ([6/PAYLOADS](/specs/6-payloads)) with a `payload` of `CommunityMessageArchiveIndex`.
 
 Only the control node MAY post to the special channel. Other messages on this specified channel MUST be ignored by clients.
 Community members MUST NOT have permission to send messages to the special channel.
@@ -322,7 +321,7 @@ There are two scenarios in which member nodes can receive such a magnet link mes
 2. The member node requests messages for a time range of up to 30 days from store nodes (this is the case when a new community member joins a community)
 
 ## Downloading message archives
-When member nodes receive a message with a `CommunityMessageHistoryArchive` ([62/PAYLOAD](https://rfc.vac.dev/spec/62)) from the aforementioned channnel, they MUST extract the `magnet_uri` and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the `index` file of the torrent (see [Creating message archive torrents](#creating-message-archive-torrents)).
+When member nodes receive a message with a `CommunityMessageHistoryArchive` ([6/PAYLOADS](/spec/6#communitymessagearchive)) from the aforementioned channnel, they MUST extract the `magnet_uri` and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the `index` file of the torrent (see [Creating message archive torrents](#creating-message-archive-torrents)).
 
 Due to the nature of distributed systems, there's no guarantee that a received message is the "last" message. This is especially true when member nodes request historical messages from store nodes. 
 
@@ -379,16 +378,15 @@ Even if just a single message is missing in one of the histories, the hashes pre
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-* [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+* [13/WAKU2-STORE](/spec/13/)
 * [BitTorrent](https://bittorrent.org)
-* [10/WAKU2](https://rfc.vac.dev/spec/10/)
-* [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+* [10/WAKU2](/spec/10/)
+* [11/WAKU2-RELAY](/spec/11/)
 * [Magnet URI scheme](https://en.wikipedia.org/wiki/Magnet_URI_scheme)
 * [forum discussion](https://forum.vac.dev/t/status-communities-protocol-and-product-point-of-view/114)
 * [org channels](https://github.com/status-im/specs/pull/151)
 * [UI feature spec](https://github.com/status-im/feature-specs/pull/36))
 * [Extensions for Peers to Send Metadata Files](https://www.bittorrent.org/beps/bep_0009.html)
 * [org channels spec](https://rfc.vac.dev/spec/56/)
-* [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/)
-* [62/PAYLOAD](https://rfc.vac.dev/spec/62)
-
+* [14/WAKU2-MESSAGE](/spec/14/)
+* [62/PAYLOAD](/spec/62)
