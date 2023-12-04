@@ -137,7 +137,7 @@ Status app could allocate more shard clusters, for instance to establish a test 
 We could add the shard cluster index to the community description as well.
 The recommendation for now is to keep it as a configuration option of the Status app.
 
-> *Note*: Once this RFC moves forward, the new community description protobuf fields should be mentioned in [56/STATUS-COMMUNITIES](https://rfc.vac.dev/spec/56/).
+> *Note*: Once this RFC moves forward, the new community description protobuf fields should be mentioned in [56/STATUS-COMMUNITIES](/spec/56/).
 
 Status communities can be mapped to shards in two ways: static, and owner-based.
 
@@ -260,7 +260,7 @@ Light protocols comprise
 
 * [19/WAKU2-LIGHTPUSH](/spec/19/) for sending messages
 * [12/WAKU2-FILTER](/spec/12/) for requesting messages with specific attributes
-* [34/WAKU2-PEER-EXCHANGE](/spec/34) for discovering peers
+* [34/WAKU2-PEER-EXCHANGE](/spec/34/) for discovering peers
 
 # Waku Archive
 
@@ -307,8 +307,8 @@ functionality offered by the libp2p circuit relay protocols, and
 2) use [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md) to upgrade to a direct connection.
 
 Nodes that do not announce themselves at all and only plan to use light protocols,
-MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34).
-For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34) offer the same functionality,
+MAY use rendezvous discovery instead of or along-side [34/WAKU2-PEER-EXCHANGE](/specs/34/).
+For these nodes, rendezvous and [34/WAKU2-PEER-EXCHANGE](/specs/34/) offer the same functionality,
 but return node sets sampled in different ways.
 Using both can help increasing connectivity.
 
@@ -331,7 +331,7 @@ The app name, `my-app` is used to encode a single shard in the form:
 <rs (utf8 encoded)> | <2-byte shard cluster index> | <2-byte shard index>
 ```
 
-Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/h)),
+Registering shard 2 in the Status shard cluster (with shard cluster index 16, see [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/)),
 the register query would look like
 
 ```
@@ -471,16 +471,26 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
+* [56/STATUS-COMMUNITIES](/spec/56/)
+* [55/STATUS-1TO1-CHAT](/spec/55/)
+* [23/WAKU2-TOPICS](/spec/23/)
 * [11/WAKU2-RELAY](/spec/11/)
 * [51/WAKU2-RELAY-SHARDING](/spec/51/)
-* [33/WAKU2-DISCV5](/spec/33/)
-* [13/WAKU2-STORE](/spec/13/)
+* [52/WAKU2-RELAY-STATIC-SHARD-ALLOC](/spec/52/)
+* [30/ADAPTIVE-NODES](/spec/30/)
 * [19/WAKU2-LIGHTPUSH](/spec/19/)
 * [12/WAKU2-FILTER](/spec/12/)
 * [34/WAKU2-PEER-EXCHANGE](/spec/34/)
+* [13/WAKU2-STORE](/spec/13/)
+* [libp2p rendezvous](https://github.com/libp2p/specs/blob/master/rendezvous/README.md)
+* [libp2p AutoNAT protocol](https://github.com/libp2p/specs/blob/master/autonat/README.md)
 * [33/WAKU2-DISCV5](/spec/33/)
-* [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
 * [libp2p circuit relay](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md)
+* [limiting](https://github.com/libp2p/specs/blob/6634ca7abb2f955645243d48d1cd2fd02a8e8880/relay/circuit-v2.md#reservation)
 * [DCUtR](https://github.com/libp2p/specs/blob/master/relay/DCUtR.md)
+* [scoring](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators)
+* [45/WAKU2-ADVERSARIAL-MODELS](/spec/45/)
+
+## Informative
+* [Circuit Relay](https://docs.libp2p.io/concepts/nat/circuit-relay/)
 * [31/WAKU2-ENR](/spec/31/)
-* [45/WAKU2-ADVERSARIAL-MODELS](/spec/45)
