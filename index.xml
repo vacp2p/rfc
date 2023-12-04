@@ -240,7 +240,7 @@ Peer management is a closely related concept and refers to the set of actions a 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://rfc.vac.dev/spec/28/</guid>
-      <description>This spec is a proposition of voting on community featuring over waku v2.
+      <description>Abstract # This specification describes a voting method to feature different active Status Communities.
 Overview # When there is a active community that is seeking new members, current users of community should be able to feature their community so that it will be accessible to larger audience. Status community curation DApp should provide such a tool.
 Rules of featuring: - Given community can&amp;rsquo;t be featured twice in a row. - Only one vote per user per community (single user can vote on multiple communities) - Voting will be done off-chain - If community hasn&amp;rsquo;t been featured votes for given community are still valid for the next 4 weeks</description>
     </item>
