@@ -54,7 +54,7 @@ This extends to banning and kicking members.
 7. A Community is uniquely identified by a public key.
 8. The public key of the Community is shared out of band.
 9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
-10. Community members run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
+10. Community members run their own Waku nodes, with the configuration described in [Waku-Protocols](#waku-protocols).
 Light nodes solely implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
@@ -396,7 +396,7 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 1. The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.
 2. If the Community is Private, Re-keying is performed between the members of the Community, to ensure that the banned member is unable to decrypt any messages.
 
-## Waku protocols 
+## Waku Protocols 
 
 The following Waku protocols SHOULD be used to implement Status Communities -
 
