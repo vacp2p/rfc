@@ -5,13 +5,12 @@ name: Status Community Directory Curation Voting using Waku v2
 status: raw
 tags: waku-application
 description: A voting protocol for peers to submit votes to a smart contract. Voting is immutable, which helps avoid sabotage from malicious peers.
-editor: Jimmy Debe <jimmy@status.im>
-contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
+editor: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
 # Abstract
-A voting protocol for peers to submit votes to a smart contract. Voting is immutable, 
-which helps avoid sabotage from malicious peers.
+This specification is a voting protocol for peers to submit votes to a smart contract. Voting is immutable, 
+this will help avoid sabotage from malicious peers.
 
 # Motivation
 
