@@ -289,7 +289,7 @@ The topic of that special channel follows the following format:
 /{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
 ```
 
-All messages sent with this topic MUST be instances of `ApplicationMetadataMessage` ([6/PAYLOADS](/specs/6-payloads)) with a `payload` of `CommunityMessageArchiveIndex`.
+All messages sent with this topic MUST be instances of `ApplicationMetadataMessage` ([62/PAYLOADS](/specs/62/)) with a `payload` of `CommunityMessageArchiveIndex`.
 
 Only the control node MAY post to the special channel. Other messages on this specified channel MUST be ignored by clients.
 Community members MUST NOT have permission to send messages to the special channel.
@@ -321,7 +321,7 @@ There are two scenarios in which member nodes can receive such a magnet link mes
 2. The member node requests messages for a time range of up to 30 days from store nodes (this is the case when a new community member joins a community)
 
 ## Downloading message archives
-When member nodes receive a message with a `CommunityMessageHistoryArchive` ([6/PAYLOADS](/spec/6#communitymessagearchive)) from the aforementioned channnel, they MUST extract the `magnet_uri` and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the `index` file of the torrent (see [Creating message archive torrents](#creating-message-archive-torrents)).
+When member nodes receive a message with a `CommunityMessageHistoryArchive` ([62/PAYLOADS](/spec/62/)) from the aforementioned channnel, they MUST extract the `magnet_uri` and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the `index` file of the torrent (see [Creating message archive torrents](#creating-message-archive-torrents)).
 
 Due to the nature of distributed systems, there's no guarantee that a received message is the "last" message. This is especially true when member nodes request historical messages from store nodes. 
 
@@ -385,8 +385,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 * [Magnet URI scheme](https://en.wikipedia.org/wiki/Magnet_URI_scheme)
 * [forum discussion](https://forum.vac.dev/t/status-communities-protocol-and-product-point-of-view/114)
 * [org channels](https://github.com/status-im/specs/pull/151)
-* [UI feature spec](https://github.com/status-im/feature-specs/pull/36))
+* [UI feature spec](https://github.com/status-im/feature-specs/pull/36)
 * [Extensions for Peers to Send Metadata Files](https://www.bittorrent.org/beps/bep_0009.html)
 * [org channels spec](https://rfc.vac.dev/spec/56/)
 * [14/WAKU2-MESSAGE](/spec/14/)
-* [62/PAYLOAD](/spec/62)
+* [62/PAYLOAD](/spec/62/)
