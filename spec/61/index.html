@@ -5,9 +5,9 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract # Messages are stored permanently by store nodes (13/WAKU2-STORE) for up to a certain configurable period of time, limited by the overall storage provided by a store node. Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels.">
+<meta name="description" content="Explains how new members of a Status community can request historical messages from archive nodes.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="61/STATUS-Community-History-Archives" />
-<meta property="og:description" content="Abstract # Messages are stored permanently by store nodes (13/WAKU2-STORE) for up to a certain configurable period of time, limited by the overall storage provided by a store node. Messages older than that period are no longer provided by store nodes, making it impossible for other nodes to request historical messages that go beyond that time range. This raises issues in the case of Status communities, where recently joined members of a community are not able to request complete message histories of the community channels." />
+<meta property="og:description" content="Explains how new members of a Status community can request historical messages from archive nodes." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/61/" /><meta property="article:section" content="docs" />
 
@@ -17,7 +17,7 @@
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.ad047a036a5771658082cf91d13a64765336a96d23990e4fa3c706cce4503d17.js" integrity="sha256-rQR6A2pXcWWAgs&#43;R0TpkdlM2qW0jmQ5Po8cGzORQPRc="></script>
+<script defer src="/en.search.min.27a29842b52d88c2495d40b442915c0aa66a88c73b8c673764912ea5bf2380db.js" integrity="sha256-J6KYQrUtiMJJXUC0QpFcCqZqiMc7jGc3ZJEupb8jgNs="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -578,7 +578,7 @@ Other community member nodes will download the message archives from the BitTorr
 <p>The control node MUST send magnet links containing message archives and the message archive index to a special community channel.
 The topic of that special channel follows the following format:</p>
 <pre tabindex="0"><code>/{application-name}/{version-of-the-application}/{content-topic-name}/{encoding}
-</code></pre><p>All messages sent with this topic MUST be instances of <code>ApplicationMetadataMessage</code> (<a href="/specs/6-payloads">6/PAYLOADS</a>) with a <code>payload</code> of <code>CommunityMessageArchiveIndex</code>.</p>
+</code></pre><p>All messages sent with this topic MUST be instances of <code>ApplicationMetadataMessage</code> (<a href="/specs/62/">62/PAYLOADS</a>) with a <code>payload</code> of <code>CommunityMessageArchiveIndex</code>.</p>
 <p>Only the control node MAY post to the special channel. Other messages on this specified channel MUST be ignored by clients.
 Community members MUST NOT have permission to send messages to the special channel.
 However, community member nodes MUST subscribe to special channel to receive Waku messages containing magnet links for message archives.</p>
@@ -611,7 +611,7 @@ There are two scenarios in which member nodes can receive such a magnet link mes
   Downloading message archives
   <a class="anchor" href="#downloading-message-archives">#</a>
 </h2>
-<p>When member nodes receive a message with a <code>CommunityMessageHistoryArchive</code> (<a href="/spec/6#communitymessagearchive">6/PAYLOADS</a>) from the aforementioned channnel, they MUST extract the <code>magnet_uri</code> and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the <code>index</code> file of the torrent (see <a href="#creating-message-archive-torrents">Creating message archive torrents</a>).</p>
+<p>When member nodes receive a message with a <code>CommunityMessageHistoryArchive</code> (<a href="/spec/62/">62/PAYLOADS</a>) from the aforementioned channnel, they MUST extract the <code>magnet_uri</code> and pass it to their underlying BitTorrent client so they can fetch the latest message history archive index, which is the <code>index</code> file of the torrent (see <a href="#creating-message-archive-torrents">Creating message archive torrents</a>).</p>
 <p>Due to the nature of distributed systems, there&rsquo;s no guarantee that a received message is the &ldquo;last&rdquo; message. This is especially true when member nodes request historical messages from store nodes.</p>
 <p>Therefore, member nodes MUST wait for 20 seconds after receiving the last <code>CommunityMessageArchive</code> before they start extracting the magnet link to fetch the latest archive index.</p>
 <p>Once a message history archive index is downloaded and parsed back into <code>WakuMessageArchiveIndex</code>, community member nodes use a local lookup table to determine which of the listed archives are missing using the KECCAK-256 hashes stored in the index.</p>
@@ -665,6 +665,20 @@ This means, it&rsquo;s possible for multiple control nodes to exist.</p>
   References
   <a class="anchor" href="#references">#</a>
 </h1>
+<ul>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="https://bittorrent.org">BitTorrent</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Magnet_URI_scheme">Magnet URI scheme</a></li>
+<li><a href="https://forum.vac.dev/t/status-communities-protocol-and-product-point-of-view/114">forum discussion</a></li>
+<li><a href="https://github.com/status-im/specs/pull/151">org channels</a></li>
+<li><a href="https://github.com/status-im/feature-specs/pull/36">UI feature spec</a></li>
+<li><a href="https://www.bittorrent.org/beps/bep_0009.html">Extensions for Peers to Send Metadata Files</a></li>
+<li><a href="https://rfc.vac.dev/spec/56/">org channels spec</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/62/">62/PAYLOAD</a></li>
+</ul>
 </article>
  
       
