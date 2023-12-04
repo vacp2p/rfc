@@ -7,7 +7,7 @@ category: Standards Track
 description: Describes how an application can use the Status Keycard to create, store, and transact with different accounts.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
-  - "?"
+  - Jimmy Debe <jimmy@status.im>
 ---
 
 # Terminology
