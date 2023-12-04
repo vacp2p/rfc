@@ -5,6 +5,7 @@ name: Status Communities that run over Waku v2
 status: draft
 category: Standards Track
 tags: waku-application
+description: Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
@@ -53,7 +54,7 @@ This extends to banning and kicking members.
 7. A Community is uniquely identified by a public key.
 8. The public key of the Community is shared out of band.
 9. The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.
-10. Community members run their own Waku nodes, with the configuration described in [#Waku-Protocols](#Waku-Protocols).
+10. Community members run their own Waku nodes, with the configuration described in [Waku-Protocols](#waku-protocols).
 Light nodes solely implementing [19/WAKU2-LIGHTPUSH](/spec/19/) may not be able to run their own Waku node with the configuration described.
 
 # Design
@@ -395,7 +396,7 @@ At this point, the peer MAY send a "CommunityCancelRequestToJoin" message to can
 1. The Community owner adds a member to the ban list, revokes their grants, and publishes the updated Community metadata.
 2. If the Community is Private, Re-keying is performed between the members of the Community, to ensure that the banned member is unable to decrypt any messages.
 
-## Waku protocols 
+## Waku Protocols 
 
 The following Waku protocols SHOULD be used to implement Status Communities -
 
@@ -443,6 +444,17 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
+- [55/STATUS-1TO1-CHAT](/spec/55/)
 - [53/WAKU2-X3DH](/spec/53/)
-- https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go
-- https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md
+- [19/WAKU2-LIGHTPUSH](/spec/19/)
+- [14/WAKU2-MESSAGE](/spec/14/)
+- [10/WAKU2](/spec/10/)
+- [11/WAKU2-RELAY](/spec/11/)
+- [54/WAKU2-X3DH-SESSIONS](/spec/54/)
+- [13/WAKU2-STORE](/spec/13/)
+- [12/WAKU2-FILTER](/spec/12/)
+- [19/WAKU2-LIGHTPUSH](/spec/19/)
+
+## informative
+- [community.go](https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go)
+- [organisation-channels.md](https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md)
