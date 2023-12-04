@@ -4,6 +4,7 @@ title: 71/STATUS-PUSH-NOTIFICATION-SERVER
 name: Push Notification Server
 status: raw
 category: Standards Track
+description: A set of methods to allow Status clients to use push notification services in mobile environments.
 editor: Jimmy Debe <jimmy@status.im>
 contributors: 
   - Andrea Maria Piana <andreap@status.im>
@@ -36,7 +37,7 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 | client | A node that implements the Status specifications. |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
-| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](https://rfc.vac.dev/spec/13/) specification. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](/spec/13/) specification. |
 
 ### Server Components 
 
@@ -72,9 +73,9 @@ Registering a client with a push notification service.
 - A client SHOULD make sure that all the notification services they registered with have the same information about their tokens.
 
 - A `PNR message` (Push Notification Registration) MUST be sent to the
-[partitioned topic](https://rfc.vac.dev/spec/54/) for the public key of the node, encrypted with this key.
+[partitioned topic](/spec/54/) for the public key of the node, encrypted with this key.
 
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION`.
 
 - The marshaled protobuf payload MUST also be encrypted with AES-GCM using the Diffie–Hellman key generated from the client and server identity.
 This is done in order to ensure that the extracted key from the signature will be considered invalid if it can’t decrypt the payload.
@@ -122,7 +123,7 @@ A push notification server will handle the message according to the following ru
 
 - it MUST verify that `apn_topic` is set if token_type is APN_TOKEN.
 
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION_RESPONSE`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_REGISTRATION_RESPONSE`.
 
 The payload of the response is:
 
@@ -143,7 +144,7 @@ message PushNotificationRegistrationResponse {
 
 ```
 
-A client SHOULD listen for a response sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) that the key used to register. 
+A client SHOULD listen for a response sent on the [partitioned topic](/spec/54/) that the key used to register. 
 If success is true the client has registered successfully.
 
 If `success` is `false`:
@@ -165,7 +166,7 @@ If `success` is `false`:
 
 - `request_id` SHOULD be set to the [`SHAKE-256`](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf) of the encrypted payload.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
+- The response MUST be sent on the [partitioned topic](/spec/54/) of the sender and
 MUST not be encrypted using the secure transport to facilitate the usage of ephemeral keys.
 
 - If no response is returned, the request SHOULD be considered failed and
@@ -225,17 +226,17 @@ message ContactCodeAdvertisement {
 ```
 
 ### Handle Advertisement Message:
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_INFO`.
 - If no filtering is done based on public keys, the access token SHOULD be included in the advertisement.
   Otherwise it SHOULD be left empty.
-- This SHOULD be advertised on the [contact code topic](https://rfc.vac.dev/spec/53/) and
+- This SHOULD be advertised on the [contact code topic](/spec/53/) and
 SHOULD be coupled with normal contact-code advertisement.
 - When a user register or re-register with a push notification service, their contact-code SHOULD be re-advertised.
 - Multiple servers MAY be advertised for the same installation_id for redundancy reasons.
 
 ### Discovering a Server:
 To discover a push notification service for a given user, their 
-[contact code topic](https://rfc.vac.dev/spec/53/) SHOULD be listened to. 
+[contact code topic](/spec/53/) SHOULD be listened to. 
 A Waku-Store node can be queried for the specific topic to retrieve the most up-to-date contact code.
 
 ### Querying a Server:
@@ -251,10 +252,10 @@ message PushNotificationQuery {
 ```
 
 ### Handle Query Message:
-- The message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY`.
+- The message MUST be wrapped in a [`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_QUERY`.
 - it MUST be sent to the server on the topic derived from the hashed public key of the key we are querying,
 [as described above](#query-topic).
-- An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/).
+- An ephemeral key SHOULD be used and SHOULD NOT be encrypted using the [secure transport](/spec/53/).
 
 If the server has information about the client a response MUST be sent:
 
@@ -279,7 +280,7 @@ message PushNotificationQueryResponse {
 
 ### Handle Query Response:
 - A `PushNotificationQueryResponse` message MUST be wrapped in a
-[`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
+[`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_QUERY_RESPONSE`.
 Otherwise a response MUST NOT be sent.
 
 - If `allowed_key_list` is not set `access_token` MUST be set and `allowed_key_list` MUST NOT be set.
@@ -292,8 +293,8 @@ Otherwise a response MUST NOT be sent.
 If AES decryption succeeds it will return a valid `uuid` which is what is used for access_token.
 The token SHOULD be used to send push notifications.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
-MUST NOT be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](/spec/54/) of the sender and
+MUST NOT be encrypted using the [secure transport](/spec/53/) to facilitate the usage of ephemeral keys.
 
 - On receiving a response a client MUST verify `grant` to ensure that the server has been authorized to send push notification to a given client.
 
@@ -336,7 +337,7 @@ message PushNotificationRequest {
 ```
 ### Handle Notification Request:
 - A `PushNotificationRequest` message MUST be wrapped in a
-[`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
+[`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_REQUEST`.
 
 - Where `message` is the encrypted payload of the message and `chat_id` is the `SHAKE-256` of the `chat_id`.
 `message_id` is the id of the message `author` is the `SHAKE-256` of the public key of the sender.
@@ -401,10 +402,10 @@ message PushNotificationResponse {
 Where `message_id` is the `message_id` sent by the client.
 
 ### Handle Notification Response:
-- A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](https://rfc.vac.dev/spec/62) with type set to `PUSH_NOTIFICATION_RESPONSE`.
+- A `PushNotificationResponse` message MUST be wrapped in a [`ApplicationMetadataMessage`](/spec/62) with type set to `PUSH_NOTIFICATION_RESPONSE`.
 
-- The response MUST be sent on the [partitioned topic](https://rfc.vac.dev/spec/54/) of the sender and
-MUST not be encrypted using the [secure transport](https://rfc.vac.dev/spec/53/) to facilitate the usage of ephemeral keys.
+- The response MUST be sent on the [partitioned topic](/spec/54/) of the sender and
+MUST not be encrypted using the [secure transport](/spec/53/) to facilitate the usage of ephemeral keys.
 
 - If the request is accepted `success` MUST be set to `true`. Otherwise `success` MUST be set to `false`.
 
@@ -495,7 +496,7 @@ Data disclosed
 
 ### PushNotificationRequest:
 `requests`: a list of PushNotification<br />
-`message_id`: the [Status message id](https://rfc.vac.dev/spec/62)
+`message_id`: the [Status message id](/spec/62)
 
 Data disclosed
 - The status `message_id` for which the notification is for
@@ -516,7 +517,7 @@ A client in anonymous mode can register with the server using a key that is diff
 This will hide their real chat key. This public key is effectively a secret and 
 SHOULD only be disclosed to clients approved to notify a user. 
 
-- A client MAY advertise the access token on the [contact-code topic](https://rfc.vac.dev/spec/53/) of the key generated. 
+- A client MAY advertise the access token on the [contact-code topic](/spec/53/) of the key generated. 
 
 - A client MAY share their public key contact updates in the [protobuf record](https://developers.google.com/protocol-buffers/). 
 
@@ -524,7 +525,7 @@ SHOULD only be disclosed to clients approved to notify a user.
 
 The method described above effectively does not share the identity of the sender nor the receiver to the server, but 
 MAY result in missing push notifications as the propagation of the secret is left to the client. 
-This can be mitigated by [device syncing](https://rfc.vac.dev/spec/62), but not completely addressed.
+This can be mitigated by [device syncing](/spec/62), but not completely addressed.
 
 # Security/Privacy Considerations
 If anonymous mode is not used, when registering with a push notification service a client will disclose:
@@ -552,13 +553,13 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 1. [PUSH-NOTIFICATION-SERVER, Initial Specification](https://github.com/status-im/specs/blob/master/docs/raw/push-notification-server.md)
 2. [Push Notification, Apple Developer](https://developer.apple.com/library/archive/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html#//apple_ref/doc/uid/TP40008194-CH8-SW1)
 3. [Firebase](https://firebase.google.com)
-4. [13/WAKU2-STORE](https://rfc.vac.dev/spec/13/)
+4. [13/WAKU2-STORE](/spec/13/)
 5. [gorush](https://github.com/appleboy/gorush)
-6. [54/WAKU2-X3DH-SESSIONS](https://rfc.vac.dev/spec/54/)
-7. [62/PAYLOAD](https://rfc.vac.dev/spec/62)
+6. [54/WAKU2-X3DH-SESSIONS](/spec/54/)
+7. [62/PAYLOAD](/spec/62)
 8. [SHAKE-256](https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.202.pdf)
 9. [Protocol Buffers](https://developers.google.com/protocol-buffers)
-10. [53/WAKU2-X3DH](https://rfc.vac.dev/spec/53/)
+10. [53/WAKU2-X3DH](/spec/53/)
 
 
 
