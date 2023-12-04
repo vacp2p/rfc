@@ -4,6 +4,7 @@ title: 65/STATUS-ACCOUNTS
 name: Status Accounts
 status: draft
 category: Standards Track
+description: Details of what a Status account is, how accounts are created, and how accounts are used.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Corey Petty <corey@status.im>
