@@ -5,7 +5,7 @@ name: Status 1-to-1 Chat
 status: draft
 category: Standards Track
 tags: waku-application
-description: A 1-to-1 chat protocol to send public and private messages to a single recipient by the Status app.
+description: A chat protocol to send public and private messages to a single recipient by the Status app.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
