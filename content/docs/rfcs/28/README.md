@@ -9,7 +9,8 @@ editor: Jimmy Debe <jimmy@status.im>
 contributors: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
-This spec is a proposition of voting on community featuring over waku v2.
+# Abstract
+To gain new members, current users can vote to feature an active Status community to the larger Status audience.
 
 # Background
 
