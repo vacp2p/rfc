@@ -5,9 +5,9 @@ name: Status Keycard Usage
 status: raw
 category: Standards Track
 description: Describes how an application can use the Status Keycard to create, store, and transact with different accounts.
-editor: Jimmy Debe <jimmy@status.im>
+editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
-  - Aaryamann Challani <aaryamann@status.im>
+  - "?"
 ---
 
 # Terminology
@@ -353,3 +353,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 1. [BIP-32 specification](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
 2. [Keycard documentation](https://keycard.tech/docs/)
+3. [16/Keycard-Usage](https://specs.status.im/draft/16)
