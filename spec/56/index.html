@@ -5,13 +5,9 @@
   <meta name="generator" content="Hugo 0.106.0">
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Abstract # This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app.
-Background and Motivation # The purpose of Status communities, as specified in this document, is allowing for large group chats. Communities can have further substructure, e.g. specific channels.
-Smaller group chats, on the other hand, are out of scope for this document and can be built over 55/STATUS-1TO1-CHAT.">
+<meta name="description" content="Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application.">
 <meta name="theme-color" content="#FFFFFF"><meta property="og:title" content="56/STATUS-COMMUNITIES" />
-<meta property="og:description" content="Abstract # This document describes the design of Status Communities over Waku v2, allowing for multiple users to communicate in a group chat. This is a key feature for the Status messaging app.
-Background and Motivation # The purpose of Status communities, as specified in this document, is allowing for large group chats. Communities can have further substructure, e.g. specific channels.
-Smaller group chats, on the other hand, are out of scope for this document and can be built over 55/STATUS-1TO1-CHAT." />
+<meta property="og:description" content="Status Communities allow multiple users to communicate in a group chat. This is a key feature for the Status application." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://rfc.vac.dev/spec/56/" /><meta property="article:section" content="docs" />
 
@@ -21,7 +17,7 @@ Smaller group chats, on the other hand, are out of scope for this document and c
 <link rel="manifest" href="/manifest.json">
 <link rel="icon" href="/favicon.png" type="image/x-icon">
 <link rel="stylesheet" href="/book.min.e935e20bd0d469378cb482f0958edf258c731a4f895dccd55799c6fbc8043f23.css" integrity="sha256-6TXiC9DUaTeMtILwlY7fJYxzGk&#43;JXczVV5nG&#43;8gEPyM=">
-<script defer src="/en.search.min.8a9b8706e3cd95f3f5a0e186eb62ea8e09db7f65e9e0abb1556454de663f406a.js" integrity="sha256-ipuHBuPNlfP1oOGG62Lqjgnbf2Xp4KuxVWRU3mY/QGo="></script>
+<script defer src="/en.search.min.f643eb357030901ba6c3deff43d127af51734af9b1c92fdf5356973011b9673f.js" integrity="sha256-9kPrNXAwkBumw97/Q9Enr1FzSvmxyS/fU1aXMBG5Zz8="></script>
 <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -206,7 +202,7 @@ https://github.com/alex-shpak/hugo-book
             <li><a href="#community-ban-flow">Community Ban Flow</a></li>
           </ul>
         </li>
-        <li><a href="#waku-protocols">Waku protocols</a></li>
+        <li><a href="#waku-protocols">Waku Protocols</a></li>
         <li><a href="#backups">Backups</a></li>
         <li><a href="#clock">Clock</a></li>
       </ul>
@@ -214,7 +210,11 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#security-considerations">Security Considerations</a></li>
     <li><a href="#future-work">Future work</a></li>
     <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -308,7 +308,7 @@ This extends to banning and kicking members.</li>
 <li>A Community is uniquely identified by a public key.</li>
 <li>The public key of the Community is shared out of band.</li>
 <li>The metadata of the Community can be found by listening on a content topic derived from the public key of the Community.</li>
-<li>Community members run their own Waku nodes, with the configuration described in <a href="#Waku-Protocols">#Waku-Protocols</a>.
+<li>Community members run their own Waku nodes, with the configuration described in <a href="#waku-protocols">Waku-Protocols</a>.
 Light nodes solely implementing <a href="/spec/19/">19/WAKU2-LIGHTPUSH</a> may not be able to run their own Waku node with the configuration described.</li>
 </ol>
 <h1 id="design">
@@ -661,7 +661,7 @@ At this point, the peer MAY send a &ldquo;CommunityCancelRequestToJoin&rdquo; me
 <li>If the Community is Private, Re-keying is performed between the members of the Community, to ensure that the banned member is unable to decrypt any messages.</li>
 </ol>
 <h2 id="waku-protocols">
-  Waku protocols
+  Waku Protocols
   <a class="anchor" href="#waku-protocols">#</a>
 </h2>
 <p>The following Waku protocols SHOULD be used to implement Status Communities -</p>
@@ -728,9 +728,24 @@ This allows ordering of messages in an asynchronous network where messages may b
   <a class="anchor" href="#references">#</a>
 </h1>
 <ul>
+<li><a href="/spec/55/">55/STATUS-1TO1-CHAT</a></li>
 <li><a href="/spec/53/">53/WAKU2-X3DH</a></li>
-<li><a href="https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go">https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go</a></li>
-<li><a href="https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md">https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+<li><a href="/spec/14/">14/WAKU2-MESSAGE</a></li>
+<li><a href="/spec/10/">10/WAKU2</a></li>
+<li><a href="/spec/11/">11/WAKU2-RELAY</a></li>
+<li><a href="/spec/54/">54/WAKU2-X3DH-SESSIONS</a></li>
+<li><a href="/spec/13/">13/WAKU2-STORE</a></li>
+<li><a href="/spec/12/">12/WAKU2-FILTER</a></li>
+<li><a href="/spec/19/">19/WAKU2-LIGHTPUSH</a></li>
+</ul>
+<h2 id="informative">
+  informative
+  <a class="anchor" href="#informative">#</a>
+</h2>
+<ul>
+<li><a href="https://github.com/status-im/status-go/blob/6072bd17ab1e5d9fc42cf844fcb8ad18aa07760c/protocol/communities/community.go">community.go</a></li>
+<li><a href="https://github.com/status-im/specs/blob/403b5ce316a270565023fc6a1f8dec138819f4b0/docs/raw/organisation-channels.md">organisation-channels.md</a></li>
 </ul>
 </article>
  
@@ -792,7 +807,7 @@ This allows ordering of messages in an asynchronous network where messages may b
             <li><a href="#community-ban-flow">Community Ban Flow</a></li>
           </ul>
         </li>
-        <li><a href="#waku-protocols">Waku protocols</a></li>
+        <li><a href="#waku-protocols">Waku Protocols</a></li>
         <li><a href="#backups">Backups</a></li>
         <li><a href="#clock">Clock</a></li>
       </ul>
@@ -800,7 +815,11 @@ This allows ordering of messages in an asynchronous network where messages may b
     <li><a href="#security-considerations">Security Considerations</a></li>
     <li><a href="#future-work">Future work</a></li>
     <li><a href="#copyright">Copyright</a></li>
-    <li><a href="#references">References</a></li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#informative">informative</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
