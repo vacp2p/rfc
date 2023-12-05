@@ -44,9 +44,9 @@ This protocol will consist of several stages:
 3.  Execution of the double ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.
 
 ## Cryptographic functions required
--   XEd448 for digital signatures involved in the X3DH key generation.
--   SHA512 for hashing and the generation of HMACs.
--   AES256-CBC for the encryption/decryption of messages.
+-   XEd448 and SHA512 for digital signatures involved in the X3DH key generation.
+-   SHA256 for the key generation related to AES256-GCM.
+-   AES256-GCM for the encryption/decryption of messages.
 
 ## Considerations on the X3DH initialization
 This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve Curve448 MUST be chosen: 
@@ -398,7 +398,7 @@ User C needs to compute the following encryptions and provide other users with t
 - `c_D = UPKE(pk_D, s'_F)`
 
 The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of the group.
-The symmetric algorithm MUST be `AES256-CBC`.
+The symmetric algorithm MUST be `AES256-GCM`.
 
 > One observes that the solution based on TreeKEM makes the combination ADKG + DR obsolete.
 > TreeKEM can manage the situation of a user associated to several devices. 
@@ -410,6 +410,7 @@ This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
 
 # Privacy and Security Considerations
 
+- The double ratchet "recommends" using AES in CBC mode. Since encryption must be with an AEAD encryption scheme, we will use AES in GCM mode instead (supported by Noise).
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
 - The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
