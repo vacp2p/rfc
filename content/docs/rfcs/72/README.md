@@ -6,6 +6,7 @@ status: raw
 category: Standards Track
 editor: Jimmy Debe <jimmy@status.im>
 contributors: 
+- ?
 ---
 
 # Abstract
@@ -27,26 +28,26 @@ With [32/RLN-V1](https://rfc.vac.dev/spec/32/), sending and receiving messages w
 This is an example of a keystore used by a [17/WAKU2-RLN-Relay](https://rfc.vac.dev/spec/17/).
 
 ```js
-
-application: "waku-rln-relay",
-appIdentifier: "string",
-version: "string",
-  credentials: {
-    ["memberHash | string"]: {
+application: 1 ,
+appIdentifier: 2,
+version: 3,
+credentials: {
+    membershipHash: {
       crypto: {
-        cipher: "string",
-        cipherparams: { object },
-        ciphertext: "string",
-        kdf: "pbkdf2 | string",
+        cipher: 4,
+        cipherparams: 5,
+        ciphertext: 6,
+        kdf: 7,
         kdfparams: {
-          dklen: interger,
-          c: interger,
-          prf: "string",
-          salt: "string",
+          dklen: 8,
+          c: 9,
+          prf: 10,
+          salt: 11,
         },
-        mac: “SHA 256 Hash | string",
-      },
+        mac: 12,
+      }
     }
+}
 
 ```
 
@@ -63,11 +64,11 @@ Keystore modules MUST include metadata, key derivation function, checksum, ciphe
 - Information about the keystore SHOULD be stored in the metadata. 
 - The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
-`application` : current application
+`application` : current application, MUST be a string
 
-`version` : application version
+`version` : application version, MUST be a string
 
-`appIdentifier`: application identifier
+`appIdentifier`: application identifier, MUST be a string
 
 ## Credentials:
 The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`
@@ -76,47 +77,48 @@ The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`
 
 ### membershipHash 
 - MUST be a 256 byte hash.
+- it Must be a string
 - SHOULD be generated with `treeIndex`, `membershipContract`, and `identityCredential`.
 - MUST not already exist in the keystore.
 
-`treeIndex` : 
+`treeIndex`  
 - it MUST be a RLN membership tree index in a merkle tree data structure filled with `identity_commitment` from user registrations.
 As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
 - MUST be integer
 
-`membershipContract` : 
+`membershipContract` 
 - it MUST be a hash of a `contractId` and `contractAddress`
 - `contractId` MUST be an integer.
 - `contractAddess` MUST be a string.
 
-`identityCredential` : 
+`identityCredential` 
 - it MUST be a hash of `identity_commitment` stored in a Merkle tree.
 - MUST be a string.
 
-it MUST Consists of:
-- `identity_secret`: `identity_nullifier` + `identity_trapdoor` 
-  - `identity_nullifier` : Random 32 byte value used for `identity_secret` generation.
-  - `identity_trapdoor` : Random 32 byte value for `identity_secret` generation.
+it MUST consists of:
+- `identity_secret`= `identity_nullifier` + `identity_trapdoor` 
+  - `identity_nullifier` : Random 32 byte value
+  - `identity_trapdoor` : Random 32 byte value
 
-`identity_secret_hash`: 
+`identity_secret_hash` 
 - it MUST be created with `identity_secret` as a parameter for the hash function.
 - Used to decrypt the `identity_commitment` of the user, and as
 a private input for zero-knowledge proof generation.
 - The secret hash SHOULD be kept private by the user.
 
-`identity_commitment`: 
+`identity_commitment` 
 - it MUST be created with `identity_secret_hash` for hash creation. 
 - MUST be used by a user for contract registering.
 
-### Waku Credential: 
-`WakuCredential` MUST be used for password verification.
+### Waku Credential
+`WakuCredential` 
+- MUST be used for password verification.
+- it MUST follow [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335) 
 
-`WakuCredential` follows [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335) 
 
+### KDF
 
-### KDF:
-
-The password-based encryption SHOULD be KDF, key derivation function, 
+The password-based encryption used SHOULD be KDF, key derivation function, 
 to produce a derived key from a password and other parameters.
 Keystore COULD use PBKDF2 password based encryption, 
 as described in [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt).
@@ -134,30 +136,39 @@ A `WakuCredential` object MUST include:
 ```js
 
 crypto: {
-	cipher: cipher.function,
+	// The cipher function
+	cipher: 1
+	// The cipher parameters
 	cipherparams: {
-		- cipher.parameters
-	}
-	ciphertext: cipher.message,
-	kdf: kdf.function,
-	kdfparams: {
-		param: salt value and iteration count,
-		dklen: length in octets of derived key, MUST be positive integer,
-		c: iteration count, MUST be positive integer,
-		prf: Underlying pseudorandom function,
-		salt: produces a large set of keys based on the password
+		iv: 2
 	},
-	mac: checksum
+	// The cipher message
+	ciphertext: 3,
+	// KDF Function
+	kdf: 4,
+	kdfparams: {
+		// Salt value and iteration count
+		param: 5,
+		// Length in octets of derived key, MUST be positive integer
+		dklen: 6,
+		// Iteration count, MUST be positive integer
+		c: 7,
+		// Underlying pseudorandom function
+		prf: 8,
+		// Produces a large set of keys based on the password
+		salt: 9
+	},
+	// Checksum
+	mac: 10
 }
 
 ```
 	
-### Decryption: 
-- The keystore decrypts a keystore with a password and Merkle proof with PBKDF2.</br>
-- Returns secret key.
-To generate `decryptionKey`, MUST be constructed from password and KDF.
-- The cipher.function encrypts the secret key using the decryption key.
-- The `decryptionKey`, cipher.function and cipher.params MUST be used to encrypt the secret.
+### Decryption
+The keystore decrypts a keystore with a password and Merkle proof with PBKDF2 than returns the secret key.
+- To generate `decryptionKey`, MUST be constructed from password and KDF.
+- The cipher function encrypts the secret key using the `decryptionKey`.
+- The `decryptionKey`, cipher function and cipher parameters MUST be used to encrypt the secret.
 - If the `decryptionKey` is longer than the key size required by the cipher,
 it MUST be truncated to the correct number of bits.
 
@@ -165,10 +176,13 @@ it MUST be truncated to the correct number of bits.
 ### Input:
 Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
 
-`application`: "waku-rln-relay" <br />
-`appIdentifier`: "01234567890abcdef" <br />
-`version`: "0.2" <br />
-`hash_function`: "poseidonHash" <br />
+`application`: "waku-rln-relay"
+
+`appIdentifier`: "01234567890abcdef"
+
+`version`: "0.2" 
+
+`hash_function`: "poseidonHash"
 
 ```js
 identityCredential = {
