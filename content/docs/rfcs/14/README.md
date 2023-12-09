@@ -208,4 +208,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - [Google Protocol buffers v3](https://developers.google.com/protocol-buffers/)
 - [26/WAKU-PAYLOAD](/spec/26)
 - [35/WAKU2-NOISE](/spec/35)
-- [6/PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering)
+
