@@ -27,6 +27,7 @@ bookMenuLevels: 1
   - [63/STATUS-Keycard-Usage]({{< relref "/docs/rfcs/63/README.md" >}})
   - [64/WAKU2-NETWORK]({{< relref "/docs/rfcs/64/README.md" >}})
   - [66/WAKU2-METADATA]({{< relref "/docs/rfcs/66/README.md" >}})
+  - [70/ETH-SECPM]({{< relref "/docs/rfcs/70/README.md" >}})
   - [71/STATUS-PUSH-NOTIFICATION-SERVER]({{< relref "/docs/rfcs/71/README.md" >}})
 - Draft
   - [1/COSS]({{< relref "/docs/rfcs/1/README.md" >}})
