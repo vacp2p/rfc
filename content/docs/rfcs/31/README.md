@@ -60,7 +60,7 @@ We define a  `multiaddrs` key.
 - The `secp256k1` value MUST be present on the record;
   `secp256k1` is defined in [EIP-778](https://eips.ethereum.org/EIPS/eip-778) and contains the compressed secp256k1 public key.
 - The node's peer id SHOULD be deduced from the `secp256k1` value.
-- The multiaddresses SHOULD NOT contain a peer id except for circuit relay addresses
+- The multiaddresses SHOULD NOT contain a peer id.
 - For raw TCP & UDP connections details, [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys SHOULD be used;
   The keys `tcp`, `udp`, `ip` (and `tcp6`, `udp6`, `ip6` for IPv6) are enough to convey all necessary information;
 - To save space, `multiaddrs` key SHOULD only be used for connection details that cannot be represented using the [EIP-778](https://eips.ethereum.org/EIPS/eip-778) pre-defined keys.
@@ -78,7 +78,6 @@ Alice is a node operator, she runs a node that supports inbound connection for t
 - UDP 40404 on `1234:5600:101:1::142`
 - Secure Websocket on `wss://example.com:443/`
 - QUIC on `quic://quic.example.com:443/`
-- A circuit relay address `/ip4/1.2.3.4/tcp/55555/p2p/QmRelay/p2p-circuit/p2p/QmAlice`
 
 Alice SHOULD structure the ENR for her node as follows:
 
@@ -91,13 +90,12 @@ Alice SHOULD structure the ENR for her node as follows:
 | `ip`   | `1.2.3.4` |
 | `ip6`  | `1234:5600:101:1::142` |
 | `secp256k1` | Alice's compressed secp256k1 public key, 33 bytes |
-| `multiaddrs` | <code>len1 &#124; /dns4/example.com/tcp/443/wss &#124; len2 &#124; /dns4/quic.examle.com/tcp/443/quic  &#124; len3 &#124; /ip4/1.2.3.4/tcp/55555/p2p/QmRelay </code> |
+| `multiaddrs` | <code>len1 &#124; /dns4/example.com/tcp/443/wss &#124; len2 &#124; /dns4/quic.examle.com/tcp/443/quic</cpoode> |
 
 Where:
 - `|` is the concatenation operator,
 - `len1` is the length of `/dns4/example.com/tcp/443/wss` byte representation,
 - `len2` is the length of `/dns4/quic.examle.com/tcp/443/quic` byte representation.
-- `len3` is the length of `/ip4/1.2.3.4/tcp/55555/p2p/QmRelay` byte representation. Notice that the `/p2p-circuit` component is not stored, but, since circuit relay addresses are the only one containing a `p2p` component, it's safe to assume that any address containing this component is a circuit relay address. Decoding this type of multiaddresses would require appending the `/p2p-circuit` component.
 
 ### Raw TCP only
 
