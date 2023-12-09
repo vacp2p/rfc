@@ -10,7 +10,6 @@ contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Aaryamann Challani <aaryamann@status.im>
   - Lorenzo Delgado <lorenzo@status.im>
-  - Abhimanyu Rawat <abhi@status.im>
 ---
 
 # Abstract
@@ -126,7 +125,7 @@ It is also unstable across different builds with schema changes due to unknown f
 To overcome this interoperability limitation, a Waku v2 message's hash MUST be computed following this schema:
 
 ```
-message_hash = sha256(concat(pubsub_topic, message.payload, message.content_topic, message.meta, message.timestamp))
+message_hash = sha256(concat(pubsub_topic, message.payload, message.content_topic, message.meta))
 ```
 
 If an optional attribute, such as `meta`, is absent, the concatenation of attributes SHOULD exclude it. This recommendation is made to ensure that the concatenation process proceeds smoothly when certain attributes are missing and to maintain backward compatibility.
@@ -141,9 +140,8 @@ pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d7
 message.payload = 0x010203045445535405060708
 message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 message.meta = 0x73757065722d736563726574
-message.timestamp = 0x175789bfa23f8400
 
-message_hash = 0x64cce733fed134e83da02b02c6f689814872b1a0ac97ea56b76095c3c72bfe05
+message_hash = 0x4fdde1099c9f77f6dae8147b6b3179aba1fc8e14a7bf35203fc253ee479f135f
 ```
 
 Waku message hash computation (`meta` size of 64 bytes):
@@ -153,9 +151,8 @@ pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d7
 message.payload = 0x010203045445535405060708
 message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 message.meta = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f
-message.timestamp = 0x175789bfa23f8400
 
-message_hash = 0x7158b6498753313368b9af8f6e0a0a05104f68f972981da42a43bc53fb0c1b27
+message_hash = 0xc32ed3b51f0c432be1c7f50880110e1a1a60f6067cd8193ca946909efe1b26ad
 ```
 
 Waku message hash computation (`meta` attribute not present):
@@ -164,9 +161,8 @@ pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d7
 message.payload = 0x010203045445535405060708
 message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 message.meta = <not-present>
-message.timestamp = 0x175789bfa23f8400
 
-message_hash = 0xa2554498b31f5bcdfcbf7fa58ad1c2d45f0254f3f8110a85588ec3cf10720fd8
+message_hash = 0x87619d05e563521d9126749b45bd4cc2430df0607e77e23572d874ed9c1aaa62
 ```
 
 Waku message hash computation (`payload` length 0):
@@ -175,9 +171,8 @@ pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d7
 message.payload = []
 message.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 message.meta = 0x73757065722d736563726574
-message.timestamp = 0x175789bfa23f8400
 
-message_hash = 0x483ea950cb63f9b9d6926b262bb36194d3f40a0463ce8446228350bd44e96de4
+message_hash = 0xe1a9596237dbe2cc8aaf4b838c46a7052df6bc0d42ba214b998a8bfdbe8487d6
 ```
 
 # Security Considerations
