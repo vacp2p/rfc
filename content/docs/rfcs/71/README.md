@@ -21,11 +21,13 @@ Apple Push Notification, service for iOS or
 
 For some Android devices, foreground services are restricted, requiring a user to grant authorization to applications to use foreground notifications. 
 Apple iOS devices restrict notifications to a few internal functions that every application can not use. 
-Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, it will not schedule any time if the application was closed with force quit. 
+Applications on iOS can request execution time when they are in the background. This has a limited set of use cases for example, 
+it will not schedule any time if the application was closed with force quit. 
 Requesting execution time is not responsive enough to implement a push notification system. 
 Status provides a set of methods to acheive push notification services.
 
-Since this can not be safely implemented in a privacy-preserving manner, clients need to be given an option to opt-in to receive and send push notifications. They are disabled by default.
+Since this can not be safely implemented in a privacy-preserving manner, clients need to be given an option to opt-in to receive and send push notifications. 
+They are disabled by default.
 
 # Specification
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in RFC 2119.
@@ -37,7 +39,8 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 | client | A node that implements the Status specifications. |
 | user | The owner of a device that runs a client. |
 | server | A service that performs push notifications. |
-| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. Follows [13/WAKU-STORE](/spec/13/) specification. |
+| Waku-Store | A Waku node that decides to provide functionality to store messages permanently and deliver the messages to requesting clients. As described in [13/WAKU-STORE](/spec/13/) specification.|
+
 
 ### Server Components 
 
