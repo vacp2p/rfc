@@ -4,9 +4,10 @@ title: 67/STATUS-WAKU2-USAGE
 name: Status Waku2 Usage
 status: raw
 category: Standards Track
-tags: an optional list of tags, not standard
-editor: Jimmy Debe <jimmyyy@status.im>
-contributors: Aaryamann Challani <aaryamann@status.im>
+description: Get familiar with all the Waku protocols used by the Status application.
+editor: Jimmy Debe <jimmy@status.im>
+contributors: 
+- Aaryamann Challani <aaryamann@status.im>
 
 ---
 
@@ -22,30 +23,26 @@ Waku, which is described in [10/WAKU2](/spec/10).
 # Background 
 
 The Status application aspires to achieve censorship resistance and incorporates specific privacy features, 
-leveraging the comprehensive set of protocols offered by Waku to enhance these attributes.
+leveraging the comprehensive set of protocols offered by Waku to enhance these attributes. 
+Waku protocols provide secure communication capbailites over decentralized networks. 
+Once integrated, an application will benifit from privacy preserving, 
+censorship resistance and spam protected communcation. 
 
 Since Status uses a large set of Waku protocols, 
 it is imperative to describe how each are used. 
 
-# Theory / Semantics
+# Definitions
 
-- `Waku node`: A server running Waku software, 
-configured with a set of protocols
-- `RELAY`: This refers to the Waku Relay protocol, 
-described in [11/WAKU2-RELAY](/spec/11)
-- `FILTER`: This refers to the Waku Filter protocol, 
-described in [12/WAKU2-FILTER](/spec/12)
-- `STORE`: This refers to the Waku Store protocol, 
-described in [13/WAKU2-STORE](/spec/13)
-- `MESSAGE`: This refers to the Waku Message format, 
-described in [14/WAKU2-MESSAGE](/spec/14)
-- `Pubsub Topic / Content Topic`: This refers to the routing of messages within the Waku network, 
-described in [23/WAKU2-TOPICS]
-- `Light Client`: This refers to the capabilities of a Status Client, 
-which operates within resource constrained environments,
-and uses only a subset of Waku Protocols.
-- `LIGHTPUSH`: This refers to the Waku Lightpush protocol,
-described in [19/WAKU2-LIGHTPUSH](/spec/19)
+| Terminology  | Description |
+| --------------- | --------- |
+| Waku node | A server running Waku software configured with a set of protocols |
+| `RELAY`| This refers to the Waku Relay protocol, described in [11/WAKU2-RELAY](/spec/11) |
+|`FILTER` | This refers to the Waku Filter protocol, described in [12/WAKU2-FILTER](/spec/12) |
+| `STORE` | This refers to the Waku Store protocol, described in [13/WAKU2-STORE](/spec/13) |
+| `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
+| `Pubsub Topic / Content Topic` | This refers to the routing of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
+| Light Client | Status clients that operate within resource constrained environments, and uses only a subset of Waku Protocols. |
+| LIGHTPUSH | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
 
 # Protocol Usage
 
