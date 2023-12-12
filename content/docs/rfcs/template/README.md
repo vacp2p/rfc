@@ -5,7 +5,7 @@ name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
 category: (Standards Track|Informational|Best Current Practice)
 tags: an optional list of tags, not standard
-editor: Daniel Kaiser <https://github.com/kaiserd>
+editor: Daniel Kaiser <danielkaiser@status.im> kaiserd
 contributors:
 ---
 
