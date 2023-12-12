@@ -5,7 +5,6 @@ name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
 category: (Standards Track|Informational|Best Current Practice)
 tags: an optional list of tags, not standard
-description: an optional short summary
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
