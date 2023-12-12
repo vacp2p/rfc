@@ -1,7 +1,7 @@
 ---
 slug: 65
 title: 65/STATUS-ACCOUNTS
-name: Status Accounts
+name: Status Account Address
 status: draft
 category: Standards Track
 description: Details of what a Status account address is and how account addresses are created and used.
