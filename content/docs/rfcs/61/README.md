@@ -1,7 +1,7 @@
 ---
 slug: 61
 title: 61/STATUS-Community-History-Archives
-name: Status Community History Archives
+name: Status Community History Service
 status: raw
 category: Standards Track
 description: Explains how new members of a Status community can request historical messages from archive nodes.
