@@ -4,7 +4,9 @@ title: XX/(WAKU2|LOGOS|CODEX|*)-TEMPLATE
 name: (Waku v2 | Logos | Codex) RFC Template
 status: (raw|draft|stable)
 category: (Standards Track|Informational|Best Current Practice)
+description: an optional short summary
 tags: an optional list of tags, not standard
+version: an optional current version number
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 ---
@@ -16,6 +18,11 @@ This section (including its subsections) MUST be removed.
 
 [COSS](https://rfc.vac.dev/spec/1/) explains the Vac RFC process.
 
+## Description
+The `description` SHOULD be a short summary of the current document.
+The `description` MAY be used as the abstract
+The `description` MUST be 140 characters.
+
 ## Tags
 
 The `tags` metadata SHOULD contain a list of tags if applicable.
@@ -25,6 +32,8 @@ Currently identified tags comprise
 * `waku/core-protocol` for Waku protocol definitions (e.g. store, relay, light push),
 * `waku/application` for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),
 
+## Version
+The `version` SHOULD be a number representing a new version of a document.
 
 # Abstract
 
