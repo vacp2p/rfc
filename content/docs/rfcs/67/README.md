@@ -35,14 +35,18 @@ it is imperative to describe how each are used.
 
 | Terminology  | Description |
 | --------------- | --------- |
-| Waku node | A server running Waku software configured with a set of protocols |
 | `RELAY`| This refers to the Waku Relay protocol, described in [11/WAKU2-RELAY](/spec/11) |
 |`FILTER` | This refers to the Waku Filter protocol, described in [12/WAKU2-FILTER](/spec/12) |
 | `STORE` | This refers to the Waku Store protocol, described in [13/WAKU2-STORE](/spec/13) |
 | `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
-| `Pubsub Topic / Content Topic` | This refers to the routing of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
-| Light Client | Status clients that operate within resource constrained environments, and uses only a subset of Waku Protocols. |
-| LIGHTPUSH | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
+| `Pubsub Topic` / `Content Topic` | This refers to the routing of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
+| `LIGHTPUSH` | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
+
+# Semantics
+Waku Node : A server running Waku software configured with a set of protocols
+
+Light Client: Status clients that operate within resource constrained environments, and uses only a subset of Waku Protocols.
+
 
 # Protocol Usage
 
@@ -51,10 +55,10 @@ The following is a list of Waku Protocols used by the Status application.
 
 ## 1. `RELAY`
 
-> Note: This protocol MUST not supported by Status light clients.
+> Note: This protocol MUST not be used by Status light clients.
 
 Waku Relay is used to broadcast messages from a Status Client.
-All Status messages are transformed into Waku Messages which are sent over the wire.
+All Status messages are transformed into Waku Messages, [14/WAKU2-MESSAGE](/spec/14), which are sent over the wire.
 All Status message types are described in [62/STATUS-PAYLOAD](/spec/62).
 
 Status Clients MUST transform the following object into a `MESSAGE` as described below -
