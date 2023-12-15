@@ -410,6 +410,7 @@ Beyond merely concurring on a member list, the protocol enables agreement on div
 Central to this process is the Delivery Service component, which enforces sequential delivery of MLS messages, dictating the progressive transition from one group state to another. 
 This mechanism establishes an MLS group as a reliable distribution channel for synchronizing various data among different entities. 
 The cryptographic agreement on prior extension messages ensures the secure transfer of data, enhancing the protocol's integrity and synchronization capabilities.
+> The Delivery Service can be completely abstract if users are able to distribute credentials and messages without relying on a central Delivery Service. 
 - **Extensibility**: MLS offers extensibility by permitting modifications or additions of data to a group's state. 
 It incorporates a negotiation mechanism that mandates unanimous support from all group members for any introduced extensions. 
 Moreover, members collectively decide which extensions are obligatory within the group. 
