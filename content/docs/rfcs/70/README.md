@@ -449,9 +449,9 @@ The efficiency of TreeKEM remains logarithmic to the group's size when all membe
 	- `s'_G = SHA256(s'_F)`
 
 	User C needs to compute the following encryptions and provide other users with them:
-	- `c_A = UPKE(pk_A, s'_G)`
-	- `c_B = UPKE(pk_B, s'_G)`
-	- `c_D = UPKE(pk_D, s'_F)`
+	- `c_A = HPKE(pk_A, s'_G)`
+	- `c_B = HPKE(pk_B, s'_G)`
+	- `c_D = HPKE(pk_D, s'_F)`
 
 	The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of 	the group.
 	The symmetric algorithm MUST be `AES256-GCM`.
