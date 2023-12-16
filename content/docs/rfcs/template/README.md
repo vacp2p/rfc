@@ -25,6 +25,11 @@ Currently identified tags comprise
 * `waku/core-protocol` for Waku protocol definitions (e.g. store, relay, light push),
 * `waku/application` for applications built on top of Waku protocol (e.g. eth-dm, toy-chat),
 
+## Contributors and Editor
+The contributors and resposible editor name SHOULD be mentioned with email address along with github username,
+e.g.
+- name | < email > | gh_handle
+
 
 # Abstract
 
