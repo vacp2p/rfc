@@ -1,6 +1,6 @@
 ---
 slug: 65
-title: 65/STATUS-ACCOUNTS
+title: 65/STATUS-ACCOUNT-ADDRESS
 name: Status Account Address
 status: draft
 category: Standards Track
@@ -14,7 +14,7 @@ contributors:
 
 # Abstract
 
-This specification explains what a Status account is, and how it is created and used.
+This specification details what a Status account address is and how account addresses are created and used.
 
 # Background
 
