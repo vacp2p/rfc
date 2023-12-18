@@ -118,6 +118,8 @@ Raw specifications have no contractual weight.
 When raw specifications can be demonstrated, they become **draft** specifications.
 Changes to draft specifications should be done in consultation with users.
 Draft specifications are contracts between the editors and implementers.
+If a draft specification is replaced by another draft,
+the new draft MUST mention the previous specification.
 
 ### Stable Specifications
 
@@ -142,7 +144,7 @@ Retired specifications have no contractual weight.
 
 Deleted specifications are those that have not reached maturity (stable) and were discarded.
 They should not be used and are only kept for their historical value.
-Only Raw and Draft specifications can be deleted.
+Only Raw specifications can be deleted.
 
 ## Editorial control
 
