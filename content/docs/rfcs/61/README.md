@@ -1,6 +1,6 @@
 ---
 slug: 61
-title: 61/STATUS-Community-History-Archives
+title: 61/STATUS-Community-History-Service
 name: Status Community History Service
 status: raw
 category: Standards Track
