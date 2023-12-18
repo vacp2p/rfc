@@ -5,7 +5,7 @@ name: Status Communities that run over Waku v2
 status: draft
 category: Standards Track
 tags: waku-application
-description: Status Communities allow multiple users to communicate in a community space. This is a key feature of the Status application.
+description: Status Communities allow multiple users to communicate in a discussion space. This is a key feature of the Status application.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Andrea Piana <andreap@status.im>
