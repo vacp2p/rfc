@@ -121,8 +121,16 @@ The Status client SHOULD provide a method to prune the database of older records
 > Note: This protocol SHOULD be enabled on Light clients.
 
 This protocol SHOULD be used to filter messages based on a given criteria, such as the `Content Topic` of a `MESSAGE`.
-
 This allows a reduction in bandwidth consumption by the Status client.
+
+### Content filtering protocol identifers:
+
+filter-subscribe:
+
+    /vac/waku/filter-subscribe/2.0.0-beta1
+filter-push:
+
+    /vac/waku/filter-push/2.0.0-beta1
 
 Status clients SHOULD apply a filter for all the `Content Topic` they are interested in, 
 such as `Content Topic` derived from -
@@ -137,22 +145,24 @@ such as `Content Topic` derived from -
 This protocol allows Status light clients to publish messages to the Waku Network,
 without running a full-fledged Waku Relay protocol.
 
-When a Status Client is publishing a message, 
+When a Status client is publishing a message, 
 it MUST check if Light mode is enabled,
-and if so, it MUST publish the message via `LIGHTPUSH`.
+and if so, it MUST publish the message via this protocol.
 
 ## 5. `DISCOVERY`
 
 > Note: This protocol MUST be supported by Light clients and Full clients
 
-Status Clients SHOULD make use of the following peer discovery methods that are provided by Waku,
+Status clients SHOULD make use of the following peer discovery methods that are provided by Waku,
 such as -
 
 1. [EIP-1459: DNS-Based Discovery](https://eips.ethereum.org/EIPS/eip-1459)
-2. [33/WAKU2-DISCV5](/spec/33)
-3. [34/WAKU2-PEER-EXCHANGE](/spec/34)
+2. [33/WAKU2-DISCV5](/spec/33): 
+A node discovery protocol to create decentralized network of interconnected Waku nodes. 
+3. [34/WAKU2-PEER-EXCHANGE](/spec/34):
+A peer discovery protocol for resoruce restricting devices.
 
-Status Clients MAY use any combination of the above peer discovery methods, 
+Status clients MAY use any combination of the above peer discovery methods, 
 which is suited best for their implementation.
 
 # Security/Privacy Considerations
