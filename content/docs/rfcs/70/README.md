@@ -425,12 +425,6 @@ The former ghost is therefore able to reconstruct the secret seeds corresponding
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
 - The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
-> Although it is suggested using curve448 for security reasons, the ADKG relies in curve25519. 
-One may be tempted to consider modifying the implementation of the authors to use curve448, but they use the Ristretto algorithm (to avoid potential attacks). 
-Modifying the implementation would imply more problems since Ristretto cannot be applied to curve448. 
-Hence, we should use curve25519 instead of curve448 (it would imply minor changes in our proposal). 
-It will require using SHA256 instead of SHA512. 
-SHA3 is not supported neither by the Noise Framework nor by the digital signatures involved in the X3DH.
 - Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
 - In order to improve forward-secrecy in TreeKEM users MUST use a UPKE scheme.
 
