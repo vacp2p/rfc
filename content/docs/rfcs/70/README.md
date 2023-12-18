@@ -196,8 +196,6 @@ The `HEADER` function creates a new message header containing the public key fro
 It outputs the previous chain length `pn`, and the message number `n`. 
 The returned header object contains ratchet public key `dh` and integers `pn` and `n`.
 
-
-
 ## Decryption
 This function will decrypt incoming messages. One introduces auxiliary functions required.
 
@@ -279,37 +277,37 @@ It is a key establishment protocol that provides efficient asynchronous group ke
 
 ### Main security characteristics
 
-The main security goals of the protocol follow:
+The main security characteristics of the protocol follow:
 
-- **Message confidentiality**: If a user $C$ sends a message $M$ in epoch $E$ of group $G$, 
-and $C$ believes that the membership of $G$ in $E$ is $C_0,… ,C_n$, 
-then $M$ is kept secret from an adversary as long as none of these members is compromised.
-- **Message authentication**: If a user $C$ accepts a message $M$ in epoch $E$ of group $G$, 
-and if $C$ believes that the membership of $G$ in $E$ is $C_0,… ,C_n$, 
-and if none of these members are compromised at the time of reception, then $M$ must have been sent by one of these group members for the group $G$ in epoch $E$.
-- **Sender authentication**: If a user $C$ accepts a message $M$ seemingly sent by a client $C'$ in epoch $E$ of group $G$, 
-and if $C'$ is uncompromised at the time of reception, 
-then $M$ must indeed have been sent by $C'$ in epoch $E$ of group $G$.
-- **Membership agreement**: If a user $C$ accepts a message M from a client $C'$ in epoch $E$ of group $G$, 
-then $C$ and $C'$ must agree on the membership of G at E.
-- **Post-remove security**: If a user $C$ was member of group $G$ in epoch $E$, 
-and was no longer a member in epoch $E+1$, 
-then even if $C$ was compromised in epochs before $E$, it does not affect the confidentiality of messages sent in epochs following $E+1$.
-- **Post-update security**: If a user $C$ was member of group $G$ in epoch $E$, 
-and has updated its cryptographic keys in epoch $E+1$, 
-then even if the previous state of $C$ in epochs before $E$ was compromised, 
-it does not affect the confidentiality of messages sent in following $E+1$.
-- **Forward secrecy**: If a user $C$ sends (or receives) a message $M$ in epoch $E$ of group $G$, 
-then any compromise of $C$ after this point does not affect the confidentiality of $M$.
-- **Post-compromise security**: If the key of a user $C$ has been compromised in epoch $E$, 
-then all members og the group $G$ have security guarantees about communicating with $C$. 
+- **Message confidentiality**: If a user C sends a message $M$ in epoch $E$ of group $G$, 
+and C believes that the membership of G in E is C_0, …, C_n, 
+then M is kept secret from an adversary as long as none of these members is compromised.
+- **Message authentication**: If a user C accepts a message M in epoch E of group G, 
+and if C believes that the membership of G in E is C_0, …, C_n, 
+and if none of these members are compromised at the time of reception, then M must have been sent by one of these group members for the group G in epoch E.
+- **Sender authentication**: If a user C accepts a message M seemingly sent by a client C' in epoch E of group G, 
+and if C' is uncompromised at the time of reception, 
+then M must have been sent by C' in epoch E of group G.
+- **Membership agreement**: If a user C accepts a message M from a client C' in epoch E of group G, 
+then C and C' must agree on the membership of G at E.
+- **Post-remove security**: If a user C was member of group G in epoch E, 
+and was no longer a member in epoch E+1, 
+then even if C was compromised in epochs before E, it does not affect the confidentiality of messages sent in epochs following E+1.
+- **Post-update security**: If a user C was member of group G in epoch E, 
+and has updated its cryptographic keys in epoch E+1, 
+then even if the previous state of C in epochs before E was compromised, 
+it does not affect the confidentiality of messages sent in following E+1.
+- **Forward secrecy**: If a user C sends (or receives) a message M in epoch E of group G, 
+then any compromise of C after this point does not affect the confidentiality of M.
+- **Post-compromise security**: If the key of a user C has been compromised in epoch E, 
+then all members og the group G have security guarantees about communicating with C. 
 To recover from a compromise of a single member of the group, all other members have to broadcast an update of their key material. 
-This leads to an overall cost of computation and bandwidth of $O(n^2)$ for a group size of $n$ and requires all group members to come online at least once. 
-MLS has an update operation with complexity of $O(\log (n))$ that requires only the compromised member to be online for the group to recover from the compromise.
+This leads to an overall cost of computation and bandwidth of O(n^2) for a group size of n and requires all group members to come online at least once. 
+MLS has an update operation with complexity of O(log(n)) that requires only the compromised member to be online for the group to recover from the compromise.
 
 ### Strengths of the protocol
 
-- **Low complexity**: The use of binary trees allows MLS achieveing low complexity leves, 
+- **Low complexity**: The use of binary trees allows MLS achieveing low complexity levels, 
 meaning that the number of required operations and the payload size do not increase linearly with the group size but logarithmically after a short period.
 - **Group integrity**: This property guarantees full agreement among group members regarding the group's current state and its constituents. 
 Consequently, a member can decrypt messages exclusively from others in the group when both sender and recipient align on the group's status, particularly its membership. 
@@ -337,63 +335,22 @@ TreeSync employs several tree hashing methodologies similar to Merkle Trees alon
 When group membership changes, TreeKEM generates a new group key and efficiently distributes it to all members. 
 The efficiency of TreeKEM remains logarithmic to the group's size when all members actively participate in the group. However, if only a subset of members actively engage, operational costs can escalate linearly with the group size, compromising the protocol's efficiency.
     
-    TreeKEM is based in a previous protocol called Asynchronous Ratcheting Tree (ART). 
+	TreeKEM is based in a previous protocol called Asynchronous Ratcheting Tree (ART). 
 	ART was replaced by the more efficient alternative TreeKEM, which is based on Hybrid Public Key Encryption. 
 	Subsequent drafts refined and improved TreeKEM, but the fundamental key establishment mechanism remains the same.
 
-	![treeKEM](https://github.com/vacp2p/rfc/assets/74050285/64f685ad-fdf1-4ec2-8558-04357b3baddd)
-
-	In the above figure the group symmetric key is `sG`.
-	The keys `sE` and `sF` are secret and unknown to users B and D respectively.
-
-	TreeKEM allows the following operations:
-	- Key updating.
-	- User addition and removal.
-	- Concurrent operations.
-
-	We show how keys updating works in the following example, using the above figure as a guide. 
-	User C wants to update his keys, 
-	so computes a new key pair `pk'_C; sk'_C` and derives a symmetric secret `s'_C = KDF(sk'_C)`. 
-	User C is also required to update nodes from his leaf to the root: 
-	- `s'_F = SHA256(s'_C)`
-	- `s'_G = SHA256(s'_F)`
-
-	User C needs to compute the following encryptions and provide other users with them:
-	- `c_A = HPKE(pk_A, s'_G)`
-	- `c_B = HPKE(pk_B, s'_G)`
-	- `c_D = HPKE(pk_D, s'_F)`
-
-	The secret group key `sG` allows using symmetric encryption to send encrypted messages, and decrypt them, between members of 	the group.
-	The symmetric algorithm MUST be `AES256-GCM`.
-
-	> One observes that the solution based on TreeKEM makes the combination ADKG + DR obsolete.
-	> TreeKEM can manage the situation of a user associated to several devices. 
+	TreeKEM can manage the situation of a user associated to several devices. 
 	There are two approaches:
-	> - Providing each device with a set of keys and including it in the tree as separate leaf.
+	- Providing each device with a set of keys and including it in the tree as separate leaf.
 	This corresponds to session `NM` [here](https://rfc.vac.dev/spec/37/).
-	> - Allowing the synchronization of keys so all devices appear as a single leaf.
+	- Allowing the synchronization of keys so all devices appear as a single leaf.
 	This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
     
 - **TreeDEM** (Forward Secure Group Messaging): This sub-protocol builds upon TreeKEM's established group keys to secure application messages, handshake messages and *welcome* messages, for new members, transmitted within each epoch. 
 Employing the tree structure, TreeDEM ensures forward security for these messages by determining key derivation and deletion based on the tree's configuration. 
 This approach safeguards the integrity of application messages while providing forward security measures by effectively managing key usage and expiration within the protocol's framework.
 
-### Comparison with the Double Ratchet
-
-The MLS protocol borrows some ideas and techniques from the Double Ratchet algorithm that we highlight below:
-
-- **Key evolution and forward secrecy**: The MLS protocol employs continuous key updates and rotations for forward secrecy.
-- **Per-message keying**: The MLS generates per-message keys, enhancing security by ensuring that compromising one key does not expose the entire conversation.
-- **Asynchronous communication**: The concept of ratcheting in the DR allows for asynchronous message delivery. MLS also supports asynchronous communication among group members.
-
-On the other hand, the MLS and the Double Ratchet are completely different protocols, with different objectives, among which we highlight:
-
-- **Group context and management**: The MLS protocol is designed for secure group messaging in contrast to the Double Ratchet, which focuses in one-to-one communication. 
-Furthermore, the MLS allows for managing group membership, agreement on group state, and synchronization of data among multiple participants.
-- **Tree-based structure**: The MLS protocol makes use of tree-based structures to manage keys and communication within a group with efficiency and scalability in mind. The Double Ratchet does not utilize this hierarchical structure for managing keys.
-- **Extension and negotiation**: The MLS protocol is designed with extensibility in mind, allowing for protocol extensions and negotiation mechanisms to ensure compatibility among different implementations.
-
-### Improvements: Quarantined treeKEM and Tainted treeKEM
+### Inactive users: Quarantined treeKEM and Tainted treeKEM
 
 Ensuring post-compromise security and forward secrecy requires active involvement from all users within a group, including both compromised and uncompromised individuals.
 However, there's a potential risk posed by inactive users, termed as *ghosts*, who remain offline for extended periods and fail to update their keys. These inactive users create a vulnerability that affects the entire group.
