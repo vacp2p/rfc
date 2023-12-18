@@ -15,7 +15,9 @@ contributors:
 This specification enables querying of messages received through the relay protocol and stored by other nodes. 
 It also supports pagination for more efficient querying of historical messages. 
 
-**Protocol identifier***: `/vac/waku/store/2.0.0-beta4`
+***Protocol Identifier***: 
+
+    /vac/waku/store/2.0.0-beta4
 
 # Design Requirements
 Nodes willing to provide storage service using this protocol SHOULD provide a complete and 
@@ -27,19 +29,19 @@ The high uptime requirement makes sure that no message is missed out hence a com
 intact view of the message history is delivered to the querying nodes.
 Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
-The concept of "ephemeral" messages introduced in `[14/WAKU2-MESSAGE](/spec/14)` affects `13/WAKU2-STORE` as well.
-Nodes running [13/WAKU2-STORE](/spec/13) SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
-Nodes running [13/WAKU2-STORE](/spec/13) SHOULD NOT store messages with the `ephemeral` flag set to `true`.
+The concept of "ephemeral" messages introduced in [14/WAKU2-MESSAGE](/spec/14) affects this specification as well.
+Nodes running this protocol SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
+Nodes running this protocol SHOULD NOT store messages with the `ephemeral` flag set to `true`.
 
 ## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. 
 For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
-Any peer running the `13/WAKU2-STORE` protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
+Any peer running this protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
 Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
 As we evolve the protocol, further adversarial models will be considered.
-For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `13/WAKU2-STORE` protocol. 
+For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the protocol. 
 
 The following are not considered as part of the adversarial model:
 - An adversary with a global view of all the peers and their connections.
@@ -105,7 +107,7 @@ message HistoryRPC {
 
 ### Index
 
-To perform pagination, each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is associated with a unique `Index` that encapsulates the following parts. 
+To perform pagination, each `WakuMessage` stored at a node running this protocol is associated with a unique `Index` that encapsulates the following parts. 
 - `digest`:  a sequence of bytes representing the SHA256 hash of a `WakuMessage`.
   The hash is computed over the concatenation of `contentTopic` and `payload` fields of a `WakuMessage` (see [14/WAKU2-MESSAGE](/spec/14)).
 - `receiverTime`: the UNIX time in nanoseconds at which the waku message is received by the receiving node.
@@ -130,7 +132,7 @@ RPC call to query historical messages.
 
 - The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
   This field denotes the pubsub topic on which waku messages are published.
-  This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
+  This field maps to `topicIDs` field of `Message` in [11/WAKU2-RELAY](/spec/11).
   Leaving this field empty means no filter on the pubsub topic of message history is requested.
   This field SHOULD be left empty in order to retrieve the historical waku messages regardless of the pubsub topics on which they are published.
 - The `contentFilters` field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
@@ -146,7 +148,7 @@ RPC call to query historical messages.
   In the forward pagination request, the `messages` field of the `HistoryResponse` shall contain at maximum the `pageSize` amount of waku messages whose `Index` values are larger than the given `cursor` (and vise versa for the backward pagination). 
   Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 
-#### Sorting Messages
+### Sorting Messages
 The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
 As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
@@ -157,7 +159,7 @@ However, this `cursor` reusability  does not hold when the `receiverTime` is uti
 ### HistoryResponse
 
 RPC call to respond to a HistoryQuery call.
-- The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding [specification](./waku-message.md).
+- The `messages` field MUST contain the messages found, these are [`WakuMessage`] types as defined in the corresponding specification, [14/WAKU2-MESSAGE](/spec/14).
 - `PagingInfo`  holds the paging information based on which the querying node can resume its further history queries. 
   The `pageSize` indicates the number of returned Waku messages (i.e., the number of messages included in the `messages` field of `HistoryResponse`). 
   The `direction` is the same direction as in the corresponding `HistoryQuery`. 
@@ -171,13 +173,13 @@ RPC call to respond to a HistoryQuery call.
 
 # Security Consideration
 
-The main security consideration to take into account while using `13/WAKU2-STORE` is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.
+The main security consideration to take into account while using this protocol is that a querying node have to reveal their content filters of interest to the queried node, hence potentially compromising their privacy.
 
 # Future Work
 
 - **Anonymous query**: This feature guarantees that nodes can anonymously query historical messages from other nodes i.e., without disclosing the exact topics of waku messages they are interested in.  
-As such, no adversary in the `13/WAKU2-STORE` protocol would be able to learn which peer is interested in which content filters i.e., content topics of waku message. 
-The current version of the `13/WAKU2-STORE` protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in the `13/WAKU2-STORE` protocol and explicitly disclose the content filters of its interest to retrieve the corresponding messages. 
+As such, no adversary in this protocol would be able to learn which peer is interested in which content filters i.e., content topics of waku message. 
+The current version of this protocol does not provide anonymity for historical queries as the querying node needs to directly connect to another node in this protocol and explicitly disclose the content filters of its interest to retrieve the corresponding messages. 
 However, one can consider preserving anonymity through one of the following ways: 
   - By hiding the source of the request i.e., anonymous communication. That is the querying node shall hide all its PII in its history request e.g., its IP address.
   This can happen by the utilization of a proxy server or by using Tor. 
@@ -201,11 +203,14 @@ One solution is the use of [open timestamps](https://opentimestamps.org/) e.g., 
 That is, messages contain the most recent block height perceived by their senders at the time of message generation. 
 This proves accuracy within a range of minutes (e.g., in Bitcoin blockchain) or seconds (e.g., in Ethereum 2.0) from the time of origination. 
 
-# References
-1. [Open timestamps](https://opentimestamps.org/) 
-   
 # Copyright
 
 Copyright and related rights waived via
 [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
+
+# References
+1. [14/WAKU2-MESSAGE](/spec/14)
+2. [protocol buffers v3](https://developers.google.com/protocol-buffers/)
+3. [14/WAKU2-MESSAGE](/spec/14)
+4. [Open timestamps](https://opentimestamps.org/) 
 
