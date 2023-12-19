@@ -277,78 +277,36 @@ It is a key establishment protocol that provides efficient asynchronous group ke
 
 ### Main security characteristics
 
-The main security characteristics of the protocol follow:
+The main security characteristics of the protocol are:
 
-- **Message confidentiality**: If a user C sends a message $M$ in epoch $E$ of group $G$, 
-and C believes that the membership of G in E is C_0, …, C_n, 
-then M is kept secret from an adversary as long as none of these members is compromised.
-- **Message authentication**: If a user C accepts a message M in epoch E of group G, 
-and if C believes that the membership of G in E is C_0, …, C_n, 
-and if none of these members are compromised at the time of reception, then M must have been sent by one of these group members for the group G in epoch E.
-- **Sender authentication**: If a user C accepts a message M seemingly sent by a client C' in epoch E of group G, 
-and if C' is uncompromised at the time of reception, 
-then M must have been sent by C' in epoch E of group G.
-- **Membership agreement**: If a user C accepts a message M from a client C' in epoch E of group G, 
-then C and C' must agree on the membership of G at E.
-- **Post-remove security**: If a user C was member of group G in epoch E, 
-and was no longer a member in epoch E+1, 
-then even if C was compromised in epochs before E, it does not affect the confidentiality of messages sent in epochs following E+1.
-- **Post-update security**: If a user C was member of group G in epoch E, 
-and has updated its cryptographic keys in epoch E+1, 
-then even if the previous state of C in epochs before E was compromised, 
-it does not affect the confidentiality of messages sent in following E+1.
-- **Forward secrecy**: If a user C sends (or receives) a message M in epoch E of group G, 
-then any compromise of C after this point does not affect the confidentiality of M.
-- **Post-compromise security**: If the key of a user C has been compromised in epoch E, 
-then all members og the group G have security guarantees about communicating with C. 
-To recover from a compromise of a single member of the group, all other members have to broadcast an update of their key material. 
-This leads to an overall cost of computation and bandwidth of O(n^2) for a group size of n and requires all group members to come online at least once. 
-MLS has an update operation with complexity of O(log(n)) that requires only the compromised member to be online for the group to recover from the compromise.
+- Message confidentiality and authentication.
+- Sender authentication.
+- Membership agreement.
+- Post-remove and post-update security.
+- Forward secrecy and post-compromise security.
 
 ### Strengths of the protocol
 
 - **Low complexity**: The use of binary trees allows MLS achieveing low complexity levels, 
 meaning that the number of required operations and the payload size do not increase linearly with the group size but logarithmically after a short period.
 - **Group integrity**: This property guarantees full agreement among group members regarding the group's current state and its constituents. 
-Consequently, a member can decrypt messages exclusively from others in the group when both sender and recipient align on the group's status, particularly its membership. 
-This feature thwarts any attempt by a third party to add a new member to the group without the explicit acknowledgment of all existing members, enhancing the group's security by preventing unauthorized inclusions.
-- **Synchronization**: MLS tackles data synchronization among group members by leveraging its group integrity property. 
-Beyond merely concurring on a member list, the protocol enables agreement on diverse data sets among group members. 
-Central to this process is the Delivery Service component, which enforces sequential delivery of MLS messages, dictating the progressive transition from one group state to another. 
-This mechanism establishes an MLS group as a reliable distribution channel for synchronizing various data among different entities. 
-The cryptographic agreement on prior extension messages ensures the secure transfer of data, enhancing the protocol's integrity and synchronization capabilities.
-> The Delivery Service can be completely abstract if users are able to distribute credentials and messages without relying on a central Delivery Service. 
+- **Synchronization**: The protocol enables agreement on diverse data sets among group members via a Delivery Service which enforces sequential delivery of MLS message. 
+The Delivery Service can be completely abstract if users are able to distribute credentials and messages without relying on a central Delivery Service. 
 - **Extensibility**: MLS offers extensibility by permitting modifications or additions of data to a group's state. 
-It incorporates a negotiation mechanism that mandates unanimous support from all group members for any introduced extensions. 
-Moreover, members collectively decide which extensions are obligatory within the group. 
-As a group key negotiation protocol, MLS facilitates the export of additional cryptographic key material by all members, enabling the augmentation of cryptographic keys within the group's context.
 
-### Components
+### Subprotocols
 
 The MLS protocol is composed of 3 subprotocols, namely: TreeSync, TreeKEM and TreeDEM, which are described below:
 
-- **TreeSync** (Authenticated Group Management): This sub-protocol guarantees consensus on membership and upholds the integrity of the group's state. 
-The sub-protocol maintains a synchronized and authenticated representation of the group's state for all members. 
-It encompasses group management functionalities, ensuring coherence across membership arrays and keys within the MLS tree data structure. 
-TreeSync employs several tree hashing methodologies similar to Merkle Trees alongside signatures.
-- **TreeKEM** (Efficient Group Key Establishment): This sub-protocol utilizes a tree structure to create subgroup keys for internal nodes, including a shared group key at the root for all members within the present group epoch. 
-When group membership changes, TreeKEM generates a new group key and efficiently distributes it to all members. 
-The efficiency of TreeKEM remains logarithmic to the group's size when all members actively participate in the group. However, if only a subset of members actively engage, operational costs can escalate linearly with the group size, compromising the protocol's efficiency.
-    
-	TreeKEM is based in a previous protocol called Asynchronous Ratcheting Tree (ART). 
-	ART was replaced by the more efficient alternative TreeKEM, which is based on Hybrid Public Key Encryption. 
-	Subsequent drafts refined and improved TreeKEM, but the fundamental key establishment mechanism remains the same.
-
-	TreeKEM can manage the situation of a user associated to several devices. 
-	There are two approaches:
+- **TreeSync**: This sub-protocol guarantees consensus on membership and upholds the integrity of the group's state. 
+- **TreeKEM** : This sub-protocol utilizes a tree structure to create subgroup keys for internal nodes, including a shared group key at the root for all members within the present group epoch. 
+TreeKEM can manage the situation of a user associated to several devices. 
 	- Providing each device with a set of keys and including it in the tree as separate leaf.
 	This corresponds to session `NM` [here](https://rfc.vac.dev/spec/37/).
 	- Allowing the synchronization of keys so all devices appear as a single leaf.
 	This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
     
-- **TreeDEM** (Forward Secure Group Messaging): This sub-protocol builds upon TreeKEM's established group keys to secure application messages, handshake messages and *welcome* messages, for new members, transmitted within each epoch. 
-Employing the tree structure, TreeDEM ensures forward security for these messages by determining key derivation and deletion based on the tree's configuration. 
-This approach safeguards the integrity of application messages while providing forward security measures by effectively managing key usage and expiration within the protocol's framework.
+- **TreeDEM**: This sub-protocol builds upon TreeKEM's established group keys to secure application messages, handshake messages and *welcome* messages, for new members, transmitted within each epoch. 
 
 ### Inactive users: Quarantined treeKEM and Tainted treeKEM
 
@@ -375,6 +333,128 @@ Consequently, the confidentiality of the ghost's secret key no longer hinges on 
 
 When a ghost finally reconnects and updates its keying material, its quarantine automatically stops and the users that kept shares related to that ghost send them to it. 
 The former ghost is therefore able to reconstruct the secret seeds corresponding to its quarantine keys.
+
+## Implementation considerations
+
+### Cryptographic suites
+Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
+- `X488` as Diffie-Hellman function.
+- `SHA256` as KDF.
+- `AES256-GCM` as AEAD algorithm.
+- `SHA512` as hash function.
+- `XEd448` for digital signatures.
+
+Formats for public keys, signatures and public-key encryption MUST be as defined in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+### Hash-based identifiers
+Some MLS messages refer to other MLS objects by hash.
+These identifiers MUST be computed according to [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+### Credentials
+Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
+The identities and signing key are verified by the Authentication Service in use for a group.
+
+> We need to describe how to use Ethereum as AS
+
+### Message framing
+Handshake and application messages use a common framing structure providing encryption to ensure confidentiality within the group, and signing to authenticate the sender.
+
+The structures are:
+- `PublicMessage`: represents a message that is only signed, and not encrypted. 
+- `PrivateMessage`: represents a signed and encrypted message, with protections for both the content of the message and related metadata.
+
+Applications MUST use `PrivateMessage` to encrypt application messages. 
+Applications SHOULD use `PrivateMessage` to encode handshake messages.
+
+The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+The definition of `PrivateMessage ` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+### Ratchet tree operations
+The ratchet tree for an epoch describes the membership of a group in that epoch.
+In order to reflect changes to the membership of the group from one epoch to the next, corresponding changes are made to the ratchet tree. 
+The following section describes the required operations.
+
+#### Nodes contents
+The nodes of a ratchet tree contain several types of data. 
+Leaf nodes describe individual members.
+Parent nodes describe subgroups.
+
+Contents of each kind of node, and its structure MUST follow the indications described in sections 7.1 and 7.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Leaf node validation
+`KeyPackage` objects describes a client's capabilities and provides keys that can be used to add the client to a group.
+
+The validity of a leaf node needs to be verified at the following stages:
+- When a leaf node is downloaded in a `KeyPackage`, before it is used to add the client to the group.
+- When a leaf node is received by a group member in an Add, Update, or Commit message.
+- When a client validates a ratchet tree.
+
+A client MUST verify the validity of a leaf node following the instructions of section 7.3 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+> This las verification process depends on the AS, which in turn depends on our side.
+
+#### Ratchet tree evolution
+Whenever a member initiates an epoch change, they MAY need to refresh the key pairs of their leaf and of the nodes on their direct path. This is done to keep forward secrecy and post-compromise security.
+The member initiating the epoch change MUST follow this procedure procedure.
+A member updates the nodes along its direct path as follows:
+- Blank all the nodes on the direct path from the leaf to the root.
+- Generate a fresh HPKE key pair for the leaf.
+- Generate a sequence of path secrets, one for each node on the leaf's filtered direct path.
+It MUST follow the procedure described in section 7.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+- Compute the sequence of HPKE key pairs `(node_priv,node_pub)`, one for each node on the leaf's direct path.
+It MUST follow the procedure described in section 7.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Views of the tree synchronization
+After generating fresh key material and applying it to update their local tree state, the generator broadcasts this update to other members of the group.
+This operation MUST be done according to section 7.5 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Leave synchronization
+Changes to group memberships MUST be represented by adding and removing leaves of the tree.
+This corresponds to increasing or decreasing the depth of the tree, resulting in the number of leaves being doubled or halved.
+These operations MUST be done as described in section 7.7 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Tree and parent hashing
+
+Group members can agree on the cryptographic state of the group by generating a hash value that represents the contents of the group ratchet tree and the member’s credentials. 
+The hash of the tree is the hash of its root node, defined recursively from the leaves.
+Tree hashes summarize the state of a tree at point in time.
+The hash of a leaf is the hash of the `LeafNodeHashInput` object. 
+At the same time, the hash of a parent node including the root, is the hash of a `ParentNodeHashInput` object.
+Parent hashes capture information about how keys in the tree were populated.
+
+![NodeTypes](https://github.com/vacp2p/rfc/assets/74050285/3601f51d-9b4d-410c-9f85-ab5f06c903b4)
+
+#### Key schedule
+Group keys are derived using the `Extract` and `Expand` functions from the KDF for the group's cipher suite, as well as the functions defined below:
+
+```
+ExpandWithLabel(Secret, Label, Context, Length) = KDF.Expand(Secret, KDFLabel, Length)
+DeriveSecret(Secret, Label) = ExpandWithLabel(Secret, Label, "", KDF.Nh)
+```
+`KDFLabel` MUST be specified as:
+```
+struct {
+    uint16 length;
+    opaque label<V>;
+    opaque context<V>;
+} KDFLabel;
+```
+The fields of `KDFLabel` MUST be:
+```
+length = Length;
+label = "MLS 1.0 " + Label;
+context = Context;
+```
+
+
+
+
+
+
+
+
+
+
 
 # Privacy and Security Considerations
 
