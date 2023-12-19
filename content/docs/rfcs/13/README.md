@@ -12,47 +12,44 @@ contributors:
 ---
 
 # Abstract
-This specification enables querying of messages received through the relay protocol and stored by other nodes. 
+This specification explains the Waku `13/WAKU2-STORE` protocol which enables querying of messages received through relay protocol and stored by other nodes. 
 It also supports pagination for more efficient querying of historical messages. 
 
-***Protocol Identifier***: 
-
-    /vac/waku/store/2.0.0-beta4
+**Protocol identifier***: `/vac/waku/store/2.0.0-beta4`
 
 # Design Requirements
-Nodes willing to provide storage service using this protocol SHOULD provide a complete and 
-full view of message history.
+Nodes willing to provide storage service using `13/WAKU2-STORE` protocol SHOULD provide a complete and full view of message history.
 As such, they are required to be *highly available* and 
-in specific have a *high uptime* to consistently receive and 
-store network messages. 
+in specific have a *high uptime* to consistently receive and store network messages. 
 The high uptime requirement makes sure that no message is missed out hence a complete and 
 intact view of the message history is delivered to the querying nodes.
-Nevertheless, in case that storage provider nodes cannot afford high availability, the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
+Nevertheless, in case that storage provider nodes cannot afford high availability, 
+the querying nodes may retrieve the historical messages from multiple sources to achieve a full and intact view of the past.
 
-The concept of "ephemeral" messages introduced in [14/WAKU2-MESSAGE](/spec/14) affects this specification as well.
-Nodes running this protocol SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
-Nodes running this protocol SHOULD NOT store messages with the `ephemeral` flag set to `true`.
+The concept of "ephemeral" messages introduced in `[14/WAKU2-MESSAGE](/spec/14)` affects `13/WAKU2-STORE` as well.
+Nodes running `13/WAKU2-STORE` SHOULD support "ephemeral" messages as specified in [14/WAKU2-MESSAGE](/spec/14).
+Nodes running `13/WAKU2-STORE` SHOULD NOT store messages with the `ephemeral` flag set to `true`.
 
 ## Terminology
 The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. 
 For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Adversarial Model
-Any peer running this protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
+Any peer running the `13/WAKU2-STORE` protocol, i.e. both the querying node and the queried node, are considered as an adversary. 
 Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but it does so without violating protocol definitions and instructions. 
 As we evolve the protocol, further adversarial models will be considered.
-For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the protocol. 
+For example, under the passive adversarial model, no malicious node hides or lies about the history of messages as it is against the description of the `13/WAKU2-STORE` protocol. 
 
 The following are not considered as part of the adversarial model:
 - An adversary with a global view of all the peers and their connections.
 - An adversary that can eavesdrop on communication links between arbitrary pairs of peers (unless the adversary is one end of the communication). 
-  In specific, the communication channels are assumed to be secure.
+  In specific, the communication channels are assumed to be secure
 
 
 # Wire Specification
 Peers communicate with each other using a request / response API. 
 The messages sent are Protobuf RPC messages which are implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
-The followings are the specifications of the Protobuf messages. 
+The followings are the specifications of the Protobuf messages.  
 
 ## Payloads
 
@@ -107,7 +104,8 @@ message HistoryRPC {
 
 ### Index
 
-To perform pagination, each `WakuMessage` stored at a node running this protocol is associated with a unique `Index` that encapsulates the following parts. 
+To perform pagination, 
+each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is associated with a unique `Index` that encapsulates the following parts. 
 - `digest`:  a sequence of bytes representing the SHA256 hash of a `WakuMessage`.
   The hash is computed over the concatenation of `contentTopic` and `payload` fields of a `WakuMessage` (see [14/WAKU2-MESSAGE](/spec/14)).
 - `receiverTime`: the UNIX time in nanoseconds at which the waku message is received by the receiving node.
@@ -132,7 +130,7 @@ RPC call to query historical messages.
 
 - The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
   This field denotes the pubsub topic on which waku messages are published.
-  This field maps to `topicIDs` field of `Message` in [11/WAKU2-RELAY](/spec/11).
+  This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
   Leaving this field empty means no filter on the pubsub topic of message history is requested.
   This field SHOULD be left empty in order to retrieve the historical waku messages regardless of the pubsub topics on which they are published.
 - The `contentFilters` field MUST indicate the list of content filters based on which the historical messages are to be retrieved.
@@ -149,12 +147,17 @@ RPC call to query historical messages.
   Note that the `cursor` of a `HistoryQuery` may be empty (e.g., for the initial query), as such, and depending on whether the  `direction` is `BACKWARD` or `FORWARD`  the last or the first `pageSize` waku messages shall be returned, respectively.
 
 ### Sorting Messages
-The queried node MUST sort the `WakuMessage`s based on their `Index`, where the `senderTime` constitutes the most significant part and the `digest` comes next, and then perform pagination on the sorted result. 
+The queried node MUST sort the `WakuMessage`s based on their `Index`, 
+where the `senderTime` constitutes the most significant part and the `digest` comes next, and 
+then perform pagination on the sorted result. 
 As such, the retrieved page contains an ordered list of `WakuMessage`s from the oldest message to the most recent one.
 Alternatively, the `receiverTime` (instead of `senderTime` ) MAY be used to sort `WakuMessage`s during the paging process. 
-However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and consistent across all the nodes.
-This has the benefit of `cursor` reusability i.e., a `cursor` obtained from one node can be consistently used to query from another node.
-However, this `cursor` reusability  does not hold when the `receiverTime` is utilized as the receiver time is affected by the network delay and nodes' clock asynchrony.
+However, we RECOMMEND the use of the `senderTime` for sorting as it is invariant and 
+consistent across all the nodes.
+This has the benefit of `cursor` reusability i.e., 
+a `cursor` obtained from one node can be consistently used to query from another node.
+However, this `cursor` reusability  does not hold when the `receiverTime` is utilized as the receiver time is affected by the network delay and 
+nodes' clock asynchrony.
 
 ### HistoryResponse
 
