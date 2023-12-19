@@ -211,6 +211,6 @@ Copyright and related rights waived via
 # References
 1. [14/WAKU2-MESSAGE](/spec/14)
 2. [protocol buffers v3](https://developers.google.com/protocol-buffers/)
-3. [14/WAKU2-MESSAGE](/spec/14)
+3. [11/WAKU2-RELAY](/spec/11)
 4. [Open timestamps](https://opentimestamps.org/) 
 
