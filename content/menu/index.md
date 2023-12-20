@@ -24,6 +24,7 @@ bookMenuLevels: 1
   - [57/STATUS-Simple-Scaling]({{< relref "/docs/rfcs/57/README.md" >}})
   - [58/RLN-V2]({{< relref "/docs/rfcs/58/README.md" >}})
   - [61/STATUS-Community-History-Archives]({{< relref "/docs/rfcs/61/README.md" >}})
+  - [62/STATUS-Payloads]({{< relref "/docs/rfcs/62/README.md" >}})
   - [63/STATUS-Keycard-Usage]({{< relref "/docs/rfcs/63/README.md" >}})
   - [64/WAKU2-NETWORK]({{< relref "/docs/rfcs/64/README.md" >}})
   - [66/WAKU2-METADATA]({{< relref "/docs/rfcs/66/README.md" >}})
