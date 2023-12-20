@@ -6,28 +6,32 @@ status: raw
 category: Standards Track
 editor: Jimmy Debe <jimmy@status.im>
 contributors: 
-- ?
+- 
 ---
 
 # Abstract
-Encrypted credentials are stored in a JSON schema to securely exchange credentials between peers.
+This specification describes how encrypted RLN, Rate Limit Nullifier, 
+credentials are securely stored in a JSON schema.
 
 # Summary
 A keystore is a construct to store a user’s keys. 
-The keys will be encrypted and decrypted based on methods specified in the specification. 
-This keystore specification uses [32/RLN-V1](https://rfc.vac.dev/spec/32/), Rate Limit Nullifiers, as a spam-prevention mechanism by generating zero-knowledge proofs and storing the proofs locally in the keystore.
+The keys will be encrypted and decrypted based on methods specified in this specification. 
+This keystore uses [58/RLN-V2](/spec/58/) as a spam-prevention mechanism by generating zero-knowledge proofs and 
+storing the credentials locally in the keystore.
 
 # Background
-The secure transfer of keys is important in peer-to-peer messaging applications.
+The secure storage of keys is important in peer-to-peer messaging applications.
 A Waku RLN Keystore uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks. 
 Generated credentials by a user are encrypted and stored in the keystore to be retrieved over a network.
-With [32/RLN-V1](https://rfc.vac.dev/spec/32/), sending and receiving messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
+With [58/RLN-V2](/spec/58/), sending and receiving 
+messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
 
 ## Example Waku RLN Keystore:
 
-This is an example of a keystore used by a [17/WAKU2-RLN-Relay](https://rfc.vac.dev/spec/17/).
+This is an example of a keystore used by a [17/WAKU2-RLN-Relay](/spec/17/).
 
 ```js
+
 application: 1 ,
 appIdentifier: 2,
 version: 3,
@@ -52,8 +56,8 @@ credentials: {
 ```
 
 # Specification
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119) and [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174).
-#
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, 
+“NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 The keystore MUST be generated with a cryptographic construction for password verification and decryption.
 
@@ -61,8 +65,9 @@ Keystore modules MUST include metadata, key derivation function, checksum, ciphe
 
 
 ## Metadata:
-- Information about the keystore SHOULD be stored in the metadata. 
-- The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
+Information about the keystore SHOULD be stored in the metadata.
+
+The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
 `application` : current application, MUST be a string
 
@@ -71,20 +76,22 @@ Keystore modules MUST include metadata, key derivation function, checksum, ciphe
 `appIdentifier`: application identifier, MUST be a string
 
 ## Credentials:
-The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`
-- Each contruct MUST include the keypair:
+The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`.
+
+
+Each contruct MUST include the keypair, :
 > key: [membershipHash]: pair: [WakuCredential]
 
 ### membershipHash 
 - MUST be a 256 byte hash.
 - it Must be a string
 - SHOULD be generated with `treeIndex`, `membershipContract`, and `identityCredential`.
-- MUST not already exist in the keystore.
+- it MUST NOT already exist in the keystore.
 
 `treeIndex`  
 - it MUST be a RLN membership tree index in a merkle tree data structure filled with `identity_commitment` from user registrations.
 As described in [32/RLN-V1](https://rfc.vac.dev/spec/32/)
-- MUST be integer
+- it MUST be integer
 
 `membershipContract` 
 - it MUST be a hash of a `contractId` and `contractAddress`
@@ -104,7 +111,7 @@ it MUST consists of:
 - it MUST be created with `identity_secret` as a parameter for the hash function.
 - Used to decrypt the `identity_commitment` of the user, and as
 a private input for zero-knowledge proof generation.
-- The secret hash SHOULD be kept private by the user.
+- This secret hash SHOULD be kept private by the user.
 
 `identity_commitment` 
 - it MUST be created with `identity_secret_hash` for hash creation. 
@@ -114,7 +121,6 @@ a private input for zero-knowledge proof generation.
 `WakuCredential` 
 - MUST be used for password verification.
 - it MUST follow [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335) 
-
 
 ### KDF
 
@@ -174,7 +180,7 @@ it MUST be truncated to the correct number of bits.
 
 ## Test Vectors
 ### Input:
-Hashing function used: Poseidon Hash as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
+Hashing function used: Poseidon Hash, as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
 
 `application`: "waku-rln-relay"
 
@@ -262,12 +268,13 @@ Suggested Construct:
 Copyright and related rights waived via CC0.
 
 # References
-1. [58/RLN-V2](https://rfc.vac.dev/spec/58/)
-2. [17/WAKU2-RLN-RELAY](https://rfc.vac.dev/spec/17/)
+1. [58/RLN-V2](/spec/58/)
+2. [17/WAKU2-RLN-RELAY](/spec/17/)
 3. [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
 4. [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)
 5. [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335)
 6. [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt)
+7. [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
 
 
 
