@@ -446,14 +446,135 @@ label = "MLS 1.0 " + Label;
 context = Context;
 ```
 
+Each member of the group MUST maintaint a `GroupContext` object summarizing the state of the group. 
+The sturcture of such object MUST be:
 
+![GroupContext](https://github.com/vacp2p/rfc/assets/74050285/7d7e7fa7-4b29-403e-a1a1-bf0683e1dc11)
 
+Semantics of the state MUST follow the indications in section 8.1 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
+#### Key packages
+`KeyPackage` objects specify:
+- Protocol version and cipher suite supported by the client.
+- Public keys that can be used to encrypt Welcome messages.
+- The content of the leaf node that should be added to the tree to represent this client.
 
+KeyPackages are intended to be used only once and SHOULD NOT be reused. 
+Clients MAY generate and publish multiple KeyPackages to support multiple cipher suites.
+The structure of the object MUST be:
 
+![KeyPackage](https://github.com/vacp2p/rfc/assets/74050285/0f35c3d6-b705-46cd-ae79-1ca0504230dc)
 
+`KeyPackage` object MUST be verified when:
+- A `KeyPackage` is downloaded by a group member, before it is used to add the client to the group.
+- When a `KeyPackage` is received by a group member in an `Add` message.
 
+Verification MUST be done as follows:
+- Verify that the cipher suite and protocol version of the `KeyPackage` match those in the `GroupContext`.
+- Verify that the `leaf_node` of the `KeyPackage` is valid for a `KeyPackage`.
+- Verify that the signature on the `KeyPackage` is valid.
+- Verify that the value of `leaf_node.encryption_key` is different from the value of the `init_key field`.
 
+#### Group creation
+
+A group is always created with a single member. 
+Other members are then added to the group using the usual Add/Commit mechanism.
+The creator of a group MUST set:
+- the group ID. 
+- cipher suite.
+- initial extensions for the group. 
+
+If the creator intends to add other members at the time of creation, then it SHOULD fetch `KeyPackages` for those members, and select a cipher suite and extensions according to their capabilities. 
+
+The creator MUST use the capabilities information in these `KeyPackages` to verify that the chosen version and cipher suite is the best option supported by all members.
+
+Group IDs SHOULD be constructed so they are unique with high probability. 
+
+To initialize a group, the creator of the group MUST initialize a one-member group with the following initial values:
+- Ratchet tree: A tree with a single node, a leaf node containing an HPKE public key and credential for the creator.
+- Group ID: A value set by the creator.
+- Epoch: `0`.
+- Tree hash: The root hash of the above ratchet tree.
+- Confirmed transcript hash: The zero-length octet string.
+- Epoch secret: A fresh random value of size `KDF.Nh`.
+- Extensions: Any values of the creator's choosing.
+
+The creator MUST also calculate the interim transcript hash:
+- Derive the `confirmation_key` for the epoch according to Section 8 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+- Compute a `confirmation_tag` over the empty `confirmed_transcript_hash` using the `confirmation_key` as described in Section 6.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+- Compute the updated `interim_transcript_hash` from the `confirmed_transcript_hash` and the `confirmation_tag` as described in Section 8.2 [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+All members of a group MUST support the cipher suite and protocol version in use. Additional requirements MAY be imposed by including a `required_capabilities` extension in the `GroupContext`.
+
+![RequiredCapabilities](https://github.com/vacp2p/rfc/assets/74050285/1eb093d1-ed73-4fa1-a8b1-6c768f171786)
+
+#### Group evolution
+
+Group membership can change, and existing members can change their keys in order to achieve post-compromise security. 
+In MLS, each such change is accomplished by a two-step process:
+- A proposal to make the change is broadcast to the group in a Proposal message.
+- A member of the group or a new member broadcasts a Commit message that causes one or more proposed changes to enter into effect.
+
+The group evolves from one cryptographic state to another each time a Commit message is sent and processed. 
+These states are called epochs and are uniquely identified among states of the group by eight-octet epoch values. 
+
+Proposals are included in a FramedContent by way of a Proposal structure that indicates their type:
+
+![Proposal](https://github.com/vacp2p/rfc/assets/74050285/1f9c8d09-d89a-44c9-bcfd-36ba0818bca0)
+
+On receiving a FramedContent containing a Proposal, a client MUST verify the signature inside `FramedContentAuthData` and that the epoch field of the enclosing FramedContent is equal to the epoch field of the current GroupContext object. 
+If the verification is successful, then the Proposal SHOULD be cached in such a way that it can be retrieved by hash in a later Commit message.
+
+Proposals are organized as follows:
+- Add: requests that a client with a specified KeyPackage be added to the group.
+- Update: similar to Add, it replaces the sender's LeafNode in the tree instead of adding a new leaf to the tree.
+- Remove: requests that the member with the leaf index removed be removed from the group.
+- ReInit: requests to reinitialize the group with different parameters.
+- ExternalInit: used by new members that want to join a group by using an external commit.
+- GroupContentExtensions: it is used to update the list of extensions in the GroupContext for the group.
+
+Proposals structure and semantics MUST follow sections 12.1.1 - 12.1.7 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+Any list of commited proposals MUST be validated either by a the group member who created the commit, or any group member processing such commit.
+The validation MUST be done according to one of the procedures described in Section 12.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+When creating or processing a Commit, a client applies a list of proposals to the ratchet tree and GroupContext. 
+The client MUST apply the proposals in the list in the order described in Section 12.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Commit messages
+
+Commit messages initiate new group epochs. 
+It informs group members to update their representation of the state of the group by applying the proposals and advancing the key schedule.
+
+Each proposal covered by the Commit is included by a `ProposalOrRef` value.
+`ProposalOrRef` identify the proposal to be applied by value or by reference. 
+Commits that refer to new Proposals from the committer can be included by value. 
+Commits for previously sent proposals from anyone can be sent by reference. 
+Proposals sent by reference are specified by including the hash of the `AuthenticatedContent`.
+
+![Commit](https://github.com/vacp2p/rfc/assets/74050285/a736aee0-e730-4807-b332-a8f6f3a61be0)
+
+Group members that have observed one or more valid proposals within an epoch MUST send a Commit message before sending application data.
+A sender and a receiver of a Commit MUST verify that the committed list of proposals is valid.
+The sender of a Commit SHOULD include all valid proposals received during the current epoch.
+
+Functioning of commits MUST follow the instructions of Section 12.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+#### Application messages
+
+Handshake messages provide an authenticated group key exchange to clients. 
+To protect application messages sent among the members of a group, the `encryption_secret` provided by the key schedule is used to derive a sequence of nonces and keys for message encryption.
+
+Each client MUST maintain their local copy of the key schedule for each epoch during which they are a group member. 
+They derive new keys, nonces, and secrets as needed. This data MUST be deleted as soon as they have been used.
+
+Group members MUST use the AEAD algorithm associated with the negotiated MLS ciphersuite to encrypt and decrypt Application messages according to the Message Framing section.
+The group identifier and epoch allow a device to know which group secrets should be used and from which Epoch secret to start computing other secrets and keys. 
+Application messages SHOULD be padded to provide resistance against traffic analysis techniques. 
+This avoids additional information to be provided to an attacker in order to guess the length of the encrypted message.
+Padding SHOULD be used on messages with zero-valued bytes before AEAD encryption.
+
+Functioning of application messages MUST follow the instructions of Section 15 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 
 # Privacy and Security Considerations
