@@ -14,7 +14,7 @@ contributors:
 # Abstract
 
 This document describes how to scale [56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/)
-using existing Waku v2 protocols and components.
+using Waku v2 protocol and components.
 It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
 
 > *Note:* (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components
