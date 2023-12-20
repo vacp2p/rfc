@@ -268,71 +268,12 @@ A user who wants to retrieve a public key associated with a specific wallet addr
 The user provides the wallet address as the only input parameter for *getPublicKey*.
 The function outputs the associated public key from the smart contract.
 
-# Extension to group chat
-
-## The MLS Framework
+# Extension to group chat: the MLS Framework
 
 The Messaging Layer Security (MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
 It is a key establishment protocol that provides efficient asynchronous group key establishment with forward secrecy (FS) and post-compromise security (PCS) for groups in size ranging from two to thousands.
-
-### Main security characteristics
-
-The main security characteristics of the protocol are:
-
-- Message confidentiality and authentication.
-- Sender authentication.
-- Membership agreement.
-- Post-remove and post-update security.
-- Forward secrecy and post-compromise security.
-
-### Strengths of the protocol
-
-- **Low complexity**: The use of binary trees allows MLS achieveing low complexity levels, 
-meaning that the number of required operations and the payload size do not increase linearly with the group size but logarithmically after a short period.
-- **Group integrity**: This property guarantees full agreement among group members regarding the group's current state and its constituents. 
-- **Synchronization**: The protocol enables agreement on diverse data sets among group members via a Delivery Service which enforces sequential delivery of MLS message. 
-The Delivery Service can be completely abstract if users are able to distribute credentials and messages without relying on a central Delivery Service. 
-- **Extensibility**: MLS offers extensibility by permitting modifications or additions of data to a group's state. 
-
-### Subprotocols
-
-The MLS protocol is composed of 3 subprotocols, namely: TreeSync, TreeKEM and TreeDEM, which are described below:
-
-- **TreeSync**: This sub-protocol guarantees consensus on membership and upholds the integrity of the group's state. 
-- **TreeKEM** : This sub-protocol utilizes a tree structure to create subgroup keys for internal nodes, including a shared group key at the root for all members within the present group epoch. 
-TreeKEM can manage the situation of a user associated to several devices. 
-	- Providing each device with a set of keys and including it in the tree as separate leaf.
-	This corresponds to session `NM` [here](https://rfc.vac.dev/spec/37/).
-	- Allowing the synchronization of keys so all devices appear as a single leaf.
-	This corresponds to session `N11M` [here](https://rfc.vac.dev/spec/37/).
-    
-- **TreeDEM**: This sub-protocol builds upon TreeKEM's established group keys to secure application messages, handshake messages and *welcome* messages, for new members, transmitted within each epoch. 
-
-### Inactive users: Quarantined treeKEM and Tainted treeKEM
-
-Ensuring post-compromise security and forward secrecy requires active involvement from all users within a group, including both compromised and uncompromised individuals.
-However, there's a potential risk posed by inactive users, termed as *ghosts*, who remain offline for extended periods and fail to update their keys. These inactive users create a vulnerability that affects the entire group.
-
-Ghosts are considered an inherent aspect of the protocol's asynchronicity. 
-The compromise of just one ghost can jeopardize the forward secrecy of the entire system. 
-Moreover, the presence of a single corrupted ghost is sufficient to undermine the post-compromise security of the entire group.
-
-In order to overcome the associated issues with ghosts one finds two similar soluctions, namely: [Quarantined treeKEM](https://eprint.iacr.org/2023/1903) (QTK) and [Tainted treeKEM](https://eprint.iacr.org/2019/1489) (TTK).
-
-QTK is a continuous group key agreement which builds upon treeKEM and aligns with the MLS standard. 
-It introduces a "quarantine" feature designed to address the risks associated with ghosts while retaining their presence within the group.
-
-In the quarantine process of QTK, a randomly selected user takes charge of blanking the ghost's direct path and updating its encryption keys on its behalf. 
-This method bears a striking resemblance to TTK's strategy for adding or removing users without blanking their direct paths. 
-In TTK, nodes within new or former users' direct paths are updated by a temporary group member.
-
-The main distinction between QTK and TTK lies in how they handle the initiator's access to the ghost's (secret) decryption key. 
-QTK diverges by employing a secret sharing scheme to share the secret seed used for generating the ghost's encryption key pair. 
-These shares are then distributed among all group members, and the ghost's secret seed and private key are deleted from the initiator's internal state. 
-Consequently, the confidentiality of the ghost's secret key no longer hinges on the security of a single user (the quarantine initiator) but relies on the collective security of several active group members.
-
-When a ghost finally reconnects and updates its keying material, its quarantine automatically stops and the users that kept shares related to that ghost send them to it. 
-The former ghost is therefore able to reconstruct the secret seeds corresponding to its quarantine keys.
+The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
+The MLS protocol achieves: low-complexity, group integrity, synchronization and extensibility.
 
 ## Implementation considerations
 
@@ -344,11 +285,11 @@ Each MLS session uses a single cipher suite that specifies the primitives to be 
 - `SHA512` as hash function.
 - `XEd448` for digital signatures.
 
-Formats for public keys, signatures and public-key encryption MUST be as defined in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+Formats for public keys, signatures and public-key encryption MUST be as defined in Section 5.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ### Hash-based identifiers
 Some MLS messages refer to other MLS objects by hash.
-These identifiers MUST be computed according to [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+These identifiers MUST be computed according to Section 5.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ### Credentials
 Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
@@ -369,20 +310,14 @@ Applications SHOULD use `PrivateMessage` to encode handshake messages.
 The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 The definition of `PrivateMessage ` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Ratchet tree operations
-The ratchet tree for an epoch describes the membership of a group in that epoch.
-In order to reflect changes to the membership of the group from one epoch to the next, corresponding changes are made to the ratchet tree. 
-The following section describes the required operations.
-
-#### Nodes contents
+### Nodes contents
 The nodes of a ratchet tree contain several types of data. 
 Leaf nodes describe individual members.
 Parent nodes describe subgroups.
-
 Contents of each kind of node, and its structure MUST follow the indications described in sections 7.1 and 7.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Leaf node validation
-`KeyPackage` objects describes a client's capabilities and provides keys that can be used to add the client to a group.
+### Leaf node validation
+`KeyPackage` objects describe the client's capabilities and provides keys that can be used to add the client to a group.
 
 The validity of a leaf node needs to be verified at the following stages:
 - When a leaf node is downloaded in a `KeyPackage`, before it is used to add the client to the group.
@@ -391,9 +326,9 @@ The validity of a leaf node needs to be verified at the following stages:
 
 A client MUST verify the validity of a leaf node following the instructions of section 7.3 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-> This las verification process depends on the AS, which in turn depends on our side.
+> This verification process depends on the AS, which in turn depends on our side.
 
-#### Ratchet tree evolution
+### Ratchet tree evolution
 Whenever a member initiates an epoch change, they MAY need to refresh the key pairs of their leaf and of the nodes on their direct path. This is done to keep forward secrecy and post-compromise security.
 The member initiating the epoch change MUST follow this procedure procedure.
 A member updates the nodes along its direct path as follows:
@@ -404,17 +339,16 @@ It MUST follow the procedure described in section 7.4 of [RFC9420](https://datat
 - Compute the sequence of HPKE key pairs `(node_priv,node_pub)`, one for each node on the leaf's direct path.
 It MUST follow the procedure described in section 7.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Views of the tree synchronization
+### Views of the tree synchronization
 After generating fresh key material and applying it to update their local tree state, the generator broadcasts this update to other members of the group.
 This operation MUST be done according to section 7.5 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Leave synchronization
+### Leave synchronization
 Changes to group memberships MUST be represented by adding and removing leaves of the tree.
 This corresponds to increasing or decreasing the depth of the tree, resulting in the number of leaves being doubled or halved.
 These operations MUST be done as described in section 7.7 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Tree and parent hashing
-
+### Tree and parent hashing
 Group members can agree on the cryptographic state of the group by generating a hash value that represents the contents of the group ratchet tree and the member’s credentials. 
 The hash of the tree is the hash of its root node, defined recursively from the leaves.
 Tree hashes summarize the state of a tree at point in time.
@@ -422,9 +356,9 @@ The hash of a leaf is the hash of the `LeafNodeHashInput` object.
 At the same time, the hash of a parent node including the root, is the hash of a `ParentNodeHashInput` object.
 Parent hashes capture information about how keys in the tree were populated.
 
-![NodeTypes](https://github.com/vacp2p/rfc/assets/74050285/3601f51d-9b4d-410c-9f85-ab5f06c903b4)
+Tree and parent hashing MUST follow the directions in Sections 7.8 and 7.9 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Key schedule
+### Key schedule
 Group keys are derived using the `Extract` and `Expand` functions from the KDF for the group's cipher suite, as well as the functions defined below:
 
 ```
@@ -449,11 +383,21 @@ context = Context;
 Each member of the group MUST maintaint a `GroupContext` object summarizing the state of the group. 
 The sturcture of such object MUST be:
 
-![GroupContext](https://github.com/vacp2p/rfc/assets/74050285/7d7e7fa7-4b29-403e-a1a1-bf0683e1dc11)
+```
+struct {
+ProtocolVersion version = mls10;
+CipherSuite cipher_suite;
+opaque group_id<V>;
+uint64 epoch;
+opaque tree_hash<V>;
+opaque confirmed_trasncript_hash<V>;
+Extension extension<V>;
+} GroupContext;
+```
 
 Semantics of the state MUST follow the indications in section 8.1 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Key packages
+### Key packages
 `KeyPackage` objects specify:
 - Protocol version and cipher suite supported by the client.
 - Public keys that can be used to encrypt Welcome messages.
@@ -463,8 +407,26 @@ KeyPackages are intended to be used only once and SHOULD NOT be reused.
 Clients MAY generate and publish multiple KeyPackages to support multiple cipher suites.
 The structure of the object MUST be:
 
-![KeyPackage](https://github.com/vacp2p/rfc/assets/74050285/0f35c3d6-b705-46cd-ae79-1ca0504230dc)
-
+```
+struct {
+ProtocolVersion version;
+CipherSuite cipher_suite;
+HPKEPublicKey init_key;
+LeafNode leaf_node;
+Extension extensions<V>;
+/* SignWithLabel(., "KeyPackageTBS", KeyPackageTBS) */
+opaque signature<V>;
+}
+```
+```
+struct {
+ProtocolVersion version;
+CipheSuite cipher_suite;
+HPKEPublicKey init_key;
+LeafNode leaf_node;
+Extension extensions<V>;
+}
+```
 `KeyPackage` object MUST be verified when:
 - A `KeyPackage` is downloaded by a group member, before it is used to add the client to the group.
 - When a `KeyPackage` is received by a group member in an `Add` message.
@@ -475,8 +437,10 @@ Verification MUST be done as follows:
 - Verify that the signature on the `KeyPackage` is valid.
 - Verify that the value of `leaf_node.encryption_key` is different from the value of the `init_key field`.
 
-#### Group creation
+HPKE public keys are opaque values in a format defined by Section 4 of [RFC9180](https://datatracker.ietf.org/doc/rfc9180/).
+Signature public keys are represented as opaque values in a format defined by the cipher suite's signature scheme.
 
+### Group creation
 A group is always created with a single member. 
 Other members are then added to the group using the usual Add/Commit mechanism.
 The creator of a group MUST set:
@@ -506,10 +470,15 @@ The creator MUST also calculate the interim transcript hash:
 
 All members of a group MUST support the cipher suite and protocol version in use. Additional requirements MAY be imposed by including a `required_capabilities` extension in the `GroupContext`.
 
-![RequiredCapabilities](https://github.com/vacp2p/rfc/assets/74050285/1eb093d1-ed73-4fa1-a8b1-6c768f171786)
+```
+struct {
+ExtensionType extension_types<V>;
+ProposalType proposal_types<V>;
+CredentialType credential_types<V>;
+}
+```
 
-#### Group evolution
-
+### Group evolution
 Group membership can change, and existing members can change their keys in order to achieve post-compromise security. 
 In MLS, each such change is accomplished by a two-step process:
 - A proposal to make the change is broadcast to the group in a Proposal message.
@@ -520,8 +489,19 @@ These states are called epochs and are uniquely identified among states of the g
 
 Proposals are included in a FramedContent by way of a Proposal structure that indicates their type:
 
-![Proposal](https://github.com/vacp2p/rfc/assets/74050285/1f9c8d09-d89a-44c9-bcfd-36ba0818bca0)
-
+```
+struct {
+ProposalType proposal_type;
+select (Proposal.proposal_type) {
+case add:			Add:
+case update:			Update;
+case remove:			Remove;
+case psk:			PreSharedKey;
+case reinit:			ReInit;
+case external_init:		ExternalInit;
+case group_context_extensions:	GroupContextExtensions;
+}
+```
 On receiving a FramedContent containing a Proposal, a client MUST verify the signature inside `FramedContentAuthData` and that the epoch field of the enclosing FramedContent is equal to the epoch field of the current GroupContext object. 
 If the verification is successful, then the Proposal SHOULD be cached in such a way that it can be retrieved by hash in a later Commit message.
 
@@ -541,8 +521,7 @@ The validation MUST be done according to one of the procedures described in Sect
 When creating or processing a Commit, a client applies a list of proposals to the ratchet tree and GroupContext. 
 The client MUST apply the proposals in the list in the order described in Section 12.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Commit messages
-
+### Commit messages
 Commit messages initiate new group epochs. 
 It informs group members to update their representation of the state of the group by applying the proposals and advancing the key schedule.
 
@@ -552,16 +531,13 @@ Commits that refer to new Proposals from the committer can be included by value.
 Commits for previously sent proposals from anyone can be sent by reference. 
 Proposals sent by reference are specified by including the hash of the `AuthenticatedContent`.
 
-![Commit](https://github.com/vacp2p/rfc/assets/74050285/a736aee0-e730-4807-b332-a8f6f3a61be0)
-
 Group members that have observed one or more valid proposals within an epoch MUST send a Commit message before sending application data.
 A sender and a receiver of a Commit MUST verify that the committed list of proposals is valid.
 The sender of a Commit SHOULD include all valid proposals received during the current epoch.
 
 Functioning of commits MUST follow the instructions of Section 12.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-#### Application messages
-
+### Application messages
 Handshake messages provide an authenticated group key exchange to clients. 
 To protect application messages sent among the members of a group, the `encryption_secret` provided by the key schedule is used to derive a sequence of nonces and keys for message encryption.
 
@@ -576,9 +552,7 @@ Padding SHOULD be used on messages with zero-valued bytes before AEAD encryption
 
 Functioning of application messages MUST follow the instructions of Section 15 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-
 # Privacy and Security Considerations
-
 - The double ratchet "recommends" using AES in CBC mode. Since encryption must be with an AEAD encryption scheme, we will use AES in GCM mode instead (supported by Noise).
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
@@ -587,11 +561,9 @@ Functioning of application messages MUST follow the instructions of Section 15 o
 - In order to improve forward-secrecy in TreeKEM users MUST use a UPKE scheme.
 
 # Copyright
-
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-
 - https://rfc.vac.dev/spec/20/
 - https://signal.org/docs/specifications/x3dh/
 - https://signal.org/docs/specifications/doubleratchet/
