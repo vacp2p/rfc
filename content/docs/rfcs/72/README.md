@@ -76,6 +76,8 @@ The declaration of `application`, `version`, and `appIdentifier` COULD occur in 
 `appIdentifier`: application identifier, MUST be a string
 
 ## Credentials:
+After RLN credentials are generated, it MUST be stored in a JSON schema.
+An on chain membership contract SHOULD be used to create the memebershipHash.
 The Waku RLN credentials MUST consist of a `membershipHash` and `WakuCredential`.
 
 
