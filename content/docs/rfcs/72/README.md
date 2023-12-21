@@ -118,8 +118,8 @@ a private input for zero-knowledge proof generation.
 - This secret hash SHOULD be kept private by the user.
 
 `identity_commitment` 
-- it MUST be created with `identity_secret_hash` for hash creation. 
-- it MUST be used by a user for user registering.
+- it MUST be created with `identity_secret_hash` by using hashing function as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf). 
+- it MUST be used by a user for group registering.
 
 ### Waku Credential
 `WakuCredential` 
