@@ -275,9 +275,16 @@ It is a key establishment protocol that provides efficient asynchronous group ke
 The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
 The MLS protocol achieves: low-complexity, group integrity, synchronization and extensibility.
 
-## Implementation considerations
+## Authentication service
 
-### Cryptographic suites
+
+
+
+
+
+
+
+## Cryptographic suites
 Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
 - `X488` as Diffie-Hellman function.
 - `SHA256` as KDF.
@@ -287,17 +294,17 @@ Each MLS session uses a single cipher suite that specifies the primitives to be 
 
 Formats for public keys, signatures and public-key encryption MUST be as defined in Section 5.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Hash-based identifiers
+## Hash-based identifiers
 Some MLS messages refer to other MLS objects by hash.
 These identifiers MUST be computed according to Section 5.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Credentials
+## Credentials
 Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
 The identities and signing key are verified by the Authentication Service in use for a group.
 
 > We need to describe how to use Ethereum as AS
 
-### Message framing
+## Message framing
 Handshake and application messages use a common framing structure providing encryption to ensure confidentiality within the group, and signing to authenticate the sender.
 
 The structures are:
@@ -310,13 +317,13 @@ Applications SHOULD use `PrivateMessage` to encode handshake messages.
 The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 The definition of `PrivateMessage ` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Nodes contents
+## Nodes contents
 The nodes of a ratchet tree contain several types of data. 
 Leaf nodes describe individual members.
 Parent nodes describe subgroups.
 Contents of each kind of node, and its structure MUST follow the indications described in sections 7.1 and 7.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Leaf node validation
+## Leaf node validation
 `KeyPackage` objects describe the client's capabilities and provides keys that can be used to add the client to a group.
 
 The validity of a leaf node needs to be verified at the following stages:
@@ -328,7 +335,7 @@ A client MUST verify the validity of a leaf node following the instructions of s
 
 > This verification process depends on the AS, which in turn depends on our side.
 
-### Ratchet tree evolution
+## Ratchet tree evolution
 Whenever a member initiates an epoch change, they MAY need to refresh the key pairs of their leaf and of the nodes on their direct path. This is done to keep forward secrecy and post-compromise security.
 The member initiating the epoch change MUST follow this procedure procedure.
 A member updates the nodes along its direct path as follows:
@@ -339,16 +346,16 @@ It MUST follow the procedure described in section 7.4 of [RFC9420](https://datat
 - Compute the sequence of HPKE key pairs `(node_priv,node_pub)`, one for each node on the leaf's direct path.
 It MUST follow the procedure described in section 7.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Views of the tree synchronization
+## Views of the tree synchronization
 After generating fresh key material and applying it to update their local tree state, the generator broadcasts this update to other members of the group.
 This operation MUST be done according to section 7.5 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Leave synchronization
+## Leaf synchronization
 Changes to group memberships MUST be represented by adding and removing leaves of the tree.
 This corresponds to increasing or decreasing the depth of the tree, resulting in the number of leaves being doubled or halved.
 These operations MUST be done as described in section 7.7 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Tree and parent hashing
+## Tree and parent hashing
 Group members can agree on the cryptographic state of the group by generating a hash value that represents the contents of the group ratchet tree and the member’s credentials. 
 The hash of the tree is the hash of its root node, defined recursively from the leaves.
 Tree hashes summarize the state of a tree at point in time.
@@ -358,7 +365,7 @@ Parent hashes capture information about how keys in the tree were populated.
 
 Tree and parent hashing MUST follow the directions in Sections 7.8 and 7.9 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Key schedule
+## Key schedule
 Group keys are derived using the `Extract` and `Expand` functions from the KDF for the group's cipher suite, as well as the functions defined below:
 
 ```
@@ -397,7 +404,7 @@ Extension extension<V>;
 
 Semantics of the state MUST follow the indications in section 8.1 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Key packages
+## Key packages
 `KeyPackage` objects specify:
 - Protocol version and cipher suite supported by the client.
 - Public keys that can be used to encrypt Welcome messages.
@@ -440,7 +447,7 @@ Verification MUST be done as follows:
 HPKE public keys are opaque values in a format defined by Section 4 of [RFC9180](https://datatracker.ietf.org/doc/rfc9180/).
 Signature public keys are represented as opaque values in a format defined by the cipher suite's signature scheme.
 
-### Group creation
+## Group creation
 A group is always created with a single member. 
 Other members are then added to the group using the usual Add/Commit mechanism.
 The creator of a group MUST set:
@@ -478,7 +485,7 @@ CredentialType credential_types<V>;
 }
 ```
 
-### Group evolution
+## Group evolution
 Group membership can change, and existing members can change their keys in order to achieve post-compromise security. 
 In MLS, each such change is accomplished by a two-step process:
 - A proposal to make the change is broadcast to the group in a Proposal message.
@@ -521,7 +528,7 @@ The validation MUST be done according to one of the procedures described in Sect
 When creating or processing a Commit, a client applies a list of proposals to the ratchet tree and GroupContext. 
 The client MUST apply the proposals in the list in the order described in Section 12.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Commit messages
+## Commit messages
 Commit messages initiate new group epochs. 
 It informs group members to update their representation of the state of the group by applying the proposals and advancing the key schedule.
 
@@ -537,7 +544,7 @@ The sender of a Commit SHOULD include all valid proposals received during the cu
 
 Functioning of commits MUST follow the instructions of Section 12.4 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-### Application messages
+## Application messages
 Handshake messages provide an authenticated group key exchange to clients. 
 To protect application messages sent among the members of a group, the `encryption_secret` provided by the key schedule is used to derive a sequence of nonces and keys for message encryption.
 
