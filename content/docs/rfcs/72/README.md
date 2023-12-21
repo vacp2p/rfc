@@ -16,14 +16,14 @@ credentials are securely stored in a JSON schema.
 # Summary
 A keystore is a construct to store a user’s keys. 
 The keys will be encrypted and decrypted based on methods specified in this specification. 
-This keystore uses [58/RLN-V2](/spec/58/) as a spam-prevention mechanism by generating zero-knowledge proofs and 
+This keystore uses [32/RLN-V1](/spec/32/) as a spam-prevention mechanism by generating zero-knowledge proofs and 
 storing the credentials locally in the keystore.
 
 # Background
 The secure storage of keys is important in peer-to-peer messaging applications.
 A `72/WAKU-RLN-KEYSTORE` uses zero-knowledge proofs for anonymous rate-limiting for messaging frameworks. 
 Generated credentials by a user are encrypted and stored in the keystore to be retrieved over a network.
-With [58/RLN-V2](/spec/58/), sending and receiving 
+With [32/RLN-V1](/spec/32/), sending and receiving 
 messages will ensure a message rate for a network is being followed while keeping the anonymity of the message owner. 
 
 ## Example Waku RLN Keystore:
@@ -272,7 +272,7 @@ Suggested Construct:
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-1. [58/RLN-V2](/spec/58/)
+1. [32/RLN-V1](/spec/32/)
 2. [17/WAKU2-RLN-RELAY](/spec/17/)
 3. [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
 4. [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)
