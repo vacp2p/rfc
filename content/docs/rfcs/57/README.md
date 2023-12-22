@@ -5,7 +5,7 @@ name: Status Simple Scaling
 status: raw
 category: Informational
 tags: waku/application
-description: Describes how to scale Status Communities and Status 1-to-1 Chat using existing Waku v2 protocols and components.
+description: Describes how to scale Status Communities and Status 1-to-1 chats using Waku v2 protocol and components.
 editor: Daniel Kaiser <danielkaiser@status.im>
 contributors:
 - Alvaro Revuelta <alrevuelta@status.im>
@@ -14,7 +14,7 @@ contributors:
 # Abstract
 
 This document describes how to scale [56/STATUS-COMMUNITIES](/spec/56/) as well as [55/STATUS-1TO1-CHAT](/spec/55/)
-using existing Waku v2 protocols and components.
+using Waku v2 protocol and components.
 It also adds a few new aspects, where more sophisticated components are not yet researched and evaluated.
 
 > *Note:* (Parts of) this RFC will be deprecated in the future as we continue research to scale specific components
