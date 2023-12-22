@@ -277,12 +277,27 @@ The MLS protocol achieves: low-complexity, group integrity, synchronization and 
 
 ## Authentication service
 
+NIZK proofs (such as Bulletproofs or SNARKs) allow users to authenticate without any need for them to submit any compromising data. And with the verifier not needing to set any interaction with the prover.
 
+It is required to have a smart contract including a function to handle user registration. This implies that the smart contract should maintain or have access to a storage service managing the list of verified users.
 
+### User registration
 
+- Users will provide their Ethereum address as identifier together with a NIZK proof proving knowledge of the associated secret key. Users send this information to the smart contract.
+    
+> It is important to note that one uses the secret key of the keypair needed to derive the Ethereum addess.
+ 
+- Upon reception of the registration request, the smart contract initiates the verification of the provided NIZK proof. If the verification process is successful, the smart contract includes the Ethereum address to a list of authorized users.
+    
+> Question: is it possible for the smart contract to store this information as an array for example?
 
+### Authentication process
 
-
+- Users willing to access the service MUST generate a new NIZK proof demonstrating possession of the private key associated to their Ethereum address. This NIZK proof is generated locally by users.
+- The NIZK proof is submitted to the smart contract.
+- The smart contract verifies the NIZK proof. If verification is successful, the smart contract grants access to the service.
+    
+> This last part needs to be careful with gas consumption.
 
 ## Cryptographic suites
 Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
@@ -301,8 +316,6 @@ These identifiers MUST be computed according to Section 5.2 of [RFC9420](https:/
 ## Credentials
 Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
 The identities and signing key are verified by the Authentication Service in use for a group.
-
-> We need to describe how to use Ethereum as AS
 
 ## Message framing
 Handshake and application messages use a common framing structure providing encryption to ensure confidentiality within the group, and signing to authenticate the sender.
@@ -332,8 +345,6 @@ The validity of a leaf node needs to be verified at the following stages:
 - When a client validates a ratchet tree.
 
 A client MUST verify the validity of a leaf node following the instructions of section 7.3 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
-
-> This verification process depends on the AS, which in turn depends on our side.
 
 ## Ratchet tree evolution
 Whenever a member initiates an epoch change, they MAY need to refresh the key pairs of their leaf and of the nodes on their direct path. This is done to keep forward secrecy and post-compromise security.
