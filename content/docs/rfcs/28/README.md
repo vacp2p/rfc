@@ -4,7 +4,7 @@ title: 28/STATUS-FEATURING
 name: Status community featuring using waku v2
 status: raw
 tags: waku-application
-description: To gain new members, current users can vote to feature an active Status community to the larger Status audience.
+description: To gain new members, current SNT holders can vote to feature an active Status community to the larger Status audience.
 editor: Szymon Szlachtowicz <szymon.s@ethworks.io>
 ---
 
