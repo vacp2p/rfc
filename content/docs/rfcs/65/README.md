@@ -1,10 +1,10 @@
 ---
 slug: 65
-title: 65/STATUS-ACCOUNTS
-name: Status Accounts
+title: 65/STATUS-ACCOUNT-ADDRESS
+name: Status Account Address
 status: draft
 category: Standards Track
-description: Details of what a Status account is, how accounts are created, and how accounts are used.
+description: Details of what a Status account address is and how account addresses are created and used.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Corey Petty <corey@status.im>
@@ -14,7 +14,7 @@ contributors:
 
 # Abstract
 
-This specification explains what a Status account is, and how it is created and used.
+This specification details what a Status account address is and how account addresses are created and used.
 
 # Background
 
