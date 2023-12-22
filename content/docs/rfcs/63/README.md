@@ -4,7 +4,7 @@ title: 63/STATUS-Keycard-Usage
 name: Status Keycard Usage
 status: raw
 category: Standards Track
-description: Describes how an application can use the Status Keycard to create, store, and transact with different accounts.
+description: Describes how an application can use the Status Keycard to create, store and transact with different account addresses.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
   - Jimmy Debe <jimmy@status.im>
