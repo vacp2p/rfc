@@ -21,7 +21,7 @@ This section (including its subsections) MUST be removed.
 ## Description
 The `description` SHOULD be a short summary of the current document.
 The `description` MAY be used as the abstract
-The `description` MUST be 140 characters.
+The `description` MUST be from 100 to 140 characters.
 
 ## Tags
 
