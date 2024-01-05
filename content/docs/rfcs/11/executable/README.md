@@ -35,4 +35,20 @@ In your new directory, download the supported py-libp2p from the github reposito
 
 ```
 
+## Configuration
+A Waku node is Publish/Subscribe which allows peers to communicate with each other.
+Publish/Subscribe allows peers to join topics, within a network,
+that they are interseted in.
+Once joined, they are able to send and recieve messages within the topic.
+
+The gossipsub protocol is the Publish/Subscribe protocol used in a Waku node.
+
+
+``` python
+# import the necessary py-libp2p
+from libp2p.pubsub import pubsub
+from libp2p.pubsub import gossipsub
+from libp2p.peer.id import ID
+
+```
 
