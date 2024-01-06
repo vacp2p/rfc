@@ -19,7 +19,9 @@ Waku v2 is a family of modular peer-to-peer protocols for secure communication.
 These protocols are designed to be secure, privacy-preserving, and censorship-resistant and can run in resource-restricted environments.
 At a high level, Waku v2 implements a Pub/Sub messaging pattern over libp2p and adds capabilities.
 
-The present document specifies the Waku v2 message format, a way to encapsulate the messages sent with specific information security goals, and Whisper/Waku v1 backward compatibility.
+The present document specifies the Waku v2 message format, 
+a way to encapsulate the messages sent with specific information security goals, and 
+Whisper/Waku v1 backward compatibility.
 
 
 # Motivation
@@ -39,7 +41,8 @@ This specification attempts to provide for these various requirements.
 
 ## Waku Message
 
-A Waku message is constituted by the combination of data payload and attributes that, for example, a *publisher* sends to a *topic* and is eventually delivered to *subscribers*.
+A Waku message is constituted by the combination of data payload and attributes that, for example, 
+a *publisher* sends to a *topic* and is eventually delivered to *subscribers*.
 
 Waku message attributes are key-value pairs of metadata associated with a message. 
 And the message data payload is the part of the transmitted Waku message that is the actual message information.
