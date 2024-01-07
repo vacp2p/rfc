@@ -223,8 +223,8 @@ The Waku message `timestamp` attribute is set by the sender.
 Therefore, because message timestamps aren’t independently verified, 
 this attribute is prone to exploitation and misuse.
 It should not solely be relied upon for operations such as message ordering.
-For example, 
-a malicious actor can arbitrarily set the `timestamp` of a Waku message to a high value so that it always shows up as the most recent message in a chat application.
+For example, a malicious actor can arbitrarily set the `timestamp` of a Waku message to a high value, so 
+that it always shows up as the most recent message in a chat application.
 Applications using Waku messages’ `timestamp` attribute are RECOMMENDED to use additional methods for more robust message ordering.
 An example of how to deal with message ordering against adversarial message timestamps can be found in the Status protocol, 
 see [62/STATUS-PAYLOADS](/spec/62).
