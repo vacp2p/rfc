@@ -49,7 +49,8 @@ The data payload is also treated as a Waku message attribute for convenience.
 
 * The `payload` attribute MUST contain the message data payload to be sent.
 
-* The `content_topic` attribute MUST specify a string identifier that can be used for content-based filtering.
+* The `content_topic` attribute MUST specify a string identifier that can be used for content-based filtering,
+as described in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/).
 
 * The `meta` attribute, if present, contains an arbitrary application-specific variable-length byte array with a maximum length limit of 64 bytes.
 This attribute can be utilized to convey supplementary details to various Waku protocols, thereby enabling customized processing based on its contents.
