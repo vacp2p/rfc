@@ -94,16 +94,16 @@ message WakuMessage {
   optional bool ephemeral = 31;
 }
 ```
-## Waku Message Vaildator
+## Waku Message Vaildation
 
 A message MUST be vaildated as a vaild `WakuMessage`.
 When a [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) receives a message,
 it SHOULD validate the `content_topic` and `payload` attributes.
 If a message is processed as invalid,
-the message MUST be dropped and not forwarded to other peers.
+it MUST be dropped and not forwarded to other peers.
 
 If the message is processed as valid,
-the message MUST be sent to peers who have subscribed to the `content_topic`.
+it MUST be sent to peers who have subscribed to the `content_topic`.
 
 ## Payload Encryption
 
