@@ -25,7 +25,7 @@ We repeat them here with RECOMMMENDED values for `11/WAKU2-RELAY` implementation
 |----------------------|-------------------------------------------------------|-------------------|
 | `D`                  | The desired outbound degree of the network            | 6                 |
 | `D_low`              | Lower bound for outbound degree                       | 4                 |
-| `D_high`             | Upper bound for outbound degree                       | 12                |
+| `D_high`             | Upper bound for outbound degree                       | 8                |
 | `D_lazy`             | (Optional) the outbound degree for gossip emission    | `D`               |
 | `heartbeat_interval` | Time between heartbeats                               | 1 second          |
 | `fanout_ttl`         | Time-to-live for each topic's fanout state            | 60 seconds        |
