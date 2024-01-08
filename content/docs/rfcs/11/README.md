@@ -119,8 +119,8 @@ The following usage requirements apply:
 
 - The `topicid` field MUST contain the pubsub topic.
 
-> Note: `topicid` refers to pubsub topic and
-`topicId` refers to content-topic are detailed in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/) as 
+> Note: The `topicid` refering to pubsub topic and
+`topicId` refering to content-topic are detailed in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/).
 
 ## Signature Policy
 
