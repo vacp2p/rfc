@@ -55,7 +55,7 @@ as described in [64/WAKU2-NETWORK](/spec/64).
 ### Light Client:
 
 A Status client that operates within resource constrained environments is a node configured as light client.
-Light clients do not run a full `RELAY`.
+Light clients do not run `RELAY`.
 Instead, using a Waku service protocol, nodes can request services from other `RELAY` nodes.
 
 # Protocol Usage
