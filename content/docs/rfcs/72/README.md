@@ -113,7 +113,8 @@ the `membershipContract` SHOULD be derived from a public blockchain using smart 
 
 `contractId`
 
-The blockchain identifer being used for `membershipcontract`.
+The `contractId` SHOULD be the blockchain identifier used for `membershipcontract`.
+- it MUST be a string
 
 The `identityCredential` MUST be derived after a succussful decryption of the keystore.
 
