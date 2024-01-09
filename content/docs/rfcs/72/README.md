@@ -97,24 +97,26 @@ To generate the `membershipHash`,
 the `treeIndex`, `membershipContract`, `contractId` and `identityCredential` attributes SHOULD be used to create a hexadecimal string.
 - it MUST NOT already exist in the keystore.
 
-`treeIndex`
+#### treeIndex
 
 After a user registers to a group, 
-a tree index value of the position in the Merkle tree SHOULD be returned.
+a `treeIndex` value of the position in the Merkle tree SHOULD be returned.
 - it MUST be a Merkle tree data structure filled with `identity_commitment` from user registrations.
 - it MUST be a hexadecimal string
 
-`membershipContract`
+#### membershipContract
 
 For decentralized membership registrations, 
 the `membershipContract` SHOULD be derived from a public blockchain using smart contracts. 
 - it MUST be a hash of a `contractAddress`
 - `contractAddess` MUST be a string.
 
-`contractId`
+#### contractId
 
 The `contractId` SHOULD be the blockchain identifier used for `membershipcontract`.
 - it MUST be a string
+
+#### identityCredential
 
 The `identityCredential` MUST be derived after a succussful decryption of the keystore.
 
