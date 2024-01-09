@@ -36,7 +36,7 @@ it is imperative to describe how each are used.
 | Name  | Description |
 | --------------- | --------- |
 | `RELAY`| This refers to the Waku Relay protocol, described in [11/WAKU2-RELAY](/spec/11) |
-|`FILTER` | This refers to the Waku Filter protocol, described in [12/WAKU2-FILTER](/spec/12) |
+| `FILTER` | This refers to the Waku Filter protocol, described in [12/WAKU2-FILTER](/spec/12) |
 | `STORE` | This refers to the Waku Store protocol, described in [13/WAKU2-STORE](/spec/13) |
 | `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
 | `LIGHTPUSH` | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
