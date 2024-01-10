@@ -316,6 +316,7 @@ These identifiers MUST be computed according to Section 5.2 of [RFC9420](https:/
 ## Credentials
 Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
 The identities and signing key are verified by the Authentication Service in use for a group.
+Credentials MUST follow the specifications of section 5.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).  
 
 ## Message framing
 Handshake and application messages use a common framing structure providing encryption to ensure confidentiality within the group, and signing to authenticate the sender.
@@ -328,7 +329,7 @@ Applications MUST use `PrivateMessage` to encrypt application messages.
 Applications SHOULD use `PrivateMessage` to encode handshake messages.
 
 The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
-The definition of `PrivateMessage ` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+The definition, and the encoding/decoding of `PrivateMessage` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Nodes contents
 The nodes of a ratchet tree contain several types of data. 
@@ -413,12 +414,14 @@ Extension extension<V>;
 } GroupContext;
 ```
 
-Semantics of the state MUST follow the indications in section 8.1 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+The use of key scheduling MUST follow the indications in sections 8.1 - 8.7 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Key packages
-`KeyPackage` objects specify:
+KeyPackage objects are used to ease the addition of clients to a group asynchronously.
+A KeyPackage object specifies:
+
 - Protocol version and cipher suite supported by the client.
-- Public keys that can be used to encrypt Welcome messages.
+- Public keys that can be used to encrypt Welcome messages. Welcome messages provide new members with the information to initialize their state for the epoch in which they were added or in which they want to add themselves to the group
 - The content of the leaf node that should be added to the tree to represent this client.
 
 KeyPackages are intended to be used only once and SHOULD NOT be reused. 
