@@ -40,7 +40,7 @@ it is imperative to describe how each are used.
 | `STORE` | This refers to the Waku Store protocol, described in [13/WAKU2-STORE](/spec/13) |
 | `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
 | `LIGHTPUSH` | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
-| DISCOVERY | This refers to a peer discovery method used by a Waku node |
+| Discovery | This refers to a peer discovery method used by a Waku node. |
 | `Pubsub Topic` / `Content Topic` | This refers to the routing and filtering of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
 
 ### Waku Node:
