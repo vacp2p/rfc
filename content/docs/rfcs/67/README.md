@@ -24,7 +24,7 @@ Waku, which is described in [10/WAKU2](/spec/10).
 
 The Status application aspires to achieve censorship resistance and incorporates specific privacy features, 
 leveraging the comprehensive set of protocols offered by Waku to enhance these attributes. 
-Waku protocols provide secure communication capbailites over decentralized networks. 
+Waku protocols provide secure communication capabilities over decentralized networks. 
 Once integrated, an application will benifit from privacy preserving, 
 censorship resistance and spam protected communcation. 
 
