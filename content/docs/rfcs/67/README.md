@@ -3,7 +3,7 @@ slug: 67
 title: 67/STATUS-WAKU2-USAGE
 name: Status Waku2 Usage
 status: raw
-category: Standards Track
+category: Best Common Practice
 description: Get familiar with all the Waku protocols used by the Status application.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors: 
@@ -40,13 +40,13 @@ it is imperative to describe how each are used.
 | `STORE` | This refers to the Waku Store protocol, described in [13/WAKU2-STORE](/spec/13) |
 | `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
 | `LIGHTPUSH` | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
-| `Pubsub Topic` / `Content Topic` | This refers to the routing of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
-
+| DISCOVERY | This refers to a peer discovery method used by a Waku node |
+| `Pubsub Topic` / `Content Topic` | This refers to the routing and filtering of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
 
 ### Waku Node:
 
-A server running Waku software configured with a set of protocols.
-A Status client is a Waku node as that can be a full relay node or
+Software that is configured with a set of Waku protocols.
+A Status client comprises of a Waku node that can be a relay node or
 a non-relay node.
 
 The Waku network is a group of Waku nodes used to create an open access messaging network, 
@@ -64,9 +64,8 @@ The following is a list of Waku Protocols used by the Status application.
 
 ## 1. `RELAY`
 
-> Note: This protocol MUST not be used by Status light clients.
-
-This protocol is used to broadcast messages from a Status client.
+The `RELAY` MUST not be used by Status light clients.
+The `RELAY` is used to broadcast messages from a Status client nodes to peers in the [64/WAKU2-NETWORK](/spec/64).
 All Status messages are transformed into [14/WAKU2-MESSAGE](/spec/14), which are sent over the wire.
 
 All Status message types are described in [62/STATUS-PAYLOAD](/spec/62).
@@ -92,11 +91,6 @@ type StatusMessage struct {
 If both are received, the implementation MUST throw an error.
 2. `WakuMessage.Payload` MUST be set to `StatusMessage.Payload` 
 3. `WakuMessage.Key` MUST be set to `StatusMessage.SymKey`
-<!-- 
-Curious about the key that is being set within the message here -
-https://github.com/status-im/status-go/blob/dc6fe5613a0b59249b11d14477f581ed636a8153/wakuv2/api.go#L217-L219
-are we sharing the symmetric key for each message?
--->
 4. `WakuMessage.Version` MUST be set to `1`
 5. `WakuMessage.Ephemeral` MUST be set to `StatusMessage.Ephemeral`
 6. `WakuMessage.ContentTopic` MUST be set to `StatusMessage.ContentTopic`
@@ -125,10 +119,11 @@ This allows a reduction in bandwidth consumption by the Status client.
 
 ### Content filtering protocol identifers:
 
-filter-subscribe:
+`filter-subscribe`:
 
     /vac/waku/filter-subscribe/2.0.0-beta1
-filter-push:
+
+`filter-push`:
 
     /vac/waku/filter-push/2.0.0-beta1
 
@@ -140,18 +135,17 @@ such as `Content Topic` derived from -
 
 ## 4. `LIGHTPUSH`
 
-> Note: This protocol MUST be enabled solely on Light clients.
-
-This protocol allows Status light clients to publish messages to the Waku Network,
-without running a full-fledged Waku Relay protocol.
+The `LIGHTPUSH` protocol MUST be enabled solely on Light clients.
+Status light clients are able to publish messages to the [64/WAKU2-NETWORK](/spec/64),
+without running a full-fledged [11/WAKU2-RELAY](/spec/11) protocol.
 
 When a Status client is publishing a message, 
 it MUST check if Light mode is enabled,
 and if so, it MUST publish the message via this protocol.
 
-## 5. `DISCOVERY`
+## 5. Discovery
 
-> Note: This protocol MUST be supported by Light clients and Full clients
+A discovery method MUST be supported by Light clients and Full clients
 
 Status clients SHOULD make use of the following peer discovery methods that are provided by Waku,
 such as -
