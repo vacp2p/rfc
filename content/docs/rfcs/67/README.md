@@ -3,7 +3,7 @@ slug: 67
 title: 67/STATUS-WAKU2-USAGE
 name: Status Waku2 Usage
 status: raw
-category: Best Common Practice
+category: Best Current Practice
 description: Get familiar with all the Waku protocols used by the Status application.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors: 
