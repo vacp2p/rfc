@@ -3,7 +3,7 @@ slug: 10
 title: 10/WAKU2
 name: Waku v2
 status: draft
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Hanno Cornelius <hanno@status.im>

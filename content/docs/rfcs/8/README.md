@@ -7,7 +7,7 @@ editor: Andrea Maria Piana <andreap@status.im>
 contributors:
   - Adam Babik <adam@status.im>
   - Dean Eigenmann <dean@status.im>
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
 ---
 
 ## Abstract

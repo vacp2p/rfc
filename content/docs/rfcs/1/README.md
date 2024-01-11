@@ -4,7 +4,7 @@ title: 1/COSS
 name: Consensus-Oriented Specification System
 status: draft
 category: Best Current Practice
-editor: Oskar Thoren <oskar@status.im>
+editor: Oskar Thoren <oskarth@titanproxy.com>
 contributors:
   - Pieter Hintjens <ph@imatix.com>
   - André Rebentisch <andre@openstandards.de>
@@ -200,7 +200,7 @@ This will enable programmatic access to specification metadata.
 | **status**       | status               | string | draft                                                                                                                                                                                                                               |
 | **category**     | category             | string | Best Current Practice                                                                                                                                                                                                                            |
 | **tags**         | 0 or several tags    | list   | waku-application, waku-core-protocol                                                                                                                                                                                                |
-| **editor**       | editor name/email    | string | Oskar Thoren <oskar@status.im>                                                                                                                                                                                                      |
+| **editor**       | editor name/email    | string | Oskar Thoren <oskarth@titanproxy.com>                                                                                                                                                                                                      |
 | **contributors** | contributors         | list   | - Pieter Hintjens <ph@imatix.com><br> - André Rebentisch <andre@openstandards.de><br> - Alberto Barrionuevo <abarrio@opentia.es><br> - Chris Puttick <chris.puttick@thehumanjourney.net><br> - Yurii Rashkovskii <yrashk@gmail.com> |
 
 ### Specification Template

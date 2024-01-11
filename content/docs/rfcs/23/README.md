@@ -4,7 +4,7 @@ title: 23/WAKU2-TOPICS
 name: Waku v2 Topic Usage Recommendations
 status: draft
 category: Informational
-editor: Oskar Thoren <oskar@status.im>
+editor: Oskar Thoren <oskarth@titanproxy.com>
 contributors:
   - Hanno Cornelius <hanno@status.im>
   - Daniel Kaiser <danielkaiser@status.im>

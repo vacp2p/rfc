@@ -3,7 +3,7 @@ slug: 30
 title: 30/ADAPTIVE-NODES
 name: Adaptive nodes
 status: draft
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
 ---
 

@@ -7,7 +7,7 @@ editor: Rasul Ibragimov <curryrasul@gmail.com>
 contributors:
 - Barry Whitehat <barrywhitehat@protonmail.com>
 - Sanaz Taheri <sanaz@status.im>
-- Oskar Thorén <oskar@status.im>
+- Oskar Thorén <oskarth@titanproxy.com>
 - Onur Kilic <onurkilic1004@gmail.com>
 - Blagoj Dimovski <blagoj.dimovski@yandex.com>
 ---

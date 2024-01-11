@@ -3,7 +3,7 @@ slug: 7
 title: 7/WAKU-DATA
 name: Waku Envelope data field
 status: stable
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Dean Eigenmann <dean@status.im>
   - Kim De Mey <kimdemey@status.im>

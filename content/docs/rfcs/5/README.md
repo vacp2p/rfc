@@ -3,7 +3,7 @@ slug: 5
 title: 5/WAKU0
 name: Waku v0
 status: deprecated
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Adam Babik <adam@status.im>
   - Andrea Maria Piana <andreap@status.im>

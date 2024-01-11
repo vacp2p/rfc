@@ -6,7 +6,7 @@ status: stable
 editor: Andrea Maria Piana <andreap@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
 ---
 
 This specification describes the RPC API that Waku nodes MAY adhere to. The unified API allows clients to easily

@@ -5,7 +5,7 @@ name: Waku v2 Message
 status: draft
 category: Standards Track
 tags: waku/core-protocol
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Sanaz Taheri <sanaz@status.im>
   - Aaryamann Challani <aaryamann@status.im>
