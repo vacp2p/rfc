@@ -94,7 +94,7 @@ A cryptographic hash function that SHOULD be used to generate the `membershipHas
 The hash function that is used,
 SHOULD be mentioned in the `verison` attribute.
 To generate the `membershipHash`, 
-the `treeIndex`, `membershipContract`, `contractId` and `identityCredential` attributes SHOULD be used to create a hexadecimal string.
+the `treeIndex`, `membershipContract`, `chainId` and `identityCredential` attributes SHOULD be used to create a hexadecimal string.
 - it MUST NOT already exist in the keystore.
 
 #### treeIndex
@@ -107,13 +107,12 @@ a `treeIndex` value of the position in the Merkle tree SHOULD be returned.
 #### membershipContract
 
 For decentralized membership registrations, 
-the `membershipContract` SHOULD be derived from a public blockchain using smart contracts. 
-- it MUST be a hash of a `contractAddress`
-- `contractAddess` MUST be a string.
+the `membershipContract` SHOULD be a `contractAddress` from a public blockchain using smart contracts. 
+- it MUST be a string.
 
-#### contractId
+#### chainId
 
-The `contractId` SHOULD be the blockchain identifier used for `membershipcontract`.
+The `chainId` SHOULD be the blockchain identifier used for `membershipcontract`.
 - it MUST be a string
 
 #### identityCredential
@@ -187,8 +186,8 @@ crypto: {
 ```
 	
 ### Decryption
-The keystore SHOULD decrypt a user's credentials using a password and 
-a Merkle proof, the `membershipHASh`, using PBKDF2 that returns the `decryptionKey` key.
+The keystore SHOULD decrypt a user's credentials using a password and the `membershipHash`, 
+using PBKDF2 that returns the `decryptionKey` key.
 The decryption key is used to verify the keystore is correct.
 - To generate the `decryptionKey`, it MUST be constructed from a password and KDF,
 as desrcibed in [ERC-2335: BLS12-381 Keystore](https://eips.ethereum.org/EIPS/eip-2335).
@@ -196,20 +195,18 @@ as desrcibed in [ERC-2335: BLS12-381 Keystore](https://eips.ethereum.org/EIPS/ei
 cipher parameters described in the KDF used in the keystore.
 
 ## Test Vectors
+
+The RLN hashing function used for `identityCredential` is Poseidon Hash, 
+as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf).
+The keystore hash function used is [SHA256](https://www.rfc-editor.org/rfc/rfc4634.txt).
+
 ### Input:
-Hashing function used: Poseidon Hash, as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
 
-`application`: "waku-rln-relay"
-
-`appIdentifier`: "01234567890abcdef"
-
-`version`: "0.2" 
-
-`hashFunction`: "poseidonHash"
-
-`password`: "sup3rsecure"
-
-
+- `application`: "waku-rln-relay"
+- `appIdentifier`: "01234567890abcdef"
+- `version`: "0.2" 
+- `hashFunction`: "poseidonHash"
+- `password`: "sup3rsecure"
 
 ```js
 
@@ -268,7 +265,6 @@ version: "0.2",
         mac: "51a227ac6db7f2797c63925880b3db664e034231a4c68daa919ab42d8df38bc6",
       },
     }
-
 
 ```
 
