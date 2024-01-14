@@ -19,12 +19,14 @@ It also supports pagination for more efficient querying of historical messages.
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta4`
 
 ## Terminology
-The term Personally identifiable information (PII) refers to any piece of data that can be used to uniquely identify a user. 
+The term PII, Personally Identifiable Information, 
+refers to any piece of data that can be used to uniquely identify a user. 
 For example, the signature verification key, and 
 the hash of one's static IP address are unique for each user and hence count as PII.
 
 # Design Requirements
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC2119](https://www.ietf.org/rfc/rfc2119.txt).
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, 
+“RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 Nodes willing to provide the storage service using `13/WAKU2-STORE` protocol,
 SHOULD provide a complete and full view of message history.
@@ -42,9 +44,11 @@ Nodes running `13/WAKU2-STORE` SHOULD NOT store messages with the `ephemeral` fl
 # Adversarial Model
 Any peer running the `13/WAKU2-STORE` protocol, i.e. 
 both the querying node and the queried node, are considered as an adversary. 
-Furthermore, we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but 
+Furthermore, 
+we currently consider the adversary as a passive entity that attempts to collect information from other peers to conduct an attack but 
 it does so without violating protocol definitions and instructions. 
-As we evolve the protocol, further adversarial models will be considered.
+As we evolve the protocol, 
+further adversarial models will be considered.
 For example, under the passive adversarial model, 
 no malicious node hides or 
 lies about the history of messages as it is against the description of the `13/WAKU2-STORE` protocol. 
@@ -123,7 +127,8 @@ each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is ass
 ### PagingInfo
 
 `PagingInfo` holds the information required for pagination. It consists of the following components.
-- `pageSize`: A positive integer indicating the number of queried `WakuMessage` in a `HistoryQuery` (or retrieved  `WakuMessage` in a `HistoryResponse`).
+- `pageSize`: A positive integer indicating the number of queried `WakuMessage`s in a `HistoryQuery`
+(or retrieved  `WakuMessage`s in a `HistoryResponse`).
 - `cursor`: holds the `Index` of a `WakuMessage`.
 - `direction`: indicates the direction of paging which can be either `FORWARD` or `BACKWARD`.
 
@@ -137,7 +142,7 @@ each `WakuMessage` stored at a node running the `13/WAKU2-STORE` protocol is ass
 RPC call to query historical messages.
 
 - The `pubsubTopic` field MUST indicate the pubsub topic of the historical messages to be retrieved. 
-  This field denotes the pubsub topic on which Waku messages are published.
+  This field denotes the pubsub topic on which `WakuMessage`s are published.
   This field maps to `topicIDs` field of `Message` in [`11/WAKU2-RELAY`](/spec/11).
   Leaving this field empty means no filter on the pubsub topic of message history is requested.
   This field SHOULD be left empty in order to retrieve the historical `WakuMessage` regardless of the pubsub topics on which they are published.
@@ -145,7 +150,7 @@ RPC call to query historical messages.
   Leaving this field empty means no filter on the content topic of message history is required.
   This field SHOULD be left empty in order to retrieve historical `WakuMessage` regardless of their content topics.
 - `PagingInfo` holds the information required for pagination.  
-  Its `pageSize` field indicates the number of  `WakuMessage` to be included in the corresponding `HistoryResponse`. 
+  Its `pageSize` field indicates the number of  `WakuMessage`s to be included in the corresponding `HistoryResponse`. 
   It is RECOMMENDED that the queried node defines a maximum page size internally.
   If the querying node leaves the `pageSize` unspecified,
   or if the `pageSize` exceeds the maximum page size,
