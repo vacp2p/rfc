@@ -275,30 +275,6 @@ It is a key establishment protocol that provides efficient asynchronous group ke
 The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
 The MLS protocol achieves: low-complexity, group integrity, synchronization and extensibility.
 
-## Authentication service
-
-NIZK proofs (such as Bulletproofs or SNARKs) allow users to authenticate without any need for them to submit any compromising data. And with the verifier not needing to set any interaction with the prover.
-
-It is required to have a smart contract including a function to handle user registration. This implies that the smart contract should maintain or have access to a storage service managing the list of verified users.
-
-### User registration
-
-- Users will provide their Ethereum address as identifier together with a NIZK proof proving knowledge of the associated secret key. Users send this information to the smart contract.
-    
-> It is important to note that one uses the secret key of the keypair needed to derive the Ethereum addess.
- 
-- Upon reception of the registration request, the smart contract initiates the verification of the provided NIZK proof. If the verification process is successful, the smart contract includes the Ethereum address to a list of authorized users.
-    
-> Question: is it possible for the smart contract to store this information as an array for example?
-
-### Authentication process
-
-- Users willing to access the service MUST generate a new NIZK proof demonstrating possession of the private key associated to their Ethereum address. This NIZK proof is generated locally by users.
-- The NIZK proof is submitted to the smart contract.
-- The smart contract verifies the NIZK proof. If verification is successful, the smart contract grants access to the service.
-    
-> This last part needs to be careful with gas consumption.
-
 ## Cryptographic suites
 Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
 - `X488` as Diffie-Hellman function.
@@ -572,6 +548,146 @@ This avoids additional information to be provided to an attacker in order to gue
 Padding SHOULD be used on messages with zero-valued bytes before AEAD encryption.
 
 Functioning of application messages MUST follow the instructions of Section 15 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+# Authentication process: SIWE
+
+[EIP 4361](https://eips.ethereum.org/EIPS/eip-4361) is the authentication method required. 
+Sign-In with Ethereum describes how Ethereum accounts authenticate with off-chain services by signing a standard message format 
+parameterized by scope, session details, and security mechanisms
+
+## Message format (ABNF)
+
+A SIWE Message MUST conform with the following Augmented Backus–Naur Form ([RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234)) expression.
+
+```
+sign-in-with-ethereum =
+    [ scheme "://" ] domain %s" wants you to sign in with your Ethereum account:" LF
+    address LF
+    LF
+    [ statement LF ]
+    LF
+    %s"URI: " uri LF
+    %s"Version: " version LF
+    %s"Chain ID: " chain-id LF
+    %s"Nonce: " nonce LF
+    %s"Issued At: " issued-at
+    [ LF %s"Expiration Time: " expiration-time ]
+    [ LF %s"Not Before: " not-before ]
+    [ LF %s"Request ID: " request-id ]
+    [ LF %s"Resources:"
+    resources ]
+
+scheme = ALPHA *( ALPHA / DIGIT / "+" / "-" / "." )
+    ; See RFC 3986 for the fully contextualized
+    ; definition of "scheme".
+
+domain = authority
+    ; From RFC 3986:
+    ;     authority     = [ userinfo "@" ] host [ ":" port ]
+    ; See RFC 3986 for the fully contextualized
+    ; definition of "authority".
+
+address = "0x" 40*40HEXDIG
+    ; Must also conform to captilization
+    ; checksum encoding specified in EIP-55
+    ; where applicable (EOAs).
+
+statement = *( reserved / unreserved / " " )
+    ; See RFC 3986 for the definition
+    ; of "reserved" and "unreserved".
+    ; The purpose is to exclude LF (line break).
+
+uri = URI
+    ; See RFC 3986 for the definition of "URI".
+
+version = "1"
+
+chain-id = 1*DIGIT
+    ; See EIP-155 for valid CHAIN_IDs.
+
+nonce = 8*( ALPHA / DIGIT )
+    ; See RFC 5234 for the definition
+    ; of "ALPHA" and "DIGIT".
+
+issued-at = date-time
+expiration-time = date-time
+not-before = date-time
+    ; See RFC 3339 (ISO 8601) for the
+    ; definition of "date-time".
+
+request-id = *pchar
+    ; See RFC 3986 for the definition of "pchar".
+
+resources = *( LF resource )
+
+resource = "- " URI
+```
+
+This specification defines the following SIWE Message fields that can be parsed from a SIWE Message by following the rules in ABNF Message Format:
+
+- `scheme` OPTIONAL. The URI scheme of the origin of the request. 
+Its value MUST be a [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) URI scheme.
+
+- `domain` REQUIRED. The domain that is requesting the signing. 
+Its value MUST be a [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) authority. The authority includes an OPTIONAL port. 
+If the port is not specified, the default port for the provided scheme is assumed. 
+
+If scheme is not specified, HTTPS is assumed by default.
+- `address` REQUIRED. The Ethereum address performing the signing. 
+Its value SHOULD be conformant to mixed-case checksum address encoding specified in ERC-55 where applicable.
+
+- `statement` OPTIONAL. A human-readable ASCII assertion that the user will sign which MUST NOT include '\n' (the byte 0x0a).
+- `uri` REQUIRED. An [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) URI referring to the resource that is the subject of the signing.
+
+- `version` REQUIRED. The current version of the SIWE Message, which MUST be 1 for this specification.
+
+- `chain-id` REQUIRED. The EIP-155 Chain ID to which the session is bound, and the network where Contract Accounts MUST be resolved.
+
+- `nonce` REQUIRED. A random string (minimum 8 alphanumeric characters) chosen by the relying party and used to prevent replay attacks.
+
+- `issued-at` REQUIRED. The time when the message was generated, typically the current time. 
+Its value MUST be an ISO 8601 datetime string.
+
+- `expiration-time` OPTIONAL. The time when the signed authentication message is no longer valid. 
+Its value MUST be an ISO 8601 datetime string.
+
+- `not-before` OPTIONAL. The time when the signed authentication message will become valid. 
+Its value MUST be an ISO 8601 datetime string.
+
+- `request-id` OPTIONAL. An system-specific identifier that MAY be used to uniquely refer to the sign-in request.
+
+- `resources` OPTIONAL. A list of information or references to information the user wishes to have resolved as part of authentication by the relying party. 
+Every resource MUST be a RFC 3986 URI separated by "\n- " where \n is the byte 0x0a.
+
+## Signing and Verifying Messages with Ethereum Accounts
+
+- For Externally Owned Accounts, the verification method specified in [ERC-191](https://eips.ethereum.org/EIPS/eip-191) MUST be used.
+
+- For Contract Accounts,
+
+	- The verification method specified in [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) SHOULD be used. 
+Otherwise, the implementer MUST clearly define the verification method to attain security and interoperability for both wallets and relying parties.
+
+	- When performing [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) signature verification, the contract performing the verification MUST be resolved from the specified `chain-id`.
+
+	- Implementers SHOULD take into consideration that [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) implementations are not required to be pure functions. 
+They can return different results for the same inputs depending on blockchain state. 
+This can affect the security model and session validation rules.
+
+## Resolving Ethereum Name Service (ENS) Data
+
+- The relying party or wallet MAY additionally perform resolution of ENS data, as this can improve the user experience by displaying human-friendly information that is related to the `address`. 
+Resolvable ENS data include:
+	- The primary ENS name.
+	- The ENS avatar.
+	- Any other resolvable resources specified in the ENS documentation.
+
+- If resolution of ENS data is performed, implementers SHOULD take precautions to preserve user privacy and consent. 
+Their `address` could be forwarded to third party services as part of the resolution process.
+
+
+
+
 
 # Privacy and Security Considerations
 - The double ratchet "recommends" using AES in CBC mode. Since encryption must be with an AEAD encryption scheme, we will use AES in GCM mode instead (supported by Noise).
