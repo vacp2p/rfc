@@ -3,7 +3,7 @@ slug: 26
 title: 26/WAKU2-PAYLOAD
 name: Waku Message Payload Encryption
 status: draft
-editor: Oskar Thoren <oskar@status.im>
+editor: Oskar Thoren <oskarth@titanproxy.com>
 contributors:
 ---
 

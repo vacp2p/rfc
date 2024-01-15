@@ -3,7 +3,7 @@ slug: 19
 title: 19/WAKU2-LIGHTPUSH
 name: Waku v2 Light Push
 status: draft
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors: 
   - Daniel Kaiser <danielkaiser@status.im>
 ---

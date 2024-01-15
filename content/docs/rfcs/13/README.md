@@ -7,7 +7,7 @@ tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
   - Aaryamann Challani <aaryamann@status.im>
 ---
 

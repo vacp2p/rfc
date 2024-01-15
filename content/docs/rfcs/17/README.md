@@ -6,7 +6,7 @@ status: draft
 tags: waku-core
 editor: Sanaz Taheri <sanaz@status.im>
 contributors:
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
   - Aaryamann Challani <aaryamann@status.im>
 ---
 

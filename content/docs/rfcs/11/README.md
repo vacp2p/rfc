@@ -6,7 +6,7 @@ status: stable
 tags: waku-core
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
   - Sanaz Taheri <sanaz@status.im>
 ---
 

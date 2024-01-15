@@ -8,7 +8,7 @@ version: 01
 editor: Hanno Cornelius <hanno@status.im>
 contributors:
   - Dean Eigenmann <dean@status.im>
-  - Oskar Thorén <oskar@status.im>
+  - Oskar Thorén <oskarth@titanproxy.com>
   - Sanaz Taheri <sanaz@status.im>
   - Ebube Ud <ebube@status.im>
 ---

@@ -7,7 +7,7 @@ editor: r4bbit <r4bbit@status.im>
 contributors: 
 - Adam Babik <adam@status.im>
 - Andrea Maria Piana <andreap@status.im>
-- Oskar Thoren <oskar@status.im>
+- Oskar Thoren <oskarth@titanproxy.com>
 - Samuel Hawksby-Robinson <samuel@status.im>
 ---
 

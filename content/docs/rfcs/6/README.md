@@ -3,7 +3,7 @@ slug: 6
 title: 6/WAKU1
 name: Waku v1
 status: stable
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Adam Babik <adam@status.im>
   - Andrea Maria Piana <andreap@status.im>

@@ -8,7 +8,7 @@ description: Details of what a Status account address is and how account address
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Corey Petty <corey@status.im>
-- Oskar Thorén <oskar@status.im>
+- Oskar Thorén <oskarth@titanproxy.com>
 - Samuel Hawksby-Robinson <samuel@status.im>
 ---
 

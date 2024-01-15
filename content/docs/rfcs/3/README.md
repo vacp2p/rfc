@@ -3,7 +3,7 @@ slug: 3
 title: 3/REMOTE-LOG
 name: Remote log specification
 status: draft
-editor: Oskar Thorén <oskar@status.im>
+editor: Oskar Thorén <oskarth@titanproxy.com>
 contributors:
   - Dean Eigenmann <dean@status.im>
 ---
