@@ -23,7 +23,7 @@ It is equivalent except for some areas:
 - recommending the use of a permissive licenses, such as CC0 (with the exception of this document);
 - miscellaneous metadata, editor, and format/link updates;
 - more inheritance from the [IETF Standards Process][https://www.rfc-editor.org/rfc/rfc2026.txt],
-  e.g. using RFC categories: Standards Track, Informational, Best Common Practice, Experimental;
+  e.g. using RFC categories: Standards Track, Informational and Best Common Practice;
 - standards track specifications SHOULD follow a specific structure that both streamlines editing,
   and helps implementers to quickly comprehend the specification
 - specifications MUST feature a header providing specific meta information
