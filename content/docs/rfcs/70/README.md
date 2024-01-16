@@ -685,6 +685,22 @@ Resolvable ENS data include:
 - If resolution of ENS data is performed, implementers SHOULD take precautions to preserve user privacy and consent. 
 Their `address` could be forwarded to third party services as part of the resolution process.
 
+## Relying Party Implementer Steps
+### Specifying the Request Origin
+The `domain` and, if present, the `scheme`, in the SIWE Message MUST correspond to the origin from where the signing request was made. 
+
+### Verifying a signed Message
+The SIWE Message MUST be checked for conformance to the ABNF Message Format and its signature MUST be checked as defined in Signing and Verifying Messages with Ethereum Accounts.
+
+### Creating Sessions
+Sessions MUST be bound to the address and not to further resolved resources that can change.
+
+### Interpreting and resolving Resources
+Implementers SHOULD ensure that that URIs in the listed resources are human-friendly when expressed in plaintext form.
+
+
+
+
 
 
 
