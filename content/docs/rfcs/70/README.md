@@ -246,7 +246,7 @@ RatchetDecrypt(state, header, ciphertext, AD):
 
 ## Static data
 
-Some data, such as the key pairs (ik, IK) for Alice and Bob, MAY NOT be regenerated after a period of time. 
+Some data, such as the key pairs `(ik, IK)` for Alice and Bob, MAY NOT be regenerated after a period of time. 
 Therefore the prekey bundle MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
 
 ## Ephemeral data
@@ -261,11 +261,11 @@ The fact of a user not updating the ephemeral information can be understood as B
 
 ## Interaction with Ethereum
 
-Storing static data is done using a dedicated smart contract *PublicKeyStorage* which associates the Ethereum wallet address of a user with his public key.
-This mapping is done by PublicKeyStorage using a *publicKeys* function, or a *setPublicKey* function.
+Storing static data is done using a dedicated smart contract `PublicKeyStorage` which associates the Ethereum wallet address of a user with his public key.
+This mapping is done by `PublicKeyStorage` using a `publicKeys` function, or a `setPublicKey` function.
 This mapping is done if the user passed an authorization process.
-A user who wants to retrieve a public key associated with a specific wallet address calls a function *getPublicKey*.
-The user provides the wallet address as the only input parameter for *getPublicKey*.
+A user who wants to retrieve a public key associated with a specific wallet address calls a function `getPublicKey.
+The user provides the wallet address as the only input parameter for `getPublicKey`.
 The function outputs the associated public key from the smart contract.
 
 # Extension to group chat: the MLS Framework
