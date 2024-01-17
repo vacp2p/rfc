@@ -198,7 +198,7 @@ cipher parameters described in the KDF used in the keystore.
 
 ## Test Vectors
 
-RLN uses Poseidon hash algorithm for `identityCredential`, 
+RLN uses Poseidon hash algorithm to generate the `identityCredential`, 
 as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf).
 The keystore hash algorithm used is [SHA256](https://www.rfc-editor.org/rfc/rfc4634.txt).
 
