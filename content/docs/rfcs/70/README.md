@@ -392,6 +392,32 @@ Extension extension<V>;
 
 The use of key scheduling MUST follow the indications in sections 8.1 - 8.7 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
+## Secret trees
+For the generation of encryption keys and nonces, the key schedule begins with the encryption_secret at the root and derives a tree of secrets with the same structure as the group's ratchet tree.
+Each leaf in the secret tree is associated with the same group member as the corresponding leaf in the ratchet tree.
+
+If N is a parent node in the secret tree, the secrets of the children of N MUST be defined following section 9 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+### Encryption keys
+
+MLS encrypts three different types of information:
+- Metadata (sender information).
+- Handshake messages (Proposal and Commit).
+- Application messages.
+
+For handshake and application messages, a sequence of keys is derived via a sender ratchet. 
+Each sender has their own sender ratchet, and each step along the ratchet is called a generation. These procedures MUST follow section 9.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
+### Deletion schedule
+
+All security-sensitive values MUST be deleted as soon as they are consumed. 
+A sensitive value S is consumed if:
+
+- S was used to encrypt or (successfully) decrypt a message. 
+- A key, nonce, or secret derived from S has been consumed.
+
+The deletion procedure MUST follow the instruction described in section 9.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+
 ## Key packages
 KeyPackage objects are used to ease the addition of clients to a group asynchronously.
 A KeyPackage object specifies:
