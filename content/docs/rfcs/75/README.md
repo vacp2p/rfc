@@ -1,6 +1,6 @@
 ---
-slug: "74"
-title: 74/WAKU2-MESSAGE-RELIABILITY
+slug: "75"
+title: 75/WAKU2-MESSAGE-RELIABILITY
 name: Message reliability for Waku Store
 status: raw
 category: Standards Track
@@ -131,17 +131,17 @@ The PoC code is written in Python and can be found [here](https://github.com/ABr
 
 The Sync Process works in following steps:
 
-    Step 1: A key-value store is created using the Store protocol where the key is the timestamp of a message, and the value is the `message_hash` attribute which uniquely identifies a message in Waku network.
+Step 1: A key-value store is created using the Store protocol where the key is the timestamp of a message, and the value is the `message_hash` attribute which uniquely identifies a message in Waku network.
 
-    Step 2: A Prolly tree is populated using the key-value store. This construction is similar at both client and server side.
+Step 2: A Prolly tree is populated using the key-value store. This construction is similar at both client and server side.
 
-    Step 3: A client node sends a request to the server node to get the root node of the Prolly tree. The server node responds with the root node of the Prolly tree.
+Step 3: A client node sends a request to the server node to get the root node of the Prolly tree. The server node responds with the root node of the Prolly tree.
 
-    Step 4: If the height of the root of the Prolly tree is different then the client node sends a request to the server node to get the root node of the Prolly tree at the height of the root of the Prolly tree. The server node responds with the root node of the Prolly tree at the height of the root of the Prolly tree.
+Step 4: If the height of the root of the Prolly tree is different then the client node sends a request to the server node to get the root node of the Prolly tree at the height of the root of the Prolly tree. The server node responds with the root node of the Prolly tree at the height of the root of the Prolly tree.
 
-    Step 5: The client node then traverses the Prolly tree from the root node to the leaf nodes and finds the missing nodes at every level of the tree starting from the top. The missing intermediate Prolly tree Node is requested by client to the server. Server responds with the requested nodes.
+Step 5: The client node then traverses the Prolly tree from the root node to the leaf nodes and finds the missing nodes at every level of the tree starting from the top. The missing intermediate Prolly tree Node is requested by client to the server. Server responds with the requested nodes.
 
-    Step 6: The client eventually computes the missing `message_hash`es and sends a request to server to get the missing messages. Server responds with the requested messages.
+Step 6: The client eventually computes the missing `message_hash`es and sends a request to server to get the missing messages. Server responds with the requested messages.
 
 Upon receiving the missing messages that are present in the Prolly tree, the client node request the onward messages using the existing Store [method](https://github.com/waku-org/nwaku/blob/master/waku/waku_archive/driver.nim#L36) since these nodes are for sure missing from the client Prolly tree.
 
