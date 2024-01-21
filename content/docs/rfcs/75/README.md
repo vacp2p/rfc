@@ -137,7 +137,7 @@ Step 2: A Prolly tree is populated using the key-value store. This construction 
 
 Step 3: A client node sends a request to the server node to get the root node of the Prolly tree. The server node responds with the root node of the Prolly tree.
 
-Step 4: If the height of the root of the Prolly tree is different then the client node sends a request to the server node to get the root node of the Prolly tree at the height of the root of the Prolly tree. The server node responds with the root node of the Prolly tree at the height of the root of the Prolly tree.
+Step 4: As Prolly tree is designed to compare diff based on equal hieght so if the height of the root of the Prolly tree is different then the client node sends a request to the server node to get the root node of the Prolly tree at the height of the root of the client's Prolly tree. The server node responds with the root node of the Prolly tree at the height of the root of the client's Prolly tree.
 
 Step 5: The client node then traverses the Prolly tree from the root node to the leaf nodes and finds the missing nodes at every level of the tree starting from the top. The missing intermediate Prolly tree Node is requested by client to the server. Server responds with the requested nodes.
 
