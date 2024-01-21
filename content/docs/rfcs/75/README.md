@@ -38,11 +38,11 @@ Client and Server both MUST be peers supporting the Waku Sync protocol. There is
     package prollytree;
 
     message Node {
-        string data = 1;              // The data stored in the node
+        bytes data = 1;              // The data stored in the node
         int64 timestamp = 2;          // Timestamp or other unique identifier
-        string node_hash = 3;         // Hash of the node
+        bytes node_hash = 3;         // Hash of the node
         int32 level = 4;              // Level of the node in the tree
-        string merkel_hash = 5;       // Merkel hash of the node
+        bytes merkel_hash = 5;       // Merkel hash of the node
         bool is_tail = 6;             // Flag indicating if it's a tail node
 
         // Relationships (IDs or indices of related nodes)
