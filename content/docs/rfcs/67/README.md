@@ -4,7 +4,7 @@ title: 67/STATUS-WAKU2-USAGE
 name: Status Waku2 Usage
 status: raw
 category: Best Current Practice
-description: Get familiar with all the Waku protocols used by the Status application.
+description: Defines how the Status application uses the Waku protocols.
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors: 
 - Jimmy Debe <jimmy@status.im>
@@ -41,31 +41,32 @@ it is imperative to describe how each are used.
 | `MESSAGE` | This refers to the Waku Message format, described in [14/WAKU2-MESSAGE](/spec/14) |
 | `LIGHTPUSH` | This refers to the Waku Lightpush protocol, described in [19/WAKU2-LIGHTPUSH](/spec/19) |
 | Discovery | This refers to a peer discovery method used by a Waku node. |
-| `Pubsub Topic` / `Content Topic` | This refers to the routing and filtering of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
+| `Pubsub Topic` / `Content Topic` | This refers to the routing of messages within the Waku network, described in [23/WAKU2-TOPICS](/spec/23/) |
 
 ### Waku Node:
 
 Software that is configured with a set of Waku protocols.
-A Status client comprises of a Waku node that can be a relay node or
-a non-relay node.
+A Status client comprises of a Waku node that is a `RELAY` node or a non-relay node.
 
-The Waku network is a group of Waku nodes used to create an open access messaging network, 
-as described in [64/WAKU2-NETWORK](/spec/64).
 
 ### Light Client:
 
 A Status client that operates within resource constrained environments is a node configured as light client.
-Light clients do not run `RELAY`.
-Instead, using a Waku service protocol, nodes can request services from other `RELAY` nodes.
+Light clients do not run a `RELAY`.
+Instead, Status light clients,
+can request services from other `RELAY` node that provide `LIGHTPUSH` service.
 
 # Protocol Usage
 
-The following is a list of Waku Protocols used by the Status application.
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, 
+“NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
+The following is a list of Waku Protocols used by a Status application.
 
 ## 1. `RELAY`
 
 The `RELAY` MUST NOT be used by Status light clients.
-The `RELAY` is used to broadcast messages from a Status client nodes to peers in the [64/WAKU2-NETWORK](/spec/64).
+The `RELAY` is used to broadcast messages between Status clients.
 All Status messages are transformed into [14/WAKU2-MESSAGE](/spec/14), which are sent over the wire.
 
 All Status message types are described in [62/STATUS-PAYLOAD](/spec/62).
@@ -108,7 +109,7 @@ Status clients SHOULD request historical messages from this service node.
 
 The messages that have the `WakuMessage.Ephemeral` flag set to true will not be stored.
 
-The Status client SHOULD provide a method to prune the database of older records to save storage.
+The Status client MAY provide a method to prune the database of older records to save storage.
 
 ## 3. `FILTER`
 
@@ -118,10 +119,13 @@ This protocol SHOULD be used to filter messages based on a given criteria, such 
 This allows a reduction in bandwidth consumption by the Status client.
 
 ### Content filtering protocol identifers:
+The `filter-subcribe` SHOULD be implemented on `RELAY` nodes to provide `FILTER` services.
 
 `filter-subscribe`:
 
     /vac/waku/filter-subscribe/2.0.0-beta1
+
+The `filter-push` SHOULD be implemented on light clients to receive messages.
 
 `filter-push`:
 
@@ -136,7 +140,7 @@ such as `Content Topic` derived from -
 ## 4. `LIGHTPUSH`
 
 The `LIGHTPUSH` protocol MUST be enabled on Status light clients.
-A Status `RELAY` node SHOULD implement `LIGHTPUSH` to support light clients. 
+A Status `RELAY` node MAY implement `LIGHTPUSH` to support light clients. 
 Peers will be able to publish messages,
 without running a full-fledged [11/WAKU2-RELAY](/spec/11) protocol.
 
@@ -155,7 +159,7 @@ such as -
 2. [33/WAKU2-DISCV5](/spec/33): 
 A node discovery protocol to create decentralized network of interconnected Waku nodes. 
 3. [34/WAKU2-PEER-EXCHANGE](/spec/34):
-A peer discovery protocol for resource restricting devices.
+A peer discovery protocol for resource restricted devices.
 
 Status clients MAY use any combination of the above peer discovery methods, 
 which is suited best for their implementation.
