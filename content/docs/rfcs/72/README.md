@@ -114,8 +114,9 @@ the `membershipContract` SHOULD be a `contractAddress` from a public blockchain 
 - it MUST be a string.
 
 #### `chainId`
-
-The `chainId` SHOULD be the blockchain identifier used for `membershipcontract`.
+It uniquely defines the chain upon which the registration has occurred.
+The `chainId` SHOULD be the blockchain identifier used for `membershipcontract`, 
+as described in [EIP155](https://eips.ethereum.org/EIPS/eip-155).
 - it MUST be a string
 
 #### `identityCredential`
@@ -146,10 +147,10 @@ as described in [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf).
 
 ### WakuCredential
 
-The `WakuCredential` will store values used for encryting and decrypting user's keystores.
+The `WakuCredential` will store values used for encrypting and decrypting user's keystores.
 - it MUST be used for password verification.
 - it MUST follow [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335)
-- it MAY use [SHA256](https://www.rfc-editor.org/rfc/rfc4634.txt) as the hash function
+- it SHOULD use [SHA256](https://www.rfc-editor.org/rfc/rfc4634.txt) as the hash function
 
 
 ### KDF
@@ -292,12 +293,9 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 # References
 1. [32/RLN-V1](/spec/32/)
 2. [17/WAKU2-RLN-RELAY](/spec/17/)
-3. [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
-4. [RFC 8174](https://datatracker.ietf.org/doc/html/rfc8174)
-5. [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335)
-6. [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt)
-7. [ERC-2335: BLS12-381 Keystore](https://eips.ethereum.org/EIPS/eip-2335)
-8. [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
-
-
-
+3. [SHA256](https://www.rfc-editor.org/rfc/rfc4634.txt)
+4. [EIP155](https://eips.ethereum.org/EIPS/eip-155)
+5. [Poseidon Paper](https://eprint.iacr.org/2019/458.pdf)
+6. [EIP-2335](https://eips.ethereum.org/EIPS/eip-2335)
+7. [RFC 2898](https://www.ietf.org/rfc/rfc2898.txt)
+8. [ERC-2335: BLS12-381 Keystore](https://eips.ethereum.org/EIPS/eip-2335)
