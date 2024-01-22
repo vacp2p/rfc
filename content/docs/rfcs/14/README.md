@@ -15,19 +15,19 @@ contributors:
 
 # Abstract
 
-Waku v2 is a family of modular peer-to-peer protocols for secure communication.
-These protocols are designed to be secure, privacy-preserving, and censorship-resistant and 
-can run in resource-restricted environments.
-At a high level, Waku v2 implements a Pub/Sub messaging pattern over libp2p and adds capabilities.
+[10/WAKU2](/spec/10) is a family of modular peer-to-peer protocols for secure communication.
+These protocols are designed to be secure, privacy-preserving, 
+and censorship-resistant which can run in resource-restricted environments.
+At a high level, [10/WAKU2](/spec/10) implements a publish-subscribe messaging mechianism over libp2p and 
+adds capabilities.
 
-The present document specifies the Waku v2 message format, 
-a way to encapsulate the messages sent with specific information security goals, and 
-Whisper/Waku v1 backward compatibility.
-
+This specification describes the [10/WAKU2](/spec/10) messaging format. 
+A way to encapsulate the messages sent with specific information security goals, and 
+[6/WAKU1](/spec/6/) backward compatibility.
 
 # Motivation
 
-When sending messages over Waku, there are multiple requirements:
+When sending messages over [10/WAKU2](/spec/10), there are multiple requirements:
 
 - One may have a separate encryption layer as part of the application.
 - One may want to provide efficient routing for resource-restricted devices.
@@ -37,24 +37,23 @@ When sending messages over Waku, there are multiple requirements:
 
 This specification attempts to provide for these various requirements.
 
-
 # Semantics
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 ## Waku Message
 
-A Waku message is constituted by the combination of data payload and attributes that, for example, 
-a *publisher* sends to a *topic* and is eventually delivered to *subscribers*.
+A `WakuMessage` is constituted by the combination of data payload and attributes that, for example, 
+a *publisher* sends to a `pubsubTopic` and is eventually delivered to *subscribers*.
 
-Waku message attributes are key-value pairs of metadata associated with a message. 
-And the message data payload is the part of the transmitted Waku message that is the actual message information.
+The `WakuMessage` attributes are key-value pairs of metadata associated with a message. 
+The message data payload is the part of the transmitted `WakuMessage` that is the actual message information.
 The data payload is also treated as a Waku message attribute for convenience.
 
 ## Message Attributes
 
 * The `payload` attribute MUST contain the message data payload to be sent.
 
-* The `content_topic` attribute MUST specify a string identifier that can be used for content-based filtering.
+* The `contentTopic` attribute MUST specify a string identifier that can be used for content-based filtering.
 
 * The `meta` attribute, if present,
 contains an arbitrary application-specific variable-length byte array with a maximum length limit of 64 bytes.
@@ -83,11 +82,12 @@ the message SHOULD be interpreted as non-ephemeral.
 The Waku message wire format is specified using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
 
 ```protobuf
+
 syntax = "proto3";
 
 message WakuMessage {
   bytes payload = 1;
-  string content_topic = 2;
+  string contentTopic = 2;
   optional uint32 version = 3;
   optional sint64 timestamp = 10;
   optional bytes meta = 11;
@@ -96,18 +96,19 @@ message WakuMessage {
 ```
 ## Waku Message Vaildation
 
-A message MUST be vaildated as a vaild `WakuMessage`.
+A `WakuMessage` MUST be vaildated by a validator, 
+usually a [11/WAKU2-RELAY](/spec/11/) node.
 When a [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) receives a message,
-it SHOULD validate the `content_topic` and `payload` attributes.
+it SHOULD validate the `contentTopic` and `payload` attributes.
 If a message is processed as invalid,
 it MUST be dropped and not forwarded to other peers.
 
 If the message is processed as valid,
-it MUST be sent to peers who have subscribed to the `content_topic`.
+it MUST be sent to peers who have subscribed to the `contentTopic`.
 
 ## Payload Encryption
 
-The Waku message payload MAY be encrypted.
+The `WakuMessage` payload MAY be encrypted.
 The message `version` attribute indicates the schema used to encrypt the payload data.
 
 - **Version 0:**
@@ -245,9 +246,10 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 # References
 
+- [10/WAKU2](/spec/10)
 - [6/WAKU1](/spec/6/)
 - [Google Protocol buffers v3](https://developers.google.com/protocol-buffers/)
-- [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/)
+- [11/WAKU2-RELAY](/spec/11/)
 - [26/WAKU-PAYLOAD](/spec/26)
 - [35/WAKU2-NOISE](/spec/35)
-- [62/STATUS-PAYLOADS](https://specs.status.im/spec/6#clock-vs-timestamp-and-message-ordering)
+- [62/STATUS-PAYLOADS](/spec/62)
