@@ -271,8 +271,8 @@ The function outputs the associated public key from the smart contract.
 # Extension to group chat: the MLS Framework
 
 The Messaging Layer Security (MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
-It is a key establishment protocol that provides efficient asynchronous group key establishment with forward secrecy (FS) and post-compromise security (PCS) for groups in size ranging from two to thousands.
-The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
+The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, 
+membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
 The MLS protocol achieves: low-complexity, group integrity, synchronization and extensibility.
 
 ## Cryptographic suites
@@ -283,7 +283,7 @@ Each MLS session uses a single cipher suite that specifies the primitives to be 
 - `SHA512` as hash function.
 - `XEd448` for digital signatures.
 
-Formats for public keys, signatures and public-key encryption MUST be as defined in Section 5.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+Formats for public keys, signatures and public-key encryption MUST follow Section 5.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Hash-based identifiers
 Some MLS messages refer to other MLS objects by hash.
@@ -292,25 +292,28 @@ These identifiers MUST be computed according to Section 5.2 of [RFC9420](https:/
 ## Credentials
 Each member of a group presents a credential that provides one or more identities for the member and associates them with the member's signing key. 
 The identities and signing key are verified by the Authentication Service in use for a group.
+
 Credentials MUST follow the specifications of section 5.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).  
 
 ## Message framing
 Handshake and application messages use a common framing structure providing encryption to ensure confidentiality within the group, and signing to authenticate the sender.
 
-The structures are:
-- `PublicMessage`: represents a message that is only signed, and not encrypted. 
-- `PrivateMessage`: represents a signed and encrypted message, with protections for both the content of the message and related metadata.
-
-Applications MUST use `PrivateMessage` to encrypt application messages. 
-Applications SHOULD use `PrivateMessage` to encode handshake messages.
-
+The structure is:
+- `PublicMessage`: represents a message that is only signed, and not encrypted.
 The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+- `PrivateMessage`: represents a signed and encrypted message, with protections for both the content of the message and related metadata.
 The definition, and the encoding/decoding of `PrivateMessage` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
+Applications MUST use `PrivateMessage` to encrypt application messages. 
+
+Applications SHOULD use `PrivateMessage` to encode handshake messages.
+
 ## Nodes contents
-The nodes of a ratchet tree contain several types of data. 
-Leaf nodes describe individual members.
-Parent nodes describe subgroups.
+The nodes of a ratchet tree contain several types of data:
+
+- Leaf nodes describe individual members.
+- Parent nodes describe subgroups.
+
 Contents of each kind of node, and its structure MUST follow the indications described in sections 7.1 and 7.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Leaf node validation
@@ -393,10 +396,10 @@ Extension extension<V>;
 The use of key scheduling MUST follow the indications in sections 8.1 - 8.7 in [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Secret trees
-For the generation of encryption keys and nonces, the key schedule begins with the encryption_secret at the root and derives a tree of secrets with the same structure as the group's ratchet tree.
+For the generation of encryption keys and nonces, the key schedule begins with the `encryption_secret` at the root and derives a tree of secrets with the same structure as the group's ratchet tree.
 Each leaf in the secret tree is associated with the same group member as the corresponding leaf in the ratchet tree.
 
-If N is a parent node in the secret tree, the secrets of the children of N MUST be defined following section 9 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+If `N` is a parent node in the secret tree, the secrets of the children of `N` MUST be defined following section 9 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ### Encryption keys
 
@@ -427,9 +430,10 @@ A KeyPackage object specifies:
 - The content of the leaf node that should be added to the tree to represent this client.
 
 KeyPackages are intended to be used only once and SHOULD NOT be reused. 
-Clients MAY generate and publish multiple KeyPackages to support multiple cipher suites.
-The structure of the object MUST be:
 
+Clients MAY generate and publish multiple KeyPackages to support multiple cipher suites.
+
+The structure of the object MUST be:
 ```
 struct {
 ProtocolVersion version;
@@ -461,6 +465,7 @@ Verification MUST be done as follows:
 - Verify that the value of `leaf_node.encryption_key` is different from the value of the `init_key field`.
 
 HPKE public keys are opaque values in a format defined by Section 4 of [RFC9180](https://datatracker.ietf.org/doc/rfc9180/).
+
 Signature public keys are represented as opaque values in a format defined by the cipher suite's signature scheme.
 
 ## Group creation
@@ -488,7 +493,7 @@ To initialize a group, the creator of the group MUST initialize a one-member gro
 
 The creator MUST also calculate the interim transcript hash:
 - Derive the `confirmation_key` for the epoch according to Section 8 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
-- Compute a `confirmation_tag` over the empty `confirmed_transcript_hash` using the `confirmation_key` as described in Section 6.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+- Compute a `confirmation_tag` over the empty `confirmed_transcript_hash` using the `confirmation_key` as described in Section 8.1 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 - Compute the updated `interim_transcript_hash` from the `confirmed_transcript_hash` and the `confirmation_tag` as described in Section 8.2 [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 All members of a group MUST support the cipher suite and protocol version in use. Additional requirements MAY be imposed by including a `required_capabilities` extension in the `GroupContext`.
@@ -510,7 +515,7 @@ In MLS, each such change is accomplished by a two-step process:
 The group evolves from one cryptographic state to another each time a Commit message is sent and processed. 
 These states are called epochs and are uniquely identified among states of the group by eight-octet epoch values. 
 
-Proposals are included in a FramedContent by way of a Proposal structure that indicates their type:
+Proposals are included in a `FramedContent` by way of a `Proposal` structure that indicates their type:
 
 ```
 struct {
@@ -525,23 +530,23 @@ case external_init:		ExternalInit;
 case group_context_extensions:	GroupContextExtensions;
 }
 ```
-On receiving a FramedContent containing a Proposal, a client MUST verify the signature inside `FramedContentAuthData` and that the epoch field of the enclosing FramedContent is equal to the epoch field of the current GroupContext object. 
+On receiving a `FramedContent` containing a `Proposal`, a client MUST verify the signature inside `FramedContentAuthData` and that the epoch field of the enclosing FramedContent is equal to the epoch field of the current GroupContext object. 
 If the verification is successful, then the Proposal SHOULD be cached in such a way that it can be retrieved by hash in a later Commit message.
 
 Proposals are organized as follows:
-- Add: requests that a client with a specified KeyPackage be added to the group.
-- Update: similar to Add, it replaces the sender's LeafNode in the tree instead of adding a new leaf to the tree.
-- Remove: requests that the member with the leaf index removed be removed from the group.
-- ReInit: requests to reinitialize the group with different parameters.
-- ExternalInit: used by new members that want to join a group by using an external commit.
-- GroupContentExtensions: it is used to update the list of extensions in the GroupContext for the group.
+- `Add`: requests that a client with a specified KeyPackage be added to the group.
+- `Update`: similar to Add, it replaces the sender's LeafNode in the tree instead of adding a new leaf to the tree.
+- `Remove`: requests that the member with the leaf index removed be removed from the group.
+- `ReInit`: requests to reinitialize the group with different parameters.
+- `ExternalInit`: used by new members that want to join a group by using an external commit.
+- `GroupContentExtensions`: it is used to update the list of extensions in the GroupContext for the group.
 
 Proposals structure and semantics MUST follow sections 12.1.1 - 12.1.7 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 Any list of commited proposals MUST be validated either by a the group member who created the commit, or any group member processing such commit.
 The validation MUST be done according to one of the procedures described in Section 12.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-When creating or processing a Commit, a client applies a list of proposals to the ratchet tree and GroupContext. 
+When creating or processing a Commit, a client applies a list of proposals to the ratchet tree and `GroupContext`. 
 The client MUST apply the proposals in the list in the order described in Section 12.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 ## Commit messages
