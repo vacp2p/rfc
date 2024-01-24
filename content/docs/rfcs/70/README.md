@@ -10,19 +10,23 @@ contributors:
 ---
 
 # Abstract
-This document specifies an Ethereum-based private messaging service. 
+This document specifies an Ethereum-based private messaging service.
 This proposal is built upon this [model](https://rfc.vac.dev/spec/20/) and 
-amends the limitations of the latter concerning forward privacy and authentication. 
+amends the limitations of the latter concerning forward privacy and authentication.
+This document also tackles the extension of a 1-to-1 communication protocol to a group messaging protocol.
+This document also contains the specification for an Ethereum-based authentication protocol.
 The document is still work in progress. 
 Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
 
-# Background
+# One-to-one communication protocol
+
+## Background
 
 Alice wants to send an encrypted message to Bob. 
 Here Bob is the only individual able to decrypt the message.
 Alice knows Bob’s Ethereum address.
 
-# Theory and Description of the Protocol
+## Theory and Description of the Protocol
 
 The proposed protocol must adhere to the following design requirements:
 -   Alice knows Bob’s Ethereum address.
@@ -36,7 +40,7 @@ It corresponds to the double ratchet scheme combined with the X3DH algorithm, wh
 We chose to express the protocol in noise to be be able to use the noise streamlined implementation and proving features.
 The X3DH algorithm provides both authentication and forward secrecy, as stated in the [X3DH specification](https://signal.org/docs/specifications/x3dh/).
 
-## High level description
+### High level description
 This protocol will consist of several stages:
 
 1.  Key setting for X3DH: this step will produce prekey bundles for Bob which will be fed into X3DH. It will also allow Alice to generate the keys required to run the X3DH algorithm correctly.
@@ -48,7 +52,7 @@ This protocol will consist of several stages:
 -   SHA256 for the key generation related to AES256-GCM.
 -   AES256-GCM for the encryption/decryption of messages.
 
-## Considerations on the X3DH initialization
+### Considerations on the X3DH initialization
 This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve Curve448 MUST be chosen: 
 since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519. This document specifies X3DH in terms of the Noise Framework.
 The X3DH algorithm corresponds to the IX pattern in Noise.
@@ -115,7 +119,7 @@ convert_mont(u):
     return P
 ```
 
-## Using X3DH in Double Ratchet
+### Using X3DH in Double Ratchet
 
 According to [Signal specifications](https://signal.org/docs/specifications/doubleratchet/) 
 this specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:
@@ -153,9 +157,9 @@ Bob derives SK and constructs AD.
 Bob decrypts the initial message encrypted with AES256.
 If decryption fails, Bob MUST abort the protocol.
 
-# The Double Ratchet
+## The Double Ratchet
 
-## Initialization
+### Initialization
 In this stage Bob and Alice have generated key pairs and agreed a shared secret SK using X3DH.
 
 Alice calls `RatchetInitAlice()` defined below:
@@ -182,7 +186,7 @@ RatchetInitBob(SK, (ik_B,IK_B)):
     state.MKSKIPPED = {}
 ```
 
-## Encryption
+### Encryption
 This function performs the symmetric key ratchet.
 
 ```
@@ -196,7 +200,7 @@ The `HEADER` function creates a new message header containing the public key fro
 It outputs the previous chain length `pn`, and the message number `n`. 
 The returned header object contains ratchet public key `dh` and integers `pn` and `n`.
 
-## Decryption
+### Decryption
 This function will decrypt incoming messages. One introduces auxiliary functions required.
 
 ```
@@ -242,14 +246,14 @@ RatchetDecrypt(state, header, ciphertext, AD):
     return AES256-GCM_Dec(mk, ciphertext, AD || header)
 ```
 
-# Retrieving information
+## Retrieving information
 
-## Static data
+### Static data
 
 Some data, such as the key pairs `(ik, IK)` for Alice and Bob, MAY NOT be regenerated after a period of time. 
 Therefore the prekey bundle MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
 
-## Ephemeral data
+### Ephemeral data
 
 Storing ephemeral data on Ethereum can be done using a combination of on-chain and off-chain solutions. 
 This approach provides an efficient solution to the problem of storing updatable data in Ethereum.
@@ -259,7 +263,7 @@ In any case, the user stores the associated IPFS hash, URL or reference in Ether
 
 The fact of a user not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
 
-## Interaction with Ethereum
+### Interaction with Ethereum
 
 Storing static data is done using a dedicated smart contract `PublicKeyStorage` which associates the Ethereum wallet address of a user with his public key.
 This mapping is done by `PublicKeyStorage` using a `publicKeys` function, or a `setPublicKey` function.
@@ -794,15 +798,16 @@ After successfully parsing the message into ABNF terms, translation MAY happen a
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-- https://rfc.vac.dev/spec/20/
-- https://signal.org/docs/specifications/x3dh/
-- https://signal.org/docs/specifications/doubleratchet/
-- https://eprint.iacr.org/2022/1389
-- https://github.com/sourav1547/htadkg
-- https://github.com/farcasterxyz/protocol/discussions/99
-- http://www.ietf.org/rfc/rfc5869.txt
-- https://eprint.iacr.org/2022/1389
-- https://inria.hal.science/hal-02425247/file/treekem%20(1).pdf
-- https://eprint.iacr.org/2019/1189.pdf
-- https://eprint.iacr.org/2023/1903
-- https://eprint.iacr.org/2019/1489
+- Toy Ethereum Private Message: https://rfc.vac.dev/spec/20/
+- Hybrid Public Key Encryption: https://datatracker.ietf.org/doc/rfc9180/
+- The Messaging Layer Security (MLS) Protocol: https://datatracker.ietf.org/doc/rfc9420/
+- Sign-In with Ethereum: https://eips.ethereum.org/EIPS/eip-4361
+- Signed Data Standard: https://eips.ethereum.org/EIPS/eip-191
+- Uniform Resource Identifier (URI): https://datatracker.ietf.org/doc/html/rfc3986
+- WalletConnect URI Format: https://eips.ethereum.org/EIPS/eip-1328
+- Standard Signature Validation Method for Contracts: https://eips.ethereum.org/EIPS/eip-1271
+- Augmented BNF for Syntax Specifications: https://datatracker.ietf.org/doc/html/rfc5234
+- HMAC-based Extract-and-Expand Key Derivation Function: https://www.ietf.org/rfc/rfc5869.txt
+- The X3DH Key Agreement Protocol: https://signal.org/docs/specifications/x3dh/
+- The Double Ratchet Algorithm: https://signal.org/docs/specifications/doubleratchet/
+- Security Analysis and Improvements for the IETF MLS Standard for Group Messaging: https://eprint.iacr.org/2019/1189.pdf
