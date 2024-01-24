@@ -13,15 +13,18 @@ contributors:
 
 ## Abstract
 
-Waku v2 is family of modular peer-to-peer protocols for secure communication.
-The protocols are designed to be secure, privacy-preserving, censorship-resistant and being able to run in resource restricted environments.
-At a high level, it implements Pub/Sub over [libp2p](https://github.com/libp2p/specs) and adds a set of capabilities to it.
-These capabilities are things such as:
-(i) retrieving historical messages for mostly-offline devices
-(ii) adaptive nodes, allowing for heterogeneous nodes to contribute to the network
-(iii) preserving bandwidth usage for resource-restriced devices
+Waku v2 is a family of modular peer-to-peer protocols for secure communication.
+These protocols are designed to be secure, privacy-preserving, 
+censorship-resistant and run in resource-restricted environments.
+At a high level, it implements a publish/subscribe, PubSub, 
+messaging mechianism over [libp2p](https://github.com/libp2p/specs) and adds capabilities.
 
-This makes Waku ideal for running a p2p protocol on mobile and in similarly restricted environments.
+These capabilities are things such as:
+- Retrieving historical messages for mostly-offline devices.
+- Adaptive nodes, allowing for heterogeneous nodes to contribute to the network.
+- Reserving bandwidth usage for resource-restriced devices.
+
+This makes Waku v2 ideal for running a p2p protocol on mobile devices and other similar restricted environments.
 
 Historically, it has its roots in [Waku v1](/spec/6),
 which stems from [Whisper](https://eips.ethereum.org/EIPS/eip-627), originally part of the Ethereum stack.
@@ -29,14 +32,14 @@ However, Waku v2 acts more as a thin wrapper for PubSub and has a different API.
 It is implemented in an iterative manner where initial focus is on porting essential functionality to libp2p.
 See [rough road map (2020)](https://vac.dev/waku-v2-plan) for more historical context.
 
-## Motivation and goals
+## Motivation and Goals
 
 Waku as a family of protocols is designed to have a set of properties that are useful for many applications:
 
 1. **Useful for generalized messaging.**
 
 Many applications require some form of messaging protocol to communicate between different subsystems or different nodes.
-This messaging can be human-to-human or machine-to-machine or a mix.
+This messaging can be human-to-human, machine-to-machine or a mix.
 Waku is designed to work for all these scenarios.
 
 2. **Peer-to-peer.**
@@ -98,7 +101,7 @@ This is in addition to protocols that specify messages, payloads, and recommende
 Since these aren't negotiated libp2p protocols, they are referred to by their RFC ID.
 For example:
 
-- [14/WAKU2-MESSAGE](/spec/14)and [26/WAKU2-PAYLOAD](/spec/26) for message payloads
+- [14/WAKU2-MESSAGE](/spec/14) and [26/WAKU2-PAYLOAD](/spec/26) for message payloads
 - [23/WAKU2-TOPICS](/spec/23) and [27/WAKU2-PEERS](/spec/27) for recommendations around usage
 
 There are also more experimental libp2p protocols such as:
@@ -106,7 +109,7 @@ There are also more experimental libp2p protocols such as:
 1. `/vac/waku/swap/2.0.0-beta1`
 2. `/vac/waku/waku-rln-relay/2.0.0-alpha1`
 
-These protocols and their semantics are elaborated on in their own specs.
+These protocols and their semantics are elaborated on in their own specifications.
 
 
 ### Use of libp2p and protobuf
