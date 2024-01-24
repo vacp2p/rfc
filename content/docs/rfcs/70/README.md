@@ -584,6 +584,19 @@ Padding SHOULD be used on messages with zero-valued bytes before AEAD encryption
 
 Functioning of application messages MUST follow the instructions of Section 15 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
+# Considerations with respect to decentralization
+
+The MLS protocol assumes the existence on a (untrusted) *delivery service*, whose responsabilites include:
+
+- Acting as a directory service providing the initial keying material for clients to use.
+- Routing MLS messages among clients.
+
+The idea of a central delivery service can be by-passed in the setting of decentralization, and in particular for protocols using the publish/gossip approach, such as [gossipsub](https://github.com/libp2p/specs/tree/master/pubsub/gossipsub).
+
+Concerning keys, each node can generate and disseminate their encryption key among the other nodes, so they can create a local version of the tree that allows for the generation of the group key.
+
+Another important component is the *authentication service*, which can be replaced with SIWE. Sign-In with Ethereum describes how Ethereum accounts authenticate with off-chain services by signing a standard message format parameterized by scope, session details, and security mechanisms (e.g., a nonce).
+
 # Authentication process: SIWE
 
 [EIP 4361](https://eips.ethereum.org/EIPS/eip-4361) is the authentication method required. 
@@ -811,3 +824,4 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 - The X3DH Key Agreement Protocol: https://signal.org/docs/specifications/x3dh/
 - The Double Ratchet Algorithm: https://signal.org/docs/specifications/doubleratchet/
 - Security Analysis and Improvements for the IETF MLS Standard for Group Messaging: https://eprint.iacr.org/2019/1189.pdf
+- Gossipsub: https://github.com/libp2p/specs/tree/master/pubsub/gossipsub
