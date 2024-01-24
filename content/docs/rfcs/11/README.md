@@ -103,7 +103,7 @@ See [`14/WAKU2-MESSAGE`](/spec/14) for more details.
 
 - The `seqno` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-policy).
 
-- The `topicIDs` field MUST contain the topics that a message is being published on.
+- The `topicIDs` field MUST contain the content-topics that a message is being published on.
 
 - The `signature` field MUST NOT be used, following the [`StrictNoSign` signature policy](#signature-policy).
 
@@ -117,7 +117,10 @@ The following usage requirements apply:
 
 - The `subscribe` field MUST contain a boolean, where `true` indicates subscribe and `false` indicates unsubscribe to a topic.
 
-- The `topicid` field MUST contain the topic.
+- The `topicid` field MUST contain the pubsub topic.
+
+> Note: The `topicid` refering to pubsub topic and
+`topicId` refering to content-topic are detailed in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/).
 
 ## Signature Policy
 

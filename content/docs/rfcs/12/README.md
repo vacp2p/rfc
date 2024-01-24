@@ -27,8 +27,10 @@ previous versions: [00](/spec/12/previous-versions/00/)
 
 Content filtering is a way to do [message-based
 filtering](https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern#Message_filtering).
-Currently the only content filter being applied is on `contentTopic`. This
-corresponds to topics in Waku v1.
+Currently the only content filter being applied is on `contentTopic`.
+This corresponds to topics in Waku v1.
+The `contentTopic` is described in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/).
+
 
 ## Rationale
 
