@@ -255,6 +255,8 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 - [10/WAKU2](/spec/10)
 - [6/WAKU1](/spec/6/)
+- [23/WAKU2-TOPICS](/spec/23/)
+- [64/WAKU2-NETWORK](/spec/64)
 - [Google Protocol buffers v3](https://developers.google.com/protocol-buffers/)
 - [11/WAKU2-RELAY](/spec/11/)
 - [26/WAKU-PAYLOAD](/spec/26)
