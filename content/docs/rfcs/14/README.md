@@ -17,7 +17,7 @@ contributors:
 
 [10/WAKU2](/spec/10) is a family of modular peer-to-peer protocols for secure communication.
 These protocols are designed to be secure, privacy-preserving, 
-and censorship-resistant which can run in resource-restricted environments.
+censorship-resistant and run in resource-restricted environments.
 At a high level, 
 [10/WAKU2](/spec/10) implements a publish-subscribe messaging mechianism over libp2p and 
 adds capabilities.
