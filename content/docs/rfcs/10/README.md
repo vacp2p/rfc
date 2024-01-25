@@ -79,7 +79,7 @@ For example:
 For more on the concept of adaptive nodes and what this means in practice,
 please see the [30/ADAPTIVE-NODES](/spec/30) spec.
 
-## Network interaction domains
+## Network Interaction Domains
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 While Waku is best thought of as a single cohesive thing, there are three network interaction domains:
@@ -162,7 +162,7 @@ These protocols are anyway used by the libp2p connection establishment layer Wak
 We plan to introduce a new Vac capability discovery protocol with better anonymity properties and 
 more functionality.
 
-# Transports
+### Transports
 
 Waku v2 is built on top of libp2p, and like libp2p, it strives to be transport agnostic.
 We define a set of RECOMMENDED transports in order to achieve a baseline of interoperability between clients.
@@ -247,7 +247,7 @@ See the sequence diagram below for an overview of how different protocols intera
 
 0. We have six nodes, A-F.
 The protocols initially mounted are indicated as such.
-The PubSub topics `pubsubTopic1` and `pubsubTopic2` is used for routing and
+The PubSub topics `pubTopic1` and `pubsubTopic2` is used for routing and
 indicates that it is subscribed to messages on that topic for relay,
 see [11/WAKU2-RELAY](/spec/11) for details.
 Ditto for [13/WAKU2-STORE](/spec/13),
@@ -255,48 +255,59 @@ where it indicates that these messages are persisted on that node.
 
 2. Node A creates a `WakuMessage` with a ContentTopic `contentTopic1`.
 See [14/WAKU2-MESSAGE](/spec/14) for more details.
-If `WakuMessage` `version` is set to 1, we use the [6/WAKU1](/spec/6) compatible `data` field with encryption.
+If `WakuMessage` `version` is set to 1,
+we use the [6/WAKU1](/spec/6) compatible `data` field with encryption.
 See [7/WAKU-DATA](/spec/7) for more details.
 
-3. Node F requests to get messages filtered by PubSub topic `pubtopic1` and ContentTopic `contentTopic1`.
-Node D subscribes F to this filter and will in the future forward messages that match that filter.
+4. Node F requests to get messages filtered by PubSub topic `pubTopic1` and
+ContentTopic `contentTopic1`.
+Node D subscribes F to this filter and, in the future,
+will forward messages that match this filter.
 See [12/WAKU2-FILTER](/spec/12) for more details.
 
-4. Node A publishes `msg1` on `pubtopic1` and subscribes to that relay topic pick it up.
-It then gets relayed further from B to D, but not C since it doesn't subscribe to that topic.
+5. Node A publishes `msg1` on `pubTopic1` and
+subscribes to that pubsub topic so relay node B can receive it.
+It then gets relayed further from B to D, but
+not C since it doesn't subscribe to that pubsub topic.
 See [11/WAKU2-RELAY](/spec/11).
 
-5. Node D saves `msg1` for possible later retrieval by other nodes.
+7. Node D saves `msg1` for possible later retrieval by other nodes.
 See [13/WAKU2-STORE](/spec/13).
 
-6. Node D also pushes `msg1` to F, as it has previously subscribed F to this filter.
+8. Node D also pushes `msg1` to F, as it has previously subscribed F to this filter.
 See [12/WAKU2-FILTER](/spec/12).
 
-7. At a later time, Node E comes online.
+9. At a later time, Node E comes online.
 It then requests messages matching `pubtopic1` and `contentTopic1` from Node D.
-Node D responds with messages meeting this (and possibly other) criteria. See [13/WAKU2-STORE](/spec/13).
+Node D responds with messages meeting this (and possibly other) criteria.
+See [13/WAKU2-STORE](/spec/13).
 
-## Appendix A: Upgradability and Compatibility
+### Appendix A: Upgradability and Compatibility
 
-### Compatibility with Waku v1
+#### Compatibility with Waku v1
 
 Waku v1 and Waku v2 are different protocols all together.
-They use a different transport protocol underneath; Waku v1 is devp2p RLPx based while Waku v2 uses libp2p.
+They use a different transport protocol underneath; 
+Waku v1 is devp2p RLPx based while Waku v2 uses libp2p.
 The protocols themselves also differ as does their data format.
-Compatibility can be achieved only by using a bridge that not only talks both devp2p RLPx and libp2p, but that also transfers (partially) the content of a packet from one version to the other.
+Compatibility can be achieved only by using a bridge that not only talks both devp2p RLPx and libp2p, but 
+that also transfers (partially) the content of a packet from one version to the other.
 
 See [15/WAKU-BRIDGE](/spec/15) for details on a bidirectional bridge mode.
 
-# Appendix B: Security 
+### Appendix B: Security 
 
-Each protocol layer of Waku v2 provides a distinct service and is associated with a separate set of security features and concerns.
+Each protocol layer of Waku v2 provides a distinct service and 
+is associated with a separate set of security features and concerns.
 Therefore, the overall security of Waku v2 depends on how the different layers are utilized.
-In this section, we overview the security properties of Waku v2 protocols against a static adversarial model which is described below.
-Note that a more detailed security analysis of each Waku protocol is supplied in its respective specification as well.
+In this section, we overview the security properties of Waku v2 protocols against a static adversarial model,
+which is described below.
+Note that a more detailed security analysis of each Waku v2 protocol is supplied in its respective specification as well.
 
-## Primary Adversarial Model
+#### Primary Adversarial Model
 
-In the primary adversarial model, we consider adversary as a passive entity that attempts to collect information from others to conduct an attack,
+In the primary adversarial model, 
+we consider adversary as a passive entity that attempts to collect information from others to conduct an attack,
 but it does so without violating protocol definitions and instructions.
 
 The following are **not** considered as part of the adversarial model: 
@@ -305,41 +316,51 @@ The following are **not** considered as part of the adversarial model:
   (unless the adversary is one end of the communication).
   Specifically, the communication channels are assumed to be secure.
 
-## Security Features
+#### Security Features
 
-### Pseudonymity 
+##### Pseudonymity 
 
-Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity
-and instead they utilize libp2p `PeerID` as their identifiers.
-While pseudonymity is an appealing security feature, it does not guarantee full anonymity since the actions taken under the same pseudonym
+Waku v2 by default guarantees pseudonymity for all of the protocol layers since parties do not have to disclose their true identity and 
+instead they utilize libp2p `PeerID` as their identifiers.
+While pseudonymity is an appealing security feature, 
+it does not guarantee full anonymity since the actions taken under the same pseudonym
 i.e., `PeerID` can be linked together and potentially result in the re-identification of the true actor. 
   
-### Anonymity / Unlinkability
+##### Anonymity / Unlinkability
 
-At a high level, anonymity is the inability of an adversary in linking an actor to its data/performed action (the actor and action are context-dependent).
-To be precise about linkability, we use the term Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party.
-For example, the signature verification key, and the hash of one's static IP address are unique for each user and hence count as PII.
-Notice that users' actions can be traced through their PIIs (e.g., signatures) and hence result in their re-identification risk.
-As such, we seek anonymity by avoiding linkability between actions and the actors / actors' PII. Concerning anonymity, Waku v2 provides the following features:
+At a high level, anonymity is the inability of an adversary in linking an actor to its data/performed action 
+(the actor and action are context-dependent).
+To be precise about linkability, we use the term,
+Personally Identifiable Information (PII) to refer to any piece of data that could potentially be used to uniquely identify a party.
+For example, the signature verification key, and 
+the hash of one's static IP address are unique for each user and hence count as PII.
+Notice that users' actions can be traced through their PIIs 
+(e.g., signatures) and hence result in their re-identification risk.
+As such, we seek anonymity by avoiding linkability between actions and 
+the actors / actors' PII. 
+Concerning anonymity, Waku v2 provides the following features:
 
 **Publisher-Message Unlinkability**:
-This feature signifies the unlinkability of a publisher to its published messages in the 11/WAKU2-RELAY protocol.
-The [Publisher-Message Unlinkability](/spec/11#security-analysis) is enforced through the `StrictNoSign` policy due to which the data fields of pubsub messages that count as PII for the publisher must be left unspecified.
+This feature signifies the unlinkability of a publisher to its published messages in the [11/WAKU2-RELAY](/spec/11) protocol.
+The [Publisher-Message Unlinkability](/spec/11#security-analysis) is enforced through the `StrictNoSign` policy,
+due to the data fields of pubsub messages that count as PII for the publisher must be left unspecified.
 
 **Subscriber-Topic Unlinkability**:
-This feature stands for the unlinkability of the subscriber to its subscribed topics in the 11/WAKU2-RELAY protocol.
+This feature stands for the unlinkability of the subscriber to its subscribed topics in the [11/WAKU2-RELAY](/spec/11) protocol.
 The [Subscriber-Topic Unlinkability](/spec/11/#security-analysis) is achieved through the utilization of a single PubSub topic.
 As such, subscribers are not re-identifiable from their subscribed topic IDs as the entire network is linked to the same topic ID.
-This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/) where k is proportional to the system size (number of subscribers).
-Note that there is no hard limit on the number of the pubsub topics, however, the use of one topic is recommended for the sake of anonymity. 
+This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/),
+where k is proportional to the system size (number of subscribers).
+Note that there is no hard limit on the number of the pubsub topics, however, 
+the use of one pubsub topic is RECOMMENDED for the sake of anonymity. 
 
-### Spam protection
+##### Spam protection
 
 This property indicates that no adversary can flood the system (i.e., publishing a large number of messages in a short amount of time), either accidentally or deliberately, with any kind of message i.e. even if the message content is valid or useful.
 Spam protection is partly provided in `11/WAKU2-RELAY` through the [scoring mechanism](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#spam-protection-measures) provided for by GossipSub v1.1.
 At a high level, peers utilize a scoring function to locally score the behavior of their connections and remove peers with a low score.
   
-### Data confidentiality, Integrity, and Authenticity
+##### Data confidentiality, Integrity, and Authenticity
 
 Confidentiality can be addressed through data encryption whereas integrity and authenticity are achievable through digital signatures.
 These features are provided for in [14/WAKU2-MESSAGE (version 1)](/spec/14#version-1)` through payload encryption as well as encrypted signatures.
@@ -357,9 +378,9 @@ Likewise, in the `12/WAKU2-FILTER`, a full node can link the light node's `PeerI
 
 <!--TODO: might be good to add a figure visualizing the Waku protocol stack and the security features of each layer-->
 
-## Appendix C: Implementation Notes
+### Appendix C: Implementation Notes
 
-### Implementation Matrix
+#### Implementation Matrix
 
 There are multiple implementations of Waku v2 and its protocols:
 
@@ -411,7 +432,7 @@ For an interoperable keep-alive mechanism:
 - [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping),
 with periodic pings to connected peers
 
-## Appendix D: Future work
+### Appendix D: Future work
 
 The following features are currently experimental and under research and initial implementation:
 
