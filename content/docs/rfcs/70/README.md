@@ -806,8 +806,6 @@ After successfully parsing the message into ABNF terms, translation MAY happen a
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
 - The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
-- Concerning the hardness of the ADKG, the proposal lies on the Discrete Logarithm assumption.
-- In order to improve forward-secrecy in TreeKEM users MUST use a UPKE scheme.
 
 # Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
