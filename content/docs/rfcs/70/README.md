@@ -10,13 +10,15 @@ contributors:
 ---
 
 # Abstract
-This document specifies an Ethereum-based private messaging service.
-This proposal is built upon this [model](https://rfc.vac.dev/spec/20/) and 
-amends the limitations of the latter concerning forward privacy and authentication.
-This document also tackles the extension of a 1-to-1 communication protocol to a group messaging protocol.
-This document also contains the specification for an Ethereum-based authentication protocol.
-The document is still work in progress. 
-Next steps will include a description of how to implement the different functions and algorithms in terms of the Noise framework.
+This specification outlines a private messaging service utilizing the Ethereum blockchain. 
+Rooted in the existing [model](https://rfc.vac.dev/spec/20/), this proposal addresses the deficiencies related to forward privacy and authentication inherent in the current framework.
+The specification is divided into 3 sections:
+
+- Private 1-to-1 communications protocol, based in Signal's double ratchet.
+- Private group messaging protocol, based in the MLS protocol.
+- Description of an Ethereun-based authentication protocol, based in SIWE.
+
+Please note that this document is a work in progress, with forthcoming sections detailing the implementation of various functions and algorithms within the framework of the Noise protocol.
 
 # One-to-one communication protocol
 
@@ -586,16 +588,16 @@ Functioning of application messages MUST follow the instructions of Section 15 o
 
 # Considerations with respect to decentralization
 
-The MLS protocol assumes the existence on a (untrusted) *delivery service*, whose responsabilites include:
+The MLS protocol assumes the existence on a (central, untrusted) *delivery service*, whose responsabilites include:
 
 - Acting as a directory service providing the initial keying material for clients to use.
 - Routing MLS messages among clients.
 
-The idea of a central delivery service can be by-passed in the setting of decentralization, and in particular for protocols using the publish/gossip approach, such as [gossipsub](https://github.com/libp2p/specs/tree/master/pubsub/gossipsub).
+The central delivery service can be avoided in protocols using the publish/gossip approach, such as [gossipsub](https://github.com/libp2p/specs/tree/master/pubsub/gossipsub).
 
 Concerning keys, each node can generate and disseminate their encryption key among the other nodes, so they can create a local version of the tree that allows for the generation of the group key.
 
-Another important component is the *authentication service*, which can be replaced with SIWE. Sign-In with Ethereum describes how Ethereum accounts authenticate with off-chain services by signing a standard message format parameterized by scope, session details, and security mechanisms (e.g., a nonce).
+Another important component is the *authentication service*, which is replaced with SIWE in this specification. 
 
 # Authentication process: SIWE
 
@@ -811,17 +813,17 @@ After successfully parsing the message into ABNF terms, translation MAY happen a
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 # References
-- Toy Ethereum Private Message: https://rfc.vac.dev/spec/20/
-- Hybrid Public Key Encryption: https://datatracker.ietf.org/doc/rfc9180/
-- The Messaging Layer Security (MLS) Protocol: https://datatracker.ietf.org/doc/rfc9420/
-- Sign-In with Ethereum: https://eips.ethereum.org/EIPS/eip-4361
-- Signed Data Standard: https://eips.ethereum.org/EIPS/eip-191
-- Uniform Resource Identifier (URI): https://datatracker.ietf.org/doc/html/rfc3986
-- WalletConnect URI Format: https://eips.ethereum.org/EIPS/eip-1328
-- Standard Signature Validation Method for Contracts: https://eips.ethereum.org/EIPS/eip-1271
-- Augmented BNF for Syntax Specifications: https://datatracker.ietf.org/doc/html/rfc5234
-- HMAC-based Extract-and-Expand Key Derivation Function: https://www.ietf.org/rfc/rfc5869.txt
-- The X3DH Key Agreement Protocol: https://signal.org/docs/specifications/x3dh/
-- The Double Ratchet Algorithm: https://signal.org/docs/specifications/doubleratchet/
-- Security Analysis and Improvements for the IETF MLS Standard for Group Messaging: https://eprint.iacr.org/2019/1189.pdf
-- Gossipsub: https://github.com/libp2p/specs/tree/master/pubsub/gossipsub
+- [Augmented BNF for Syntax Specifications](https://datatracker.ietf.org/doc/html/rfc5234)
+- [Gossipsub](https://github.com/libp2p/specs/tree/master/pubsub/gossipsub)
+- [HMAC-based Extract-and-Expand Key Derivation Function](https://www.ietf.org/rfc/rfc5869.txt)
+- [Hybrid Public Key Encryption](https://datatracker.ietf.org/doc/rfc9180/)
+- [Security Analysis and Improvements for the IETF MLS Standard for Group Messaging](https://eprint.iacr.org/2019/1189.pdf)
+- [Signed Data Standard](https://eips.ethereum.org/EIPS/eip-191)
+- [Sign-In with Ethereum](https://eips.ethereum.org/EIPS/eip-4361)
+- [Standard Signature Validation Method for Contracts](https://eips.ethereum.org/EIPS/eip-1271)
+- [The Double Ratchet Algorithm](https://signal.org/docs/specifications/doubleratchet/)
+- [The Messaging Layer Security Protocol](https://datatracker.ietf.org/doc/rfc9420/)
+- [The X3DH Key Agreement Protocol](https://signal.org/docs/specifications/x3dh/)
+- [Toy Ethereum Private Messaging Protocol](https://rfc.vac.dev/spec/20/)
+- [Uniform Resource Identifier](https://datatracker.ietf.org/doc/html/rfc3986)
+- [WalletConnect URI Format](https://eips.ethereum.org/EIPS/eip-1328)
