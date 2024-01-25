@@ -257,13 +257,16 @@ Therefore the prekey bundle MAY be stored in long-term storage solutions, such a
 
 ### Ephemeral data
 
-Storing ephemeral data on Ethereum can be done using a combination of on-chain and off-chain solutions. 
+Storing ephemeral data on Ethereum MAY be done using a combination of on-chain and off-chain solutions. 
 This approach provides an efficient solution to the problem of storing updatable data in Ethereum.
-1. Ethereum can store a reference or a hash that points to the off-chain data.
+1. Ethereum stores a reference or a hash that points to the off-chain data.
 2. Off-chain solutions can include systems like IPFS, traditional cloud storage solutions, or decentralized storage networks such as a [Swarm](https://www.ethswarm.org). 
 In any case, the user stores the associated IPFS hash, URL or reference in Ethereum.
 
 The fact of a user not updating the ephemeral information can be understood as Bob not willing to participate in any communication.
+
+This applies to `KeyPackage`, which in the MLS specification are meant to be stored in a directory provided by the delivery service.
+If such an element does not exist, `KeyPackage` MUST be stored according to one of the two options outlined above.
 
 ### Interaction with Ethereum
 
