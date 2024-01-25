@@ -13,7 +13,7 @@ contributors:
   - Abhimanyu Rawat <abhi@status.im>
 ---
 
-# Abstract
+## Abstract
 
 [10/WAKU2](/spec/10) is a family of modular peer-to-peer protocols for secure communication.
 These protocols are designed to be secure, privacy-preserving, 
@@ -25,7 +25,7 @@ This specification describes the [10/WAKU2](/spec/10) messaging format.
 A way to encapsulate the messages sent with specific information security goals, and 
 [6/WAKU1](/spec/6/) backward compatibility.
 
-# Motivation
+## Motivation
 
 When sending messages over [10/WAKU2](/spec/10), there are multiple requirements:
 
@@ -37,11 +37,11 @@ When sending messages over [10/WAKU2](/spec/10), there are multiple requirements
 
 This specification attempts to provide for these various requirements.
 
-# Semantics
+## Semantics
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “MAY”, 
 and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-## Waku Message
+### Waku Message
 
 A `WakuMessage` is constituted by the combination of the data payload and attributes that, for example, 
 a *publisher* sends to a `pubsubTopic` and is eventually delivered to *subscribers*.
@@ -50,7 +50,7 @@ The `WakuMessage` attributes are key-value pairs of metadata associated with a m
 The message data payload is part of the transmitted `WakuMessage` that is the actual message information.
 The data payload is also treated as a `WakuMessage` attribute for convenience.
 
-## Message Attributes
+### Message Attributes
 
 * The `payload` attribute MUST contain the message data payload to be sent.
 
@@ -79,7 +79,7 @@ the message SHOULD be interpreted as ephemeral.
 If the attribute is omitted or set to `false`,
 the message SHOULD be interpreted as non-ephemeral.
 
-## Wire Format
+### Wire Format
 
 The `WakuMessage` wire format is specified using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
 
@@ -98,7 +98,7 @@ message WakuMessage {
 
 ```
 
-## Waku Message Vaildation
+### Waku Message Vaildation
 
 A `WakuMessage` MUST be vaildated by a validator, 
 the [11/WAKU2-RELAY](/spec/11/) node.
@@ -110,7 +110,7 @@ it MUST be dropped and not forwarded to other peers.
 If the message is processed as valid,
 it MUST be sent to peers who have subscribed to the `contentTopic`.
 
-## Payload Encryption
+### Payload Encryption
 
 The `WakuMessage` payload MAY be encrypted.
 The message `version` attribute indicates the schema used to encrypt the payload data.
@@ -133,7 +133,7 @@ which provides symmetric encryption and asymmetric key exchange.
 Any `version` value not included in this list is reserved for a future specification.
 And, in this case, the `payload` SHOULD be interpreted as unencrypted by the Waku layer.
 
-## Whisper/Waku v1 Envelope Compatibility
+### Whisper/Waku v1 Envelope Compatibility
 
 Whisper/[6/WAKU1](/spec/6/) envelopes are compatible with [10/WAKU2](/spec/10) messages format.
 
@@ -144,7 +144,7 @@ Whisper/[6/WAKU1](/spec/6/) envelopes are compatible with [10/WAKU2](/spec/10) m
 This makes redundant some Whisper/[6/WAKU1](/spec/6/) envelope fields (e.g., `expiry`, `ttl`, `topic`, etc.), so 
 they can be ignored.
 
-## Deterministic Message Hashing
+### Deterministic Message Hashing
 
 In Protocol Buffers v3, 
 the deterministic serialization is not canonical across the different implementations and languages.
@@ -169,7 +169,7 @@ The collision probability offered by this hashing schema can be considered negli
 This is due to the deterministic concatenation order of the message attributes, 
 coupled with using a SHA-2 (256-bit) hashing algorithm.
 
-## Test Vectors
+### Test Vectors
 
 `WakuMessage` hash computation (`meta` size of 12 bytes):
 ```
@@ -215,16 +215,16 @@ WakuMessage.timestamp = 0x175789bfa23f8400
 messageHash = 0x483ea950cb63f9b9d6926b262bb36194d3f40a0463ce8446228350bd44e96de4
 ```
 
-# Security Considerations
+## Security Considerations
 
-## Confidentiality, Integrity, and Authenticity
+### Confidentiality, Integrity, and Authenticity
 
 The level of confidentiality, integrity, and 
 authenticity of the `WakuMessage` data payload is discretionary.
 Accordingly, the application layer shall utilize the encryption and 
 signature schemes supported by [10/WAKU2](/spec/10) to meet the application-specific privacy needs.
 
-## Reliability of the `timestamp` attribute
+### Reliability of the `timestamp` attribute
 
 The `timestamp` attribute is set by the sender.
 Therefore, because message timestamps aren’t independently verified, 
@@ -237,7 +237,7 @@ to use additional methods for more robust message ordering.
 An example of how to deal with message ordering against adversarial message timestamps can be found in the Status protocol, 
 see [62/STATUS-PAYLOADS](/spec/62).
 
-## Reliability of the `ephemeral` attribute
+### Reliability of the `ephemeral` attribute
 
 The `ephemeral` attribute is set by the sender.
 Since there is currently no incentive mechanism for network participants to behave correctly, 
@@ -245,12 +245,12 @@ this attribute is inherently insecure.
 A malicious actor can tamper with the value of the `ephemeral` attribute, and 
 the receiver would not be able to verify the integrity of the message.
 
-# Copyright
+## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
-# References
+## References
 
 - [10/WAKU2](/spec/10)
 - [6/WAKU1](/spec/6/)
