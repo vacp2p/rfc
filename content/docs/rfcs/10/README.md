@@ -82,11 +82,11 @@ please see the [30/ADAPTIVE-NODES](/spec/30) spec.
 ## Network Interaction Domains
 The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
-While Waku is best thought of as a single cohesive thing, there are three network interaction domains:
+While Waku v2 is best thought of as a single cohesive thing, there are three network interaction domains:
 
 (a) gossip domain
 (b) discovery domain
-(c) req/resp domain
+(c) request/reply domain
 
 ### Protocols and identifiers
 
@@ -202,10 +202,10 @@ These fields MUST be used under certain conditions, as set out in the specificat
 Both EIP-1459 DNS-based discovery and Node Discovery v5 operates on ENR,
 and it's reasonable to expect even wider utility for ENR in Waku v2 networks in future.
 
-### Request/Reponse domain
+### Request/Reply domain
 
 In addition to the Gossip domain,
-Waku v2 provides a set of Request/Reponse protocols.
+Waku v2 provides a set of Request/Reply protocols.
 They are primarily used in order to get Waku v2 to run in resource restricted environments,
 such as low bandwidth or being mostly offline.
 
