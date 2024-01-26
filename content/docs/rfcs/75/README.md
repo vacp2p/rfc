@@ -12,7 +12,7 @@ contributors:
 
 # Abstract
 
-The Sync protocol allows operators within peer-to-peer Waku network to efficiently synchronize Waku messages by exchanging their [message hashes](https://rfc.vac.dev/spec/14/#deterministic-message-hashing) using their respective Prolly trees (spec of Prolly tree to be published).
+The Sync protocol allows operators within peer-to-peer Waku network to efficiently synchronize Waku messages by exchanging their [message hashes](https://rfc.vac.dev/spec/14/#deterministic-message-hashing) using their respective Prolly trees (Spec of Prolly tree to be published).
 This process ensures that all operators stay updated with minimal information exchange, accommodating situations where operators may have missed some messages due to any reason.
 
 This document describes the Sync store protocol and how it is used to synchronize the operators in the network.
@@ -36,8 +36,8 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 Consider a request-response protocol with two roles: a client and a server.
 Client and Server both MUST be peers supporting the Waku Sync protocol.
-Each operator MUST contain empty or populated Prolly tree of Waku message hashes.
-There is no other eligibility for the node at this point in time to be a client or a server who can synchronize with each other.
+Each operator (client/server) MUST contain empty or populated Prolly tree of Waku message hashes.
+There is no other eligibility for the operators at this point in time to be a client or a server who can synchronize with each other.
 
 # Wire Format Specification / Syntax
 
@@ -64,12 +64,12 @@ There is no other eligibility for the node at this point in time to be a client 
         int64 down = 10;              // Reference to the child node
     }
 
-    // Request message for GetRoot
+    // Request message for ExchangeRootRequest
     message ExchangeRootRequest {
         Node root = 1;    // The root node of the Prolly tree
     }
 
-    // Response message for GetRoot RPC
+    // Response message for ExchangeRootRequest
     message ExchangeRootResponse {
         Node root = 1;  // The root node of the Prolly tree, same height as requested root
         // Add additional fields if necessary, e.g., a status message or an error code.
@@ -91,7 +91,7 @@ There is no other eligibility for the node at this point in time to be a client 
         repeated Node start_nodes = 1;  // Nodes from which to start searching
     }
 
-    // Response message for GetNonBoundaryNodes RPC
+    // Response message for GetNonBoundaryNodes
     message GetNonBoundaryNodesResponse {
         repeated Node non_boundary_nodes = 1;  // Non-boundary nodes found
     }
@@ -101,51 +101,43 @@ A brief description of each message request-response is described as follows:
 
 ### ExchangeRootRequest
 
-This message is sent by the node that wants to sync with the peer node.
-It contains local Prolly Tree root along with its height in the tree.
-The peer node if using the Sync store protocol will respond with the GetRootResponse message.
-It sends the root node of the tree to the requesting node.
+This message is sent by a client that wants to sync with its peer/server.
+It contains local Prolly Tree root as input.
+The server will respond with the GetRootResponse message.
 
 ### ExchangeRootResponse
 
-This message is sent by the peer node in response to the GetRootRequest message.
-It contains the root node of the tree.
-The requesting node can then use this node to traverse the tree and find the nodes that it needs to sync with the peer node.
-
-### GetRootAtHeightRequest
-
-This message is sent by the node that wants to sync with the peer node.
-It contains the height of the tree that the requesting node wants to sync with the peer node.
-The peer node if using the Sync store protocol will respond with the GetRootResponse message.
-It sends the root node of the tree to the requesting node.
+This message is sent by the peer/server in response to the GetRootRequest message.
+It contains the root Node of the tree present at a same or lower (maximum at the server) height as the client.
+Client can then use this root Node to traverse the tree and iteratively find the intermediate/leaf Nodes that it needs to Sync with peer.
 
 ### GetIntermediateNodeRequest
 
-This message is sent by the node that wants to sync with the peer node.
-It contains the node id/key and the level of the Prolly tree, uisng this information peer node searches and in response send back the subjected node.
-The peer node if using the Sync store protocol will respond with the GetIntermediateNodeResponse message.
-It sends the node of the tree to the requesting node.
+This message is sent by a client that wants to Sync with its peer.
+This request contains a Node's id/key and level inside Prolly tree, using this information server searches and in response send back the subjected Node.
+The server will respond with the GetIntermediateNodeResponse message.
 
 ### GetIntermediateNodeResponse
 
-This message is sent by the peer node in response to the GetIntermediateNodeRequest message.
-It contains an intermediate node of the tree.
-The requesting node can then use this node to traverse the tree and find the missing nodes.
+This message is sent by the peer/server in response to the GetIntermediateNodeRequest message.
+It contains an intermediate Node of the tree corresponding to the requesting key-level inside the Prolly tree.
+Client can then use this response Node to traverse the tree further and find the missing Nodes.
 
 ### GetNonBoundaryNodesRequest
 
-This message is sent by the node that wants to sync with the peer node.
-It contains the start nodes from which the peer node will start searching for the non boundary nodes.
-The peer node if using the Sync store protocol will respond with the GetNonBoundaryNodesResponse message.
-It sends the non boundary nodes of the tree to the requesting node.
+This message is sent by a client that wants to sync with its peer.
+It is a list of Nodes of which are either missing or have a merkle mismatch inside the local Prolly tree when compared with corresponding Nodes present in the peer's Prolly tree.
+Peer will respond with GetNonBoundaryNodesResponse message.
 
 ### GetNonBoundaryNodesResponse
 
-This message is sent by the peer node in response to the GetNonBoundaryNodesRequest message.
-It contains the non boundary nodes of the tree.
-The requesting node can then use this nodes to traverse the tree and find the missing nodes.
+This message is sent by the peer/server in response to the GetNonBoundaryNodesRequest message.
+For the each requested Node, it contains the non-boundary Nodes present just one level below it in the Prolly tree.
+Client can then use these intermediate Nodes to traverse the tree further and find the missing Nodes.
 
-# Implementation in of Sync using Prolly tree (PoC version)
+# Implementation of Sync using Prolly tree (PoC version)
+
+<!-- This whole section can be removed once the Spec of Prolly tree or any foundation unit of Sync mechanism is ready -->
 
 This Section describes a proof-of-concept (PoC) implementation of the Sync protocol using Prolly tree.
 
@@ -179,7 +171,7 @@ Server responds with the requested Waku messages.
 When a server receives the `ExchangeRootRequest` message from the client, it can also detect if server also needs to Sync message hashes with the client.
 This step helps reducing the bandwidth usage and the number of messages exchanged between the client and the server nodes in longer run.
 
-Upon receiving the missing messages that are present in the Prolly tree, the client node request the onward messages using the existing Store [method](https://github.com/waku-org/nwaku/blob/master/waku/waku_archive/driver.nim#L36) since these nodes are for sure missing from the client Prolly tree.
+Upon receiving the missing messages that are present in the peer's Prolly tree, the client node can request the onward (messages with greater timestamp than last message in the Prolly tree) messages using the existing Store [method](https://github.com/waku-org/nwaku/blob/master/waku/waku_archive/driver.nim#L36) since these messages are for sure can be missing from the client Prolly tree.
 
 # Security/Privacy Considerations
 
@@ -190,11 +182,11 @@ The security and privacy considerations are limited to the storage of messages o
 
 This document is intentionally simplified in its initial version.
 It is to showcase the working pieces of the Sync protocol and how it can be used to synchronize the nodes in the network.
-The PoC of the Sync store is initself feature complete but not sufficient for production code without sanitizing it to work with Waku Store.
+The PoC of the Sync store is in itself feature complete but not sufficient for production code without sanitizing it to work with Waku Store.
 
 The following ideas may be explored in future:
 
-- Batch sequenced insertions/deletions: The design and the advantage of the Waku Prolly tree over others is such that it can be used to insert/delete multiple sequenced messages at once without affection the Merkle hashes of the messages already present in the tree i.e. left side of the tree.
+- Batch sequenced insertions/deletions: The design and the advantage of the Waku Prolly tree over others is such that it can be used to insert/delete multiple sequenced messages at once without affecting the Merkle hashes of the Nodes already present in the Prolly tree i.e. left side of the tree.
 
 - It can itself be served as a Store of messages in light weight nodes with limited storage capacity.
 
