@@ -18,7 +18,7 @@ Waku nodes can query messages by given an array of message hash. This is useful 
 ## Request
 
 The parameters are the following:
-* `digests`: array of unique identifiers of the messages that request node is interested in, refer to [Deterministic Message Hashing](/spec/14/#deterministic-message-hashing).
+* `digests`: array of unique identifiers of the messages that request node is interested in, refer to [Deterministic Message Hashing](/spec/14/#deterministic-message-hashing). The max length of `digests` should be 20.
 
 ```proto
 message QueryWakuMessagesRequest {
@@ -29,7 +29,7 @@ message QueryWakuMessagesRequest {
 ## Response
 
 The response are the following:
-* `messages`: array of messages that the response node has, refer to [Waku Message](/spec/14). The order of the response messages is not ensured to be the same as the order of the request digests. And the response messages could be less than `digests`, which means the response node don't have the messages corresponding to specific digests.
+* `messages`: array of messages that the response node has, refer to [Waku Message](/spec/14). The order of the response messages is not ensured to be the same as the order of the request digests. And the response messages could be less than `digests`, which means the response node don't have the messages corresponding to specific digests. The request node needs to recalculate the message hash to match digest with a WakuMessage in `messages`.
 
 ```proto
 message QueryWakuMessagesResponse {
