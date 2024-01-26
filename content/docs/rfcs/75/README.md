@@ -24,6 +24,8 @@ In a Sync request-response protocol, a client receives the list of missing Waku 
 Operators who want to synchronize with each other should be able to do so with minimal amount of communication and bandwidth usage.
 Existing methods present in Waku Store protocol are based on full Waku message delivery using time range query where there is no way to know apart from a given timestamp range if other Waku messages are also missing, making Store only method unreliable and bandwidth consuming.
 Operator that wants to synchronize sends a request to its peer, and in return peer operator send the response.
+Root of the Prolly tree is used in this Sync mechanism, which is a Merkle tree with a probabilistic data structure.
+As per the Prolly tree design, there is a fake root present at every level/height of the Prolly tree, to Sync properly both roots must be from the same height/level inside the Prolly tree.
 After a brief low-bandwidth consuming back and flow exchange, resulting will be a list message hashes that the requesting operator needs to sync with the peer operator.
 These messages hashes can be used by other parts of the Store protocol to make sure the related full messages are wired to the requesting operator and stored in its accessible (local for now) Store/DB.
 Making the requesting operator fully synchronized with its peer operator.
@@ -62,15 +64,14 @@ There is no other eligibility for the node at this point in time to be a client 
         int64 down = 10;              // Reference to the child node
     }
 
-    // Request message for GetRootAtHeight
-    message ExchangeRootAtHeightRequest {
+    // Request message for GetRoot
+    message ExchangeRootRequest {
         Node root = 1;    // The root node of the Prolly tree
-        int32 height = 1;  // The desired height
     }
 
     // Response message for GetRoot RPC
-    message ExchangeRootAtHeightResponse {
-        Node root = 1;  // The root node of the Prolly tree
+    message ExchangeRootResponse {
+        Node root = 1;  // The root node of the Prolly tree, same height as requested root
         // Add additional fields if necessary, e.g., a status message or an error code.
     }
 
@@ -158,21 +159,24 @@ Step 1: A key-value store is created using the Store protocol where the key is t
 Step 2: A Prolly tree is populated using the key-value store.
 This construction is similar at both client and server side.
 
-Step 3: A client node sends a request to the server node to get the root node of the Prolly tree at a particular height.
-It also send its own local root node of the Prolly tree.
+Step 3: A client node sends a request to the server node to get the root node of the Prolly tree.
+Client sends its own local root node of the Prolly tree.
+With client's root node, server can calculate the height inside the Prolly tree from where client wants to Sync.
 
-Step 4: The server node responds with the root node of the Prolly tree present at that height.
-If the height at server is less than the height requested by the client, then the server responds with the root node of the Prolly tree at the maximum height present at the server.
+Step 4: The server node responds with the root node of the Prolly tree present at same height as client's root.
+4a) If the root height at server is less than the root height requested by the client, then the server responds with the root node of the Prolly tree at the maximum height present at the server.
+4b) If the root height at server is greater than the root height requested by the client, then the server responds with the root node at the requested height by traversing down to that height inside it's local Prolly tree.
 
-Step 5: The client node starts traversing the Prolly tree from the root node to the leaf nodes and finds the missing nodes at every level of the tree starting from the top.
-If the client detects the difference of merkle hash at a key of a certain level, then it requests the server node to get the intermediate child node belonging to that key.
-And the keys with no difference in merkle hash are skipped.
-This process continues until the client reaches the leaf nodes of the tree.
+Step 5: The client node starts traversing the Prolly tree from the root node to the leaf nodes and finds the missing nodes or nodes with different merkle hash at every level of the tree starting from the top.
+5a) If the client detects the missing key or difference of merkle hash at a key of a certain level, then it requests the server node to get the intermediate child node belonging to that key.
+5b) And the keys with no difference in merkle hash are skipped.
+
+This step continues iteratively until the client reaches the leaf nodes of the tree.
 
 Step 6: The client eventually computes the missing message hashes and sends a request to server to get the missing Waku messages corresponding to the computed message hashes.
 Server responds with the requested Waku messages.
 
-When a server receives the `ExchangeRootAtHeightRequest` message from the client, it can also detect if server also needs to Sync message hashes with the client.
+When a server receives the `ExchangeRootRequest` message from the client, it can also detect if server also needs to Sync message hashes with the client.
 This step helps reducing the bandwidth usage and the number of messages exchanged between the client and the server nodes in longer run.
 
 Upon receiving the missing messages that are present in the Prolly tree, the client node request the onward messages using the existing Store [method](https://github.com/waku-org/nwaku/blob/master/waku/waku_archive/driver.nim#L36) since these nodes are for sure missing from the client Prolly tree.
