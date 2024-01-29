@@ -277,7 +277,7 @@ A user who wants to retrieve a public key associated with a specific wallet addr
 The user provides the wallet address as the only input parameter for `getPublicKey`.
 The function outputs the associated public key from the smart contract.
 
-# Extension to group chat: the MLS Framework
+# Extension to Group Chat
 
 The Messaging Layer Security (MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
 The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, 
