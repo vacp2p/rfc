@@ -103,7 +103,7 @@ A brief description of each message request-response is described as follows:
 
 This message is sent by a client that wants to sync with its peer/server.
 It contains local Prolly Tree root as input.
-The server will respond with the GetRootResponse message.
+The server will respond with the `ExchangeRootResponse` message.
 
 ### ExchangeRootResponse
 
