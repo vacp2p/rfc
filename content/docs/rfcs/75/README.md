@@ -107,7 +107,7 @@ The server will respond with the `ExchangeRootResponse` message.
 
 ### ExchangeRootResponse
 
-This message is sent by the peer/server in response to the GetRootRequest message.
+This message is sent by the peer/server in response to the `ExchangeRootRequest` message.
 It contains the root Node of the tree present at a same or lower (maximum at the server) height as the client.
 Client can then use this root Node to traverse the tree and iteratively find the intermediate/leaf Nodes that it needs to Sync with peer.
 
