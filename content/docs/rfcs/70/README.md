@@ -16,7 +16,7 @@ The specification is divided into 3 sections:
 
 - Private 1-to-1 communications protocol, based on Signal's double ratchet.
 - Private group messaging protocol, based in the MLS protocol.
-- Description of an Ethereun-based authentication protocol, based in SIWE.
+- Description of an Ethereum-based authentication protocol, based on SIWE.
 
 The following section on the private 1-to-1 communications protocol specifies various functions and algorithms within the framework of the Noise protocol.
 
