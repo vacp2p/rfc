@@ -14,9 +14,9 @@ This specification outlines a private messaging service utilizing the Ethereum b
 Rooted in the existing [model](https://rfc.vac.dev/spec/20/), this proposal addresses the deficiencies related to forward privacy and authentication inherent in the current framework.
 The specification is divided into 3 sections:
 
-- Private 1-to-1 communications protocol, based on Signal's double ratchet.
-- Private group messaging protocol, based on the MLS protocol.
-- Description of an Ethereum-based authentication protocol, based on SIWE.
+- Private 1-to-1 communications protocol, based on [Signal's double ratchet](https://signal.org/docs/specifications/doubleratchet/).
+- Private group messaging protocol, based on the [MLS protocol](https://datatracker.ietf.org/doc/rfc9420/).
+- Description of an Ethereum-based authentication protocol, based on [SIWE](https://eips.ethereum.org/EIPS/eip-4361).
 
 The following section on the private 1-to-1 communications protocol specifies various functions and algorithms within the framework of the Noise protocol.
 
@@ -279,10 +279,12 @@ The function outputs the associated public key from the smart contract.
 
 # Extension to Group Chat
 
-The Messaging Layer Security (MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
+The [Messaging Layer Security](https://datatracker.ietf.org/doc/rfc9420/)(MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
 The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, 
 membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
 The MLS protocol achieves: low-complexity, group integrity, synchronization and extensibility.
+
+The extension to group chat described in forthcoming sections is built upon the [MLS](https://datatracker.ietf.org/doc/rfc9420/) protocol.
 
 ## Cryptographic suites
 Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
