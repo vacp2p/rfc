@@ -64,7 +64,7 @@ Bob and Alice MUST define personal key pairs `(ik_B, IK_B)` and `(ik_A, IK_A)` r
 -   and the key IK is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
-Using the Noise framework notation, these key pairs MUST BE generated using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
+Using the Noise framework notation, these key pairs MUST be generated using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
 Bob MUST also generate a public key SPK using `(spk_B, SPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
