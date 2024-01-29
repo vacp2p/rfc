@@ -14,7 +14,7 @@ This specification outlines a private messaging service utilizing the Ethereum b
 Rooted in the existing [model](https://rfc.vac.dev/spec/20/), this proposal addresses the deficiencies related to forward privacy and authentication inherent in the current framework.
 The specification is divided into 3 sections:
 
-- Private 1-to-1 communications protocol, based in Signal's double ratchet.
+- Private 1-to-1 communications protocol, based on Signal's double ratchet.
 - Private group messaging protocol, based in the MLS protocol.
 - Description of an Ethereun-based authentication protocol, based in SIWE.
 
