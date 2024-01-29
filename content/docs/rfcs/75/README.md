@@ -26,6 +26,7 @@ Existing methods present in Waku Store protocol are based on full Waku message d
 Operator that wants to synchronize sends a request to its peer, and in return peer operator send the response.
 Root of the Prolly tree is used in this Sync mechanism, which is a Merkle tree with a probabilistic data structure.
 As per the Prolly tree design, there is a fake root present at every level/height of the Prolly tree, to Sync properly both roots must be from the same height/level inside the Prolly tree.
+Every Node (fake root is also a Node without key/value data) in the Prolly tree has `merkle_hash` attribute which is a rolling hash of the subtree rooted at that Node.
 After a brief low-bandwidth consuming back and flow exchange, resulting will be a list message hashes that the requesting operator needs to sync with the peer operator.
 These messages hashes can be used by other parts of the Store protocol to make sure the related full messages are wired to the requesting operator and stored in its accessible (local for now) Store/DB.
 Making the requesting operator fully synchronized with its peer operator.
