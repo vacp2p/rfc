@@ -18,7 +18,7 @@ The specification is divided into 3 sections:
 - Private group messaging protocol, based in the MLS protocol.
 - Description of an Ethereun-based authentication protocol, based in SIWE.
 
-Please note that this document is a work in progress, with forthcoming sections detailing the implementation of various functions and algorithms within the framework of the Noise protocol.
+The following section on the private 1-to-1 communications protocol specifies various functions and algorithms within the framework of the Noise protocol.
 
 # One-to-one communication protocol
 
