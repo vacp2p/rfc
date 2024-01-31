@@ -130,6 +130,8 @@ Here the Tail Node will act as a boundary Node for the last chunk and will store
 **Step 5:** Step 1-4 continues while there are still Nodes that were promoted from the previous level.
 If no Nodes are are promoted for the next level, then the next level contains only one Node which is the Tail Node of the Prolly tree which also acts as a root of the whole Prolly Tree.
 
+With the current implementation, the height of the Prolly tree moves in a logarithmic manner.
+
 ## How insertion happens inside a Prolly tree
 
 If there is an already populated Prolly tree and we want to insert a new Node with key K inside it.
@@ -154,12 +156,14 @@ Following steps are taken:
 
 While adding the new Node it is possible that the Height of the Tree increases.
 One can add new levels to the tree as and when required.
+To insert an item, it takes O(log n) time complexity.
 
 ## How deletion happens inside a Prolly tree
 
 Follow the same steps as insertion to find the Node to delete.
 Instead of inserting the new Node, delete the Node from the Prolly tree and update the Merkle hashes.
 In this case the levels can decrease as well, remove the levels from the top of the tree as and when required.
+To delete an item, it takes O(log n) time complexity.
 
 ## How to compare two Prolly trees
 
