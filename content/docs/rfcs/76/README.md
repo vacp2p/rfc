@@ -27,6 +27,13 @@ By maintaining a balanced tree structure, prolly trees ensure quick and efficien
 This structure is crucial for handling large volumes of data, providing scalability and performance benefits.
 Additionally, Prolly trees are adept at managing data integrity during synchronization processes, making them ideal for distributed systems where consistency and up-to-date data are paramount.
 
+# Theory / Semantics
+
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+
+Prolly tree is a probabilistic data structure which is currently a non-standard data structure.
+To construct a Prolly tree as per this document one MUST have a key-value store.
+
 # Specification
 
 A Prolly tree constitutes of the following components:
@@ -173,15 +180,6 @@ If the `merkel_hash` doesn't match, then [get](https://github.com/ABresting/Prol
 
 **Step 4:** Upon [receiving](https://github.com/ABresting/Prolly-Tree-Waku-Message/blob/main/prolly_tree.py#L367) the Nodes of level 0, extract the `data` attribute i.e. `message_hash`.
 This is the diff of the the Prolly Trees.
-
-# Theory / Semantics
-
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
-
-Consider a request-response protocol with two roles: a client and a server.
-Client and Server both MUST be peers supporting the Waku Sync protocol.
-Each operator (client/server) MUST contain empty or populated Prolly tree of Waku message hashes.
-There is no other eligibility for the operators at this point in time to be a client or a server who can synchronize with each other.
 
 # Security/Privacy Considerations
 
