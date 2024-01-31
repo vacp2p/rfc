@@ -73,8 +73,8 @@ A Prolly tree constitutes of the following components:
 
 - **Threshold Mechanism**: Using this the structure of the Prolly tree is kept in check.
   It is used to maintain an average number of Nodes present in a chunk/bucket.
-  It works in a probabilistic manner, where the probability of a Node being a boundary Node is checked against a customizable threshold value.
-  If the has of a Node is less than the threshold value, then it is promoted to the next level in the Prolly tree.
+  It works in a probabilistic manner, where the probability of a Node being a boundary Node is [checked against](https://github.com/ABresting/Prolly-Tree-Waku-Message/blob/main/prolly_tree.py#L14) a customizable threshold value.
+  If the hash of a Node is less than the threshold value, then it is promoted to the next level in the Prolly tree.
 
 - **Node Hash**: It is an attribute of the Node.
   If the Node is a leaf Node then, it is calculated as the SHA-256 hash of its contents i.e. key/value pair, timestamp and `message_hash` of the Waku message.
