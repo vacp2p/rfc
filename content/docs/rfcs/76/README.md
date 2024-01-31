@@ -1,6 +1,6 @@
 ---
 slug: "76"
-title: 76/WAKU2-SYNC
+title: 76/WAKU2-PROLLY-TREE
 name: Prolly Tree
 status: raw
 category: Standards Track
