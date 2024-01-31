@@ -9,28 +9,27 @@ editor: Ramses Fernandez <ramses@status.im>
 contributors:
 ---
 
-# Abstract
-This specification outlines a private messaging service utilizing the Ethereum blockchain. 
-Rooted in the existing [model](https://rfc.vac.dev/spec/20/), this proposal addresses the deficiencies related to forward privacy and authentication inherent in the current framework.
+# Motivation
+The need for secure communications has become paramount. 
+Traditional centralized messaging protocols are susceptible to various security threats, 
+including unauthorized access, data breaches, and single points of failure. 
+Therefore a decentralized approach to secure communication becomes increasingly relevant, 
+offering a robust solution to address these challenges.
+
+This specification outlines a private messaging service using the Ethereum blockchain as authentication service. 
+Rooted in the existing [model](https://rfc.vac.dev/spec/20/), 
+this proposal addresses the deficiencies related to forward privacy and authentication inherent in the current framework.
 The specification is divided into 3 sections:
 
 - Private 1-to-1 communications protocol, based on [Signal's double ratchet](https://signal.org/docs/specifications/doubleratchet/).
 - Private group messaging protocol, based on the [MLS protocol](https://datatracker.ietf.org/doc/rfc9420/).
 - Description of an Ethereum-based authentication protocol, based on [SIWE](https://eips.ethereum.org/EIPS/eip-4361).
 
-The following section on the private 1-to-1 communications protocol specifies various functions and algorithms within the framework of the Noise protocol.
 
-# One-to-one communication protocol
+# Private 1-to-1 communications protocol
 
-## Background
-
-Alice wants to send an encrypted message to Bob. 
-Here Bob is the only individual able to decrypt the message.
-Alice knows Bob’s Ethereum address.
-
-## Theory and Description of the Protocol
-
-The proposed protocol must adhere to the following design requirements:
+## Theory
+The proposed protocol MUST adhere to the following requirements:
 -   Alice knows Bob’s Ethereum address.
 -   Bob is willing to participate in the protocol, and publishes his public key.
 -   Bob’s ownership of his public key is verifiable,
@@ -42,53 +41,54 @@ It corresponds to the double ratchet scheme combined with the X3DH algorithm, wh
 We chose to express the protocol in noise to be be able to use the noise streamlined implementation and proving features.
 The X3DH algorithm provides both authentication and forward secrecy, as stated in the [X3DH specification](https://signal.org/docs/specifications/x3dh/).
 
-### High level description
 This protocol will consist of several stages:
 
 1.  Key setting for X3DH: this step will produce prekey bundles for Bob which will be fed into X3DH. It will also allow Alice to generate the keys required to run the X3DH algorithm correctly.
-2.  Execution of X3DH: This step will output a common secret key SK together with an additional data vector AD. Both will be used in the double ratchet algorithm initialization.
-3.  Execution of the double ratchet algorithm for forward secure, authenticated communications, using the common secret key SK, obtained from X3DH, as a root key.
+2.  Execution of X3DH: This step will output a common secret key `SK` together with an additional data vector `AD`. Both will be used in the double ratchet algorithm initialization.
+3.  Execution of the double ratchet algorithm for forward secure, authenticated communications, using the common secret key `SK`, obtained from X3DH, as a root key.
 
-## Cryptographic functions required
--   XEd448 and SHA512 for digital signatures involved in the X3DH key generation.
--   SHA256 for the key generation related to AES256-GCM.
--   AES256-GCM for the encryption/decryption of messages.
+## Syntax
+The following suite of cryptographic function MUST be used:
+- `X488` as Diffie-Hellman function.
+- `SHA256` as KDF.
+- `AES256-GCM` as AEAD algorithm.
+- `SHA512` as hash function.
+- `XEd448` for digital signatures.
 
-### Considerations on the X3DH initialization
-This scheme MUST work on a specific elliptic curves which differ from those used by Ethereum. The curve Curve448 MUST be chosen: 
-since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519. This document specifies X3DH in terms of the Noise Framework.
+### X3DH initialization
+This scheme MUST work on the curve Curve448.
 The X3DH algorithm corresponds to the IX pattern in Noise.
 
 Bob and Alice MUST define personal key pairs `(ik_B, IK_B)` and `(ik_A, IK_A)` respectively where:
--   The key ik must be kept secret,
--   and the key IK is public.
+-   The key `ik` must be kept secret,
+-   and the key `IK` is public.
 
 Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
 Using the Noise framework notation, these key pairs MUST be generated using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
 Bob MUST also generate a public key SPK using `(spk_B, SPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
-SPK is a public key generated and stored at medium-term. 
-It is called a signed prekey because Bob MUST store a public key certificate of SPK using IK. 
+`SPK` is a public key generated and stored at medium-term. 
+It is called a signed prekey because Bob MUST store a public key certificate of `SPK` using `IK`. 
 Both signed prekey and the certificate MUST undergo periodic replacement, 
 a process that entails the generation of a fresh signed prekey. 
 After replacing the key, 
-Bob keeps the old private key of SPK for some interval, dependant on the implementation.
+Bob keeps the old private key of `SPK` for some interval, dependant on the implementation.
 This allows Bob to decrypt delayed messages. 
-It is important that Bob MUST NOT reuse SPKs. 
+It is important that Bob MUST NOT reuse `SPK`. 
 This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
-Bob MUST sign SPK for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define `SigSPK = XEd448(ik, Encode(SPK))`
+Bob MUST sign `SPK` for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define `SigSPK = XEd448(ik, Encode(SPK))`
 
-A final step requires the definition of a  _prekey bundle_  given by the tuple `prekey_bundle = (IK, SPK, SigSPK, OPK_i)`
+A final step requires the definition of `prekey_bundle = (IK, SPK, SigSPK, OPK_i)`
 
-Where the different one-time keys OPK are generated as `(opk_B, OPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
+One-time keys `OPK` are generated as `(opk_B, OPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
 Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation: `AD = Encode(IK_A) || Encode(IK_B)`.
 
 Alice MUST generate ephemeral key pairs `(ek, EK) = GENERATE_KEYPAIR(curve = curve448)`.
 
-The function Encode() transforms an X448 public key into a byte sequence. 
+The function `Encode()` transforms an Curve448 public key into a byte sequence. 
 It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
@@ -121,21 +121,19 @@ convert_mont(u):
     return P
 ```
 
-### Using X3DH in Double Ratchet
+### Use of X3DH
+This specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:
 
-According to [Signal specifications](https://signal.org/docs/specifications/doubleratchet/) 
-this specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:
-
--   The SK output from X3DH becomes the SK input of the double ratchet. See section 3.3 of [Signal Specification](https://signal.org/docs/specifications/doubleratchet/) for a detailed description.
--   The AD output from X3DH becomes the AD input of the double ratchet. See sections 3.4 and 3.5 of  [Signal Specification](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
--   Bob’s signed prekey SigSPKB from X3DH is used as Bob’s initial ratchet public key of the double ratchet.
+-   The `SK` output from X3DH becomes the `SK` input of the double ratchet. See section 3.3 of [Signal Specification](https://signal.org/docs/specifications/doubleratchet/) for a detailed description.
+-   The `AD` output from X3DH becomes the `AD` input of the double ratchet. See sections 3.4 and 3.5 of  [Signal Specification](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
+-   Bob’s signed prekey `SigSPKB` from X3DH is used as Bob’s initial ratchet public key of the double ratchet.
 
 Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.
 
 X3DH has three phases:
 
 1.  Bob publishes his identity key and prekeys to a server, a network, or dedicated smart contract.
-2.  Alice fetches a "prekey bundle" from the server, and uses it to send an initial message to Bob.
+2.  Alice fetches a prekey bundle from the server, and uses it to send an initial message to Bob.
 3.  Bob receives and processes Alice's initial message.
 
 Alice MUST perform the following computations:
@@ -151,18 +149,13 @@ Alice MUST send to Bob a message containing:
 -  An identifier to the Bob's prekeys used.
 -  A message encrypted with AES256 using AD and SK.
 
-The Key Derivation Function (KDF) ratchet and the associated encryption protocols used by the double ratchet are also included by the Noise framework: 
-SHA256 for the KDF and AES256 for AEAD encryption.
-
-Upon reception of the initial message, Bob MUST perform the same computations above with the DH() function.
-Bob derives SK and constructs AD.
-Bob decrypts the initial message encrypted with AES256.
+Upon reception of the initial message, Bob MUST perform the same computations above with the `DH()` function.
+Bob derives `SK` and constructs `AD`.
+Bob decrypts the initial message encrypted with `AES256`.
 If decryption fails, Bob MUST abort the protocol.
 
-## The Double Ratchet
-
-### Initialization
-In this stage Bob and Alice have generated key pairs and agreed a shared secret SK using X3DH.
+### Initialization of the double datchet
+In this stage Bob and Alice have generated key pairs and agreed a shared secret `SK` using X3DH.
 
 Alice calls `RatchetInitAlice()` defined below:
 ```
@@ -187,7 +180,6 @@ RatchetInitBob(SK, (ik_B,IK_B)):
     state.Ns, state.Nr, state.PN = 0
     state.MKSKIPPED = {}
 ```
-
 ### Encryption
 This function performs the symmetric key ratchet.
 
@@ -248,15 +240,20 @@ RatchetDecrypt(state, header, ciphertext, AD):
     return AES256-GCM_Dec(mk, ciphertext, AD || header)
 ```
 
-## Retrieving information
+# Information retrieval
 
-### Static data
-
+## Static data
 Some data, such as the key pairs `(ik, IK)` for Alice and Bob, MAY NOT be regenerated after a period of time. 
 Therefore the prekey bundle MAY be stored in long-term storage solutions, such as a dedicated smart contract which outputs such a key pair when receiving an Ethereum wallet address.
 
-### Ephemeral data
+Storing static data is done using a dedicated smart contract `PublicKeyStorage` which associates the Ethereum wallet address of a user with his public key.
+This mapping is done by `PublicKeyStorage` using a `publicKeys` function, or a `setPublicKey` function.
+This mapping is done if the user passed an authorization process.
+A user who wants to retrieve a public key associated with a specific wallet address calls a function `getPublicKey`.
+The user provides the wallet address as the only input parameter for `getPublicKey`.
+The function outputs the associated public key from the smart contract.
 
+## Ephemeral data
 Storing ephemeral data on Ethereum MAY be done using a combination of on-chain and off-chain solutions. 
 This approach provides an efficient solution to the problem of storing updatable data in Ethereum.
 1. Ethereum stores a reference or a hash that points to the off-chain data.
@@ -268,17 +265,8 @@ The fact of a user not updating the ephemeral information can be understood as B
 This applies to `KeyPackage`, which in the MLS specification are meant to be stored in a directory provided by the delivery service.
 If such an element does not exist, `KeyPackage` MUST be stored according to one of the two options outlined above.
 
-### Interaction with Ethereum
-
-Storing static data is done using a dedicated smart contract `PublicKeyStorage` which associates the Ethereum wallet address of a user with his public key.
-This mapping is done by `PublicKeyStorage` using a `publicKeys` function, or a `setPublicKey` function.
-This mapping is done if the user passed an authorization process.
-A user who wants to retrieve a public key associated with a specific wallet address calls a function `getPublicKey`.
-The user provides the wallet address as the only input parameter for `getPublicKey`.
-The function outputs the associated public key from the smart contract.
-
-# Extension to Group Chat
-
+# Private group messaging protocol
+# Theory
 The [Messaging Layer Security](https://datatracker.ietf.org/doc/rfc9420/)(MLS) protocol aims at providing a group of users with end-to-end encryption in an authenticated and asynchronous way. 
 The main security characteristics of the protocol are: Message confidentiality and authentication, sender authentication, 
 membership agreement, post-remove and post-update security, and forward secrecy and post-compromise security.
@@ -286,7 +274,7 @@ The MLS protocol achieves: low-complexity, group integrity, synchronization and 
 
 The extension to group chat described in forthcoming sections is built upon the [MLS](https://datatracker.ietf.org/doc/rfc9420/) protocol.
 
-## Cryptographic suites
+# Syntax
 Each MLS session uses a single cipher suite that specifies the primitives to be used in group key computations. The cipher suite MUST use:
 - `X488` as Diffie-Hellman function.
 - `SHA256` as KDF.
@@ -591,8 +579,7 @@ Padding SHOULD be used on messages with zero-valued bytes before AEAD encryption
 
 Functioning of application messages MUST follow the instructions of Section 15 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
-# Considerations with respect to decentralization
-
+## Considerations with respect to decentralization
 The MLS protocol assumes the existence on a (central, untrusted) *delivery service*, whose responsabilites include:
 
 - Acting as a directory service providing the initial keying material for clients to use.
@@ -604,14 +591,14 @@ Concerning keys, each node can generate and disseminate their encryption key amo
 
 Another important component is the *authentication service*, which is replaced with SIWE in this specification. 
 
-# Authentication process: SIWE
+# Ethereum-based authentication protocol
+## Theory
+Sign-in with Ethereum describes how Ethereum accounts authenticate with off-chain services by signing a standard message format 
+parameterized by scope, session details, and security mechanisms.
+Sign-in with Ethereum (SIWE), which is described in the [EIP 4361](https://eips.ethereum.org/EIPS/eip-4361), MUST be the authentication method required. 
 
-[EIP 4361](https://eips.ethereum.org/EIPS/eip-4361) is the authentication method required. 
-Sign-In with Ethereum describes how Ethereum accounts authenticate with off-chain services by signing a standard message format 
-parameterized by scope, session details, and security mechanisms
-
-## Message format (ABNF)
-
+## Syntax
+### Message format (ABNF)
 A SIWE Message MUST conform with the following Augmented Backus–Naur Form ([RFC 5234](https://datatracker.ietf.org/doc/html/rfc5234)) expression.
 
 ```
@@ -714,8 +701,7 @@ Its value MUST be an ISO 8601 datetime string.
 - `resources` OPTIONAL. A list of information or references to information the user wishes to have resolved as part of authentication by the relying party. 
 Every resource MUST be a RFC 3986 URI separated by "\n- " where \n is the byte 0x0a.
 
-## Signing and Verifying Messages with Ethereum Accounts
-
+### Signing and Verifying Messages with Ethereum Accounts
 - For Externally Owned Accounts, the verification method specified in [ERC-191](https://eips.ethereum.org/EIPS/eip-191) MUST be used.
 
 - For Contract Accounts,
@@ -729,8 +715,7 @@ Otherwise, the implementer MUST clearly define the verification method to attain
 They can return different results for the same inputs depending on blockchain state. 
 This can affect the security model and session validation rules.
 
-## Resolving Ethereum Name Service (ENS) Data
-
+### Resolving Ethereum Name Service (ENS) Data
 - The relying party or wallet MAY additionally perform resolution of ENS data, as this can improve the user experience by displaying human-friendly information that is related to the `address`. 
 Resolvable ENS data include:
 	- The primary ENS name.
@@ -740,27 +725,24 @@ Resolvable ENS data include:
 - If resolution of ENS data is performed, implementers SHOULD take precautions to preserve user privacy and consent. 
 Their `address` could be forwarded to third party services as part of the resolution process.
 
-## Relying Party Implementer Steps
-### Specifying the Request Origin
+### Implementer steps: specifying the request origin
 The `domain` and, if present, the `scheme`, in the SIWE Message MUST correspond to the origin from where the signing request was made. 
 
-### Verifying a signed Message
+### Implementer steps: verifying a signed message
 The SIWE Message MUST be checked for conformance to the ABNF Message Format and its signature MUST be checked as defined in Signing and Verifying Messages with Ethereum Accounts.
 
-### Creating Sessions
+### Implementer steps: creating sessions
 Sessions MUST be bound to the address and not to further resolved resources that can change.
 
-### Interpreting and resolving Resources
+### Implementer steps: interpreting and resolving resources
 Implementers SHOULD ensure that that URIs in the listed resources are human-friendly when expressed in plaintext form.
 
-## Wallet Implementer Steps
-
-### Verifying the Message Format
+### Wallet implementer steps: verifying the message format
 The full SIWE message MUST be checked for conformance to the ABNF defined in ABNF Message Format.
 
 Wallet implementers SHOULD warn users if the substring `"wants you to sign in with your Ethereum account"` appears anywhere in an [ERC-191](https://eips.ethereum.org/EIPS/eip-191) message signing request unless the message fully conforms to the format defined ABNF Message Format.
 
-### Verifying the Request Origin
+### Wallet implementer steps: verifying the request origin
 Wallet implementers MUST prevent phishing attacks by verifying the origin of the request against the `scheme` and `domain` fields in the SIWE Message. 
 
 The origin SHOULD be read from a trusted data source such as the browser window or over WalletConnect [ERC-1328](https://eips.ethereum.org/EIPS/eip-1328) sessions for comparison against the signing message contents.
@@ -794,7 +776,7 @@ In developer mode the Wallet MAY show a warning instead and continues procesing 
 - If `port` is empty, then the Wallet MAY show a warning if `origin` contains a specific port.
 - Return request origin verification completed.
 
-### Creating Sign-In with Ethereum Interfaces
+### Wallet implementer steps: creating SIWE interfaces
 Wallet implementers MUST display to the user the following fields from the SIWE Message request by default and prior to signing, if they are present: `scheme`, `domain`, `address`, `statement`, and `resources`. 
 Other present fields MUST also be made available to the user prior to signing either by default or through an extended interface.
 
@@ -803,7 +785,7 @@ Wallet implementers displaying a plaintext SIWE Message to the user SHOULD requi
 Wallet implementers MAY construct a custom SIWE user interface by parsing the ABNF terms into data elements for use in the interface. 
 The display rules above still apply to custom interfaces.
 
-### Supporting internationalization (i18n)
+### Wallet implementer steps: supporting internationalization (i18n)
 After successfully parsing the message into ABNF terms, translation MAY happen at the UX level per human language.
 
 # Privacy and Security Considerations
