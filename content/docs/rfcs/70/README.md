@@ -29,13 +29,6 @@ The specification is divided into 3 sections:
 # Private 1-to-1 communications protocol
 
 ## Theory
-The proposed protocol MUST adhere to the following requirements:
--   Alice knows Bob’s Ethereum address.
--   Bob is willing to participate in the protocol, and publishes his public key.
--   Bob’s ownership of his public key is verifiable,
--   Alice wants to send message M to Bob.
--   An eavesdropper cannot read M’s content even if she is storing it or relaying it.
-
 The specification is based on the noise protocol framework.
 It corresponds to the double ratchet scheme combined with the X3DH algorithm, which will be used to initialize the former. 
 We chose to express the protocol in noise to be be able to use the noise streamlined implementation and proving features.
@@ -47,53 +40,55 @@ This protocol will consist of several stages:
 2.  Execution of X3DH: This step will output a common secret key `SK` together with an additional data vector `AD`. Both will be used in the double ratchet algorithm initialization.
 3.  Execution of the double ratchet algorithm for forward secure, authenticated communications, using the common secret key `SK`, obtained from X3DH, as a root key.
 
+The protocol assumes the following requirements:
+-   Alice knows Bob’s Ethereum address.
+-   Bob is willing to participate in the protocol, and publishes his public key.
+-   Bob’s ownership of his public key is verifiable,
+-   Alice wants to send message M to Bob.
+-   An eavesdropper cannot read M’s content even if she is storing it or relaying it.
+
 ## Syntax
-The following suite of cryptographic function MUST be used:
-- `X488` as Diffie-Hellman function.
+### Cryptographic suite
+The following cryptographic functions MUST be used:
+- `X488` as Diffie-Hellman function `DH`.
 - `SHA256` as KDF.
 - `AES256-GCM` as AEAD algorithm.
 - `SHA512` as hash function.
 - `XEd448` for digital signatures.
 
 ### X3DH initialization
-This scheme MUST work on the curve Curve448.
+This scheme MUST work on the curve curve448.
 The X3DH algorithm corresponds to the IX pattern in Noise.
 
 Bob and Alice MUST define personal key pairs `(ik_B, IK_B)` and `(ik_A, IK_A)` respectively where:
 -   The key `ik` must be kept secret,
 -   and the key `IK` is public.
 
-Bob will not be able to use his Ethereum public key during this stage due to incompatibilities with the involved elliptic curves, therefore he MUST generate new keys. 
-Using the Noise framework notation, these key pairs MUST be generated using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
+Bob MUST generate new keys using `(ik_B, IK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
-Bob MUST also generate a public key SPK using `(spk_B, SPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
+Bob MUST also generate a public key pair `(spk_B, SPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
 `SPK` is a public key generated and stored at medium-term. 
-It is called a signed prekey because Bob MUST store a public key certificate of `SPK` using `IK`. 
-Both signed prekey and the certificate MUST undergo periodic replacement, 
-a process that entails the generation of a fresh signed prekey. 
+Both signed prekey and the certificate MUST undergo periodic replacement. 
 After replacing the key, 
 Bob keeps the old private key of `SPK` for some interval, dependant on the implementation.
 This allows Bob to decrypt delayed messages. 
-It is important that Bob MUST NOT reuse `SPK`. 
-This action is pivotal for ensuring forward secrecy, as these keys are integral for recalculating the shared secret employed in decrypting historical messages.
 
-Bob MUST sign `SPK` for authentication. Following the specification of X3DH, one will use the digital signature scheme XEd448 and define `SigSPK = XEd448(ik, Encode(SPK))`
+Bob MUST sign `SPK` for authentication: `SigSPK = XEd448(ik, Encode(SPK))`
 
 A final step requires the definition of `prekey_bundle = (IK, SPK, SigSPK, OPK_i)`
 
-One-time keys `OPK` are generated as `(opk_B, OPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
+One-time keys `OPK` MUST be generated as `(opk_B, OPK_B) = GENERATE_KEYPAIR(curve = curve448)`.
 
-Before sending an initial message to Bob, Alice MUST generate an AD vector as described in the documentation: `AD = Encode(IK_A) || Encode(IK_B)`.
+Before sending an initial message to Bob, Alice MUST generate an AD: `AD = Encode(IK_A) || Encode(IK_B)`.
 
 Alice MUST generate ephemeral key pairs `(ek, EK) = GENERATE_KEYPAIR(curve = curve448)`.
 
-The function `Encode()` transforms an Curve448 public key into a byte sequence. 
-It consists of a single-byte constant to represent the type of curve, followed by little-endian encoding of the u-coordinate. 
+The function `Encode()` transforms an curve448 public key into a byte sequence. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
 The algorithm used for digital signatures MUST be XEd448 described below. 
-One MUST consider `q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885` and Z a random 64-bytes sequence:
+One MUST consider `q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885`:
 ```
 XEd448_sign((ik, IK), message):
     Z = randbytes(64)  
@@ -122,13 +117,11 @@ convert_mont(u):
 ```
 
 ### Use of X3DH
-This specification uses the double ratchet in combination with X3DH using the following data as initialization for the former:
+This specification combines the double ratchet with X3DH using the following data as initialization for the former:
 
 -   The `SK` output from X3DH becomes the `SK` input of the double ratchet. See section 3.3 of [Signal Specification](https://signal.org/docs/specifications/doubleratchet/) for a detailed description.
 -   The `AD` output from X3DH becomes the `AD` input of the double ratchet. See sections 3.4 and 3.5 of  [Signal Specification](https://signal.org/docs/specifications/doubleratchet/)  for a detailed description.
 -   Bob’s signed prekey `SigSPKB` from X3DH is used as Bob’s initial ratchet public key of the double ratchet.
-
-Once this initialization has been set, Alice and Bob can start exchanging messages with forward secrecy and authentication.
 
 X3DH has three phases:
 
@@ -146,13 +139,14 @@ SK = KDF(dh1 || dh2 || dh3)
 Alice MUST send to Bob a message containing: 
 
 -  `IK_A, EK_A`.
--  An identifier to the Bob's prekeys used.
--  A message encrypted with AES256 using AD and SK.
+-  An identifier to Bob's prekeys used.
+-  A message encrypted with AES256-GCM using AD and SK.
 
-Upon reception of the initial message, Bob MUST perform the same computations above with the `DH()` function.
-Bob derives `SK` and constructs `AD`.
-Bob decrypts the initial message encrypted with `AES256`.
-If decryption fails, Bob MUST abort the protocol.
+Upon reception of the initial message, Bob MUST:
+1. Perform the same computations above with the `DH()` function.
+2. Derive `SK` and construct `AD`.
+3. Decrypt the initial message encrypted with `AES256-GCM`.
+4. If decryption fails, abort the protocol.
 
 ### Initialization of the double datchet
 In this stage Bob and Alice have generated key pairs and agreed a shared secret `SK` using X3DH.
@@ -168,7 +162,7 @@ RatchetInitAlice(SK, IK_B):
     state.MKSKIPPED = {}
 ```
 The HKDF function MUST be the proposal by [Krawczyk and Eronen](http://www.ietf.org/rfc/rfc5869.txt).
-In this proposal `chaining_key` and `input_key_material` MUST be replaced with `SK` and the output of `DH` (respectively).
+In this proposal `chaining_key` and `input_key_material` MUST be replaced with `SK` and the output of `DH` respectively.
 
 Similarly, Bob calls the function `RatchetInitBob()` defined below:
 ```
@@ -195,7 +189,21 @@ It outputs the previous chain length `pn`, and the message number `n`.
 The returned header object contains ratchet public key `dh` and integers `pn` and `n`.
 
 ### Decryption
-This function will decrypt incoming messages. One introduces auxiliary functions required.
+The function `RatchetDecrypt()` decrypts incoming messages:
+```
+RatchetDecrypt(state, header, ciphertext, AD):
+    plaintext = TrySkippedMessageKeys(state, header, ciphertext, AD)
+    if plaintext != None:
+        return plaintext
+    if header.dh != state.DHr:
+        SkipMessageKeys(state, header.pn)
+        DHRatchet(state, header)
+    SkipMessageKeys(state, header.n)
+    state.CKr, mk = HMAC-SHA256(state.CKr)
+    state.Nr = state.Nr + 1
+    return AES256-GCM_Dec(mk, ciphertext, AD || header)
+```
+Auxiliary functions follow:
 
 ```
 DHRatchet(state, header):
@@ -223,21 +231,6 @@ TrySkippedMessageKey(state, header, ciphertext, AD):
         delete state.MKSKIPPED[header.dh, header.n]
         return AES256-GCM_Dec(mk, ciphertext, AD || header)
     else: return None
-```
-
-The main function of this section follows:
-```
-RatchetDecrypt(state, header, ciphertext, AD):
-    plaintext = TrySkippedMessageKeys(state, header, ciphertext, AD)
-    if plaintext != None:
-        return plaintext
-    if header.dh != state.DHr:
-        SkipMessageKeys(state, header.pn)
-        DHRatchet(state, header)
-    SkipMessageKeys(state, header.n)
-    state.CKr, mk = HMAC-SHA256(state.CKr)
-    state.Nr = state.Nr + 1
-    return AES256-GCM_Dec(mk, ciphertext, AD || header)
 ```
 
 # Information retrieval
@@ -792,7 +785,8 @@ After successfully parsing the message into ABNF terms, translation MAY happen a
 - The double ratchet "recommends" using AES in CBC mode. Since encryption must be with an AEAD encryption scheme, we will use AES in GCM mode instead (supported by Noise).
 - For the information retrieval, the algorithm MUST include a access control mechanisms to restrict who can call the set and get functions.
 - One SHOULD include event logs to track changes in public keys.
-- The curve Curve448 MUST be chosen as the elliptic curve, since it offers a higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+- The curve vurve448 MUST be chosen due to its higher security level: 224-bit security instead of the 128-bit security provided by X25519.
+- It is important that Bob MUST NOT reuse `SPK`.
 
 # Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
