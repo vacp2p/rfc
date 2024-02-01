@@ -364,7 +364,7 @@ Operators can freely choose how they want to generate, and distribute the public
 
 The following concepts are introduced:
 * `private-key-topic`: A private key of 32 bytes, that allows the holder to sign messages and it's mapped to a `protected-pubsub-topic`.
-* `app-message-hash`: Application `WakuMessage` hash, calculated as `sha256(concat(pubsubTopic, payload, contentTopic))` with all elements in bytes.
+* `app-message-hash`: Application `WakuMessage` hash, calculated as `sha256(concat(pubsubTopic, payload, contentTopic, timestamp, ephemeral))` with all elements in bytes.
 * `message-signature`: ECDSA signature of `application-message-hash` using a given `private-key-topic`, 64 bytes.
 * `public-key-topic`: The equivalent public key of `private-key-topic`.
 * `protected-pubsub-topic`: Pubsub topic that only accepts messages that were signed with `private-key-topic`, where `verify(message-signature, app-message-hash, public-key-topic)` is only correct if the `message-signature` was produced by `private-key-topic`. See ECDSA signature verification algorithm.
