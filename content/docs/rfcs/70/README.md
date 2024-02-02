@@ -87,8 +87,7 @@ Alice MUST generate ephemeral key pairs `(ek, EK) = GENERATE_KEYPAIR(curve = cur
 The function `Encode()` transforms an curve448 public key into a byte sequence. 
 This is specified in the [RFC 7748](http://www.ietf.org/rfc/rfc7748.txt) on elliptic curves for security.
 
-The algorithm used for digital signatures MUST be XEd448 described below. 
-One MUST consider `q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885`:
+One MUST consider `q = 2^446 - 13818066809895115352007386748515426880336692474882178609894547503885` for digital signatures with `(XEd448_sign, XEd448_verify)`:
 ```
 XEd448_sign((ik, IK), message):
     Z = randbytes(64)  
@@ -106,7 +105,6 @@ XEd448_verify(u, message, (R || s)):
     if R == R_check: return TRUE
     return FALSE 
 ```
-The auxiliary function `convert_mont(u)` follows:
 ```
 convert_mont(u):
     u_masked = u % mod 2^448
@@ -140,7 +138,7 @@ Alice MUST send to Bob a message containing:
 
 -  `IK_A, EK_A`.
 -  An identifier to Bob's prekeys used.
--  A message encrypted with AES256-GCM using AD and SK.
+-  A message encrypted with AES256-GCM using `AD` and `SK`.
 
 Upon reception of the initial message, Bob MUST:
 1. Perform the same computations above with the `DH()` function.
