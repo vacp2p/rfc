@@ -188,6 +188,14 @@ The shard to use is the modulo of the hash by the number of shards in the networ
 - `0x8e541178adbd8126068c47be6a221d77d64837221893a8e4e53139fb802d4928` MOD `8` equals `0`
 - The shard to use has index 0
 
+### Test Vectors
+- `/toychat/2/huilong/proto` -> Shard 3
+- `/0/toychat/2/huilong/proto` -> Shard 3
+- `/1/toychat/2/huilong/proto` -> Invalid
+- `/statusim/1/community/cbor` -> Shard 4
+- `/0/statusim/1/community/cbor` -> Shard 4
+- `/1/statusim/1/community/cbor` -> Invalid
+
 ## Content Topics Format for Autosharding
 Content topics MUST follow the format in [23/WAKU2-TOPICS](https://rfc.vac.dev/spec/23/#content-topic-format).
 In addition, a generation prefix MAY be added to content topics.
