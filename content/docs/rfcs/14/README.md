@@ -20,7 +20,7 @@ contributors:
 These protocols are designed to be secure, privacy-preserving, 
 censorship-resistant and run in resource-restricted environments.
 At a high level, it implements a publish/subscribe, PubSub, 
-messaging mechianism over [libp2p](https://github.com/libp2p/specs) and adds capabilities.
+messaging mechanism over [libp2p](https://github.com/libp2p/specs) and adds capabilities.
 
 This specification describes the [10/WAKU2](/spec/10) messaging format. 
 A way to encapsulate the messages sent with specific information security goals, and 
