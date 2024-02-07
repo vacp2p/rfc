@@ -101,7 +101,7 @@ message WakuMessage {
 
 ### Waku Message Vaildation
 
-A `WakuMessage` MUST be vaildated by a validator, 
+A `WakuMessage` MUST be validated by a validator, 
 the [11/WAKU2-RELAY](/spec/11/) node.
 When a [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) receives a message,
 it SHOULD validate the `contentTopic` and `payload` attributes.
