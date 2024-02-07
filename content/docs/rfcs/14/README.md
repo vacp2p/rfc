@@ -90,7 +90,7 @@ syntax = "proto3";
 
 message WakuMessage {
   bytes payload = 1;
-  string contentTopic = 2;
+  string content_topic = 2;
   optional uint32 version = 3;
   optional sint64 timestamp = 10;
   optional bytes meta = 11;
@@ -104,12 +104,12 @@ message WakuMessage {
 A `WakuMessage` MUST be validated by a validator, 
 the [11/WAKU2-RELAY](/spec/11/) node.
 When a [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) receives a message,
-it SHOULD validate the `contentTopic` and `payload` attributes.
+it SHOULD validate the `content_topic` and `payload` attributes.
 If a message is processed as invalid,
 it MUST be dropped and not forwarded to other peers.
 
 If the message is processed as valid,
-it MUST be sent to peers who have subscribed to the `contentTopic`.
+it MUST be sent to peers who have subscribed to the `content_topic`.
 
 ### Payload Encryption
 
@@ -138,7 +138,7 @@ And, in this case, the `payload` SHOULD be interpreted as unencrypted by the Wak
 
 Whisper/[6/WAKU1](/spec/6/) envelopes are compatible with [10/WAKU2](/spec/10) messages format.
 
-* Whisper/[6/WAKU1](/spec/6/) `topic` field SHOULD be mapped to [10/WAKU2](/spec/10) message's `contentTopic` attribute.
+* Whisper/[6/WAKU1](/spec/6/) `topic` field SHOULD be mapped to [10/WAKU2](/spec/10) message's `content_topic` attribute.
 * Whisper/[6/WAKU1](/spec/6/) `data` field SHOULD be mapped to [10/WAKU2](/spec/10) message's `payload` attribute.
 
 [10/WAKU2](/spec/10) implements a pub/sub messaging pattern over libp2p.
@@ -155,7 +155,7 @@ To overcome this interoperability limitation,
 a `WakuMessage` hash MUST be computed following this schema:
 
 ```
-messageHash = sha256(concat(pubsubTopic, WakuMessage.payload, WakuMessage.contentTopic, WakuMessage.meta, WakuMessage.timestamp));
+messageHash = sha256(concat(pubsub_topic, WakuMessage.payload, WakuMessage.content_topic, WakuMessage.meta, WakuMessage.timestamp));
 
 ```
 
@@ -174,9 +174,9 @@ coupled with using a SHA-2 (256-bit) hashing algorithm.
 
 `WakuMessage` hash computation (`meta` size of 12 bytes):
 ```
-pubsubTopic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
 WakuMessage.payload = 0x010203045445535405060708
-WakuMessage.contentTopic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+WakuMessage.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 WakuMessage.meta = 0x73757065722d736563726574
 WakuMessage.timestamp = 0x175789bfa23f8400
 
@@ -185,9 +185,9 @@ messageHash = 0x64cce733fed134e83da02b02c6f689814872b1a0ac97ea56b76095c3c72bfe05
 
 `WakuMessage` hash computation (`meta` size of 64 bytes):
 ```
-pubsubTopic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
 WakuMessage.payload = 0x010203045445535405060708
-WakuMessage.contentTopic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+WakuMessage.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 WakuMessage.meta = 0x000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f
 WakuMessage.timestamp = 0x175789bfa23f8400
 
@@ -196,9 +196,9 @@ messageHash = 0x7158b6498753313368b9af8f6e0a0a05104f68f972981da42a43bc53fb0c1b27
 
 `WakuMessage` hash computation (`meta` attribute not present):
 ```
-pubsubTopic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
 WakuMessage.payload = 0x010203045445535405060708
-WakuMessage.contentTopic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+WakuMessage.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 WakuMessage.meta = <not-present>
 WakuMessage.timestamp = 0x175789bfa23f8400
 
@@ -207,9 +207,9 @@ messageHash = 0xa2554498b31f5bcdfcbf7fa58ad1c2d45f0254f3f8110a85588ec3cf10720fd8
 
 `WakuMessage` hash computation (`payload` length 0):
 ```
-pubsubTopic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
+pubsub_topic = "/waku/2/default-waku/proto" (0x2f77616b752f322f64656661756c742d77616b752f70726f746f)
 WakuMessage.payload = []
-WakuMessage.contentTopic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
+WakuMessage.content_topic = "/waku/2/default-content/proto" (0x2f77616b752f322f64656661756c742d636f6e74656e742f70726f746f)
 WakuMessage.meta = 0x73757065722d736563726574
 WakuMessage.timestamp = 0x175789bfa23f8400
 
