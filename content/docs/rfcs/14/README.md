@@ -99,7 +99,7 @@ message WakuMessage {
 
 ```
 
-### Waku Message Vaildation
+### Waku Message Validation
 
 A `WakuMessage` MUST be validated by a validator, 
 the [11/WAKU2-RELAY](/spec/11/) node.
