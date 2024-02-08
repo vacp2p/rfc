@@ -22,7 +22,7 @@ messaging mechianism over [libp2p](https://github.com/libp2p/specs) and adds cap
 These capabilities are things such as:
 - Retrieving historical messages for mostly-offline devices.
 - Adaptive nodes, allowing for heterogeneous nodes to contribute to the network.
-- Reserving bandwidth usage for resource-restriced devices.
+- Preserving bandwidth usage for resource-restriced devices.
 
 This makes Waku v2 ideal for running a p2p protocol on mobile devices and other similar restricted environments.
 
