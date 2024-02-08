@@ -74,7 +74,7 @@ If the attribute is omitted, it SHOULD be interpreted as timestamp 0.
 
 * The `ephemeral` attribute, if present,
 signifies the transient nature of the message.
-For example, an ephemeral message SHOULD not be persisted by the [64/WAKU2-NETWORK](/spec/64).
+For example, an ephemeral message SHOULD not be persisted by any [10/WAKU2](/spec/10) nodes.
 If this attribute is set to `true`,
 the message SHOULD be interpreted as ephemeral.
 If the attribute is omitted or set to `false`,
