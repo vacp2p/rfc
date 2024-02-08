@@ -10,6 +10,8 @@ contributors:
   - Aaryamann Challani <aaryamann@status.im>
 ---
 
+## Abstract
+
 The `17/WAKU2-RLN-RELAY` protocol is an extension of `11/WAKU2-RELAY` which additionally provides spam protection using [Rate Limiting Nullifiers (RLN)](/spec/32). 
 
 The security objective is to contain spam activity in a GossipSub network by enforcing a global messaging rate to all the peers.
@@ -19,7 +21,7 @@ Spammers are also financially punished and removed from the system.
 
 <!-- **Protocol identifier***: `/vac/waku/waku-rln-relay/2.0.0-alpha1` -->
 
-# Motivation
+## Motivation
 
 In open and anonymous p2p messaging networks, one big problem is spam resistance. 
 Existing solutions, such as Whisper’s proof of work are computationally expensive hence not suitable for resource-limited nodes. 
@@ -27,9 +29,7 @@ Other reputation-based approaches might not be desirable, due to issues around a
 
 We augment the [`11/WAKU2-RELAY`](/spec/11) protocol with a novel construct of [RLN](/spec/32) to enable an efficient economic spam prevention mechanism that can be run in resource-constrained environments.
 
-
-# Flow
-
+## Flow
 
 The messaging rate is defined by the `period` which indicates how many messages can be sent in a given period.
 We define an `epoch` as $\lceil$ `unix_time` / `period` $\rceil$. For example, if `unix_time` is `1644810116` and we set `period` to `30`, then `epoch` is  $\lceil$`(unix_time/period)`$\rceil$ `= 54827003`.
@@ -38,9 +38,8 @@ See see section [Recommended System Parameters](#recommended-system-parameters) 
 Peers subscribed to a spam-protected `pubsubTopic` are only allowed to send one message per `epoch`.
 The higher-level layers adopting `17/WAKU2-RLN-RELAY` MAY choose to enforce the messaging rate for  `WakuMessages` with a specific `contentTopic` published on a `pubsubTopic`.
 
-
-
 ## Setup and Registration
+
 Peers subscribed to a specific `pubsubTopic` form a [RLN group](/spec/32).
 <!-- link to the RLN group definition in the RLN RFC -->
 Peers MUST be registered to the RLN group to be able to publish messages.
@@ -59,7 +58,6 @@ An overview of registration is illustrated in Figure 1.
 
 ![Figure 1: Registration.](../../../../rfcs/17/rln-relay.png)
 
-
 ## Publishing
 
 To publish at a given `epoch`, the publishing peer proceeds based on the regular [`11/WAKU2-RELAY`](/spec/11) protocol.  
@@ -76,7 +74,6 @@ The `nullifier` is a deterministic value derived from `sk` and `epoch` therefore
 The `share_x` and `share_y` can be seen as partial disclosure of peer's `sk` for the intended `epoch`.
 They are derived deterministically from peer's `sk` and current `epoch` using [Shamir secret sharing scheme](/spec/32). 
 If a peer discloses more than one such pair (`share_x`, `share_y`) for the same `epoch`, it would allow full disclosure of its  `sk` and hence get access to its staked fund in the membership contract.
-
 
 The `proof` field is a zero-knowledge proof signifying that: 
 1. The message owner is the current member of the group i.e., her/his identity commitment key `pk` is part of the membership group Merkle tree with the root `merkle_root`.
@@ -144,14 +141,11 @@ The `sk` then can be used to delete the spammer from the group and withdraw a po
 
 An overview of the routing procedure and slashing is provided in Figure 2.
 
-
-<!-- TODO: may consider [validator functions](https://github.com/libp2p/specs/tree/master/pubsub#topic-validation) or [extended validators](https://github.com/libp2p/specs/blob/master/pubsub/gossipsub/gossipsub-v1.1.md#extended-validators) for the spam detection -->
-
 ![Figure 2: Publishing, Routing and Slashing workflow.](../../../../rfcs/17/rln-message-verification.png)
 
 -------
 
-# Payloads
+## Payloads
 
 Payloads are protobuf messages implemented using [protocol buffers v3](https://developers.google.com/protocol-buffers/).
 Nodes MAY extend the  [14/WAKU2-MESSAGE](/spec/14) with a `rate_limit_proof` field to indicate that their message is not spam.
@@ -194,7 +188,7 @@ Below is the description of the fields of `RateLimitProof` and their types.
 | `nullifier`  | array of 32 bytes | internal nullifier derived from `epoch` and peer's `sk` as explained in [RLN construct](/spec/32)|
 
 
-# Recommended System Parameters
+### Recommended System Parameters
 The system parameters are summarized in the following table, and the recommended values for a subset of them are presented next.
 
 | Parameter | Description |
@@ -205,14 +199,14 @@ The system parameters are summarized in the following table, and the recommended
 | `max_epoch_gap` | the maximum allowed gap between the `epoch` of a routing peer and the incoming message |
 | `acceptable_root_window_size` | The maximum number of past Merkle roots to store |
 
-## Epoch Length
+#### Epoch Length
 A sensible value for the `period` depends on the application for which the spam protection is going to be used.
 For example, while the `period` of `1` second i.e., messaging rate of `1` per second, might be acceptable for a chat application, might be too low for communication among Ethereum network validators.
 One should look at the desired throughput of the application to decide on a proper `period` value.
 In the proof of concept implementation of `17/WAKU2-RLN-RELAY` protocol which is available in [nim-waku](https://github.com/status-im/nim-waku), the `period` is set to `1` second.
 Nevertheless, this value is also subject to change depending on user experience.
 
-## Maximum Epoch Gap
+#### Maximum Epoch Gap
 We discussed in the [Routing](#routing) section that the gap between the epoch observed by the routing peer and the one attached to the incoming message should not exceed a threshold denoted by  `max_epoch_gap` .
 The value of  `max_epoch_gap`  can be measured based on the following factors.
 - Network transmission delay `Network_Delay`: the maximum time that it takes for a message to be fully disseminated in the GossipSub network.
@@ -235,11 +229,11 @@ The `acceptable_root_window_size` should indicate how many blocks may have been 
 This formula represents a lower bound of the number of acceptable roots. 
 
 
-# Copyright
+## Copyright
 
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
 
-# References
+## References
 
 1. [RLN documentation](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view)
 2. [Public inputs to the RLN circuit](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?view#Public-Inputs)
