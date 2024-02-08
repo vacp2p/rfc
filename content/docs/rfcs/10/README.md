@@ -348,7 +348,7 @@ due to the data fields of pubsub messages that count as PII for the publisher mu
 **Subscriber-Topic Unlinkability**:
 This feature stands for the unlinkability of the subscriber to its subscribed topics in the [11/WAKU2-RELAY](/spec/11) protocol.
 The [Subscriber-Topic Unlinkability](/spec/11/#security-analysis) is achieved through the utilization of a single PubSub topic.
-As such, subscribers are not re-identifiable from their subscribed topic IDs(pubsub topic) as the entire network is linked to the same topic ID(pubsub topic).
+As such, subscribers are not re-identifiable from their subscribed topic IDs (`pubsub_topic`) as the entire network is linked to the same topic ID (`pubsub_topic`).
 This level of unlinkability / anonymity is known as [k-anonymity](https://www.privitar.com/blog/k-anonymity-an-introduction/),
 where k is proportional to the system size (number of subscribers).
 Note that there is no hard limit on the number of the pubsub topics, however, 
@@ -377,7 +377,7 @@ The anonymity/unlinkability is not guaranteed in the protocols like `13/WAKU2-ST
 `12/WAKU2-FILTER` where peers need to have direct connections to benefit from the designated service.
 This is because during the direct connections peers utilize `PeerID` to identify each other,
 therefore the service obtained in the protocol is linkable to the beneficiary's `PeerID` (which counts as PII).
-For `13/WAKU2-STORE`, the queried node would be able to link the querying node's `PeerID` to its queried topics(`contectTopic`).
+For `13/WAKU2-STORE`, the queried node would be able to link the querying node's `PeerID` to its queried topics(`contentTopic`).
 Likewise, in the `12/WAKU2-FILTER`, a full node can link the light node's `PeerID`s to its content filter.
 
 ### Appendix C: Implementation Notes
@@ -416,7 +416,7 @@ This includes Waku v1 specifications, as they are used for bridging between the 
 
 ### Recommendations for clients
 
-To implement a minimal Waku v2 client, the following subset of protocols is RECOMMENDED to implement in the following order:
+To implement a minimal Waku v2 client, the following subset of protocols is RECOMMENDED to be implemented in the following order:
 
 - [10/WAKU2](/spec/10) - this specification
 - [11/WAKU2-RELAY](/spec/11) - for basic operation
