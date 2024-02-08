@@ -80,7 +80,8 @@ For more on the concept of adaptive nodes and what this means in practice,
 please see the [30/ADAPTIVE-NODES](/spec/30) spec.
 
 ## Network Interaction Domains
-The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
+The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, 
+“MAY”, and “OPTIONAL” in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 While Waku v2 is best thought of as a single cohesive thing, there are three network interaction domains:
 
@@ -186,7 +187,8 @@ A node MAY support unsecure websockets if required by the application or running
 
 Waku v2 can retrieve a list of nodes to connect to using DNS-based discovery as per [EIP-1459](https://eips.ethereum.org/EIPS/eip-1459).
 While this is a useful way of bootstrapping connection to a set of peers,
-it MAY be used in conjunction with an [ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery) procedure to find still other nodes to connect to,
+it MAY be used in conjunction with an 
+[ambient peer discovery](https://docs.libp2p.io/concepts/publish-subscribe/#discovery) procedure to find still other nodes to connect to,
 such as [Node Discovery v5](https://github.com/ethereum/devp2p/blob/8fd5f7e1c1ec496a9d8dc1640a8548b8a8b5986b/discv5/discv5.md).
 More ambient peer discovery methods are being tested for Waku v2,
 and will be specified for wider adoption.
@@ -216,8 +218,8 @@ such as low bandwidth or being mostly offline.
 This is used to fetch historical messages for mostly offline devices.
 See [13/WAKU2-STORE](/spec/13) specifiction for more details.
 
-An experimental fault-tolerant addition to the store protocol, as described in [21/WAKU2-FT-STORE](/spec/21),
-relaxes the high availability requirement.
+An experimental fault-tolerant addition to the store protocol, 
+as described in [21/WAKU2-FT-STORE](/spec/21), relaxes the high availability requirement.
 
 #### Content filtering
 
@@ -236,8 +238,8 @@ See [19/WAKU2-LIGHTPUSH](/spec/19) specification for more details.
 
 #### Other protocols
 
-The above is a non-exhaustive list,
-and due to the modular design of Waku v2 there may be other protocols here that provide a useful service to the Waku network.
+The above is a non-exhaustive list, and 
+due to the modular design of Waku v2 there may be other protocols here that provide a useful service to the Waku network.
 
 ### Overview of protocol interaction
 
