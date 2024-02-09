@@ -72,7 +72,7 @@ Information about the keystore SHOULD be stored in the metadata.
 The declaration of `application`, `version`, and `appIdentifier` COULD occur in the metadata.
 
 - `application` : current application, MUST be a string
-- `version` : application version, MUST be a string
+- `version` : application version, MUST be a string, SHOULD follow semantic versioning
 - `appIdentifier`: application identifier, MUST be a string
 
 ## Credentials:
