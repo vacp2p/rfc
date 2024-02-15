@@ -87,7 +87,7 @@ While Waku v2 is best thought of as a single cohesive thing, there are three net
 
 (a) gossip domain
 (b) discovery domain
-(c) request/reply domain
+(c) request/response domain
 
 ### Protocols and identifiers
 
@@ -135,7 +135,8 @@ See [23/WAKU2-TOPICS](/spec/23) for more information about the RECOMMENDED topic
 
 ### Direct use of libp2p protocols
 
-In addition to `/vac/waku/*` protocols, Waku v2 MAY directly use the following libp2p protocols:
+In addition to `/vac/waku/*` protocols, 
+Waku v2 MAY directly use the following libp2p protocols:
 
 * [libp2p ping protocol](https://docs.libp2p.io/concepts/protocols/#ping) with protocol id
 
@@ -143,7 +144,7 @@ In addition to `/vac/waku/*` protocols, Waku v2 MAY directly use the following l
 /ipfs/ping/1.0.0
 ```
 
-For liveness checks between peers, or to keep peer-to-peer connections alive.
+for liveness checks between peers, or to keep peer-to-peer connections alive.
 
 * [libp2p identity and identity/push](https://docs.libp2p.io/concepts/protocols/#identify) with protocol IDs
 
@@ -158,9 +159,9 @@ and
 /ipfs/id/push/1.0.0
 ```
 
-Respectively, as basic means for capability discovery.
+respectively, as basic means for capability discovery.
 These protocols are anyway used by the libp2p connection establishment layer Waku v2 is built on.
-We plan to introduce a new Vac capability discovery protocol with better anonymity properties and 
+We plan to introduce a new Waku capability discovery protocol with better anonymity properties and 
 more functionality.
 
 ### Transports
@@ -204,10 +205,10 @@ These fields MUST be used under certain conditions, as set out in the specificat
 Both EIP-1459 DNS-based discovery and Node Discovery v5 operates on ENR,
 and it's reasonable to expect even wider utility for ENR in Waku v2 networks in future.
 
-### Request/Reply domain
+### Request/Response domain
 
 In addition to the Gossip domain,
-Waku v2 provides a set of Request/Reply protocols.
+Waku v2 provides a set of Request/Response protocols.
 They are primarily used in order to get Waku v2 to run in resource restricted environments,
 such as low bandwidth or being mostly offline.
 
