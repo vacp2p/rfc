@@ -16,7 +16,7 @@ This specification explains the `13/WAKU2-STORE` protocol which enables querying
 stored by other nodes. 
 It also supports pagination for more efficient querying of historical messages. 
 
-**Protocol identifier***: `/vac/waku/store/3.0.0`
+**Protocol identifier***: `/vac/waku/store-query/3.0.0`
 
 ## Terminology
 The term PII, Personally Identifiable Information, 
@@ -65,7 +65,7 @@ In specific, the communication channels are assumed to be secure.
 ```protobuf
 syntax = "proto3";
 
-// Protocol identifier: /vac/waku/store/3.0.0
+// Protocol identifier: /vac/waku/store-query/3.0.0
 package waku.store.v3;
 
 import "waku/message/v1/message.proto";
@@ -75,9 +75,9 @@ message WakuMessageKeyValue {
   optional waku.message.v1.WakuMessage message = 2; // Full message content as value
 }
 
-message StoreRequest {
+message StoreQueryRequest {
   string request_id = 1;
-  bool return_values = 2; // Response should include full message content
+  bool include_data = 2; // Response should include full message content
   
   // Filter criteria for content-filtered queries
   optional string pubsub_topic = 10;
@@ -94,7 +94,7 @@ message StoreRequest {
   optional uint64 pagination_limit = 53;
 }
 
-message StoreResponse {
+message StoreQueryResponse {
   string request_id = 1;
 
   optional uint32 status_code = 10;
@@ -105,15 +105,15 @@ message StoreResponse {
   optional bytes pagination_cursor = 51;
 }
 ```
-## General store concepts
+## General store query concepts
 
 ### Waku message key-value pairs
 
-The store protocol operates as a query protocol for a key-value store of historical Waku messages,
+The store query protocol operates as a query protocol for a key-value store of historical Waku messages,
 with each entry having a [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/) as value
 and [deterministic message hash](https://rfc.vac.dev/spec/14/#deterministic-message-hashing) as key.
 The store can be queried to return either a set of keys or a set of key-value pairs.
-Within the store protocol, Waku message keys and values MUST be represented in a `WakuMessageKeyValue` message.
+Within the store query protocol, Waku message keys and values MUST be represented in a `WakuMessageKeyValue` message.
 This message MUST contain the deterministic `message_hash` as key.
 It MAY contain the full `WakuMessage` as value in the `message` field,
 depending on the use case as set out below.
@@ -122,7 +122,7 @@ depending on the use case as set out below.
 
 In order for a Waku message to be eligible for storage:
 - it MUST be a _valid_ [14/WAKU2-MESSAGE](https://rfc.vac.dev/spec/14/).
-- the `timestamp` field MUST be populated with the Unix epoch time at which the message was generated.
+- the `timestamp` field MUST be populated with the Unix epoch time at which the message was generated in nanoseconds.
 If at the time of storage the `timestamp` deviates by more than 20 seconds
 either into the past or the future when compared to the store node’s internal clock,
 the store node MAY reject the message.
@@ -139,49 +139,50 @@ whereas _"backward"_ indicates traversing the entries in descending order.
 
 ### Pagination
 
-If a large number of entries in the store service node match the query criteria provided in a `StoreRequest`,
+If a large number of entries in the store service node match the query criteria provided in a `StoreQueryRequest`,
 the client MAY make use of pagination
-in a chain of store request and response transactions
+in a chain of store query request and response transactions
 to retrieve the full response in smaller batches termed _"pages"_.
 Pagination can be performed either in [a _forward_ or _backward_ direction](#waku-message-sorting).
 
-A store client MAY indicate the maximum number of matching entries it wants in the `StoreResponse`,
+A store query client MAY indicate the maximum number of matching entries it wants in the `StoreQueryResponse`,
 by setting the page size limit in the `pagination_limit` field.
 Note that a store service node MAY enforce its own limit
 if the `pagination_limit` is unset
 or larger than the service node's internal page size limit.
 
-A `StoreResponse` with a populated `pagination_cursor` indicates that more stored entries match the query than included in the response.
+A `StoreQueryResponse` with a populated `pagination_cursor` indicates that more stored entries match the query than included in the response.
 
-A `StoreResponse` without a populated `pagination_cursor` indicates that
+A `StoreQueryResponse` without a populated `pagination_cursor` indicates that
 there are no more matching entries in the store.
 
 The client MAY request the next page of entries from the store service node
-by populating a subsequent `StoreRequest` with the `pagination_cursor` received in the `StoreResponse`. All other fields and query criteria MUST be the same as in the preceding `StoreRequest`.
+by populating a subsequent `StoreQueryRequest` with the `pagination_cursor` received in the `StoreQueryResponse`.
+All other fields and query criteria MUST be the same as in the preceding `StoreQueryRequest`.
 
-A `StoreRequest` without a populated `pagination_cursor` indicates that
+A `StoreQueryRequest` without a populated `pagination_cursor` indicates that
 the client wants to retrieve the "first page" of the stored entries matching the query.
 
-## Store Request
+## Store Query Request
 
-A client node MUST send all historical message queries within a `StoreRequest` message.
+A client node MUST send all historical message queries within a `StoreQueryRequest` message.
 This request MUST contain a `request_id`.
 The `request_id` MUST be a uniquely generated string.
 
-If the store client requires the store service node to include Waku message values in the query response,
-it MUST set `return_values` to `true`.
-If the store client requires the store service node to return only message hash keys in the query response,
-it SHOULD set `return_values` to `false`.
-By default, therefore, the store service node assumes `return_values` to be `false`.
+If the store query client requires the store service node to include Waku message values in the query response,
+it MUST set `include_data` to `true`.
+If the store query client requires the store service node to return only message hash keys in the query response,
+it SHOULD set `include_data` to `false`.
+By default, therefore, the store service node assumes `include_data` to be `false`.
 
-A store client MAY include query filter criteria in the `StoreRequest`.
+A store query client MAY include query filter criteria in the `StoreQueryRequest`.
 There are two types of filter use cases:
 1. Content filtered queries and
 2. Message hash lookup queries
 
 ### Content filtered queries
 
-A store client MAY request the store service node to filter historical entries by a content filter.
+A store query client MAY request the store service node to filter historical entries by a content filter.
 Such a client MAY create a filter on content topic, on time range or on both.
 
 To filter on content topic, the client MUST populate _both_ the `pubsub_topic` _and_ `content_topics` field.
@@ -190,6 +191,7 @@ Both fields MUST either be set or unset.
 A mixed content topic filter with just one of either `pubsub_topic` or `content_topics` set, SHOULD be regarded as an invalid request.
 
 To filter on time range, the client MUST set `time_start`, `time_end` or both.
+Each `time_` field should contain a Unix epoch timestamp in nanoseconds.
 An unset `time_start` SHOULD be interpreted as "from the oldest stored entry".
 An unset `time_end` SHOULD be interpreted as "up to the youngest stored entry".
 
@@ -199,10 +201,10 @@ the client MUST NOT set the `message_hashes` field.
 
 ### Message hash lookup queries
 
-A store client MAY request the store service node to filter historical entries by one or more matching message hash keys.
+A store query client MAY request the store service node to filter historical entries by one or more matching message hash keys.
 This type of query acts as a "lookup" against a message hash key or set of keys already known to the client.
 
-In order to perform a lookup query, the store client MUST populate the `message_hashes` field with the list of message hash keys it wants to lookup in the store service node.
+In order to perform a lookup query, the store query client MUST populate the `message_hashes` field with the list of message hash keys it wants to lookup in the store service node.
 
 If the `message_hashes` field is set,
 the client MUST NOT set any of the content filter fields,
@@ -213,32 +215,32 @@ namely `pubsub_topic`, `content_topic`, `time_start`, or `time_end`.
 A presence query is a special type of lookup query that allows a client to check for the presence of one or more messages in the store service node,
 without retrieving the full contents (values) of the messages.
 This can, for example, be used as part of a reliability mechanism,
-whereby store clients verify that previously published messages have been successfully stored.
+whereby store query clients verify that previously published messages have been successfully stored.
 
 In order to perform a presence query,
-the store client MUST populate the `message_hashes` field in the `StoreRequest` with the list of message hashes
+the store query client MUST populate the `message_hashes` field in the `StoreQueryRequest` with the list of message hashes
 for which it wants to verify presence in the store service node.
-The `return_values` property MUST be set to `false`.
-The client SHOULD interpret every `message_hash` returned in the `messages` field of the `StoreResponse` as present in the store.
-The client SHOULD assume that all other message hashes included in the original `StoreRequest` but not in the `StoreResponse` is not present in the store.
+The `include_data` property MUST be set to `false`.
+The client SHOULD interpret every `message_hash` returned in the `messages` field of the `StoreQueryResponse` as present in the store.
+The client SHOULD assume that all other message hashes included in the original `StoreQueryRequest` but not in the `StoreQueryResponse` is not present in the store.
 
 ### Pagination info
 
-The store client MAY include a message hash as `pagination_cursor`,
+The store query client MAY include a message hash as `pagination_cursor`,
 to indicate at which key-value entry a store service node SHOULD start the query.
 The `pagination_cursor` is treated as exclusive
-and the corresponding entry will not be included in subsequent store responses.
+and the corresponding entry will not be included in subsequent store query responses.
 
 For forward queries, only messages following (see [sorting](#waku-message-sorting)) the one indexed at `pagination_cursor` will be returned.
 For backward queries, only messages preceding (see [sorting](#waku-message-sorting)) the one indexed at `pagination_cursor` will be returned.
 
-If the store client requires the store service node to perform a forward query,
+If the store query client requires the store service node to perform a forward query,
 it MUST set `pagination_forward` to `true`.
-If the store client requires the store service node to perform a backward query,
+If the store query client requires the store service node to perform a backward query,
 it SHOULD set `pagination_forward` to `false`.
 By default, therefore, the store service node assumes pagination to be backward.
 
-A store client MAY indicate the maximum number of matching entries it wants in the `StoreResponse`,
+A store query client MAY indicate the maximum number of matching entries it wants in the `StoreQueryResponse`,
 by setting the page size limit in the `pagination_limit` field.
 Note that a store service node MAY enforce its own limit
 if the `pagination_limit` is unset
@@ -246,10 +248,10 @@ or larger than the service node's internal page size limit.
 
 See [pagination](#pagination) for more on how the pagination info is used in store transactions.
 
-## Store Response
+## Store Query Response
 
-In response to any `StoreRequest`,
-a store service node SHOULD respond with a `StoreResponse` with a `requestId` matching that of the request.
+In response to any `StoreQueryRequest`,
+a store service node SHOULD respond with a `StoreQueryResponse` with a `requestId` matching that of the request.
 This response MUST contain a `status_code` indicating if the request was successful or not.
 Successful status codes are in the `2xx` range.
 Client nodes SHOULD consider all other status codes as error codes and assume that the requested operation had failed.
@@ -257,7 +259,7 @@ In addition, the store service node MAY choose to provide a more detailed status
 
 ### Filter matching
 
-For [content filtered queries](#content-filtered-queries), an entry in the store service node matches the filter criteria in a `StoreRequest` if each of the following conditions are met:
+For [content filtered queries](#content-filtered-queries), an entry in the store service node matches the filter criteria in a `StoreQueryRequest` if each of the following conditions are met:
 - its `content_topic` is in the request `content_topics` set
 and it was published on a matching `pubsub_topic` OR the request `content_topics` and `pubsub_topic` fields are unset
 - its `timestamp` is _larger or equal_ than the request `start_time` OR the request `start_time` is unset
@@ -268,7 +270,7 @@ Note that for content filtered queries, `start_time` is treated as _inclusive_ a
 For [message hash lookup queries](#message-hash-lookup-queries), an entry in the store service node matches the filter criteria if its `message_hash` is in the request `message_hashes` set.
 
 The store service node SHOULD respond with an error code and discard the request
-if the store request contains both content filter criteria and message hashes.
+if the store query request contains both content filter criteria and message hashes.
 
 ### Populating response messages
 
@@ -278,19 +280,19 @@ Regardless of whether the response is to a _forward_ or _backward_ query,
 the `messages`field in the response MUST be ordered in a forward direction
 according to the [message sorting rules](#waku-message-sorting).
 
-If the corresponding `StoreRequest` has `return_values` set to true,
+If the corresponding `StoreQueryRequest` has `include_data` set to true,
 the service node SHOULD populate both the `message_hash` and `message` for each entry in the response.
 In all other cases, the store service node SHOULD populate only the `message_hash` field for each entry in the response.
 
 ### Paginating the response
 
-The response SHOULD NOT contain more `messages` than the `pagination_limit` provided in the corresponding `StoreRequest`.
+The response SHOULD NOT contain more `messages` than the `pagination_limit` provided in the corresponding `StoreQueryRequest`.
 It is RECOMMENDED that the store node defines its own maximum page size internally.
 If the `pagination_limit` in the request is unset,
 or exceeds this internal maximum page size,
 the store service node SHOULD ignore the `pagination_limit` field and apply its own internal maximum page size.
 
-In response to a _forward_ `StoreRequest`:
+In response to a _forward_ `StoreQueryRequest`:
 - if the `pagination_cursor` is set,
   the store service node SHOULD populate the `messages` field
   with matching entries following the `pagination_cursor` (exclusive).
@@ -299,10 +301,10 @@ In response to a _forward_ `StoreRequest`:
   with matching entries from the first entry in the store.
 - if there are still more matching entries in the store
   after the maximum page size is reached while populating the response,
-  the store service node SHOULD populate the `pagination_cursor` in the `StoreResponse`
+  the store service node SHOULD populate the `pagination_cursor` in the `StoreQueryResponse`
   with the message hash key of the _last_ entry _included_ in the response.
 
-In response to a _backward_ `StoreRequest`:
+In response to a _backward_ `StoreQueryRequest`:
 - if the `pagination_cursor` is set,
   the store service node SHOULD populate the `messages` field
   with matching entries preceding the `pagination_cursor` (exclusive).
@@ -311,7 +313,7 @@ In response to a _backward_ `StoreRequest`:
   with matching entries from the last entry in the store.
 - if there are still more matching entries in the store
   after the maximum page size is reached while populating the response,
-  the store service node SHOULD populate the `pagination_cursor` in the `StoreResponse`
+  the store service node SHOULD populate the `pagination_cursor` in the `StoreQueryResponse`
   with the message hash key of the _first_ entry _included_ in the response.
 
 # Security Consideration
