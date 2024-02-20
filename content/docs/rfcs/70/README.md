@@ -785,6 +785,7 @@ After successfully parsing the message into ABNF terms, translation MAY happen a
 - One SHOULD include event logs to track changes in public keys.
 - The curve vurve448 MUST be chosen due to its higher security level: 224-bit security instead of the 128-bit security provided by X25519.
 - It is important that Bob MUST NOT reuse `SPK`.
+- The MLS protocol requires the DS to reliably deliver messages. A corrupted DS can permanently block messages to and from a group member, and this is something that may not be detected by other members of the group. In order to reduce the impact of corrupted delivery services, one can embed an identification number, such as a counter, with each message before encryption can help the receiver detect lost messages. 
 
 # Copyright
 Copyright and related rights waived via [CC0](https://creativecommons.org/publicdomain/zero/1.0/).
