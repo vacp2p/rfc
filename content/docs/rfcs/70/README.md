@@ -290,13 +290,15 @@ Handshake and application messages use a common framing structure providing encr
 
 The structure is:
 - `PublicMessage`: represents a message that is only signed, and not encrypted.
-The definition of `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+The definition and the encoding/decoding of a `PublicMessage` MUST follow the specification in section 6.2 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 - `PrivateMessage`: represents a signed and encrypted message, with protections for both the content of the message and related metadata.
-The definition, and the encoding/decoding of `PrivateMessage` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
+The definition, and the encoding/decoding of a `PrivateMessage` MUST follow the specification in section 6.3 of [RFC9420](https://datatracker.ietf.org/doc/rfc9420/).
 
 Applications MUST use `PrivateMessage` to encrypt application messages. 
 
 Applications SHOULD use `PrivateMessage` to encode handshake messages.
+
+`PublicMessage` and `PrivateMessage` MUST include a `counter` as a method of detection of lost messages. This `counter` MUST be included as a part of the message contents before encryption for `PrivateMessage`.
 
 ## Nodes contents
 The nodes of a ratchet tree contain several types of data:
