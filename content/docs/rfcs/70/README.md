@@ -298,6 +298,10 @@ Applications MUST use `PrivateMessage` to encrypt application messages.
 
 Applications SHOULD use `PrivateMessage` to encode handshake messages.
 
+Each encrypted MLS message carries a "generation" number which is a per-sender incrementing counter. 
+If a group member observes a gap in the generation sequence for a sender, 
+then they know that they have missed a message from that sender.
+
 ## Nodes contents
 The nodes of a ratchet tree contain several types of data:
 
