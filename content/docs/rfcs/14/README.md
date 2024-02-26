@@ -99,18 +99,6 @@ message WakuMessage {
 
 ```
 
-### Waku Message Validation
-
-A `WakuMessage` MUST be validated by a validator, 
-the [11/WAKU2-RELAY](/spec/11/) node.
-When a [11/WAKU2-RELAY](https://rfc.vac.dev/spec/11/) receives a message,
-it SHOULD validate the `content_topic` and `payload` attributes.
-If a message is processed as invalid,
-it MUST be dropped and not forwarded to other peers.
-
-If the message is processed as valid,
-it MUST be sent to peers who have subscribed to the `content_topic`.
-
 ### Payload Encryption
 
 The `WakuMessage` payload MAY be encrypted.
