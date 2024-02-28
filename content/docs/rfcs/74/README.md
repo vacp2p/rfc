@@ -4,7 +4,6 @@ title: 74/RLN-STEALTH-COMMITMENTS
 name: RLN Stealth Commitment Usage
 status: raw
 category: Standards Track
-description:
 editor: Aaryamann Challani <aaryamann@status.im>
 contributors:
 - Jimmy Debe <jimmy@status.im>
@@ -62,9 +61,10 @@ message Request {
 ```
 ### Generate Stealth Commitment
 
-The application or user SHOULD generate a stealth commitment after a request to do so is received.
+The application or user SHOULD generate a `stealth_commitment` after a request to do so is received.
 This commitment MAY be inserted into the corresponding application membership set.
-Once the membership set is updated, the reciver SHOULD exchange the following as a response to the request:
+
+Once the membership set is updated, the receiver SHOULD exchange the following as a response to the request:
 
 ```protobuf
 
