@@ -34,7 +34,7 @@ The [32/RLN-V1](/spec/32) protocol,
 consists of a smart contract that stores a `idenitityCommitment` in a membership set.
 In order for a user to join the membership set,
 the user is required to make a transaction on the blockchain.
-A set of public keys is used to compute a stealth address,
+A set of public keys is used to compute a stealth address for a user,
 as described in [ERC-5564](https://eips.ethereum.org/EIPS/eip-5564).
 This specification is an implementation of the [ERC-5564](https://eips.ethereum.org/EIPS/eip-5564) scheme, 
 tailored to the curve that is used in the [32/RLN-V1](/spec/32) protocol.
@@ -45,9 +45,45 @@ This can be used in a couple of ways in applications:
 
 This is useful when the prospective user does not have access to funds on the network that [32/RLN-V1](/spec/32) is deployed on.
 
+## Wire Format Specification
+
+The two parties, the requester and the receiver, MUST exchange the following information:
+
+```protobuf
+
+message Request {
+  // The spending public key of the requester
+  bytes spending_public_key = 1;
+
+  // The viewing public key of the requester
+  bytes viewing_public_key = 2;
+}
+
+```
 ### Generate Stealth Commitment
+
 The application or user SHOULD generate a stealth commitment after a request to do so is received.
 This commitment MAY be inserted into the corresponding application membership set.
+Once the membership set is updated, the reciver SHOULD exchange the following as a response to the request:
+
+```protobuf
+
+message Response {
+  // If the request was accepted
+  bool accepted = 1;
+
+  // The private key used to see if transaction was made
+  bytes view_tag = 2;
+
+  // The stealth commitment for the requester
+  bytes stealth_commitment = 3;
+
+  // The ephemeral public key used to generate the commitment
+  bytes ephemeral_public_key = 4;
+
+}
+
+```
 
 - The receiver MUST generate an `ephemeral_public_key`, `view_tag` and `stealth_commitment`.
 This will be used to check the stealth commitment used to register to the membership set,
@@ -68,5 +104,6 @@ Copyright and related rights waived via [CC0](https://creativecommons.org/public
 
 ## References
 
+- [10/Waku2](/spec/10)
 - [32/RLN-V1](/spec/32)
 - [ERC-5564](https://eips.ethereum.org/EIPS/eip-5564)
