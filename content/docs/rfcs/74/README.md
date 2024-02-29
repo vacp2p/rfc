@@ -33,7 +33,7 @@ The [32/RLN-V1](/spec/32) protocol,
 consists of a smart contract that stores a `idenitityCommitment` in a membership set.
 In order for a user to join the membership set,
 the user is required to make a transaction on the blockchain.
-A set of public keys is used to compute a stealth address for a user,
+A set of public keys is used to compute a stealth commitment for a user,
 as described in [ERC-5564](https://eips.ethereum.org/EIPS/eip-5564).
 This specification is an implementation of the [ERC-5564](https://eips.ethereum.org/EIPS/eip-5564) scheme, 
 tailored to the curve that is used in the [32/RLN-V1](/spec/32) protocol.
@@ -69,10 +69,8 @@ Once the membership set is updated, the receiver SHOULD exchange the following a
 ```protobuf
 
 message Response {
-  // If the request was accepted
-  bool accepted = 1;
-
-  // The private key used to see if transaction was made
+  
+  // The used to check if the stealth_commitment belongs to the requester
   bytes view_tag = 2;
 
   // The stealth commitment for the requester
