@@ -3,11 +3,10 @@ name: markdown-linting
 on:
   push:
     branches: 
-      - ${{ github.ref }}
+      - '**'
   pull_request:
-    types: [opened, synchronize]
     branches: 
-      - ${{ github.head_ref }}
+      - '**'
 
 jobs:
   lint:
