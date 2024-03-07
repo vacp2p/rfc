@@ -1,0 +1,18 @@
+name: markdown-linting
+
+on:
+  push:
+    branches: 
+      - ${{ github.ref }}
+  pull_request:
+    branches: 
+      - ${{ github.head_ref }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DavidAnson/markdownlint-cli2-action@v15
+    with:
+        globs: '**/*.md'
