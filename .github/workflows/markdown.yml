@@ -5,6 +5,7 @@ on:
     branches: 
       - ${{ github.ref }}
   pull_request:
+    types: [opened, synchronize]
     branches: 
       - ${{ github.head_ref }}
 
