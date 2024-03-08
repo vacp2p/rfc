@@ -13,8 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Installing markdownlint-cli
-        run: npm install -g markdownlint-cli
-      - name: markdown linting
-        run: markdownlint --reporter github-pr-check '**/*.md'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      - name: Markdown Linter
+        uses: DavidAnson/markdownlint-cli2-action@v15
+      - name: Lint Markdown files
+        run: markdownlint --reporter github-pr-check ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
