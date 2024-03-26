@@ -11,7 +11,7 @@ contributors:
   - Aaryamann Challani <aaryamann@status.im>
 ---
 
-This specification explains the Waku `13/WAKU2-STORE` protocol which enables querying of messages received through relay protocol and stored by other nodes. 
+This specification explains the Waku `13/WAKU2-STORE` protocol which enables querying of messages received through relay protocol anhhd stored by other nodes. 
 It also supports pagination for more efficient querying of historical messages. 
 
 **Protocol identifier***: `/vac/waku/store/2.0.0-beta4`
