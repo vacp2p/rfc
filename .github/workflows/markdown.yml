@@ -13,12 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
+      
+      - name: Get changed files
+        id: changed_files
+        run: |
+         echo "::set-output name=files::$(git show --pretty="" --name-only ${{ github.sha }} | grep '\.md$' | tr '\n' ',' | sed 's/,$//')"
+      
+      - name: Markdown Linter
+        uses: DavidAnson/markdownlint-cli2-action@v15
         with:
-          ref: ${{ github.event.pull_request.base.ref }}
-      - name: Update npm
-        run: npm install -g npm@latest
-      - name: Install markdownlint-cli
-        run: npm install -g markdownlint-cli
-      - name: Lint Markdown files
-        run: markdownlint --reporter github-pr-check
+          globs: ${{ steps.changed_files.outputs.files }}
